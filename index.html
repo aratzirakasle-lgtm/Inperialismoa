@@ -15,6 +15,8 @@
   <!-- Prueba visual reversible: quitar esta línea restaura la versión anterior. -->
   <!-- El experimento anterior queda guardado, pero desactivado. -->
   <link rel="stylesheet" href="./assets/museo-rotulos-reales.css?v=20261117-3">
+  <!-- Sistema visual interior del museo, independiente de la portada y fácil de revertir -->
+  <link rel="stylesheet" href="./assets/museo-salas.css?v=20261117-1">
 </head>
 <body>
   <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
@@ -57,7 +59,7 @@
 
   <div id="app-shell" class="app-shell" hidden>
     <header class="topbar">
-      <a class="logo" href="./"><span class="logo-mark">✳</span> INPERIALISMOA <span class="topbar-sub">/ HISTORIA CONTEMPORÁNEA</span></a>
+      <a class="logo" href="./"><span class="logo-mark">✳</span> Inperialismoaren garaia <span class="topbar-sub">/ MUSEO DIGITALA · XIX. MENDEA</span></a>
       <div class="topbar-right"><span id="mode-badge" class="mode-badge" hidden>DEMO</span><span id="topbar-user" class="user-chip"></span><button class="btn tiny outline" id="logout-btn" type="button">Salir ↗</button></div>
     </header>
     <div class="layout">
@@ -73,6 +75,7 @@
         <div class="sidebar-foot">«Conocer el pasado es también aprender a hacer preguntas.»</div>
       </aside>
       <main class="main-content" id="main-content" tabindex="-1">
+        <div class="museum-cornice" aria-hidden="true"><span>INPERIALISMOAREN GARAIA</span><span>ERAKUSKETA · XIX. MENDEA</span></div>
         <div id="view"></div>
       </main>
     </div>
