@@ -39,10 +39,88 @@ function render(){if(!user)return;$("#topbar-user").textContent=displayName();$(
 $("#mission-nav").innerHTML=(accountIsTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Panel del profesor</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Vista del alumno</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Mi expedición</span></button>')+missions.map(m=>{const locked=!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?'Bloqueada':done?'Completada':'Disponible')+'</span></span></button>'}).join("");
 $("#scoreboard").innerHTML=(teacherPreview?teams.filter(t=>t.class_id===mine()?.class_id):teams).map(t=>'<div class="score-row"><span>'+esc(t.name)+'</span><span aria-label="'+(completed(t.id,currentMission)?'Completado':'Pendiente')+'" class="'+(completed(t.id,currentMission)?'score-check':'score-pending')+'">'+(completed(t.id,currentMission)?'✓':'○')+'</span></div>').join("");
 if(isTeacher()&&currentMission===0)renderTeacher();else if(currentMission===0)renderHome();else if(currentMission===6)renderFinal();else renderMission();
+$("#view").dataset.museumPage=isTeacher()?"teacher":currentMission===0?"home":currentMission===6?"final":"mission";
 if(teacherPreview)$("#view").insertAdjacentHTML("afterbegin",'<div class="notice amber" style="margin:12px auto;max-width:1100px"><strong>Vista previa del alumno · '+esc(mine()?.name||"equipo de prueba")+'</strong> — Estás viendo la interfaz de un estudiante. Es una simulación: no podrás guardar respuestas, subir PDF ni reclamar países. <button type="button" class="btn outline" id="return-to-teacher" style="margin-left:10px">← Volver al panel docente</button></div>');
 }
 function pageHeading(eyebrow,title,desc,pill){return '<div class="page-top"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h1>'+esc(title)+'</h1><p class="page-desc">'+esc(desc)+'</p></div>'+(pill?'<span class="step-pill">'+esc(pill)+'</span>':'')+'</div>'}
-function renderHome(){const n=countDone(viewTeamId());$("#view").innerHTML='<div class="content-width">'+pageHeading("TU CUADERNO DE EXPEDICIÓN","Cada misión cuenta.","Recorre el imperialismo del siglo XIX, investiga y supera todos los retos para llegar al desafío final.",n+" / "+missions.length+" COMPLETADAS")+'<div class="card"><div class="eyebrow">TU PROGRESO</div><div class="progressbar"><span style="width:'+Math.round(n/missions.length*100)+'%"></span></div><p class="card-sub">Para pasar a la siguiente misión debes acertar todas las preguntas. Los intentos son ilimitados.</p></div><h3 class="section-title">El recorrido histórico</h3><div class="mission-grid">'+missions.map(m=>{const locked=!available(m.id),done=completed(viewTeamId(),m.id);return '<article class="card mission-card"><div class="card-top"><span class="chapter-index">CAPÍTULO '+String(m.id).padStart(2,"0")+'</span><span class="tag '+(done?'done':locked?'':'active')+'">'+(done?'✓ Superada':locked?'🔒 Bloqueada':'Disponible')+'</span></div><h3>'+esc(m.title)+'</h3><p>'+esc(m.subtitle)+'</p><button class="btn '+(locked?'':'outline')+'" '+(locked?'disabled':'data-mission="'+m.id+'"')+'>'+(done?'Repasar misión':locked?'Por desbloquear':'Entrar en misión →')+'</button></article>'}).join("")+'</div><p class="footer-note">Actividad histórica: la representación del reparto colonial invita a examinar críticamente la dominación, no a celebrarla.</p></div>'}
+function renderHome(){
+ const total=missions.length;
+ const n=countDone(viewTeamId());
+ const pct=total?Math.round(100*n/total):0;
+ const active=missions.find(m=>!completed(viewTeamId(),m.id))||missions[total-1];
+ const next=active?missions.find(m=>m.id===Number(active.id)+1):null;
+ const ownDone=active?completed(viewTeamId(),active.id):false;
+ const question=active?.questions?.[0];
+ const progressRows=missions.map(m=>{
+   const done=completed(viewTeamId(),m.id);
+   return `<li><span class="museum-progress-dot ${done?'is-complete':''}">${done?'✓':''}</span><span>Misioa ${esc(m.id)}</span></li>`;
+ }).join("");
+ const action=(m,label,extra="")=>m?`<button type="button" class="btn ${extra}" ${available(m.id)?`data-mission="${m.id}"`:"disabled"}>${label}</button>`:"";
+ const heading=active?`<div class="museum-gallery-heading"><div class="eyebrow">IBILBIDE DIDAKTIKOA · XIX. MENDEA</div><h1>${esc(active.title)}</h1><p>${esc(active.intro||"Munduko botereen hedapena eta haren ondorioak ikertzeko ibilbidea.")}</p></div>`:"";
+ const featured=active?`
+ <section class="museum-showcase" aria-label="Misioaren aurkezpena">
+  <article class="museum-feature museum-feature-primary">
+   <div class="museum-feature-photo museum-art museum-art--factory" role="img" aria-label="Industria eta lantegi historikoen grabatua"></div>
+   <div class="museum-feature-copy">
+    <span class="museum-object-label">MISIOA ${String(active.id).padStart(2,"0")}</span>
+    <h2>${esc(active.subtitle||active.title)}</h2>
+    <p>${esc(active.intro||"Aztertu testuinguru historikoa eta osatu ikerketa.")}</p>
+    ${action(active,ownDone?"Misioa berrikusi →":"Misioa hasi →","primary")}
+   </div>
+  </article>
+  <article class="museum-feature museum-feature-question">
+   <div class="museum-feature-copy">
+    <span class="museum-object-label">GALDERA GAKOA</span>
+    <h2>${esc(question?.text||"Zein izan ziren inperialismoaren kausak eta ondorioak?")}</h2>
+    <p>Ikerketari ekin eta erantzunak aztertu.</p>
+    ${action(active,"Galderak ikusi →","outline")}
+   </div>
+   <div class="museum-feature-photo museum-art museum-art--globe" role="img" aria-label="Atlas eta munduko globo historikoa"></div>
+  </article>
+ </section>`:"";
+ const third=next?`
+  <div class="museum-next-body">
+    <div class="museum-next-photo museum-art museum-art--ship" aria-hidden="true"></div>
+    <div><strong>${esc(next.title)}</strong><p>${esc(next.subtitle||"Hurrengo atala")}</p></div>
+  </div>
+  ${action(next,available(next.id)?"Hurrengo misiora →":"🔒 Aurreko misioa amaitu","outline museum-next-cta")}
+ `:`<p class="museum-next-completed">${n===total?"✓ Ibilbide osoa gainditu duzue.":"Misioaren hurrengo urratsa prestatzen ari da."}</p>`;
+ $("#view").innerHTML=`
+ <div class="content-width museum-gallery-home">
+  ${heading}
+  ${featured}
+  <section class="museum-gallery-lower" aria-label="Aurrerapena eta testuingurua">
+    <article class="card museum-progress-panel">
+      <div class="museum-panel-title"><span class="museum-panel-emblem">◉</span> ZURE AURRERAPENA</div>
+      <div class="museum-progress-content">
+        <div class="museum-progress-ring" style="--progress:${pct}%" role="img" aria-label="${n} de ${total} misiones completadas">
+          <div><strong>${pct}%</strong><small>${n} / ${total}</small></div>
+        </div>
+        <ol class="museum-progress-list">${progressRows}</ol>
+      </div>
+    </article>
+    <article class="card museum-context-panel">
+      <div class="museum-context-text">
+        <div class="museum-panel-title"><span class="museum-panel-emblem">▣</span> TESTUINGURUA</div>
+        <h3>Inperialismoa: kausak eta ondorioak</h3>
+        <p>Kapitalismoaren hazkundearen itzalean, Europaren handinahiak munduaren mapa berridazten. Zer gertatu zen kolonizatutako herriekin?</p>
+        <span class="museum-panel-note">Aztertu, alderatu eta hausnartu.</span>
+      </div>
+      <div class="museum-context-photo museum-art museum-art--context" aria-hidden="true"></div>
+    </article>
+    <article class="card museum-next-panel">
+      <div class="museum-panel-title"><span class="museum-panel-emblem">»</span> HURRENGO MISIOA</div>
+      ${third}
+    </article>
+  </section>
+  <h2 class="museum-gallery-section-heading">Ibilbide historikoa <span>· ${total} misio</span></h2>
+  <div class="mission-grid museum-mission-index">${missions.map(m=>{
+    const done=completed(viewTeamId(),m.id),locked=!available(m.id);
+    return `<article class="card mission-card"><div class="card-top"><span class="chapter-index">MISIOA ${String(m.id).padStart(2,"0")}</span><span class="tag ${done?'done':locked?'':'active'}">${done?'✓ Gainditua':locked?'🔒 Blokeatua':'Eskuragarri'}</span></div><h3>${esc(m.title)}</h3><p>${esc(m.subtitle||"Ikerketa historikoa")}</p><button type="button" class="btn ${locked?'':'outline'}" ${locked?'disabled':`data-mission="${m.id}"`}>${done?'Berrikusi →':locked?'Desblokeatu gabe':'Sartu →'}</button></article>`;
+  }).join("")}</div>
+  <p class="footer-note">Ariketa historiko kritikoa: kolonialismoaren eraginak, ustiapena eta erresistentziak ere aztertuko ditugu.</p>
+ </div>`;
+}
 function renderMission(){const m=missionById(currentMission);if(!m)return;const done=!isTeacher()&&completed(viewTeamId(),m.id);const qs=m.questions||[];const answered=qs.filter(q=>responses[q.id]!==undefined).length;$("#view").innerHTML='<div class="content-width">'+pageHeading("MISIÓN "+String(m.id).padStart(2,"0")+" · HISTORIA DEL IMPERIALISMO",m.title,m.intro,done?'✓ COMPLETADA':'100 % PARA AVANZAR')+'<div class="card"><div class="eyebrow">ANTES DE EMPEZAR</div><h3>'+esc(m.subtitle)+'</h3><p class="card-sub">Lee con atención. Hay '+qs.length+' preguntas. Debes acertarlas todas; las respuestas correctas quedarán conservadas y puedes volver a intentarlo.</p><div class="progressbar"><span style="width:'+(qs.length?100*qs.filter(q=>checkFeedback?.correct?.includes(q.id)).length/qs.length:0)+'%"></span></div><div class="card-sub">'+answered+' de '+qs.length+' respondidas</div></div>'+qs.map((q,i)=>'<section class="card question-card"><div class="eyebrow">PREGUNTA '+String(i+1).padStart(2,"0")+'</div><div class="question-title">'+esc(q.text)+'</div><div class="question-options">'+q.options.map((opt,j)=>'<label class="option '+(checkFeedback?.correct?.includes(q.id)&&responses[q.id]===j?'locked-correct':'')+'"><input type="radio" name="question-'+esc(q.id)+'" value="'+j+'" data-question="'+esc(q.id)+'" '+(responses[q.id]===j?'checked':'')+' '+(checkFeedback?.correct?.includes(q.id)||done||isTeacher()?'disabled':'')+'><span>'+esc(opt)+'</span></label>').join("")+'</div>'+(checkFeedback?.correct?.includes(q.id)?'<div class="question-feedback ok">✓ Respuesta correcta</div>':checkFeedback?.incorrect?.includes(q.id)?'<div class="question-feedback bad">Revisa esta respuesta y vuelve a intentarlo.</div>':'')+'</section>').join("")+(done?'<div class="complete-banner"><h3>✓ ¡Misión superada!</h3><p>Tu equipo ha conseguido el pleno. La siguiente misión está desbloqueada.</p><button class="btn primary" data-mission="'+Math.min(m.id+1,6)+'">Continuar la expedición →</button></div>':isTeacher()?'<div class="notice">Vista previa del profesor. Las respuestas no se envían desde esta pantalla.</div>':'<div class="mission-actions"><button class="btn primary" id="check-mission" '+(answered!==qs.length?'disabled':'')+'>Comprobar las '+qs.length+' respuestas →</button><span class="card-sub">Intentos ilimitados · Progreso guardado</span></div>')+'</div>';
 }
 async function submitMission(){if(teacherPreview)return toast("Vista previa: utiliza una cuenta ficticia de alumno para probar la corrección real.");const m=missionById(currentMission);if(!m||!user||isTeacher())return;const qs=m.questions||[];if(qs.some(q=>responses[q.id]===undefined))return toast("Responde todas las preguntas.");let correct=[],incorrect=[],complete=false,attemptNo=0;
