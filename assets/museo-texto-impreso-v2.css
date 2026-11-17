@@ -1,0 +1,107 @@
+/*
+ * PRUEBA REVERSIBLE: tinta museística sobre cartela, noviembre 2026.
+ * Capa óptica adicional sobre museo-login-integrado.css. No altera la fotografía,
+ * HTML, autenticación ni el estilo de móvil.
+ * Para restaurar el resultado anterior, eliminar solo la referencia a este archivo
+ * en index.html. La hoja anterior permanece intacta.
+ */
+@media (min-width:1025px) and (orientation:landscape) {
+  /* Las dos veladuras imitan la pátina de la placa: variación de tinta,
+     poro del material y luz ambiental, sin crear un nuevo rectángulo. */
+  .museo-form .museo-field-frame::before,
+  .museo-form .museo-password-wrap::before {
+    left:16.5%;
+    right:3.1%;
+    top:15%;
+    bottom:13%;
+    background-color:#dfc5a2;
+    background-image:
+      radial-gradient(ellipse at 16% 24%, #f1dfc53a 0%, transparent 58%),
+      radial-gradient(ellipse at 83% 74%, #95704b21 0%, transparent 62%),
+      repeating-linear-gradient(97deg, #77533809 0px, transparent 1px, transparent 4px, #fff4dd0c 5px),
+      linear-gradient(96deg,#e6cfae 1%,#dec09c 52%,#d9bb98 100%);
+    background-blend-mode:screen,multiply,multiply,normal;
+    border:0;
+    border-radius:2px;
+    box-shadow:0 0 5px 3px #e0c5a49c, inset 0 0 5px #73512d0b;
+    filter:saturate(.81) contrast(.96);
+    transform:rotate(-.12deg);
+    transition:opacity .16s ease;
+  }
+  /* Cuando están vacíos se mantiene la fotografía original.
+     Al escribir, la textura tapa solamente el texto que estaba impreso. */
+  .museo-form .museo-field-frame:focus-within::before,
+  .museo-form .museo-field-frame:has(input:not(:placeholder-shown))::before,
+  .museo-form .museo-password-wrap:focus-within::before,
+  .museo-form .museo-password-wrap:has(input:not(:placeholder-shown))::before {
+    opacity:.98;
+  }
+  /* Desaparece el borde luminoso rectangular que parecía un input moderno. */
+  .museo-form .museo-field-frame:focus-within::after,
+  .museo-form .museo-password-wrap:focus-within::after {
+    content:none;
+    display:none;
+  }
+  /* Mezcla de tinta con el pigmento físico fotografiado debajo. */
+  .museo-form .museo-field-frame .museo-field,
+  .museo-form .museo-password-wrap .museo-field {
+    color:#433021!important;
+    -webkit-text-fill-color:#433021;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(12px,1.035vw,17.5px);
+    font-weight:500;
+    line-height:1.15;
+    letter-spacing:.001em;
+    text-shadow:
+      0 .4px .55px #3a251a38,
+      0 -.35px .2px #fae7c62d;
+    mix-blend-mode:multiply;
+    opacity:.94;
+    caret-color:#665039;
+    filter:contrast(.92);
+  }
+  .museo-form .museo-field-frame .museo-field:focus,
+  .museo-form .museo-password-wrap .museo-field:focus {
+    outline:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  /* El navegador tampoco añade una segunda etiqueta flotante. */
+  .museo-form .museo-field::placeholder,
+  .museo-form .museo-field:focus::placeholder {
+    color:transparent!important;
+    -webkit-text-fill-color:transparent!important;
+    opacity:0!important;
+  }
+  /* Corrección de colores del autocompletado: sin fondos amarillo o blanco. */
+  .museo-form .museo-field:-webkit-autofill,
+  .museo-form .museo-field:-webkit-autofill:hover,
+  .museo-form .museo-field:-webkit-autofill:focus {
+    -webkit-text-fill-color:#433021!important;
+    -webkit-box-shadow:0 0 0 1000px transparent inset!important;
+    box-shadow:none!important;
+    transition:background-color 50000s ease-in-out 0s;
+  }
+  /* Indicación de foco accesible únicamente para navegación con teclado. */
+  .museo-form .museo-field-frame:has(.museo-field:focus-visible),
+  .museo-form .museo-password-wrap:has(.museo-field:focus-visible) {
+    outline:1px dotted #b48d549e;
+    outline-offset:3px;
+    border-radius:4px;
+  }
+  /* El ojo es un discreto grabado y no compite con la inscripción. */
+  .museo-form .museo-password-toggle {
+    color:#604632;
+    font-family:Georgia,serif;
+    font-size:clamp(10px,.82vw,14px);
+    opacity:.26;
+    text-shadow:0 .4px .35px #2f1b12a8;
+    mix-blend-mode:multiply;
+  }
+  .museo-form .museo-password-toggle:hover,
+  .museo-form .museo-password-toggle:focus-visible { opacity:.87; }
+}
+@media (prefers-reduced-motion:reduce){
+  .museo-form .museo-field-frame::before,
+  .museo-form .museo-password-wrap::before{transition:none!important}
+}
