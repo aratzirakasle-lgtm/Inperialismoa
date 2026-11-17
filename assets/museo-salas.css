@@ -1,0 +1,433 @@
+/*
+ * INPERIALISMOAREN GARAIA — MUSEO · SISTEMA VISUAL DE LAS SALAS
+ * Estética expositiva común para alumno y profesor.
+ *
+ * La portada fotográfica permanece intacta.
+ * La decoración de cada misión podrá añadirse después en hojas propias.
+ * Para restaurar el aspecto anterior, basta retirar esta hoja de index.html.
+ */
+#app-shell{
+  --museum-wall:#142d2d;
+  --museum-shadow:#071a1c;
+  --museum-brass:#c1a06a;
+  --museum-brass-light:#e5c38a;
+  --museum-ivory:#f3e8d1;
+  --museum-paper:#f7efdf;
+  --museum-text:#302c27;
+  --museum-border:#d0bc98;
+  --museum-patina:#31544c;
+  --museum-soft:#ede1c8;
+  --museum-accent:#bf9a60;
+  --ink:#302c27;
+  --muted:#736755;
+  --teal:#27574e;
+  --navy:#132c2e;
+  --line:#d7c9ae;
+  --soft:#efe3cc;
+  --paper:#f7efdf;
+  --sand:#f4ebd9;
+  --gold:#bf9a60;
+  --radius:9px;
+  --shadow:0 12px 30px #07171827;
+  background:var(--museum-wall);
+  color:var(--museum-text);
+  min-height:100vh;
+}
+/* Friso superior del museo: piedra verde oscura, pátina y filetes de latón. */
+#app-shell .topbar{
+  height:80px;
+  background:
+    linear-gradient(90deg,transparent 0%,#dbb87816 46%,transparent 95%),
+    repeating-linear-gradient(90deg,#fff0cd05 0,#fff0cd05 1px,transparent 1px,transparent 7px),
+    linear-gradient(180deg,#23403d 0%,#132b2e 70%,#091e21 100%);
+  border-bottom:1px solid #c9a66a9e;
+  box-shadow:inset 0 3px 0 #e7ca942e,0 9px 30px #020d12a6;
+  padding-inline:clamp(17px,2.5vw,44px);
+}
+#app-shell .topbar::after{
+  content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;
+  background:linear-gradient(90deg,transparent,#f2cd824d,transparent);
+  pointer-events:none;
+}
+#app-shell .topbar .logo{
+  color:#f1dfba;
+  font:600 clamp(15px,1.65vw,22px)/1.18 Georgia,"Times New Roman",serif;
+  text-transform:none;letter-spacing:.045em;min-width:0;
+  text-shadow:0 2px 3px #0008;
+}
+#app-shell .topbar .logo:hover{text-decoration:none;color:#fff0d4}
+#app-shell .topbar .logo-mark{
+  background:radial-gradient(circle at 35% 25%,#f2d398,#b78f53 65%,#806237);
+  border:1px solid #f8dbaa;box-shadow:0 0 0 3px #c09b5330,inset 0 1px 2px #fff9;
+  border-radius:50%;color:#223732;width:38px;height:38px;flex:none;
+  font-size:25px;font-family:Georgia,serif;
+}
+#app-shell .topbar-sub{
+  color:#d0bd9e;font:600 10px/1.5 "DM Sans",sans-serif;
+  letter-spacing:.13em;margin-left:8px;opacity:.85;
+}
+#app-shell .user-chip{color:#e8d6b5;font-size:12px;font-weight:600}
+#app-shell .topbar-right{gap:12px}
+#app-shell #logout-btn{
+  border:1px solid #c5a26a9e;background:#29454090;color:#f5e2bf;
+  padding:9px 15px;border-radius:6px;
+}
+#app-shell #logout-btn:hover{background:#39564c;color:#fff}
+#app-shell .mode-badge{background:#dac18b;color:#3b3121;border:1px solid #faf0c2}
+/* Galería: pared texturizada y haces de luz, sin fotografías repetidas ni texto intrusivo. */
+#app-shell .layout{min-height:calc(100vh - 80px)}
+#app-shell .main-content{
+  position:relative;isolation:isolate;
+  min-height:calc(100vh - 80px);
+  padding:clamp(25px,3.4vw,54px) clamp(20px,4.4vw,76px) 95px;
+  background-color:#10292b;
+  background-image:
+    radial-gradient(ellipse 40% 32% at 18% -4%,#d7b47e27 0%,transparent 86%),
+    radial-gradient(ellipse 37% 29% at 82% -4%,#d9bb8425 0%,transparent 88%),
+    linear-gradient(90deg,#071b2029 0%,transparent 11%,transparent 89%,#071b2061 100%),
+    repeating-linear-gradient(90deg,transparent 0,transparent 243px,#eac99709 244px,transparent 245px),
+    repeating-linear-gradient(0deg,#f4ddae04 0,#f4ddae04 1px,transparent 1px,transparent 5px),
+    linear-gradient(180deg,#19393a 0%,#173132 44%,#0b2327 100%);
+}
+#app-shell .main-content::before{
+  content:"";position:absolute;z-index:0;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 43% 12% at 20% 0%,#fff2c016,transparent 95%),
+    radial-gradient(ellipse 43% 12% at 80% 0%,#fff2c012,transparent 95%),
+    linear-gradient(180deg,#ffffff07 0,#0000 9%,#00151b14 80%,#00111444 100%);
+}
+#app-shell .main-content::after{
+  content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:13px;
+  border-top:2px solid #e4bd7a4f;border-bottom:1px solid #dab47631;
+  background:linear-gradient(180deg,#070f1190,#2c48402b);
+  box-shadow:0 10px 22px #00111333;pointer-events:none;
+}
+#app-shell #view{position:relative;z-index:1}
+#app-shell .content-width{max-width:1120px}
+#app-shell .museum-cornice{
+  position:relative;z-index:1;
+  margin:0 auto clamp(22px,3vw,37px);max-width:1120px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:0 0 11px;
+  border-bottom:1px solid #cda66865;
+  color:#d0b681;letter-spacing:.22em;font-size:10px;font-weight:700;
+}
+#app-shell .museum-cornice::after{
+  content:"✦";position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  background:#173334;padding:0 10px;color:#dbb87e;font-size:13px;
+}
+#app-shell .museum-cornice span:last-child{color:#c5b69c;font-weight:500;letter-spacing:.13em}
+/* Titulares de sala: inscripción museística sobre la pared. */
+#app-shell .page-top{align-items:flex-start;gap:22px;margin-bottom:29px}
+#app-shell .page-top .eyebrow{
+  color:#dcbf8c;font-size:10px;letter-spacing:.22em;font-weight:800;
+  text-transform:uppercase;
+}
+#app-shell .page-top h1{
+  color:#f6e8cb;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(34px,4.2vw,57px);
+  font-weight:500;letter-spacing:-.033em;line-height:1.11;
+  margin:10px 0 14px;text-shadow:0 3px 14px #050e10a6;
+}
+#app-shell .page-desc{color:#e1d4bc;line-height:1.75;font-size:14px;max-width:760px}
+#app-shell .step-pill{
+  background:#213f3d;border:1px solid #c6a46a;
+  color:#efdbad;border-radius:3px;padding:10px 14px;
+  font-size:10px;letter-spacing:.12em;box-shadow:0 2px 12px #0004;
+}
+#app-shell .section-title{
+  color:#efdfc0;font:500 clamp(18px,2vw,25px)/1.3 Georgia,serif;
+  letter-spacing:.005em;display:flex;align-items:center;gap:18px;
+  margin:35px 0 18px;
+}
+#app-shell .section-title::after{
+  content:"";flex:1;height:1px;background:linear-gradient(90deg,#c5a4719c,transparent);
+}
+#app-shell .footer-note{color:#dbcba8;font-size:12px;line-height:1.7}
+#app-shell .footer-note::before{content:"✦";color:#d8b475;margin-right:9px}
+/* Lateral de navegación = pared con directorio de salas. */
+#app-shell .sidebar{
+  background:
+    linear-gradient(90deg,#080f1470 0%,transparent 9%,transparent 90%,#050f1499 100%),
+    repeating-linear-gradient(0deg,#e1c38f07 0,#e1c38f07 1px,transparent 1px,transparent 6px),
+    linear-gradient(170deg,#1d3b3b 0%,#142e30 45%,#0e2528 100%);
+  border-right:1px solid #b2925b99;
+  box-shadow:inset -9px 0 17px #0003,7px 0 25px #00151e40;
+  color:#eddfc8;padding:30px 17px;gap:11px;
+}
+#app-shell .aside-label,#app-shell .sidebar-section-title{
+  color:#c6aa78;font-size:10px;letter-spacing:.16em;font-weight:800;
+}
+#app-shell .aside-label{
+  display:block;border-bottom:1px solid #b9965c75;
+  padding-bottom:13px;margin:0 5px 10px;
+}
+#app-shell .team-summary{
+  background:linear-gradient(145deg,#345550a6,#1a3a37d9);
+  border:1px solid #b89b659c;border-radius:5px;
+  padding:19px 17px;
+  box-shadow:inset 0 0 0 3px #071d1b70,inset 0 0 0 4px #c4a36f45,0 6px 18px #00141750;
+}
+#app-shell .team-name{font:600 19px/1.3 Georgia,serif;color:#f0dba8}
+#app-shell .team-members{color:#e1d2b7;line-height:1.65}
+#app-shell .team-progress{background:#071d1ba6;height:7px;border:1px solid #c19d6257}
+#app-shell .team-progress>span{background:linear-gradient(90deg,#719e80,#ccbe77)}
+#app-shell .sidebar-section-title{margin:19px 5px 8px}
+#app-shell .mission-nav{gap:6px}
+#app-shell .nav-mission{
+  position:relative;background:#071d1f37;border:1px solid #bda67b2f;
+  border-radius:5px;padding:11px 9px;color:#eadfcb;
+  transition:background .16s,border-color .16s,transform .16s;
+}
+#app-shell .nav-mission:hover:not(:disabled){
+  background:#47665c8c;border-color:#c7ac7888;transform:translateX(2px);
+}
+#app-shell .nav-mission.active{
+  background:linear-gradient(98deg,#d7b579,#b18a50);
+  border-color:#ead19b;color:#25271f;
+  box-shadow:0 3px 11px #0005,inset 0 1px 0 #fff6;
+}
+#app-shell .nav-mission:disabled{opacity:.53}
+#app-shell .nav-number{
+  border:1px solid #af925e;background:#163433;
+  color:#e7cca0;border-radius:3px;font-family:Georgia,serif;font-size:14px;
+  width:34px;height:34px;flex:none;
+}
+#app-shell .nav-mission.active .nav-number{
+  background:#284b44;color:#f6e7c5;border-color:#6b744e;
+}
+#app-shell .nav-mission.done .nav-number{
+  background:#254d42;color:#e8e0a6;border-color:#9eb68c;
+}
+#app-shell .nav-title{font-size:12px;line-height:1.35}
+#app-shell .nav-sub{color:#bbbaaa;font-size:10px}
+#app-shell .nav-mission.active .nav-sub{color:#554734}
+#app-shell .sidebar-divider{background:#ae8c5d66}
+#app-shell .aside-explainer{color:#cfbea1;line-height:1.65}
+#app-shell .scoreboard{gap:7px}
+#app-shell .score-row{
+  padding:7px 5px;border-bottom:1px solid #e0c18b2c;
+  color:#eddec5;gap:12px;
+}
+#app-shell .score-row span:first-child{overflow-wrap:anywhere}
+#app-shell .score-check{color:#cce8aa;text-shadow:0 0 8px #c9e3a633}
+#app-shell .score-pending{color:#9aab9f}
+#app-shell .sidebar-foot{
+  border-top:1px solid #c6a46b58;color:#d1c0a2;
+  line-height:1.6;margin-top:auto;
+}
+#app-shell .live-pulse{background:#88bd99;box-shadow:0 0 0 4px #88bd9930}
+/* Las fichas de contenido son vitrinas y cartelas sobre papel de archivo. */
+#app-shell .card{
+  position:relative;isolation:isolate;
+  background:
+    radial-gradient(ellipse 80% 90% at 0% 0%,#fff9e9a8,transparent 88%),
+    repeating-linear-gradient(0deg,#6f543105 0,#6f543105 1px,transparent 1px,transparent 5px),
+    linear-gradient(146deg,#faf4e8,#eee1cb 100%);
+  border:1px solid var(--museum-border);border-radius:7px;
+  box-shadow:0 1px 0 #fcebd0bb,inset 0 0 0 4px #fff6,0 12px 26px #061c2066;
+  color:var(--museum-text);
+}
+#app-shell .card::before{
+  content:"";position:absolute;inset:5px;border:1px solid #a1855624;
+  border-radius:3px;pointer-events:none;z-index:-1;
+}
+#app-shell .card h3{font:600 clamp(18px,1.8vw,23px)/1.25 Georgia,serif;letter-spacing:-.01em;color:#2a3e35}
+#app-shell .card .eyebrow{
+  color:#846333;letter-spacing:.16em;font-size:10px;font-weight:800;
+}
+#app-shell .card-sub{color:#675d4c;font-size:13px;line-height:1.7}
+#app-shell .card p{line-height:1.7}
+#app-shell .mission-card{
+  min-height:214px;padding:26px 24px 21px;
+  border-left:3px solid #bb9156;
+  transition:transform .17s ease,box-shadow .17s ease;
+}
+#app-shell .mission-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 1px 0 #fcebd0bb,inset 0 0 0 4px #fff6,0 19px 36px #061c20a3;
+}
+#app-shell .mission-card h3{font:600 23px/1.2 Georgia,serif}
+#app-shell .mission-card p{color:#6a6051;line-height:1.7}
+#app-shell .chapter-index{color:#8b6736;font-size:10px;letter-spacing:.15em}
+#app-shell .tag{
+  background:#e3d4b8;color:#665139;border:1px solid #c7b18e;
+  border-radius:3px;font-size:10px;
+}
+#app-shell .tag.done{background:#dbe8d2;color:#285c43;border-color:#a5c4a2}
+#app-shell .tag.active{background:#f2dfb0;color:#70501f;border-color:#d9b76a}
+/* Opciones de respuesta: fichas de lectura con estados inequívocos. */
+#app-shell .question-title{color:#2b332d;font-size:16px;line-height:1.55}
+#app-shell .question-card{padding-block:28px}
+#app-shell .option{
+  background:#fffaf0b0;border:1px solid #cabb9c;
+  border-radius:5px;padding:14px 16px;
+  color:#302c27;line-height:1.55;
+  transition:background .15s,border-color .15s;
+}
+#app-shell .option:hover{background:#f9ebd2;border-color:#b99663}
+#app-shell .option:has(input:checked){
+  background:#e3efe4;border-color:#567967;box-shadow:inset 3px 0 0 #356f55;
+}
+#app-shell .option.locked-correct{background:#deefdd;border-color:#71a07d}
+#app-shell .option input{accent-color:#396a53}
+#app-shell .question-feedback.ok{color:#266040}
+#app-shell .question-feedback.bad{color:#9a3b35}
+#app-shell .progressbar{height:9px;background:#dfceb0;border:1px solid #c2aa7e}
+#app-shell .progressbar>span{background:linear-gradient(90deg,#426f5b,#b49c57)}
+#app-shell .step-pill,#app-shell .status-free,#app-shell .status-taken{font-weight:700}
+#app-shell .complete-banner{
+  background:linear-gradient(135deg,#255744,#173c36);
+  border:1px solid #c7ad76;border-radius:7px;color:#f0e7d2;
+  box-shadow:0 12px 29px #001b1e66;
+}
+#app-shell .complete-banner h3{color:#f4e1b8}
+#app-shell .complete-banner p{color:#dfebdd}
+/* Botones de latón y controles sin sacrificar lectura ni uso táctil. */
+#app-shell .btn{
+  border-radius:5px;min-height:38px;
+  background:#eee4d1;border-color:#bfa985;color:#2f3b30;
+  font-weight:800;letter-spacing:.008em;
+}
+#app-shell .btn.primary,#app-shell .btn.dark{
+  background:linear-gradient(180deg,#ddbc82 0%,#b48a4e 100%);
+  color:#28241c;border:1px solid #e3c68f;
+  text-shadow:0 1px 0 #fff3;
+  box-shadow:inset 0 1px 0 #ffeaad94,0 3px 10px #3d2b1840;
+}
+#app-shell .btn.outline{
+  background:#f7eedb;border:1px solid #b69b73;color:#294139;
+}
+#app-shell .btn.warn{background:#f5e6c6;color:#835d21;border-color:#ceaa6c}
+#app-shell .btn:hover:not(:disabled){filter:brightness(1.04);transform:translateY(-1px)}
+#app-shell .btn:disabled{opacity:.52}
+#app-shell :is(.btn,.nav-mission,.tab-btn,.option,.territory-item):focus-visible{
+  outline:3px solid #f2c979;outline-offset:3px;
+}
+#app-shell :is(input,textarea,select){
+  border:1px solid #bba683;border-radius:5px;background:#fffaf0;color:#2d2b27;
+  accent-color:#376854;outline-color:#976d3c;
+}
+#app-shell :is(input,textarea,select):focus{
+  border-color:#99723d;box-shadow:0 0 0 3px #dfb77844;
+}
+#app-shell label{color:#3d382e}
+#app-shell .checkbox-line label{color:#3d382e}
+#app-shell .notice{border-radius:6px;border:1px solid #bdc4a7;background:#e9eedf;color:#365147}
+#app-shell .notice.amber{background:#f3e4c4;border-color:#d6b87c;color:#6e4d25}
+#app-shell .notice.error{background:#f5dddd;border-color:#d3aaa3;color:#8c332f}
+#app-shell .notice.success{background:#e0efdf;border-color:#a9c3a6;color:#245a3d}
+/* Cuadernos de evaluación, fichas de docentes y tablas de resultados. */
+#app-shell .teacher-tabs{gap:9px;margin:23px 0}
+#app-shell .tab-btn{
+  background:#203c3b;color:#ecdfc8;border:1px solid #b99c6b;
+  border-radius:4px;padding:10px 14px;font-size:12px;
+}
+#app-shell .tab-btn:hover{background:#345750}
+#app-shell .tab-btn.selected{
+  background:linear-gradient(#dec18d,#b48d50);border-color:#edce8e;
+  color:#282721;box-shadow:0 2px 12px #0004;
+}
+#app-shell .stats-grid .card{min-width:0}
+#app-shell .stat-number{
+  font:600 35px/1.12 Georgia,serif;color:#294a3e;letter-spacing:-.02em;
+}
+#app-shell .stat-label{color:#645e50;font-weight:600}
+#app-shell .table-scroll{
+  border:1px solid #c4b396;border-radius:5px;overflow-x:auto;background:#fff9eb;
+}
+#app-shell table{background:#fff9ec;border-collapse:collapse;font-size:12px;color:#302c27}
+#app-shell th{
+  background:#24443d;color:#f5e9cb;text-align:left;font-weight:800;
+  border-bottom:1px solid #bc9968;
+}
+#app-shell td,#app-shell th{padding:11px 13px}
+#app-shell td{border-bottom:1px solid #dfd1b8}
+#app-shell tbody tr:nth-child(even){background:#f1e7d7}
+#app-shell tbody tr:hover{background:#e9e0cd}
+#app-shell .table-note{color:#665c4c}
+#app-shell .empty{
+  background:#f7ecdaa8;color:#554b3a;border:1px dashed #bb9e71;border-radius:7px;
+}
+#app-shell .draft-badge{background:#ecdfbe;color:#76591f}
+#app-shell .review-status{background:#e4ece0;color:#35634c}
+/* El mapa y las entregas mantienen sus elementos funcionales actuales. */
+#app-shell .map-wrap{
+  background:radial-gradient(ellipse at 35% 25%,#f7efda,#e2d8be);
+  border:1px solid #ba9e70;border-radius:6px;
+}
+#app-shell .map-caption{color:#655b48}
+#app-shell .map-loading{color:#315949}
+#app-shell .territory-item{
+  border:1px solid #cbba9c;background:#fbf2e0;color:#342f26;border-radius:4px;
+}
+#app-shell .territory-item.active{background:#e2ebdc;border-color:#50785e}
+#app-shell .upload-area{
+  border:2px dashed #baa16d;background:#faf1df;border-radius:6px;
+}
+#app-shell .footer-note,#app-shell .map-caption{line-height:1.65}
+#modal.modal-backdrop{background:#071b1edb;backdrop-filter:blur(6px)}
+#modal .modal-card{
+  background:linear-gradient(146deg,#faf4e7,#ecddc3);border:1px solid #c7a76f;
+  border-radius:8px;box-shadow:0 25px 110px #0008;color:#302d27;
+}
+#modal .modal-card h2,#modal .modal-card h3{font-family:Georgia,serif;color:#264638}
+#modal :is(input,textarea,select){border:1px solid #b9a078;background:#fffaf0;color:#2f302b}
+#toast.toast{
+  background:#183b36;color:#f2e6d1;border:1px solid #c7a46a;
+  border-radius:6px;box-shadow:0 12px 38px #0008;
+}
+/* Retícula de sala preparada para futuras decoraciones locales por misión.
+ * Más adelante cada pantalla podrá añadir una clase y arte propios
+ * sin tocar la pared, los rótulos o los componentes básicos.
+ */
+@media (max-width:1050px){
+  #app-shell .sidebar{padding:22px 13px}
+  #app-shell .main-content{padding:29px 25px 70px}
+  #app-shell .topbar-sub{display:none}
+}
+@media (max-width:780px){
+  #app-shell .topbar{height:66px;padding-inline:15px}
+  #app-shell .topbar .logo{font-size:clamp(12px,3.3vw,17px);letter-spacing:.01em}
+  #app-shell .topbar .logo-mark{width:29px;height:29px;font-size:19px}
+  #app-shell .topbar-right{gap:5px}
+  #app-shell #logout-btn{padding:7px 10px;min-height:34px}
+  #app-shell .layout{display:flex;flex-direction:column}
+  #app-shell .sidebar{
+    background:linear-gradient(180deg,#23423e,#142b2d);
+    padding:14px 13px 16px;border-right:0;border-bottom:1px solid #b7935d;
+  }
+  #app-shell .sidebar .aside-label{display:none}
+  #app-shell .sidebar .team-summary{padding:10px 13px}
+  #app-shell .sidebar .sidebar-section-title{margin:7px 2px 3px}
+  #app-shell .nav-mission{min-width:136px;flex-shrink:0;padding:8px 9px}
+  #app-shell .nav-mission:hover:not(:disabled){transform:none}
+  #app-shell .scoreboard{display:flex;flex-wrap:wrap;gap:7px 10px}
+  #app-shell .score-row{
+    border:1px solid #b292615b;border-radius:5px;background:#2a4b4490;padding:5px 9px;
+  }
+  #app-shell .main-content{min-height:55vh;padding:24px 15px 55px}
+  #app-shell .museum-cornice{font-size:9px;letter-spacing:.09em;margin-bottom:20px}
+  #app-shell .museum-cornice span:last-child{display:none}
+  #app-shell .page-top h1{font-size:clamp(31px,8vw,43px)}
+  #app-shell .page-desc{font-size:13px}
+  #app-shell .card{padding:20px}
+  #app-shell .mission-card{min-height:0}
+  #app-shell .question-card{padding:19px}
+  #app-shell .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #app-shell .mission-grid,#app-shell .two-col,#app-shell .field-row{grid-template-columns:1fr}
+  #app-shell .modal-backdrop{padding:10px}
+}
+@media (max-width:420px){
+  #app-shell .stats-grid{grid-template-columns:1fr}
+  #app-shell .page-top{gap:10px}
+  #app-shell .step-pill{font-size:9px}
+  #app-shell .topbar .logo{font-size:12px}
+  #app-shell .card h3{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  #app-shell .mission-card,#app-shell .nav-mission,#app-shell .option,
+  #app-shell .btn{transition:none!important}
+  #app-shell .mission-card:hover,#app-shell .nav-mission:hover{transform:none!important}
+}
