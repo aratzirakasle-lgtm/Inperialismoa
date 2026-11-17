@@ -5,36 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102738">
   <meta name="description" content="Inperialismoa: aventura histórica colaborativa sobre el imperialismo del siglo XIX.">
-  <title>Inperialismoa · La historia en tus manos</title>
+  <title>Inperialismoaren garaia · Museo digitala</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./assets/museo-portada.css?v=1">
+  <link rel="stylesheet" href="./css/styles.css?v=museo1">
 </head>
 <body>
   <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
-  <div id="login-screen" class="login-screen" hidden>
-    <section class="login-hero" aria-label="Presentación del proyecto">
-      <a class="logo light" href="./"><span class="logo-mark">✳</span> INPERIALISMOA</a>
-      <div class="hero-art" aria-hidden="true"><span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span><span class="hero-globe">✥</span></div>
-      <div class="hero-bottom"><div class="eyebrow light">UN VIAJE POR EL SIGLO XIX</div><h1>La historia<br><em>en tus manos.</em></h1><p>Cinco misiones, una investigación final y una historia que todavía nos interpela.</p><span class="hero-rule"></span><span class="hero-small">OBSERVA · INVESTIGA · REFLEXIONA</span></div>
-    </section>
-    <section class="login-form-side">
-      <div class="login-form-wrap">
-        <span class="eyebrow">PLATAFORMA EDUCATIVA</span>
-        <h2>Bienvenidos a la aventura.</h2>
-        <p class="muted">Accede con tus credenciales individuales para continuar la misión de tu equipo.</p>
-        <div id="demo-banner" class="notice amber" hidden><strong>Modo demostración.</strong> Los cambios solo se guardan en este navegador. No hay usuarios reales ni sincronización entre dispositivos.</div>
-        <form id="login-form">
-          <label for="login-user">Usuario</label><input id="login-user" name="username" autocomplete="username" required placeholder="Tu nombre de usuario">
-          <label for="login-password">Contraseña</label><div class="password-wrap"><input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"><button type="button" class="password-toggle" id="toggle-password" aria-label="Mostrar u ocultar contraseña">Mostrar</button></div>
-          <p class="form-error" id="login-error" role="alert"></p>
-          <button class="btn primary full" type="submit" id="login-submit">Entrar en la expedición <span aria-hidden="true">↗</span></button>
-        </form>
-        <div id="demo-access" class="demo-access" hidden><div class="demo-divider"><span>O explorar una demostración</span></div><div class="demo-actions"><button class="btn outline" data-demo="student">Entrar como alumno</button><button class="btn outline" data-demo="teacher">Entrar como profesor</button></div></div>
-        <p class="login-help">Si no puedes entrar, pide al profesor que revise tus credenciales. No compartas tu contraseña.</p>
+  <div id="login-screen" class="login-screen museo-login-screen" hidden>
+    <main class="museo-stage" lang="eu" aria-labelledby="museo-title">
+      <h1 id="museo-title" class="sr-only">Inperialismoaren garaia</h1>
+      <p class="sr-only">Kapitalismoaren hazkundearen itzalean, Europaren handinahiak munduaren mapa berridazten</p>
+
+      <header class="museo-mobile-intro">
+        <span class="museo-kicker">MUSEO DIGITALA · XIX. MENDEA</span>
+        <h2>Inperialismoaren garaia</h2>
+        <p>Kapitalismoaren hazkundearen itzalean, Europaren handinahiak munduaren mapa berridazten</p>
+      </header>
+
+      <form id="login-form" class="museo-form" aria-label="Museora sartzeko datuak">
+        <label for="login-user" class="sr-only">Helbide elektronikoa</label>
+        <input id="login-user" class="museo-field museo-username" name="username" type="email" autocomplete="username" placeholder=" " aria-label="Helbide elektronikoa" required spellcheck="false">
+
+        <label for="login-password" class="sr-only">Pasahitza</label>
+        <div class="museo-password-wrap">
+          <input id="login-password" class="museo-field museo-password" name="password" type="password" autocomplete="current-password" placeholder=" " aria-label="Pasahitza" required>
+          <button type="button" class="museo-password-toggle" id="toggle-password" aria-label="Pasahitza erakutsi edo ezkutatu" title="Pasahitza erakutsi edo ezkutatu">◉</button>
+        </div>
+
+        <button class="museo-submit" type="submit" id="login-submit" aria-label="Sartu">Sartu</button>
+        <p class="form-error museo-login-error" id="login-error" role="alert" aria-live="polite"></p>
+      </form>
+
+      <div id="demo-banner" class="notice amber museo-demo-banner" hidden><strong>Erakustaldi modua.</strong> Datuak nabigatzaile honetan soilik gordetzen dira.</div>
+      <div id="demo-access" class="museo-demo-access" hidden>
+        <p>Erakustaldi modua</p>
+        <button type="button" class="btn outline" data-demo="student">Ikasle gisa sartu</button>
+        <button type="button" class="btn outline" data-demo="teacher">Irakasle gisa sartu</button>
       </div>
-    </section>
+      <p class="museo-access-help">Sartzeko arazoak badituzu, galdetu irakasleari. Ez partekatu zure pasahitza.</p>
+    </main>
   </div>
 
   <div id="app-shell" class="app-shell" hidden>
