@@ -43,39 +43,7 @@ $("#view").dataset.museumPage=isTeacher()?"teacher":currentMission===0?"home":cu
 if(teacherPreview)$("#view").insertAdjacentHTML("afterbegin",'<div class="notice amber" style="margin:12px auto;max-width:1100px"><strong>Vista previa del alumno · '+esc(mine()?.name||"equipo de prueba")+'</strong> — Estás viendo la interfaz de un estudiante. Es una simulación: no podrás guardar respuestas, subir PDF ni reclamar países. <button type="button" class="btn outline" id="return-to-teacher" style="margin-left:10px">← Volver al panel docente</button></div>');
 }
 function pageHeading(eyebrow,title,desc,pill){return '<div class="page-top"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h1>'+esc(title)+'</h1><p class="page-desc">'+esc(desc)+'</p></div>'+(pill?'<span class="step-pill">'+esc(pill)+'</span>':'')+'</div>'}
-function renderReplicaHome(){
- const total=missions.length||5,done=countDone(viewTeamId()),pct=Math.round(done*100/total);
- const first=missions[0],second=missions[1];
- const hotspot=(cls,label,attrs)=>`<button type="button" class="museum-hotspot ${cls}" aria-label="${esc(label)}" title="${esc(label)}" ${attrs||""}>${esc(label)}</button>`;
- const nav=[hotspot("museum-nav-hotspot museum-nav-home","Hasiera · Inicio",'data-view="home"'),...missions.map((m,i)=>hotspot("museum-nav-hotspot museum-nav-m"+(i+1),"Misioa "+m.id+": "+m.title,available(m.id)?`data-mission="${m.id}"`:"disabled")),hotspot("museum-nav-hotspot museum-nav-final","Azken erronka · Desafío final",available(6)?'data-mission="6"':"disabled")].join("");
- const checks=missions.map((m,i)=>`<span class="museum-replica-check ${completed(viewTeamId(),m.id)?'done':''}" style="top:${74.5+i*3.15}%" aria-label="Misioa ${m.id}: ${completed(viewTeamId(),m.id)?'gainditua':'osatu gabe'}">${completed(viewTeamId(),m.id)?'✓':''}</span>`).join("");
- const mobile=`<div class="museum-replica-mobile" lang="eu">
-   <h1>Inperialismoaren garaia</h1>
-   <p>Kapitalismoaren hazkundearen itzalean, Europaren handinahiak munduaren mapa berridazten</p>
-   <div class="museum-mobile-progress"><strong>Zure aurrerapena: ${pct}%</strong> · ${done}/${total} misio</div>
-   <div class="museum-mobile-actions">
-     <button type="button" data-view="home">Hasiera</button>
-     ${missions.map(m=>`<button type="button" ${available(m.id)?`data-mission="${m.id}"`:"disabled"}>Misioa ${m.id} ${completed(viewTeamId(),m.id)?"✓":""}</button>`).join("")}
-     <button type="button" ${available(6)?'data-mission="6"':"disabled"}>Azken erronka</button>
-   </div>
-   <button type="button" class="primary" data-mission="1">Misioa hasi →</button>
-   ${teacherPreview?'<button type="button" class="museum-mobile-exit" id="return-to-teacher">← Irakaslearen panela</button>':'<button type="button" class="museum-mobile-exit" id="replica-logout-btn">Saioa itxi</button>'}
- </div>`;
- $("#view").innerHTML=`<div class="museum-replica-stage" aria-label="Inperialismoaren garaia, museo interaktiboa">
- ${nav}
- ${hotspot("museum-start","Misioa 1: Hasi",first?'data-mission="1"':"disabled")}
- ${hotspot("museum-question","Galdera gakoa: Misioa 1",first?'data-mission="1"':"disabled")}
- ${hotspot("museum-context","Testuingurua: Misioa 1",first?'data-mission="1"':"disabled")}
- ${hotspot("museum-next","Hurrengo misioa: Misioa 2",second&&available(second.id)?`data-mission="${second.id}"`:"disabled")}
- ${!teacherPreview?hotspot("museum-profile","Saioa itxi",'id="replica-logout-btn"'):""}
- <div class="museum-replica-progress" style="--progress:${pct}%" role="img" aria-label="${done} misio ${total}tik gaindituta"><strong>${pct}%</strong><small>(${done} / ${total})</small></div>
- ${checks}
- ${mobile}
- ${teacherPreview?'<button type="button" class="museum-replica-preview-back" id="return-to-teacher">← Irakaslearen panela</button>':""}
- </div>`;
-}
 function renderHome(){
- if(!isTeacher())return renderReplicaHome();
  const total=missions.length;
  const n=countDone(viewTeamId());
  const pct=total?Math.round(100*n/total):0;
@@ -217,5 +185,5 @@ document.addEventListener("click",async e=>{const svgCountry=e.target.closest("s
 }if(b.dataset.next){closeModal();changeMission(Number(b.dataset.next))}if(b.dataset.continent){continent=b.dataset.continent;selectedCountry=null;renderFinal()}if(b.dataset.country)chooseCountry(b.dataset.country);if(b.dataset.confirmCountry)await confirmClaim(b.dataset.confirmCountry);if(b.dataset.teacherTab){teacherTab=b.dataset.teacherTab;renderTeacher()}if(b.dataset.releaseCountry)modal('<h2 id="modal-title">¿Liberar territorio?</h2><p>El país volverá a estar disponible para otros equipos.</p><button class="btn warn full" data-yes-release="'+b.dataset.releaseCountry+'">Confirmar liberación</button>');if(b.dataset.yesRelease){closeModal();await releaseCountry(b.dataset.yesRelease)}if(b.dataset.download)await downloadSubmission(b.dataset.download);if(b.dataset.assess)openAssessment(b.dataset.assess)});
 document.addEventListener("change",e=>{if(e.target.id==="teacher-class-select"&&isTeacher()){teacherClassId=e.target.value;renderTeacher();return}if(e.target.matches("[data-question]")){responses[e.target.dataset.question]=Number(e.target.value);const q=e.target.dataset.question;if(checkFeedback?.incorrect?.includes(q))checkFeedback.incorrect=checkFeedback.incorrect.filter(id=>id!==q);const btn=$("#check-mission");if(btn){const m=missionById(currentMission);btn.disabled=m.questions.some(x=>responses[x.id]===undefined)}}});
 document.addEventListener("submit",async e=>{if(e.target.id==="login-form"){e.preventDefault();if(demo){$("#login-error").textContent="Selecciona una de las cuentas de demostración de abajo.";return}await signInReal(e)}if(e.target.id==="upload-form")await uploadPdf(e);if(e.target.id==="assessment-form"){e.preventDefault();await saveAssessment(e.target)}if(e.target.id==="create-class-form"){e.preventDefault();await createClass(e.target)}if(e.target.id==="create-team-form"){e.preventDefault();await createTeam(e.target)}});
-document.addEventListener("click",async e=>{if(e.target.closest("#check-mission"))await submitMission();if(e.target.closest("#claim-button")&&selectedCountry)await claimCountry(selectedCountry);if(e.target.closest("#create-test-students"))await createTestStudents();if(e.target.closest("#copy-test-credentials")){const c=window.__testCredentials||[];if(c.length){await navigator.clipboard.writeText(c.map(a=>a.name+"\nUsuario: "+a.email+"\nContraseña: "+a.password).join("\n\n"));toast("Credenciales copiadas.");}}if(e.target.closest("#export-progress"))downloadCSV();if(e.target.closest("#export-errors"))exportErrors();if(e.target.closest("#reset-demo")){localStorage.removeItem(key);initDemo();render();toast("Demostración reiniciada")}if(e.target.closest("#modal-close")||e.target.id==="modal")closeModal();if(e.target.closest("#toggle-password")){const i=$("#login-password");i.type=i.type==="password"?"text":"password"}if(e.target.closest("#logout-btn")||e.target.closest("#replica-logout-btn")){if(demo){user=null;currentMission=0;switchScreen(false)}else await db.auth.signOut()}});
+document.addEventListener("click",async e=>{if(e.target.closest("#check-mission"))await submitMission();if(e.target.closest("#claim-button")&&selectedCountry)await claimCountry(selectedCountry);if(e.target.closest("#create-test-students"))await createTestStudents();if(e.target.closest("#copy-test-credentials")){const c=window.__testCredentials||[];if(c.length){await navigator.clipboard.writeText(c.map(a=>a.name+"\nUsuario: "+a.email+"\nContraseña: "+a.password).join("\n\n"));toast("Credenciales copiadas.");}}if(e.target.closest("#export-progress"))downloadCSV();if(e.target.closest("#export-errors"))exportErrors();if(e.target.closest("#reset-demo")){localStorage.removeItem(key);initDemo();render();toast("Demostración reiniciada")}if(e.target.closest("#modal-close")||e.target.id==="modal")closeModal();if(e.target.closest("#toggle-password")){const i=$("#login-password");i.type=i.type==="password"?"text":"password"}if(e.target.closest("#logout-btn")){if(demo){user=null;currentMission=0;switchScreen(false)}else await db.auth.signOut()}});
 start();
