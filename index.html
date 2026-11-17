@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="./assets/museo-rotulos-reales.css?v=20261117-3">
   <!-- Sistema visual interior del museo, independiente de la portada y fácil de revertir -->
   <link rel="stylesheet" href="./assets/museo-salas.css?v=20261117-1">
+  <link rel="stylesheet" href="./assets/museo-fotografias.css?v=20261117-1">
+  <link rel="stylesheet" href="./assets/museo-galeria-v2.css?v=20261117-1">
 </head>
 <body>
   <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
@@ -62,6 +64,13 @@
       <a class="logo" href="./"><span class="logo-mark">✳</span> Inperialismoaren garaia <span class="topbar-sub">/ MUSEO DIGITALA · XIX. MENDEA</span></a>
       <div class="topbar-right"><span id="mode-badge" class="mode-badge" hidden>DEMO</span><span id="topbar-user" class="user-chip"></span><button class="btn tiny outline" id="logout-btn" type="button">Salir ↗</button></div>
     </header>
+    <section class="museum-exhibition-banner" aria-label="Título de la exposición">
+      <div class="museum-banner-inner" lang="eu">
+        <h2>Inperialismoaren garaia</h2>
+        <div class="museum-banner-ornament" aria-hidden="true">✧</div>
+        <p>Kapitalismoaren hazkundearen itzalean, Europaren handinahiak munduaren mapa berridazten</p>
+      </div>
+    </section>
     <div class="layout">
       <aside class="sidebar">
         <div class="aside-label">TU EXPEDICIÓN</div>
@@ -84,6 +93,6 @@
   <div id="modal" class="modal-backdrop" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="modal-close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
   <div id="toast" class="toast" role="status" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
-  <script type="module" src="./js/app.js?v=20261117-preview2"></script>
+  <script type="module" src="./js/app.js?v=20261117-galeria1"></script>
 </body>
 </html>
