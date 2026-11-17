@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102738">
+  <meta name="description" content="Inperialismoa: aventura histórica colaborativa sobre el imperialismo del siglo XIX.">
+  <title>Inperialismoa · La historia en tus manos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
+  <div id="login-screen" class="login-screen" hidden>
+    <section class="login-hero" aria-label="Presentación del proyecto">
+      <a class="logo light" href="./"><span class="logo-mark">✳</span> INPERIALISMOA</a>
+      <div class="hero-art" aria-hidden="true"><span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span><span class="hero-globe">✥</span></div>
+      <div class="hero-bottom"><div class="eyebrow light">UN VIAJE POR EL SIGLO XIX</div><h1>La historia<br><em>en tus manos.</em></h1><p>Cinco misiones, una investigación final y una historia que todavía nos interpela.</p><span class="hero-rule"></span><span class="hero-small">OBSERVA · INVESTIGA · REFLEXIONA</span></div>
+    </section>
+    <section class="login-form-side">
+      <div class="login-form-wrap">
+        <span class="eyebrow">PLATAFORMA EDUCATIVA</span>
+        <h2>Bienvenidos a la aventura.</h2>
+        <p class="muted">Accede con tus credenciales individuales para continuar la misión de tu equipo.</p>
+        <div id="demo-banner" class="notice amber" hidden><strong>Modo demostración.</strong> Los cambios solo se guardan en este navegador. No hay usuarios reales ni sincronización entre dispositivos.</div>
+        <form id="login-form">
+          <label for="login-user">Usuario</label><input id="login-user" name="username" autocomplete="username" required placeholder="Tu nombre de usuario">
+          <label for="login-password">Contraseña</label><div class="password-wrap"><input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña"><button type="button" class="password-toggle" id="toggle-password" aria-label="Mostrar u ocultar contraseña">Mostrar</button></div>
+          <p class="form-error" id="login-error" role="alert"></p>
+          <button class="btn primary full" type="submit" id="login-submit">Entrar en la expedición <span aria-hidden="true">↗</span></button>
+        </form>
+        <div id="demo-access" class="demo-access" hidden><div class="demo-divider"><span>O explorar una demostración</span></div><div class="demo-actions"><button class="btn outline" data-demo="student">Entrar como alumno</button><button class="btn outline" data-demo="teacher">Entrar como profesor</button></div></div>
+        <p class="login-help">Si no puedes entrar, pide al profesor que revise tus credenciales. No compartas tu contraseña.</p>
+      </div>
+    </section>
+  </div>
+
+  <div id="app-shell" class="app-shell" hidden>
+    <header class="topbar">
+      <a class="logo" href="./"><span class="logo-mark">✳</span> INPERIALISMOA <span class="topbar-sub">/ HISTORIA CONTEMPORÁNEA</span></a>
+      <div class="topbar-right"><span id="mode-badge" class="mode-badge" hidden>DEMO</span><span id="topbar-user" class="user-chip"></span><button class="btn tiny outline" id="logout-btn" type="button">Salir ↗</button></div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="aside-label">TU EXPEDICIÓN</div>
+        <div class="team-summary" id="team-summary"></div>
+        <div class="sidebar-section-title">LAS MISIONES <span id="mission-count"></span></div>
+        <nav aria-label="Navegación de las misiones" id="mission-nav" class="mission-nav"></nav>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-title"><span>EQUIPOS EN ESTA MISIÓN</span><span class="live-pulse" title="Se actualiza automáticamente"></span></div>
+        <p class="aside-explainer">✓ indica que el equipo ha conseguido el 100 % de aciertos en la misión seleccionada.</p>
+        <div id="scoreboard" class="scoreboard" aria-live="polite"></div>
+        <div class="sidebar-foot">«Conocer el pasado es también aprender a hacer preguntas.»</div>
+      </aside>
+      <main class="main-content" id="main-content" tabindex="-1">
+        <div id="view"></div>
+      </main>
+    </div>
+  </div>
+
+  <div id="modal" class="modal-backdrop" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="modal-close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
