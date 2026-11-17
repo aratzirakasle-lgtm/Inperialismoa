@@ -65,3 +65,18 @@ Esta es la **primera versión funcional de pruebas**, no una plataforma escolar 
 - Separar entornos de pruebas y producción, copias de seguridad y migraciones futuras.
 
 Las modificaciones se versionan en **GitHub**, no es necesario crear nuevos HTML descargables en la Biblioteca de ChatGPT para cada cambio.
+
+## 6. Seguimiento y evaluación docente privados (noviembre de 2026)
+
+Implementado en el repositorio y aplicado al proyecto Supabase:
+
+- **Progreso**: fecha y hora, intentos y alumno que completó la misión (solo profesor).
+- **Alumnos**: envíos, últimos intentos, porcentaje medio de aciertos (solo profesor; no equivale automáticamente a participación).
+- **Errores**: número de envíos y errores por pregunta, filtrable por clase, exportable en CSV.
+- **Rúbricas PDF**: evaluación de cinco criterios, nota sobre 10 y comentario privado. Se guarda en `submission_assessments`.
+- **Clases**: tabla de clases con curso, clase inicial `Clase de pruebas`, y equipo `Exploradores` conservado. Alta de nuevas clases/equipos en el panel y filtro por clase.
+- **Privacidad**: RLS a nivel de PostgreSQL, no solo ocultación visual. Los estudiantes consultan `mission_badges` (tics sin fecha ni alumno) y `territory_markers` (país y equipo sin autor ni hora). Intentos, respuestas enviadas y rúbricas son solo de profesorado autorizado.
+- **Historial**: fichero `supabase/teacher_private_dashboard.sql` como referencia de despliegue. Ya aplicado en Supabase; **NO ejecutar de nuevo sin revisar**, pues contiene modificaciones de estructura y permisos.
+- **Descargas**: CSV privado del progreso y errores por pregunta. Evitar compartir los archivos exportados fuera del ámbito docente.
+
+**Aún pendiente:** prueba completa con dos sesiones reales de alumnos, prueba de concurrencia y validación de privacidad con cuenta auténtica de estudiante; auditoría RGPD y revisión de requisitos del centro. No usar todavía nombres reales hasta completar esas comprobaciones.
