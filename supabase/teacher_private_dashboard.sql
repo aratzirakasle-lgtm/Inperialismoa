@@ -279,3 +279,48 @@ revoke all on function public.my_team() from public,anon;
 grant execute on function public.is_teacher(),public.my_team() to authenticated;
 revoke all on function public.register_submission(text,text,bigint) from public,anon;
 grant execute on function public.register_submission(text,text,bigint) to authenticated;
+
+-- Ocupaciones visibles por clase, sin identidad del alumno ni hora de reclamación.
+create table if not exists public.territory_markers (
+ country_code text not null,
+ team_id uuid not null references public.teams(id) on delete cascade,
+ class_id uuid not null references public.classes(id),
+ primary key (class_id,country_code),
+ unique(team_id)
+);
+alter table public.territory_markers enable row level security;
+drop policy if exists "Ocupación pública limitada a la clase" on public.territory_markers;
+create policy "Ocupación pública limitada a la clase" on public.territory_markers
+for select to authenticated using(public.same_class_team(team_id) or public.teacher_owns_team(team_id));
+grant select on public.territory_markers to authenticated;
+revoke insert,update,delete on public.territory_markers from anon,authenticated;
+insert into public.territory_markers(country_code,team_id,class_id)
+select country_code,team_id,class_id from public.territory_claims on conflict do nothing;
+create or replace function public.sync_territory_marker()
+returns trigger language plpgsql security definer set search_path='' as $$
+begin
+ if TG_OP='INSERT' then
+   insert into public.territory_markers(country_code,team_id,class_id)
+   values(new.country_code,new.team_id,new.class_id) on conflict do nothing;
+   return new;
+ elsif TG_OP='DELETE' then
+   delete from public.territory_markers where class_id=old.class_id and country_code=old.country_code;
+   return old;
+ end if;
+ return null;
+end $$;
+drop trigger if exists territory_marker_insert on public.territory_claims;
+drop trigger if exists territory_marker_delete on public.territory_claims;
+create trigger territory_marker_insert after insert on public.territory_claims
+for each row execute function public.sync_territory_marker();
+create trigger territory_marker_delete after delete on public.territory_claims
+for each row execute function public.sync_territory_marker();
+revoke all on function public.sync_territory_marker() from public,anon,authenticated;
+drop policy if exists "Territorios de tu clase" on public.territory_claims;
+create policy "Detalle de reclamación solo docente" on public.territory_claims
+for select to authenticated using(public.teacher_owns_team(team_id));
+revoke select on public.submissions from authenticated;
+grant select(id,team_id,submitted_by,file_path,filename,file_size,created_at,status) on public.submissions to authenticated;
+do $$ begin
+ alter publication supabase_realtime add table public.territory_markers;
+exception when duplicate_object then null;end $$;
