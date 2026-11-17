@@ -265,3 +265,17 @@ using(bucket_id='entregas' and (
 do $$ begin
  alter publication supabase_realtime add table public.mission_badges;
 exception when duplicate_object then null;end $$;
+
+-- Endurecimiento posterior: los alumnos solo reciben ticks, no registros completos.
+drop policy if exists "Finalizaciones detalladas privadas" on public.mission_completions;
+drop policy if exists "Solo docente consulta finalizaciones" on public.mission_completions;
+create policy "Solo docente consulta finalizaciones" on public.mission_completions for select to authenticated
+using(public.teacher_owns_team(team_id));
+-- Las funciones trigger no son endpoints públicos.
+revoke all on function public.finish_final_on_claim() from public,anon,authenticated;
+revoke all on function public.sync_mission_badge() from public,anon,authenticated;
+revoke all on function public.is_teacher() from public,anon;
+revoke all on function public.my_team() from public,anon;
+grant execute on function public.is_teacher(),public.my_team() to authenticated;
+revoke all on function public.register_submission(text,text,bigint) from public,anon;
+grant execute on function public.register_submission(text,text,bigint) to authenticated;
