@@ -76,3 +76,5 @@
 @media (prefers-reduced-motion:reduce){
   .museo-stage *{scroll-behavior:auto;transition:none!important}
 }
+
+@media (max-width:850px), (orientation:portrait){.museo-stage::before{z-index:0}.museo-mobile-intro,.museo-form,.museo-access-help,.museo-demo-banner,.museo-demo-access{z-index:1}}
