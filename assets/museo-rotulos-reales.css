@@ -1,0 +1,96 @@
+/* Corrección localizada: eliminamos solo el texto IMPRESO en los dos rótulos de la fotografía.
+   Son dos fragmentos de la misma imagen, retocados píxel a píxel sin cambiar el muro,
+   los iconos, el título o el museo. El login sigue siendo HTML real.
+   Esta hoja es una sola capa reversible: para volver al diseño anterior, quitar su link. */
+@media (min-width:1025px) and (orientation:landscape){
+  .museo-form .museo-field-frame::before,
+  .museo-form .museo-password-wrap::before {
+    content:"";
+    position:absolute;
+    opacity:1!important;
+    z-index:0;
+    display:block;
+    pointer-events:none;
+    background-repeat:no-repeat!important;
+    background-position:center!important;
+    background-size:100% 100%!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    filter:none!important;
+    transform:none!important;
+    transition:none!important;
+  }
+  /* Coordenadas medidas sobre la imagen original de 1672×941 píxeles. */
+  .museo-form .museo-field-frame::before {
+    left:14.75%!important;top:26.1%!important;
+    width:51.75%!important;height:76.7%!important;
+    right:auto!important;bottom:auto!important;
+    background-image:url("data:image/webp;base64,UklGRk4CAABXRUJQVlA4IEICAABQDACdASp1ACwAPj0ciUOiIaEWrmSQIAPEs4BkH9/tsvn/zwl2i9iKm/hSWIHivQmk5V0n/dCvX7AL+bXu2WzoqbtMxFA6w9dg2auZCS0+LIJuGRfGPr3vdDIKl9aZ2R5w9/8v2XpKVl3xxAD+/ofCflom/wD8IaMlOclq+wkXY/9ezJvsRxmFpbjyzsNx3ma58LT83jToRQ5LJS7/onLqWHhkiZtVn/aOY4R1DEMXEu0t8sowZzesNbahCsNYhyicFUJgPqDJxHv/u22e4+D7uGYt1iZTlhMnq6pQe4INx4rnA4Zv2xb/fx1zP8uDI3QbxESJPMsxdlkPcpvW+TevM4RWJanDJrQfvmEWH+paNhs00IDn+SYM/w5AHyqfC3RSQueGRNyRlRAOb1jxqoc9ip49rLl5C9p698+v6RIBkS98VYXLm+A6DliiwRX58VJrk+d7lEVv5XCbdZ1BC3ASSAo6DPIWSDwpaUAmfv2ZSrekpMxA168ViqeA9S0zpxfG0Vwm9Jm36YBdci2jDjz+Yq87/UIrRKUVCUCZ0P31ZZ9NnwvNn8O8wxV05cuBEDCcf51D04wTPYd7Yilh3sjPy0C1adpFhT63S6JP6lbr1bD92js+QsTPZ9x1BDmP+pwbzuSwhacEWwQnn7YVCQ7Q/M5HVluoETC1OK+zMzaCC9ZDe3UdL2a5K0kqram803GreUvMHWX+KVbF2CVIpdJsqvhEXQOrjqXm+uAEnk69frlLwFVyRfWn0T6Gd/GCo8wgAA==")!important;
+  }
+  .museo-form .museo-password-wrap::before {
+    left:14.75%!important;top:22.7%!important;
+    width:47.35%!important;height:68%!important;
+    right:auto!important;bottom:auto!important;
+    background-image:url("data:image/webp;base64,UklGRhQBAABXRUJQVlA4IAgBAADQBwCdASprACcAPj0ejUSiIaGjpIlYcAeJaQDNWyAev+ARDhzSe0y4YGdIwomqouf0P2Vdt6kNOyH706C+Ar1UsGK2CfL4eAD+9vT/8PLsqR9ZjVAKXGEQ8rs+ft9iJkJ/0g1dOfehKUf5rfzuozLfpGPjK7Di3QAyLc/8qEURjKEKPBjnjbgfRWIgDmkTykVj4dxWiVwZJgk5Wje96AncJbfY+hL2e1taqFy5YN13ndeEUu3P6ojiVnobUi5DY3CMeGQRa7x8TZP7QmPMynWVChFvK9QElC8O2+nUJdZP53hPanhNfjLU5f1eYFaCGsE07vmkwjbOouWJaEFymeFB7yGqrxoAAAA=")!important;
+  }
+  /* No se necesita el marco de foco falso que antes parecía un input superpuesto. */
+  .museo-form .museo-field-frame::after,
+  .museo-form .museo-password-wrap::after {content:none!important;display:none!important}
+  /* El fondo ya no contiene palabras fijas. Placeholder y contenido comparten el mismo aspecto. */
+  .museo-form .museo-field-frame .museo-field,
+  .museo-form .museo-password-wrap .museo-field{
+    position:absolute!important;
+    top:34%!important;
+    left:0!important;
+    width:100%!important;
+    height:72%!important;
+    padding:0 6% 0 18.6%!important;
+    border:0!important;
+    outline:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    font-family:Georgia,"Times New Roman",serif!important;
+    font-size:clamp(11px,1.18vw,19.7px)!important;
+    font-weight:500!important;
+    line-height:1.05!important;
+    color:#30241b!important;
+    -webkit-text-fill-color:#30241b!important;
+    letter-spacing:-.02em!important;
+    text-shadow:0 .35px .5px #4d392d48,0 -.35px .15px #fff5df44!important;
+    mix-blend-mode:multiply!important;
+    opacity:.97!important;
+    caret-color:#33281d;
+    transform:rotate(-5.0deg);
+    transform-origin:18.6% center;
+    filter:none!important;
+    z-index:1;
+  }
+  .museo-form .museo-password-wrap .museo-field{
+    top:28%!important;
+    padding-right:17%!important;
+    transform:rotate(-4.3deg);
+  }
+  .museo-form .museo-field::placeholder,
+  .museo-form .museo-field:focus::placeholder {
+    color:#3f3022!important;
+    -webkit-text-fill-color:#3f3022!important;
+    opacity:.88!important;
+    text-shadow:0 .35px .45px #3d2a1855!important;
+  }
+  .museo-form .museo-field-frame:focus-within,
+  .museo-form .museo-password-wrap:focus-within {outline:none!important}
+  .museo-form .museo-field-frame:has(input:focus-visible),
+  .museo-form .museo-password-wrap:has(input:focus-visible){
+    outline:1px dotted #a57e4eaa!important;
+    outline-offset:3px!important;
+  }
+  .museo-form .museo-password-toggle{
+    opacity:.27!important;
+    color:#644c37!important;
+    transform:rotate(-4deg);
+  }
+  .museo-form .museo-password-toggle:hover,
+  .museo-form .museo-password-toggle:focus-visible{opacity:.9!important}
+}
+/* En móvil conserva la versión legible, sin aplicar parches ni rotaciones. */
