@@ -1,0 +1,317 @@
+/*
+ * INPERIALISMOAREN GARAIA — GALERÍA CONTEMPORÁNEA (v1)
+ * Inspirada en la referencia seleccionada, con fotografías de la misma maqueta.
+ * Es una capa independiente. Retirar su <link> restaura el diseño interior anterior.
+ * La portada fotográfica, Supabase y las herramientas docentes no se modifican.
+ */
+#app-shell {
+  --museum-white:#f4f2ed;
+  --museum-card:#f4f1eb;
+  --museum-blackgreen:#09241f;
+  --museum-brass:#c89e54;
+  --museum-shadow:#040e0e;
+  background:#09211f;
+}
+#app-shell .topbar{
+  height:63px;
+  background:linear-gradient(90deg,#071e1c,#0b3029 48%,#061c1c);
+  border-bottom:1px solid #b9925099;
+  box-shadow:0 4px 17px #0006;
+  z-index:30;
+}
+#app-shell .topbar .logo{font-size:17px;font-weight:500;letter-spacing:.015em;color:#f2e9d8}
+#app-shell .topbar .logo-mark{width:31px;height:31px;font-size:19px}
+#app-shell .topbar-sub{color:#d7ba8a}
+#app-shell .layout{min-height:calc(100vh - 190px);grid-template-columns:265px minmax(0,1fr)}
+#app-shell .sidebar{
+  background:
+    radial-gradient(ellipse 100% 45% at 30% 0%,#315c484b,transparent),
+    linear-gradient(120deg,#0b2925,#071d1b);
+  border-right:1px solid #aa8750;
+  box-shadow:inset -7px 0 20px #020e0eaa;
+}
+#app-shell .sidebar .aside-label{color:#e0ba79}
+#app-shell .team-summary{background:#173b33;border:1px solid #99764b;box-shadow:inset 0 0 0 2px #0b2821}
+#app-shell .nav-mission{border-color:transparent;background:transparent;padding:12px 8px;border-bottom:1px solid #c6a3712e; border-radius:0}
+#app-shell .nav-mission:hover:not(:disabled){background:#254f42;border-radius:5px}
+#app-shell .nav-mission.active{
+  background:linear-gradient(110deg,#f0c780 0%,#ae7938 100%);
+  border-color:#ffdfa8;border-radius:7px;
+  box-shadow:inset 0 0 0 1px #fff6,0 6px 15px #0009;
+}
+#app-shell .nav-mission.active .nav-title{color:#171f1b}
+#app-shell .sidebar-section-title{font-size:10px;color:#d1af7b}
+#app-shell .main-content{
+  background:
+    radial-gradient(ellipse 44% 38% at 40% -13%,#fff0ca24,transparent),
+    radial-gradient(ellipse 30% 30% at 84% 3%,#e3b77417,transparent),
+    repeating-linear-gradient(0deg,transparent 0 27px,#8cbb9e03 28px 29px),
+    linear-gradient(155deg,#163b32,#0d2c26 38%,#08231e 100%);
+  padding:28px clamp(20px,3vw,53px) 80px;
+}
+#app-shell .main-content::after{height:4px}
+#app-shell .museum-cornice{display:none}
+#app-shell .content-width{max-width:1300px}
+/* Cabecera continua de exposición, como la rotulación de una sala física. */
+#app-shell .museum-exhibition-banner{
+  position:relative;isolation:isolate;
+  min-height:130px;
+  background:
+    radial-gradient(ellipse 42% 90% at 50% -32%,#80a6a142,transparent),
+    linear-gradient(90deg,#061d1d 0%,#15362e 34%,#173b33 66%,#071e1b 100%);
+  border-bottom:2px solid #b48a4d;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 5px 12px #020b0da6,0 8px 20px #0005;
+  overflow:hidden;
+}
+#app-shell .museum-exhibition-banner::before{
+  content:"";position:absolute;inset:-20% 25% auto;height:100%;
+  background:radial-gradient(ellipse at 50% 0%,#d3e3e342,transparent 65%);
+  pointer-events:none;
+}
+#app-shell .museum-exhibition-banner::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(92deg,#fff5dc00 0,#fff5dc00 6%,#fff5dc06 6.15%,#fff5dc00 6.35%);
+  opacity:.55;pointer-events:none;
+}
+#app-shell .museum-banner-inner{text-align:center;padding:22px 28px;position:relative;z-index:1;max-width:1200px}
+#app-shell .museum-banner-inner h2{
+  margin:0;color:#f4eada;line-height:1;
+  font:500 clamp(28px,3.65vw,53px)/1.12 Georgia,"Times New Roman",serif;
+  letter-spacing:-.035em;text-shadow:0 3px 7px #0009;
+}
+#app-shell .museum-banner-ornament{margin:6px auto 5px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:17px;color:#d7b474}
+#app-shell .museum-banner-ornament::before,
+#app-shell .museum-banner-ornament::after{content:"";width:clamp(60px,9vw,170px);height:1px;background:linear-gradient(90deg,transparent,#b99560)}
+#app-shell .museum-banner-ornament::after{transform:rotate(180deg)}
+#app-shell .museum-banner-inner p{
+  margin:0;color:#e2d5c1;font:italic clamp(12px,1.15vw,16px)/1.4 Georgia,serif;
+}
+#app-shell .museum-gallery-home{max-width:1300px}
+#app-shell .museum-gallery-heading{margin:0 0 20px;padding:0 4px}
+#app-shell .museum-gallery-heading .eyebrow{
+  color:#dfbd7b;letter-spacing:.16em;font-size:11px;font-weight:700;
+  display:flex;align-items:center;gap:13px;
+}
+#app-shell .museum-gallery-heading .eyebrow::after{content:"";width:120px;height:1px;background:#c4a06b}
+#app-shell .museum-gallery-heading h1{
+  color:#f4ead8;font:500 clamp(32px,3.45vw,49px)/1.15 Georgia,serif;
+  letter-spacing:-.028em;max-width:1050px;
+  margin:9px 0 11px;text-shadow:0 2px 10px #0008;
+}
+#app-shell .museum-gallery-heading p{
+  color:#e3dbcb;max-width:980px;margin:0;
+  font:italic clamp(13px,1.25vw,16px)/1.55 Georgia,serif;
+}
+#app-shell .museum-showcase{
+  display:grid;grid-template-columns:1.2fr .98fr;gap:18px;align-items:stretch;
+}
+#app-shell .museum-feature{
+  position:relative;overflow:hidden;
+  display:grid;min-width:0;min-height:256px;
+  background:linear-gradient(130deg,#f8f6f2,#e7e5df);
+  border:2px solid #caa562;border-radius:15px;
+  box-shadow:inset 0 0 0 3px #fff9,0 12px 24px #0009;
+  color:#1a211b;
+}
+#app-shell .museum-feature-primary{grid-template-columns:45% 55%}
+#app-shell .museum-feature-question{grid-template-columns:67% 33%}
+#app-shell .museum-feature-photo{
+  min-height:100%;background-color:#786753;background-size:400% 100%;
+  background-repeat:no-repeat;position:relative;
+}
+#app-shell .museum-feature-primary .museum-feature-photo{
+  border-right:2px solid #dfcaa6;
+  clip-path:polygon(0 0,100% 0,89% 100%,0 100%);
+  margin-right:-8%;
+}
+#app-shell .museum-feature-question .museum-feature-photo{
+  clip-path:polygon(28% 0,100% 0,100% 100%,0% 100%);
+  margin-left:-22%;border-left:1px solid #d7bb89;
+}
+#app-shell .museum-feature-copy{
+  padding:28px clamp(18px,2.2vw,35px) 22px;
+  display:flex;flex-direction:column;align-items:flex-start;min-width:0;
+  position:relative;z-index:1;
+}
+#app-shell .museum-object-label{
+  display:inline-flex;align-items:center;
+  border:1px solid #a68558;border-radius:5px;
+  background:#163c33;color:#f4e8c5;
+  font:700 10px/1.1 "DM Sans",sans-serif;letter-spacing:.09em;
+  padding:8px 13px;box-shadow:0 3px 8px #0003;
+  margin-bottom:12px;
+}
+#app-shell .museum-feature h2{
+  font:600 clamp(22px,2.1vw,33px)/1.15 Georgia,"Times New Roman",serif;
+  color:#1b251d;letter-spacing:-.02em;margin:0 0 12px;
+}
+#app-shell .museum-feature-question h2{font-size:clamp(20px,1.75vw,29px);font-style:italic}
+#app-shell .museum-feature p{
+  color:#34352e;line-height:1.48;font-size:13px;max-width:480px;margin:0 0 17px;
+}
+#app-shell .museum-feature .btn{
+  margin-top:auto;min-height:39px;font-size:13px;padding:9px 16px;
+  width:min(100%,248px);box-shadow:0 3px 9px #0004;
+}
+#app-shell .museum-feature .btn.outline{
+  background:#f0eee6;color:#283e36;border:1px solid #a78250;
+}
+#app-shell .museum-gallery-lower{
+  display:grid;grid-template-columns:.92fr 1.2fr .92fr;gap:18px;margin-top:18px;
+  align-items:stretch;
+}
+#app-shell .museum-gallery-lower .card{
+  background:linear-gradient(140deg,#f7f6f2,#e9e7e1);
+  border:2px solid #c5a16c;border-radius:14px;
+  padding:20px;min-height:242px;box-shadow:inset 0 0 0 3px #fff9,0 12px 24px #0008;
+}
+#app-shell .museum-gallery-lower .card::before{display:none}
+#app-shell .museum-panel-title{
+  display:flex;gap:9px;align-items:center;
+  color:#1d342c;white-space:normal;
+  font-size:11px;font-weight:800;letter-spacing:.055em;
+  padding-bottom:10px;margin-bottom:13px;border-bottom:1px solid #c0b6a1;
+}
+#app-shell .museum-panel-emblem{
+  background:#133b31;color:#daba79;border:2px solid #c4a063;
+  flex:none;width:33px;height:33px;display:grid;place-items:center;
+  border-radius:50%;font:700 19px/1 Georgia,serif;
+}
+#app-shell .museum-progress-content{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center;
+}
+#app-shell .museum-progress-ring{
+  width:min(100%,155px);aspect-ratio:1;display:grid;place-items:center;
+  margin:auto;border-radius:50%;
+  background:conic-gradient(#c4a057 var(--progress),#315d4f 0);
+  box-shadow:0 3px 10px #0002,inset 0 0 0 3px #fff8;
+}
+#app-shell .museum-progress-ring > div{
+  width:76%;aspect-ratio:1;border-radius:50%;
+  background:linear-gradient(140deg,#faf9f5,#e6e7df);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:inset 0 2px 6px #0003;
+}
+#app-shell .museum-progress-ring strong{
+  font:600 clamp(23px,2.3vw,38px)/1 Georgia,serif;color:#212823;
+}
+#app-shell .museum-progress-ring small{
+  margin-top:5px;font-size:11px;color:#4e5850;
+}
+#app-shell .museum-progress-list{
+  display:grid;gap:7px;list-style:none;margin:0;padding:0;
+  font-size:11px;color:#303b32;font-weight:700;
+}
+#app-shell .museum-progress-list li{display:flex;align-items:center;gap:9px}
+#app-shell .museum-progress-dot{
+  display:grid;place-items:center;width:21px;height:21px;border-radius:50%;
+  border:1px solid #81918a;flex:none;background:#fafaf8;color:#204b36;font-size:12px;
+}
+#app-shell .museum-progress-dot.is-complete{
+  color:#fff;border-color:#2f6a4a;background:#356c50;
+}
+#app-shell .museum-context-panel{padding:0!important;display:grid;grid-template-columns:70% 30%;overflow:hidden}
+#app-shell .museum-context-text{padding:18px;display:flex;flex-direction:column;min-width:0}
+#app-shell .museum-context-text h3{
+  font:600 clamp(18px,1.7vw,23px)/1.2 Georgia,serif;color:#232d26;
+  margin:0 0 9px;
+}
+#app-shell .museum-context-text p{font-size:12px;line-height:1.52;margin:0 0 8px;color:#3a423c}
+#app-shell .museum-panel-note{
+  margin-top:auto;display:block;font:italic 12px/1.4 Georgia,serif;color:#5d635c;
+  border-top:1px solid #b7b6aa;padding-top:9px;
+}
+#app-shell .museum-context-photo{min-height:100%;filter:saturate(.6);clip-path:polygon(28% 0,100% 0,100% 100%,0 100%);margin-left:-20%}
+#app-shell .museum-next-panel{display:flex;flex-direction:column}
+#app-shell .museum-next-body{display:grid;grid-template-columns:39% minmax(0,1fr);gap:12px;align-items:start}
+#app-shell .museum-next-photo{aspect-ratio:1.2;border-radius:6px;border:1px solid #c4b59a;box-shadow:0 3px 7px #0004}
+#app-shell .museum-next-body strong{font:600 18px/1.25 Georgia,serif;color:#273128}
+#app-shell .museum-next-body p{font-size:12px;color:#424840;margin-top:6px;line-height:1.4}
+#app-shell .museum-next-cta{margin-top:auto;min-height:37px;font-size:12px;width:100%}
+#app-shell .museum-next-completed{margin:auto 0;color:#314940}
+#app-shell .museum-gallery-section-heading{
+  color:#eee4d1;display:flex;gap:13px;align-items:baseline;
+  font:500 24px/1.2 Georgia,serif;margin:35px 0 17px;
+}
+#app-shell .museum-gallery-section-heading span{
+  color:#c1ad88;font:600 11px/1.4 "DM Sans",sans-serif;letter-spacing:.1em;
+}
+#app-shell .museum-mission-index{
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;
+}
+#app-shell .museum-mission-index .mission-card{
+  border-radius:10px;border:1px solid #bda77d;border-top:4px solid #b89052;
+  background:linear-gradient(150deg,#f6f5f0,#eeeee9);
+  min-height:205px;padding:19px;
+}
+#app-shell .museum-mission-index .mission-card h3{font-size:20px;line-height:1.25}
+#app-shell .museum-mission-index .mission-card p{font-size:12px}
+#app-shell .museum-mission-index .mission-card .btn{margin-top:auto;width:100%}
+#app-shell .museum-mission-index .mission-card .card-top{gap:6px}
+/* Los ejercicios mantienen el mismo lenguaje museográfico y la lectura clara. */
+#app-shell #view[data-museum-page="mission"] .card.question-card{
+  background:linear-gradient(145deg,#f8f7f3,#e7e7e1);border:1px solid #bbac8e;
+  border-top:4px solid #c19a5b;border-radius:11px;padding:27px;
+}
+#app-shell #view[data-museum-page="mission"] .card:not(.question-card){
+  background:linear-gradient(145deg,#f8f7f3,#eeeae3);border-radius:11px;
+}
+#app-shell .option{background:#fcfbf7;border:1px solid #bbbbae;border-radius:7px}
+#app-shell .option:hover{background:#eef5f0}
+#app-shell .option:has(input:checked){background:#dfede6;border-color:#50866e}
+#app-shell .card h3{color:#243e32}
+#app-shell .card:not(.museum-gallery-lower .card){background-color:#f5f4ef}
+#app-shell .page-top h1{font-weight:500}
+#app-shell .page-top .page-desc{color:#e7ddca}
+/* Garantías de adaptación. La arquitectura visual permanece, las tarjetas fluyen. */
+@media (max-width:1350px){
+ #app-shell .museum-gallery-lower{grid-template-columns:1fr 1.12fr}
+ #app-shell .museum-next-panel{grid-column:1/-1;min-height:160px!important}
+ #app-shell .museum-next-panel .museum-next-body{grid-template-columns:110px 1fr}
+ #app-shell .museum-next-panel .museum-next-photo{height:94px}
+}
+@media (max-width:1150px){
+ #app-shell .museum-showcase{grid-template-columns:1fr}
+ #app-shell .museum-feature{min-height:260px}
+ #app-shell .museum-feature-primary{grid-template-columns:35% 65%}
+ #app-shell .museum-feature-question{grid-template-columns:72% 28%}
+ #app-shell .museum-mission-index{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:780px){
+ #app-shell .topbar{height:60px}
+ #app-shell .museum-exhibition-banner{min-height:104px}
+ #app-shell .museum-banner-inner{padding:18px 13px}
+ #app-shell .museum-banner-inner h2{font-size:clamp(25px,5.4vw,39px)}
+ #app-shell .museum-banner-inner p{font-size:11px}
+ #app-shell .layout{display:flex;flex-direction:column}
+ #app-shell .main-content{padding:22px 14px 60px}
+ #app-shell .museum-gallery-heading h1{font-size:clamp(29px,7vw,42px)}
+ #app-shell .museum-gallery-lower{grid-template-columns:1fr}
+ #app-shell .museum-next-panel{grid-column:auto}
+ #app-shell .museum-showcase{gap:14px}
+ #app-shell .museum-feature{min-height:230px}
+ #app-shell .museum-feature-primary{grid-template-columns:37% 63%}
+ #app-shell .museum-feature-copy{padding:20px}
+ #app-shell .museum-feature h2{font-size:clamp(21px,4.2vw,27px)}
+ #app-shell .museum-mission-index{grid-template-columns:1fr}
+ #app-shell .museum-gallery-lower .card{min-height:215px}
+}
+@media (max-width:470px){
+ #app-shell .museum-feature-primary{grid-template-columns:34% 66%}
+ #app-shell .museum-feature-question{grid-template-columns:72% 28%}
+ #app-shell .museum-feature{min-height:270px}
+ #app-shell .museum-feature-copy{padding:16px 13px}
+ #app-shell .museum-feature h2,#app-shell .museum-feature-question h2{font-size:20px}
+ #app-shell .museum-feature p{font-size:12px}
+ #app-shell .museum-object-label{font-size:9px;padding:6px 9px}
+ #app-shell .museum-feature .btn{font-size:11px;padding:7px}
+ #app-shell .museum-context-panel{grid-template-columns:74% 26%}
+ #app-shell .museum-context-text{padding:15px}
+ #app-shell .museum-progress-content{grid-template-columns:45% 55%}
+ #app-shell .museum-progress-list{font-size:10px}
+ #app-shell .museum-gallery-heading{margin-bottom:17px}
+}
+@media (prefers-reduced-motion:reduce){
+ #app-shell .museum-gallery-home *{transition:none!important}
+}
