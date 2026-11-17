@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/museo-portada.css?v=20261117-2">
   <link rel="stylesheet" href="./css/styles.css?v=museo1">
+  <link rel="stylesheet" href="./assets/museo-login-integrado.css?v=20261117-1">
 </head>
 <body>
   <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
@@ -27,7 +28,9 @@
 
       <form id="login-form" class="museo-form" aria-label="Museora sartzeko datuak">
         <label for="login-user" class="sr-only">Helbide elektronikoa</label>
-        <input id="login-user" class="museo-field museo-username" name="username" type="email" autocomplete="username" placeholder="Erabiltzailea / e-posta"  aria-label="Helbide elektronikoa" required spellcheck="false">
+        <div class="museo-field-frame museo-username-frame">
+          <input id="login-user" class="museo-field museo-username" name="username" type="email" autocomplete="username" placeholder="Erabiltzailea / e-posta" aria-label="Helbide elektronikoa" required spellcheck="false">
+        </div>
 
         <label for="login-password" class="sr-only">Pasahitza</label>
         <div class="museo-password-wrap">
