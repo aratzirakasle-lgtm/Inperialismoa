@@ -309,8 +309,15 @@ async function boot(){
     if(teacherPreview){
       stage.classList.add("bi-teacher-preview");busy=false;
       announce("Irakaslearen aurrebista: ezin da daturik bidali.");
-      locked=new Set(["army","monarch","separation","rights"]);
-      positions={army:"auth",monarch:"auth",separation:"lib",rights:"lib"};
+      // La vista docente debe empezar vacía. Nunca inyectar soluciones de ejemplo.
+      // Los alumnos recuperan únicamente los aciertos que realmente tenga guardados su equipo.
+      locked=new Set();
+      positions={};
+      challengeLocked=new Set();
+      pending={};
+      challengePending={};
+      completed=false;
+      phase="classify";
       paint();
       const back=$(".bi-back");back.href="./index.html";
       return;
