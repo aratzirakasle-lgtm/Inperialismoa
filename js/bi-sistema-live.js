@@ -1,14 +1,15 @@
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+import { ICONS } from "./bi-sistema-iconos.js?v=1";
 
 const TRAITS=[
-  ["army","armadak pisu handia","⚔"],
-  ["monarch","monarka bat agintari","♛"],
-  ["parliament","parlamentua kontrolatu","▥"],
-  ["separation","botere-banaketa","⚖"],
-  ["rights","eskubide berriak (askatasunak)","✧"],
-  ["suffrage","sufragio-eskubidea","▣"],
-  ["socialist","alderdi sozialistak sortu","⚑"]
+  ["army","Armadak pisu handia",""],
+  ["monarch","Monarka bat agintari",""],
+  ["parliament","Parlamentua kontrolatu",""],
+  ["separation","Botere-banaketa",""],
+  ["rights","Eskubide berriak",""],
+  ["suffrage","Sufragio-eskubidea",""],
+  ["socialist","Alderdi sozialistak sortu",""]
 ].map(([id,label,icon])=>({id,label,icon}));
 const BY_ID=new Map(TRAITS.map(x=>[x.id,x]));
 const $=sel=>document.querySelector(sel);
@@ -33,7 +34,7 @@ function card(id,placed){
     (fixed?'disabled ':'')+
     'class="bi-card '+(placed?'bi-card-placed':'bi-card-tray')+(fixed?' bi-locked':'')+(isSelected?' bi-selected':'')+
     '" title="'+(fixed?'Kontzeptu zuzena, gordeta':'Sakatu edo arrastatu sailkatzeko')+'">'+
-    '<span class="bi-card-icon" aria-hidden="true">'+esc(t.icon)+'</span>'+
+    '<span class="bi-card-icon" aria-hidden="true">'+ICONS[id]+'</span>'+
     '<span class="bi-card-word">'+esc(t.label)+'</span>'+
     (fixed?'<span class="bi-card-tick" aria-label="Zuzena">✓</span>':placed?'<span class="bi-card-grip" aria-hidden="true">↗</span>':'<span class="bi-card-grip" aria-hidden="true">⠿</span>')+
     '</button>';
