@@ -237,7 +237,13 @@
  .dossier-sheet--case .dossier-grid{display:flex!important;flex-direction:column!important;gap:10px!important}
  .dossier-sheet--case .dossier-photo,.dossier-sheet--case .dossier-mini-map{display:none!important}
  .dossier-sheet--case .dossier-art{display:block!important;position:relative!important;clip-path:none!important;pointer-events:none!important;width:100%!important;height:auto!important;margin:0!important;overflow:hidden!important}
- .dossier-sheet--case .dossier-art img{width:100%!important;max-height:255px!important;object-fit:cover!important;border:5px solid #dbb579!important}
+ .dossier-sheet--case .dossier-art{height:238px!important;min-height:238px!important;
+   background-image:var(--new-museum-art)!important;background-size:285% auto!important;
+   background-position:3% 44%!important;background-repeat:no-repeat!important;
+   border:5px solid #ba8f55!important;box-shadow:0 6px 14px #4026178a!important;
+   clip-path:polygon(0 3%,12% 0,43% 2%,72% 0,100% 3%,99% 95%,81% 99%,52% 98%,24% 100%,0 96%)!important;
+ }
+ .dossier-sheet--case .dossier-art img,.dossier-sheet--case .dossier-art small{display:none!important}
  .dossier-sheet--case .dossier-detail{display:flex!important;flex-direction:column!important;gap:11px!important}
  .dossier-sheet--case .dossier-question{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;
   color:#5b261e!important;font:italic 700 26px/1.14 Georgia,serif!important;background:none!important;text-shadow:none!important;margin:4px 0 5px!important}
