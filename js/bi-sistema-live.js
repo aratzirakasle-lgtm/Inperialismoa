@@ -62,6 +62,7 @@ function paint(){
   auth.innerHTML=cardsFor("auth");
   lib.innerHTML=cardsFor("lib");
   const bank=TRAITS.filter(x=>!roomOf(x.id));
+  stage.dataset.trayCount=String(bank.length);
   tray.innerHTML=bank.length?bank.map(x=>card(x.id,false)).join(""):'<p class="bi-desk-complete">Kontzeptu guztiak kokatuta daude.</p>';
   $("#bi-progress").textContent=locked.size+" / 7 zuzen";
   note.textContent=feedback||"Hautatu kontzeptua eta ondoren aretoa; edo arrastatu txartela.";
