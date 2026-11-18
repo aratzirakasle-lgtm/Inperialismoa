@@ -1,0 +1,149 @@
+/* INPERIALISMOAREN GARAIA · Cartelas ilustradas, aprobadas el 18/11/2026.
+   Sobrescribe únicamente la apariencia de los siete conceptos del ejercicio 2.
+   No modifica la corrección ni la navegación. */
+.bi-stage .bi-card{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-weight:700!important;
+  color:#241c12!important;
+  text-transform:none!important;
+  letter-spacing:-.027em!important;
+}
+.bi-stage .bi-card .bi-card-icon{
+  position:relative!important;
+  order:0!important;flex:0 0 auto!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:3.4cqw!important;height:3.45cqw!important;
+  padding:0!important;margin:0 .46cqw 0 0!important;
+  border:0!important;background:transparent!important;
+  box-shadow:none!important;text-shadow:none!important;overflow:visible!important;
+}
+.bi-stage .bi-card-icon::after{
+  content:"";position:absolute;right:-.25cqw;top:13%;
+  width:.09cqw;min-width:1px;height:74%;
+  background:linear-gradient(180deg,#f9e6ac,#b28a4b 40%,#785221 60%,#eed39c);
+  box-shadow:1px 0 1px #fff8;
+  pointer-events:none;
+}
+.bi-stage .bi-card .bi-concept-svg{
+  display:block;width:100%;height:100%;overflow:visible;object-fit:contain;
+  filter:drop-shadow(0 .09cqw .12cqw #583a1b77);
+  pointer-events:none;user-select:none;
+}
+.bi-stage .bi-card .bi-card-word{
+  flex:1 1 auto!important;min-width:0!important;
+  color:#201910!important;line-height:1.15!important;
+  text-align:left!important;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-weight:700!important;
+  hyphens:auto;overflow-wrap:normal;word-break:normal;
+}
+.bi-stage .bi-card .bi-card-grip{display:none!important;}
+.bi-stage .bi-card:not(.bi-locked){cursor:grab;}
+.bi-stage .bi-card:not(.bi-locked):active{cursor:grabbing;}
+.bi-stage .bi-card-tray{
+  background:linear-gradient(150deg,#fff6e2 0%,#f1e1c4 57%,#e3cba4 100%)!important;
+  border:.12cqw solid #a87534!important;
+  box-shadow:inset 0 0 0 .11cqw #fff7e9,inset 0 -.11cqw .2cqw #ab8c6088,0 .22cqw .42cqw #0008!important;
+  padding:.28cqw .43cqw!important;
+  border-radius:.55cqw!important;
+  gap:.15cqw!important;
+  font-size:1.03cqw!important;
+}
+.bi-stage .bi-card-tray .bi-card-icon{
+  width:2.75cqw!important;height:2.32cqw!important;margin-right:.45cqw!important;
+}
+.bi-stage .bi-card-tray .bi-card-word{text-align:left!important;}
+.bi-stage .bi-card.bi-selected{
+  outline:2px solid #ffdf9f!important;outline-offset:2px;
+}
+.bi-stage .bi-room-drop .bi-card-placed{
+  background:linear-gradient(148deg,#fff6e5,#f2e3cb 57%,#e6d1ab)!important;
+  border:.09cqw solid #c39b57!important;
+  box-shadow:inset 0 0 0 .12cqw #fff9,inset 0 -.09cqw .2cqw #a9895660!important;
+  text-shadow:0 1px 0 #fff8!important;
+  padding:.15cqw .34cqw!important;gap:.23cqw!important;
+  font-size:1.05cqw!important;
+  overflow:hidden;
+}
+.bi-stage .bi-room-drop .bi-card-placed .bi-card-icon{
+  width:2.52cqw!important;height:2.72cqw!important;margin-right:.38cqw!important;
+}
+.bi-stage .bi-room-drop .bi-card-placed .bi-card-word{
+  font-size:inherit!important;line-height:1.08!important;
+}
+.bi-stage .bi-room-drop .bi-card-placed .bi-card-tick{
+  margin-left:auto!important;z-index:2!important;flex:none!important;
+}
+.bi-stage .bi-card-placed:hover:not(.bi-locked),
+.bi-stage .bi-card-placed.bi-selected{
+  background:linear-gradient(150deg,#fff6e5,#f4dfb4)!important;
+  box-shadow:inset 0 0 0 2px #d6b56c,0 0 .4cqw #ffd68f77!important;
+}
+/* Al empezar hay 7 tarjetas sobre la mesa y ambas vitrinas están vacías.
+   Los elementos no son imágenes pegadas a la pantalla: conservan sus gestos. */
+@media(min-width:981px) and (orientation:landscape){
+ .bi-stage[data-state="empty"] .bi-desk-chips,
+ .bi-stage[data-state="live"] .bi-desk-chips{
+   top:28%!important;left:10%!important;width:80%!important;height:57%!important;
+   display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+   grid-auto-rows:minmax(0,1fr)!important;gap:.34cqw .46cqw!important;
+ }
+ .bi-stage[data-state="empty"] .bi-card-tray,
+ .bi-stage[data-state="live"] .bi-card-tray{
+   width:100%!important;height:100%!important;min-height:0!important;
+   display:flex!important;align-items:center!important;
+ }
+ .bi-stage .bi-room-drop-authoritarian .bi-card-placed{
+   font-size:1.09cqw!important;
+ }
+ .bi-stage .bi-room-drop-liberal .bi-card-placed{
+   font-size:1.01cqw!important;
+ }
+ .bi-stage .bi-room-drop-liberal .bi-card-placed .bi-card-icon{
+   height:2.1cqw!important;width:2.1cqw!important;
+ }
+}
+/* Tablet y móvil: 2 columnas en la mesa, iconos aún legibles,
+   sin desplazar la estructura de las salas. */
+@media(max-width:980px),(orientation:portrait){
+ .bi-stage .bi-card-tray,
+ .bi-stage[data-state="empty"] .bi-card-tray,
+ .bi-stage[data-state="live"] .bi-card-tray{
+   min-height:58px!important;height:auto!important;
+   border:1px solid #af8048!important;border-radius:9px!important;
+   padding:6px 7px!important;gap:6px!important;
+   font-size:clamp(11px,2.8vw,15px)!important;
+ }
+ .bi-stage .bi-card .bi-card-icon,
+ .bi-stage .bi-card-tray .bi-card-icon{
+   width:36px!important;height:42px!important;margin-right:5px!important;
+ }
+ .bi-stage .bi-card-icon::after{
+   right:-4px!important;top:10%!important;width:2px!important;height:80%!important;
+ }
+ .bi-stage .bi-card .bi-concept-svg{
+   filter:drop-shadow(0 1px 1px #54341788);
+ }
+ .bi-stage .bi-card-tray .bi-card-word{line-height:1.2!important}
+ .bi-stage .bi-room-drop .bi-card-placed,
+ .bi-stage .bi-room-drop-liberal .bi-card-placed{
+   font-size:clamp(11px,2.6vw,14px)!important;padding:4px 8px!important;
+   gap:7px!important;
+ }
+ .bi-stage .bi-room-drop .bi-card-placed .bi-card-icon,
+ .bi-stage .bi-room-drop-liberal .bi-card-placed .bi-card-icon{
+   height:38px!important;width:38px!important;margin-right:7px!important;
+ }
+ .bi-stage .bi-room-drop .bi-card-placed .bi-card-word{line-height:1.12!important}
+ .bi-stage .bi-desk-chips{gap:8px!important;align-items:stretch!important}
+ .bi-stage .bi-desk{overflow:visible!important}
+ .bi-stage .bi-room-drop>.bi-card{overflow:hidden!important}
+}
+@media(max-width:370px){
+ .bi-stage .bi-card-tray .bi-card-icon{width:31px!important;height:37px!important}
+ .bi-stage .bi-card-tray{font-size:11px!important}
+ .bi-stage .bi-room-drop .bi-card-placed .bi-card-icon{width:32px!important;height:34px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .bi-stage .bi-card,.bi-stage .bi-concept-svg{transition:none!important;animation:none!important}
+}
