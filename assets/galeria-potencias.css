@@ -1,0 +1,207 @@
+/* POTENTZIA HANDIEN GALERIA — sala interactiva.
+ * Referencias: dos conceptos museísticos elegidos por el docente (1672 × 941).
+ * HTML/CSS verdaderos: no es una captura convertida en un fondo con botones.
+ */
+#app-shell.gallery-active{background:#061c1a;color:#f4e8cf}
+#app-shell.gallery-active .topbar,#app-shell.gallery-active .museum-exhibition-banner,
+#app-shell.gallery-active .sidebar,#app-shell.gallery-active .museum-cornice{display:none!important}
+#app-shell.gallery-active .layout{display:block!important;min-height:100vh!important}
+#app-shell.gallery-active .main-content{padding:0!important;background:#081f1c!important;min-height:100vh!important;overflow:visible}
+#app-shell.gallery-active .main-content::before,#app-shell.gallery-active .main-content::after{display:none!important}
+#app-shell.gallery-active #view{position:relative;z-index:1}
+#app-shell.gallery-active :is(.gal-hall,.gal-hall *){box-sizing:border-box}
+#app-shell.gallery-active .gal-hall{
+ --gal-dark:#09241f;--gal-copper:#c59a55;--gal-gold:#f1c875;--gal-ink:#191e19;
+ position:relative;max-width:1710px;min-height:100vh;margin:auto;overflow:hidden;
+ padding:0 clamp(18px,4.4vw,80px) 21px;
+ background:
+  linear-gradient(90deg,#000a 0,transparent 6%,transparent 94%,#000a 100%),
+  radial-gradient(ellipse 57% 17% at 50% -2%,#6aa2a381 0,transparent 85%),
+  radial-gradient(ellipse 35% 38% at 26% 26%,#4d695231 0,transparent 91%),
+  radial-gradient(ellipse 35% 38% at 82% 30%,#526d5038 0,transparent 89%),
+  repeating-linear-gradient(0deg,transparent 0,transparent 13px,#f4c57d03 14px),
+  linear-gradient(180deg,#091d1d,#11382d 28%,#0a2924 73%,#091916 100%);
+ font-family:Georgia,'Times New Roman',serif;
+ color:#f3e7ce;isolation:isolate;
+}
+#app-shell.gallery-active .gal-hall::before{
+ content:'';pointer-events:none;position:absolute;z-index:-1;inset:0;
+ background:
+  radial-gradient(ellipse 45% 27% at 50% -6%,#a6d2d452 0%,transparent 85%),
+  linear-gradient(90deg,#b7895175 0,#c59a5341 1px,transparent 4.5%,transparent 95.5%,#c59a5366 99.8%),
+  repeating-linear-gradient(90deg,transparent 0,transparent 267px,#d4bc7c0b 268px,transparent 269px);
+}
+#app-shell.gallery-active .gal-hall::after{
+ content:'';pointer-events:none;position:absolute;left:0;right:0;bottom:0;height:71px;z-index:-1;
+ background:repeating-linear-gradient(100deg,#be975e22 0 2px,transparent 3px 75px),
+  linear-gradient(178deg,#07211c 0,#273b33 30%,#956e4b4f 63%,#071c1a 100%);
+ border-top:2px solid #c6a26b88;box-shadow:inset 0 9px 20px #0005;
+}
+#app-shell.gallery-active .gal-masthead{position:relative;text-align:center;padding:7px 0 15px;border-bottom:1px solid #c7a36b68}
+#app-shell.gallery-active .gal-masthead::before{
+ content:'';position:absolute;left:8%;right:8%;top:0;height:38px;
+ background:repeating-radial-gradient(ellipse at 50% -70%,transparent 0,transparent 27px,#aababa19 29px,transparent 33px);
+ pointer-events:none;
+}
+#app-shell.gallery-active .gal-topline{display:flex;justify-content:center;gap:18px;align-items:center;color:#f7e3bb;font:600 11px/1.2 'DM Sans',sans-serif;letter-spacing:.18em;text-shadow:0 2px 7px #0009;margin-bottom:3px}
+#app-shell.gallery-active .gal-topline span+span{color:#e5be76}
+#app-shell.gallery-active .gal-crown{color:#d6a354;font-size:19px;display:inline-block;vertical-align:middle;margin-bottom:1px}
+#app-shell.gallery-active .gal-return{
+ position:absolute;top:13px;left:0;z-index:3;min-width:142px;padding:8px 13px;background:#08261eaa;color:#f1dbaf;
+ border:1px solid #bf975e;border-radius:22px;font:600 12px/1.2 Georgia,serif;
+}
+#app-shell.gallery-active .gal-return:hover{background:#315b42}
+#app-shell.gallery-active .gal-titlebar{display:flex;justify-content:center;align-items:center;gap:30px;max-width:1080px;margin:0 auto}
+#app-shell.gallery-active .gal-titlebar .gal-title-small{display:block;color:#e1b66e;font:600 clamp(15px,1.65vw,23px)/1.3 Georgia,serif;margin-bottom:1px}
+#app-shell.gallery-active .gal-titlebar h1{font:600 clamp(31px,3.6vw,58px)/1.1 Georgia,serif;letter-spacing:-.03em;color:#f8e5c6;text-shadow:0 3px 9px #000b;margin:0 0 6px}
+#app-shell.gallery-active .gal-titlebar p{color:#f3e5c9;font:italic clamp(12px,1.1vw,16px)/1.4 Georgia,serif;margin:0}
+#app-shell.gallery-active .gal-wreath{color:#d4a55d;font-size:40px;transform:rotate(-36deg)}
+#app-shell.gallery-active .gal-wreath:last-child{transform:scaleX(-1) rotate(-36deg)}
+#app-shell.gallery-active .gal-progress-chips{display:flex;justify-content:center;gap:17px;font:600 11px/1.2 'DM Sans',sans-serif;letter-spacing:.03em;color:#ebd6b0;margin-top:8px}
+#app-shell.gallery-active .gal-display{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.25vw,21px);margin:15px 0 13px;align-items:stretch}
+#app-shell.gallery-active .gal-vitrine{
+ position:relative;min-width:0;height:clamp(344px,39vw,463px);display:flex;flex-direction:column;
+ border:3px ridge #b78b4e;border-radius:15px 15px 10px 10px;
+ background:linear-gradient(145deg,#f9f1e2,#eee4d1 72%,#d8c8aa);
+ box-shadow:inset 0 0 0 2px #fde8b6,inset 0 0 0 6px #a57b4144,0 14px 25px #000b,0 0 22px #c79a473b;
+ color:#241f19;overflow:hidden;
+}
+#app-shell.gallery-active .gal-vitrine::before{
+ content:'';position:absolute;left:20%;top:-15px;width:60%;height:18px;z-index:2;
+ background:radial-gradient(ellipse,#ffdf9d 0,#e4b25e 19%,transparent 75%);
+ filter:blur(1.8px);pointer-events:none;
+}
+#app-shell.gallery-active .gal-vitrine::after{
+ content:'';position:absolute;left:14%;right:14%;top:0;height:30px;
+ background:radial-gradient(ellipse at 50% 0,#ffcc806b,transparent 84%);pointer-events:none;z-index:2;
+}
+#app-shell.gallery-active .gal-vitrine-top{
+ display:flex;align-items:center;justify-content:center;gap:12px;min-height:61px;
+ border-bottom:3px double #a67b4c;
+ background:linear-gradient(140deg,#fef7e8,#eddec3 80%);
+ position:relative;z-index:1;padding:8px;
+}
+#app-shell.gallery-active .gal-vitrine-top h2{margin:0;color:#211e16;font:700 clamp(18px,2vw,30px)/1.08 Georgia,serif;letter-spacing:-.01em}
+#app-shell.gallery-active .gal-flag{
+ display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;
+ border:1px solid #b9a17c;border-radius:3px;background:#fffdfa;padding:3px 5px;
+ font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif;font-size:clamp(22px,2.15vw,32px);
+ line-height:1;box-shadow:0 1px 5px #674c2e3e;flex:none;
+}
+#app-shell.gallery-active .gal-vitrine-image{
+ height:clamp(110px,10.5vw,159px);flex:none;
+ background-image:var(--gal-photos);
+ background-repeat:no-repeat;background-size:400% 100%;
+ background-position:0% center;
+ border-bottom:2px solid #c5a06a;box-shadow:inset 0 -24px 30px #0f110d47;
+}
+#app-shell.gallery-active .gal-photo-ru{background-position:33.333333% center}
+#app-shell.gallery-active .gal-photo-us{background-position:66.666667% center}
+#app-shell.gallery-active .gal-photo-jp{background-position:100% center}
+#app-shell.gallery-active .gal-vitrine-contents{padding:9px;min-height:0;flex:1;display:flex;flex-direction:column;gap:7px;overflow:auto;scrollbar-color:#bba077 #efe2d0;scrollbar-width:thin}
+#app-shell.gallery-active .gal-vitrine-eu .gal-vitrine-contents{display:grid;grid-template-rows:1fr 1fr;gap:7px}
+#app-shell.gallery-active .gal-zone{
+ min-height:72px;border:1px dashed #a5957c;border-radius:7px;
+ padding:6px;background:linear-gradient(145deg,#f9f3e8,#ede1cf);
+ display:flex;flex-direction:column;gap:6px;outline-offset:2px;
+ transition:background .14s,border-color .14s,box-shadow .14s;
+}
+#app-shell.gallery-active .gal-zone:hover,#app-shell.gallery-active .gal-zone.gal-dragover,#app-shell.gallery-active .gal-zone.gal-zone-selectable:hover,
+#app-shell.gallery-active .gal-zone.gal-zone-selectable:focus{
+ border-color:#9c773f;background:#fff3d4;box-shadow:0 0 0 2px #ddb76d6b,inset 0 0 15px #f3c6753c;
+}
+#app-shell.gallery-active .gal-zone-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#735734;font:700 11px/1.3 'DM Sans',sans-serif;letter-spacing:.012em}
+#app-shell.gallery-active .gal-zone-heading small{white-space:nowrap;font-size:10px;color:#8d795e}
+#app-shell.gallery-active .gal-zone-list{display:flex;flex-wrap:wrap;align-content:flex-start;gap:5px;min-height:25px}
+#app-shell.gallery-active .gal-zone-placeholder{display:grid;place-items:center;min-height:35px;width:100%;color:#8b8170;font:italic 12px/1.2 Georgia,serif}
+#app-shell.gallery-active .gal-tray{
+ position:relative;border:3px ridge #c6a16d;border-radius:13px;
+ background:linear-gradient(142deg,#fff9eb,#eee4d2 60%,#e2d0ad);
+ box-shadow:inset 0 0 0 3px #fbefd5,0 7px 20px #0009;padding:12px 16px 15px;
+ color:#27241c;
+}
+#app-shell.gallery-active .gal-tray h2{display:flex;align-items:center;gap:9px;font:700 clamp(16px,1.6vw,22px)/1.2 Georgia,serif;color:#242519;margin:0 0 11px}
+#app-shell.gallery-active .gal-tray h2>span{color:#2c4a38;font-size:22px}
+#app-shell.gallery-active .gal-tray h2>small{font:600 11px/1.2 'DM Sans',sans-serif;color:#786c56;margin-left:auto}
+#app-shell.gallery-active .gal-tile-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#app-shell.gallery-active .gal-tile{
+ display:flex;align-items:center;justify-content:flex-start;gap:8px;
+ min-width:0;min-height:45px;width:100%;padding:7px 9px;
+ background:linear-gradient(180deg,#fffaf1,#ecdfca);
+ border:1px solid #b99560;border-radius:7px;color:#2a2922;
+ box-shadow:0 2px 0 #ba9560,0 4px 6px #4d352119;
+ font:600 clamp(10px,.82vw,12.5px)/1.2 'DM Sans',sans-serif;
+ text-align:left;cursor:grab;touch-action:manipulation;transition:transform .14s,background .14s,border-color .14s;
+}
+#app-shell.gallery-active .gal-tile:active:not(:disabled){cursor:grabbing}
+#app-shell.gallery-active .gal-tile:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.03)}
+#app-shell.gallery-active .gal-tile.gal-selected{
+ background:#dff0df;border:2px solid #2e7452;
+ box-shadow:0 0 0 2px #2e745255,0 2px 4px #0003;
+}
+#app-shell.gallery-active .gal-tile.gal-wrong{border-color:#bb594a;background:#ffeded}
+#app-shell.gallery-active .gal-tile-icon{font:700 20px/1 Georgia,serif;flex:none;width:24px;text-align:center;color:#244c3d}
+#app-shell.gallery-active .gal-tile-name{overflow-wrap:anywhere;hyphens:auto}
+#app-shell.gallery-active .gal-tile-check{color:#fff;background:#2f8749;border-radius:50%;width:19px;height:19px;display:grid;place-items:center;font:700 12px/1 Arial;flex:none;margin-left:auto}
+#app-shell.gallery-active .gal-tile-move{color:#947850;font-size:12px;margin-left:auto}
+#app-shell.gallery-active .gal-tile.gal-tile-placed{padding:5px 6px;min-height:27px;width:100%;font-size:10.2px;border-radius:5px;box-shadow:0 1px 2px #0002;cursor:pointer}
+#app-shell.gallery-active .gal-tile.gal-locked{background:linear-gradient(#e2f1e1,#cce2c7);border-color:#659663;color:#214331;cursor:default;opacity:1;transform:none}
+#app-shell.gallery-active .gal-tile-placed .gal-tile-icon{font-size:15px;width:16px}
+#app-shell.gallery-active .gal-all-placed{color:#244b34;grid-column:1/-1;font-size:14px}
+#app-shell.gallery-active .gal-bottom-bar{display:flex;flex-wrap:wrap;align-items:center;gap:11px;padding:13px 0 8px}
+#app-shell.gallery-active .gal-action{
+ min-height:43px;padding:10px 18px;font:700 12px/1.2 'DM Sans',sans-serif;letter-spacing:.018em;
+ border-radius:24px;border:1px solid #d4a96c;
+ color:#f9e3bd;background:linear-gradient(125deg,#1a4033,#08231e);
+ box-shadow:inset 0 1px #fdf3d133,0 3px 9px #0006;
+}
+#app-shell.gallery-active .gal-action:hover:not(:disabled){filter:brightness(1.14);transform:translateY(-1px)}
+#app-shell.gallery-active .gal-action-primary{
+ color:#282115;border-color:#f1cc82;background:linear-gradient(145deg,#f5d591,#b5843c);
+ text-shadow:0 1px #fff7;box-shadow:0 3px 9px #0008,inset 0 1px #fff9;
+}
+#app-shell.gallery-active .gal-action-next{background:#d9e8d1;color:#173e2b;border-color:#d6f2d0}
+#app-shell.gallery-active .gal-action:disabled{opacity:.45;cursor:not-allowed}
+#app-shell.gallery-active .gal-status{color:#efddbd;font:italic 12px/1.5 Georgia,serif;flex:1;min-width:170px}
+#app-shell.gallery-active .gal-hint{margin:0 0 7px;padding:9px 14px;border:1px solid #d8ba7a;background:#183f36;color:#f6e6c3;border-radius:6px;font-size:13px}
+#app-shell.gallery-active .gal-critical{margin:8px 0 0;color:#d9cba9;font:italic 11px/1.5 Georgia,serif;text-align:center}
+#app-shell.gallery-active .gal-hall :is(button,[role=button]):focus-visible{outline:3px solid #f5db9c;outline-offset:3px}
+@media(max-width:1300px){
+ #app-shell.gallery-active .gal-vitrine{height:440px}
+ #app-shell.gallery-active .gal-tray .gal-tile-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-tile{font-size:11px}
+}
+@media(max-width:1030px){
+ #app-shell.gallery-active .gal-display{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-vitrine{height:400px}
+ #app-shell.gallery-active .gal-vitrine-image{height:145px}
+ #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-vitrine-top h2{font-size:27px}
+}
+@media(max-width:680px){
+ #app-shell.gallery-active .gal-hall{padding:0 11px 18px}
+ #app-shell.gallery-active .gal-masthead{padding:42px 0 15px}
+ #app-shell.gallery-active .gal-return{top:8px;font-size:11px}
+ #app-shell.gallery-active .gal-topline{font-size:9px;letter-spacing:.06em;gap:6px}
+ #app-shell.gallery-active .gal-titlebar{gap:7px}
+ #app-shell.gallery-active .gal-wreath{font-size:21px}
+ #app-shell.gallery-active .gal-titlebar h1{font-size:clamp(26px,7vw,38px)}
+ #app-shell.gallery-active .gal-titlebar p{font-size:12px}
+ #app-shell.gallery-active .gal-display{gap:9px;grid-template-columns:1fr 1fr}
+ #app-shell.gallery-active .gal-vitrine{height:380px;border-width:2px}
+ #app-shell.gallery-active .gal-vitrine-top{min-height:43px;gap:5px}
+ #app-shell.gallery-active .gal-flag{font-size:17px;padding:2px}
+ #app-shell.gallery-active .gal-vitrine-top h2{font-size:18px}
+ #app-shell.gallery-active .gal-vitrine-image{height:98px}
+ #app-shell.gallery-active .gal-vitrine-contents{padding:6px}
+ #app-shell.gallery-active .gal-zone-heading{font-size:9px}
+ #app-shell.gallery-active .gal-tray{padding:10px}
+ #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-tile{min-height:48px;font-size:11px}
+ #app-shell.gallery-active .gal-tile.gal-tile-placed{font-size:9px;min-height:26px}
+ #app-shell.gallery-active .gal-tile-icon{font-size:18px;width:18px}
+ #app-shell.gallery-active .gal-bottom-bar{gap:8px}
+ #app-shell.gallery-active .gal-status{order:-1;width:100%;min-width:100%}
+ #app-shell.gallery-active .gal-action{font-size:11px;padding:9px 12px}
+}
+@media(prefers-reduced-motion:reduce){#app-shell.gallery-active .gal-tile,#app-shell.gallery-active .gal-action{transition:none}}
