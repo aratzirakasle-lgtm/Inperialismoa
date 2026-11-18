@@ -145,7 +145,12 @@ async function submit(answers,kind){
   }catch(err){
     console.error("Bi sistema, bi Europa:",err);
     announce("Ezin izan da egiaztatu. Egiaztatu konexioa eta saiatu berriro.",true);
-  }finally{busy=false;paint()}
+  }finally{
+    busy=false;paint();
+    if((phase==="challenge"||phase==="complete")&&window.matchMedia("(max-width: 980px), (orientation: portrait)").matches){
+      challengeBox?.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth",block:"start"});
+    }
+  }
 }
 async function checkCards(){
   const answers=Object.fromEntries(Object.entries(pending).filter(([id,zone])=>!locked.has(id)&&BY_ID.has(id)&&["auth","lib"].includes(zone)));
