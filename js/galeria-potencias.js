@@ -42,12 +42,43 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
   const items=ITEMS.filter(x=>state.placements[x.id]===zone);
   return '<div class="gal-zone '+(state.selected?'gal-zone-selectable':'')+'" data-gallery-zone="'+zone+'" tabindex="0" role="button" aria-label="'+esc(label)+': jarri kontzeptua hemen"><div class="gal-zone-heading"><span>'+esc(label)+'</span><small>'+items.length+(cap?' / '+cap:'')+'</small></div><div class="gal-zone-list">'+(items.length?items.map(x=>tile(x,true)).join(''):'<span class="gal-zone-placeholder">↓ Arrastatu hona</span>')+'</div></div>';
  };
- const flagHtml={
-  eu:'<span class="gal-flags"><span class="gal-flag-de" title="Alemania" aria-label="Alemaniako bandera"></span><span class="gal-flag-fr" title="Frantzia" aria-label="Frantziako bandera"></span></span>',
-  ru:'<span class="gal-flags"><span class="gal-flag-ru" title="Errusia" aria-label="Errusiako bandera"></span></span>',
-  us:'<span class="gal-flags"><span class="gal-flag-us" title="EEBB" aria-label="Estatu Batuetako bandera"></span></span>',
-  jp:'<span class="gal-flags"><span class="gal-flag-jp" title="Japonia" aria-label="Japoniako bandera"></span></span>'
+
+ // Banderas vectoriales sin marco ni fondo ajeno a la propia tela.
+ // La de la UE es un símbolo gráfico contemporáneo para Europa, no una bandera del XIX.
+ const flagStars=(cx,cy,outer,inner)=>{
+   const points=Array.from({length:10},(_,i)=>{
+     const angle=-Math.PI/2+i*Math.PI/5,rad=i%2?inner:outer;
+     return (cx+Math.cos(angle)*rad).toFixed(2)+","+(cy+Math.sin(angle)*rad).toFixed(2);
+   });
+   return '<polygon points="'+points.join(" ")+'"/>';
  };
+ const flagSvg=(key)=>{
+   const names={eu:"Europar Batasuneko bandera (gaur egungo ikurra)",ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
+   const clipId="gal-flag-cloth-"+key;
+   const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
+   let graphic="";
+   if(key==="eu"){
+     graphic='<rect x="5" y="4" width="52" height="32" fill="#003399"/>';
+     graphic+='<g fill="#ffcc00">'+Array.from({length:12},(_,i)=>{
+       const angle=-Math.PI/2+i*Math.PI/6;
+       return flagStars(31+10.5*Math.cos(angle),19.6+10.5*Math.sin(angle),2.45,1.05);
+     }).join("")+'</g>';
+   }
+   if(key==="ru"){
+     graphic='<rect x="5" y="4" width="52" height="11" fill="#fff"/><rect x="5" y="15" width="52" height="10" fill="#1345a7"/><rect x="5" y="25" width="52" height="11" fill="#c73542"/>';
+   }
+   if(key==="jp"){
+     graphic='<rect x="5" y="4" width="52" height="32" fill="#fff"/><circle cx="31" cy="19.7" r="9.5" fill="#bc002d"/>';
+   }
+   if(key==="us"){
+     graphic='<rect x="5" y="4" width="52" height="32" fill="#fff"/>';
+     for(let i=0;i<13;i+=2)graphic+='<rect x="5" y="'+(4+i*32/13).toFixed(3)+'" width="52" height="'+(32/13).toFixed(3)+'" fill="#b22234"/>';
+     graphic+='<rect x="5" y="4" width="23.5" height="17.5" fill="#3c3b6e"/>';
+     graphic+='<g fill="#fff">'+Array.from({length:5},(_,row)=>Array.from({length:6},(_,col)=>flagStars(7+col*3.7+(row%2?1.7:0),6+row*3.2,.85,.37)).join("")).join("")+'</g>';
+   }
+   return '<svg class="gal-flag-illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 42" role="img" aria-label="'+names[key]+'" focusable="false"><title>'+names[key]+'</title><defs><clipPath id="'+clipId+'"><path d="'+cloth+'"/></clipPath></defs><g clip-path="url(#'+clipId+')">'+graphic+'</g></svg>';
+ };
+ const flagHtml={eu:flagSvg("eu"),ru:flagSvg("ru"),us:flagSvg("us"),jp:flagSvg("jp")};
  const showcase=(key,name,flags,desc,content)=>'<article class="gal-vitrine gal-vitrine-'+key+'"><header class="gal-vitrine-top">'+flagHtml[key]+'<h2>'+name+'</h2></header><div class="gal-vitrine-image gal-photo-'+key+'" role="img" aria-label="'+esc(desc)+'"></div><div class="gal-vitrine-contents">'+content+'</div></article>';
  function draw(){
    const tray=ITEMS.filter(x=>!state.placements[x.id]);
