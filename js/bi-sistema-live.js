@@ -87,7 +87,7 @@ function paint(){
   stage.dataset.trayCount=String(bank.length);
   tray.innerHTML=bank.length?bank.map(x=>card(x.id,false)).join(""):'<p class="bi-desk-complete">Kontzeptu guztiak kokatuta daude.</p>';
   $("#bi-progress").textContent=locked.size+" / 7 zuzen";
-  note.textContent=feedback||"Hautatu kontzeptua eta ondoren aretoa; edo arrastatu txartela.";
+  note.textContent=feedback||"";
   note.classList.toggle("bi-error",warning);
   if(hintBox){
     hintBox.hidden=!hintLevel;
@@ -315,7 +315,7 @@ function setupStage(){
   $(".bi-instructions p").innerHTML="<strong>Jarraibidea:</strong> mugitu txartelak dagokien aretora. Ez duzu jakingo zuzenak diren <em>«Erantzunak egiaztatu» sakatu arte.</em>";
   const status=document.createElement("div");status.className="bi-live-status";status.id="bi-feedback";
   status.setAttribute("role","status");status.setAttribute("aria-live","polite");
-  stage.append(status);note=status;
+  stage.after(status);note=status;
   const hints=document.createElement("aside");hints.className="bi-hint";hints.id="bi-hint";hints.hidden=true;stage.append(hints);hintBox=hints;
   const overlay=document.createElement("section");overlay.className="bi-challenge-overlay";overlay.id="bi-challenge";overlay.setAttribute("aria-live","polite");overlay.hidden=true;stage.append(overlay);challengeBox=overlay;
   const progress=document.createElement("span");progress.className="bi-live-progress";progress.id="bi-progress";$(".bi-step").append(progress);
