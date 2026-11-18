@@ -1,107 +1,132 @@
-/* BI SISTEMA — VITRINAS VACÍAS, CARTELAS INTEGRADAS
- * El decorado no lleva ninguna respuesta pintada.
- * Las tarjetas HTML se colocan sobre las cartelas de la fotografía,
- * sin sombras ni marcos dobles que las hagan parecer flotantes.
- */
-@media (min-width:981px) and (orientation:landscape){
+/* Sala 2 — cartelas encajadas en los huecos de las vitrinas.
+ * Reproducción del tamaño real de los soportes sobre las imágenes vacías.
+ * Ninguna tarjeta queda flotando ni se mueve al aparecer otra. */
+@media(min-width:981px) and (orientation:landscape) {
  .bi-stage .bi-room-drop{
-   display:flex!important;flex-direction:column!important;justify-content:flex-start;
-   padding:0!important;margin:0!important;border:0!important;box-shadow:none!important;
-   background:transparent!important;overflow:hidden!important;
+  display:block!important;position:absolute!important;
+  padding:0!important;margin:0!important;border:0!important;
+  background:transparent!important;box-shadow:none!important;
+  overflow:visible!important;pointer-events:auto!important;
  }
  .bi-stage .bi-room-drop::before{display:none!important}
  .bi-stage .bi-room-drop-authoritarian{
-   left:5.9%!important;right:auto!important;top:54%!important;width:42%!important;
-   height:39%!important;max-height:39%!important;gap:.18cqw!important;
+  left:5.9%!important;right:auto!important;top:54%!important;width:42%!important;
+  height:39.3%!important;max-height:none!important;
  }
  .bi-stage .bi-room-drop-liberal{
-   right:3.4%!important;left:auto!important;top:53.8%!important;width:41.7%!important;
-   height:41%!important;max-height:41%!important;gap:.14cqw!important;
+  right:3.4%!important;left:auto!important;top:54.2%!important;width:41.7%!important;
+  height:40.7%!important;max-height:none!important;
  }
- .bi-stage .bi-room-drop-authoritarian>.bi-card{height:4cqw!important;min-height:4cqw!important}
- .bi-stage .bi-room-drop-liberal>.bi-card{height:3.2cqw!important;min-height:3.2cqw!important}
- .bi-stage .bi-room-drop .bi-card-empty,
- .bi-stage .bi-room-drop .bi-card-placed{
-   width:100%!important;flex:none!important;border:0!important;
-   background:transparent!important;box-shadow:none!important;
-   border-radius:.3cqw!important;
+ .bi-stage .bi-room-drop > .bi-card{
+  position:absolute!important;left:0!important;width:100%!important;
+  min-height:0!important;max-height:none!important;flex:none!important;
+  margin:0!important;transform:none!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ }
+ .bi-stage .bi-room-drop-authoritarian>.bi-card{height:31.2%!important}
+ .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(1){top:0%!important}
+ .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(2){top:34%!important}
+ .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(3){top:68%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card{height:22.5%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(1){top:0%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(2){top:26%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(3){top:52%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(4){top:77%!important}
+ .bi-stage .bi-room-drop .bi-card-empty{
+  border:0!important;background:transparent!important;box-shadow:none!important;
+  border-radius:.58cqw!important;
  }
  .bi-stage .bi-room-drop .bi-card-empty::before{display:none!important}
  .bi-stage .bi-room-drop .bi-card-placed{
-   font-size:1.12cqw!important;line-height:1.12!important;
-   padding:.25cqw .5cqw!important;gap:.28cqw!important;
-   text-shadow:0 1px 0 #fffcf0ae!important;
+  background:linear-gradient(145deg,#fff6e5,#eedfc8 65%,#e4d0aa)!important;
+  border:.1cqw solid #bc975e!important;
+  border-radius:.65cqw!important;
+  box-shadow:inset 0 0 0 .16cqw #fff8,inset 0 .17cqw .46cqw #fff6!important;
+  font-size:1.09cqw!important;line-height:1.15!important;
+  padding:.28cqw .55cqw!important;gap:.28cqw!important;
+  text-shadow:0 1px 0 #fff9!important;
  }
- .bi-stage .bi-room-drop-liberal .bi-card-placed{font-size:1.02cqw!important;padding:.15cqw .36cqw!important}
- .bi-stage .bi-room-drop .bi-card-icon{font-size:1.65cqw!important;width:2.6cqw!important}
- .bi-stage .bi-room-drop-liberal .bi-card-icon{font-size:1.4cqw!important;width:2.4cqw!important}
- .bi-stage .bi-room-drop .bi-card-tick{font-size:.95cqw!important;width:1.55cqw!important;height:1.55cqw!important}
- .bi-stage .bi-room-drop .bi-card-placed:hover:not(.bi-locked),
- .bi-stage .bi-room-drop .bi-card-placed.bi-selected{
-   transform:none!important;background:#edcb894a!important;
-   box-shadow:inset 0 0 0 2px #d9b36a88!important;
+ .bi-stage .bi-room-drop-liberal .bi-card-placed{
+  font-size:1.0cqw!important;padding:.15cqw .35cqw!important;
  }
- .bi-stage .bi-room-drop.bi-select-target{outline:1px dashed #edcd825e;outline-offset:0}
+ .bi-stage .bi-room-drop .bi-card-icon{
+  font-size:1.54cqw!important;width:2.5cqw!important;
+ }
+ .bi-stage .bi-room-drop-liberal .bi-card-icon{
+  font-size:1.34cqw!important;width:2.25cqw!important;
+ }
+ .bi-stage .bi-room-drop .bi-card-tick{
+  font-size:.92cqw!important;width:1.5cqw!important;height:1.5cqw!important;
+ }
+ .bi-stage .bi-room-drop .bi-card-grip{
+  flex:none!important;font-size:.92cqw!important;opacity:.7;
+ }
+ .bi-stage .bi-room-drop .bi-card-placed.bi-selected,
+ .bi-stage .bi-room-drop .bi-card-placed:hover:not(.bi-locked){
+  transform:none!important;
+  background:linear-gradient(145deg,#fff3d6,#e6cb9b)!important;
+  box-shadow:inset 0 0 0 .18cqw #dbb26caa,0 0 .55cqw #e7c68080!important;
+ }
 }
-/* En dispositivos estrechos, las cartelas cuelgan de una pared expositiva propia
- * bajo cada fotografía; no quedan flotando encima de los personajes. */
-@media (max-width:980px), (orientation:portrait){
- .bi-stage .bi-room{
-   height:550px!important;min-height:550px!important;
-   background-size:100% 100%!important;background-position:center top!important;
-   overflow:hidden!important;
- }
+/* Móvil y tablet: las cuatro cartelas quedan repartidas dentro
+ * de la pared expositiva bajo cada escena, sin desbordar. */
+@media(max-width:980px),(orientation:portrait){
+ .bi-stage .bi-room{height:550px!important;min-height:550px!important;overflow:hidden!important}
  .bi-stage .bi-room::after{
-   content:"";position:absolute;z-index:6;
-   inset:46% 0 0!important;
-   background:
-     radial-gradient(ellipse at 50% 0%,#7c604a37,transparent 85%),
-     repeating-linear-gradient(0deg,transparent 0,transparent 9px,#e8c58404 10px),
-     linear-gradient(130deg,#332218,#1a2721 75%,#172820);
-   border-top:3px solid #bb8e54;box-shadow:inset 0 7px 16px #0009;
-   pointer-events:none;
+  content:"";position:absolute;z-index:6;inset:46% 0 0!important;
+  background:radial-gradient(ellipse at 50% 0%,#7c604a37,transparent 85%),
+   linear-gradient(130deg,#332218,#1a2721 75%,#172820);
+  border-top:3px solid #bb8e54;box-shadow:inset 0 7px 16px #0009;
+  pointer-events:none;
  }
  .bi-stage .bi-room-drop,
  .bi-stage .bi-room-drop-authoritarian,
  .bi-stage .bi-room-drop-liberal{
-   position:absolute!important;z-index:9!important;
-   left:5%!important;right:5%!important;top:52%!important;
-   width:90%!important;height:44%!important;max-height:44%!important;
-   display:flex!important;flex-direction:column!important;justify-content:flex-start!important;
-   gap:7px!important;padding:0!important;
-   background:transparent!important;border:0!important;box-shadow:none!important;
-   overflow:hidden!important;
+  position:absolute!important;z-index:9!important;top:52%!important;
+  left:5%!important;right:5%!important;width:90%!important;
+  height:44%!important;max-height:44%!important;
+  display:grid!important;grid-auto-flow:row!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:repeat(3,minmax(0,1fr))!important;
+  gap:6px!important;padding:0!important;margin:0!important;
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  overflow:hidden!important;align-items:stretch!important;
+ }
+ .bi-stage .bi-room-drop-liberal{
+  grid-template-rows:repeat(4,minmax(0,1fr))!important;
  }
  .bi-stage .bi-room-drop::before{display:none!important}
  .bi-stage .bi-room-drop>.bi-card{
-   position:relative!important;flex:none!important;width:100%!important;
-   height:53px!important;min-height:53px!important;max-height:53px!important;
-   border:2px solid #bc995d!important;border-radius:9px!important;
-   background:linear-gradient(145deg,#fff5e1,#ebd8b6)!important;
-   box-shadow:inset 0 0 0 2px #fff9,0 3px 7px #0007!important;
+  position:relative!important;inset:auto!important;
+  width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;
+  flex:none!important;margin:0!important;border:1px solid #bd985e!important;
+  border-radius:8px!important;
+  background:linear-gradient(145deg,#fff5e3,#e8d4b2)!important;
+  box-shadow:inset 0 0 0 2px #fff9!important;
  }
  .bi-stage .bi-room-drop .bi-card-empty::before{
-   display:block!important;content:"";position:absolute;inset:5px;
-   border:1px dashed #b8a585;border-radius:5px;
+  content:"";position:absolute;inset:5px;display:block!important;
+  border:1px dashed #b8a585;border-radius:5px;
  }
  .bi-stage .bi-room-drop .bi-card-placed{
-   padding:5px 9px!important;gap:7px!important;
-   font-size:13px!important;line-height:1.12!important;
+  padding:5px 9px!important;gap:7px!important;
+  font-size:13px!important;line-height:1.15!important;
  }
- .bi-stage .bi-room-drop .bi-card-icon{width:28px!important;font-size:22px!important}
- .bi-stage .bi-room-drop .bi-card-tick{width:21px!important;height:21px!important;font-size:13px!important}
+ .bi-stage .bi-room-drop .bi-card-icon{width:28px!important;font-size:20px!important}
+ .bi-stage .bi-room-drop .bi-card-tick{width:20px!important;height:20px!important;font-size:13px!important}
  .bi-stage .bi-room-drop .bi-card-placed:hover:not(.bi-locked),
  .bi-stage .bi-room-drop .bi-card-placed.bi-selected{
-   transform:none!important;background:linear-gradient(130deg,#fff4d0,#e8d3a5)!important;
-   box-shadow:inset 0 0 0 2px #fff9,0 0 12px #ead08b78!important;
+  transform:none!important;box-shadow:inset 0 0 0 2px #d9b36a!important;
  }
  .bi-stage[data-state=complete] .bi-room{height:550px!important;min-height:550px!important}
  .bi-stage[data-state=complete] .bi-room-drop{top:52%!important}
- .bi-stage[data-state=complete] .bi-card-placed{height:53px!important;min-height:53px!important}
 }
 @media(max-width:380px){
  .bi-stage .bi-room{height:535px!important;min-height:535px!important}
- .bi-stage .bi-room-drop{top:51.5%!important;height:46%!important;max-height:46%!important;gap:6px!important}
- .bi-stage .bi-room-drop>.bi-card{height:51px!important;min-height:51px!important;max-height:51px!important}
+ .bi-stage .bi-room-drop{top:51.5%!important;height:46%!important;max-height:46%!important}
  .bi-stage .bi-room-drop .bi-card-placed{font-size:12px!important}
 }
+/* La mesa tiene zonas transparentes sobre las cartelas inferiores.
+ * No debe interceptar el gesto de soltar sobre esas cartelas. */
+.bi-stage .bi-desk{pointer-events:none!important}
+.bi-stage .bi-desk-chips{pointer-events:auto!important}
