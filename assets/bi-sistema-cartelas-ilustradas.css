@@ -241,3 +241,64 @@
    overflow-wrap:break-word!important;
  }
 }
+
+/* Ajuste 18/11/2026 · rectángulos translúcidos señalados por el docente.
+ * El área de destino continúa recibiendo clics y tarjetas, pero no dibuja
+ * superficies, contornos o sombras por sí misma, en ningún estado.
+ * Solo las cartelas históricas y sus tarjetas reales permanecen visibles. */
+.bi-stage .bi-room-drop,
+.bi-stage .bi-room-drop-authoritarian,
+.bi-stage .bi-room-drop-liberal,
+.bi-stage .bi-room-drop.bi-select-target,
+.bi-stage .bi-room-drop.bi-over,
+.bi-stage .bi-room-drop-authoritarian.bi-select-target,
+.bi-stage .bi-room-drop-liberal.bi-select-target,
+.bi-stage .bi-room-drop-authoritarian.bi-over,
+.bi-stage .bi-room-drop-liberal.bi-over{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  filter:none!important;
+  cursor:pointer;
+}
+.bi-stage .bi-room-drop::before,
+.bi-stage .bi-room-drop::after{
+  display:none!important;
+  content:none!important;
+}
+.bi-stage .bi-room-drop .bi-card-empty{
+  visibility:hidden!important;
+  background:transparent!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  pointer-events:none!important;
+}
+.bi-stage .bi-room-drop .bi-card-empty::before,
+.bi-stage .bi-room-drop .bi-card-empty::after{
+  display:none!important;
+  content:none!important;
+}
+/* La mesa ya contiene en la ilustración su tapa de terciopelo verde;
+ * su segunda placa semitransparente era el cuadrado marcado en la captura. */
+.bi-stage .bi-desk-scrim{
+  display:none!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.bi-stage .bi-desk-chips.bi-select-target,
+.bi-stage .bi-desk-chips.bi-over{
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+/* El realce visual se limita a la tarjeta elegida, no a una caja gigante. */
+.bi-stage .bi-room-drop>.bi-card.bi-selected{
+  outline:1px solid #d2ac6b!important;
+  outline-offset:-1px!important;
+}
