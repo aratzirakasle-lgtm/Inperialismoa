@@ -302,3 +302,67 @@
   outline:1px solid #d2ac6b!important;
   outline-offset:-1px!important;
 }
+
+/* CORRECCIÓN DEFINITIVA DE CAPAS · 18/11/2026
+ * El escenario nunca muestra un panel de arrastre; el arrastre usa el
+ * contenedor transparente sin ninguna superficie visible ni pseudo-elementos.
+ * El mensaje se ha movido FUERA del escenario en el JS. */
+.bi-stage :is(.bi-room-drop,.bi-room-drop.bi-select-target,.bi-room-drop.bi-over){
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  filter:none!important;
+}
+.bi-stage .bi-room-drop::before,
+.bi-stage .bi-room-drop::after{
+  content:none!important;
+  display:none!important;
+}
+.bi-stage .bi-room-drop>.bi-card-empty{
+  visibility:hidden!important;
+  opacity:0!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  pointer-events:none!important;
+}
+.bi-stage .bi-room-drop>.bi-card-empty::before,
+.bi-stage .bi-room-drop>.bi-card-empty::after{
+  display:none!important;content:none!important;
+}
+.bi-stage .bi-desk-scrim{
+  display:none!important;
+}
+.bi-stage .bi-desk-chips.bi-select-target,
+.bi-stage .bi-desk-chips.bi-over{
+  background:none!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+/* Esta indicación ya no aparece delante ni detrás de los conceptos.
+   Los avisos importantes se muestran fuera de la escena y siguen
+   anunciándose a lectores de pantalla. */
+.bi-live-status{
+  box-sizing:border-box;
+  position:relative;
+  z-index:1;
+  display:block;
+  width:min(100%,1672px);
+  margin:0 auto;
+  padding:10px 18px;
+  font:600 13px/1.5 Arial,sans-serif;
+  text-align:center;
+  color:#f5e4c0;
+  background:#0a2b24;
+  border-top:1px solid #c19b5c;
+  border-bottom:1px solid #81673b;
+  box-shadow:none;
+}
+.bi-live-status:empty{display:none}
+.bi-live-status.bi-error{color:#ffddaa;background:#442a1e;border-color:#e7ad63}
