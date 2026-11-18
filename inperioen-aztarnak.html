@@ -157,6 +157,12 @@
 </style>
 <link rel="stylesheet" href="./assets/inperioen-expedientes-aprobados.css?v=20261118-1">
 <link rel="stylesheet" href="./assets/inperioen-fidelidad-v4.css?v=20261118-2">
+<!-- Láminas de alta resolución, escenografía separada de los controles HTML. -->
+<link rel="stylesheet" href="./assets/inperioen-arte-india-v5.css?v=20261118-1">
+<link rel="stylesheet" href="./assets/inperioen-arte-aljeria-v5.css?v=20261118-1">
+<link rel="stylesheet" href="./assets/inperioen-arte-indonesia-v5.css?v=20261118-1">
+<link rel="stylesheet" href="./assets/inperioen-arte-angola-v5.css?v=20261118-1">
+<link rel="stylesheet" href="./assets/inperioen-fidelidad-real-v5.css?v=20261118-2">
 </head>
 <body>
 <main class="museum-scene" aria-label="Inperioen aztarnak · diseinu-aurrebista">
@@ -283,7 +289,7 @@ function clueCount(id){return clueSet(id).size}
 function updateClueUnlock(id){
  if(currentCase!==id||modalMode!=='case')return;
  const count=clueCount(id),ready=count===3||solved.has(id),locked=solved.has(id);
- const progress=$('#clue-progress-label');if(progress)progress.textContent=`${count}/3 agiri kontsultatuta`;
+ const progress=$('#clue-progress-label');if(progress)progress.textContent=`${count}/3`;
  const dots=modal.querySelectorAll('.reading-dot');dots.forEach((el,i)=>el.classList.toggle('done',clueSet(id).has(i)));
  for(const el of modal.querySelectorAll('details[data-clue]')){
   const index=Number(el.dataset.clue),seen=clueSet(id).has(index);
@@ -340,7 +346,7 @@ function openCase(id){
  <div class="dossier-detail"><p class="dossier-guide" id="dossier-description">Ireki hiru agiriak metropolia aukeratu aurretik.</p>
  <h3 class="dossier-question" aria-label="${escapeHtml(c.question)}">${escapeHtml(shortQuestion)}</h3>
  <div class="dossier-clues">${c.clues.map((clue,i)=>`<details data-clue="${i}" data-read="${clueSet(id).has(i)}"><summary data-ico="${types[i]}"><span>${escapeHtml(clue.title)}</span><span class="clue-seen">${clueSet(id).has(i)?'✓ Irakurrita':'Ireki'}</span></summary><p>${escapeHtml(clue.text)}</p></details>`).join('')}</div>
- <div class="dossier-clue-status" aria-live="polite"><span id="clue-progress-label">${count}/3 agiri kontsultatuta</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
+ <div class="dossier-clue-status" aria-live="polite"><span id="clue-progress-label">${count}/3</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
  <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice ${!ready||solvedIt?'is-locked':''}"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${!ready||solvedIt||saving?'disabled':''}><span class="choice-flag">${powerFlagSvg(choice.id)}</span><span class="choice-name">${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
  <div class="dossier-actionrow"><button type="button" id="dossier-verify" class="dossier-action" ${!ready||solvedIt||!selected[id]||saving?'disabled':''}>${solvedIt?'✓ Egiaztatuta':'Erantzuna egiaztatu'}</button></div>
  <p id="choice-locked-note" class="dossier-locked-note">${ready?'Erantzuna aukeratu eta egiaztatu.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`}</p>
