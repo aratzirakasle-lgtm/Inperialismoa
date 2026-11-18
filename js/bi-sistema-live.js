@@ -16,7 +16,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const url=new URLSearchParams(location.search);
 let client,teamId=null,teacherPreview=false;
 let locked=new Set(),positions={},challengeLocked=new Set(),pending={},selected=null;
-let challengePending={},busy=false,feedback="",warning=false,hintLevel=0;
+let challengePending={},busy=true,feedback="Taldearen datuak kargatzen…",warning=false,hintLevel=0;
 let phase="classify",completed=false,dragging=null,suppressClick=false;
 const stage=$("#bi-stage"),auth=$("#bi-auth-slots"),lib=$("#bi-lib-slots"),tray=$("#bi-concept-chips");
 let note=null,hintBox=null,challengeBox=null;
@@ -135,11 +135,11 @@ async function submit(answers,kind){
       announce("Bikain! Bi sistema politikoak ulertu dituzue. Hurrengo aretoa prest dago.");
     } else if(locked.size===7){
       phase="challenge";
-      announce(wrong.length?"Berrikusi azken egoerak eta saiatu berriro.":"Zazpi kontzeptuak zuzen! Orain azken erronka.");
+      announce(wrong.length?"Berrikusi azken egoerak eta saiatu berriro.":"Zazpi kontzeptuak zuzen! Orain azken erronka.",wrong.length>0);
     } else {
       announce(wrong.length?
         locked.size+" / 7 zuzen. "+wrong.length+" kontzeptu berrikusi eta berriz kokatu. Saiakera: "+data.attempt_count+".":
-        locked.size+" / 7 zuzen. Jarri gainerako kontzeptuak.");
+        locked.size+" / 7 zuzen. Jarri gainerako kontzeptuak.",wrong.length>0);
     }
     await fetchState().catch(()=>{});
   }catch(err){
@@ -302,7 +302,7 @@ async function boot(){
     if(profile.role==="teacher"&&!teacherPreview){location.replace("./index.html");return}
     if(profile.role!=="student"&&!teacherPreview){location.replace("./index.html");return}
     if(teacherPreview){
-      stage.classList.add("bi-teacher-preview");
+      stage.classList.add("bi-teacher-preview");busy=false;
       announce("Irakaslearen aurrebista: ezin da daturik bidali.");
       locked=new Set(["army","monarch","separation","rights"]);
       positions={army:"auth",monarch:"auth",separation:"lib",rights:"lib"};
@@ -321,7 +321,7 @@ async function boot(){
     if(!g?.completed_at&&!legacy?.length){
       location.replace("./index.html#mission1gallery");return;
     }
-    await fetchState();
+    await fetchState();busy=false;paint();
     window.addEventListener("focus",()=>void fetchState().catch(()=>{}));
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)void fetchState().catch(()=>{})});
     client.channel("bi-sistema-team-"+teamId)
