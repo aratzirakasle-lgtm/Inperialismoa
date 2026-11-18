@@ -1,0 +1,119 @@
+/*
+ * Fase 2 · interactividad sobre el escenario museístico APROBADO.
+ * No sustituye las fotografías ni modifica las proporciones de las salas.
+ */
+.bi-stage .bi-room-drop{z-index:11;top:45.5%;height:49%;max-height:49%;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#b58a50 #132d24}
+.bi-stage .bi-room-drop-authoritarian{left:5.6%;width:41.6%}
+.bi-stage .bi-room-drop-liberal{right:6.1%;width:40.7%}
+.bi-stage .bi-room-drop>.bi-card{min-height:2.85cqw;height:2.85cqw}
+.bi-stage .bi-room-drop .bi-card-placed{padding:.3cqw .55cqw;font-size:1.04cqw}
+.bi-stage .bi-room-drop .bi-card-icon{width:2.8cqw;font-size:1.65cqw}
+.bi-stage .bi-room-drop .bi-card-tick{font-size:.95cqw}
+.bi-stage .bi-room-drop .bi-card-empty{min-height:2.85cqw;height:2.85cqw;opacity:.85}
+.bi-stage .bi-room-drop,.bi-stage .bi-desk-chips{outline-offset:3px;transition:box-shadow .2s,background-color .2s}
+.bi-stage .bi-room-drop.bi-over{box-shadow:0 0 0 .25cqw #ecd29b,0 0 2.7cqw #f8d28f85;outline:2px solid #e3c17a;border-radius:.8cqw}
+.bi-stage .bi-desk-chips.bi-over{background:#3c7252a0;outline:2px solid #dab77a;border-radius:.7cqw}
+.bi-stage .bi-select-target{outline:1px dashed #efc57b88;outline-offset:2px;cursor:pointer}
+.bi-stage .bi-card:not(.bi-locked){cursor:grab;touch-action:pan-y;transition:transform .17s,box-shadow .17s,filter .17s}
+.bi-stage .bi-card:not(.bi-locked):hover,.bi-stage .bi-card.bi-selected{
+  transform:translateY(-.22cqw);
+  box-shadow:inset 0 0 0 .15cqw #fff9,0 .3cqw .7cqw #0008,0 0 .95cqw #ffe5a282;
+  filter:saturate(1.03);
+}
+.bi-stage .bi-card.bi-selected{outline:2px solid #f2c973;outline-offset:2px}
+.bi-stage .bi-card.bi-locked{cursor:default}
+.bi-stage .bi-card:disabled{opacity:1}
+.bi-stage .bi-desk{z-index:12}
+.bi-stage .bi-footer{z-index:20}
+.bi-stage .bi-action:not(:disabled){cursor:pointer;transition:filter .15s,transform .15s}
+.bi-stage .bi-action:hover:not(:disabled){filter:brightness(1.11);transform:translateY(-2px)}
+.bi-stage :is(.bi-action,.bi-card,.bi-room-drop,.bi-desk-chips):focus-visible{outline:3px solid #f8d38b;outline-offset:3px}
+.bi-stage .bi-action:disabled{opacity:.56;cursor:not-allowed}
+.bi-stage .bi-live-progress{position:absolute;right:0;top:115%;font:600 10px/1.4 Arial,sans-serif;color:#f0dcad;background:#0c2d24;border:1px solid #b39361;border-radius:3px;padding:2px 8px}
+.bi-stage .bi-live-status{
+ position:absolute;z-index:18;left:19%;right:19%;bottom:11.5%;
+ text-align:center;color:#f1e2be;background:#0a2d24dd;border:1px solid #a98a5599;
+ border-radius:7px;padding:.4cqw .8cqw;min-height:2.1cqw;
+ font:600 clamp(11px,.8cqw,14px)/1.3 Arial,sans-serif;
+ box-shadow:0 3px 14px #0007;pointer-events:none
+}
+.bi-stage .bi-live-status.bi-error{color:#ffe6ad;border-color:#efac5c;background:#473020e8}
+.bi-stage .bi-hint{
+ position:absolute;z-index:19;top:18%;left:30%;right:30%;color:#3e3523;
+ background:linear-gradient(145deg,#fff4d9,#e9d5ac);
+ border:2px solid #bb945e;border-radius:9px;box-shadow:0 10px 35px #000a;
+ padding:1.05cqw 1.5cqw;text-align:center;font:italic 1.03cqw/1.38 Georgia,serif;
+}
+.bi-stage [hidden]{display:none!important}
+.bi-stage .bi-challenge-overlay{
+ position:absolute;z-index:30;inset:13% 10% 9%;display:flex;justify-content:center;align-items:center;
+ background:#061d1aa8;backdrop-filter:blur(7px);overflow:auto;
+ border:1px solid #c9a06170;border-radius:16px;padding:20px;
+}
+.bi-stage .bi-challenge-panel{
+ width:min(100%,970px);max-height:100%;overflow:auto;padding:clamp(24px,2.5cqw,43px);
+ background:radial-gradient(ellipse at 50% 0%,#e3d6b988,#f3ead9 70%),linear-gradient(#fff9eb,#ead8b9);
+ color:#2f2d23;border:4px ridge #b68b50;border-radius:17px;
+ box-shadow:inset 0 0 0 4px #fff9,0 18px 70px #000c;
+}
+.bi-stage .bi-challenge-kicker{font:800 12px/1.2 Arial,sans-serif;color:#806036;letter-spacing:.12em;text-align:center}
+.bi-stage .bi-challenge-panel h2{font:600 clamp(23px,2.4cqw,39px)/1.2 Georgia,serif;margin:10px 0;color:#24392c;text-align:center}
+.bi-stage .bi-challenge-panel>p{text-align:center;font:italic 15px/1.45 Georgia,serif}
+.bi-stage .bi-case{background:#fefbf3;border:1px solid #c6ab7b;border-radius:9px;margin:12px 0;padding:14px 18px;box-shadow:0 3px 8px #42352019}
+.bi-stage .bi-case p{font:600 17px/1.35 Georgia,serif;margin:0 0 12px}
+.bi-stage .bi-case-choices{display:flex;flex-wrap:wrap;gap:10px}
+.bi-stage .bi-case-choices button{padding:11px 14px;font:700 13px/1.3 Georgia,serif;background:#e9e0cf;color:#223c30;border:1px solid #9e8155;border-radius:7px;cursor:pointer}
+.bi-stage .bi-case-choices button.bi-chosen{background:#d5b879;border-color:#88612a;box-shadow:0 0 0 2px #b99767}
+.bi-stage .bi-case-choices button:disabled{opacity:.8;cursor:default}
+.bi-stage .bi-case-locked{display:inline-block;margin-top:8px;background:#235c40;color:#fff4dc;border-radius:10px;padding:4px 11px;font:700 12px Arial,sans-serif}
+.bi-stage .bi-challenge-actions{text-align:center;margin-top:15px}
+.bi-stage :is(#bi-check-cases,.bi-challenge-next){
+ display:inline-flex;align-items:center;justify-content:center;margin:5px;
+ padding:13px 22px;background:linear-gradient(160deg,#eacc8b,#b58743);
+ color:#231d15;border:1px solid #956c35;border-radius:8px;
+ font:700 16px/1.2 Georgia,serif;cursor:pointer;text-decoration:none;
+ box-shadow:0 3px 10px #0003;
+}
+.bi-stage #bi-check-cases:disabled{opacity:.5;cursor:not-allowed}
+.bi-stage .bi-victory{text-align:center}
+.bi-stage .bi-victory-icon{font-size:70px;color:#ad8b4b;text-shadow:0 3px #fff}
+.bi-stage .bi-victory p{font-size:18px}
+.bi-stage.bi-light-guards .bi-room-authoritarian{filter:brightness(1.035)}
+.bi-stage.bi-light-throne .bi-room-authoritarian{box-shadow:inset 0 0 32px #d9a45b45}
+.bi-stage.bi-light-parliament .bi-room-liberal{filter:brightness(1.035)}
+.bi-stage.bi-light-rights .bi-room-liberal{box-shadow:inset 0 0 34px #e8d8a13b}
+.bi-stage.bi-all-correct .bi-room{outline:1px solid #f7d69d66}
+.bi-touch-ghost{
+ position:fixed;z-index:999999;max-width:220px;padding:12px;
+ color:#29271d;border:2px solid #bf934f;border-radius:9px;
+ background:#f9eacc;box-shadow:0 12px 28px #0008;
+ pointer-events:none;transform:translate(-50%,-50%);
+ font:700 15px/1.2 Georgia,serif;
+}
+@media(max-width:980px),(orientation:portrait){
+ .bi-stage .bi-room-drop{top:49%;height:47%;max-height:47%;gap:5px}
+ .bi-stage .bi-room-drop>.bi-card,.bi-stage .bi-room-drop .bi-card-empty{height:48px;min-height:48px}
+ .bi-stage .bi-room-drop .bi-card-placed{font-size:12px;padding:4px 5px}
+ .bi-stage .bi-room-drop .bi-card-icon{width:23px;font-size:18px}
+ .bi-stage .bi-room-drop .bi-card-tick{font-size:13px}
+ .bi-stage .bi-room-drop-authoritarian,.bi-stage .bi-room-drop-liberal{width:70%}
+ .bi-stage .bi-room-drop-authoritarian{left:4%}.bi-stage .bi-room-drop-liberal{right:4%}
+ .bi-stage .bi-desk{min-height:300px}
+ .bi-stage .bi-desk-chips{left:8%;top:20%;width:84%;height:auto;min-height:68%;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .bi-stage .bi-card-tray{height:auto;min-height:53px;padding:6px;font-size:12px}
+ .bi-stage .bi-card-tray .bi-card-icon{font-size:18px;width:24px}
+ .bi-stage .bi-card:not(.bi-locked){touch-action:none}
+ .bi-stage .bi-live-status{position:relative;z-index:20;left:auto;right:auto;bottom:auto;margin:0 0 5px;padding:12px;font-size:12px}
+ .bi-stage .bi-hint{position:relative;top:auto;left:auto;right:auto;font-size:14px;padding:13px 17px}
+ .bi-stage .bi-challenge-overlay{position:relative;inset:auto;z-index:30;flex:none;padding:10px;background:#071d19a8;border-radius:10px;backdrop-filter:none}
+ .bi-stage .bi-challenge-panel{padding:20px;max-height:none}
+ .bi-stage .bi-case p{font-size:15px}
+ .bi-stage .bi-case-choices button{font-size:12px}
+ .bi-stage .bi-live-progress{font-size:10px;top:112%}
+ .bi-stage .bi-instructions p{font-size:12px}
+}
+@media(max-width:380px){.bi-stage .bi-card-tray{font-size:11px}.bi-stage .bi-case-choices button{padding:9px 10px}}
+@media(prefers-reduced-motion:reduce){
+ .bi-stage .bi-card,.bi-stage .bi-room-drop,.bi-stage .bi-action{animation:none!important;transition:none!important}
+ .bi-stage .bi-challenge-overlay{backdrop-filter:none}
+}
