@@ -19,6 +19,8 @@ let client,teamId=null,teacherPreview=false;
 let locked=new Set(),positions={},challengeLocked=new Set(),pending={},selected=null;
 let challengePending={},busy=true,feedback="Taldearen datuak kargatzen…",warning=false,hintLevel=0;
 let phase="classify",completed=false,dragging=null,suppressClick=false;
+// Mantener cada concepto en su hueco: las demás cartelas no se desplazan al añadir la última.
+const slotAssignments=new Map();
 const stage=$("#bi-stage"),auth=$("#bi-auth-slots"),lib=$("#bi-lib-slots"),tray=$("#bi-concept-chips");
 let note=null,hintBox=null,challengeBox=null;
 const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check")};
@@ -40,9 +42,28 @@ function card(id,placed){
     '</button>';
 }
 function cardsFor(zone){
-  const list=TRAITS.filter(x=>roomOf(x.id)===zone).map(x=>card(x.id,true));
-  const slots=Math.max(0,(zone==="auth"?3:4)-list.length);
-  return list.join("")+Array.from({length:slots},()=>'<div class="bi-card bi-card-empty" aria-hidden="true"></div>').join("");
+  const limit=zone==="auth"?3:4;
+  const inRoom=TRAITS.filter(x=>roomOf(x.id)===zone);
+  const slots=Array(limit).fill(null);
+  // Primero conservar los huecos ya ocupados, sin reordenar las tarjetas anteriores.
+  for(const item of inRoom){
+    const saved=slotAssignments.get(item.id);
+    if(saved?.zone===zone&&Number.isInteger(saved.index)&&saved.index>=0&&saved.index<limit&&!slots[saved.index])
+      slots[saved.index]=item.id;
+  }
+  for(const item of inRoom){
+    if(slots.includes(item.id))continue;
+    const index=slots.indexOf(null);
+    if(index<0)continue;
+    slots[index]=item.id;
+    slotAssignments.set(item.id,{zone,index});
+  }
+  // Las ranuras vacías tienen posición, pero ningún recuadro HTML visible.
+  // El soporte de marfil ya está pintado en la fotografía del museo.
+  return slots.map((id,index)=>id
+    ?card(id,true)
+    :'<div class="bi-card bi-card-empty" data-bi-slot="'+index+'" aria-hidden="true"></div>'
+  ).join("");
 }
 function announce(message,isWarning=false){
   feedback=message;warning=isWarning;
