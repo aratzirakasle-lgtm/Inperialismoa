@@ -117,3 +117,42 @@
  .bi-stage .bi-card,.bi-stage .bi-room-drop,.bi-stage .bi-action{animation:none!important;transition:none!important}
  .bi-stage .bi-challenge-overlay{backdrop-filter:none}
 }
+
+/* Mesa: siete, cinco o tres conceptos nunca deben superponerse al suelo ni al pie. */
+@media(min-width:981px) and (orientation:landscape){
+ .bi-stage[data-state="live"] .bi-desk-chips{
+  top:28%;left:10%;width:80%;height:57%;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:.32cqw .44cqw;align-items:stretch;
+ }
+ .bi-stage[data-state="live"] .bi-card-tray{
+  height:2.45cqw;min-height:2.45cqw;
+  font-size:.88cqw;padding:.26cqw .4cqw;gap:.25cqw;
+ }
+ .bi-stage[data-state="live"] .bi-card-tray .bi-card-icon{font-size:1.24cqw;width:1.3cqw}
+ .bi-stage[data-state="live"] .bi-card-tray .bi-card-grip{display:none}
+ .bi-stage[data-tray-count="1"] .bi-desk-chips,
+ .bi-stage[data-tray-count="2"] .bi-desk-chips{
+  top:30.6%;left:12%;width:76.5%;height:49%;
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5cqw;
+ }
+ .bi-stage[data-tray-count="1"] .bi-card-tray,
+ .bi-stage[data-tray-count="2"] .bi-card-tray{
+  height:4.26cqw;min-height:4.26cqw;
+  font-size:1.32cqw;padding:.48cqw .9cqw;
+ }
+ .bi-stage[data-tray-count="1"] .bi-card-tray .bi-card-icon,
+ .bi-stage[data-tray-count="2"] .bi-card-tray .bi-card-icon{font-size:2.5cqw;width:3.5cqw}
+}
+@media(max-width:980px),(orientation:portrait){
+ .bi-stage[data-state="live"] .bi-desk{min-height:310px}
+ .bi-stage[data-state="live"] .bi-desk-chips{
+  top:20%;left:8%;width:84%;height:auto;min-height:68%;
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;
+ }
+ .bi-stage[data-state="live"] .bi-card-tray{
+  min-height:55px;height:auto;font-size:12px;line-height:1.2;padding:5px 7px;
+ }
+ .bi-stage[data-state="live"] .bi-card-tray .bi-card-icon{width:20px;font-size:18px}
+}
+.bi-stage .bi-challenge-feedback{font:600 13px/1.4 Arial,sans-serif;color:#765225;text-align:center}
