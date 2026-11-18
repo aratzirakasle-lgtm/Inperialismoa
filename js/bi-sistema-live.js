@@ -19,7 +19,7 @@ let locked=new Set(),positions={},challengeLocked=new Set(),pending={},selected=
 let challengePending={},busy=false,feedback="",warning=false,hintLevel=0;
 let phase="classify",completed=false,dragging=null,suppressClick=false;
 const stage=$("#bi-stage"),auth=$("#bi-auth-slots"),lib=$("#bi-lib-slots"),tray=$("#bi-concept-chips");
-const note=$("#bi-feedback"),hintBox=$("#bi-hint"),challengeBox=$("#bi-challenge");
+let note=null,hintBox=null,challengeBox=null;
 const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check")};
 const labels={auth:"Sistema autoritarioak",lib:"Erregimen liberalak"};
 const roomOf=id=>positions[id]||pending[id]||null;
@@ -171,7 +171,7 @@ function renderChallenge(){
     return;
   }
   challengeBox.innerHTML='<div class="bi-challenge-panel"><p class="bi-challenge-kicker">AZKEN ERRONKA · HISTORIA INTERPRETATU</p>'+
-    '<h2>Bi egoera historiko</h2><p>Irakurri bi egoerak eta hautatu dagokien sistema. Emaitza ez da agertuko egiaztatu arte.</p>'+
+    '<h2>Bi egoera historiko</h2><p>Irakurri bi egoerak eta hautatu dagokien sistema. Emaitza ez da agertuko egiaztatu arte.</p><p class="bi-challenge-feedback" role="status">'+esc(feedback)+'</p>'+
     CASES.map(c=>{
       const fixed=challengeLocked.has(c.id);
       return '<section class="bi-case"><p><span aria-hidden="true">'+c.icon+'</span> '+esc(c.text)+'</p>'+
@@ -275,9 +275,9 @@ function setupStage(){
   $(".bi-instructions p").innerHTML="<strong>Jarraibidea:</strong> mugitu txartelak dagokien aretora. Ez duzu jakingo zuzenak diren <em>«Erantzunak egiaztatu» sakatu arte.</em>";
   const status=document.createElement("div");status.className="bi-live-status";status.id="bi-feedback";
   status.setAttribute("role","status");status.setAttribute("aria-live","polite");
-  stage.append(status);
-  const hints=document.createElement("aside");hints.className="bi-hint";hints.id="bi-hint";hints.hidden=true;stage.append(hints);
-  const overlay=document.createElement("section");overlay.className="bi-challenge-overlay";overlay.id="bi-challenge";overlay.setAttribute("aria-live","polite");overlay.hidden=true;stage.append(overlay);
+  stage.append(status);note=status;
+  const hints=document.createElement("aside");hints.className="bi-hint";hints.id="bi-hint";hints.hidden=true;stage.append(hints);hintBox=hints;
+  const overlay=document.createElement("section");overlay.className="bi-challenge-overlay";overlay.id="bi-challenge";overlay.setAttribute("aria-live","polite");overlay.hidden=true;stage.append(overlay);challengeBox=overlay;
   const progress=document.createElement("span");progress.className="bi-live-progress";progress.id="bi-progress";$(".bi-step").append(progress);
   const actions=$(".bi-footer-actions").querySelectorAll("button");
   [controls.help,controls.reset,controls.check]=actions;
