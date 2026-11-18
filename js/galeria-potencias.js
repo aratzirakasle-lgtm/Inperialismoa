@@ -83,7 +83,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const card=e.target.closest('[data-gallery-card]');
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw()}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected)place(state.selected,zone.dataset.galleryZone);
- });
+ },{signal:controller.signal});
  root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}},{signal:controller.signal});
  root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
  root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
