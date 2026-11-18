@@ -141,7 +141,7 @@ async function submit(answers,kind){
         locked.size+" / 7 zuzen. "+wrong.length+" kontzeptu berrikusi eta berriz kokatu. Saiakera: "+data.attempt_count+".":
         locked.size+" / 7 zuzen. Jarri gainerako kontzeptuak.");
     }
-    await fetchState();
+    await fetchState().catch(()=>{});
   }catch(err){
     console.error("Bi sistema, bi Europa:",err);
     announce("Ezin izan da egiaztatu. Egiaztatu konexioa eta saiatu berriro.",true);
