@@ -206,7 +206,7 @@ function renderChallenge(){
       '<p class="bi-challenge-kicker">MISIOA 1 · 2. ARIKETA GAINDITUTA</p>'+
       '<h2>Bi sistema politikoak identifikatu dituzue!</h2>'+
       '<p>Zazpi kontzeptuak eta bi egoera historikoak zuzen sailkatu dituzue.</p>'+
-      '<a class="bi-challenge-next" href="./index.html#mission1questions">Hurrengo aretora →</a>'+
+      '<a class="bi-challenge-next" href="./inperioen-aztarnak.html">3. ariketa · Inperioen aztarnak →</a>'+
       '</div>';
     return;
   }
