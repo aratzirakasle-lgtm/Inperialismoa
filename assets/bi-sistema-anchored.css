@@ -25,13 +25,13 @@
  }
  .bi-stage .bi-room-drop-authoritarian>.bi-card{height:31.2%!important}
  .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(1){top:0%!important}
- .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(2){top:34%!important}
- .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(3){top:68%!important}
+ .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(2){top:33%!important}
+ .bi-stage .bi-room-drop-authoritarian>.bi-card:nth-child(3){top:65.5%!important}
  .bi-stage .bi-room-drop-liberal>.bi-card{height:22.5%!important}
  .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(1){top:0%!important}
- .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(2){top:26%!important}
- .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(3){top:52%!important}
- .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(4){top:77%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(2){top:25%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(3){top:51.5%!important}
+ .bi-stage .bi-room-drop-liberal>.bi-card:nth-child(4){top:75%!important}
  .bi-stage .bi-room-drop .bi-card-empty{
   border:0!important;background:transparent!important;box-shadow:none!important;
   border-radius:.58cqw!important;
@@ -58,9 +58,7 @@
  .bi-stage .bi-room-drop .bi-card-tick{
   font-size:.92cqw!important;width:1.5cqw!important;height:1.5cqw!important;
  }
- .bi-stage .bi-room-drop .bi-card-grip{
-  flex:none!important;font-size:.92cqw!important;opacity:.7;
- }
+ .bi-stage .bi-room-drop .bi-card-grip{display:none!important}
  .bi-stage .bi-room-drop .bi-card-placed.bi-selected,
  .bi-stage .bi-room-drop .bi-card-placed:hover:not(.bi-locked){
   transform:none!important;
