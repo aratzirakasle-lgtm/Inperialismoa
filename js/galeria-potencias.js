@@ -25,6 +25,9 @@ const LOOKUP=new Map(ITEMS.map(x=>[x.id,x]));
 const ZONES=new Set(["eu_auth","eu_liberal","ru","us","jp"]);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false}={}){
+ if(root.__galleryCleanup)root.__galleryCleanup();
+ const controller=new AbortController();
+ root.__galleryCleanup=()=>controller.abort();
  const state={placements:{},locked:new Set(Array.isArray(initial.locked_ids)?initial.locked_ids:[]),completed:!!initial.completed_at,selected:null,busy:false,attempts:0,feedback:"",wrong:new Set(),hint:false};
  for(const [id,zone] of Object.entries(initial.locked_positions||{})){if(LOOKUP.has(id)&&ZONES.has(zone)&&state.locked.has(id))state.placements[id]=zone}
  const count=()=>state.locked.size;
@@ -38,6 +41,12 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const target=(zone,label,cap)=>{
   const items=ITEMS.filter(x=>state.placements[x.id]===zone);
   return '<div class="gal-zone '+(state.selected?'gal-zone-selectable':'')+'" data-gallery-zone="'+zone+'" tabindex="0" role="button" aria-label="'+esc(label)+': jarri kontzeptua hemen"><div class="gal-zone-heading"><span>'+esc(label)+'</span><small>'+items.length+(cap?' / '+cap:'')+'</small></div><div class="gal-zone-list">'+(items.length?items.map(x=>tile(x,true)).join(''):'<span class="gal-zone-placeholder">↓ Arrastatu hona</span>')+'</div></div>';
+ };
+ const flagHtml={
+  eu:'<span class="gal-flags"><span class="gal-flag-de" title="Alemania" aria-label="Alemaniako bandera"></span><span class="gal-flag-fr" title="Frantzia" aria-label="Frantziako bandera"></span></span>',
+  ru:'<span class="gal-flags"><span class="gal-flag-ru" title="Errusia" aria-label="Errusiako bandera"></span></span>',
+  us:'<span class="gal-flags"><span class="gal-flag-us" title="EEBB" aria-label="Estatu Batuetako bandera"></span></span>',
+  jp:'<span class="gal-flags"><span class="gal-flag-jp" title="Japonia" aria-label="Japoniako bandera"></span></span>'
  };
  const showcase=(key,name,flags,desc,content)=>'<article class="gal-vitrine gal-vitrine-'+key+'"><header class="gal-vitrine-top"><span class="gal-flag" aria-label="Banderak">'+flags+'</span><h2>'+name+'</h2></header><div class="gal-vitrine-image gal-photo-'+key+'" role="img" aria-label="'+esc(desc)+'"></div><div class="gal-vitrine-contents">'+content+'</div></article>';
  function draw(){
@@ -75,10 +84,10 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw()}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected)place(state.selected,zone.dataset.galleryZone);
  });
- root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}});
- root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'});
- root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}});
- root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')});
- root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');place(e.dataTransfer.getData('text/plain'),zone.dataset.galleryZone)});
+ root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}},{signal:controller.signal});
+ root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
+ root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
+ root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
+ root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');place(e.dataTransfer.getData('text/plain'),zone.dataset.galleryZone)},{signal:controller.signal});
  draw();
 }
