@@ -29,8 +29,8 @@ function card(id,placed){
   const t=BY_ID.get(id);
   if(!t)return "";
   const fixed=locked.has(id),isSelected=selected===id;
-  return '<button type="button" data-bi-card="'+id+'" draggable="'+(!fixed&&!teacherPreview&&!busy)+'" aria-pressed="'+isSelected+'" '+
-    (fixed||teacherPreview?'disabled ':'')+
+  return '<button type="button" data-bi-card="'+id+'" draggable="'+(!fixed&&!busy)+'" aria-pressed="'+isSelected+'" '+
+    (fixed?'disabled ':'')+
     'class="bi-card '+(placed?'bi-card-placed':'bi-card-tray')+(fixed?' bi-locked':'')+(isSelected?' bi-selected':'')+
     '" title="'+(fixed?'Kontzeptu zuzena, gordeta':'Sakatu edo arrastatu sailkatzeko')+'">'+
     '<span class="bi-card-icon" aria-hidden="true">'+esc(t.icon)+'</span>'+
@@ -73,12 +73,12 @@ function paint(){
       "Pista: nork kontrolatzen du parlamentua? Eta zer esan nahi du botere-banaketa izateak?":
       "Beste pista bat: monarkaren agintea eta armadaren pisua aztertu; beste sisteman, askatasun politikoen zabaltzeari begiratu.";
   }
-  controls.check.disabled=busy||teacherPreview||completed||phase!=="classify"||
+  controls.check.disabled=busy||completed||phase!=="classify"||
     !TRAITS.some(t=>pending[t.id]);
-  controls.reset.disabled=busy||teacherPreview||!Object.keys(pending).length;
-  controls.help.disabled=teacherPreview;
+  controls.reset.disabled=busy||!Object.keys(pending).length;
+  controls.help.disabled=false;
   controls.check.querySelector("span").textContent=busy?"Egiaztatzen…":"Erantzunak egiaztatu";
-  const selectedFlag=!!selected&&!teacherPreview;
+  const selectedFlag=!!selected;
   for(const target of [auth,lib,tray]){
     target.classList.toggle("bi-select-target",selectedFlag);
     if(!target.hasAttribute("tabindex"))target.tabIndex=0;
@@ -88,15 +88,23 @@ function paint(){
   renderChallenge();
 }
 function move(id,target){
-  if(!BY_ID.has(id)||locked.has(id)||busy||teacherPreview)return;
+  if(!BY_ID.has(id)||locked.has(id)||busy)return;
   if(target==="tray")delete pending[id];
-  else if(target==="auth"||target==="lib")pending[id]=target;
-  else return;
+  else if(target==="auth"||target==="lib"){
+    if(roomOf(id)===target){selected=null;paint();return;}
+    const limit=target==="auth"?3:4;
+    const current=TRAITS.filter(t=>t.id!==id&&roomOf(t.id)===target).length;
+    if(current>=limit){
+      announce("Areto honetan ez dago toki gehiagorik. Mugitu beste txartel bat mahaira edo beste aretora.",true);
+      return;
+    }
+    pending[id]=target;
+  } else return;
   selected=null;warning=false;feedback="";
   paint();
 }
-function reset(){if(busy||teacherPreview)return;pending={};selected=null;warning=false;feedback="Gorde gabeko txartelak mahaira itzuli dira. Zuzenak mantendu dira.";paint()}
-function hint(){if(teacherPreview)return;hintLevel=hintLevel===2?0:hintLevel+1;paint()}
+function reset(){if(busy)return;pending={};selected=null;warning=false;feedback="Gorde gabeko txartelak mahaira itzuli dira. Zuzenak mantendu dira.";paint()}
+function hint(){hintLevel=hintLevel===2?0:hintLevel+1;paint()}
 async function fetchState(){
   if(!teamId||teacherPreview)return;
   const {data,error}=await client.from("bi_sistema_team_state")
@@ -153,6 +161,10 @@ async function submit(answers,kind){
   }
 }
 async function checkCards(){
+  if(teacherPreview){
+    announce("Irakaslearen aurrebista: txartelak mugi eta aldatu ditzakezu. Ez da zuzenketarik egiten eta ez da daturik gordetzen.");
+    return;
+  }
   const answers=Object.fromEntries(Object.entries(pending).filter(([id,zone])=>!locked.has(id)&&BY_ID.has(id)&&["auth","lib"].includes(zone)));
   if(!Object.keys(answers).length){announce("Kokatu txartel bat gutxienez lehenik.",true);return}
   await submit(answers,"classify");
@@ -200,7 +212,7 @@ function initInteractions(){
   stage.addEventListener("click",e=>{
     if(suppressClick){suppressClick=false;return}
     const c=e.target.closest("[data-bi-card]");
-    if(c){const id=c.dataset.biCard;if(!locked.has(id)&&!busy&&!teacherPreview){selected=selected===id?null:id;paint()}return}
+    if(c){const id=c.dataset.biCard;if(!locked.has(id)&&!busy){selected=selected===id?null:id;paint()}return}
     const zone=e.target.closest("[data-bi-target]");
     if(zone&&selected){move(selected,zone.dataset.biTarget);return}
     const answer=e.target.closest("[data-case][data-choice]");
@@ -215,7 +227,7 @@ function initInteractions(){
   });
   stage.addEventListener("dragstart",e=>{
     const card=e.target.closest("[data-bi-card]");
-    if(!card||locked.has(card.dataset.biCard)||teacherPreview){e.preventDefault();return}
+    if(!card||locked.has(card.dataset.biCard)||busy){e.preventDefault();return}
     e.dataTransfer.setData("text/plain",card.dataset.biCard);e.dataTransfer.effectAllowed="move";
   });
   stage.addEventListener("dragover",e=>{
@@ -234,7 +246,7 @@ function initInteractions(){
   // Táctil: desplazamiento real con eventos pointer, más selección por pulsación.
   stage.addEventListener("pointerdown",e=>{
     const card=e.target.closest("[data-bi-card]");
-    if(!card||locked.has(card.dataset.biCard)||teacherPreview||e.pointerType==="mouse")return;
+    if(!card||locked.has(card.dataset.biCard)||busy||e.pointerType==="mouse")return;
     dragging={id:card.dataset.biCard,startX:e.clientX,startY:e.clientY,active:false,ghost:null};
   });
   stage.addEventListener("pointermove",e=>{
@@ -308,7 +320,7 @@ async function boot(){
     if(profile.role!=="student"&&!teacherPreview){location.replace("./index.html");return}
     if(teacherPreview){
       stage.classList.add("bi-teacher-preview");busy=false;
-      announce("Irakaslearen aurrebista: ezin da daturik bidali.");
+      announce("Irakaslearen aurrebista: mugitu zazpi kontzeptuak. Ez da daturik gordetzen.");
       // La vista docente debe empezar vacía. Nunca inyectar soluciones de ejemplo.
       // Los alumnos recuperan únicamente los aciertos que realmente tenga guardados su equipo.
       locked=new Set();
