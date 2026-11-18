@@ -105,10 +105,10 @@
    opacity:1!important;display:block!important;
  }
  .dossier-sheet--case .dossier-clues details[open] p{
-   position:absolute!important;left:21%!important;right:5%!important;top:45%!important;bottom:15%!important;
+   position:absolute!important;left:21%!important;right:5%!important;top:39%!important;bottom:7%!important;
    z-index:3!important;padding:.09cqw .15cqw!important;background:transparent!important;
    clip-path:none!important;box-shadow:none!important;overflow:auto!important;
-   color:#3a291c!important;font:600 .87cqw/1.13 Georgia,serif!important;
+   color:#3a291c!important;font:600 .94cqw/1.08 Georgia,serif!important;
  }
  .dossier-sheet--case .dossier-clues details:not([open]) p{display:none!important}
  .dossier-sheet--case .dossier-choices{
@@ -142,6 +142,11 @@
    outline:.18cqw solid #ddb76f!important;outline-offset:-.5cqw!important;
    box-shadow:inset 0 0 0 .12cqw #6e4c27b0!important;
    clip-path:polygon(1% 12%,8% 0,41% 4%,73% 0,99% 10%,100% 89%,92% 99%,57% 95%,20% 100%,0 89%)!important;
+ }
+ .dossier-sheet--case .dossier-choice:not(.is-locked)::before{
+   content:'◯'!important;position:absolute!important;right:6%!important;top:31%!important;
+   z-index:2!important;font:700 1.35cqw Georgia,serif!important;color:#9a723f!important;
+   background:#e7c69be8!important;border-radius:50%!important;padding:0 .17cqw!important;
  }
  .dossier-sheet--case .dossier-choice:has(input:checked)::after{
    content:'◆'!important;position:absolute!important;right:7%!important;top:36%!important;
