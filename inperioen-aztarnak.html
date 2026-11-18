@@ -155,6 +155,7 @@
 @media(max-width:560px){.dossier-header{gap:9px}.dossier-flag{width:50px;height:36px}.dossier-header h2{font-size:27px}.dossier-art img{aspect-ratio:5/3}.dossier-sheet{font-size:15px;padding:12px}.dossier-clues summary{font-size:14px}.dossier-question{font-size:16px}.dossier-choice{font-size:14px}.dossier-top{gap:4px}.dossier-exit{padding:7px}.dossier-kicker{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
+<link rel="stylesheet" href="./assets/inperioen-expedientes-aprobados.css?v=20261118-1">
 </head>
 <body>
 <main class="museum-scene" aria-label="Inperioen aztarnak · diseinu-aurrebista">
@@ -223,6 +224,8 @@ const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 let client=null,teamId=null,teacherPreview=false,authenticated=false,loading=true;
 let solved=new Set(),finalComplete=false,currentCase=null,selected={},cluesOpened={},lastResult={},saving=false;
 let modalMode='case';
+let studentId=null;
+const clueRequestsInFlight=new Set();
 const modal=$('#dossier-overlay');
 const flagCode={india:'🇮🇳',aljeria:'🇩🇿',indonesia:'🇮🇩',angola:'🇦🇴'};
 const LINES={
@@ -262,43 +265,108 @@ function feedbackMessage(result){
  if(result.wrong){return `<div class="dossier-feedback bad" role="status"><strong>Oraindik ez.</strong> Berrikusi pistak eta saiatu berriro; oraindik ez da loturarik argitu.</div>`}
  return '';
 }
+/* Banderas reales en SVG, con fondo transparente alrededor y sin recuadro extra. */
+function powerFlagSvg(id){
+ const base='xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" role="img"';
+ const sr={fr:'Bandera de Francia',uk:'Bandera del Reino Unido',pt:'Bandera de Portugal',nl:'Bandera de los Países Bajos'};
+ const paths={
+  fr:'<path fill="#183d98" d="M0 0h20v40H0z"/><path fill="#fff" d="M20 0h20v40H20z"/><path fill="#e2363c" d="M40 0h20v40H40z"/>',
+  nl:'<path fill="#ae1c28" d="M0 0h60v13.34H0z"/><path fill="#fff" d="M0 13.34h60v13.33H0z"/><path fill="#21468b" d="M0 26.67h60V40H0z"/>',
+  uk:'<rect width="60" height="40" fill="#012169"/><path d="M0 0L60 40M60 0L0 40" stroke="#fff" stroke-width="9"/><path d="M0 0L60 40M60 0L0 40" stroke="#c8102e" stroke-width="4"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="13"/><path d="M30 0V40M0 20H60" stroke="#c8102e" stroke-width="7"/>',
+  pt:'<rect width="60" height="40" fill="#ee2436"/><path d="M0 0h24v40H0z" fill="#006b46"/><circle cx="24" cy="20" r="10" fill="none" stroke="#ffce31" stroke-width="2.5"/><path d="M18 11h12v15l-6 4-6-4z" fill="#fff" stroke="#c8152e" stroke-width="1.3"/><path d="M23 14h3v4h-3zM19 20h3v4h-3zM25 20h3v4h-3z" fill="#1856ab"/>'
+ };
+ return `<svg ${base} aria-label="${sr[id]||'Bandera'}" preserveAspectRatio="xMidYMid meet">${paths[id]||''}</svg>`;
+}
+function clueSet(id){if(!cluesOpened[id])cluesOpened[id]=new Set();return cluesOpened[id]}
+function clueCount(id){return clueSet(id).size}
+function updateClueUnlock(id){
+ if(currentCase!==id||modalMode!=='case')return;
+ const count=clueCount(id),ready=count===3||solved.has(id),locked=solved.has(id);
+ const progress=$('#clue-progress-label');if(progress)progress.textContent=`${count}/3 agiri kontsultatuta`;
+ const dots=modal.querySelectorAll('.reading-dot');dots.forEach((el,i)=>el.classList.toggle('done',clueSet(id).has(i)));
+ for(const el of modal.querySelectorAll('details[data-clue]')){
+  const index=Number(el.dataset.clue),seen=clueSet(id).has(index);
+  el.dataset.read=String(seen);
+  const mark=el.querySelector('.clue-seen');
+  if(mark)mark.textContent=seen?'✓ Irakurrita':'Ireki';
+ }
+ const help=$('#choice-locked-note');
+ if(help)help.textContent=ready?'Erantzuna aukeratu eta egiaztatu. Ez da zuzenketarik agertuko lehenago.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`;
+ for(const input of modal.querySelectorAll('input[name="choice"]')){
+  input.disabled=!ready||locked||saving;
+  input.closest('.dossier-choice')?.classList.toggle('is-locked',!ready||locked||saving);
+ }
+ const verify=$('#dossier-verify');if(verify)verify.disabled=!ready||locked||saving||!selected[id];
+}
+async function markClueRead(id,index){
+ if(clueSet(id).has(index)||clueRequestsInFlight.has(id+':'+index))return;
+ const key=id+':'+index;
+ clueRequestsInFlight.add(key);
+ try{
+  if(!teacherPreview){
+   const {error}=await client.rpc('record_empire_dossier_clue',{p_case_id:id,p_clue_no:index+1});
+   if(error)throw error;
+  }
+  clueSet(id).add(index);
+  updateClueUnlock(id);
+ }catch(error){
+  console.error('Pista gordetzeko errorea:',error);
+  if(currentCase===id){
+   const msg=$('#choice-locked-note');if(msg)msg.textContent='Ezin izan da pista erregistratu. Egiaztatu konexioa eta ireki berriro.';
+  }
+ }finally{clueRequestsInFlight.delete(key)}
+}
+async function loadClueReads(){
+ if(teacherPreview||!studentId)return;
+ const {data,error}=await client.from('empire_dossier_clue_reads').select('case_id,clue_no').eq('student_id',studentId);
+ if(error)throw error;
+ for(const item of data||[])if(byId[item.case_id]&&item.clue_no>=1&&item.clue_no<=3)clueSet(item.case_id).add(item.clue_no-1);
+}
 function openCase(id){
  const c=byId[id];if(!c||!authenticated)return;
  currentCase=id;modalMode='case';document.body.style.overflow='hidden';modal.hidden=false;
- const num=CASES.findIndex(x=>x.id===id);
- const opened=cluesOpened[id]||new Set();
+ const num=CASES.findIndex(x=>x.id===id),count=clueCount(id),ready=count===3||solved.has(id);
  const solvedIt=solved.has(id);
- modal.innerHTML=`<section class="dossier-sheet" role="dialog" aria-modal="true" aria-labelledby="dossier-heading">
- <div class="dossier-top"><span class="dossier-kicker">IKERKETA ${String(num+1).padStart(2,'0')} / 04 · Artxibo historikoa</span><button type="button" id="dossier-close" class="dossier-exit">✕ Itxi</button></div>
- ${teacherPreview?'<div class="dossier-teacher-note">Irakaslearen probako ikuspegia: egiaztapenak ez dira gordeko.</div>':''}
+ const shortQuestion={india:'Zein metropolik menderatu zuen India?',aljeria:'Zein metropolik menderatu zuen Aljeria?',indonesia:'Zein metropolik menderatu zuen Indonesia?',angola:'Zein metropolik menderatu zuen Angola?'}[id];
+ const types=['⚔','▤','♛'];
+ modal.innerHTML=`<section class="dossier-sheet dossier-sheet--case dossier-${id}" role="dialog" aria-modal="true" aria-labelledby="dossier-heading" aria-describedby="dossier-description">
+ <div class="dossier-top"><span class="dossier-kicker">ESPEDIENTEA ${String(num+1).padStart(2,'0')} / 04 · Artxibo historikoa</span><button type="button" class="dossier-exit" data-close-dossier>✕ Itxi</button></div>
  <header class="dossier-header"><div class="dossier-flag">${flagSvg(id)}</div><div><h2 id="dossier-heading">${escapeHtml(c.country)}</h2><p>${escapeHtml(c.region)} · ${escapeHtml(c.date)} · ${escapeHtml(c.historical_location)}</p></div></header>
- <div class="dossier-grid"><figure class="dossier-art"><img src="${c.image_data}" alt="${escapeHtml(c.asset_caption)}"><small>${escapeHtml(c.asset_caption)} · Dokumentazio bisuala</small></figure>
- <div class="dossier-detail"><div class="dossier-guide"><strong>3 agiri aztertu:</strong> pista historikoak kontsultatu eta metropolia aukeratu. Ez da erantzuna agertuko egiaztatu arte.</div>
- <div class="dossier-clues">${c.clues.map((clue,i)=>`<details data-clue="${i}" ${opened.has(i)?'open':''}><summary>📜 ${escapeHtml(clue.title)}</summary><p>${escapeHtml(clue.text)}</p></details>`).join('')}</div>
- <h3 class="dossier-question">${escapeHtml(c.question)}</h3>
- <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${solvedIt||saving?'disabled':''}><span>${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
- <div class="dossier-actionrow"><button type="button" id="dossier-verify" class="dossier-action" ${solvedIt||!selected[id]||saving?'disabled':''}>${solvedIt?'✓ Espedientea egiaztatuta':'Erantzuna egiaztatu'}</button></div>
+ ${teacherPreview?'<div class="dossier-teacher-note">Irakaslearen proba: ez da daturik gordeko.</div>':''}
+ <div class="dossier-grid"><figure class="dossier-art"><img src="${c.image_data}" alt="${escapeHtml(c.asset_caption)}"><small>${escapeHtml(c.asset_caption)}</small></figure>
+ <figure class="dossier-photo" role="img" aria-label="${escapeHtml(c.asset_caption)}"><figcaption>Artxibo historikoaren berreraikuntza artistikoa · ${escapeHtml(c.country)}</figcaption></figure>
+ <div class="dossier-mini-map" role="img" aria-label="${escapeHtml(c.country)}: mapa geografikoa"></div><p class="dossier-small-details">${escapeHtml(c.region)} · Gaur egungo estatua: ${escapeHtml(c.country)}<br>Ikerketaren gaia: menderatze koloniala</p>
+ <div class="dossier-detail"><p class="dossier-guide" id="dossier-description">Ireki hiru agiriak metropolia aukeratu aurretik.</p>
+ <h3 class="dossier-question" aria-label="${escapeHtml(c.question)}">${escapeHtml(shortQuestion)}</h3>
+ <div class="dossier-clues">${c.clues.map((clue,i)=>`<details data-clue="${i}" data-read="${clueSet(id).has(i)}"><summary data-ico="${types[i]}"><span>${escapeHtml(clue.title)}</span><span class="clue-seen">${clueSet(id).has(i)?'✓ Irakurrita':'Ireki'}</span></summary><p>${escapeHtml(clue.text)}</p></details>`).join('')}</div>
+ <div class="dossier-clue-status" aria-live="polite"><span id="clue-progress-label">${count}/3 agiri kontsultatuta</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
+ <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice ${!ready||solvedIt?'is-locked':''}"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${!ready||solvedIt||saving?'disabled':''}><span class="choice-flag">${powerFlagSvg(choice.id)}</span><span class="choice-name">${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
+ <div class="dossier-actionrow"><button type="button" id="dossier-verify" class="dossier-action" ${!ready||solvedIt||!selected[id]||saving?'disabled':''}>${solvedIt?'✓ Egiaztatuta':'Erantzuna egiaztatu'}</button></div>
+ <p id="choice-locked-note" class="dossier-locked-note">${ready?'Erantzuna aukeratu eta egiaztatu.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`}</p>
  <div id="case-feedback">${feedbackMessage(lastResult[id])}</div></div></div>
+ <div class="dossier-footer"><button type="button" class="dossier-exit" data-close-dossier>← Globora itzuli</button><div class="dossier-progress">Ikerketaren aurrerapena: ${solved.size} / 4 <span class="dots">${CASES.map(c=>`<span class="dot ${solved.has(c.id)?'done':''}"></span>`).join('')}</span></div></div>
  <div class="dossier-nav"><button type="button" id="dossier-prev" ${num===0?'disabled':''}>← Aurrekoa</button><span>${num+1} / ${CASES.length} espediente</span><button type="button" id="dossier-next" ${num===CASES.length-1?'disabled':''}>Hurrengoa →</button></div>
  </section>`;
- $('#dossier-close').addEventListener('click',closeModal);
- $('#dossier-prev').addEventListener('click',()=>openCase(CASES[num-1]?.id));
- $('#dossier-next').addEventListener('click',()=>openCase(CASES[num+1]?.id));
+ for(const close of modal.querySelectorAll('[data-close-dossier]'))close.addEventListener('click',closeModal);
+ const prev=modal.querySelector('#dossier-prev'),next=modal.querySelector('#dossier-next');
+ if(prev)prev.addEventListener('click',()=>openCase(CASES[num-1]?.id));
+ if(next)next.addEventListener('click',()=>openCase(CASES[num+1]?.id));
  for(const input of modal.querySelectorAll('input[name="choice"]'))input.addEventListener('change',()=>{
+  if(clueCount(id)!==3||solved.has(id)||saving){input.checked=false;return;}
   selected[id]=input.value;lastResult[id]=null;
-  $('#dossier-verify').disabled=false;$('#case-feedback').innerHTML='';
+  const feedback=$('#case-feedback');if(feedback)feedback.innerHTML='';
+  updateClueUnlock(id);
  });
  for(const detail of modal.querySelectorAll('details[data-clue]'))detail.addEventListener('toggle',()=>{
-  if(!cluesOpened[id])cluesOpened[id]=new Set();const i=Number(detail.dataset.clue);
-  if(detail.open)cluesOpened[id].add(i);else cluesOpened[id].delete(i);
+  const index=Number(detail.dataset.clue);if(detail.open)void markClueRead(id,index);
  });
  $('#dossier-verify').addEventListener('click',()=>void verifyCase(id));
- $('#dossier-close').focus();
+ const closeBtn=modal.querySelector('[data-close-dossier]');closeBtn?.focus();
 }
 function closeModal(){modal.hidden=true;modal.innerHTML='';document.body.style.overflow='';currentCase=null;modalMode='case';}
 async function rpcVerify(kind,id,choice){
  if(!client)throw Error('Saioa ez dago prest');
- const {data,error}=await client.rpc('check_empire_dossier',{
+ const {data,error}=await client.rpc('check_empire_dossier_with_reading',{
   p_phase:kind,p_case_id:kind==='reflection'?'final':id,p_answer:choice,p_preview:teacherPreview
  });
  if(error)throw error;
@@ -306,7 +374,7 @@ async function rpcVerify(kind,id,choice){
  return data;
 }
 async function verifyCase(id){
- if(saving||solved.has(id)||!selected[id])return;
+ if(saving||solved.has(id)||!selected[id]||clueCount(id)!==3)return;
  saving=true;const btn=$('#dossier-verify');btn.disabled=true;btn.textContent='Egiaztatzen…';
  try{
   const res=await rpcVerify('case',id,selected[id]);
@@ -364,7 +432,7 @@ async function init(){
   if(error||!user){location.replace('./index.html');return}
   const {data:profile,error:pe}=await client.from('profiles').select('id,role,team_id').eq('id',user.id).single();
   if(pe||!profile){location.replace('./index.html');return}
-  teacherPreview=profile.role==='teacher'&&params.get('preview')==='1';
+  studentId=user.id;teacherPreview=profile.role==='teacher'&&params.get('preview')==='1';
   if(profile.role==='teacher'&&!teacherPreview||profile.role!=='student'&&!teacherPreview){location.replace('./index.html');return}
   if(!teacherPreview){
    teamId=profile.team_id;if(!teamId){location.replace('./index.html');return}
@@ -375,6 +443,7 @@ async function init(){
    if(prevErr||legacyErr)throw prevErr||legacyErr;
    if(!prev?.completed_at&&!legacy?.length){location.replace('./index.html#mission1gallery');return}
    await loadState();
+   await loadClueReads();
    client.channel('empire-dossier-'+teamId).on('postgres_changes',{
     event:'*',schema:'public',table:'empire_dossier_team_state',filter:'team_id=eq.'+teamId
    },()=>void loadState().catch(()=>{})).subscribe();
