@@ -147,3 +147,97 @@
 @media(prefers-reduced-motion:reduce){
  .bi-stage .bi-card,.bi-stage .bi-concept-svg{transition:none!important;animation:none!important}
 }
+
+/* 18/11 · Corrección de la última cartela de cada vitrina.
+   Las cajas marfil son PARTE del decorado original. Las tarjetas HTML
+   solo aportan icono y texto: no se dibuja otro rectángulo encima. */
+@media (min-width:981px) and (orientation:landscape) {
+ .bi-stage .bi-room-drop > .bi-card.bi-card-empty{
+   border:0!important;background:transparent!important;
+   box-shadow:none!important;outline:0!important;
+   visibility:hidden!important;pointer-events:none!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card.bi-card-empty::before,
+ .bi-stage .bi-room-drop > .bi-card.bi-card-empty::after{
+   display:none!important;content:none!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card.bi-card-placed{
+   box-sizing:border-box!important;
+   background:transparent!important;
+   border:0!important;
+   border-radius:0!important;
+   box-shadow:none!important;
+   outline:0!important;
+   margin:0!important;
+   max-width:100%!important;max-height:100%!important;
+   padding:.18cqw .48cqw!important;
+   overflow:hidden!important;
+   isolation:isolate!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card.bi-card-placed:hover:not(.bi-locked),
+ .bi-stage .bi-room-drop > .bi-card.bi-card-placed.bi-selected{
+   transform:none!important;background:#efc98529!important;
+   border:0!important;box-shadow:none!important;
+   outline:1px solid #c9a2639e!important;outline-offset:-1px!important;
+ }
+ .bi-stage .bi-room-drop .bi-card .bi-card-icon{
+   box-sizing:border-box!important;
+   max-width:19%!important;
+   max-height:80%!important;
+   overflow:hidden!important;
+ }
+ .bi-stage .bi-room-drop .bi-card .bi-concept-svg{
+   max-height:100%!important;
+   width:100%!important;height:100%!important;
+   overflow:hidden!important;
+ }
+ .bi-stage .bi-room-drop .bi-card .bi-card-word{
+   flex:1 1 0!important;
+   min-width:0!important;
+   max-height:100%!important;
+   overflow:hidden!important;
+   font-size:1.0cqw!important;
+   line-height:1.08!important;
+ }
+ .bi-stage .bi-room-drop-liberal .bi-card .bi-card-word{
+   font-size:.93cqw!important;
+ }
+ .bi-stage .bi-room-drop [data-bi-card="rights"] .bi-card-word,
+ .bi-stage .bi-room-drop [data-bi-card="socialist"] .bi-card-word{
+   font-size:.86cqw!important;
+   letter-spacing:-.03em!important;
+ }
+ .bi-stage .bi-room-drop-authoritarian > .bi-card:last-child,
+ .bi-stage .bi-room-drop-liberal > .bi-card:last-child{
+   box-sizing:border-box!important;
+   overflow:hidden!important;
+ }
+}
+/* En móvil las tarjetas sí son la cartela, sobre el panel verde oscuro:
+   se distribuyen en filas iguales; la cuarta no se sale de la vitrina. */
+@media(max-width:980px),(orientation:portrait){
+ .bi-stage .bi-room-drop{box-sizing:border-box!important;align-content:stretch!important}
+ .bi-stage .bi-room-drop > .bi-card{
+   min-height:0!important;min-width:0!important;
+   box-sizing:border-box!important;
+   align-self:stretch!important;
+   overflow:hidden!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card .bi-card-icon{
+   flex:0 0 34px!important;
+   height:min(100%,39px)!important;
+   max-width:34px!important;
+   overflow:hidden!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card .bi-concept-svg{
+   max-width:100%!important;
+   max-height:100%!important;
+   object-fit:contain!important;
+ }
+ .bi-stage .bi-room-drop > .bi-card .bi-card-word{
+   min-width:0!important;
+   font-size:clamp(11px,2.55vw,14px)!important;
+   line-height:1.12!important;
+   overflow-wrap:break-word!important;
+ }
+}
