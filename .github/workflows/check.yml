@@ -11,10 +11,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verificar sintaxis JS
+      - name: Verificar sintaxis JS y scripts de las pantallas
         run: |
-          node --check js/app.js
-          node --check js/config.js
+          for file in js/*.js; do node --check "$file"; done
+          node tests/check-html-scripts.mjs
+      - name: Probar separación de acceso alumno/profesor
+        run: node --test tests/mission1-access.test.mjs
       - name: Verificar archivos esenciales
         run: |
           test -s index.html
