@@ -64,32 +64,70 @@
   }
 
 
-  /* Las láminas conservan sus tres documentos originales. Cerrados muestran
-     solo el rótulo de consulta, como tinta sobre un retal del mismo pergamino.
-     Abiertos recuperan el título y texto originales, sin tocar su contenido. */
+
+  /* Las tres inscripciones originales son píxeles de la escenografía. El papel
+     opaco cubre TODO el bloque de tinta de cada recorte, desde el título hasta
+     la última línea. Su perímetro deja ver los grabados del margen izquierdo. */
+  .dossier-sheet--case.dossier-india {--archive-paper-light:#f0dcb9;--archive-paper:#e7cb9f;--archive-paper-dark:#d0ab77}
+  .dossier-sheet--case.dossier-aljeria {--archive-paper-light:#f2dfbc;--archive-paper:#e4c99e;--archive-paper-dark:#d0a979}
+  .dossier-sheet--case.dossier-indonesia {--archive-paper-light:#f0d7ad;--archive-paper:#dfbd8d;--archive-paper-dark:#c99f6d}
+  .dossier-sheet--case.dossier-angola {--archive-paper-light:#f1ddba;--archive-paper:#e4c79d;--archive-paper-dark:#cea676}
+
+  .dossier-sheet--case .dossier-clues details:not([open]) {
+    isolation:isolate!important;
+  }
+  /* Primera capa sin transparencias: la antigua tipografía nunca asoma
+     por debajo de las fibras ni por los cortes irregulares del rótulo. */
+  .dossier-sheet--case .dossier-clues details:not([open])::before {
+    content:''!important;display:block!important;position:absolute!important;
+    left:18.4%!important;right:1%!important;top:6%!important;bottom:7%!important;
+    z-index:1!important;pointer-events:none!important;
+    background:var(--archive-paper,#e7cb9f)!important;
+    box-shadow:none!important;clip-path:none!important;opacity:1!important;
+    -webkit-mask-image:none!important;mask-image:none!important;
+  }
+  .dossier-sheet--case .dossier-clues details:not([open]) summary {
+    z-index:3!important;isolation:isolate!important;
+  }
   .dossier-sheet--case .dossier-clues details:not([open]) summary span:first-child,
   .dossier-sheet--case .dossier-clues details:not([open]) .clue-seen {
     display:none!important;
   }
+  /* Segunda capa: la misma gama de pergamino de las cuatro láminas, con
+     fibra sutil, manchas naturales y borde rasgado. SIN degradado transparente
+     en las zonas donde el original contiene tinta. */
   .dossier-sheet--case .dossier-clues details:not([open]) summary::after {
-    content:'Ikusi agiria'!important;display:inline-flex!important;position:absolute!important;
-    left:20%!important;top:24%!important;width:73%!important;height:53%!important;
-    align-items:center!important;justify-content:center!important;
-    padding:.18cqw .4cqw!important;box-sizing:border-box!important;
-    color:#503721!important;font:italic 700 1.14cqw/1.15 Georgia,serif!important;
-    letter-spacing:.012em!important;text-shadow:0 .06cqw #ffedc477!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;
-    background:radial-gradient(ellipse at 50% 50%,#edd6ae 13%,#e5c697e8 61%,#ddbd8a73 88%,transparent 100%)!important;
-    clip-path:none!important;transform:none!important;pointer-events:none!important;
-    transition:filter .18s,color .18s!important;
+    content:'Ikusi agiria'!important;display:grid!important;place-items:center!important;
+    position:absolute!important;left:17.8%!important;right:0%!important;
+    top:3%!important;bottom:4%!important;width:auto!important;height:auto!important;
+    box-sizing:border-box!important;padding:.08cqw .65cqw!important;
+    z-index:3!important;pointer-events:none!important;
+    background-image:
+      url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22120%22%20viewBox%3D%220%200%20160%20120%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20baseFrequency%3D%22.38%22%20numOctaves%3D%223%22%20seed%3D%2212%22%20type%3D%22fractalNoise%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%22linear%22%20slope%3D%22.17%22%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%2380613d%22%20filter%3D%22url(%23g)%22%20opacity%3D%22.28%22%2F%3E%3C%2Fsvg%3E"),
+      radial-gradient(ellipse at 94% 13%,#a7763e2c 0,transparent 40%),
+      radial-gradient(ellipse at 8% 84%,#96683d33 0,transparent 35%),
+      linear-gradient(108deg,var(--archive-paper-dark,#d0ab77) 0%,var(--archive-paper,#e7cb9f) 8%,var(--archive-paper-light,#f0dcb9) 43%,var(--archive-paper,#e7cb9f) 84%,var(--archive-paper-dark,#d0ab77) 100%)!important;
+    background-size:160px 120px,100% 100%,100% 100%,100% 100%!important;
+    background-repeat:repeat,no-repeat,no-repeat,no-repeat!important;
+    background-blend-mode:multiply,normal,normal,normal!important;
+    color:#593824!important;font:italic 700 1.25cqw/1.15 Georgia,'Times New Roman',serif!important;
+    letter-spacing:.02em!important;text-align:center!important;
+    text-shadow:0 .05cqw #fff0d4b0!important;
+    border:0!important;border-radius:0!important;
+    box-shadow:inset 0 .10cqw .20cqw #fff5,inset 0 -.13cqw .18cqw #90683a24!important;
+    filter:none!important;opacity:1!important;transform:none!important;
+    clip-path:polygon(0 8%,3% 2%,13% 4%,24% 1%,38% 3%,53% 0,70% 3%,83% 1%,96% 3%,100% 7%,99% 27%,100% 56%,99% 88%,96% 98%,80% 96%,66% 100%,51% 97%,37% 99%,19% 96%,5% 99%,0 94%,1% 70%,0 42%)!important;
+    transition:filter .18s ease,color .18s ease!important;
   }
   .dossier-sheet--case .dossier-clues details:nth-child(1):not([open]) summary::after {content:'Ikusi 1. agiria'!important}
   .dossier-sheet--case .dossier-clues details:nth-child(2):not([open]) summary::after {content:'Ikusi 2. agiria'!important}
   .dossier-sheet--case .dossier-clues details:nth-child(3):not([open]) summary::after {content:'Ikusi 3. agiria'!important}
   .dossier-sheet--case .dossier-clues details:not([open]):hover summary::after,
   .dossier-sheet--case .dossier-clues details:not([open]):focus-within summary::after {
-    color:#2e2017!important;filter:brightness(1.07)!important;
+    filter:brightness(1.045)!important;color:#352318!important;
   }
+  /* En cuanto se abre desaparece la máscara de consulta: se muestran las
+     pistas reales como antes y la hoja abierta conserva su propio papel. */
   .dossier-sheet--case .dossier-clues details[open] summary::after {
     content:none!important;display:none!important;
   }
@@ -220,25 +258,39 @@
     font:italic 700 11px Georgia,serif!important;border:0!important;
   }
 
-  /* Solo al cerrar cada documento se ve "Ikusi ...", en el papel existente. */
+
+  /* En móvil el expediente es HTML real: se reemplaza todo el contenido
+     visual del encabezado cerrado por una única pieza de pergamino. */
+  .dossier-sheet--case .dossier-clues details:not([open]) {
+    isolation:isolate!important;
+  }
   .dossier-sheet--case .dossier-clues details:not([open]) summary {
-    position:relative!important;display:flex!important;align-items:center!important;
-    justify-content:center!important;min-height:49px!important;
-    padding:5px!important;border-bottom:0!important;
+    position:relative!important;display:grid!important;place-items:center!important;
+    min-height:63px!important;height:63px!important;padding:0!important;
+    border:0!important;overflow:hidden!important;isolation:isolate!important;
   }
   .dossier-sheet--case .dossier-clues details:not([open]) summary span:first-child,
   .dossier-sheet--case .dossier-clues details:not([open]) .clue-seen {
     display:none!important;
   }
   .dossier-sheet--case .dossier-clues details:not([open]) summary::after {
-    content:'Ikusi agiria'!important;display:inline-flex!important;position:relative!important;
-    inset:auto!important;align-items:center!important;justify-content:center!important;
-    min-width:165px!important;min-height:38px!important;
-    padding:6px 18px!important;box-sizing:border-box!important;
-    background:radial-gradient(ellipse at center,#ecd4ab 8%,#e3c392df 68%,transparent 100%)!important;
-    border:0!important;border-radius:0!important;box-shadow:none!important;
-    color:#4e3421!important;font:italic 700 16px/1.2 Georgia,serif!important;
-    text-shadow:0 1px #fff3!important;transform:none!important;pointer-events:none!important;
+    content:'Ikusi agiria'!important;display:grid!important;place-items:center!important;
+    position:absolute!important;inset:1px 0!important;
+    width:100%!important;height:calc(100% - 2px)!important;
+    min-width:0!important;min-height:0!important;padding:6px 10px!important;
+    box-sizing:border-box!important;pointer-events:none!important;
+    background-image:
+      url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22160%22%20height%3D%22120%22%20viewBox%3D%220%200%20160%20120%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20baseFrequency%3D%22.38%22%20numOctaves%3D%223%22%20seed%3D%2212%22%20type%3D%22fractalNoise%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%22linear%22%20slope%3D%22.17%22%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%2380613d%22%20filter%3D%22url(%23g)%22%20opacity%3D%22.28%22%2F%3E%3C%2Fsvg%3E"),
+      radial-gradient(ellipse at 91% 18%,#9f72382a 0,transparent 40%),
+      linear-gradient(105deg,#d6b080,#eed8b1 16%,#f1dfbf 55%,#e0bd8e 100%)!important;
+    background-size:160px 120px,100% 100%,100% 100%!important;
+    background-repeat:repeat,no-repeat,no-repeat!important;
+    background-blend-mode:multiply,normal,normal!important;
+    color:#53341d!important;font:italic 700 17px/1.2 Georgia,'Times New Roman',serif!important;
+    letter-spacing:.01em!important;text-shadow:0 1px #fff1d0ad!important;
+    border:0!important;border-radius:0!important;box-shadow:inset 0 1px #fff7,inset 0 -1px #78532926!important;
+    clip-path:polygon(0 6%,10% 1%,22% 3%,40% 0,64% 2%,81% 0,100% 5%,99% 95%,83% 100%,64% 97%,41% 100%,19% 97%,0 100%)!important;
+    opacity:1!important;transform:none!important;
   }
   .dossier-sheet--case .dossier-clues details:nth-child(1):not([open]) summary::after {content:'Ikusi 1. agiria'!important}
   .dossier-sheet--case .dossier-clues details:nth-child(2):not([open]) summary::after {content:'Ikusi 2. agiria'!important}
