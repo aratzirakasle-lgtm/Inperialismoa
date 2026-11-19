@@ -1,6 +1,6 @@
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { mountExerciseNav, addTeacherStageControls } from "./mission1-navigation.js";
+import { mountExerciseNav, addTeacherStageControls } from "./mission1-navigation.js?v=20261119-teacher-2";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 
 const TRAITS=[
