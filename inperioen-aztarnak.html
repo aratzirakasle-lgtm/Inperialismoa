@@ -222,7 +222,9 @@
 </main>
 <div id="dossier-overlay" class="dossier-overlay" hidden></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
-<script type="module">/* Inperioen aztarnak · Fase 2: cuatro expedientes interactivos.
+<script type="module">import { mountExerciseNav } from './js/mission1-navigation.js';
+mountExerciseNav(4);
+/* Inperioen aztarnak · Fase 2: cuatro expedientes interactivos.
  * Las claves NO se distribuyen en el navegador. La validación y el progreso
  * compartido se realizan en la función pública con control estricto de rol. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './js/config.js';
@@ -446,12 +448,7 @@ async function init(){
   if(profile.role==='teacher'&&!teacherPreview||profile.role!=='student'&&!teacherPreview){location.replace('./index.html');return}
   if(!teacherPreview){
    teamId=profile.team_id;if(!teamId){location.replace('./index.html');return}
-   const [{data:prev,error:prevErr},{data:legacy,error:legacyErr}]=await Promise.all([
-    client.from('mission1_exercise_completions').select('exercise').eq('team_id',teamId).eq('exercise',3).maybeSingle(),
-    client.from('mission_completions').select('mission_id').eq('team_id',teamId).eq('mission_id',1).limit(1)
-   ]);
-   if(prevErr||legacyErr)throw prevErr||legacyErr;
-   if(!prev?.exercise&&!legacy?.length){location.replace('./inperialismoaren-definizioa.html');return}
+   // El cuarto ejercicio puede verse sin completar el tercero.
    await loadState();
    await loadClueReads();
    client.channel('empire-dossier-'+teamId).on('postgres_changes',{
