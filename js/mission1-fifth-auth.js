@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav } from './mission1-navigation.js';
+import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js';
 
 const status=document.querySelector('#online-state');
 const url=new URLSearchParams(location.search);
@@ -19,6 +19,11 @@ async function initialize(){
     const preview=profile.role==='teacher'&&previewRequested;
     if(!preview&&profile.role!=='student'){location.replace('./index.html');return}
     if(preview){
+      mountExerciseNav(5);
+      addTeacherStageControls([
+        ['Hasierako pantaila',()=>window.m1FifthPreviewSetStage?.('start')],
+        ['Amaierako pantaila',()=>window.m1FifthPreviewSetStage?.('complete')]
+      ]);
       window.m1FifthProgress=async()=>({completed:true,preview:true,mission_completed:false});
       say('Irakaslearen aurrebista: ez dira benetako taldearen emaitzak gordeko.');
       return;
