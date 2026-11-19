@@ -148,8 +148,18 @@ const ART = Object.freeze({
     <path d="M19 7h8l-8 3" fill="#ba5150"/>
   `
 });
+/* Miniilustraciones independientes (elementos IMG, no glifos de fuente).
+ * Los SVG originales se tratan como imágenes, sin fondo y con volumen
+ * de tinta/luz sobre los objetos. No hay llamadas a servidores externos. */
+const IMAGES = Object.freeze(Object.fromEntries(Object.entries(ART).map(([id,drawing])=>{
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="72" height="72" fill="none" stroke="#674a33" stroke-width="1.05" stroke-linejoin="round" stroke-linecap="round">'+
+    '<defs><filter id="painted" x="-25%" y="-25%" width="150%" height="160%">'+
+    '<feDropShadow dx=".45" dy="1.05" stdDeviation=".65" flood-color="#392b20" flood-opacity=".3"/>'+
+    '</filter></defs><g filter="url(#painted)">'+drawing+'</g></svg>';
+  return [id,'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg).replace(/'/g,'%27')];
+})));
 export function galleryIllustration(id){
-  const drawing=ART[id];
-  if(!drawing)return '';
-  return '<svg class="gal-tile-artwork" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false" aria-hidden="true" fill="none" stroke="#5d4433" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round">'+drawing+'</svg>';
+  const src=IMAGES[id];
+  if(!src)return '';
+  return '<img class="gal-tile-artwork" src="'+src+'" alt="" width="24" height="24" draggable="false" decoding="async" aria-hidden="true">';
 }
