@@ -404,7 +404,7 @@ function showFinal(){
  <p>${escapeHtml(f.question)}</p>
  ${finalComplete?'<p>Lau metropoliak eta koloniak lotu dituzue. Hausnarketa historikoa ere ongi osatu duzue.</p>':`<fieldset class="dossier-choices" style="border:0;padding:0">${f.options.map(op=>`<label class="dossier-choice"><input name="reflection" type="radio" value="${escapeHtml(op.id)}" ${selected.final===op.id?'checked':''}><span>${escapeHtml(op.label)}</span></label>`).join('')}</fieldset><div class="dossier-actionrow" style="justify-content:center"><button id="reflection-verify" class="dossier-action" type="button" ${selected.final?'':'disabled'}>Erantzuna egiaztatu</button></div>`}
  <div id="final-feedback">${feedbackMessage(lastResult.final)}</div>
- ${finalComplete?'<a href="./index.html#mission1questions">Hurrengo aretora →</a>':''}
+ ${finalComplete?'<a href="./esaldiak-osatu.html">5. ariketa · Esaldiak osatu →</a>':''}
  </div></section>`;
  $('#dossier-close').addEventListener('click',closeModal);
  for(const inp of modal.querySelectorAll('input[name="reflection"]'))inp.addEventListener('change',()=>{selected.final=inp.value;lastResult.final=null;$('#reflection-verify').disabled=false;$('#final-feedback').innerHTML=''});
