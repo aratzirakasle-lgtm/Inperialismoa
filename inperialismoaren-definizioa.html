@@ -26,7 +26,18 @@ main {width:100%;margin:0 auto}
 /* Las cartonas rellenas usan el pergamino original y letras redibujadas, sin deformación. */
 .piece .lettering {display:none}
 .piece.placed .lettering {position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;inset:10% 7% 11%;box-sizing:border-box;white-space:normal;text-wrap:balance;overflow-wrap:normal;overflow:hidden;text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:700;line-height:1.06;letter-spacing:-.023em;color:#24180e;text-shadow:0 .035cqw #fff4d68c;pointer-events:none}
-.piece.placed::before{display:none}
+.piece.placed::before{display:none!important}
+/* Al incrustarse, se ve el pergamino de la escena, sin cartona duplicada. */
+.piece.placed:not(.dragging) img{opacity:0;visibility:hidden}
+.piece.placed.dragging img{opacity:1;visibility:visible}
+.piece.placed.dragging .lettering{display:none}
+.piece.placed:not(.dragging){filter:none}
+.drop.slot-paper-ready.filled{
+  background-image:var(--paper-matched)!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+}
 .piece.dragging {z-index:20;cursor:grabbing;transition:none;filter:drop-shadow(0 .55cqw .5cqw #0c0a07a9)}
 .piece.focused {z-index:13;filter:drop-shadow(0 0 .9cqw #ffd789aa)}
 .piece.placed {z-index:9;filter:drop-shadow(0 .08cqw .11cqw #301c0a70);transform:translateZ(0)}
@@ -79,67 +90,66 @@ const items=new Map(model.items.map(item=>[item.id,item]));
 const targets=new Map(model.slots.map(slot=>[slot.id,slot]));
 const state=new Map(model.items.map(item=>[item.id,null]));
 let selection=null,active=null,moved=false,solved=false;
-const blankCards=new Map();
 const pixel=v=>v/W*100+'%';
 function placeCoords(el,rect,transition=true){
   el.style.left=(rect[0]/W*100)+'%';el.style.top=(rect[1]/H*100)+'%';
   el.style.width=((rect[2]-rect[0])/W*100)+'%';el.style.height=((rect[3]-rect[1])/H*100)+'%';
   if(transition===false)el.style.transition='none';else el.style.removeProperty('transition');
 }
-/* Encaja el pergamino conservando la relación de aspecto de su imagen:
-   el marco y las letras dibujadas nunca se estiran ni se comprimen. */
-function fitRectInside(slotRect,sourceRect,padX=8,padY=6){
-  const width=slotRect[2]-slotRect[0],height=slotRect[3]-slotRect[1];
-  const sourceWidth=sourceRect[2]-sourceRect[0],sourceHeight=sourceRect[3]-sourceRect[1];
-  const usableWidth=Math.max(1,width-2*padX);
-  const usableHeight=Math.max(1,height-2*padY);
-  const scale=Math.min(usableWidth/sourceWidth,usableHeight/sourceHeight);
-  const w=sourceWidth*scale,h=sourceHeight*scale;
-  const x=slotRect[0]+(width-w)/2,y=slotRect[1]+(height-h)/2;
-  return [x,y,x+w,y+h];
+/* Para evitar parches: cada hueco se reproduce pixel a pixel a partir del
+   fondo que ya está expuesto y se borra solamente el signo de interrogación.
+   El tono, las manchas y los bordes permanecen IDENTICOS a la lámina. */
+function imageFromSceneVariable(name){
+  const declared=scene.style.getPropertyValue(name);
+  const source=declared.match(/data:image\/(?:webp|png|jpeg);base64,[A-Za-z0-9+/=]+/);
+  if(!source)return Promise.reject(new Error('Falta el material de '+name));
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.onload=()=>resolve(img);
+    img.onerror=()=>reject(new Error('No se pudo abrir '+name));
+    img.src=source[0];
+  });
 }
-/* Reproduce la fibra y el borde originales y borra solo la tinta fotografiada
-   del centro. La cartona vacía se estira como material; las letras no. */
-function eraseInk(img){
- const can=document.createElement('canvas'),w=img.naturalWidth,h=img.naturalHeight;
- can.width=w;can.height=h;
- const ctx=can.getContext('2d',{willReadFrequently:true});
- ctx.drawImage(img,0,0,w,h);
- const frame=ctx.getImageData(0,0,w,h),pix=frame.data,mask=new Uint8Array(w*h);
- const xmin=Math.ceil(w*.09),xmax=Math.floor(w*.91),ymin=Math.ceil(h*.17),ymax=Math.floor(h*.88);
- for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++){
-   const p=y*w+x,i=p*4,r=pix[i],g=pix[i+1],b=pix[i+2];
-   if(r<162&&g<139&&b<108&&r+g+b<407)mask[p]=1;
- }
- const expanded=mask.slice();
- for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++)if(mask[y*w+x]){
-   for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
-     const xx=x+dx,yy=y+dy;
-     if(xx>=xmin&&xx<xmax&&yy>=ymin&&yy<ymax)expanded[yy*w+xx]=1;
-   }
- }
- const done=new Uint8Array(w*h);
- for(let p=0;p<w*h;p++)if(!expanded[p])done[p]=1;
- const offsets=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
- for(let pass=0;pass<25;pass++){
-   const updates=[];
-   for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++){
-     const p=y*w+x;if(done[p])continue;
-     let n=0,r=0,g=0,b=0;
-     for(const [dx,dy] of offsets){
-       const xx=x+dx,yy=y+dy,neighbor=yy*w+xx;
-       if(xx<0||xx>=w||yy<0||yy>=h||!done[neighbor])continue;
-       const i=neighbor*4;r+=pix[i];g+=pix[i+1];b+=pix[i+2];n++;
-     }
-     if(n)updates.push([p,r/n,g/n,b/n]);
-   }
-   for(const [p,r,g,b] of updates){
-     const i=p*4;pix[i]=r;pix[i+1]=g;pix[i+2]=b;done[p]=1;
-   }
-   if(!updates.length)break;
- }
- ctx.putImageData(frame,0,0);
- return can.toDataURL('image/webp',.93);
+function removeQuestionFromPaper(ctx,w,h){
+  const data=ctx.getImageData(0,0,w,h),pix=data.data;
+  const original=new Uint8ClampedArray(pix);
+  const cx=(w-1)/2,cy=(h-1)/2;
+  const rx=Math.min(44,w*.155),ry=h*.48,offset=Math.round(w*.24);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const radius=Math.hypot((x-cx)/rx,(y-cy)/ry);
+    if(radius>=1)continue;
+    const alpha=Math.min(1,(1-radius)/.20);
+    const left=Math.max(0,x-offset),right=Math.min(w-1,x+offset);
+    const p=(y*w+x)*4,l=(y*w+left)*4,r=(y*w+right)*4;
+    for(let k=0;k<3;k++){
+      const parchment=original[l+k]*.55+original[r+k]*.45;
+      pix[p+k]=Math.round(original[p+k]*(1-alpha)+parchment*alpha);
+    }
+  }
+  ctx.putImageData(data,0,0);
+}
+async function prepareMatchingPapers(){
+  const [museum,outcome]=await Promise.all([
+    imageFromSceneVariable('--museum'),
+    imageFromSceneVariable('--blank-slot')
+  ]);
+  for(const slot of model.slots){
+    const rect=slot.rect,w=Math.round(rect[2]-rect[0]),h=Math.round(rect[3]-rect[1]);
+    const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext('2d',{willReadFrequently:true});
+    if(!ctx)continue;
+    if(slot.id==='outcome'){
+      // Este hueco pertenece a una pieza independiente; se usa SU papel original.
+      ctx.drawImage(outcome,0,0,w,h);
+    }else{
+      // El resto ya está impreso en la lámina del museo: copia exacta del lugar.
+      ctx.drawImage(museum,rect[0],rect[1],w,h,0,0,w,h);
+    }
+    removeQuestionFromPaper(ctx,w,h);
+    const el=scene.querySelector('[data-slot="'+slot.id+'"]');
+    el.style.setProperty('--paper-matched','url("'+canvas.toDataURL('image/png')+'")');
+    el.classList.add('slot-paper-ready');
+  }
 }
 /* Recalcula el tamaño de letra para que quepa en cada hueco, sin escala X/Y. */
 function fitLettering(piece){
@@ -175,13 +185,6 @@ function setup(){
     el.setAttribute('aria-pressed','false');el.title=item.name;el.innerHTML='<img draggable="false" alt=""><span class="lettering" aria-hidden="true"></span><span class="stamp" aria-hidden="true">✓</span>';
     el.querySelector('.lettering').textContent=item.name;
     el.querySelector('img').src=item.src;scene.append(el);
-    const source=el.querySelector('img');
-    source.addEventListener('load',()=>{
-      if(!blankCards.has(item.id)&&!source.dataset.cleaning){
-        source.dataset.cleaning='1';blankCards.set(item.id,eraseInk(source));
-        delete source.dataset.cleaning;if(state.get(item.id))paint();
-      }
-    },{once:true});
     el.addEventListener('transitionend',event=>{
       if((event.propertyName==='width'||event.propertyName==='height')&&state.get(item.id))fitLettering(el);
     });
@@ -193,6 +196,7 @@ function setup(){
     el.addEventListener('click',e=>{if(moved){moved=false;e.preventDefault();return}toggleSelect(item.id)});
     el.addEventListener('keydown',e=>{if(e.key==='Backspace'||e.key==='Delete'){e.preventDefault();returnToTray(item.id)}});
   });
+  prepareMatchingPapers().catch(error=>console.error('Pergaminoak ezin izan dira prestatu:',error));
   $('#check').addEventListener('click',check);
   $('#close-result').addEventListener('click',()=>{result.hidden=true});
   $('#reset').addEventListener('click',reset);
@@ -216,9 +220,7 @@ function paint(){
     // En los cinco huecos, el tamaño se adapta sin deformar la imagen ni sus letras.
     const rect=slot?targets.get(slot).rect:item.origin;
     placeCoords(el,rect);el.classList.toggle('placed',!!slot);
-    const art=el.querySelector('img'),clean=blankCards.get(item.id);
-    const desired=slot&&clean?clean:item.src;
-    if(art.src!==desired)art.src=desired;
+    // No se añade ninguna imagen encima: solo tipografía sobre el papel del hueco.
     if(slot)requestAnimationFrame(()=>fitLettering(el));el.classList.toggle('focused',selection===item.id);el.setAttribute('aria-pressed',selection===item.id?'true':'false');
     el.style.cursor=solved?'default':'grab';
   }
