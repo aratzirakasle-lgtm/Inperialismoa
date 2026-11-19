@@ -60,7 +60,7 @@
 #app-shell.gallery-active .gal-progress-chips{display:flex;justify-content:center;gap:17px;font:600 11px/1.2 'DM Sans',sans-serif;letter-spacing:.03em;color:#ebd6b0;margin-top:8px}
 #app-shell.gallery-active .gal-display{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.25vw,21px);margin:15px 0 13px;align-items:stretch}
 #app-shell.gallery-active .gal-vitrine{
- position:relative;min-width:0;height:clamp(344px,39vw,463px);display:flex;flex-direction:column;
+ position:relative;min-width:0;height:auto;min-height:clamp(344px,39vw,463px);display:flex;flex-direction:column;
  border:3px ridge #b78b4e;border-radius:15px 15px 10px 10px;
  background:linear-gradient(145deg,#f9f1e2,#eee4d1 72%,#d8c8aa);
  box-shadow:inset 0 0 0 2px #fde8b6,inset 0 0 0 6px #a57b4144,0 14px 25px #000b,0 0 22px #c79a473b;
@@ -99,7 +99,18 @@
 #app-shell.gallery-active .gal-photo-us{background-position:66.666667% center}
 #app-shell.gallery-active .gal-photo-jp{background-position:100% center}
 #app-shell.gallery-active .gal-vitrine-contents{padding:9px;min-height:0;flex:1;display:flex;flex-direction:column;gap:7px;overflow:auto;scrollbar-color:#bba077 #efe2d0;scrollbar-width:thin}
-#app-shell.gallery-active .gal-vitrine-eu .gal-vitrine-contents{display:grid;grid-template-rows:1fr 1fr;gap:7px}
+/* Los dos paneles de Europa se dimensionan por el contenido real:
+   el autoritario crece al recibir tarjetas y el liberal baja sin taparlas. */
+#app-shell.gallery-active .gal-vitrine-eu .gal-vitrine-contents{
+  display:flex;flex-direction:column;gap:7px;
+  min-height:max-content;overflow:visible;
+}
+#app-shell.gallery-active .gal-vitrine-eu .gal-zone{
+  flex:0 0 auto;min-height:72px;
+}
+#app-shell.gallery-active .gal-vitrine-eu .gal-zone:last-child{
+  flex:1 0 72px;
+}
 #app-shell.gallery-active .gal-zone{
  min-height:72px;border:1px dashed #a5957c;border-radius:7px;
  padding:6px;background:linear-gradient(145deg,#f9f3e8,#ede1cf);
@@ -170,13 +181,13 @@
 #app-shell.gallery-active .gal-critical{margin:8px 0 0;color:#d9cba9;font:italic 11px/1.5 Georgia,serif;text-align:center}
 #app-shell.gallery-active .gal-hall :is(button,[role=button]):focus-visible{outline:3px solid #f5db9c;outline-offset:3px}
 @media(max-width:1300px){
- #app-shell.gallery-active .gal-vitrine{height:440px}
+ #app-shell.gallery-active .gal-vitrine{min-height:440px}
  #app-shell.gallery-active .gal-tray .gal-tile-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
  #app-shell.gallery-active .gal-tile{font-size:11px}
 }
 @media(max-width:1030px){
  #app-shell.gallery-active .gal-display{grid-template-columns:repeat(2,minmax(0,1fr))}
- #app-shell.gallery-active .gal-vitrine{height:400px}
+ #app-shell.gallery-active .gal-vitrine{min-height:400px}
  #app-shell.gallery-active .gal-vitrine-image{height:145px}
  #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
  #app-shell.gallery-active .gal-vitrine-top h2{font-size:27px}
@@ -191,7 +202,7 @@
  #app-shell.gallery-active .gal-titlebar h1{font-size:clamp(26px,7vw,38px)}
  #app-shell.gallery-active .gal-titlebar p{font-size:12px}
  #app-shell.gallery-active .gal-display{gap:9px;grid-template-columns:1fr 1fr}
- #app-shell.gallery-active .gal-vitrine{height:380px;border-width:2px}
+ #app-shell.gallery-active .gal-vitrine{min-height:380px;border-width:2px}
  #app-shell.gallery-active .gal-vitrine-top{min-height:43px;gap:5px}
  #app-shell.gallery-active .gal-flag{font-size:17px;padding:2px}
  #app-shell.gallery-active .gal-vitrine-top h2{font-size:18px}
