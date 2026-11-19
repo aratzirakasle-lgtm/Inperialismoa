@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { mountExerciseNav } from './mission1-navigation.js';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');
@@ -27,13 +28,8 @@ async function initialize(){
     }
     if(!profile.team_id){location.replace('./index.html');return}
     const team=profile.team_id;
-    const [{data:second,error:e2},{data:prior,error:e3},{data:legacy,error:el}]=await Promise.all([
-      client.from('bi_sistema_team_state').select('completed_at').eq('team_id',team).maybeSingle(),
-      client.from('mission1_exercise_completions').select('exercise').eq('team_id',team).eq('exercise',3).maybeSingle(),
-      client.from('mission_badges').select('mission_id').eq('team_id',team).eq('mission_id',1).limit(1)
-    ]);
-    if(e2||e3||el)throw e2||e3||el;
-    if(!second?.completed_at&&!legacy?.length){location.replace('./bi-sistema.html');return}
+    const {data:prior,error:priorError}=await client.from('mission1_exercise_completions').select('exercise').eq('team_id',team).eq('exercise',3).maybeSingle();
+    if(priorError)throw priorError;
     window.m1ThirdProgress=async answers=>{
       const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:3,p_answers:answers});
       if(error)throw error;
@@ -46,4 +42,5 @@ async function initialize(){
     fail('Ezin izan da taldearen egoera egiaztatu. Berritu orria edo itzuli hasierara.');
   }
 }
+mountExerciseNav(3);
 window.addEventListener('load',()=>void initialize());
