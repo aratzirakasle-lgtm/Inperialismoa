@@ -27,7 +27,7 @@ function style(){
 export function exerciseNavMarkup(active){
  style();
  const items=pages.map(([id,label,href])=>`<a href="${href}" title="${id}. ariketa · ${label}" ${id===active?'aria-current="page"':''}><span class="m1-nav-num" aria-hidden="true">${id}</span><span class="m1-nav-label">${label}</span></a>`).join("");
- return `<nav class="m1-nav" aria-label="Irakaslearen ariketa-nabigazioa"><span class="m1-nav-title">IRAKASLEAREN AURREBISTA · 1. MISIOA</span><div class="m1-nav-links">${items}</div><div class="m1-nav-links"><a href="./index.html#teacherpanel" title="Irakaslearen panela">← Panelera</a></div></nav>`;
+ return `<nav class="m1-nav" aria-label="Irakaslearen ariketa-nabigazioa"><span class="m1-nav-title">IRAKASLEAREN AURREBISTA · 1. MISIOA</span><div class="m1-nav-links">${items}</div><div class="m1-nav-links"><a href="./index.html?teacherpanel=1" title="Irakaslearen panela">← Panelera</a></div></nav>`;
 }
 export function mountExerciseNav(active){
  const holder=document.createElement("div");holder.innerHTML=exerciseNavMarkup(active);
