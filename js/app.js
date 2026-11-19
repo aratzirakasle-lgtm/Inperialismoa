@@ -28,7 +28,7 @@ const viewTeamId=()=>teacherPreview?teacherPreviewTeamId:user?.team_id;
 const mine=()=>teams.find(t=>t.id===viewTeamId());
 const completed=(team,id)=>progress.some(p=>String(p.team_id)===String(team)&&Number(p.mission_id)===Number(id));
 const countDone=team=>missions.filter(m=>completed(team,m.id)).length;
-const available=id=>isTeacher()||id===1||completed(viewTeamId(),id-1);
+const available=id=>accountIsTeacher()||id===1||completed(viewTeamId(),id-1);
 const displayName=()=>teacherPreview?"Alumno/a · vista previa":isTeacher()?"Profesor/a":(user?.name||"Alumno/a");
 const missionById=id=>missions.find(m=>Number(m.id)===Number(id));
 const cleanHtml = s=>esc(s).replace(/\n/g,"<br>");
@@ -125,10 +125,10 @@ function renderHome(){
 function renderGallery(){
  const team=viewTeamId();
  const current=galleryStates.find(x=>x.team_id===team)||{};
- const canSkip=true;
+ const canSkip=teacherPreview||completed(team,1);
  mountGallery($("#view"),{
    initial:current,preview:demo||teacherPreview,
-   canSkip,navigationEnabled:!demo,navigationPreview:teacherPreview,
+   canSkip,navigationEnabled:teacherPreview,navigationPreview:teacherPreview,
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},
    onSubmit:async answers=>{
@@ -212,10 +212,11 @@ async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-de
 async function signInReal(e){e.preventDefault();const email=$("#login-user").value.trim(),password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession()}catch(err){$("#login-error").textContent="No se ha podido iniciar sesión. Revisa los datos o consulta al profesor."}finally{btn.disabled=false}}
 async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};await refreshData();
  const hash=location.hash;
- if(!accountIsTeacher()&&hash==="#mission2"&&available(2)){currentMission=2;galleryQuestionsOpen=false}
+ if(accountIsTeacher()&&hash==="#teacherpreviewgallery"){const selected=teams.find(t=>t.name==="Exploradores")||teams[0];teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=1;galleryQuestionsOpen=false}
+ else if(!accountIsTeacher()&&hash==="#mission2"&&available(2)){currentMission=2;galleryQuestionsOpen=false}
  else if(!accountIsTeacher()&&hash==="#mission1gallery"){currentMission=1;galleryQuestionsOpen=false}
  else{currentMission=0;galleryQuestionsOpen=false}
- if(hash.startsWith("#mission"))history.replaceState(null,"",location.pathname+location.search);
+ if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
  switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},async()=>{await refreshData();render()}).subscribe()}
 async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;if(b.id==="teacher-preview-bi"&&accountIsTeacher()){location.assign("./bi-sistema.html?preview=1");return}if(b.id==="student-preview"&&accountIsTeacher()){const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=0;responses={};checkFeedback=null;render();return}if(b.id==="return-to-teacher"&&accountIsTeacher()){teacherPreview=false;teacherPreviewTeamId=null;currentMission=0;responses={};checkFeedback=null;render();return}if(b.dataset.demo)await signInDemo(b.dataset.demo);if(b.dataset.mission)changeMission(Number(b.dataset.mission));if(b.dataset.view){
