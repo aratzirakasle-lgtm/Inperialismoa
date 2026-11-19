@@ -41,11 +41,14 @@ test('Las ilustraciones transparentes son pequeñas y no reciben eventos de rat�
   assert.match(css,/gal-tile-icon\{[^}]*pointer-events:none\}/);
 });
 
-test('El espacio europeo se adapta automáticamente a cuatro tarjetas sin solapar ambos recuadros',()=>{
+test('Los dos sistemas europeos caben completos (cuatro autoritarias y cinco liberales)',()=>{
   assert.match(css,/\.gal-vitrine\{[\s\S]{0,100}height:auto;min-height:clamp\(/);
-  assert.match(css,/\.gal-vitrine-eu \.gal-vitrine-contents\{[^}]*display:flex;flex-direction:column;[^}]*overflow:visible/);
-  assert.match(css,/\.gal-vitrine-eu \.gal-zone\{[^}]*flex:0 0 auto/);
-  assert.match(css,/\.gal-vitrine-eu \.gal-zone:last-child\{[^}]*flex:1 0 72px/);
+  assert.match(css,/\.gal-vitrine-eu\{[^}]*height:max-content;[^}]*overflow:visible/);
+  assert.match(css,/\.gal-vitrine-eu \.gal-vitrine-contents\{[^}]*flex:0 0 auto;[^}]*height:auto;[^}]*overflow:visible/);
+  assert.match(css,/\.gal-vitrine-eu \.gal-zone:last-child\{[^}]*flex:none;[^}]*height:auto/);
+  assert.match(css,/\.gal-vitrine-eu \.gal-zone-list\{[^}]*flex-direction:column;[^}]*flex-wrap:nowrap;[^}]*overflow:visible/);
+  assert.match(css,/\.gal-vitrine-eu \.gal-tile-placed\{[^}]*flex:0 0 auto;[^}]*height:auto/);
   assert.doesNotMatch(css,/\.gal-vitrine-eu \.gal-vitrine-contents\{display:grid;grid-template-rows:1fr 1fr/);
+  assert.doesNotMatch(css,/\.gal-vitrine-eu \.gal-zone:last-child\{[^}]*flex:1 0 72px/);
   assert.doesNotMatch(css,/\.gal-vitrine\{height:(?:380|400|440)px/);
 });
