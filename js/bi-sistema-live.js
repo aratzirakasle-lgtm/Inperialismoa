@@ -359,7 +359,14 @@ async function boot(){
     }
     teamId=profile.team_id;
     if(!teamId){location.replace("./index.html");return}
-    // Acceso a la pantalla independiente de la finalización del primer ejercicio.
+    const [{data:first,error:firstError},{data:legacy,error:legacyError}]=await Promise.all([
+      client.from("gallery_team_state").select("completed_at").eq("team_id",teamId).maybeSingle(),
+      client.from("mission_badges").select("mission_id").eq("team_id",teamId).eq("mission_id",1).limit(1)
+    ]);
+    if(firstError||legacyError)throw firstError||legacyError;
+    if(!first?.completed_at&&!legacy?.length){
+      location.replace("./index.html#mission1gallery");return;
+    }
     await fetchState();busy=false;paint();
     window.addEventListener("focus",()=>void fetchState().catch(()=>{}));
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)void fetchState().catch(()=>{})});
@@ -371,5 +378,4 @@ async function boot(){
     announce("Ezin izan dira taldearen datuak kargatu. Berritu orria edo itzuli misiora.",true);
   }
 }
-mountExerciseNav(2);
 boot();
