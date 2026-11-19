@@ -1,82 +1,73 @@
-# INPERIALISMOA
-### Plataforma educativa de misiones sobre el imperialismo (siglo XIX)
+# Inperialismoa · Museo digital de Historia (4.º ESO)
 
-Web estática HTML/CSS/JavaScript con dos modos:
+Web educativa HTML, CSS y JavaScript alojada en GitHub Pages y conectada a Supabase. Este documento describe **la aplicación actual**, no el prototipo inicial. El diseño de cada pantalla y sus imágenes históricas se conservan deliberadamente.
 
-- **Demostración (activado por defecto):** alumnos y profesor ficticios, cinco misiones de tres preguntas, desbloqueo al 100 %, marcador de equipos, mapas interactivos, reserva simulada de países, panel docente y formulario de entrega PDF (simulada, sin subir ni conservar el archivo). La demostración usa almacenamiento local en el navegador: **no sincroniza equipos entre dispositivos**.
-- **Supabase (requiere configurar):** cuentas individuales, datos persistentes, comprobación de respuestas en el servidor, progreso de equipos, fechas y segundos, intentos, tics en tiempo real, reservas atómicas y almacenamiento privado de entregas PDF.
+## Pantallas y recorrido
 
-## 1. Archivos
-
-| Ruta | Uso |
+| Archivo | Contenido |
 | --- | --- |
-| index.html | Interfaz inicial, acceso, navegación y diálogos |
-| css/styles.css | Diseño adaptado a móvil y ordenador |
-| js/app.js | Preguntas, progreso, mapas y paneles |
-| js/config.js | Configuración pública del frontend |
-| supabase/schema.sql | Tablas, datos iniciales, permisos y funciones seguras |
+| `index.html` | Portada, inicio de sesión, museo, menú de misiones y panel docente |
+| `index.html#mission1gallery` | Misión 1 · Ejercicio 1: `Potentzia handien galeria` (20 tarjetas) |
+| `bi-sistema.html` | Misión 1 · Ejercicio 2: `Bi sistema, bi Europa` |
+| `inperialismoaren-definizioa.html` | Misión 1 · Ejercicio 3: `Inperialismoaren definizioa` |
+| `inperioen-aztarnak.html` | Misión 1 · Ejercicio 4: `Inperioen aztarnak` (cuatro expedientes y reflexión) |
+| `esaldiak-osatu.html` | Misión 1 · Ejercicio 5: `Esaldiak osatu` y aviso final |
+| `preview-bi-sistema.html` | Enlace de compatibilidad con la previsualización docente del segundo ejercicio |
 
-## 2. Probar la demostración
+El **alumnado** entra con una cuenta `student` de Supabase. Debe completar los cinco ejercicios de la primera misión, en orden, para que se registre la misión y se desbloquee la segunda. La corrección y la persistencia real dependen de las funciones seguras de Supabase.
 
-Abre \`index.html\` desde un servidor web local (por ejemplo, Live Server de VS Code) o activa GitHub Pages desde **Settings → Pages → Deploy from a branch → main / (root)**. GitHub Pages publicará una URL bajo \`https://<usuario>.github.io/Inperialismoa/\`.
+El **profesorado** entra con una cuenta `teacher`. Desde el panel puede abrir `Vista del alumno` y visitar los cinco ejercicios a través del menú privilegiado. La previsualización docente y sus pantallas finales simuladas **no guardan resultados de equipos**, y la mera presencia de `?preview=1` en un enlace **no concede acceso docente**: el rol se verifica en Supabase. Para comprobar la experiencia real es necesario iniciar sesión con una cuenta auténtica de alumno en otro perfil de navegador o en incógnito.
 
-En la página de acceso pulsa **Entrar como alumno** o **Entrar como profesor**. Las cuentas y los datos de demostración son ficticios. El alumno pertenece a **Imperio Atlas**; algunas misiones están ya superadas por otros equipos para ilustrar el marcador.
+Las misiones posteriores, el mapa de territorios, las entregas PDF, el seguimiento de clase y la evaluación del profesor se conservan en `js/app.js` y los datos de Supabase.
 
-**No utilizar aún con alumnado real:** el modo demostración no incluye autenticación y no almacena PDF. Para una clase necesitas conectar Supabase y verificar las políticas.
+## Organización del repositorio
 
-## 3. Configurar Supabase
+- `js/app.js`: portada, sesiones, navegación, misiones posteriores, mapas y panel docente.
+- `js/galeria-potencias.js`, `js/galeria-iconos-color.js` y `assets/galeria-potencias.css`: ejercicio 1, tarjetas, imágenes SVG transparentes y vitrinas.
+- `js/bi-sistema-live.js`, `js/bi-sistema-iconos.js` y `assets/bi-sistema-*.css`: ejercicio 2.
+- `js/mission1-third-auth.js` y el HTML del ejercicio 3: autorización y juego de la definición.
+- `inperioen-aztarnak.html` y `assets/inperioen-*.css`: globo, expedientes e investigación del ejercicio 4.
+- `js/mission1-fifth-auth.js` y el HTML del ejercicio 5: palabras, registro y final de misión.
+- `js/mission1-navigation.js`: menú que solo se monta cuando el usuario autenticado es profesor.
+- `js/config.js`: URL y clave **pública** de Supabase; nunca introducir la `service_role`.
+- `supabase/schema.sql` y `supabase/teacher_private_dashboard.sql`: referencias históricas de esquema. **No ejecutarlas otra vez directamente en producción** sin revisar las diferencias y migraciones.
+- `.github/workflows/check.yml` y `tests/`: sintaxis, enlaces, archivos, roles y pruebas de regresión.
 
-1. Crea un proyecto Supabase en región europea.
-2. Abre **SQL Editor**, pega \`supabase/schema.sql\` y ejecútalo. Revisa primero la consulta y pruébala con un proyecto vacío de ensayo.
-3. En **Project settings → API / Data API**, toma la **Project URL** y la **publishable/anon key** del proyecto. No utilices nunca la clave **service_role**, ni contraseñas administrativas, en el repositorio.
-4. Edita \`js/config.js\`:
-   \`\`\`js
-   export const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
-   export const SUPABASE_ANON_KEY = "TU-CLAVE-PUBLICABLE";
-   export const DEMO_MODE = false;
-   \`\`\`
-5. En **Authentication → Users** crea cuentas ficticias con correos válidos y contraseñas individuales para probar. La pantalla actual inicia sesión con **correo electrónico** y contraseña; el apodo visible se obtiene de \`profiles.display_name\`.
-6. Crea equipos en la tabla \`teams\`, anota sus identificadores UUID, y vincula cada usuario Auth a un registro de \`profiles\`. Para el docente establece \`role='teacher'\` y \`team_id=null\`.
-7. Activa GitHub Pages, comprueba el acceso con dos navegadores distintos y prueba las políticas, la reclamación simultánea y el almacenamiento antes de inscribir estudiantes.
+**Sobre los estilos e imágenes:** varios CSS contienen fotografías y fondos incrustados en base64 o capas de ajuste que preservan una composición visual concreta. Algunos archivos antiguos no están enlazados en las páginas actuales, pero se mantienen como referencias reversibles. No eliminarlos o fusionarlos automáticamente sin comparar las cinco pantallas en ordenador y móvil. El tamaño de estos activos es mayor que el de una web convencional.
 
-Ejemplo (sustituye los UUID por los de tu proyecto):
-\`\`\`sql
-insert into public.teams(name) values ('Equipo Atlas') returning id;
-insert into public.profiles(id, display_name, role, team_id)
-values ('UUID_DE_AUTH_USERS', 'Apodo del alumno', 'student', 'UUID_DEL_EQUIPO');
-\`\`\`
+## Configuración y acceso
 
-## 4. Normas de las actividades
+La configuración publicada actualmente utiliza Supabase (`DEMO_MODE = false` en `js/config.js`). La sesión del mismo navegador se comparte entre las dos vistas según el rol. Por eso entrar a la URL pública mientras ya se está autenticado como profesor muestra el panel docente y no una sesión real de estudiante.
 
-- Las misiones 1–5 tienen, como contenido de muestra, **tres preguntas cada una** (15 preguntas en total).
-- El servidor **no permite completar una misión sin pleno**; los intentos se registran. Si hay errores, el alumno puede revisar las respuestas y volver a enviar las tres. Durante una sesión se mantienen los aciertos en la interfaz.
-- La misión 6 se desbloquea al superar la misión 5. La versión inicial permite **un territorio por equipo** (reclamación irreversible para el alumno; el profesor puede liberar).
-- La sexta misión queda registrada como completada cuando el equipo **ha reclamado un país y registrado una entrega PDF**.
-- Los mapas muestran los países **actuales**, no fronteras coloniales históricas; esto se explica en la interfaz para evitar una equivalencia errónea.
-- En modo Supabase, los PDF se guardan en bucket privado \`entregas\`, tamaño máximo 20 MiB, y los accesos están limitados por equipo/docente.
+Para activar **una demostración local** habría que establecer `DEMO_MODE = true` expresamente; ese modo usa datos ficticios y almacenamiento local, y **no verifica** el funcionamiento de Supabase. No es el modo vigente en GitHub Pages.
 
-## 5. Estado y mejoras pendientes
+URL pública: `https://aratzirakasle-lgtm.github.io/Inperialismoa/`
 
-Esta es la **primera versión funcional de pruebas**, no una plataforma escolar lista para producción. Quedan por incorporar:
-- Editor docente de ejercicios desde la web, creación y restablecimiento de cuentas desde el panel, rúbrica/calificación y reentregas revisadas.
-- Control granular de desbloqueos manuales.
-- Persistir entre sesiones cada acierto parcial individual para que permanezca bloqueado incluso al cerrar sesión.
-- Pruebas automatizadas, auditoría de accesibilidad, protección y política de tratamiento de datos del alumnado (RGPD y normas del centro).
-- Separar entornos de pruebas y producción, copias de seguridad y migraciones futuras.
+Para nuevos docentes y grupos, usar los controles del panel autorizado y revisar las políticas RLS. No colocar contraseñas, claves secretas ni datos personales del alumnado en el repositorio.
 
-Las modificaciones se versionan en **GitHub**, no es necesario crear nuevos HTML descargables en la Biblioteca de ChatGPT para cada cambio.
+## Funcionalidades docentes que deben conservarse
 
-## 6. Seguimiento y evaluación docente privados (noviembre de 2026)
+- Seguimiento privado por equipo y clase, intentos, errores y fechas de entrega.
+- Administración de clases y equipos, exportaciones CSV y rúbricas privadas.
+- Reclamación de territorios en el mapa y liberación autorizada por el profesor.
+- Entrega y descarga de documentos PDF mediante el bucket privado `entregas`.
+- Vista del alumno sin escrituras reales y libre navegación de las cinco pantallas de misión 1.
+- Persistencia de aciertos y finalización de misión según las funciones de Supabase.
 
-Implementado en el repositorio y aplicado al proyecto Supabase:
+## Comprobaciones
 
-- **Progreso**: fecha y hora, intentos y alumno que completó la misión (solo profesor).
-- **Alumnos**: envíos, últimos intentos, porcentaje medio de aciertos (solo profesor; no equivale automáticamente a participación).
-- **Errores**: número de envíos y errores por pregunta, filtrable por clase, exportable en CSV.
-- **Rúbricas PDF**: evaluación de cinco criterios, nota sobre 10 y comentario privado. Se guarda en `submission_assessments`.
-- **Clases**: tabla de clases con curso, clase inicial `Clase de pruebas`, y equipo `Exploradores` conservado. Alta de nuevas clases/equipos en el panel y filtro por clase.
-- **Privacidad**: RLS a nivel de PostgreSQL, no solo ocultación visual. Los estudiantes consultan `mission_badges` (tics sin fecha ni alumno) y `territory_markers` (país y equipo sin autor ni hora). Intentos, respuestas enviadas y rúbricas son solo de profesorado autorizado.
-- **Historial**: fichero `supabase/teacher_private_dashboard.sql` como referencia de despliegue. Ya aplicado en Supabase; **NO ejecutar de nuevo sin revisar**, pues contiene modificaciones de estructura y permisos.
-- **Descargas**: CSV privado del progreso y errores por pregunta. Evitar compartir los archivos exportados fuera del ámbito docente.
+En un entorno con Node.js:
 
-**Aún pendiente:** prueba completa con dos sesiones reales de alumnos, prueba de concurrencia y validación de privacidad con cuenta auténtica de estudiante; auditoría RGPD y revisión de requisitos del centro. No usar todavía nombres reales hasta completar esas comprobaciones.
+```bash
+for file in js/*.js; do node --check "$file"; done
+node tests/check-html-scripts.mjs
+node --test tests/*.test.mjs
+```
+
+GitHub Actions ejecuta estas pruebas en cada actualización de `main`. Cubren la sintaxis, existencia de archivos y enlaces, las cinco pantallas, las restricciones de navegación, los gráficos pequeños y algunos problemas previos de renderizado. **No equivalen a una prueba funcional real** con varias sesiones de alumnos y profesor.
+
+Antes de utilizar cuentas de alumnado real: completar pruebas de extremo a extremo, accesibilidad y diferentes tamaños de pantalla; comprobar registros de Supabase, privacidad de expedientes e intentos, concurrencia, copias de seguridad y requisitos del centro/RGPD.
+
+## Auditoría y conservación
+
+Véase `docs/AUDITORIA-2026-11-20.md` para el inventario, los ajustes de mantenimiento, las comprobaciones realizadas y los riesgos que necesitan una intervención separada. Los activos originales, las cinco pantallas y los datos de Supabase **no se han eliminado** durante esta depuración.
