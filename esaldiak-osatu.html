@@ -70,7 +70,9 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
   border:0;
   border-radius:0;
   box-shadow:none;
-  filter:none;
+  /* Dos halos suaves, visibles alrededor del perfil sin descentrar la pieza. */
+  filter:drop-shadow(0 0 .13cqw rgba(255,234,161,.78))
+         drop-shadow(0 0 .29cqw rgba(238,182,77,.54));
   outline:none;
 }
 .word.selected:not(.used)::before{
@@ -78,10 +80,10 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
   position:absolute;
   inset:3% 2%;
   box-sizing:border-box;
-  border:.13cqw solid rgba(245,210,132,.9);
+  border:.16cqw solid rgba(255,226,150,.98);
   border-radius:.07cqw;
-  background:linear-gradient(180deg,rgba(255,241,181,.075),rgba(255,218,130,.025));
-  box-shadow:inset 0 0 .10cqw rgba(255,249,215,.55),0 0 .18cqw rgba(236,183,93,.35);
+  background:linear-gradient(180deg,rgba(255,241,181,.09),rgba(255,218,130,.04));
+  box-shadow:inset 0 0 .13cqw rgba(255,248,203,.75),0 0 .25cqw rgba(238,188,93,.5);
   clip-path:polygon(1% 8%,9% 0,27% 3%,46% 0,75% 3%,99% 8%,99% 94%,83% 100%,63% 97%,42% 100%,15% 97%,1% 93%);
   pointer-events:none;
 }
