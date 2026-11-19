@@ -19,7 +19,7 @@ const TERRITORIES=[
 const territories=TERRITORIES.map(([code,name,continent])=>({code,name,continent}));
 const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join(""):"🌐";
 const key = "inperialismoa-demo-v1";
-let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;
+let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
 function initDemo(){demoData=storage.read()||{progress:[{team_id:"nilo",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:1},{team_id:"atlas",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:2},{team_id:"nilo",mission_id:2,completed_at:time(),completed_by:"demo",attempt_count:1}],claims:[{country_code:"EG",team_id:"nilo",claimed_at:time()}],submissions:[],attempts:[]};teams=DEMO_TEAMS;missions=DEMO_MISSIONS;progress=demoData.progress;claims=demoData.claims;submissions=demoData.submissions;attempts=demoData.attempts}
 const accountIsTeacher=()=>user?.role==="teacher";
@@ -188,28 +188,43 @@ async function refreshData(){if(demo)return;
  attempts=accountIsTeacher()?(ar?.data||[]):[];answerDetails=accountIsTeacher()?(ad?.data||[]):[];
  assessments=accountIsTeacher()?(ass?.data||[]):[];classes=accountIsTeacher()?(cls?.data||[]):[];
  missions=(mr.data||[]).map(m=>({...m,questions:(qr.data||[]).filter(q=>q.mission_id===m.id).map(q=>({...q,options:q.options}))}));
- const gs=await db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at");
- if(gs.error)throw gs.error;galleryStates=gs.data||[];
- const bs=await db.from("bi_sistema_team_state").select("team_id,locked_ids,challenge_locked,completed_at");
- if(bs.error)throw bs.error;biSistemaStates=bs.data||[];
- const es=await db.from("empire_dossier_team_state").select("team_id,solved_ids,completed_at");
- if(es.error)throw es.error;empireDossierStates=es.data||[];
- if(accountIsTeacher()){
-   const ea=await db.from("empire_dossier_attempts").select("id,team_id,submitted_by,case_id,is_correct,created_at").order("created_at",{ascending:false}).limit(3000);
-   if(ea.error)throw ea.error;empireDossierAttempts=ea.data||[];
- }else empireDossierAttempts=[];
- if(accountIsTeacher()){
-   const ba=await db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000);
-   if(ba.error)throw ba.error;biSistemaAttempts=ba.data||[];
- }else biSistemaAttempts=[];
- if(accountIsTeacher()){
-   const ga=await db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000);
-   if(ga.error)throw ga.error;galleryHistory=ga.data||[];
- }else galleryHistory=[];
+ // Las consultas son independientes: resolverlas juntas evita esperas sucesivas.
+ const teacher=accountIsTeacher();
+ const empty=()=>Promise.resolve({data:[],error:null});
+ const [gs,bs,es,ea,ba,ga]=await Promise.all([
+   db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at"),
+   db.from("bi_sistema_team_state").select("team_id,locked_ids,challenge_locked,completed_at"),
+   db.from("empire_dossier_team_state").select("team_id,solved_ids,completed_at"),
+   teacher?db.from("empire_dossier_attempts").select("id,team_id,submitted_by,case_id,is_correct,created_at").order("created_at",{ascending:false}).limit(3000):empty(),
+   teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
+   teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty()
+ ]);
+ for(const result of [gs,bs,es,ea,ba,ga])if(result.error)throw result.error;
+ galleryStates=gs.data||[];
+ biSistemaStates=bs.data||[];
+ empireDossierStates=es.data||[];
+ empireDossierAttempts=ea.data||[];
+ biSistemaAttempts=ba.data||[];
+ galleryHistory=ga.data||[];
 
 }
 async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-demo",name:"Docente (demo)",role:"teacher"}:{id:"student-demo",name:"Ane (demo)",role:"student",team_id:"atlas"};currentMission=0;teacherTab="overview";responses={};checkFeedback=null;switchScreen(true)}
 async function signInReal(e){e.preventDefault();const email=$("#login-user").value.trim(),password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession()}catch(err){$("#login-error").textContent="No se ha podido iniciar sesión. Revisa los datos o consulta al profesor."}finally{btn.disabled=false}}
+// Agrupar notificaciones simultáneas sin perder los cambios recibidos.
+async function refreshFromRealtime(){
+ if(!user)return;
+ realtimeDirty=true;
+ if(realtimeRefreshing)return;
+ realtimeRefreshing=true;
+ try{
+   do{
+     realtimeDirty=false;
+     await refreshData();
+     if(user)render();
+   }while(realtimeDirty&&user);
+ }catch(error){console.error("Actualización en tiempo real",error)}
+ finally{realtimeRefreshing=false}
+}
 async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};await refreshData();
  const hash=location.hash;
  if(accountIsTeacher()&&hash==="#teacherpreviewgallery"){const selected=teams.find(t=>t.name==="Exploradores")||teams[0];teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=1;galleryQuestionsOpen=false}
@@ -217,8 +232,8 @@ async function setSession(){const {data:{user:authUser}}=await db.auth.getUser()
  else if(!accountIsTeacher()&&hash==="#mission1gallery"){currentMission=1;galleryQuestionsOpen=false}
  else{currentMission=0;galleryQuestionsOpen=false}
  if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
- switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},async()=>{await refreshData();render()}).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},async()=>{await refreshData();render()}).subscribe()}
-async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
+ switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).subscribe()}
+async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;realtimeDirty=false;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;if(b.id==="teacher-preview-bi"&&accountIsTeacher()){location.assign("./bi-sistema.html?preview=1");return}if(b.id==="student-preview"&&accountIsTeacher()){const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=0;responses={};checkFeedback=null;render();return}if(b.id==="return-to-teacher"&&accountIsTeacher()){teacherPreview=false;teacherPreviewTeamId=null;currentMission=0;responses={};checkFeedback=null;render();return}if(b.dataset.demo)await signInDemo(b.dataset.demo);if(b.dataset.mission)changeMission(Number(b.dataset.mission));if(b.dataset.view){
  if(b.dataset.view==="preview"&&accountIsTeacher()){
    const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);
