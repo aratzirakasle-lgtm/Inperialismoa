@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav } from './mission1-navigation.js';
+import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');
@@ -21,6 +21,11 @@ async function initialize(){
     const preview=profile.role==='teacher'&&previewRequested;
     if(!preview&&profile.role!=='student'){location.replace('./index.html');return}
     if(preview){
+      mountExerciseNav(3);
+      addTeacherStageControls([
+        ['Hasierako pantaila',()=>window.m1ThirdPreviewSetStage?.('start')],
+        ['Amaierako pantaila',()=>window.m1ThirdPreviewSetStage?.('complete')]
+      ]);
       next.href='./inperioen-aztarnak.html?preview=1';
       window.m1ThirdProgress=async()=>({completed:true,preview:true});
       status('Irakaslearen aurrebista: emaitzak ez dira taldean gordeko.');
