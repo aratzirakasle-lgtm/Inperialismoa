@@ -1,6 +1,6 @@
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { mountExerciseNav } from "./mission1-navigation.js";
+import { mountExerciseNav, addTeacherStageControls } from "./mission1-navigation.js";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 
 const TRAITS=[
@@ -207,7 +207,7 @@ function renderChallenge(){
       '<p class="bi-challenge-kicker">MISIOA 1 · 2. ARIKETA GAINDITUTA</p>'+
       '<h2>Bi sistema politikoak identifikatu dituzue!</h2>'+
       '<p>Zazpi kontzeptuak eta bi egoera historikoak zuzen sailkatu dituzue.</p>'+
-      '<a class="bi-challenge-next" href="./inperialismoaren-definizioa.html">3. ariketa · Inperialismoaren definizioa →</a>'+
+      '<a class="bi-challenge-next" href="./inperialismoaren-definizioa.html'+(teacherPreview?'?preview=1':'')+'">3. ariketa · Inperialismoaren definizioa →</a>'+
       '</div>';
     return;
   }
@@ -354,7 +354,13 @@ async function boot(){
       completed=false;
       phase="classify";
       paint();
-      const back=$(".bi-back");back.href="./index.html";
+      const back=$(".bi-back");back.href="./index.html#teacherpreviewgallery";
+      mountExerciseNav(2);
+      addTeacherStageControls([
+        ["Hasierako pantaila",()=>{locked=new Set();positions={};pending={};challengeLocked=new Set();completed=false;phase="classify";feedback="";paint()}],
+        ["Azken erronka",()=>{locked=new Set(TRAITS.map(t=>t.id));positions={};pending={};challengeLocked=new Set();completed=false;phase="challenge";feedback="Irakaslearen aurrebista (simulatua).";paint()}],
+        ["Amaierako pantaila",()=>{locked=new Set(TRAITS.map(t=>t.id));positions={};pending={};challengeLocked=new Set();completed=true;phase="complete";paint()}]
+      ]);
       return;
     }
     teamId=profile.team_id;
