@@ -99,17 +99,42 @@
 #app-shell.gallery-active .gal-photo-us{background-position:66.666667% center}
 #app-shell.gallery-active .gal-photo-jp{background-position:100% center}
 #app-shell.gallery-active .gal-vitrine-contents{padding:9px;min-height:0;flex:1;display:flex;flex-direction:column;gap:7px;overflow:auto;scrollbar-color:#bba077 #efe2d0;scrollbar-width:thin}
-/* Los dos paneles de Europa se dimensionan por el contenido real:
-   el autoritario crece al recibir tarjetas y el liberal baja sin taparlas. */
+/* EUROPA: ambos sistemas deben caber enteros, incluso con 4 + 5 tarjetas.
+   El crecimiento es intrínseco, sin repartir una altura fija ni generar
+   desplazamiento interno. Los otros tres escaparates no se modifican. */
+#app-shell.gallery-active .gal-vitrine-eu{
+  height:max-content;
+  min-height:clamp(344px,39vw,463px);
+  overflow:visible;
+}
 #app-shell.gallery-active .gal-vitrine-eu .gal-vitrine-contents{
-  display:flex;flex-direction:column;gap:7px;
-  min-height:max-content;overflow:visible;
+  display:flex;
+  flex:0 0 auto;
+  flex-direction:column;
+  gap:7px;
+  height:auto;
+  min-height:0;
+  overflow:visible;
 }
-#app-shell.gallery-active .gal-vitrine-eu .gal-zone{
-  flex:0 0 auto;min-height:72px;
-}
+#app-shell.gallery-active .gal-vitrine-eu .gal-zone,
 #app-shell.gallery-active .gal-vitrine-eu .gal-zone:last-child{
-  flex:1 0 72px;
+  flex:none;
+  height:auto;
+  min-height:72px;
+  overflow:visible;
+}
+#app-shell.gallery-active .gal-vitrine-eu .gal-zone-list{
+  display:flex;
+  flex-direction:column;
+  flex-wrap:nowrap;
+  align-content:stretch;
+  min-height:0;
+  overflow:visible;
+}
+#app-shell.gallery-active .gal-vitrine-eu .gal-tile-placed{
+  flex:0 0 auto;
+  height:auto;
+  white-space:normal;
 }
 #app-shell.gallery-active .gal-zone{
  min-height:72px;border:1px dashed #a5957c;border-radius:7px;
