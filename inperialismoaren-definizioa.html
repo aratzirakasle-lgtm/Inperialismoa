@@ -23,6 +23,10 @@ main {width:100%;margin:0 auto}
 .drop.filled {z-index:5}
 .piece {position:absolute;z-index:7;display:block;border:0;background:transparent;padding:0;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;overflow:visible;transform-origin:center center;transition:left .25s cubic-bezier(.2,.8,.25,1),top .25s cubic-bezier(.2,.8,.25,1),width .25s,height .25s,filter .2s;box-shadow:none}
 .piece img {display:block;width:100%;height:100%;pointer-events:none;user-select:none;-webkit-user-drag:none;object-fit:contain}
+/* Las cartonas rellenas usan el pergamino original y letras redibujadas, sin deformación. */
+.piece .lettering {display:none}
+.piece.placed .lettering {position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;inset:10% 7% 11%;box-sizing:border-box;white-space:normal;text-wrap:balance;overflow-wrap:normal;overflow:hidden;text-align:center;font-family:Georgia,'Times New Roman',serif;font-weight:700;line-height:1.06;letter-spacing:-.023em;color:#24180e;text-shadow:0 .035cqw #fff4d68c;pointer-events:none}
+.piece.placed::before{display:none}
 .piece.dragging {z-index:20;cursor:grabbing;transition:none;filter:drop-shadow(0 .55cqw .5cqw #0c0a07a9)}
 .piece.focused {z-index:13;filter:drop-shadow(0 0 .9cqw #ffd789aa)}
 .piece.placed {z-index:9;filter:drop-shadow(0 .08cqw .11cqw #301c0a70);transform:translateZ(0)}
@@ -75,6 +79,7 @@ const items=new Map(model.items.map(item=>[item.id,item]));
 const targets=new Map(model.slots.map(slot=>[slot.id,slot]));
 const state=new Map(model.items.map(item=>[item.id,null]));
 let selection=null,active=null,moved=false,solved=false;
+const blankCards=new Map();
 const pixel=v=>v/W*100+'%';
 function placeCoords(el,rect,transition=true){
   el.style.left=(rect[0]/W*100)+'%';el.style.top=(rect[1]/H*100)+'%';
@@ -93,6 +98,64 @@ function fitRectInside(slotRect,sourceRect,padX=8,padY=6){
   const x=slotRect[0]+(width-w)/2,y=slotRect[1]+(height-h)/2;
   return [x,y,x+w,y+h];
 }
+/* Reproduce la fibra y el borde originales y borra solo la tinta fotografiada
+   del centro. La cartona vacía se estira como material; las letras no. */
+function eraseInk(img){
+ const can=document.createElement('canvas'),w=img.naturalWidth,h=img.naturalHeight;
+ can.width=w;can.height=h;
+ const ctx=can.getContext('2d',{willReadFrequently:true});
+ ctx.drawImage(img,0,0,w,h);
+ const frame=ctx.getImageData(0,0,w,h),pix=frame.data,mask=new Uint8Array(w*h);
+ const xmin=Math.ceil(w*.09),xmax=Math.floor(w*.91),ymin=Math.ceil(h*.17),ymax=Math.floor(h*.88);
+ for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++){
+   const p=y*w+x,i=p*4,r=pix[i],g=pix[i+1],b=pix[i+2];
+   if(r<162&&g<139&&b<108&&r+g+b<407)mask[p]=1;
+ }
+ const expanded=mask.slice();
+ for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++)if(mask[y*w+x]){
+   for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+     const xx=x+dx,yy=y+dy;
+     if(xx>=xmin&&xx<xmax&&yy>=ymin&&yy<ymax)expanded[yy*w+xx]=1;
+   }
+ }
+ const done=new Uint8Array(w*h);
+ for(let p=0;p<w*h;p++)if(!expanded[p])done[p]=1;
+ const offsets=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]];
+ for(let pass=0;pass<25;pass++){
+   const updates=[];
+   for(let y=ymin;y<ymax;y++)for(let x=xmin;x<xmax;x++){
+     const p=y*w+x;if(done[p])continue;
+     let n=0,r=0,g=0,b=0;
+     for(const [dx,dy] of offsets){
+       const xx=x+dx,yy=y+dy,neighbor=yy*w+xx;
+       if(xx<0||xx>=w||yy<0||yy>=h||!done[neighbor])continue;
+       const i=neighbor*4;r+=pix[i];g+=pix[i+1];b+=pix[i+2];n++;
+     }
+     if(n)updates.push([p,r/n,g/n,b/n]);
+   }
+   for(const [p,r,g,b] of updates){
+     const i=p*4;pix[i]=r;pix[i+1]=g;pix[i+2]=b;done[p]=1;
+   }
+   if(!updates.length)break;
+ }
+ ctx.putImageData(frame,0,0);
+ return can.toDataURL('image/webp',.93);
+}
+/* Recalcula el tamaño de letra para que quepa en cada hueco, sin escala X/Y. */
+function fitLettering(piece){
+ if(!piece.classList.contains('placed'))return;
+ const el=piece.querySelector('.lettering'),available=piece.getBoundingClientRect().height;
+ if(!el||!available)return;
+ const max=Math.min(34,available*.44),min=Math.max(10,available*.13);
+ let lo=min,hi=max;
+ for(let i=0;i<11;i++){
+   const mid=(lo+hi)/2;el.style.fontSize=mid+'px';
+   if(el.scrollHeight<=el.clientHeight+1&&el.scrollWidth<=el.clientWidth+1)lo=mid;
+   else hi=mid;
+ }
+ el.style.fontSize=Math.max(min,lo-1)+'px';
+}
+window.addEventListener('resize',()=>document.querySelectorAll('.piece.placed').forEach(fitLettering));
 function announce(msg){announcer.textContent=msg}
 function occupied(slotId){for(const [id,slot] of state.entries())if(slot===slotId)return id;return null}
 function setup(){
@@ -109,8 +172,19 @@ function setup(){
   model.items.forEach(item=>{
     const el=document.createElement('button');el.type='button';el.className='piece';
     el.dataset.piece=item.id;el.setAttribute('aria-label',item.name+'. Hautatu eta sakatu dagokion tokia.');
-    el.setAttribute('aria-pressed','false');el.title=item.name;el.innerHTML='<img draggable="false" alt=""><span class="stamp" aria-hidden="true">✓</span>';
+    el.setAttribute('aria-pressed','false');el.title=item.name;el.innerHTML='<img draggable="false" alt=""><span class="lettering" aria-hidden="true"></span><span class="stamp" aria-hidden="true">✓</span>';
+    el.querySelector('.lettering').textContent=item.name;
     el.querySelector('img').src=item.src;scene.append(el);
+    const source=el.querySelector('img');
+    source.addEventListener('load',()=>{
+      if(!blankCards.has(item.id)&&!source.dataset.cleaning){
+        source.dataset.cleaning='1';blankCards.set(item.id,eraseInk(source));
+        delete source.dataset.cleaning;if(state.get(item.id))paint();
+      }
+    },{once:true});
+    el.addEventListener('transitionend',event=>{
+      if((event.propertyName==='width'||event.propertyName==='height')&&state.get(item.id))fitLettering(el);
+    });
     placeCoords(el,item.origin);
     el.addEventListener('pointerdown',pointerStart);
     el.addEventListener('pointermove',pointerMove);
@@ -140,8 +214,12 @@ function returnToTray(id){if(solved||!id)return;state.set(id,null);selection=nul
 function paint(){
   for(const item of model.items){const el=scene.querySelector('[data-piece="'+item.id+'"]');const slot=state.get(item.id);
     // En los cinco huecos, el tamaño se adapta sin deformar la imagen ni sus letras.
-    const rect=slot?fitRectInside(targets.get(slot).rect,item.origin):item.origin;
-    placeCoords(el,rect);el.classList.toggle('placed',!!slot);el.classList.toggle('focused',selection===item.id);el.setAttribute('aria-pressed',selection===item.id?'true':'false');
+    const rect=slot?targets.get(slot).rect:item.origin;
+    placeCoords(el,rect);el.classList.toggle('placed',!!slot);
+    const art=el.querySelector('img'),clean=blankCards.get(item.id);
+    const desired=slot&&clean?clean:item.src;
+    if(art.src!==desired)art.src=desired;
+    if(slot)requestAnimationFrame(()=>fitLettering(el));el.classList.toggle('focused',selection===item.id);el.setAttribute('aria-pressed',selection===item.id?'true':'false');
     el.style.cursor=solved?'default':'grab';
   }
   for(const slot of model.slots){const el=scene.querySelector('[data-slot="'+slot.id+'"]');el.classList.toggle('filled',!!occupied(slot.id));}
