@@ -1,5 +1,6 @@
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+import { mountExerciseNav } from "./mission1-navigation.js";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 
 const TRAITS=[
@@ -358,15 +359,7 @@ async function boot(){
     }
     teamId=profile.team_id;
     if(!teamId){location.replace("./index.html");return}
-    const [{data:g,error:ge},{data:legacy,error:le}]=await Promise.all([
-      client.from("gallery_team_state").select("completed_at").eq("team_id",teamId).maybeSingle(),
-      client.from("mission_badges").select("mission_id").eq("team_id",teamId).eq("mission_id",1).limit(1)
-    ]);
-    // Si la consulta de insignias no está autorizada, basta la galería.
-    if(ge||(!g?.completed_at&&le)){throw ge||le}
-    if(!g?.completed_at&&!legacy?.length){
-      location.replace("./index.html#mission1gallery");return;
-    }
+    // Acceso a la pantalla independiente de la finalización del primer ejercicio.
     await fetchState();busy=false;paint();
     window.addEventListener("focus",()=>void fetchState().catch(()=>{}));
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)void fetchState().catch(()=>{})});
@@ -378,4 +371,5 @@ async function boot(){
     announce("Ezin izan dira taldearen datuak kargatu. Berritu orria edo itzuli misiora.",true);
   }
 }
+mountExerciseNav(2);
 boot();
