@@ -206,7 +206,7 @@ function renderChallenge(){
       '<p class="bi-challenge-kicker">MISIOA 1 · 2. ARIKETA GAINDITUTA</p>'+
       '<h2>Bi sistema politikoak identifikatu dituzue!</h2>'+
       '<p>Zazpi kontzeptuak eta bi egoera historikoak zuzen sailkatu dituzue.</p>'+
-      '<a class="bi-challenge-next" href="./inperioen-aztarnak.html">3. ariketa · Inperioen aztarnak →</a>'+
+      '<a class="bi-challenge-next" href="./inperialismoaren-definizioa.html">3. ariketa · Inperialismoaren definizioa →</a>'+
       '</div>';
     return;
   }
