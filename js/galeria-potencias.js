@@ -1,4 +1,4 @@
-import { exerciseNavMarkup } from './mission1-navigation.js';
+import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
