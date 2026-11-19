@@ -447,11 +447,11 @@ async function init(){
   if(!teacherPreview){
    teamId=profile.team_id;if(!teamId){location.replace('./index.html');return}
    const [{data:prev,error:prevErr},{data:legacy,error:legacyErr}]=await Promise.all([
-    client.from('bi_sistema_team_state').select('completed_at').eq('team_id',teamId).maybeSingle(),
+    client.from('mission1_exercise_completions').select('exercise').eq('team_id',teamId).eq('exercise',3).maybeSingle(),
     client.from('mission_completions').select('mission_id').eq('team_id',teamId).eq('mission_id',1).limit(1)
    ]);
    if(prevErr||legacyErr)throw prevErr||legacyErr;
-   if(!prev?.completed_at&&!legacy?.length){location.replace('./index.html#mission1gallery');return}
+   if(!prev?.exercise&&!legacy?.length){location.replace('./inperialismoaren-definizioa.html');return}
    await loadState();
    await loadClueReads();
    client.channel('empire-dossier-'+teamId).on('postgres_changes',{
