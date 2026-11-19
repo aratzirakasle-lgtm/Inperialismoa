@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js';
+import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js?v=20261119-teacher-2';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');
@@ -26,6 +26,8 @@ async function initialize(){
         ['Hasierako pantaila',()=>window.m1ThirdPreviewSetStage?.('start')],
         ['Amaierako pantaila',()=>window.m1ThirdPreviewSetStage?.('complete')]
       ]);
+      document.querySelector('.back').href='./bi-sistema.html?preview=1';
+      document.querySelector('.screen-help a').href='./bi-sistema.html?preview=1';
       next.href='./inperioen-aztarnak.html?preview=1';
       window.m1ThirdProgress=async()=>({completed:true,preview:true});
       status('Irakaslearen aurrebista: emaitzak ez dira taldean gordeko.');
