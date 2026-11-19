@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js';
+import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js?v=20261119-teacher-2';
 
 const status=document.querySelector('#online-state');
 const url=new URLSearchParams(location.search);
@@ -19,6 +19,7 @@ async function initialize(){
     const preview=profile.role==='teacher'&&previewRequested;
     if(!preview&&profile.role!=='student'){location.replace('./index.html');return}
     if(preview){
+      document.querySelector('.mini-toolbar a').href='./inperioen-aztarnak.html?preview=1';
       mountExerciseNav(5);
       addTeacherStageControls([
         ['Hasierako pantaila',()=>window.m1FifthPreviewSetStage?.('start')],
