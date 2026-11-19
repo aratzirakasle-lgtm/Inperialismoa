@@ -1,0 +1,53 @@
+/* Restauración del globo de la misión 1, reto 3.
+   La ilustración WebP de base incluye franjas dañadas fuera del contorno de
+   la esfera y una cartela "Indonesia" cortada. Conservamos el original en la
+   variable --globe-source, recortamos únicamente los píxeles del perímetro y
+   rotulamos Indonesia en una etiqueta HTML/CSS completa y nítida. */
+.globe-art {
+  background-image:none!important;
+  isolation:isolate;
+  overflow:visible!important;
+}
+.globe-art::before {
+  content:'';display:block;position:absolute;inset:0;
+  background-image:var(--globe-source);
+  background-size:100% 100%;
+  background-position:center;
+  background-repeat:no-repeat;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22581%22%20height%3D%22670%22%20viewBox%3D%220%200%20581%20670%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22edge%22%3E%3CfeGaussianBlur%20stdDeviation%3D%221.25%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cg%20fill%3D%22white%22%20filter%3D%22url(%23edge)%22%3E%3Cpath%20d%3D%22M290%2022%20C433%2022%20542%20126%20547%20272%20C549%20310%20534%20332%20503%20346%20L501%20417%20C517%20437%20528%20466%20497%20510%20C455%20551%20375%20558%20291%20560%20C156%20558%2064%20493%2039%20363%20C23%20264%2055%20159%20120%2090%20C164%2046%20224%2022%20290%2022%20Z%22%2F%3E%3Cpath%20d%3D%22M261%200%20L314%200%20L330%2035%20L250%2035%20Z%22%2F%3E%3Cpath%20d%3D%22M246%20515%20L336%20515%20L345%20547%20C397%20562%20461%20570%20491%20585%20Q521%20594%20505%20608%20C515%20623%20519%20637%20510%20647%20L513%20666%20L72%20666%20L77%20647%20Q69%20625%2084%20612%20C72%20600%2092%20585%20134%20576%20L228%20548%20Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22581%22%20height%3D%22670%22%20viewBox%3D%220%200%20581%20670%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22edge%22%3E%3CfeGaussianBlur%20stdDeviation%3D%221.25%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Cg%20fill%3D%22white%22%20filter%3D%22url(%23edge)%22%3E%3Cpath%20d%3D%22M290%2022%20C433%2022%20542%20126%20547%20272%20C549%20310%20534%20332%20503%20346%20L501%20417%20C517%20437%20528%20466%20497%20510%20C455%20551%20375%20558%20291%20560%20C156%20558%2064%20493%2039%20363%20C23%20264%2055%20159%20120%2090%20C164%2046%20224%2022%20290%2022%20Z%22%2F%3E%3Cpath%20d%3D%22M261%200%20L314%200%20L330%2035%20L250%2035%20Z%22%2F%3E%3Cpath%20d%3D%22M246%20515%20L336%20515%20L345%20547%20C397%20562%20461%20570%20491%20585%20Q521%20594%20505%20608%20C515%20623%20519%20637%20510%20647%20L513%20666%20L72%20666%20L77%20647%20Q69%20625%2084%20612%20C72%20600%2092%20585%20134%20576%20L228%20548%20Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  -webkit-mask-size:100% 100%;
+  mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;
+  mask-repeat:no-repeat;
+  z-index:0;pointer-events:none;
+}
+.globe-art::after {
+  content:'Indonesia';
+  position:absolute;z-index:1;
+  left:69.5%;top:54.2%;width:28%;height:6.5%;
+  display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;padding:0 3%;
+  background:linear-gradient(165deg,#f6dfac 0%,#efcf92 54%,#ddad68 100%);
+  border:1px solid #775020;border-radius:5px;
+  box-shadow:0 2px 5px #1d140cc0,inset 0 1px 1px #fff1c9a8;
+  color:#302216;font:700 clamp(12px,1.18cqw,21px)/1.05 Georgia,serif;
+  text-shadow:0 1px 0 #fbe8bc;
+  white-space:nowrap;pointer-events:none;
+}
+@media(min-width:1051px) {
+  /* En la vitrina derecha, no cortar el título cuando cambia la anchura. */
+  .file-indonesia .file-title {
+    left:45%!important;top:18%!important;
+    font-size:clamp(18px,1.88cqw,32px)!important;
+    letter-spacing:-.025em!important;
+    max-width:51%!important;
+    white-space:nowrap!important;
+  }
+}
+@media(max-width:1050px) {
+  .globe-art::after {font-size:clamp(12px,2.1vw,17px);border-radius:4px}
+}
+@media(max-width:560px) {
+  .globe-art::after {font-size:clamp(12px,3vw,16px);border-width:1px}
+}
