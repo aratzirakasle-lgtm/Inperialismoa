@@ -1,5 +1,5 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
-import { galleryIllustration } from './galeria-iconos-color.js';
+import { galleryIllustration } from './galeria-iconos-color.js?v=20261119-miniaturas2';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
