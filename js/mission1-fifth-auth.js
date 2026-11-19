@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { mountExerciseNav } from './mission1-navigation.js';
 
 const status=document.querySelector('#online-state');
 const url=new URLSearchParams(location.search);
@@ -24,16 +25,8 @@ async function initialize(){
     }
     if(!profile.team_id){location.replace('./index.html');return}
     const id=profile.team_id;
-    const [{data:third,error:t3},{data:fourth,error:t4},{data:legacy,error:le},{data:prior,error:pr}]=await Promise.all([
-      client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',3).maybeSingle(),
-      client.from('empire_dossier_team_state').select('completed_at').eq('team_id',id).maybeSingle(),
-      client.from('mission_badges').select('mission_id').eq('team_id',id).eq('mission_id',1).limit(1),
-      client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',5).maybeSingle()
-    ]);
-    if(t3||t4||le||pr)throw t3||t4||le||pr;
-    if((!third||!fourth?.completed_at)&&!legacy?.length){
-      location.replace('./inperioen-aztarnak.html');return;
-    }
+    const {data:prior,error:priorError}=await client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',5).maybeSingle();
+    if(priorError)throw priorError;
     window.m1FifthProgress=async answers=>{
       const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:5,p_answers:answers});
       if(error)throw error;
@@ -45,4 +38,5 @@ async function initialize(){
     halt('Ezin izan da taldearen egoera kargatu. Berritu orria edo itzuli hasierara.');
   }
 }
+mountExerciseNav(5);
 window.addEventListener('load',()=>void initialize());
