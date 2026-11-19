@@ -125,10 +125,10 @@ function renderHome(){
 function renderGallery(){
  const team=viewTeamId();
  const current=galleryStates.find(x=>x.team_id===team)||{};
- const canSkip=completed(team,1)||teacherPreview;
+ const canSkip=true;
  mountGallery($("#view"),{
    initial:current,preview:demo||teacherPreview,
-   canSkip,
+   canSkip,navigationEnabled:!demo,navigationPreview:teacherPreview,
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},
    onSubmit:async answers=>{
