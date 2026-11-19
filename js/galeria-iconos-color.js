@@ -119,6 +119,7 @@ const ART = Object.freeze({
     <path d="M14 30q4 4 8 0" stroke="#b17d4c" stroke-width="2"/>
   `,
   us_south: `
+    <path d="M4 14h28v4H4z" fill="#dec59a" stroke="none"/>
     <path d="M5 7v23M12 7v23M24 7v23M31 7v23" stroke="#9a7456" stroke-width="3"/>
     <path d="M3 14h30M3 24h30" stroke="#cdac7b" stroke-width="3"/>
     <path d="M7 8h22M6 30h24" stroke="#826047" stroke-width="1.8"/>
