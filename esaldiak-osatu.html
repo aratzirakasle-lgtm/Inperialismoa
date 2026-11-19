@@ -62,22 +62,26 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
 .sheet .line .hole{vertical-align:middle}
 .sheet .line.justified .hole{margin-top:-.16cqw}
 
-/* Kartona hautatua: distira urreztatua argi ikus dadin, museoko estetika mantenduta. */
+/* Hautatutako kartona: urre leuna eta egiazko erdiko lerrokatzea. */
 .word.selected:not(.used){
   z-index:8;
-  border-radius:.12cqw;
-  transform:translateY(-.11cqw) scale(1.025);
-  box-shadow:0 0 0 .16cqw #fff1b6,0 0 0 .28cqw #e6a43f,0 0 .72cqw .24cqw rgba(255,198,80,.78);
-  filter:drop-shadow(0 0 .23cqw #ffe389) drop-shadow(0 0 .55cqw #ffba42);
+  transform:none;
+  transform-origin:center center;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  filter:none;
+  outline:none;
 }
 .word.selected:not(.used)::before{
   content:'';
   position:absolute;
-  inset:-.05cqw;
-  border:.25cqw solid #ffe49a;
-  border-radius:.10cqw;
-  background:linear-gradient(180deg,rgba(255,243,183,.16),rgba(255,229,143,.06));
-  box-shadow:inset 0 0 .18cqw rgba(255,246,199,.93),0 0 .45cqw rgba(255,212,98,.85);
+  inset:3% 2%;
+  box-sizing:border-box;
+  border:.13cqw solid rgba(245,210,132,.9);
+  border-radius:.07cqw;
+  background:linear-gradient(180deg,rgba(255,241,181,.075),rgba(255,218,130,.025));
+  box-shadow:inset 0 0 .10cqw rgba(255,249,215,.55),0 0 .18cqw rgba(236,183,93,.35);
   clip-path:polygon(1% 8%,9% 0,27% 3%,46% 0,75% 3%,99% 8%,99% 94%,83% 100%,63% 97%,42% 100%,15% 97%,1% 93%);
   pointer-events:none;
 }
