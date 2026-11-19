@@ -22,7 +22,7 @@ main {width:100%;margin:0 auto}
 .drop[data-slot=outcome].filled::after{content:none}
 .drop.filled {z-index:5}
 .piece {position:absolute;z-index:7;display:block;border:0;background:transparent;padding:0;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;overflow:visible;transform-origin:center center;transition:left .25s cubic-bezier(.2,.8,.25,1),top .25s cubic-bezier(.2,.8,.25,1),width .25s,height .25s,filter .2s;box-shadow:none}
-.piece img {display:block;width:100%;height:100%;pointer-events:none;user-select:none;-webkit-user-drag:none;object-fit:fill}
+.piece img {display:block;width:100%;height:100%;pointer-events:none;user-select:none;-webkit-user-drag:none;object-fit:contain}
 .piece.dragging {z-index:20;cursor:grabbing;transition:none;filter:drop-shadow(0 .55cqw .5cqw #0c0a07a9)}
 .piece.focused {z-index:13;filter:drop-shadow(0 0 .9cqw #ffd789aa)}
 .piece.placed {z-index:9;filter:drop-shadow(0 .08cqw .11cqw #301c0a70);transform:translateZ(0)}
@@ -81,6 +81,18 @@ function placeCoords(el,rect,transition=true){
   el.style.width=((rect[2]-rect[0])/W*100)+'%';el.style.height=((rect[3]-rect[1])/H*100)+'%';
   if(transition===false)el.style.transition='none';else el.style.removeProperty('transition');
 }
+/* Encaja el pergamino conservando la relación de aspecto de su imagen:
+   el marco y las letras dibujadas nunca se estiran ni se comprimen. */
+function fitRectInside(slotRect,sourceRect,padX=8,padY=6){
+  const width=slotRect[2]-slotRect[0],height=slotRect[3]-slotRect[1];
+  const sourceWidth=sourceRect[2]-sourceRect[0],sourceHeight=sourceRect[3]-sourceRect[1];
+  const usableWidth=Math.max(1,width-2*padX);
+  const usableHeight=Math.max(1,height-2*padY);
+  const scale=Math.min(usableWidth/sourceWidth,usableHeight/sourceHeight);
+  const w=sourceWidth*scale,h=sourceHeight*scale;
+  const x=slotRect[0]+(width-w)/2,y=slotRect[1]+(height-h)/2;
+  return [x,y,x+w,y+h];
+}
 function announce(msg){announcer.textContent=msg}
 function occupied(slotId){for(const [id,slot] of state.entries())if(slot===slotId)return id;return null}
 function setup(){
@@ -126,7 +138,9 @@ function setSlot(id,slotId){if(solved||!items.has(id)||!targets.has(slotId))retu
 }
 function returnToTray(id){if(solved||!id)return;state.set(id,null);selection=null;hideMessage();paint();announce(items.get(id).name+' berriro beira-armairuan dago.');}
 function paint(){
-  for(const item of model.items){const el=scene.querySelector('[data-piece="'+item.id+'"]');const slot=state.get(item.id);const rect=slot?targets.get(slot).rect:item.origin;
+  for(const item of model.items){const el=scene.querySelector('[data-piece="'+item.id+'"]');const slot=state.get(item.id);
+    // En los cinco huecos, el tamaño se adapta sin deformar la imagen ni sus letras.
+    const rect=slot?fitRectInside(targets.get(slot).rect,item.origin):item.origin;
     placeCoords(el,rect);el.classList.toggle('placed',!!slot);el.classList.toggle('focused',selection===item.id);el.setAttribute('aria-pressed',selection===item.id?'true':'false');
     el.style.cursor=solved?'default':'grab';
   }
