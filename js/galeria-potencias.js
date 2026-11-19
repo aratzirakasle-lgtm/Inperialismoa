@@ -1,3 +1,4 @@
+import { exerciseNavMarkup } from './mission1-navigation.js';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
@@ -24,7 +25,7 @@ export const ITEMS=[
 const LOOKUP=new Map(ITEMS.map(x=>[x.id,x]));
 const ZONES=new Set(["eu_auth","eu_liberal","ru","us","jp"]);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false}={}){
+export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
  root.__galleryCleanup=()=>controller.abort();
@@ -82,7 +83,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const showcase=(key,name,flags,desc,content)=>'<article class="gal-vitrine gal-vitrine-'+key+'"><header class="gal-vitrine-top">'+flagHtml[key]+'<h2>'+name+'</h2></header><div class="gal-vitrine-image gal-photo-'+key+'" role="img" aria-label="'+esc(desc)+'"></div><div class="gal-vitrine-contents">'+content+'</div></article>';
  function draw(){
    const tray=ITEMS.filter(x=>!state.placements[x.id]);
-   root.innerHTML='<div class="gal-hall"><header class="gal-masthead"><button type="button" class="gal-return" data-gallery-action="back">← Misiora itzuli</button><div class="gal-topline"><span>INPERIALISMOAREN GARAIA</span><span>1. MISIOA · 1. ARIKETA</span></div><div class="gal-titlebar"><span class="gal-wreath" aria-hidden="true">❧</span><div><span class="gal-title-small">Misioa 1 · 1. ariketa</span><h1>Potentzia handien galeria</h1><p>Arrastatu ezaugarriak dagokien erakusleihoetara. Europan, bereizi bi sistema politikoak.</p></div><span class="gal-wreath" aria-hidden="true">❧</span></div><div class="gal-progress-chips"><span>'+count()+' / '+ITEMS.length+' zuzen</span><span>✦ '+(state.completed?'Osatua':'Ariketa martxan')+'</span></div></header><section class="gal-display" aria-label="Lau potentzien erakusleihoak">'+
+   root.innerHTML=(navigationEnabled?exerciseNavMarkup(1,navigationPreview):'')+'<div class="gal-hall"><header class="gal-masthead"><button type="button" class="gal-return" data-gallery-action="back">← Misiora itzuli</button><div class="gal-topline"><span>INPERIALISMOAREN GARAIA</span><span>1. MISIOA · 1. ARIKETA</span></div><div class="gal-titlebar"><span class="gal-wreath" aria-hidden="true">❧</span><div><span class="gal-title-small">Misioa 1 · 1. ariketa</span><h1>Potentzia handien galeria</h1><p>Arrastatu ezaugarriak dagokien erakusleihoetara. Europan, bereizi bi sistema politikoak.</p></div><span class="gal-wreath" aria-hidden="true">❧</span></div><div class="gal-progress-chips"><span>'+count()+' / '+ITEMS.length+' zuzen</span><span>✦ '+(state.completed?'Osatua':'Ariketa martxan')+'</span></div></header><section class="gal-display" aria-label="Lau potentzien erakusleihoak">'+
    showcase('eu','EUROPA','🇩🇪 🇫🇷','Europako parlamentua eta industria',target('eu_auth','Sistema autoritarioak',4)+target('eu_liberal','Erregimen liberalak',5))+
    showcase('ru','ERRUSIA','🇷🇺','Errusiako tsarraren garaiko irudia',target('ru','Errusiaren ezaugarriak',4))+
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
