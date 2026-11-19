@@ -280,5 +280,13 @@ function pointerEnd(e){if(!active||active.pid!==e.pointerId)return;const a=activ
 }
 function pointerCancel(e){if(!active||active.pid!==e.pointerId)return;
   active.piece.classList.remove('dragging');active=null;highlight(null);paint();}
+// Vista docente: representación local, nunca se envían respuestas al servidor.
+window.m1ThirdPreviewSetStage=stage=>{
+  if(stage==='complete'){
+    model.items.forEach(item=>state.set(item.id,item.target));
+    solved=true;selection=null;scene.classList.add('solved');
+    result.hidden=false;hideMessage();paint();
+  }else reset();
+};
 setup();
 </script></body></html>
