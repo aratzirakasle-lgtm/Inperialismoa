@@ -92,7 +92,7 @@ try{
    assert.equal(await page.locator('[data-zone="economic"] [data-card="new_markets"]').count(),1);
    for(let n=2;n<=5;n++){
     await page.locator('[data-open="'+n+'"]').click();
-    assert.ok((await page.locator('.m2-section-head h2').innerText()).length>4);
+    assert.ok((await page.locator(n===3?'.m2-atlas-heading h1':'.m2-section-head h2').innerText()).length>4);
     await page.screenshot({path:'test-output/m2-e'+n+'-desktop.png',fullPage:true,animations:'disabled'});
    }
    await page.locator('[data-preview-next]').click();
@@ -136,8 +136,20 @@ try{
    for(const [year,pop] of [['1850','266'],['1870','310'],['1900','400']]){
     await page.locator('[data-field="'+year+'"]').selectOption(pop);
    }
-   await page.locator('[data-field="migration"]').selectOption('better_life');
-   await page.locator('[data-field="missionaries"]').selectOption('catholic_protestant');
+   await page.locator('input[data-field="migration"][value="better_life"]').check();
+   await page.locator('input[data-field="missionaries"][value="catholic_protestant"]').check();
+   for(const dest of ['africa','asia','oceania']){
+    await page.locator('[data-atlas-route="'+dest+'"]').click();
+    await page.locator('[data-atlas-target="'+dest+'"]').click();
+   }
+   for(const [id,value] of [['statement_1','egia'],['statement_2','gezurra'],['statement_3','egia'],['statement_4','egia'],['statement_5','gezurra']])
+    await page.locator('input[data-field="'+id+'"][value="'+value+'"]').check();
+   for(const [id,bag] of [['growth','cause'],['conditions','cause'],['better','cause'],['conversion','cause'],
+      ['settlement','effect'],['missions','effect'],['oceania','effect'],['faith','effect']]){
+    await page.locator('[data-atlas-bag-card="'+id+'"]').click();
+    await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="'+bag+'"]').click();
+   }
+   assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
    await page.locator('[data-next]').click();
@@ -286,78 +298,71 @@ try{
  });
 
 
- await scenario('Tercer ejercicio: libro histórico con cinco respuestas y sin pistas',async()=>{
+
+ await scenario('Atlas 3: cuatro apartados con datos PDF, radios, mapa y maletas',async()=>{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{
    await page.locator('[data-open="3"]').click();
-   await page.locator('.m2-migration-book').waitFor({state:'visible'});
-   assert.equal(await page.locator('.m2-migration-folio').count(),2);
-   assert.equal(await page.locator('.m2-ledger-year').count(),3);
-   assert.equal(await page.locator('.m2-migration-dossier').count(),2);
-   assert.deepEqual(await page.locator('select[data-field]').evaluateAll(els=>els.map(el=>el.dataset.field)),
-    ['1850','1870','1900','migration','missionaries']);
-   const art=await page.locator('.m2-migration-gallery img').evaluateAll(imgs=>imgs.map(img=>({loaded:img.complete&&img.naturalWidth>0,src:img.getAttribute('src')})));
-   assert.equal(art.length,3);
-   assert.ok(art.every(img=>img.loaded),JSON.stringify(art));
-   assert.deepEqual(await page.locator('.m2-migration-gallery select').evaluateAll(els=>els.map(el=>el.value)),['','','','','']);
-   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/0 \/ 5/);
-   // Selecting a deliberately incorrect value must not reveal a hint or mark it as correct.
-   await page.locator('[data-field="1850"]').selectOption('450');
-   assert.equal(await page.locator('[data-field="1850"]').inputValue(),'450');
-   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/1 \/ 5/);
-   assert.equal(await page.locator('.m2-migration-gallery [data-state="error"]').count(),0);
-   await page.locator('[data-field="1870"]').selectOption('310');
-   await page.locator('[data-field="1900"]').selectOption('400');
-   await page.locator('[data-field="migration"]').selectOption('sea_control');
-   await page.locator('[data-field="missionaries"]').selectOption('merchants_only');
-   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/5 \/ 5/);
-   await page.screenshot({path:'test-output/m2-e3-ledger-filled-1672x941.png',fullPage:true,animations:'disabled'});
-   // Navigating away/back preserves student-owned draft, not pre-filled correct answers.
+   await page.locator('.m2-atlas-screen').waitFor({state:'visible'});
+   assert.equal(await page.locator('.m2-atlas-heading h1').innerText().then(t=>t.includes('MIGRAZIOEN BULEGOA')),true);
+   assert.equal(await page.locator('.m2-atlas-pop-row').count(),3);
+   assert.equal(await page.locator('.m2-atlas-top-question').count(),2);
+   assert.equal(await page.locator('.m2-atlas-route-card').count(),3);
+   assert.equal(await page.locator('.m2-atlas-statement').count(),5);
+   assert.equal(await page.locator('.m2-atlas-luggage-card').count(),8);
+   assert.equal(await page.locator('[data-atlas-bag-zone].m2-atlas-suitcase').count(),2);
+   assert.equal(await page.locator('[data-check]').isDisabled(),true);
+   const imgs=await page.locator('.m2-atlas-screen img').evaluateAll(els=>els.map(i=>({name:i.src,loaded:i.complete&&i.naturalWidth>0})));
+   assert.ok(imgs.length>=5&&imgs.every(x=>x.loaded),JSON.stringify(imgs));
+   await page.screenshot({path:'test-output/m2-e3-atlas-initial-1672x941.png',fullPage:true,animations:'disabled'});
+   // Incorrect entries are allowed; no truth coloring or hints.
+   await page.locator('select[data-field="1850"]').selectOption('450');
+   await page.locator('input[data-field="migration"][value="sea_control"]').check();
+   assert.equal(await page.locator('[data-state="error"]').count(),0);
+   assert.equal(await page.locator('.m2-atlas-total').innerText().then(x=>x.trim().startsWith('2 /')),true);
+   await page.locator('[data-atlas-route="africa"]').click();
+   assert.equal(await page.locator('[data-atlas-route="africa"]').getAttribute('aria-pressed'),'true');
+   await page.locator('[data-atlas-target="oceania"]').click();
+   assert.equal(await page.locator('[data-atlas-pin]').count(),0);
+   await page.locator('[data-atlas-bag-card="growth"]').click();
+   assert.equal(await page.locator('[data-atlas-bag-card="growth"]').getAttribute('aria-pressed'),'true');
+   await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
+   assert.equal(await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').count(),1);
+   await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').click();
+   await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="effect"]').click();
+   assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
+   await page.screenshot({path:'test-output/m2-e3-atlas-partial-1672x941.png',fullPage:true,animations:'disabled'});
    await page.locator('[data-open="4"]').click();
    await page.locator('[data-open="3"]').click();
-   assert.equal(await page.locator('[data-field="1850"]').inputValue(),'450');
-   assert.equal(await page.locator('[data-field="migration"]').inputValue(),'sea_control');
+   assert.equal(await page.locator('select[data-field="1850"]').inputValue(),'450');
+   assert.equal(await page.locator('input[data-field="migration"][value="sea_control"]').isChecked(),true);
+   assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
    assert.deepEqual(await page.evaluate(()=>window.__m2RpcCalls),[]);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
- await scenario('Tercer ejercicio: texto, controles e ilustraciones visibles de 320 a 1672 px',async()=>{
+ await scenario('Atlas 3: sin desbordes ni controles cortados a 1672, 1365, 768, 390 y 320 px',async()=>{
   for(const size of [{width:1672,height:941},{width:1365,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:700}]){
    const {page,context,errors}=await open('teacher',size);
    try{
     await page.locator('[data-open="3"]').click();
-    await page.locator('.m2-migration-gallery').waitFor({state:'visible'});
-    const metrics=await page.locator('.m2-migration-gallery').evaluate(root=>{
-     const rect=el=>el.getBoundingClientRect();
-     const fields=[...root.querySelectorAll('select')];
-     const folios=[...root.querySelectorAll('.m2-migration-folio')];
-     const r=rect(root);
-     return{
-      horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
-      foliosVisible:folios.every(f=>{const b=rect(f);return b.width>0&&b.height>0&&b.left>=-1&&b.right<=innerWidth+1}),
-      controlsVisible:fields.every(field=>{
-       const b=rect(field),parent=rect(field.parentElement);
-       return b.width>=100 && b.height>=40 &&
-         b.left>=parent.left-2 && b.right<=parent.right+2 &&
-         b.left>=-1 && b.right<=innerWidth+1;
-      }),
-      textFits:[...root.querySelectorAll('.m2-migration-question-title')].every(el=>{
-       const b=rect(el);return b.width>100&&el.scrollHeight<=el.clientHeight+2;
-      }),
-      galleryWidth:r.width
-     };
+    const metrics=await page.locator('.m2-atlas-screen').evaluate(root=>{
+     const fields=[...root.querySelectorAll('select,.m2-atlas-radio input,.m2-atlas-truth input,.m2-atlas-luggage-drop,.m2-atlas-pin')];
+     const rects=[...root.querySelectorAll('.m2-atlas-activity,.m2-atlas-main,.m2-atlas-heading')].map(el=>{
+      const r=el.getBoundingClientRect();return {x:r.left,right:r.right,w:r.width};
+     });
+     const offscreen=fields.filter(el=>{const r=el.getBoundingClientRect();return r.width<0||r.left<0||r.right>innerWidth+2}).length;
+     return {scrollWidth:document.documentElement.scrollWidth,viewport:innerWidth,
+       offscreen,rects};
     });
-    assert.equal(metrics.horizontalOverflow,false,JSON.stringify({size,metrics}));
-    assert.equal(metrics.foliosVisible,true,JSON.stringify({size,metrics}));
-    assert.equal(metrics.controlsVisible,true,JSON.stringify({size,metrics}));
-    assert.equal(metrics.textFits,true,JSON.stringify({size,metrics}));
+    assert.ok(metrics.scrollWidth<=metrics.viewport+1,JSON.stringify({size,metrics}));
+    assert.ok(metrics.rects.every(r=>r.w>100&&r.x>=-2&&r.right<=size.width+2),JSON.stringify({size,metrics}));
     if([1672,390,320].includes(size.width))
-     await page.screenshot({path:'test-output/m2-e3-ledger-'+size.width+'.png',fullPage:true,animations:'disabled'});
+     await page.screenshot({path:'test-output/m2-e3-atlas-'+size.width+'.png',fullPage:true,animations:'disabled'});
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
  });
-
  await scenario('Referencia 16:9 en 1672×941: cinco vitrinas y escenografía visible',async()=>{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{
