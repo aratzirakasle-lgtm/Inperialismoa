@@ -51,6 +51,9 @@ try{
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('[data-zone]').count(),5);
    assert.equal(await page.locator('.m2-case-title-action').count(),5);
+   assert.equal(await page.locator('.m2-case-crown').count(),5);
+   assert.equal(await page.locator('.m2-case-foundation').count(),5);
+   assert.equal(await page.locator('.m2-desk-front').count(),1);
    assert.equal(await page.locator('.m2-case-scene').count(),5);
    assert.equal(await page.locator('.m2-case-scene').evaluateAll(els=>els.every(img=>img.complete&&img.naturalWidth>0)),true,'Las cinco escenas históricas deben cargar');
    await mkdir('test-output',{recursive:true});
@@ -148,6 +151,12 @@ try{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{
    assert.equal(await page.locator('.m2-case-scene').count(),5);
+   const cardLayout=await page.locator('.m2-museum-cards').evaluate(grid=>{
+     const last=grid.querySelector('.m2-museum-card:last-of-type')?.getBoundingClientRect();
+     const rect=grid.getBoundingClientRect();
+     return {lastEdge:last?.right??0,edge:rect.right};
+   });
+   assert.ok(cardLayout.edge-cardLayout.lastEdge<25,'La segunda fila de cartelas debe ocupar toda la mesa');
    const {overflow,height}=await page.evaluate(()=>({
      overflow:document.documentElement.scrollWidth-innerWidth,
      height:document.documentElement.scrollHeight
@@ -171,7 +180,13 @@ try{
     const metrics=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert.ok(metrics.scroll<=metrics.viewport+1,JSON.stringify({size,metrics}));
     assert.equal(await page.locator('.m2-hero').isVisible(),true);
-    if(size.width===390)await page.screenshot({path:'test-output/m2-e1-mobile.png',fullPage:true,animations:'disabled'});
+    if(size.width===390){
+     const title=await page.locator('.m2-case-ideological .m2-case-title-action').evaluate(el=>({
+      sw:el.scrollWidth,cw:el.clientWidth,sh:el.scrollHeight,ch:el.clientHeight
+     }));
+     assert.ok(title.sw<=title.cw+1 && title.sh<=title.ch+1,'El rótulo ideológico no debe recortarse en móvil');
+     await page.screenshot({path:'test-output/m2-e1-mobile.png',fullPage:true,animations:'disabled'});
+    }
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
