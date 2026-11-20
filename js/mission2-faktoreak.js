@@ -291,13 +291,12 @@ function renderPopulation(){
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
   return point?'<path d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
- const statements=atlasStatements.map(([key,text],i)=>'<div class="m2-atlas-statement">'+
+ const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
   '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
-  '<div class="m2-atlas-truth" role="group" aria-label="'+esc(text)+'">'+
-  ['egia','gezurra'].map(value=>'<label class="m2-atlas-truth-option">'+
-  '<input type="radio" name="atlas-'+key+'" data-field="'+key+'" value="'+value+'" '+(state[key]===value?'checked':'')+'>'+
-  '<span>'+ (value==='egia'?'E':'G') +'</span></label>').join('')+
-  '</div></div>').join('');
+  '<span class="m2-atlas-truth"><select class="m2-atlas-statement-select" data-field="'+key+'" aria-label="'+esc(text)+' — egia edo gezurra">'+
+  '<option value="">Aukeratu…</option>'+
+  option('egia','E · Egia',state[key])+option('gezurra','G · Gezurra',state[key])+
+  '</select></span></label>').join('');
  const cards=atlasSuitcase.filter(c=>!state['bag_'+c[0]]).map(c=>
   '<button type="button" draggable="true" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" class="m2-atlas-luggage-card">'+
   '<img src="./assets/'+c[2]+'" alt="" draggable="false"><span>'+esc(c[1])+'</span></button>').join('');
