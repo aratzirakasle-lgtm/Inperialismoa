@@ -118,3 +118,14 @@ Las cartelas son fichas de colección del siglo XIX con pequeño medallón graba
 Dentro de cada vitrina, las fichas se convierten en etiquetas de catálogo compactas **con miniatura visible** y se expanden verticalmente al acumularse; fuera de la vitrina conservan la disposición de seis más cinco en la mesa. Se han revisado capturas reales a **1672 × 941**, escritorio y móvil.
 
 **Pruebas automatizadas:** GitHub Actions n.º **320**, comprobaciones estáticas y Chromium superadas. El test verifica que se cargan once miniaturas distintas, que el estado de selección funciona y que la ilustración sigue acompañando a la cartela al trasladarla a una vitrina. No se modifica la primera misión, los ejercicios 2–5 ni la función de Supabase. La rama sigue en borrador.
+
+
+### Asegurar la visibilidad y el arrastre de las once cartelas
+
+La primera pantalla ha incorporado una corrección de composición para mantener **todas las cartelas visibles al clasificarlas**. Cada vitrina utiliza una cuadrícula vertical de una sola columna con filas y altura automáticas, sin límite máximo ni barras internas que oculten el final del montón. Los textos largos pueden partir líneas sin desbordar la anchura y cada ficha mantiene su miniatura histórica.
+
+**Fallo reproducido y corregido:** cuando había varias fichas colocadas, sus botones podían quedar superpuestos a la zona de destino del arrastre (que antes ocupaba el fondo de la vitrina). Ahora existe una franja de colocación «HEMEN KOKATU» al principio de cada vitrina, con posición normal en el documento y siempre encima de las tarjetas. El ratón puede soltar nuevas tarjetas ahí aunque ya haya otras colocadas. Solo se expande la vitrina que recibe fichas; las vacías no se estiran con enormes paneles de color.
+
+La prueba de regresión \`tests/mission2-browser-smoke.mjs\` incluye once cartelas acumuladas en vitrinas de cada categoría a resoluciones de **1672, 1365, 768, 390 y 320 px**, una distribución de **3 + 2 + 2 + 2 + 2** a través de arrastre real en escritorio, y la misma distribución mediante selección y pulsación en móvil (alternativa para pantallas táctiles). Comprueba los rectángulos reales de las cartelas y del compartimento, la ausencia de solapes, los textos y miniaturas visibles, el desbordamiento horizontal, y que la franja de recepción no esté cubierta por otra ficha. Las capturas de los estados llenos y distribuidos se guardan como artefactos de GitHub Actions.
+
+No se han modificado contenidos ni respuestas, no hay pistas tras errores, no se ha modificado Supabase y se mantiene la primera misión íntegra.
