@@ -20,6 +20,7 @@ jobs:
           node --check tests/image-baseline.mjs
           node --check tests/live-supabase-smoke.mjs
           node --check tests/browser-network-profile.mjs
+          node --check tests/public-live-browser-audit.mjs
           node tests/image-baseline.mjs
       - name: Probar permisos e ilustraciones de los ejercicios
         run: node --test tests/*.test.mjs
@@ -50,3 +51,12 @@ jobs:
         env:
           PROFILE_BASE_URL: https://aratzirakasle-lgtm.github.io/Inperialismoa/
         run: node tests/browser-network-profile.mjs --json
+      - name: Verificar página publicada y rutas protegidas con JS real en ordenador tableta y móvil
+        run: node tests/public-live-browser-audit.mjs
+      - name: Guardar capturas de la portada de ensayo sin usuarios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-portada-tres-resoluciones
+          path: test-output/login-*.png
+          if-no-files-found: ignore
