@@ -105,17 +105,75 @@ function intro(){
  '<h2>'+esc(item.title)+'</h2><p>'+esc(item.sub)+' · Aukeratu eta kokatu elementuak. Erantzun guztiak osatu ondoren egiaztatu ahal izango duzue.</p></div>'+
  '<span class="m2-chip">'+esc(item.pages)+'</span></div>';
 }
+
+/* Ilustraciones vectoriales integradas: piezas del gabinete histórico.
+ * Son decorativas; las tarjetas y vitrinas siguen siendo HTML interactivo. */
+const museumDrawings={
+ coins:'<ellipse cx="39" cy="63" rx="26" ry="10" fill="#f8cb48" stroke="#805018" stroke-width="3"/><path d="M13 40v23c0 6 52 6 52 0V40" fill="#d9941c" stroke="#805018" stroke-width="3"/><ellipse cx="39" cy="40" rx="26" ry="10" fill="#ffdd68" stroke="#805018" stroke-width="3"/><path d="M13 51c17 10 35 10 52 0M13 60c17 10 35 10 52 0" stroke="#9e621a" stroke-width="2"/><path d="M57 32V18c0-7 29-7 29 0v34c0 6-29 6-29 0" fill="#dc9925" stroke="#81501c" stroke-width="3"/><ellipse cx="71.5" cy="18" rx="14.5" ry="6" fill="#ffe27c" stroke="#81501c" stroke-width="3"/><path d="M58 29c8 5 20 5 28 0M58 39c8 5 20 5 28 0" stroke="#9b671e" stroke-width="2"/>',
+ ship:'<path d="M8 56h84l-13 16H23z" fill="#5d3623" stroke="#2b2720" stroke-width="3"/><path d="M19 53V34h60v19z" fill="#e7dcb8" stroke="#50412e" stroke-width="3"/><path d="M30 31V14h40v17" fill="#d9c6a1" stroke="#50412e" stroke-width="3"/><rect x="52" y="6" width="11" height="30" rx="2" fill="#383635"/><path d="M63 11h25M75 11v23" stroke="#45423b" stroke-width="3"/><circle cx="30" cy="41" r="4" fill="#4b9fb3"/><circle cx="46" cy="41" r="4" fill="#4b9fb3"/><circle cx="62" cy="41" r="4" fill="#4b9fb3"/><path d="M8 80q12-9 24 0t24 0t24 0t20 0" fill="none" stroke="#71b4c4" stroke-width="5"/>',
+ church:'<path d="M17 72V38l32-21 34 21v34z" fill="#e7be76" stroke="#67422d" stroke-width="3"/><path d="M12 37L49 13l39 24" stroke="#7d4332" stroke-width="5"/><path d="M43 72V49q6-8 12 0v23" fill="#6a3e35"/><rect x="27" y="45" width="10" height="12" rx="5" fill="#8bb4ad"/><rect x="66" y="45" width="10" height="12" rx="5" fill="#8bb4ad"/><path d="M49 3v27M40 11h18" stroke="#b67918" stroke-width="6" stroke-linecap="round"/>',
+ cannon:'<path d="M8 71h84" stroke="#4d5630" stroke-width="7"/><circle cx="32" cy="61" r="13" fill="#a37135" stroke="#483629" stroke-width="4"/><circle cx="32" cy="61" r="4" fill="#edc884"/><path d="M28 47l31-24 18 11-31 25" fill="#344a43" stroke="#1d3337" stroke-width="4"/><path d="M60 24l14-11 16 8-13 13" fill="#687a60" stroke="#1d3337" stroke-width="3"/><path d="M10 72V33h14V20h15v12h17" fill="#c9ad71" stroke="#7e6034" stroke-width="3"/><path d="M7 34h46" stroke="#866338" stroke-width="3"/>',
+ globe:'<circle cx="42" cy="35" r="28" fill="#83aca8" stroke="#5b492c" stroke-width="4"/><ellipse cx="42" cy="35" rx="13" ry="27" stroke="#426e67" stroke-width="2" fill="none"/><path d="M16 35h52M24 18h36M24 53h36" stroke="#426e67" stroke-width="2"/><path d="M30 22l13-6 8 8-6 8-14 0-6 8-9-9zM45 42l14 4-6 9-12 3-6-7z" fill="#d2b869" opacity=".88"/><path d="M10 63L30 83h55" stroke="#825b35" stroke-width="5" fill="none"/><path d="M40 64v14M26 79h37" stroke="#9a6e34" stroke-width="4"/><path d="M69 50l19-8 8 25-22 8z" fill="#8a4934" stroke="#5a3d2c" stroke-width="3"/><path d="M72 57l21-8" stroke="#e8bb65" stroke-width="2"/>',
+ factory:'<path d="M10 73V37l21 13V36l20 13V22h35v51z" fill="#9d5036" stroke="#5e362e" stroke-width="3"/><path d="M55 18V4h13v18" fill="#6f6050"/><path d="M77 23V7h8v22" fill="#6f6050"/><path d="M60 5q-12-8-8-17M83 6q-10-9-8-17" stroke="#a6a49a" stroke-width="5" opacity=".85"/><path d="M19 59h11m7 0h11m10 0h11m7 0h8" stroke="#f9c579" stroke-width="6"/>',
+ bullion:'<path d="M7 59l16-24h29l16 24z" fill="#e5a72e" stroke="#97672e" stroke-width="3"/><path d="M30 73l16-24h30l15 24z" fill="#e5ad37" stroke="#97672e" stroke-width="3"/><path d="M15 58h46m-24 15h45" stroke="#fff0aa" stroke-width="3"/>',
+ people:'<circle cx="22" cy="18" r="10" fill="#57496c"/><circle cx="50" cy="13" r="12" fill="#57496c"/><circle cx="78" cy="18" r="10" fill="#57496c"/><path d="M10 41q12-10 24 0v30H10zM37 37q13-15 27 0v37H37zM66 41q12-10 24 0v30H66z" fill="#695c83"/><path d="M22 60v18m28-17v20m28-21v19" stroke="#463d57" stroke-width="5"/>',
+ suitcase:'<rect x="22" y="32" width="51" height="41" rx="4" fill="#9c6c45" stroke="#543f34" stroke-width="4"/><path d="M37 31V21q12-10 22 0v10M48 33v40" stroke="#4e392b" stroke-width="4"/><path d="M18 74h62" stroke="#e7be72" stroke-width="3"/><circle cx="24" cy="18" r="11" fill="#5e7667"/><path d="M8 50q11-24 25 0" stroke="#5e7667" stroke-width="10"/>',
+ cross:'<path d="M44 7h12v23h22v13H56v36H44V43H22V30h22z" fill="#c9a151" stroke="#7a552a" stroke-width="3"/><path d="M50 8v70" stroke="#fae5b0" stroke-width="2"/>',
+ wheel:'<circle cx="50" cy="42" r="27" fill="#d1b881" stroke="#6e4824" stroke-width="6"/><circle cx="50" cy="42" r="10" fill="#d1b881" stroke="#6e4824" stroke-width="4"/><path d="M50 2v80M10 42h80M21 13l58 58M79 13L21 71" stroke="#6e4824" stroke-width="5"/><circle cx="50" cy="42" r="4" fill="#a65d24"/>',
+ shield:'<path d="M50 5L85 19v27q-7 31-35 40-28-9-35-40V19z" fill="#8f392b" stroke="#c19c4e" stroke-width="5"/><path d="M50 18l6 20h21L60 51l6 20-16-12-16 12 6-20-17-13h21z" fill="#eac05c"/>',
+ flags:'<path d="M27 12v68M70 10v70" stroke="#624b38" stroke-width="5"/><path d="M29 14q22-9 36 0v29q-20-10-36 0z" fill="#ad3d3b" stroke="#663830" stroke-width="3"/><path d="M72 12q18-10 23 2v28q-12-8-23 0z" fill="#d3a13d" stroke="#755322" stroke-width="3"/>',
+ microscope:'<path d="M39 11l20 10-17 35-20-10z" fill="#53756a" stroke="#314f4a" stroke-width="4"/><path d="M33 8l37 18" stroke="#d6ab62" stroke-width="7"/><path d="M62 38q22 30-12 33M34 74h49" stroke="#38594e" stroke-width="8" fill="none"/><path d="M21 78h70" stroke="#786144" stroke-width="8"/>',
+ maps:'<path d="M10 17l25-6 27 8 28-9v56l-28 8-27-8-25 6z" fill="#e7c47e" stroke="#815f39" stroke-width="3"/><path d="M35 11v55m27-47v55" stroke="#aa8556" stroke-width="2"/><path d="M20 39l16-11 20 18 22-17M52 50l14 9" stroke="#6a9473" stroke-width="5" fill="none"/><circle cx="68" cy="35" r="6" fill="#a34e36"/>'
+};
+const museumCardArt={
+ new_markets:'factory',cheap_resources:'coins',investments:'bullion',
+ settlement:'people',working_conditions:'suitcase',
+ conversion:'cross',missions:'church',sea_routes:'wheel',
+ chauvinism:'flags',racist_theories:'microscope',exploration:'maps'
+};
+const museumCategoryArt={
+ economic:'coins',demographic:'ship',religious:'church',
+ political:'cannon',ideological:'globe'
+};
+function museumIllustration(kind,large=false){
+ const shapes=museumDrawings[kind]||museumDrawings.maps;
+ return '<svg class="m2-illustration '+(large?'m2-illustration-large':'')+'" viewBox="0 0 100 92" role="img" aria-label="'+esc(kind)+'" focusable="false" xmlns="http://www.w3.org/2000/svg">'+shapes+'</svg>';
+}
+function museumHeader(){
+ return '<header class="m2-hero m2-museum-title-row">'+
+ '<div class="m2-museum-mission-plaque"><span class="m2-museum-world" aria-hidden="true">◉</span><div><strong>2. MISIOA</strong><span>Inperialismoaren<br>faktoreak</span></div></div>'+
+ '<div class="m2-museum-title"><h1>1. Kausen kabinetea</h1><p>Inperialismoa zergatik hedatu zen?</p></div>'+
+ '<div class="m2-museum-step-holder"><span class="m2-sr-only">Bost ariketak</span>'+nav()+'</div></header>';
+}
+function museumInstruction(){
+ return '<div class="m2-museum-instructions"><span class="m2-museum-hand" aria-hidden="true">☞</span> Dagozkion arrazoien arabera, kokatu beheko txartelak bost faktore hauetan:</div>';
+}
 function renderClassification(){
  const state=taskState(1),assigned=state.assignments||{};
- const tileHtml=causes.map(c=>'<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile '+(assigned[c.id]?'m2-used':'')+'" aria-pressed="'+(selected===c.id?'true':'false')+'">'+esc(c.label)+'</button>').join('');
- const zoneHtml=categories.map(cat=>{
+ function tile(c){
+  return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
+   '<span class="m2-museum-card-art" aria-hidden="true">'+museumIllustration(museumCardArt[c.id])+'</span>'+
+   '<span class="m2-museum-card-copy">'+esc(c.label)+'</span></button>';
+ }
+ const cabinets=categories.map(cat=>{
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
-  return '<button type="button" class="m2-zone" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'"><strong>'+esc(cat.label)+'</strong><small>'+inside.length+' kartela kokatuta</small><span class="m2-zone-items">'+inside.map(x=>'<span class="m2-mini">'+esc(x.label)+'</span>').join('')+'</span></button>';
+  return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
+   '<div class="m2-case-arch"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<h3 class="m2-case-title">'+esc(cat.label)+'</h3></div>'+
+   '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
+   '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
+   (!inside.length?'<span class="m2-case-empty">0 kartela kokatuta</span>':'')+
+   '</div><span class="m2-case-foot" aria-hidden="true"></span></article>';
  }).join('');
- return '<div class="m2-panels"><section class="m2-panel"><h3>Dokumentu solteak · '+causes.length+'</h3><div class="m2-tray">'+tileHtml+'</div>'+
- '<p class="m2-caption">Egin klik kartela batean eta, gero, dagokion faktorean. Arrastatu ere egin dezakezu. Kartela berriro hautatuta lekuz alda dezakezu.</p></section>'+
- '<section class="m2-panel"><h3>Faktoreen bost kutxak</h3><div class="m2-zones">'+zoneHtml+'</div></section></div>';
+ const unassigned=causes.filter(c=>!assigned[c.id]);
+ return '<section class="m2-museum-interaction" aria-label="Bost faktoreen kabinetearen sailkapena">'+
+  '<div class="m2-museum-cabinet-wall">'+cabinets+'</div>'+
+  '<div class="m2-museum-desktop"><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
+  '<span class="m2-museum-drag">✥ &nbsp; Aukeratu edo arrastatu</span></div>'+
+  '<div class="m2-museum-cards" data-unassign aria-label="Sailkatu gabeko kartelak">'+unassigned.map(tile).join('')+
+  (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div></div></section>';
 }
+
 function renderTimeline(){
  const state=taskState(2);
  const taken=new Set(['1869','1908','1914'].map(year=>state[year]).filter(Boolean));
@@ -204,7 +262,7 @@ function controls(){
  (teacher?'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>':
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
- '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>Erantzunak egiaztatu →</button>')+
+ '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+(active===1?'✓ EGIAZTATU':'Erantzunak egiaztatu →')+'</button>')+
  '</div></div>';
 }
 function renderEnd(){
@@ -216,7 +274,17 @@ function renderEnd(){
  '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'#mission3')+'">Museora itzuli →</a></section>';
 }
 function render(){
+ const firstRoom=active===1&&!teacherEnding;
+ app.classList.toggle('m2-first-room',firstRoom);
+ document.querySelector('.m2-page')?.classList.toggle('m2-first-active',firstRoom);
  if(teacherEnding){app.innerHTML=renderEnd();return}
+ if(firstRoom){
+  app.innerHTML=museumHeader()+museumInstruction()+
+    (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
+    '<div class="m2-museum-room-label"><span>ARIKETA 1 / 5</span><span>11 dokumentu · 5 faktore</span></div>'+
+    renderClassification()+controls();
+  return;
+ }
  const item=activity(active);
  app.innerHTML=hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
  nav()+intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();
@@ -259,9 +327,10 @@ function openExercise(n){
  window.scrollTo({top:0,behavior:'instant'});
 }
 function assignToCategory(catId){
- if(active!==1||!selected)return;
+ if(active!==1||!selected||!categories.some(c=>c.id===catId))return;
  const state=taskState(1);state.assignments=state.assignments||{};
- state.assignments[selected]=catId;const former=selected;selected=null;render();
+ state.assignments[selected]=catId;const former=selected;selected=null;
+ feedback='';feedbackState='';render();
  $('[data-card="'+former+'"]')?.focus({preventScroll:true});
 }
 function assignYear(year){
@@ -282,8 +351,8 @@ app.addEventListener('click',event=>{
  const elem=event.target.closest('button');
  if(!elem||!app.contains(elem))return;
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
- if(elem.hasAttribute('data-card')){selected=elem.dataset.card;render();$('[data-card="'+selected+'"]')?.focus({preventScroll:true});return}
- if(elem.hasAttribute('data-zone'))return assignToCategory(elem.dataset.zone);
+ if(elem.hasAttribute('data-card')){selected=selected===elem.dataset.card?null:elem.dataset.card;const chosen=elem.dataset.card;render();$('[data-card="'+chosen+'"]')?.focus({preventScroll:true});return}
+ const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
  if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
  if(elem.hasAttribute('data-year'))return assignYear(elem.dataset.year);
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
@@ -299,6 +368,11 @@ app.addEventListener('change',event=>{
  if(target.matches('input[data-archive]'))taskState(4)[target.dataset.archive]=target.value;
  const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
 });
+app.addEventListener('keydown',event=>{
+ if(active!==1||!['Enter',' '].includes(event.key))return;
+ const zone=event.target.closest('[data-zone]');
+ if(zone&&event.target===zone){event.preventDefault();assignToCategory(zone.dataset.zone)}
+});
 app.addEventListener('dragstart',event=>{
  const card=event.target.closest('[data-card]')||event.target.closest('[data-event]');
  if(!card)return;
@@ -307,15 +381,19 @@ app.addEventListener('dragstart',event=>{
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
 });
 app.addEventListener('dragover',event=>{
- if(event.target.closest('[data-zone]')||event.target.closest('[data-year]'))event.preventDefault();
+ if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
 });
 app.addEventListener('drop',event=>{
  const zone=event.target.closest('[data-zone]');
  const year=event.target.closest('[data-year]');
- if(!zone&&!year)return;
+ const loose=event.target.closest('[data-unassign]');
+ if(!zone&&!year&&!loose)return;
  event.preventDefault();
  const moved=event.dataTransfer?.getData('text/plain');
  if(moved)selected=moved;
+ if(loose&&active===1&&selected){
+   delete taskState(1).assignments?.[selected];selected=null;feedback='';feedbackState='';render();return;
+ }
  if(zone)assignToCategory(zone.dataset.zone);
  if(year)assignYear(year.dataset.year);
 });
