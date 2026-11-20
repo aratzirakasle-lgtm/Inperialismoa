@@ -52,6 +52,13 @@ try{
    assert.equal(await page.locator('[data-zone]').count(),5);
    await mkdir('test-output',{recursive:true});
    await page.screenshot({path:'test-output/m2-e1-desktop.png',fullPage:true,animations:'disabled'});
+   await page.locator('[data-card="new_markets"]').dragTo(page.locator('[data-zone="economic"] .m2-case-target'));
+   assert.equal(await page.locator('[data-zone="economic"] [data-card="new_markets"]').count(),1);
+   await page.locator('[data-zone="economic"] [data-card="new_markets"]').dragTo(page.locator('[data-zone="demographic"] .m2-case-target'));
+   assert.equal(await page.locator('[data-zone="demographic"] [data-card="new_markets"]').count(),1);
+   await page.locator('[data-zone="demographic"] [data-card="new_markets"]').click();
+   await page.locator('[data-zone="economic"] .m2-case-target').click();
+   assert.equal(await page.locator('[data-zone="economic"] [data-card="new_markets"]').count(),1);
    for(let n=2;n<=5;n++){
     await page.locator('[data-open="'+n+'"]').click();
     assert.ok((await page.locator('.m2-section-head h2').innerText()).length>4);
@@ -69,10 +76,10 @@ try{
    assert.equal(await page.locator('.m2-step:disabled').count(),4);
    for(const id of ['new_markets','cheap_resources','investments','settlement','working_conditions','conversion','missions','sea_routes','chauvinism','racist_theories','exploration']){
     await page.locator('[data-card="'+id+'"]').click();
-    await page.locator('[data-zone="economic"]').click();
-    const pending=await page.locator('.m2-museum-desktop [data-card]').count();
-    console.log('M2 classify',id,'remaining',pending);
+    await page.locator('[data-zone="economic"] .m2-case-target').click();
    }
+   assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+   assert.equal(await page.locator('[data-zone="economic"] [data-card]').count(),11);
    assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
