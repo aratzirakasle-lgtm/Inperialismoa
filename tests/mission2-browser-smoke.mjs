@@ -83,6 +83,14 @@ try{
    }
    assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
    assert.equal(await page.locator('[data-zone="economic"] [data-card]').count(),11);
+   const allCardsVisible=await page.locator('[data-zone="economic"]').evaluate(zone=>{
+     const well=zone.querySelector('.m2-case-well').getBoundingClientRect();
+     return [...zone.querySelectorAll('[data-card]')].every(card=>{
+       const rect=card.getBoundingClientRect();
+       return rect.width>0&&rect.height>0&&rect.top>=well.top-2&&rect.bottom<=well.bottom+2;
+     });
+   });
+   assert.equal(allCardsVisible,true,'Todas las tarjetas deben caber dentro de la vitrina y ser visibles');
    assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
@@ -133,6 +141,20 @@ try{
    await page.locator('.m2-message-card').waitFor({state:'visible'});
    assert.match(await page.locator('.m2-message-card').innerText(),/blokeatuta/i);
    assert.deepEqual(await page.evaluate(()=>window.__m2RpcCalls),[]);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+ await scenario('Referencia 16:9 en 1672×941: cinco vitrinas y escenografía visible',async()=>{
+  const {page,context,errors}=await open('teacher',{width:1672,height:941});
+  try{
+   assert.equal(await page.locator('.m2-case-scene').count(),5);
+   const {overflow,height}=await page.evaluate(()=>({
+     overflow:document.documentElement.scrollWidth-innerWidth,
+     height:document.documentElement.scrollHeight
+   }));
+   assert.ok(overflow<=1,'Desbordamiento horizontal en 16:9: '+overflow);
+   assert.ok(height<=1200,'El ejercicio pierde la composición panorámica: '+height+'px');
+   await page.screenshot({path:'test-output/m2-e1-concepto-1672x941.png',fullPage:true,animations:'disabled'});
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
