@@ -15,6 +15,11 @@ jobs:
         run: |
           for file in js/*.js; do node --check "$file"; done
           node tests/check-html-scripts.mjs
+      - name: Verificar sintaxis de los diagnósticos y medir imágenes sin comprimir
+        run: |
+          node --check tests/image-baseline.mjs
+          node --check tests/live-supabase-smoke.mjs
+          node tests/image-baseline.mjs
       - name: Probar permisos e ilustraciones de los ejercicios
         run: node --test tests/*.test.mjs
       - name: Verificar archivos esenciales
