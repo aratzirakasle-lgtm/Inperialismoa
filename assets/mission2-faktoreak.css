@@ -1544,3 +1544,45 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  }
  .m2-first-room .m2-case-spot:after{left:4px}
 }
+
+
+/* Cantoneras forjadas y perspectiva suave, comparadas con la lámina aprobada. */
+.m2-first-room .m2-museum-title{
+  overflow:visible;
+  border-radius:9px 9px 18px 18px;
+  box-shadow:0 0 0 2px #5f2b19,0 6px 0 #412417,0 11px 16px #000b,
+    inset 0 0 0 2px #f7ca82a6,inset 0 4px 10px #efb37132;
+}
+.m2-first-room .m2-museum-title:before,
+.m2-first-room .m2-museum-title:after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  top:-12px;
+  width:64px;height:57px;
+  background:url('./m2-title-brass-corner.svg') center/contain no-repeat;
+  filter:drop-shadow(0 2px 3px #190b09bd);
+  pointer-events:none;
+}
+.m2-first-room .m2-museum-title:before{left:-13px}
+.m2-first-room .m2-museum-title:after{right:-13px;transform:scaleX(-1)}
+.m2-first-room .m2-case-spot:before{
+  background:radial-gradient(ellipse at 50% 0%,#fff7cf40 0%,#ffedb21c 39%,transparent 80%);
+  opacity:.82;
+}
+.m2-first-room .m2-case-spot:after{
+  box-shadow:0 0 7px 3px #ffe7ad,0 0 13px 4px var(--case-glow);
+}
+@media(min-width:901px){
+ .m2-first-room .m2-museum-desktop{
+   clip-path:polygon(1.8% 0,98.2% 0,100% 91%,99% 100%,1% 100%,0 91%);
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-title:before,
+ .m2-first-room .m2-museum-title:after{
+   top:-8px;width:37px;height:34px;
+ }
+ .m2-first-room .m2-museum-title:before{left:-7px}
+ .m2-first-room .m2-museum-title:after{right:-7px}
+}
