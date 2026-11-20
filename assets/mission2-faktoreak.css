@@ -1913,3 +1913,138 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 @media(prefers-reduced-motion:reduce){
  .m2-first-room .m2-archive-card{transition:none!important}
 }
+
+
+/* ═══ M2 E1 · cartelas completas en vitrinas (sin recortes) ═══
+   Un volumen de tarjetas variable nunca debe superar el fondo, quedarse
+   detrás de los herrajes ni forzar la anchura del resto de los muebles.
+   No afecta a ninguna otra pantalla. */
+.m2-first-room .m2-museum-cabinet-wall{
+ align-items:stretch;
+ grid-auto-rows:minmax(min-content,auto);
+}
+.m2-first-room .m2-museum-case{
+ min-width:0;
+ height:auto;
+ max-height:none;
+ overflow:visible;
+ align-self:stretch;
+}
+.m2-first-room .m2-museum-case .m2-case-well{
+ box-sizing:border-box;
+ display:block;
+ min-width:0;
+ width:auto;
+ height:auto!important;
+ min-height:100px;
+ max-height:none!important;
+ overflow:visible!important;
+ padding:9px 7px 12px;
+}
+.m2-first-room .m2-museum-case .m2-case-contents{
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ grid-auto-flow:row;
+ grid-auto-rows:minmax(min-content,auto);
+ align-content:start;
+ align-items:stretch;
+ gap:5px;
+ width:100%;
+ min-width:0;
+ height:auto!important;
+ max-height:none!important;
+ overflow:visible!important;
+ position:relative;
+ z-index:2;
+}
+.m2-first-room .m2-museum-case .m2-case-contents .m2-archive-card.m2-tile{
+ box-sizing:border-box;
+ position:relative;
+ width:100%;
+ max-width:100%;
+ min-width:0;
+ height:auto!important;
+ min-height:45px!important;
+ overflow:visible!important;
+ display:flex!important;
+ flex-direction:row;
+ flex-wrap:nowrap;
+ align-items:center;
+ justify-content:flex-start;
+ gap:4px;
+ padding:4px 5px 4px 3px!important;
+ border-radius:6px!important;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+ box-sizing:border-box;
+ flex:0 0 28px;
+ width:28px;
+ min-width:28px;
+ height:28px;
+ display:grid!important;
+ place-items:center;
+ padding:0;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-miniature{
+ display:block;
+ width:100%;
+ height:100%;
+ max-width:100%;
+ object-fit:contain;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-copy-group{
+ display:flex;
+ flex:1 1 auto;
+ min-width:0;
+ width:auto;
+ max-width:100%;
+ height:auto;
+ padding:0;
+ overflow:visible;
+ align-items:flex-start;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{
+ display:block;
+ width:100%;
+ min-width:0;
+ max-width:100%;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
+ word-break:normal;
+ hyphens:auto;
+ line-height:1.22!important;
+ text-align:left;
+ text-overflow:clip;
+ overflow:visible;
+}
+.m2-first-room .m2-museum-case .m2-case-foundation{
+ position:relative;
+ margin-top:9px;
+}
+/* Ajustes de la miniatura a paneles estrechos, sin ocultarla. */
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case .m2-case-well{padding:8px 5px 12px}
+ .m2-first-room .m2-museum-case .m2-case-contents{gap:5px}
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+  flex-basis:26px;width:26px;min-width:26px;height:26px;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case .m2-case-well{
+  min-height:84px;
+  padding:7px 4px 10px;
+ }
+ .m2-first-room .m2-museum-case .m2-case-contents{gap:4px}
+ .m2-first-room .m2-museum-case .m2-case-contents .m2-archive-card.m2-tile{
+  min-height:43px!important;
+  padding:4px 3px!important;
+  gap:3px;
+ }
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+  flex-basis:24px;width:24px;min-width:24px;height:24px;
+ }
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{
+  font-size:clamp(10px,2.65vw,11px)!important;
+  line-height:1.22!important;
+ }
+}
