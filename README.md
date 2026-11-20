@@ -64,9 +64,22 @@ node tests/check-html-scripts.mjs
 node --test tests/*.test.mjs
 ```
 
-GitHub Actions ejecuta estas pruebas en cada actualización de `main`. Cubren la sintaxis, existencia de archivos y enlaces, las cinco pantallas, las restricciones de navegación, los gráficos pequeños y algunos problemas previos de renderizado. **No equivalen a una prueba funcional real** con varias sesiones de alumnos y profesor.
+GitHub Actions ejecuta las comprobaciones estáticas y una batería adicional de **pruebas reales con Chromium**. Estas últimas simulan cuentas de profesor y alumno mediante un Supabase ficticio: validan bloqueos, libre navegación docente, visibilidad de las nueve tarjetas europeas en ordenador/tableta, fases finales y recuperación local de tarjetas sin escribir datos en el proyecto Supabase.
 
-Antes de utilizar cuentas de alumnado real: completar pruebas de extremo a extremo, accesibilidad y diferentes tamaños de pantalla; comprobar registros de Supabase, privacidad de expedientes e intentos, concurrencia, copias de seguridad y requisitos del centro/RGPD.
+Para ejecutar las pruebas de navegador localmente:
+
+```bash
+npm install --no-save --no-package-lock playwright@1.56.1
+npx playwright install chromium
+python3 -m http.server 8765 &
+node tests/browser-smoke.mjs
+```
+
+**Criterio pedagógico:** tras una respuesta incorrecta se muestra únicamente un aviso de corrección, **sin pistas históricas sobre la respuesta**. Los botones de ayuda explican el manejo de las tarjetas. Las fuentes y documentos históricos que forman parte del ejercicio 4 se conservan.
+
+**Borradores:** el ejercicio 1 conserva en `sessionStorage` las tarjetas todavía sin enviar, separadas por alumno y equipo. Si se recarga y se vuelve a abrir la galería en la misma pestaña, se restauran las posiciones provisionales; no se registran como aciertos ni modifican Supabase. La vista docente no guarda borradores. El archivo `assets/accesibilidad-juegos.css` incorpora foco visible y reducción del movimiento cuando el usuario lo solicita en su dispositivo.
+
+Las pruebas de Chromium se realizan con Supabase **simulado**, por lo que **todavía falta un ensayo completo con cuentas reales** que verifique la persistencia, la concurrencia y el desbloqueo de la misión 2 en el servidor. Antes de utilizar datos de menores, comprobar privacidad, copias de seguridad y requisitos del centro/RGPD.
 
 ## Auditoría y conservación
 
