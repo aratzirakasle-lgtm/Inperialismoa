@@ -273,7 +273,7 @@ function updateScene(){
 function feedbackMessage(result){
  if(!result)return '';
  if(result.correct){return `<div class="dossier-feedback good" role="status"><strong>✓ Zuzen!</strong> ${escapeHtml(result.explanation||'Espedientea argitu duzue.')}<p>Globoan lotura historikoa argitu da.</p></div>`}
- if(result.wrong){return `<div class="dossier-feedback bad" role="status"><strong>Oraindik ez.</strong> Berrikusi pistak eta saiatu berriro; oraindik ez da loturarik argitu.</div>`}
+ if(result.wrong){return `<div class="dossier-feedback bad" role="status"><strong>Oraindik ez.</strong> Erantzuna ez da zuzena. Saiatu berriro.</div>`}
  return '';
 }
 /* Banderas reales en SVG, con fondo transparente alrededor y sin recuadro extra. */
