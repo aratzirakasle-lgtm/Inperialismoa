@@ -285,6 +285,79 @@ try{
   }
  });
 
+
+ await scenario('Tercer ejercicio: libro histórico con cinco respuestas y sin pistas',async()=>{
+  const {page,context,errors}=await open('teacher',{width:1672,height:941});
+  try{
+   await page.locator('[data-open="3"]').click();
+   await page.locator('.m2-migration-book').waitFor({state:'visible'});
+   assert.equal(await page.locator('.m2-migration-folio').count(),2);
+   assert.equal(await page.locator('.m2-ledger-year').count(),3);
+   assert.equal(await page.locator('.m2-migration-dossier').count(),2);
+   assert.deepEqual(await page.locator('select[data-field]').evaluateAll(els=>els.map(el=>el.dataset.field)),
+    ['1850','1870','1900','migration','missionaries']);
+   const art=await page.locator('.m2-migration-gallery img').evaluateAll(imgs=>imgs.map(img=>({loaded:img.complete&&img.naturalWidth>0,src:img.getAttribute('src')})));
+   assert.equal(art.length,3);
+   assert.ok(art.every(img=>img.loaded),JSON.stringify(art));
+   assert.deepEqual(await page.locator('.m2-migration-gallery select').evaluateAll(els=>els.map(el=>el.value)),['','','','','']);
+   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/0 \/ 5/);
+   // Selecting a deliberately incorrect value must not reveal a hint or mark it as correct.
+   await page.locator('[data-field="1850"]').selectOption('450');
+   assert.equal(await page.locator('[data-field="1850"]').inputValue(),'450');
+   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/1 \/ 5/);
+   assert.equal(await page.locator('.m2-migration-gallery [data-state="error"]').count(),0);
+   await page.locator('[data-field="1870"]').selectOption('310');
+   await page.locator('[data-field="1900"]').selectOption('400');
+   await page.locator('[data-field="migration"]').selectOption('sea_control');
+   await page.locator('[data-field="missionaries"]').selectOption('merchants_only');
+   assert.match(await page.locator('.m2-migration-progress-count').innerText(),/5 \/ 5/);
+   await page.screenshot({path:'test-output/m2-e3-ledger-filled-1672x941.png',fullPage:true,animations:'disabled'});
+   // Navigating away/back preserves student-owned draft, not pre-filled correct answers.
+   await page.locator('[data-open="4"]').click();
+   await page.locator('[data-open="3"]').click();
+   assert.equal(await page.locator('[data-field="1850"]').inputValue(),'450');
+   assert.equal(await page.locator('[data-field="migration"]').inputValue(),'sea_control');
+   assert.deepEqual(await page.evaluate(()=>window.__m2RpcCalls),[]);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+ await scenario('Tercer ejercicio: texto, controles e ilustraciones visibles de 320 a 1672 px',async()=>{
+  for(const size of [{width:1672,height:941},{width:1365,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:700}]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    await page.locator('[data-open="3"]').click();
+    await page.locator('.m2-migration-gallery').waitFor({state:'visible'});
+    const metrics=await page.locator('.m2-migration-gallery').evaluate(root=>{
+     const rect=el=>el.getBoundingClientRect();
+     const fields=[...root.querySelectorAll('select')];
+     const folios=[...root.querySelectorAll('.m2-migration-folio')];
+     const r=rect(root);
+     return{
+      horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
+      foliosVisible:folios.every(f=>{const b=rect(f);return b.width>0&&b.height>0&&b.left>=-1&&b.right<=innerWidth+1}),
+      controlsVisible:fields.every(field=>{
+       const b=rect(field),parent=rect(field.parentElement);
+       return b.width>=100 && b.height>=40 &&
+         b.left>=parent.left-2 && b.right<=parent.right+2 &&
+         b.left>=-1 && b.right<=innerWidth+1;
+      }),
+      textFits:[...root.querySelectorAll('.m2-migration-question-title')].every(el=>{
+       const b=rect(el);return b.width>100&&el.scrollHeight<=el.clientHeight+2;
+      }),
+      galleryWidth:r.width
+     };
+    });
+    assert.equal(metrics.horizontalOverflow,false,JSON.stringify({size,metrics}));
+    assert.equal(metrics.foliosVisible,true,JSON.stringify({size,metrics}));
+    assert.equal(metrics.controlsVisible,true,JSON.stringify({size,metrics}));
+    assert.equal(metrics.textFits,true,JSON.stringify({size,metrics}));
+    if([1672,390,320].includes(size.width))
+     await page.screenshot({path:'test-output/m2-e3-ledger-'+size.width+'.png',fullPage:true,animations:'disabled'});
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
+
  await scenario('Referencia 16:9 en 1672×941: cinco vitrinas y escenografía visible',async()=>{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{
