@@ -98,3 +98,12 @@ El material ilustrado del concepto aprobado se ha convertido en archivos SVG aut
 - La vitrina y las tarjetas continúan siendo DOM/CSS/JavaScript independiente de las imágenes: no se integra la imagen de la maqueta como una pantalla inmóvil.
 
 La validación visual debe incluir las capturas de **1365×900**, **1672×941** y **390×844**, además de los datos de corrección y progresión. La composición es visualmente mucho más cercana al concepto; las tarjetas son once (no las diez visibles en la imagen artística), pues se conserva íntegra la actividad didáctica.
+
+
+### 20/11/2026 · Altzariak: vitrinas y mesa del primer ejercicio
+
+Actualización **real en los componentes HTML/CSS** del primer ejercicio, sin generar una lámina sustitutiva: las cinco vitrinas son muebles interactivos con crestería de latón en `assets/m2-vitrine-gilt-crest.svg`, doble marco, cristal iluminado, placa de clasificación pulsable y pie de madera con herrajes. Cada contenedor crece para mostrar todas las cartelas, aun al depositar once en una sola categoría.
+
+El mostrador inferior se ha reconstruido con madera pulida en perspectiva, molduras, bandeja interior, cartelas de pergamino y cajón frontal. La distribución inicial utiliza seis tarjetas en la primera fila y cinco en una segunda fila que ocupa **todo el ancho del mostrador**. En móvil, la tarjeta que queda sola se centra. El rótulo «Ideologikoak / zientifikoak» aparece en dos líneas para evitar compresión o cortes.
+
+La auditoría automática verifica cargas de las escenas, cinco vitrinas, aristas decorativas, tarjetas arrastrables, recolocación, once cartelas visibles en el mismo compartimento, distribución de la segunda fila, legibilidad del título en móvil y recorrido secuencial de los cinco ejercicios. **Las claves privadas, la RPC y las pantallas de la primera misión no han cambiado.** La rama sigue en borrador, sin publicar ni fusionar.
