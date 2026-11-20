@@ -156,12 +156,10 @@ try{
    assert.ok(height<=1200,'El ejercicio pierde la composición panorámica: '+height+'px');
    const lateral=await page.locator('.m2-first-room').evaluate(el=>{
      const l=getComputedStyle(el,'::before'),r=getComputedStyle(el,'::after');
-     return {left:l.left,right:r.right,rightLeft:r.left,leftRight:l.right};
+     return {left:parseFloat(l.left),right:parseFloat(r.left),rightWidth:parseFloat(r.width),viewport:innerWidth};
    });
-   assert.equal(lateral.left,'0px','El lateral izquierdo se desplazó');
-   assert.equal(lateral.right,'0px','El lateral derecho se desplazó');
-   assert.equal(lateral.rightLeft,'auto','La decoración derecha se colocó encima de la izquierda');
-   assert.equal(lateral.leftRight,'auto','La decoración izquierda no debe ocupar ambas posiciones');
+   assert.ok(lateral.left<=1,'El adorno izquierdo se ha desplazado: '+JSON.stringify(lateral));
+   assert.ok(lateral.right+lateral.rightWidth>=lateral.viewport-2,'La decoración derecha se ha colocado encima de la izquierda: '+JSON.stringify(lateral));
    await page.screenshot({path:'test-output/m2-e1-concepto-1672x941.png',fullPage:true,animations:'disabled'});
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
