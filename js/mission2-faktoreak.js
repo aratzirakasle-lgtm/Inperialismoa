@@ -173,20 +173,20 @@ function renderClassification(){
  const cabinets=categories.map(cat=>{
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
   return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
-   '<div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<span class="m2-case-crown" aria-hidden="true"></span><div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
    '<h3 class="m2-case-title"><button type="button" class="m2-case-title-action" aria-label="'+esc(cat.label)+' faktorean kokatu">'+esc(cat.label)+'</button></h3></div>'+
    '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
    '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
    (!inside.length?'<span class="m2-case-empty">0 kartela kokatuta</span>':'')+
-   '</div><span class="m2-case-foot" aria-hidden="true"></span></article>';
+   '</div><span class="m2-case-foot" aria-hidden="true"></span><span class="m2-case-foundation" aria-hidden="true"><span class="m2-case-lock"></span></span></article>';
  }).join('');
  const unassigned=causes.filter(c=>!assigned[c.id]);
  return '<section class="m2-museum-interaction" aria-label="Bost faktoreen kabinetearen sailkapena">'+
   '<div class="m2-museum-cabinet-wall">'+cabinets+'</div>'+
-  '<div class="m2-museum-desktop"><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
+  '<div class="m2-museum-desktop"><span class="m2-desk-left-trim" aria-hidden="true"></span><span class="m2-desk-right-trim" aria-hidden="true"></span><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
   '<span class="m2-museum-drag">☞ &nbsp; Aukeratu edo arrastatu</span></div>'+
   '<div class="m2-museum-cards" data-unassign aria-label="Sailkatu gabeko kartelak">'+unassigned.map(tile).join('')+
-  (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div></div></section>';
+  (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div><span class="m2-desk-front" aria-hidden="true"><span class="m2-desk-cabinet"></span></span></div></section>';
 }
 
 function renderTimeline(){
