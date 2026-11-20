@@ -6,7 +6,7 @@ import {chromium} from 'playwright';
 import {mkdir} from 'node:fs/promises';
 
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE_CHROME==='1'?'chrome':undefined,args:['--no-sandbox']});
 let count=0;
 async function open(role='student',size={width:1365,height:900},badge=true){
  const context=await browser.newContext({viewport:size,reducedMotion:'reduce'});
