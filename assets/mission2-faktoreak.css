@@ -3768,3 +3768,35 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 @media(max-width:680px){
  .m2-atlas-home-link{order:3}
 }
+
+
+/* Arte ORIGINAL de la imagen aprobada, no iconos reconstruidos.
+   Recortado, comprimido y reutilizado como capas decorativas no interactivas. */
+@media(min-width:1101px){
+ .m2-atlas-screen:before{
+  height:77px;
+  background:
+   url('./m2-atlas-header-left.webp') left top/auto 77px no-repeat,
+   url('./m2-atlas-header-right.webp') right top/auto 77px no-repeat,
+   linear-gradient(90deg,#5a311f,#2c1c17 35%,#382219 65%,#693c22);
+ }
+ .m2-atlas-main:before{
+  content:"";
+  position:absolute;
+  z-index:7;
+  left:10.65%;
+  top:clamp(89px,6.88vw,115px);
+  width:16.81%;
+  aspect-ratio:281/149;
+  background:url('./m2-atlas-travelers-cutout.webp') center/100% 100% no-repeat;
+  pointer-events:none;
+  filter:drop-shadow(0 3px 2px #1c120e70);
+ }
+ .m2-atlas-main .m2-atlas-pop-list{position:relative;z-index:9}
+ .m2-atlas-main .m2-atlas-pop{
+  z-index:auto;
+ }
+}
+@media(min-width:1101px) and (max-width:1420px){
+ .m2-atlas-main:before{left:10.4%;top:99px;width:17.3%}
+}
