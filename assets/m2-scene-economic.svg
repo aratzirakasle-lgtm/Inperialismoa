@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="300" viewBox="0 0 230 150" role="img"><defs><radialGradient id="ambient"><stop stop-color="#b8472c" stop-opacity=".85"/><stop offset=".68" stop-color="#7a2f24" stop-opacity=".72"/><stop offset="1" stop-color="#7a2f24"/></radialGradient></defs><path d="M0 150V54Q0 0 115 0T230 54V150" fill="url(#ambient)"/><path d="M0 150V54Q0 0 115 0T230 54V150" fill="none" stroke="#f1c37a" stroke-opacity=".48" stroke-width="4"/><g transform="translate(22 18)">
+<path d="M4 113q87 12 178 0v14H4z" fill="#6b2b1b" opacity=".6"/>
+<g stroke="#8b4c17" stroke-width="2.5">
+<g transform="translate(12 59)"><path d="M0 15v20q19 15 48 0V15" fill="#d1901f"/><ellipse cx="24" cy="15" rx="24" ry="9" fill="#ffe270"/><path d="M0 23q23 12 48 0M0 31q23 12 48 0" fill="none" stroke="#ffcd5f"/></g>
+<g transform="translate(61 37)"><path d="M0 18v49q27 15 55 0V18" fill="#d18a13"/><ellipse cx="27" cy="18" rx="28" ry="11" fill="#ffe57b"/><path d="M0 30q25 15 55 0M0 41q25 15 55 0M0 52q25 15 55 0M0 63q25 15 55 0" fill="none" stroke="#ffe383"/></g>
+<g transform="translate(115 47)"><path d="M0 15v45q21 12 45 0V15" fill="#e1a129"/><ellipse cx="22" cy="15" rx="23" ry="8" fill="#ffed89"/><path d="M0 25q22 11 45 0M0 37q22 11 45 0M0 49q22 11 45 0" fill="none" stroke="#ffe383"/></g></g>
+<ellipse cx="101" cy="125" rx="98" ry="8" fill="#3f1f16" opacity=".34"/>
+</g></svg>
