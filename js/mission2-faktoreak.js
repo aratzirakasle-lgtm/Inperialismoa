@@ -177,9 +177,12 @@ function museumInstruction(){
 function renderClassification(){
  const state=taskState(1),assigned=state.assignments||{};
  function tile(c){
-  return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card" title="'+esc(c.label)+'" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
-   '<span class="m2-museum-card-art" aria-hidden="true">'+museumIllustration(museumCardArt[c.id])+'</span>'+
-   '<span class="m2-museum-card-copy">'+esc(museumCardShort[c.id]||c.label)+'</span></button>';
+  const catalogNumber=String(causes.indexOf(c)+1).padStart(2,'0');
+  return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card m2-archive-card" title="'+esc(c.label)+'" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
+   '<span class="m2-museum-card-art" aria-hidden="true"><img class="m2-card-miniature" src="./assets/m2-card-'+c.id+'.svg" alt="" draggable="false" loading="eager"></span>'+
+   '<span class="m2-card-copy-group"><span class="m2-museum-card-copy">'+esc(museumCardShort[c.id]||c.label)+'</span>'+
+   '<span class="m2-card-archive-mark" aria-hidden="true">AGIRIA · '+catalogNumber+'</span></span>'+
+   '<span class="m2-card-foil" aria-hidden="true">✦</span></button>';
  }
  const cabinets=categories.map(cat=>{
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
