@@ -55,6 +55,10 @@ try{
    assert.equal(await page.locator('.m2-case-foundation').count(),5);
    assert.equal(await page.locator('.m2-desk-front').count(),1);
    assert.equal(await page.locator('.m2-case-scene').count(),5);
+   assert.equal(await page.locator('.m2-case-details').count(),5,'Cinco vitrinas con objetos y figuras decorativas');
+   const ornate=await page.locator('.m2-case-title').first().evaluate(el=>getComputedStyle(el).backgroundImage.includes('m2-ref-ornate-plaque.svg'));
+   assert.ok(ornate,'Las placas doradas deben usar la ornamentación histórica');
+
    assert.equal(await page.locator('.m2-case-spot').count(),5,'Las vitrinas necesitan sus cinco focos');
    const sceneLayout=await page.locator('.m2-case-scene').evaluateAll(images=>images.map(img=>({
      loaded:img.complete&&img.naturalWidth>0,
@@ -165,6 +169,11 @@ try{
      return {lastEdge:last?.right??0,edge:rect.right};
    });
    assert.ok(cardLayout.edge-cardLayout.lastEdge<25,'La segunda fila de cartelas debe ocupar toda la mesa');
+   const dimensions=await page.evaluate(()=>{
+     const names=['.m2-museum-interaction','.m2-museum-cabinet-wall','.m2-museum-desktop','.m2-controls'];
+     return names.map(sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {part:sel,x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}});
+   });
+   console.log('M2 museum geometry 1672×941:',JSON.stringify(dimensions));
    const {overflow,height}=await page.evaluate(()=>({
      overflow:document.documentElement.scrollWidth-innerWidth,
      height:document.documentElement.scrollHeight
