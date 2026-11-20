@@ -311,7 +311,7 @@ try{
    assert.equal(await page.locator('.m2-atlas-statement').count(),5);
    assert.equal(await page.locator('.m2-atlas-luggage-card').count(),8);
    assert.equal(await page.locator('[data-atlas-bag-zone].m2-atlas-suitcase').count(),2);
-   assert.equal(await page.locator('[data-check]').isDisabled(),true);
+   assert.equal(await page.locator('.m2-atlas-check[data-atlas-stage="4"]').isDisabled(),true);
    const imgs=await page.locator('.m2-atlas-screen img').evaluateAll(els=>els.map(i=>({name:i.src,loaded:i.complete&&i.naturalWidth>0})));
    assert.ok(imgs.length>=5&&imgs.every(x=>x.loaded),JSON.stringify(imgs));
    await page.screenshot({path:'test-output/m2-e3-atlas-initial-1672x941.png',fullPage:true,animations:'disabled'});
