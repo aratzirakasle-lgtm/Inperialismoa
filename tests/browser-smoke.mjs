@@ -130,6 +130,18 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
+ await scenario('Galería: las nueve tarjetas europeas también quedan visibles en tableta',async()=>{
+   const {page,context,errors}=await open('student','index.html#mission1gallery',{width:768,height:1024});
+   try{
+     await waitVisible(page,'.gal-hall');
+     for(const id of ['eu_auth_head','eu_army','eu_monarch','eu_parliament'])await setCard(page,id,'eu_auth');
+     for(const id of ['eu_liberal_head','eu_separation','eu_rights','eu_vote','eu_social'])await setCard(page,id,'eu_liberal');
+     const result=await verifyCardsInsideZones(page);
+     assert.deepEqual(result.map(x=>x.items),[4,5]);
+     assert.deepEqual(result.map(x=>x.overflow),[0,0]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Alumno: la segunda pantalla no se abre si la primera está pendiente',async()=>{
    const {page,context,errors}=await open('student','bi-sistema.html');
    try{
@@ -138,6 +150,16 @@ try{
      assert.equal(await page.locator('.m1-nav').count(),0);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Alumno: no puede abrir directamente los ejercicios tercero y cuarto',async()=>{
+   for(const path of ['inperialismoaren-definizioa.html','inperioen-aztarnak.html']){
+     const {page,context,errors}=await open('student',path);
+     try{
+       await waitVisible(page,'.gal-hall');
+       assert.ok(page.url().includes('index.html'),path);
+       assert.deepEqual(errors,[]);
+     }finally{await context.close()}
+   }
  });
  await scenario('Alumno: tampoco puede abrir directamente el quinto ejercicio',async()=>{
    const {page,context,errors}=await open('student','esaldiak-osatu.html');
@@ -167,6 +189,22 @@ try{
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Profesor: ejercicios tercero y cuarto y pantallas finales sin guardar',async()=>{
+   const views=[
+     {path:'inperialismoaren-definizioa.html?preview=1',after:'.scene.solved'},
+     {path:'inperioen-aztarnak.html?preview=1',after:'#dossier-heading'}
+   ];
+   for(const {path,after} of views){
+     const {page,context,errors}=await open('teacher',path);
+     try{
+       await waitVisible(page,'.m1-nav');
+       await page.getByRole('button',{name:'Amaierako pantaila'}).click();
+       await waitVisible(page,after);
+       assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+       assert.deepEqual(errors,[]);
+     }finally{await context.close()}
+   }
  });
  await scenario('Profesor: quinto ejercicio, final simulado sin guardar',async()=>{
    const {page,context,errors}=await open('teacher','esaldiak-osatu.html?preview=1');
