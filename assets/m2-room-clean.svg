@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="950" viewBox="0 0 1680 950">
+<title>Inperialismoaren garaiko museoaren barrualdea: atlasak, lanparak, globoak, dokumentu historikoak eta erakusleihoak</title>
+<defs>
+<linearGradient id="wall" x2=".15" y2="1"><stop stop-color="#61716a"/><stop offset=".48" stop-color="#2e5654"/><stop offset="1" stop-color="#132b2c"/></linearGradient>
+<linearGradient id="marble" x2="1" y2="1"><stop stop-color="#e9c995"/><stop offset=".45" stop-color="#a26e35"/><stop offset=".67" stop-color="#f6d697"/><stop offset="1" stop-color="#754c2a"/></linearGradient>
+<linearGradient id="wood" x2="0" y2="1"><stop stop-color="#94532f"/><stop offset=".35" stop-color="#492616"/><stop offset=".75" stop-color="#6e341f"/><stop offset="1" stop-color="#211c19"/></linearGradient>
+<radialGradient id="lamp"><stop stop-color="#fff2bb" stop-opacity=".62"/><stop offset=".43" stop-color="#ffdc8d" stop-opacity=".2"/><stop offset="1" stop-color="#ffbd63" stop-opacity="0"/></radialGradient>
+<radialGradient id="globe"><stop stop-color="#f4d9a0"/><stop offset=".65" stop-color="#cfad68"/><stop offset="1" stop-color="#806036"/></radialGradient>
+<linearGradient id="photo" x2=".2" y2="1"><stop stop-color="#f3e5c7"/><stop offset="1" stop-color="#967c61"/></linearGradient>
+<pattern id="wallgrain" width="11" height="11" patternUnits="userSpaceOnUse"><path d="M0 3H11M0 9H11" stroke="#061b1d" stroke-opacity=".08" stroke-width=".6"/></pattern>
+<pattern id="woodgrain" width="90" height="65" patternUnits="userSpaceOnUse"><path d="M0 14q45-13 90 2M0 32q38 13 90-4M0 51q42-14 90 1" stroke="#da9a5f" stroke-opacity=".23" stroke-width="2" fill="none"/></pattern>
+<pattern id="mapgrid" width="29" height="29" patternUnits="userSpaceOnUse"><path d="M0 0H29M0 0V29" stroke="#9a6b49" stroke-opacity=".32" fill="none" stroke-width="1"/></pattern>
+</defs>
+<!-- architectural wood-and-stone museum interior -->
+<rect width="1680" height="950" fill="url(#wall)"/><rect width="1680" height="950" fill="url(#wallgrain)"/>
+<path d="M0 0H1680V94H0z" fill="#1f322f"/><path d="M0 73H1680" stroke="#bb8244" stroke-width="8"/><path d="M0 83H1680" stroke="#e6b870" stroke-width="2"/>
+<g opacity=".64" stroke="#b59f75" fill="none">
+<path d="M1330-22Q1515-44 1700 147M1417-27Q1620 2 1661 205M1452-20Q1600 53 1608 226" stroke-width="21" opacity=".16"/>
+<path d="M0 165V792M157 0V820M1496 0V821M1680 85V820" stroke-width="10" opacity=".24"/>
+<path d="M1416 119q117-112 234 0v410" stroke-width="12" opacity=".22"/>
+</g>
+<ellipse cx="470" cy="170" rx="340" ry="270" fill="url(#lamp)"/><ellipse cx="1360" cy="175" rx="235" ry="210" fill="url(#lamp)" opacity=".38"/>
+<!-- victorian overhead lamp -->
+<g transform="translate(370 -20)">
+<path d="M0 0V84" stroke="#1e1c1d" stroke-width="11"/><path d="M-5 0V84" stroke="#b88d48" stroke-width="3"/>
+<path d="M-17 80H17l13 11H-30z" fill="#a06c2e" stroke="#281f1c" stroke-width="5"/>
+<path d="M-20 85q-13 13-49 64h138Q30 99 20 85z" fill="url(#marble)" stroke="#3c2619" stroke-width="7"/>
+<path d="M-62 140Q0 155 62 140" stroke="#f5d595" stroke-width="6" fill="none"/>
+<ellipse cy="152" rx="53" ry="12" fill="#f5d988" stroke="#744724" stroke-width="5"/>
+<ellipse cy="162" rx="33" ry="7" fill="#fffbd2" opacity=".5"/>
+</g>
+<!-- museum carved wooden base -->
+<rect x="0" y="873" width="1680" height="77" fill="url(#wood)" stroke="#ae733b" stroke-width="8"/>
+<rect x="0" y="873" width="1680" height="77" fill="url(#woodgrain)"/>
+<path d="M0 876H1680M0 894H1680" stroke="#d4a15a" stroke-width="4"/>
+<g fill="none" stroke="#a97542" stroke-width="3" opacity=".6">
+<rect x="25" y="903" width="255" height="37"/><rect x="303" y="903" width="255" height="37"/>
+<rect x="580" y="903" width="255" height="37"/><rect x="857" y="903" width="255" height="37"/>
+<rect x="1135" y="903" width="255" height="37"/><rect x="1412" y="903" width="255" height="37"/>
+</g>
+</svg>
