@@ -18,7 +18,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const url=new URLSearchParams(location.search);
 let client,teamId=null,teacherPreview=false;
 let locked=new Set(),positions={},challengeLocked=new Set(),pending={},selected=null;
-let challengePending={},busy=true,feedback="Taldearen datuak kargatzen…",warning=false,hintLevel=0;
+let challengePending={},busy=true,feedback="Taldearen datuak kargatzen…",warning=false,helpOpen=false;
 let phase="classify",completed=false,dragging=null,suppressClick=false;
 // Mantener cada concepto en su hueco: las demás cartelas no se desplazan al añadir la última.
 const slotAssignments=new Map();
@@ -91,10 +91,8 @@ function paint(){
   note.textContent=feedback||"";
   note.classList.toggle("bi-error",warning);
   if(hintBox){
-    hintBox.hidden=!hintLevel;
-    hintBox.textContent=hintLevel===1?
-      "Pista: nork kontrolatzen du parlamentua? Eta zer esan nahi du botere-banaketa izateak?":
-      "Beste pista bat: monarkaren agintea eta armadaren pisua aztertu; beste sisteman, askatasun politikoen zabaltzeari begiratu.";
+    hintBox.hidden=!helpOpen;
+    hintBox.textContent="Erabilera: hautatu txartel bat eta sakatu aretoa, edo arrastatu txartela. Egin klik «Erantzunak egiaztatu» botoian kokapena egiaztatzeko.";
   }
   controls.check.disabled=busy||completed||phase!=="classify"||
     !TRAITS.some(t=>pending[t.id]);
@@ -127,7 +125,7 @@ function move(id,target){
   paint();
 }
 function reset(){if(busy)return;pending={};selected=null;warning=false;feedback="Gorde gabeko txartelak mahaira itzuli dira. Zuzenak mantendu dira.";paint()}
-function hint(){hintLevel=hintLevel===2?0:hintLevel+1;paint()}
+function toggleHelp(){helpOpen=!helpOpen;paint()}
 async function fetchState(){
   if(!teamId||teacherPreview)return;
   const {data,error}=await client.from("bi_sistema_team_state")
@@ -298,7 +296,7 @@ function initInteractions(){
     }
   });
   stage.addEventListener("pointercancel",()=>{dragging?.ghost?.remove();dragging=null});
-  controls.help.addEventListener("click",hint);
+  controls.help.addEventListener("click",toggleHelp);
   controls.reset.addEventListener("click",reset);
   controls.check.addEventListener("click",()=>void checkCards());
   $(".bi-back").addEventListener("click",e=>{
