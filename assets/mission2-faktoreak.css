@@ -1371,3 +1371,32 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-first-room .m2-desk-front{margin:9px -8px -8px;height:20px}
  .m2-first-room .m2-controls{margin-top:14px;border-top-width:3px;border-bottom-width:3px}
 }
+
+/* Legibilidad del rótulo largo y equilibrio de las dos filas de tarjetas. */
+.m2-first-room .m2-case-title-action{
+ min-width:0;max-width:100%;white-space:normal;
+ overflow-wrap:anywhere;word-break:normal;text-wrap:balance;
+}
+@media(min-width:901px){
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)){
+  grid-template-columns:repeat(30,minmax(0,1fr));
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)) > .m2-museum-card:nth-child(-n+6){
+  grid-column:span 5;
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)) > .m2-museum-card:nth-child(n+7){
+  grid-column:span 6;
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(10)):not(:has(> .m2-museum-card:nth-child(11))){
+  grid-template-columns:repeat(30,minmax(0,1fr));
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(10)):not(:has(> .m2-museum-card:nth-child(11))) > .m2-museum-card{
+  grid-column:span 6;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-ideological .m2-case-title{min-height:51px}
+ .m2-first-room .m2-museum-cards > .m2-museum-card:last-child:nth-child(odd){
+  grid-column:1/-1;width:calc(50% - 3px);min-width:150px;justify-self:center;
+ }
+}
