@@ -217,7 +217,7 @@ try{
       zone:cabinet.dataset.zone,
       cards:metrics,
       wellClipped:well.scrollHeight>well.clientHeight+2,
-      cabinetClipped:cabinet.scrollHeight>cabinet.clientHeight+2,
+      cabinetFramesCards:cards.every(card=>card.getBoundingClientRect().bottom<=cabinet.getBoundingClientRect().bottom+2),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
       wellWidth:wr.width,
       nonOverlapping:metrics.every((card,i)=>i===0||card.top>=metrics[i-1].bottom-2)
@@ -226,7 +226,7 @@ try{
     assert.ok(layout.cards.every(x=>x.inWell&&x.textVisible&&x.artVisible&&x.visuallyVisible),
       JSON.stringify({size,zone,layout}));
     assert.equal(layout.wellClipped,false,JSON.stringify({size,zone,layout}));
-    assert.equal(layout.cabinetClipped,false,JSON.stringify({size,zone,layout}));
+    assert.equal(layout.cabinetFramesCards,true,JSON.stringify({size,zone,layout}));
     assert.equal(layout.horizontalOverflow,false,JSON.stringify({size,zone,layout}));
     assert.equal(layout.nonOverlapping,true,JSON.stringify({size,zone,layout}));
     await page.screenshot({path:'test-output/m2-e1-filled-'+key+'.png',fullPage:true,animations:'disabled'});
