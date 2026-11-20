@@ -1073,6 +1073,7 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
    content:"";
    display:block;
    position:absolute;
+   inset:auto;
    z-index:0;
    pointer-events:none;
    top:clamp(110px,8.1vw,136px);
