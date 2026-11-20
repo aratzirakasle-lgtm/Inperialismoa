@@ -223,18 +223,61 @@ function renderTimeline(){
 function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'selected':'')+'>'+esc(label)+'</option>'}
 function renderPopulation(){
  const state=taskState(3);
- const bars=[['1850',66],['1870',78],['1900',100]].map(([year,height])=>
-  '<div class="m2-chart-bar"><span class="m2-chart-column" style="height:'+height+'px" aria-hidden="true"></span><strong>'+year+'</strong>'+
-  '<label class="m2-field"><span class="m2-sr-only">'+year+'ko biztanleria</span><select data-field="'+year+'"><option value="">Milioika…</option>'+
-  ['266','310','400','450'].map(v=>option(v,v+' milioi',state[year])).join('')+'</select></label></div>'
+ const completeKeys=['1850','1870','1900','migration','missionaries'];
+ const recorded=completeKeys.filter(key=>!!state[key]).length;
+ const years=['1850','1870','1900'];
+ const folios=years.map((year,index)=>
+  '<label class="m2-ledger-year" data-ledger-year="'+year+'">'+
+  '<span class="m2-ledger-entry">SARRERA · '+String(index+1).padStart(2,'0')+'</span>'+
+  '<span class="m2-ledger-year-number">'+year+'</span>'+
+  '<span class="m2-ledger-year-caption">Europako biztanleria</span>'+
+  '<span class="m2-ledger-numeric-slot"><span class="m2-ledger-sr">Biztanle kopurua, milioitan · '+year+'</span>'+
+  '<select required data-field="'+year+'" aria-label="'+year+'ko Europako biztanleria (milioitan)">'+
+  '<option value="">Milioika aukeratu…</option>'+
+  ['266','310','400','450'].map(v=>option(v,v+' milioi',state[year])).join('')+
+  '</select></span><span class="m2-ledger-entry-status" aria-hidden="true">'+(state[year]?'IDATZITA':'HUTSIK')+'</span></label>'
  ).join('');
- return '<div class="m2-panels"><section class="m2-panel"><h3>Europako biztanleriaren erregistroa</h3><p class="m2-caption">Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
- '<div class="m2-chart">'+bars+'</div></section><section class="m2-panel"><h3>Bi espediente osagarri</h3>'+
- '<label class="m2-field">Zergatik bilatzen zuten zenbait langilek bizitza berria kolonizatutako lurretan?<select data-field="migration"><option value="">Aukeratu</option>'+
- option('better_life','Industria-herrialdeetako lan eta bizi-baldintza gogorrengatik',state.migration)+option('sea_control','Itsasontzien nagusitasun militarra lortzeko',state.migration)+option('press','Egunkari berriak zabaltzeko',state.migration)+'</select></label>'+
- '<div style="height:16px"></div><label class="m2-field">Zein elizak bultzatu zituzten misioak Asian, Afrikan eta Ozeanian?<select data-field="missionaries"><option value="">Aukeratu</option>'+
- option('catholic_protestant','Eliza katolikoak eta protestanteak',state.missionaries)+option('states_only','Estatu bakoitzeko parlamentuek soilik',state.missionaries)+option('merchants_only','Merkataritza-enpresek soilik',state.missionaries)+'</select></label>'+
- '<aside class="m2-evidence">Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</aside></section></div>';
+ return '<section class="m2-migration-gallery" aria-label="Europako biztanleriaren erregistroa eta bi espediente">'+
+  '<header class="m2-migration-gallery-head">'+
+  '<span class="m2-migration-serial">MUSEOKO ARTXIBOA · XIX. MENDEA</span>'+
+  '<h3>Migrazioen liburua</h3>'+
+  '<p>Biztanleriaren errolda eta kolonizazio garaiko migrazioei buruzko bi agiri.</p>'+
+  '<div class="m2-migration-progress" aria-label="Bost erantzunen aurrerapena">'+
+   '<span class="m2-migration-progress-count">'+recorded+' / 5 agiri osatuta</span>'+
+   '<span class="m2-migration-progress-track" aria-hidden="true"><span class="m2-migration-progress-fill" style="width:'+(recorded*20)+'%"></span></span>'+
+  '</div></header>'+
+  '<div class="m2-migration-book">'+
+  '<section class="m2-migration-folio m2-migration-register">'+
+   '<div class="m2-migration-page-head"><span>LEHEN LIBURUKIA · ZENTSUA</span><span>ERREGISTROA · 01</span></div>'+
+   '<figure class="m2-migration-engraving"><img src="./assets/m2-ledger-census.svg" alt="" draggable="false" loading="eager"><figcaption>EUROPAKO BIZTANLERIA · XIX. MENDEA</figcaption></figure>'+
+   '<h4>Europako biztanleriaren erregistroa</h4>'+
+   '<p class="m2-migration-guidance">Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
+   '<div class="m2-ledger-year-entries">'+folios+'</div>'+
+   '<span class="m2-ledger-folio-number">FOLIO 01 · 03</span>'+
+  '</section>'+
+  '<section class="m2-migration-folio m2-migration-dossiers">'+
+   '<div class="m2-migration-page-head"><span>BIGARREN LIBURUKIA · LEKUKOTASUNAK</span><span>ESPEDIENTEAK · 02</span></div>'+
+   '<h4>Bi espediente osagarri</h4>'+
+   '<article class="m2-migration-dossier m2-migration-dossier-travel">'+
+    '<div class="m2-migration-dossier-image"><img src="./assets/m2-ledger-voyage.svg" alt="" draggable="false" loading="eager"><span>01 · EMIGRAZIOA</span></div>'+
+    '<label class="m2-migration-question" data-ledger-question="migration"><span class="m2-migration-question-title">Zergatik bilatzen zuten zenbait langilek bizitza berria kolonizatutako lurretan?</span>'+
+    '<select required data-field="migration"><option value="">Aukeratu erantzuna…</option>'+
+    option('better_life','Industria-herrialdeetako lan eta bizi-baldintza gogorrengatik',state.migration)+
+    option('sea_control','Itsasontzien nagusitasun militarra lortzeko',state.migration)+
+    option('press','Egunkari berriak zabaltzeko',state.migration)+'</select>'+
+    '<span class="m2-migration-question-status" aria-hidden="true">'+(state.migration?'AGIRIA BETETA':'ERANTZUN GABE')+'</span></label></article>'+
+   '<article class="m2-migration-dossier m2-migration-dossier-faith">'+
+    '<div class="m2-migration-dossier-image"><img src="./assets/m2-ledger-missions.svg" alt="" draggable="false" loading="eager"><span>02 · MISIOAK</span></div>'+
+    '<label class="m2-migration-question" data-ledger-question="missionaries"><span class="m2-migration-question-title">Zein elizak bultzatu zituzten misioak Asian, Afrikan eta Ozeanian?</span>'+
+    '<select required data-field="missionaries"><option value="">Aukeratu erantzuna…</option>'+
+    option('catholic_protestant','Eliza katolikoak eta protestanteak',state.missionaries)+
+    option('states_only','Estatu bakoitzeko parlamentuek soilik',state.missionaries)+
+    option('merchants_only','Merkataritza-enpresek soilik',state.missionaries)+'</select>'+
+    '<span class="m2-migration-question-status" aria-hidden="true">'+(state.missionaries?'AGIRIA BETETA':'ERANTZUN GABE')+'</span></label></article>'+
+   '<aside class="m2-migration-historical-note"><span>ITURRIAREN AZTERKETA KRITIKOA</span>'+
+    '<p>Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</p></aside>'+
+   '<span class="m2-ledger-folio-number">FOLIO 02 · 03</span>'+
+  '</section></div></section>';
 }
 function renderArchive(){
  const state=taskState(4);
@@ -404,6 +447,20 @@ app.addEventListener('click',event=>{
 app.addEventListener('change',event=>{
  const target=event.target;
  if(target.matches('select[data-field]'))taskState(active)[target.dataset.field]=target.value;
+ if(active===3&&target.matches('select[data-field]')){
+  const state=taskState(3);
+  const keys=['1850','1870','1900','migration','missionaries'];
+  const count=keys.filter(key=>!!state[key]).length;
+  const counter=$('.m2-migration-progress-count');
+  if(counter)counter.textContent=count+' / 5 agiri osatuta';
+  const fill=$('.m2-migration-progress-fill');
+  if(fill)fill.style.width=(count*20)+'%';
+  const form=target.closest('.m2-ledger-year,.m2-migration-question');
+  if(form){
+   const status=form.querySelector('.m2-ledger-entry-status,.m2-migration-question-status');
+   if(status)status.textContent=target.value?(form.classList.contains('m2-ledger-year')?'IDATZITA':'AGIRIA BETETA'):(form.classList.contains('m2-ledger-year')?'HUTSIK':'ERANTZUN GABE');
+  }
+ }
  if(target.matches('input[data-archive]'))taskState(4)[target.dataset.archive]=target.value;
  const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
 });
