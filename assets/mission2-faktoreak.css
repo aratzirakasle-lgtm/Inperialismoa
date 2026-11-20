@@ -1400,3 +1400,147 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   grid-column:1/-1;width:calc(50% - 3px);min-width:150px;justify-self:center;
  }
 }
+
+
+/* REVISIÓN 3 · continuidad con el concepto museístico aprobado.
+   Cada escena se muestra COMPLETA, con iluminación propia y enmarcado real;
+   la madera inferior envuelve los controles, no un panel independiente. */
+.m2-first-room .m2-case-scene{
+  object-fit:fill;
+  object-position:center center;
+  filter:saturate(1.16) contrast(1.055) brightness(1.06);
+}
+.m2-first-room .m2-case-arch{
+  isolation:isolate;
+  overflow:visible;
+}
+.m2-first-room .m2-case-spot{
+  position:absolute;
+  z-index:4;
+  pointer-events:none;
+  top:6px;
+  left:calc(50% - 10px);
+  width:20px;
+  height:10px;
+  border:2px solid #ad6d2f;
+  border-radius:0 0 9px 9px;
+  background:radial-gradient(ellipse at 50% 0%,#fff9d8,#f5b74a 57%,#713a19);
+  box-shadow:0 0 0 1px #f8cc6b,0 3px 6px #fff1b8d1,0 0 15px var(--case-glow);
+}
+.m2-first-room .m2-case-spot:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:5px;
+  left:-55px;
+  width:125px;
+  height:93px;
+  background:radial-gradient(ellipse at 50% 0%,#fff7cf8f 0%,#fff4a622 38%,transparent 77%);
+  clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.m2-first-room .m2-case-spot:after{
+  content:"";
+  position:absolute;
+  top:0;left:6px;
+  width:4px;height:4px;
+  background:#fffef1;
+  border-radius:50%;
+  box-shadow:0 0 11px 6px #ffe0a8,0 0 20px 7px var(--case-glow);
+}
+.m2-first-room .m2-museum-case{
+  filter:drop-shadow(0 2px 3px #1409097d);
+}
+.m2-first-room .m2-case-well{
+  background:
+    radial-gradient(ellipse 60% 24% at 50% 104%,#fff5ca82,transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 24%,var(--case-color),#10120ecc 100%),
+    linear-gradient(90deg,#070909c2,transparent 13% 87%,#080909b3);
+}
+.m2-first-room .m2-case-title{
+  text-shadow:0 1px 0 #fff8db,0 0 3px #f4c87069;
+}
+.m2-first-room .m2-case-contents .m2-museum-card{
+  box-shadow:0 3px 4px #0008,inset 0 0 0 1px #fff0cd!important;
+}
+.m2-first-room .m2-case-contents .m2-museum-card[aria-pressed="true"]{
+  box-shadow:0 0 0 2px #ffe799,0 0 13px #ffd96f,0 4px 4px #0009!important;
+}
+/* Bandeja con la luz cálida reflejada y aparente inclinación:
+   el trapecio decorativo no transforma los targets de arrastre. */
+.m2-first-room .m2-museum-desktop{
+  background:
+    linear-gradient(180deg,#ffc17d52 0%,transparent 26%),
+    radial-gradient(ellipse at 16% 2%,#ffe3a26d,transparent 39%),
+    radial-gradient(ellipse at 86% 83%,#ffc87433,transparent 52%),
+    repeating-linear-gradient(0deg,#f9c47c0d 0 2px,transparent 3px 9px),
+    repeating-linear-gradient(96deg,transparent 0 24px,#2e130b21 25px 27px,transparent 30px 37px),
+    linear-gradient(170deg,#b47843,#734122 24%,#68391d 64%,#a36234 100%);
+}
+.m2-first-room .m2-museum-desktop:before{
+  inset:5px 11px 28px;
+  border-radius:12px 12px 3px 3px;
+  background:
+    linear-gradient(175deg,#f8deaf66 0%,transparent 26%),
+    linear-gradient(0deg,#fbdba42d,transparent 58%),
+    repeating-linear-gradient(2deg,#dc9f610a 0 3px,transparent 4px 10px),
+    linear-gradient(150deg,#a9703b,#7b4425 50%,#995a30);
+  box-shadow:
+    0 0 0 2px #402410,
+    inset 0 0 0 2px #ffe8a18c,
+    inset 0 5px 10px #36170c8f;
+  clip-path:polygon(1.2% 0,98.8% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-museum-desktop-top{
+  color:#ffe9bf;
+  letter-spacing:.09em;
+}
+.m2-first-room .m2-desk-front{
+  height:26px;
+  background:
+    radial-gradient(ellipse at 50% 0%,#ffe09b61,transparent 62%),
+    linear-gradient(180deg,#f7d18b 0 2px,#a46a33 3px 8px,#442110 9px 16px,#9d5a2c 17px 21px,#f5c578 22px);
+}
+@media(min-width:901px){
+ .m2-first-room .m2-controls{
+   position:relative;
+   width:100%;
+   max-width:none;
+   margin:13px auto 0;
+   grid-template-columns:minmax(150px,1fr) auto minmax(150px,1fr);
+   padding:11px max(22px,calc((100vw - 1360px)/2)) 14px;
+   border-left:0;
+   border-right:0;
+   border-radius:0;
+   box-shadow:0 -5px 0 #4b250f,0 7px 10px #0008,
+       inset 0 3px 0 #f4c888;
+ }
+ .m2-first-room .m2-controls:before{
+   content:"";
+   position:absolute;
+   pointer-events:none;
+   left:0;right:0;bottom:-14px;
+   height:17px;
+   background:linear-gradient(#7d4728 0 4px,#2d190d 5px 12px,#c08c4a 14px 17px);
+   border-bottom:2px solid #f0c477;
+ }
+ .m2-first-room .m2-controls:after{
+   color:#ffe0a5;
+   grid-column:3;
+ }
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-spot{top:6px}
+ .m2-first-room .m2-case-spot:before{height:76px}
+ .m2-first-room .m2-controls{margin-top:17px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-spot{
+   top:3px;width:16px;height:9px;left:calc(50% - 8px);
+ }
+ .m2-first-room .m2-case-spot:before{
+   left:-38px;width:92px;height:66px;
+ }
+ .m2-first-room .m2-case-spot:after{left:4px}
+}
