@@ -26,16 +26,35 @@ export const ITEMS=[
 const LOOKUP=new Map(ITEMS.map(x=>[x.id,x]));
 const ZONES=new Set(["eu_auth","eu_liberal","ru","us","jp"]);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false}={}){
+export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,draftKey=null}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
  root.__galleryCleanup=()=>controller.abort();
  const state={placements:{},locked:new Set(Array.isArray(initial.locked_ids)?initial.locked_ids:[]),completed:!!initial.completed_at,selected:null,busy:false,attempts:0,feedback:"",wrong:new Set(),help:false};
  for(const [id,zone] of Object.entries(initial.locked_positions||{})){if(LOOKUP.has(id)&&ZONES.has(zone)&&state.locked.has(id))state.placements[id]=zone}
+ // Guardado local solo de las colocaciones provisionales de esta pestaña.
+ // No conserva aciertos como si fueran válidos ni escribe nada en Supabase.
+ const saveDraft=()=>{
+   if(!draftKey)return;
+   try{
+     const pending=Object.fromEntries(Object.entries(state.placements).filter(([id])=>!state.locked.has(id)));
+     if(Object.keys(pending).length)sessionStorage.setItem(draftKey,JSON.stringify(pending));
+     else sessionStorage.removeItem(draftKey);
+   }catch(error){console.warn('Borrador local no disponible',error)}
+ };
+ if(draftKey&&!state.completed){
+   try{
+     const pending=JSON.parse(sessionStorage.getItem(draftKey)||'{}');
+     if(pending&&typeof pending==='object'&&!Array.isArray(pending)){
+       for(const [id,zone] of Object.entries(pending))
+         if(LOOKUP.has(id)&&ZONES.has(zone)&&!state.locked.has(id))state.placements[id]=zone;
+     }
+   }catch(error){console.warn('No se pudo recuperar el borrador local',error)}
+ }else if(draftKey)saveDraft();
  const count=()=>state.locked.size;
  const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy;
- const place=(id,zone)=>{if(!canMove(id)||!ZONES.has(zone))return;state.placements[id]=zone;state.selected=null;state.wrong.delete(id);state.feedback="";draw()};
- const reset=()=>{if(state.busy)return;for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];state.selected=null;state.wrong.clear();state.feedback="";draw()};
+ const place=(id,zone)=>{if(!canMove(id)||!ZONES.has(zone))return;state.placements[id]=zone;state.selected=null;state.wrong.delete(id);state.feedback="";saveDraft();draw()};
+ const reset=()=>{if(state.busy)return;for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];state.selected=null;state.wrong.clear();state.feedback="";saveDraft();draw()};
  const tile=(item,placed=false)=>{
    const locked=state.locked.has(item.id),selected=state.selected===item.id;
    return '<button type="button" class="gal-tile '+(placed?'gal-tile-placed ':'')+(locked?'gal-locked ':'')+(selected?'gal-selected ':'')+(state.wrong.has(item.id)?'gal-wrong':'')+'" data-gallery-card="'+item.id+'" draggable="'+(!locked&&!state.busy)+'" '+(locked?'disabled':'')+' aria-pressed="'+selected+'" title="'+(locked?'Zuzena':'Sakatu edo arrastatu')+'"><span class="gal-tile-icon" aria-hidden="true">'+(galleryIllustration(item.id)||esc(item.icon))+'</span><span class="gal-tile-name">'+esc(item.label)+'</span>'+(locked?'<span class="gal-tile-check" aria-label="Zuzena">✓</span>':placed?'<span class="gal-tile-move">↗</span>':'')+'</button>';
@@ -107,6 +126,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      for(const id of wrong)if(!state.locked.has(id))delete state.placements[id];
      state.completed=!!result.completed;state.attempts=Number(result.attempt_count||0);
      state.feedback=state.completed?'Bikain! 20/20. Hurrengo atala prest dago.':state.locked.size+' kontzeptu zuzen. '+wrong.length+' birkokatu behar dira. Saiakerak: '+state.attempts+'.';
+     saveDraft();
    }catch(err){state.feedback='Ezin izan dira erantzunak bidali. Egiaztatu konexioa eta saiatu berriro.'}
    finally{state.busy=false;draw()}
  }
@@ -116,12 +136,12 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const card=e.target.closest('[data-gallery-card]');
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw()}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected){place(state.selected,zone.dataset.galleryZone);return;}
-   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){delete state.placements[state.selected];state.selected=null;draw();}
+   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){delete state.placements[state.selected];state.selected=null;saveDraft();draw();}
  },{signal:controller.signal});
- root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;draw();}},{signal:controller.signal});
+ root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();}},{signal:controller.signal});
  root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
  root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
  root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
- root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');const id=e.dataTransfer.getData('text/plain');if(zone.hasAttribute('data-gallery-tray')){if(canMove(id)){delete state.placements[id];state.selected=null;draw()}}else place(id,zone.dataset.galleryZone)},{signal:controller.signal});
+ root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');const id=e.dataTransfer.getData('text/plain');if(zone.hasAttribute('data-gallery-tray')){if(canMove(id)){delete state.placements[id];state.selected=null;saveDraft();draw()}}else place(id,zone.dataset.galleryZone)},{signal:controller.signal});
  draw();
 }
