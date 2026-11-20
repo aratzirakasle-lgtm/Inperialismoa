@@ -172,6 +172,98 @@ try{
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
+
+ // Prueba visual de estrés: ninguna cartela debe salirse ni recortarse
+ // aunque las once se coloquen juntas en cualquiera de las vitrinas.
+ await scenario('Once cartelas visibles dentro de vitrinas en 5 anchuras y destinos distintos',async()=>{
+  const cases=[
+   {size:{width:1672,height:941},zone:'economic',key:'wide'},
+   {size:{width:1365,height:900},zone:'demographic',key:'desktop'},
+   {size:{width:768,height:1024},zone:'religious',key:'tablet'},
+   {size:{width:390,height:844},zone:'political',key:'mobile'},
+   {size:{width:320,height:700},zone:'ideological',key:'small-mobile'}
+  ];
+  for(const {size,zone,key} of cases){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    const cardIds=await page.locator('.m2-museum-desktop [data-card]').evaluateAll(cards=>cards.map(c=>c.dataset.card));
+    assert.equal(cardIds.length,11);
+    for(const id of cardIds){
+     await page.locator('.m2-museum-desktop [data-card="'+id+'"]').click();
+     await page.locator('[data-zone="'+zone+'"] .m2-case-title-action').click();
+    }
+    assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+    assert.equal(await page.locator('[data-zone="'+zone+'"] .m2-archive-card').count(),11);
+    const layout=await page.locator('[data-zone="'+zone+'"]').evaluate(cabinet=>{
+     const rect=el=>el.getBoundingClientRect();
+     const well=cabinet.querySelector('.m2-case-well'),wr=rect(well);
+     const cards=[...cabinet.querySelectorAll('.m2-case-contents .m2-archive-card')];
+     const metrics=cards.map(card=>{
+      const r=rect(card),text=card.querySelector('.m2-museum-card-copy'),
+       copy=card.querySelector('.m2-card-copy-group'),
+       art=card.querySelector('.m2-card-miniature');
+      const tr=rect(text),cr=rect(copy);
+      return {
+       id:card.dataset.card,top:r.top,bottom:r.bottom,
+       width:r.width,
+       inWell:r.left>=wr.left-2 && r.right<=wr.right+2 && r.top>=wr.top-2 && r.bottom<=wr.bottom+2,
+       textVisible:tr.width>0 && tr.height>0 && tr.left>=cr.left-2 && tr.right<=cr.right+2 &&
+          text.scrollHeight<=text.clientHeight+2 && text.scrollWidth<=text.clientWidth+2,
+       artVisible:art.complete && art.naturalWidth>0 && rect(art).width>=19,
+       visuallyVisible:getComputedStyle(card).visibility!=='hidden' && getComputedStyle(card).opacity!=='0'
+      };
+     });
+     return {
+      zone:cabinet.dataset.zone,
+      cards:metrics,
+      wellClipped:well.scrollHeight>well.clientHeight+2,
+      cabinetClipped:cabinet.scrollHeight>cabinet.clientHeight+2,
+      horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,
+      wellWidth:wr.width,
+      nonOverlapping:metrics.every((card,i)=>i===0||card.top>=metrics[i-1].bottom-2)
+     };
+    });
+    assert.ok(layout.cards.every(x=>x.inWell&&x.textVisible&&x.artVisible&&x.visuallyVisible),
+      JSON.stringify({size,zone,layout}));
+    assert.equal(layout.wellClipped,false,JSON.stringify({size,zone,layout}));
+    assert.equal(layout.cabinetClipped,false,JSON.stringify({size,zone,layout}));
+    assert.equal(layout.horizontalOverflow,false,JSON.stringify({size,zone,layout}));
+    assert.equal(layout.nonOverlapping,true,JSON.stringify({size,zone,layout}));
+    await page.screenshot({path:'test-output/m2-e1-filled-'+key+'.png',fullPage:true,animations:'disabled'});
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
+ await scenario('Once cartelas repartidas entre las cinco vitrinas sin solaparse',async()=>{
+  const {page,context,errors}=await open('teacher',{width:390,height:844});
+  try{
+   const zones=['economic','demographic','religious','political','ideological'];
+   const ids=await page.locator('.m2-museum-desktop [data-card]').evaluateAll(cards=>cards.map(c=>c.dataset.card));
+   for(const [index,id] of ids.entries()){
+    const zone=zones[index%zones.length];
+    await page.locator('.m2-museum-desktop [data-card="'+id+'"]').dragTo(
+      page.locator('[data-zone="'+zone+'"] .m2-case-title-action'));
+   }
+   assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+   const result=await page.locator('[data-zone]').evaluateAll(cabinets=>cabinets.map(cabinet=>{
+    const w=cabinet.querySelector('.m2-case-well'),wr=w.getBoundingClientRect();
+    const cards=[...cabinet.querySelectorAll('.m2-archive-card')];
+    return {
+     zone:cabinet.dataset.zone,count:cards.length,
+     fit:cards.every(c=>{
+      const r=c.getBoundingClientRect();
+      return r.left>=wr.left-2&&r.right<=wr.right+2&&r.top>=wr.top-2&&r.bottom<=wr.bottom+2 &&
+       c.querySelector('.m2-card-miniature').naturalWidth>0;
+     })
+    };
+   }));
+   assert.deepEqual(result.map(x=>x.count),[3,2,2,2,2]);
+   assert.ok(result.every(x=>x.fit),JSON.stringify(result));
+   await page.screenshot({path:'test-output/m2-e1-distributed-mobile.png',fullPage:true,animations:'disabled'});
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+
  await scenario('Referencia 16:9 en 1672×941: cinco vitrinas y escenografía visible',async()=>{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{
