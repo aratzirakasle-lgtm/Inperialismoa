@@ -2143,3 +2143,13 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   letter-spacing:0;
  }
 }
+
+
+/* Solo se estira la vitrina que recibe más tarjetas; las demás conservan
+   su tamaño de museo, sin grandes paneles vacíos a los lados. */
+.m2-first-room .m2-museum-cabinet-wall{
+ align-items:start;
+}
+.m2-first-room .m2-museum-case{
+ align-self:start;
+}
