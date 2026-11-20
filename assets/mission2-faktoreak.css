@@ -1616,8 +1616,9 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 }
 .m2-first-room .m2-case-arch{height:clamp(150px,13.1vw,191px)}
 .m2-first-room .m2-case-scene{
- object-fit:cover;
- object-position:center 50%;
+ /* Mantener completas las pinturas, sin recortar personajes ni objetos. */
+ object-fit:fill;
+ object-position:center center;
  filter:saturate(1.19) contrast(1.1) brightness(1.02);
 }
 .m2-first-room .m2-case-details{
