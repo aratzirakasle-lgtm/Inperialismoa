@@ -85,3 +85,16 @@ Se ha revisado expresamente la **diferencia** entre la maqueta museística 16:9 
 - Efectos de selección dorada y ajustes \`prefers-reduced-motion\` para evitar inestabilidad del arrastre.
 
 La segunda revisión mantiene **intactos** los ejercicios 2 a 5, la lógica de permisos de Supabase, el esquema de corrección y las pantallas de la misión 1. Todos los cambios siguen exclusivamente en la rama de desarrollo / PR n.º 2.
+
+
+### Tercera pasada: integración de imágenes del concepto original
+
+El material ilustrado del concepto aprobado se ha convertido en archivos SVG autocontenidos que incrustan imágenes WebP optimizadas. No dependen de URL externas ni caducan:
+
+- \`assets/m2-painted-*.svg\`: cinco fondos pictóricos originales de las vitrinas (monedas, barco de vapor, misión religiosa, cañón costero, globo y libros).
+- \`assets/m2-museo-izquierdo.svg\`: mapa antiguo, globo y prismáticos; \`assets/m2-museo-derecho.svg\`: fotografía, busto y libros.
+- El peso binario total aproximado de los **siete recortes pictóricos** es **56 KiB**; el diseño escenográfico vectorial se mantiene de respaldo.
+- Las decoraciones laterales son \`pointer-events:none\`, en los márgenes exteriores y **no pueden interceptar** el arrastre ni los controles. Se comprueba en Chromium que cada decoración ocupa su lado correcto.
+- La vitrina y las tarjetas continúan siendo DOM/CSS/JavaScript independiente de las imágenes: no se integra la imagen de la maqueta como una pantalla inmóvil.
+
+La validación visual debe incluir las capturas de **1365×900**, **1672×941** y **390×844**, además de los datos de corrección y progresión. La composición es visualmente mucho más cercana al concepto; las tarjetas son once (no las diez visibles en la imagen artística), pues se conserva íntegra la actividad didáctica.
