@@ -49,7 +49,7 @@ const steps=[1,2,3,4,5];
 const responseKeys={
  1:causes.map(item=>item.id),
  2:['1869','1908','1914','funding','works'],
- 3:['1850','1870','1900','migration','missionaries'],
+ 3:['1850','1870','1900','migration','missionaries','route_africa','route_asia','route_oceania','statement_1','statement_2','statement_3','statement_4','statement_5','bag_growth','bag_conditions','bag_better','bag_conversion','bag_settlement','bag_missions','bag_oceania','bag_faith'],
  4:archives.map(item=>item.id),
  5:['africa','asia','north','south','meeting','congo']
 };
@@ -221,63 +221,145 @@ function renderTimeline(){
  '<aside class="m2-evidence">Iturriak: Suezko kanalaren inaugurazioa (1869), Hijazko trenbidea (1908) eta Panamako kanala (1914). Biak, garraioa eta kapital-inbertsioa, hedapen ekonomikoarekin lotzen dira.</aside></div>';
 }
 function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'selected':'')+'>'+esc(label)+'</option>'}
+/* Una sala, cuatro actividades: atlas fiel al concepto visual elegido.
+ * Los campos y las opciones de la parte teórica provienen de las págs. 10-12
+ * del PDF del proyecto. Las nuevas respuestas también deben añadirse a la
+ * clave privada de Supabase antes de publicar esta rama. */
+const atlasRoutes=[
+ {id:'africa',title:'Afrika',x:52,y:52},
+ {id:'asia',title:'Asia',x:84,y:36},
+ {id:'oceania',title:'Ozeania',x:88,y:76}
+];
+const atlasStatements=[
+ ['statement_1','1850ean Europako biztanleria 266 milioikoa zen.'],
+ ['statement_2','1870ean Europako biztanleria 450 milioikoa zen.'],
+ ['statement_3','Langileen bizi-baldintza gogorrek kolonizatutako lurretan aukera berriak bilatzera bultzatu zituzten.'],
+ ['statement_4','Eliza katoliko eta protestanteek Asian, Afrikan eta Ozeanian misioak sortu zituzten.'],
+ ['statement_5','Erlijioa ez zen inoiz kolonizazioa justifikatzeko erabili.']
+];
+const atlasSuitcase=[
+ ['growth','Europako biztanleria-hazkundea','m2-card-settlement.svg'],
+ ['conditions','Langileen bizi-baldintza neketsuak','m2-card-working_conditions.svg'],
+ ['better','Bizi-aukera hobeak bilatzeko nahia','m2-card-settlement.svg'],
+ ['conversion','Tokiko herriak kristautzeko nahia','m2-card-conversion.svg'],
+ ['settlement','Europarrak lurralde berrietan finkatzea','m2-card-exploration.svg'],
+ ['missions','Misio katoliko eta protestanteak sortzea','m2-card-missions.svg'],
+ ['oceania','Misioak Ozeanian zabaltzea','m2-card-missions.svg'],
+ ['faith','Tokiko erlijioen desagerpena Afrikan','m2-card-racist_theories.svg']
+];
+const atlasKeys=['1850','1870','1900','migration','missionaries',
+ 'route_africa','route_asia','route_oceania',
+ ...atlasStatements.map(x=>x[0]),...atlasSuitcase.map(x=>'bag_'+x[0])];
+let atlasSelectedRoute=null,atlasSelectedLuggage=null;
+function atlasInput(field,label,value,choices){
+ return '<fieldset class="m2-atlas-radios"><legend>'+esc(label)+'</legend>'+
+ choices.map(([key,text],index)=>'<label class="m2-atlas-radio"><input type="radio" data-field="'+field+'" name="atlas-'+field+'" value="'+key+'" '+(value===key?'checked':'')+'>'+
+ '<span class="m2-atlas-radio-circle" aria-hidden="true"></span><span>'+esc(text)+'</span></label>').join('')+'</fieldset>';
+}
+function atlasSectionStatus(num,count,total){
+ return '<span class="m2-atlas-section-status" data-atlas-count="'+num+'">'+count+' / '+total+' osatuta</span>';
+}
 function renderPopulation(){
  const state=taskState(3);
- const completeKeys=['1850','1870','1900','migration','missionaries'];
- const recorded=completeKeys.filter(key=>!!state[key]).length;
- const years=['1850','1870','1900'];
- const folios=years.map((year,index)=>
-  '<label class="m2-ledger-year" data-ledger-year="'+year+'">'+
-  '<span class="m2-ledger-entry">SARRERA · '+String(index+1).padStart(2,'0')+'</span>'+
-  '<span class="m2-ledger-year-number">'+year+'</span>'+
-  '<span class="m2-ledger-year-caption">Europako biztanleria</span>'+
-  '<span class="m2-ledger-numeric-slot"><span class="m2-ledger-sr">Biztanle kopurua, milioitan · '+year+'</span>'+
-  '<select required data-field="'+year+'" aria-label="'+year+'ko Europako biztanleria (milioitan)">'+
-  '<option value="">Milioika aukeratu…</option>'+
-  ['266','310','400','450'].map(v=>option(v,v+' milioi',state[year])).join('')+
-  '</select></span><span class="m2-ledger-entry-status" aria-hidden="true">'+(state[year]?'IDATZITA':'HUTSIK')+'</span></label>'
+ const filled=atlasKeys.filter(key=>!!state[key]).length;
+ const population=['1850','1870','1900'].map(year=>
+  '<label class="m2-atlas-pop-row m2-ledger-year" data-ledger-year="'+year+'">'+
+   '<span class="m2-atlas-pop-year">'+year+'</span>'+
+   '<select data-field="'+year+'" aria-label="'+year+'ko Europako biztanleria (milioitan)">'+
+    '<option value="">Aukeratu…</option>'+
+    ['266','310','400','450'].map(v=>option(v,v+' milioi',state[year])).join('')+
+   '</select><small>milioi</small></label>'
  ).join('');
- return '<section class="m2-migration-gallery" aria-label="Europako biztanleriaren erregistroa eta bi espediente">'+
-  '<header class="m2-migration-gallery-head">'+
-  '<span class="m2-migration-serial">MUSEOKO ARTXIBOA · XIX. MENDEA</span>'+
-  '<h3>Migrazioen liburua</h3>'+
-  '<p>Biztanleriaren errolda eta kolonizazio garaiko migrazioei buruzko bi agiri.</p>'+
-  '<div class="m2-migration-progress" aria-label="Bost erantzunen aurrerapena">'+
-   '<span class="m2-migration-progress-count">'+recorded+' / 5 agiri osatuta</span>'+
-   '<span class="m2-migration-progress-track" aria-hidden="true"><span class="m2-migration-progress-fill" style="width:'+(recorded*20)+'%"></span></span>'+
-  '</div></header>'+
-  '<div class="m2-migration-book">'+
-  '<section class="m2-migration-folio m2-migration-register">'+
-   '<div class="m2-migration-page-head"><span>LEHEN LIBURUKIA · ZENTSUA</span><span>ERREGISTROA · 01</span></div>'+
-   '<figure class="m2-migration-engraving"><img src="./assets/m2-ledger-census.svg" alt="" draggable="false" loading="eager"><figcaption>EUROPAKO BIZTANLERIA · XIX. MENDEA</figcaption></figure>'+
-   '<h4>Europako biztanleriaren erregistroa</h4>'+
-   '<p class="m2-migration-guidance">Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
-   '<div class="m2-ledger-year-entries">'+folios+'</div>'+
-   '<span class="m2-ledger-folio-number">FOLIO 01 · 03</span>'+
-  '</section>'+
-  '<section class="m2-migration-folio m2-migration-dossiers">'+
-   '<div class="m2-migration-page-head"><span>BIGARREN LIBURUKIA · LEKUKOTASUNAK</span><span>ESPEDIENTEAK · 02</span></div>'+
-   '<h4>Bi espediente osagarri</h4>'+
-   '<article class="m2-migration-dossier m2-migration-dossier-travel">'+
-    '<div class="m2-migration-dossier-image"><img src="./assets/m2-ledger-voyage.svg" alt="" draggable="false" loading="eager"><span>01 · EMIGRAZIOA</span></div>'+
-    '<label class="m2-migration-question" data-ledger-question="migration"><span class="m2-migration-question-title">Zergatik bilatzen zuten zenbait langilek bizitza berria kolonizatutako lurretan?</span>'+
-    '<select required data-field="migration"><option value="">Aukeratu erantzuna…</option>'+
-    option('better_life','Industria-herrialdeetako lan eta bizi-baldintza gogorrengatik',state.migration)+
-    option('sea_control','Itsasontzien nagusitasun militarra lortzeko',state.migration)+
-    option('press','Egunkari berriak zabaltzeko',state.migration)+'</select>'+
-    '<span class="m2-migration-question-status" aria-hidden="true">'+(state.migration?'AGIRIA BETETA':'ERANTZUN GABE')+'</span></label></article>'+
-   '<article class="m2-migration-dossier m2-migration-dossier-faith">'+
-    '<div class="m2-migration-dossier-image"><img src="./assets/m2-ledger-missions.svg" alt="" draggable="false" loading="eager"><span>02 · MISIOAK</span></div>'+
-    '<label class="m2-migration-question" data-ledger-question="missionaries"><span class="m2-migration-question-title">Zein elizak bultzatu zituzten misioak Asian, Afrikan eta Ozeanian?</span>'+
-    '<select required data-field="missionaries"><option value="">Aukeratu erantzuna…</option>'+
-    option('catholic_protestant','Eliza katolikoak eta protestanteak',state.missionaries)+
-    option('states_only','Estatu bakoitzeko parlamentuek soilik',state.missionaries)+
-    option('merchants_only','Merkataritza-enpresek soilik',state.missionaries)+'</select>'+
-    '<span class="m2-migration-question-status" aria-hidden="true">'+(state.missionaries?'AGIRIA BETETA':'ERANTZUN GABE')+'</span></label></article>'+
-   '<aside class="m2-migration-historical-note"><span>ITURRIAREN AZTERKETA KRITIKOA</span>'+
-    '<p>Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</p></aside>'+
-   '<span class="m2-ledger-folio-number">FOLIO 02 · 03</span>'+
-  '</section></div></section>';
+ const dossierOne=atlasInput('migration','Zergatik bilatzen zuten zenbait langilek bizitza berria kolonizatutako lurretan?',state.migration,[
+  ['better_life','Industria-herrialdeetako lan eta bizi-baldintza gogorrengatik'],
+  ['sea_control','Itsasontzien nagusitasun militarra lortzeko'],
+  ['press','Egunkari berriak zabaltzeko']]);
+ const dossierTwo=atlasInput('missionaries','Zein elizak bultzatu zituzten misioak Asian, Afrikan eta Ozeanian?',state.missionaries,[
+  ['catholic_protestant','Eliza katolikoak eta protestanteak'],
+  ['states_only','Estatu bakoitzeko parlamentuek soilik'],
+  ['merchants_only','Merkataritza-enpresek soilik']]);
+ const routes=atlasRoutes.map((dest,i)=>
+  '<div class="m2-atlas-route-line">'+
+   '<button type="button" draggable="true" data-atlas-route="'+dest.id+'" aria-pressed="'+(atlasSelectedRoute===dest.id)+'" class="m2-atlas-route-card">'+
+   '<span class="m2-atlas-route-numeral">'+String(i+1).padStart(2,'0')+'</span><span>'+esc(dest.title)+'</span>'+
+   '<span aria-hidden="true" class="m2-atlas-route-connector">◉</span></button></div>'
+ ).join('');
+ const placed=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).length;
+ const routePins=atlasRoutes.map(dest=>'<button type="button" class="m2-atlas-pin '+(Object.values(state).includes(dest.id)?'m2-pin-used':'')+'" data-atlas-target="'+dest.id+'" style="left:'+dest.x+'%;top:'+dest.y+'%;" aria-label="Mapako tokia: '+esc(dest.title)+'">'+
+ (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>✓</span>':'<span>+</span>')+'</button>').join('');
+ const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
+  const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
+  return point?'<path d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
+ }).join('');
+ const statements=atlasStatements.map(([key,text],i)=>'<div class="m2-atlas-statement">'+
+  '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
+  '<div class="m2-atlas-truth" role="group" aria-label="'+esc(text)+'">'+
+  ['egia','gezurra'].map(value=>'<label class="m2-atlas-truth-option">'+
+  '<input type="radio" name="atlas-'+key+'" data-field="'+key+'" value="'+value+'" '+(state[key]===value?'checked':'')+'>'+
+  '<span>'+ (value==='egia'?'E':'G') +'</span></label>').join('')+
+  '</div></div>').join('');
+ const cards=atlasSuitcase.filter(c=>!state['bag_'+c[0]]).map(c=>
+  '<button type="button" draggable="true" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" class="m2-atlas-luggage-card">'+
+  '<img src="./assets/'+c[2]+'" alt="" draggable="false"><span>'+esc(c[1])+'</span></button>').join('');
+ const cases=[['cause','Emigrazioaren kausak','ZERGATIK?'],['effect','Emigrazioaren ondorioak','ZER ERAGIN?']].map(([key,title,subtitle])=>{
+  const inside=atlasSuitcase.filter(c=>state['bag_'+c[0]]===key);
+  return '<section class="m2-atlas-suitcase m2-atlas-suitcase-'+key+'" data-atlas-bag-zone="'+key+'">'+
+   '<header><strong>'+esc(title)+'</strong><small>'+subtitle+'</small></header>'+
+   '<button type="button" class="m2-atlas-luggage-drop" data-atlas-bag-zone="'+key+'" aria-label="'+esc(title)+' maletan kokatu">+ KOKATU HEMEN</button>'+
+   '<div class="m2-atlas-suitcase-items">'+inside.map(c=>
+     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img src="./assets/'+c[2]+'" alt="">'+esc(c[1])+'</button>').join('')+
+   '</div></section>';
+ }).join('');
+ const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
+ const stage3=atlasStatements.filter(c=>!!state[c[0]]).length;
+ const stage4=atlasSuitcase.filter(c=>!!state['bag_'+c[0]]).length;
+ const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+'>'+label+' ✦</button>';
+ return '<section class="m2-atlas-screen m2-migration-gallery" aria-label="Migrazioen bulegoa: lau jarduera interaktibo">'+
+  '<header class="m2-atlas-heading"><span class="m2-atlas-navigation">BIGARREN MISIOA · 3 / 5</span><h1>MIGRAZIOEN BULEGOA <em>(1850–1900)</em></h1>'+
+  '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' osatuta</div></header>'+
+  '<div class="m2-atlas-navigation-strip">'+nav()+'</div>'+
+  (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
+  '<div class="m2-atlas-main">'+
+   '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">B</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
+   '<section class="m2-atlas-pop m2-migration-folio"><h3>Europako biztanleria <small>(milioi biztanle)</small></h3>'+
+    '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
+    '<div class="m2-atlas-pop-list">'+population+'</div>'+
+    '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false"></section>'+
+   '<div class="m2-atlas-main-map"><img src="./assets/m2-atlas-original-map.webp" alt="XIX. mendeko atlas historikoaren ilustrazioa" draggable="false">'+
+    '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span></div>'+
+   '<section class="m2-atlas-top-question m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
+    '<h3>Migrazioak</h3>'+dossierOne+'</section>'+
+   '<section class="m2-atlas-top-question m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-mission.webp" alt="" draggable="false">'+
+    '<h3>Misio erlijiosoak</h3>'+dossierTwo+'</section>'+
+   '<aside class="m2-atlas-critical"><strong>Interpretazio historiko kritikoa:</strong> Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</aside>'+
+   '<div class="m2-atlas-top-check">'+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
+  '</div>'+
+  '<div class="m2-atlas-row-two">'+
+   '<section class="m2-atlas-route-activity m2-atlas-activity">'+
+    '<header><span class="m2-atlas-number">2</span><h2>Norantz hedatu ziren misioak?</h2></header>'+
+    '<p class="m2-atlas-exercise-instruction">Lotu PDFan aipatutako hiru eremuak atlasaren tokiekin. Hautatu izena eta jarri mapan.</p>'+
+    '<div class="m2-atlas-route-stage"><div class="m2-atlas-route-labels">'+routes+'</div>'+
+    '<div class="m2-atlas-route-map"><img src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa" draggable="false">'+
+    '<svg class="m2-atlas-route-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="atlasArrow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto"><path d="M0 0L4 2L0 4Z" fill="#c13020"/></marker></defs>'+lines+'</svg>'+
+    routePins+'</div></div>'+
+    '<footer>'+atlasSectionStatus(2,placed,3)+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
+   '</section>'+
+   '<section class="m2-atlas-facts-activity m2-atlas-activity">'+
+    '<header><span class="m2-atlas-number">3</span><h2>Egia ala gezurra?</h2></header>'+
+    '<p class="m2-atlas-exercise-instruction">PDFko baieztapenak: aukeratu E (egia) edo G (gezurra). Ez dago pistarik.</p>'+
+    '<div class="m2-atlas-fact-head"><span>BAIEZTAPEN HISTORIKOAK</span><span>EGIA · GEZURRA</span></div>'+
+    '<div class="m2-atlas-statements">'+statements+'</div>'+
+    '<footer>'+atlasSectionStatus(3,stage3,5)+stageAction(3,'EGIAZTATU',stage3===5)+'</footer>'+
+   '</section>'+
+  '</div>'+
+  '<div class="m2-atlas-luggage-activity m2-atlas-activity">'+
+   '<header><span class="m2-atlas-number">4</span><h2>Emigrantearen maleta</h2>'+
+    '<p>Zer bultzatu zuen kolonizazioa eta zer eragin izan zuen? Sailkatu zortzi agiriak.</p></header>'+
+   '<div class="m2-atlas-luggage-board"><div class="m2-atlas-luggage-available" data-atlas-bag-reset><span class="m2-atlas-luggage-note">SAILKATZEKO AGIRIAK · '+(8-stage4)+'</span><div class="m2-atlas-luggage-cards">'+cards+'</div></div>'+
+   '<div class="m2-atlas-luggage-targets">'+cases+'</div></div>'+
+   '<footer>'+atlasSectionStatus(4,stage4,8)+stageAction(4,'EGIAZTATU',stage4===8)+'</footer></div>'+
+  '<div class="m2-atlas-final-controls">'+controls()+'</div>'+
+ '</section>';
 }
 function renderArchive(){
  const state=taskState(4);
@@ -348,9 +430,13 @@ function renderEnd(){
 }
 function render(){
  const firstRoom=active===1&&!teacherEnding;
+ const atlasRoom=active===3&&!teacherEnding;
  app.classList.toggle('m2-first-room',firstRoom);
+ app.classList.toggle('m2-atlas-active',atlasRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-first-active',firstRoom);
+ document.querySelector('.m2-page')?.classList.toggle('m2-atlas-page',atlasRoom);
  if(teacherEnding){app.innerHTML=renderEnd();return}
+ if(atlasRoom){app.innerHTML=renderPopulation();return}
  if(firstRoom){
   app.innerHTML=museumHeader()+museumInstruction()+
     (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
