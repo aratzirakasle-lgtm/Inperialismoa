@@ -76,3 +76,29 @@ Para repetir el perfil desde Chromium contra la web publicada (recurso público,
     node tests/browser-network-profile.mjs
 
 La medida de la carga estática en el servidor local de CI **no es una medida real de la latencia de un alumno**; faltan los tiempos de red y la experiencia del navegador con JavaScript y Supabase activos. No comparar tiempos de una red local con los de Internet.
+
+
+## Ensayo transaccional del recorrido íntegro en Supabase · 20/11/2026
+
+**Realizado y superado, con ROLLBACK.** A diferencia de los mocks del navegador, este ensayo ha invocado las funciones instaladas en el proyecto real `Inperialismoa`, bajo `SET LOCAL ROLE authenticated` e identidades JWT temporales. Toda la preparación (tres identidades ficticias, una clase y un equipo de ensayo), los intentos, los estados y las insignias han permanecido dentro de una única transacción que terminó en `ROLLBACK`. No se han usado contraseñas, cuentas de menores ni respuestas de alumnos.
+
+Verificaciones positivas y negativas superadas:
+
+- Ejercicio 1: impedir saltar al segundo; detectar asignación errónea sin completar; aceptar 20 cartelas correctas y registrar estado.
+- Ejercicio 2: aceptar los siete conceptos y dos casos de interpretación; completar solo después de las dos fases.
+- Ejercicio 3: rechazar una respuesta errónea; registrar la finalización con cinco respuestas válidas.
+- Ejercicio 4: impedir resolver sin leer los tres documentos de cada expediente; impedir la reflexión antes de los cuatro expedientes; completar los cuatro casos y la reflexión final.
+- Ejercicio 5: rechazar la respuesta errónea sin completar la misión; tras la resolución válida, registrar la misión 1, generar **una** insignia y habilitar la misión 2.
+- Equipo compartido: al cambiar a una segunda identidad de alumno del mismo equipo, se conserva el estado; reenvíos posteriores no duplican intentos ni finalizaciones. También se comprobó que un alumno no puede leer la tabla de finalizaciones reservada al profesor, aunque sí observa la insignia pertinente.
+- Profesor: la previsualización de expedientes funciona sin escribir; la identidad docente no puede enviar la galería ni el ejercicio 5. Un alumno no puede activar `preview=true` en el corrector de expedientes.
+- Segunda misión: se aceptó un intento en la misión 2 después de completar la primera, sin dar por aprobada una entrega vacía.
+
+Se ejecutaron aserciones adicionales sobre los registros **antes del ROLLBACK**: dos intentos de galería, dos de clasificación/interpretación, finalizaciones 3 y 5, expediente 4 terminado, una única finalización de misión 1, una única insignia y un intento de misión 2. Todas se superaron.
+
+Después de la transacción, el inventario real siguió siendo: 3 usuarios de Auth, 3 perfiles, 1 equipo, 1 finalización histórica de misión, 1 insignia, 0 intentos de galería, 0 intentos de bi-sistema, 0 intentos de expedientes y 0 finalizaciones de ejercicios 3/5. **No se conserva ningún registro de ensayo.** Las respuestas correctas necesarias para esta prueba no se incorporan al repositorio público.
+
+**Alcance limitado:** se ha verificado la integración secuencial y el estado compartido a nivel de base de datos, **no** la autenticación con contraseñas desde el navegador, la interacción visual de un alumno real ni dos conexiones concurrentes escribiendo exactamente al mismo tiempo. Esos aspectos siguen pendientes de una prueba con cuentas de ensayo autorizadas.
+
+## Medición sobre GitHub Pages
+
+Se ha añadido en la rama de auditoría un paso de GitHub Actions que ejecuta `tests/browser-network-profile.mjs --json` contra la URL pública con JavaScript desactivado. Registra transferencia y duración de carga de los recursos estáticos de las cinco pantallas sin iniciar sesión ni escribir en Supabase. Al interpretar esos resultados, distinguir siempre la medición real de la web publicada de la experiencia autenticada y los indicadores Lighthouse.
