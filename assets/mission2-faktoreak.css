@@ -1063,3 +1063,45 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  outline-offset:-2px;
  box-shadow:0 0 11px #ffe09caa;
 }
+
+
+/* Atrezzo pictórico procedente del concepto aprobado. Los paneles
+   interactivos quedan POR ENCIMA: son decoraciones y no hotspots. */
+@media(min-width:901px){
+ .m2-paper.m2-first-room::before,
+ .m2-paper.m2-first-room::after{
+   content:"";
+   display:block;
+   position:absolute;
+   z-index:0;
+   pointer-events:none;
+   top:clamp(110px,8.1vw,136px);
+   width:clamp(105px,10.42vw,174px);
+   height:clamp(560px,43.4vw,725px);
+   opacity:.98;
+   background-repeat:no-repeat;
+   background-size:100% 100%;
+   border:0;
+   box-shadow:none;
+   transform:none;
+ }
+ .m2-paper.m2-first-room::before{
+   left:0;
+   background-image:url('./m2-museo-izquierdo.svg');
+   -webkit-mask-image:linear-gradient(90deg,#000 0 77%,transparent 100%);
+   mask-image:linear-gradient(90deg,#000 0 77%,transparent 100%);
+ }
+ .m2-paper.m2-first-room::after{
+   right:0;
+   top:clamp(98px,7.2vw,121px);
+   width:clamp(102px,10vw,167px);
+   height:clamp(560px,44.3vw,740px);
+   background-image:url('./m2-museo-derecho.svg');
+   -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22% 100%);
+   mask-image:linear-gradient(90deg,transparent 0%,#000 22% 100%);
+ }
+ .m2-museum-title-row,
+ .m2-museum-instructions,
+ .m2-museum-interaction,
+ .m2-first-room .m2-controls{position:relative;z-index:1}
+}
