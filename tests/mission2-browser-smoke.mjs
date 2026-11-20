@@ -341,6 +341,32 @@ try{
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
+
+ await scenario('Atlas 3: cabecera panorámica fiel y respuestas superiores completas',async()=>{
+  for(const width of [1672,1365]){
+   const {page,context,errors}=await open('teacher',{width,height:941});
+   try{
+    await page.locator('[data-open="3"]').click();
+    assert.equal(await page.locator('.m2-atlas-home-link').isVisible(),true);
+    const geometry=await page.locator('.m2-atlas-screen').evaluate(root=>{
+     const box=el=>{const r=el.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height}};
+     const head=box(root.querySelector('.m2-atlas-heading'));
+     const main=box(root.querySelector('.m2-atlas-main'));
+     const questions=[...root.querySelectorAll('.m2-atlas-top-question')].map(q=>{
+      const outer=box(q),last=box(q.querySelector('.m2-atlas-radio:last-child'));
+      return {outer,last,inside:last.bottom<=outer.bottom+2&&last.right<=outer.right+2};
+     });
+     return {head,main,questions,viewport:innerWidth};
+    });
+    assert.ok(geometry.head.height<=80,JSON.stringify(geometry));
+    assert.ok(geometry.main.height<=285,JSON.stringify(geometry));
+    assert.ok(geometry.questions.every(q=>q.inside),'Las respuestas no deben cortarse al igualar la referencia: '+JSON.stringify(geometry));
+    assert.ok(geometry.main.left>=-2&&geometry.main.right<=width+2,JSON.stringify(geometry));
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
+
  await scenario('Atlas 3: sin desbordes ni controles cortados a 1672, 1365, 768, 390 y 320 px',async()=>{
   for(const size of [{width:1672,height:941},{width:1365,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:700}]){
    const {page,context,errors}=await open('teacher',size);
