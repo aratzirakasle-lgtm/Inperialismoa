@@ -1037,3 +1037,29 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-first-room .m2-museum-card.m2-tile{font-size:12px}
  .m2-first-room .m2-museum-preview{z-index:3}
 }
+
+/* La placa de latón es destino real de clic/teclado aun con vitrina llena. */
+.m2-case-title-action{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:100%;
+ min-height:30px;
+ border:0;
+ border-radius:3px;
+ padding:0 3px;
+ margin:0;
+ font:inherit;
+ line-height:inherit;
+ color:inherit;
+ background:transparent;
+ text-shadow:inherit;
+ cursor:pointer;
+}
+.m2-case-title-action:hover,.m2-case-title-action:focus-visible{
+ color:#331b08;
+ background:#fff2bf66;
+ outline:2px solid #fff5c6;
+ outline-offset:-2px;
+ box-shadow:0 0 11px #ffe09caa;
+}
