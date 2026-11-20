@@ -118,6 +118,24 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
+ await scenario('Alumno: las tarjetas pendientes sobreviven a una recarga, sin desbloquear el juego',async()=>{
+   const {page,context,errors}=await open('student','index.html#mission1gallery');
+   try{
+     await waitVisible(page,'.gal-hall');
+     await setCard(page,'eu_army','eu_auth');
+     assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
+     await page.reload({waitUntil:'domcontentloaded'});
+     await waitVisible(page,'.gal-hall');
+     assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
+     assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
+     await page.locator('[data-gallery-action="reset"]').click();
+     await page.reload({waitUntil:'domcontentloaded'});
+     await waitVisible(page,'.gal-hall');
+     assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),0);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Galería: cuatro tarjetas autoritarias y cinco liberales visibles sin recorte',async()=>{
    const {page,context,errors}=await open('student','index.html#mission1gallery');
    try{
