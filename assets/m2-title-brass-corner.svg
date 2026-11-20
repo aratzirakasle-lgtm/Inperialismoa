@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="138" height="102" viewBox="0 0 138 102">
+<defs><linearGradient id="g" x1="0" x2=".8" y1="0" y2="1"><stop stop-color="#fff7cc"/><stop offset=".27" stop-color="#f2c56a"/><stop offset=".58" stop-color="#ac6d2f"/><stop offset=".8" stop-color="#fee0a0"/><stop offset="1" stop-color="#724219"/></linearGradient>
+<filter id="s"><feGaussianBlur stdDeviation="1.5"/></filter></defs>
+<path d="M9 96Q-5 43 46 9Q81-6 125 7" fill="none" stroke="#160c0b" stroke-width="11" opacity=".7" filter="url(#s)"/>
+<path d="M9 96Q-5 43 46 9Q81-6 125 7" fill="none" stroke="#f2c976" stroke-width="8"/>
+<path d="M9 96Q-5 43 46 9Q81-6 125 7" fill="none" stroke="#fff4ba" stroke-width="2"/>
+<g stroke="#825222" stroke-width="2" fill="url(#g)">
+<path d="M13 51Q25 26 51 30Q76 34 69 54Q58 71 43 57Q42 48 52 48Q55 50 52 54Q61 48 55 41Q37 32 24 55Z"/>
+<path d="M43 19Q65-2 85 9Q103 23 90 36Q77 39 73 28Q76 22 82 25Q77 14 62 20Z"/>
+<path d="M11 73Q26 65 40 74Q43 87 28 90Q23 88 25 81Q18 82 15 94Z"/>
+<path d="M80 9Q99-8 114 9Q115 18 104 24Q97 23 98 15Q91 12 87 24Z"/>
+</g>
+<circle cx="37" cy="36" r="5" fill="#ffebae" stroke="#a36a2e" stroke-width="2"/>
+<circle cx="68" cy="17" r="4" fill="#ffebae" stroke="#a36a2e" stroke-width="2"/>
+</svg>
