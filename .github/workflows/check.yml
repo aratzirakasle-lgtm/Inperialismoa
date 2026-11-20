@@ -15,6 +15,13 @@ jobs:
         run: |
           for file in js/*.js; do node --check "$file"; done
           node tests/check-html-scripts.mjs
+      - name: Verificar sintaxis de los diagnósticos y medir imágenes sin comprimir
+        run: |
+          node --check tests/image-baseline.mjs
+          node --check tests/live-supabase-smoke.mjs
+          node --check tests/browser-network-profile.mjs
+          node --check tests/public-live-browser-audit.mjs
+          node tests/image-baseline.mjs
       - name: Probar permisos e ilustraciones de los ejercicios
         run: node --test tests/*.test.mjs
       - name: Verificar archivos esenciales
@@ -38,3 +45,18 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-server.log 2>&1 &
           node tests/browser-smoke.mjs
+      - name: Medir red de HTML, CSS e ilustraciones en Chromium sin ejecutar los juegos
+        run: node tests/browser-network-profile.mjs
+      - name: Auditar transferencia HTTP de la web publicada, sin login ni JavaScript
+        env:
+          PROFILE_BASE_URL: https://aratzirakasle-lgtm.github.io/Inperialismoa/
+        run: node tests/browser-network-profile.mjs --json
+      - name: Verificar página publicada y rutas protegidas con JS real en ordenador tableta y móvil
+        run: node tests/public-live-browser-audit.mjs
+      - name: Guardar capturas de la portada de ensayo sin usuarios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-portada-tres-resoluciones
+          path: test-output/login-*.png
+          if-no-files-found: ignore
