@@ -173,7 +173,7 @@ function renderClassification(){
  const cabinets=categories.map(cat=>{
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
   return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
-   '<div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-scene-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
    '<h3 class="m2-case-title"><button type="button" class="m2-case-title-action" aria-label="'+esc(cat.label)+' faktorean kokatu">'+esc(cat.label)+'</button></h3></div>'+
    '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
    '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
