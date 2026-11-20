@@ -327,9 +327,9 @@ function renderPopulation(){
     '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false"></section>'+
    '<div class="m2-atlas-main-map"><img src="./assets/m2-atlas-original-map.webp" alt="XIX. mendeko atlas historikoaren ilustrazioa" draggable="false">'+
     '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span></div>'+
-   '<section class="m2-atlas-top-question m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
+   '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
     '<h3>Migrazioak</h3>'+dossierOne+'</section>'+
-   '<section class="m2-atlas-top-question m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-mission.webp" alt="" draggable="false">'+
+   '<section class="m2-atlas-top-question m2-atlas-top-mission m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-mission.webp" alt="" draggable="false">'+
     '<h3>Misio erlijiosoak</h3>'+dossierTwo+'</section>'+
    '<aside class="m2-atlas-critical"><strong>Interpretazio historiko kritikoa:</strong> Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</aside>'+
    '<div class="m2-atlas-top-check">'+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
