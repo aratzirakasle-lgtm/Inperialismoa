@@ -22,6 +22,8 @@ jobs:
           test -s index.html
           test -s css/styles.css
           test -s supabase/schema.sql
+          test -s supabase/mission2_faktoreak.sql
+          test -s inperialismoaren-faktoreak.html
   browser-smoke:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
@@ -38,3 +40,4 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-server.log 2>&1 &
           node tests/browser-smoke.mjs
+          node tests/mission2-browser-smoke.mjs
