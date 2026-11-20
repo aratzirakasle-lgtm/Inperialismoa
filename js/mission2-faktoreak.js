@@ -274,7 +274,7 @@ function controls(){
  const canGoForward=teacher||done;
  return '<div class="m2-controls"><p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
  '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+(submitting?'disabled':'')+'>Berriz hasi</button>'+
- (teacher?'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>':
+ (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
  '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+(active===1?'✓ EGIAZTATU':'Erantzunak egiaztatu →')+'</button>')+
@@ -382,6 +382,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-reset')){draft[active]={};selected=null;feedback='';feedbackState='';render();return}
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
+ if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
  if(elem.hasAttribute('data-preview-next')){if(active===5){teacherEnding=true;render()}else openExercise(active+1);return}
  if(elem.hasAttribute('data-ending')){teacherEnding=true;render()}
 });
