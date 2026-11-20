@@ -37,8 +37,9 @@ try {
     try {
       const response = await page.goto(target, { waitUntil: 'load', timeout: 60000 });
       if (!response || !response.ok()) throw new Error('HTTP ' + (response?.status() ?? 'sin respuesta') + ' para ' + route);
-      await page.waitForTimeout(400);
+      // Cronometrar el evento load ANTES de la espera de recogida de recursos.
       const loadedMs = Math.round(performance.now() - t0);
+      await page.waitForTimeout(400);
       const requests = await Promise.all(finished.map(async request => {
         const response = await request.response();
         if (!response) return null;
