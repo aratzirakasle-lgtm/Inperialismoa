@@ -630,7 +630,7 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  color:#ffedc7;
  background:
    linear-gradient(180deg,#081e1e33 0%,#0f272711 70%,#0e1c1c33 100%),
-   url('./m2-room-illustration.svg') center top / 100% 100% no-repeat,
+   url('./m2-room-clean.svg') center top / 100% 100% no-repeat,
    radial-gradient(ellipse at 55% 30%,#405f56,#092423);
  box-shadow:0 0 60px #0009,inset 0 0 24px #0008;
 }
@@ -939,7 +939,7 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 }
 @media (max-width:900px){
  .m2-paper.m2-first-room{
-   background:linear-gradient(#08252644,#0c292644),url('./m2-room-illustration.svg') center top / auto 900px no-repeat,#113a35;
+   background:linear-gradient(#08252644,#0c292644),url('./m2-room-clean.svg') center top / auto 900px no-repeat,#113a35;
  }
  .m2-museum-title-row.m2-hero{
    grid-template-columns:minmax(150px,.6fr) minmax(0,1.4fr);
