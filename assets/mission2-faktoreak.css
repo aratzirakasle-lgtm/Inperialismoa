@@ -1586,3 +1586,98 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-first-room .m2-museum-title:before{left:-7px}
  .m2-first-room .m2-museum-title:after{right:-7px}
 }
+
+
+/* Tercera comparación con la lámina aprobada: piedras de época,
+   cartelas ornamentales y escenas con personas y objetos históricos.
+   Solo modifica el ejercicio 1. */
+@media(min-width:901px){
+ .m2-paper.m2-first-room{
+  background:
+   url('./m2-ref-vaults.svg') center top/100% 100% no-repeat,
+   linear-gradient(180deg,#061c1c4a 0%,#0e2f2c14 46%,#091b1b1c 100%),
+   url('./m2-room-clean.svg') center top/100% 100% no-repeat,
+   #10292b;
+ }
+ .m2-first-room .m2-museum-title{max-width:640px}
+ .m2-first-room .m2-museum-instructions{
+  width:min(1100px,calc(100% - 225px));
+  transform:translateX(25px);
+ }
+ .m2-first-room .m2-museum-interaction{
+  max-width:1325px;
+  width:calc(100% - clamp(105px,15vw,270px));
+  gap:12px;
+ }
+ .m2-first-room .m2-controls{padding-top:8px;padding-bottom:9px;margin-top:9px}
+ .m2-first-room .m2-museum-desktop{padding-top:10px;padding-bottom:5px}
+ .m2-first-room .m2-museum-cards{gap:7px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:61px!important}
+}
+.m2-first-room .m2-case-arch{height:clamp(150px,13.1vw,191px)}
+.m2-first-room .m2-case-scene{
+ object-fit:cover;
+ object-position:center 50%;
+ filter:saturate(1.19) contrast(1.1) brightness(1.02);
+}
+.m2-first-room .m2-case-details{
+ position:absolute;inset:0;z-index:3;
+ display:block;width:100%;height:100%;
+ overflow:visible;
+ pointer-events:none;
+ opacity:.94;
+ filter:drop-shadow(0 2px 2px #170a0b8a);
+}
+.m2-first-room .m2-case-title{
+ margin:-1px -14px -17px;
+ padding:1px 11px;
+ min-height:48px;
+ border:0;
+ border-radius:0;
+ background:url('./m2-ref-ornate-plaque.svg') center/100% 100% no-repeat;
+ box-shadow:0 5px 5px #14090599;
+ text-shadow:0 1px #fff2cb;
+}
+.m2-first-room .m2-case-title-action{
+ min-height:44px;
+ line-height:1.12;
+ text-shadow:0 1px #fff6dd;
+}
+.m2-first-room .m2-case-well{margin-top:20px}
+.m2-first-room .m2-museum-desktop{
+ box-shadow:
+  0 0 0 2px #432513,0 0 0 5px #d1a05e,
+  0 10px 0 #452516,0 14px 11px #000b,
+  inset 0 0 0 2px #fff2bdc4,inset 0 9px 15px #f9c17742;
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ border-width:3px!important;
+ box-shadow:0 0 0 1px #65411f,0 3px 0 #4d270e,0 6px 8px #17070678,
+ inset 0 0 0 2px #fff8e2!important;
+}
+@media(min-width:901px) and (max-width:1190px){
+ .m2-first-room .m2-museum-interaction{width:calc(100% - 80px)}
+ .m2-first-room .m2-case-title{margin-left:-10px;margin-right:-10px}
+ .m2-first-room .m2-case-title-action{font-size:13px}
+ .m2-first-room .m2-museum-instructions{width:calc(100% - 130px);transform:none}
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-details{filter:none;opacity:.93}
+ .m2-first-room .m2-case-title{
+  margin:-1px -11px -16px;
+  min-height:43px;padding:1px 8px;
+ }
+ .m2-first-room .m2-case-title-action{min-height:39px}
+ .m2-first-room .m2-case-arch{height:160px}
+ .m2-first-room .m2-case-well{margin-top:18px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-arch{height:143px}
+ .m2-first-room .m2-case-title{
+  min-height:40px;margin:-1px -8px -13px;padding:2px 5px;
+ }
+ .m2-first-room .m2-case-title-action{min-height:37px;font-size:12px}
+ .m2-first-room .m2-case-details{opacity:.9}
+ .m2-first-room .m2-case-well{margin-top:17px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:70px!important}
+}
