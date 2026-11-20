@@ -1231,3 +1231,143 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-first-room .m2-case-foundation{height:19px;margin:6px -7px -5px}
  .m2-first-room .m2-case-lock{top:1px;height:10px}
 }
+
+/* M2 · mostrador de nogal pulido, bandeja con moldura y cartelas de pergamino */
+.m2-first-room .m2-museum-desktop{
+ position:relative;isolation:isolate;
+ padding:14px 17px 8px;margin:0 4px;
+ border:9px ridge #c9924b;border-radius:21px 21px 7px 7px;
+ background:
+ radial-gradient(ellipse at 20% -15%,#ffe5a978,transparent 46%),
+ radial-gradient(ellipse at 72% 110%,#edb36d61,transparent 65%),
+ repeating-linear-gradient(1.9deg,transparent 0 7px,#e5a35c26 8px 9px,transparent 12px 22px),
+ repeating-linear-gradient(95deg,transparent 0 12px,#24100728 14px 16px,transparent 19px 32px),
+ linear-gradient(160deg,#a76536 0%,#5b2d1b 35%,#704021 69%,#bb7847);
+ box-shadow:0 0 0 2px #3e2013,0 0 0 5px #bf8c4c,0 0 0 7px #432217,
+ 0 12px 0 #2f150b,0 18px 15px #000b,
+ inset 0 0 0 2px #ffe5a3b8,inset 0 12px 12px #f8cb7e6f;
+}
+.m2-first-room .m2-museum-desktop:before{
+ content:"";position:absolute;inset:5px 10px 36px;z-index:-1;pointer-events:none;
+ border:4px double #f2c77a;border-radius:14px 14px 5px 5px;
+ background:radial-gradient(ellipse at 30% 0%,#ffe9b36b,transparent 60%),
+ repeating-linear-gradient(6deg,transparent 0 9px,#f9c47721 11px 12px,#25100612 15px 18px),
+ linear-gradient(115deg,#b57e49,#704021 17%,#7d4525 48%,#955728 75%,#b77946);
+ box-shadow:0 0 0 2px #3b1d11,inset 0 0 0 2px #543015,inset 0 6px 9px #2b100b7f;
+}
+.m2-first-room .m2-desk-left-trim,.m2-first-room .m2-desk-right-trim{
+ position:absolute;top:0;bottom:0;width:17px;z-index:2;pointer-events:none;
+ background:linear-gradient(90deg,#603019,#f8d083 29%,#a76b30 50%,#392316 100%);
+ box-shadow:0 0 0 1px #6a3e20;
+}
+.m2-first-room .m2-desk-left-trim{
+ left:0;clip-path:polygon(65% 0,100% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-desk-right-trim{
+ right:0;transform:scaleX(-1);
+ clip-path:polygon(65% 0,100% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-museum-desktop-top{
+ position:relative;z-index:3;min-height:14px;margin:0 5px 8px;
+ color:#ffe5b3;text-shadow:0 1px 4px #1a0b08;
+ font:700 12px/1.3 Georgia,serif;
+}
+.m2-first-room .m2-museum-cards{
+ position:relative;z-index:3;display:grid;
+ grid-template-columns:repeat(6,minmax(0,1fr));
+ gap:9px;padding:3px 4px 6px;border-radius:8px;
+ background:linear-gradient(105deg,#ffd49418,#fbd08a24 40%,transparent 80%),
+ repeating-linear-gradient(1deg,transparent 0 12px,#dfab6b1b 14px 15px,transparent 19px 25px);
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ position:relative;min-height:69px;
+ padding:7px 8px!important;
+ border:4px ridge #bf8745!important;
+ border-radius:10px;
+ background:radial-gradient(ellipse at 31% 0%,#fffef5,transparent 64%),
+ linear-gradient(175deg,#fff9e4,#f2d4a4 80%,#e6bc82)!important;
+ color:#381f14;
+ font:700 clamp(12px,1vw,16px)/1.17 Georgia,serif;
+ text-shadow:0 1px #fffbea;
+ box-shadow:0 0 0 1px #5c361e,0 3px 0 #4e270f,0 7px 8px #1c09078f,
+ inset 0 0 0 2px #fff3d6,inset 0 5px 6px #fffae5!important;
+}
+.m2-first-room .m2-museum-card.m2-tile:before{
+ content:"";position:absolute;inset:3px;pointer-events:none;
+ border:1px solid #bf915b;border-radius:5px;
+ box-shadow:inset 0 0 0 1px #fff8e8;
+}
+.m2-first-room .m2-museum-card-art{
+ min-width:42px;width:42px;filter:drop-shadow(0 2px 2px #64472861);
+}
+.m2-first-room .m2-museum-card-art .m2-illustration{width:41px;height:44px}
+.m2-first-room .m2-museum-card-copy{position:relative;z-index:1}
+.m2-first-room .m2-museum-card:hover:not(:disabled),.m2-first-room .m2-museum-card:focus-visible{
+ border-color:#f8d17c!important;
+ box-shadow:0 0 0 2px #ffe2a4,0 0 16px #ffe19a7d,0 5px 5px #000a!important;
+}
+.m2-first-room .m2-museum-card[aria-pressed="true"]{
+ border-color:#fff0ad!important;
+ box-shadow:0 0 0 3px #ffce4e,0 0 17px #ffd662,0 5px 7px #000a!important;
+}
+.m2-first-room .m2-desk-front{
+ display:block;position:relative;z-index:3;height:24px;
+ margin:10px -13px -12px;
+ border:3px ridge #cb9954;border-radius:4px;
+ background:linear-gradient(180deg,#f5cf88 0 2px,#925026 3px 9px,
+ #3b1b10 10px 14px,#a46631 15px 20px,#f1c276 21px 23px);
+ box-shadow:0 6px 0 #2c160c,0 8px 8px #0009,inset 0 0 0 1px #e9b775;
+}
+.m2-first-room .m2-desk-front:before,.m2-first-room .m2-desk-front:after{
+ content:"";position:absolute;top:5px;width:33%;height:8px;
+ pointer-events:none;border-top:1px solid #f3c882;border-bottom:1px solid #442211;opacity:.8;
+}
+.m2-first-room .m2-desk-front:before{left:5%}
+.m2-first-room .m2-desk-front:after{right:5%}
+.m2-first-room .m2-desk-cabinet{
+ position:absolute;top:3px;left:calc(50% - 30px);
+ width:60px;height:12px;border:2px ridge #ab7540;border-radius:2px;
+ background:linear-gradient(#ffdf9a,#ab6a30);box-shadow:0 0 0 1px #4e301c;
+}
+.m2-first-room .m2-desk-cabinet:after{
+ content:"";display:block;width:6px;height:6px;margin:1px auto;border-radius:50%;
+ background:#6b411c;box-shadow:inset 0 1px 2px #160b06,0 0 0 2px #f7d78d;
+}
+.m2-first-room .m2-museum-desktop:after{display:none}
+.m2-first-room .m2-controls{
+ margin-top:16px;min-height:73px;padding:14px 15px 12px;
+ border-top:5px ridge #cb9a5b;border-bottom:4px ridge #965f34;border-radius:4px;
+ background:radial-gradient(ellipse at 50% 0%,#ffca8564,transparent 68%),
+ repeating-linear-gradient(4deg,#8a472b17 0 9px,#edc08521 11px 12px,#31160a14 14px 21px),
+ linear-gradient(160deg,#aa6b3f,#4b2418 28%,#704025 74%,#a7683f);
+ box-shadow:inset 0 2px 0 #f9d28f,0 5px 13px #0009;
+}
+.m2-first-room .m2-button:not(.secondary){
+ background:linear-gradient(160deg,#247862,#0b5346 38%,#063b33 77%,#082c26);
+ border:5px ridge #e6b865;border-radius:11px;color:#fff5cf;
+ text-shadow:0 2px #15352a,0 0 8px #ffdb9678;
+ box-shadow:0 0 0 1px #59341b,inset 0 0 0 2px #448c76,0 5px 0 #25130c,0 9px 12px #0009;
+}
+.m2-first-room .m2-button.secondary{
+ border:3px ridge #d6a86d;color:#392414;
+ background:linear-gradient(170deg,#fff6dd,#e7c592 78%,#c0945a);
+}
+.m2-first-room .m2-feedback{color:#fff0d0;text-shadow:0 2px 2px #1e1009}
+@media(max-width:1250px){
+ .m2-first-room .m2-museum-cards{gap:6px}
+ .m2-first-room .m2-museum-card.m2-tile{padding:6px 5px!important;font-size:clamp(11px,1vw,14px)}
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .m2-first-room .m2-controls{width:100%;padding:12px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-desktop{margin:0;padding:11px 9px 6px;border-width:6px}
+ .m2-first-room .m2-museum-desktop-top{font-size:10px}
+ .m2-first-room .m2-museum-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:2px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:73px;font-size:12px;padding:5px 3px!important}
+ .m2-first-room .m2-museum-card-art{min-width:32px;width:32px}
+ .m2-first-room .m2-museum-card-art .m2-illustration{width:31px;height:35px}
+ .m2-first-room .m2-desk-front{margin:9px -8px -8px;height:20px}
+ .m2-first-room .m2-controls{margin-top:14px;border-top-width:3px;border-bottom-width:3px}
+}
