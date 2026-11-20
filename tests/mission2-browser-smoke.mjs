@@ -3,6 +3,7 @@
  */
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
 
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
@@ -49,9 +50,12 @@ try{
    assert.equal(await page.locator('.m2-step').count(),5);
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('[data-zone]').count(),5);
+   await mkdir('test-output',{recursive:true});
+   await page.screenshot({path:'test-output/m2-e1-desktop.png',fullPage:true,animations:'disabled'});
    for(let n=2;n<=5;n++){
     await page.locator('[data-open="'+n+'"]').click();
     assert.ok((await page.locator('.m2-section-head h2').innerText()).length>4);
+    await page.screenshot({path:'test-output/m2-e'+n+'-desktop.png',fullPage:true,animations:'disabled'});
    }
    await page.locator('[data-preview-next]').click();
    assert.equal(await page.locator('.m2-finished').count(),1);
@@ -127,6 +131,7 @@ try{
     const metrics=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert.ok(metrics.scroll<=metrics.viewport+1,JSON.stringify({size,metrics}));
     assert.equal(await page.locator('.m2-hero').isVisible(),true);
+    if(size.width===390)await page.screenshot({path:'test-output/m2-e1-mobile.png',fullPage:true,animations:'disabled'});
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
