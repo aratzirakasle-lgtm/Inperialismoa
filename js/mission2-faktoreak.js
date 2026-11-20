@@ -131,6 +131,21 @@ const museumCardArt={
  conversion:'cross',missions:'church',sea_routes:'wheel',
  chauvinism:'flags',racist_theories:'microscope',exploration:'maps'
 };
+// Rótulos breves como en la maqueta aprobada; la descripción original
+// permanece íntegra en title y aria-label, sin alterar los IDs ni la corrección.
+const museumCardShort={
+ new_markets:'Merkatu berriak',
+ cheap_resources:'Lehengai merkeak',
+ investments:'Kapitala inbertitu',
+ settlement:'Europako biztanleria finkatzea',
+ working_conditions:'Emigrazioari irteera ematea',
+ conversion:'Herriak kristautzea',
+ missions:'Misio katolikoak eta protestanteak',
+ sea_routes:'Itsas-bideen kontrola',
+ chauvinism:'Abertzalekeria (chauvinismoa)',
+ racist_theories:'Teoria arrazistak',
+ exploration:'Lurrak esploratu eta ezagutzea'
+};
 const museumCategoryArt={
  economic:'coins',demographic:'ship',religious:'church',
  political:'cannon',ideological:'globe'
@@ -151,14 +166,14 @@ function museumInstruction(){
 function renderClassification(){
  const state=taskState(1),assigned=state.assignments||{};
  function tile(c){
-  return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
+  return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card" title="'+esc(c.label)+'" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
    '<span class="m2-museum-card-art" aria-hidden="true">'+museumIllustration(museumCardArt[c.id])+'</span>'+
-   '<span class="m2-museum-card-copy">'+esc(c.label)+'</span></button>';
+   '<span class="m2-museum-card-copy">'+esc(museumCardShort[c.id]||c.label)+'</span></button>';
  }
  const cabinets=categories.map(cat=>{
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
   return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
-   '<div class="m2-case-arch"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-scene-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
    '<h3 class="m2-case-title">'+esc(cat.label)+'</h3></div>'+
    '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
    '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
@@ -169,7 +184,7 @@ function renderClassification(){
  return '<section class="m2-museum-interaction" aria-label="Bost faktoreen kabinetearen sailkapena">'+
   '<div class="m2-museum-cabinet-wall">'+cabinets+'</div>'+
   '<div class="m2-museum-desktop"><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
-  '<span class="m2-museum-drag">✥ &nbsp; Aukeratu edo arrastatu</span></div>'+
+  '<span class="m2-museum-drag">☞ &nbsp; Aukeratu edo arrastatu</span></div>'+
   '<div class="m2-museum-cards" data-unassign aria-label="Sailkatu gabeko kartelak">'+unassigned.map(tile).join('')+
   (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div></div></section>';
 }
@@ -281,7 +296,6 @@ function render(){
  if(firstRoom){
   app.innerHTML=museumHeader()+museumInstruction()+
     (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
-    '<div class="m2-museum-room-label"><span>ARIKETA 1 / 5</span><span>11 dokumentu · 5 faktore</span></div>'+
     renderClassification()+controls();
   return;
  }
