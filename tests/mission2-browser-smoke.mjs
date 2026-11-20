@@ -55,6 +55,14 @@ try{
    assert.equal(await page.locator('.m2-case-foundation').count(),5);
    assert.equal(await page.locator('.m2-desk-front').count(),1);
    assert.equal(await page.locator('.m2-case-scene').count(),5);
+   assert.equal(await page.locator('.m2-case-spot').count(),5,'Las vitrinas necesitan sus cinco focos');
+   const sceneLayout=await page.locator('.m2-case-scene').evaluateAll(images=>images.map(img=>({
+     loaded:img.complete&&img.naturalWidth>0,
+     fit:getComputedStyle(img).objectFit
+   })));
+   assert.ok(sceneLayout.every(x=>x.loaded&&x.fit==='fill'),'Las cinco escenas deben verse enteras sin cortes laterales');
+   assert.equal(await page.locator('.m2-case-spot').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none');
+
    assert.equal(await page.locator('.m2-case-scene').evaluateAll(els=>els.every(img=>img.complete&&img.naturalWidth>0)),true,'Las cinco escenas históricas deben cargar');
    await mkdir('test-output',{recursive:true});
    await page.screenshot({path:'test-output/m2-e1-desktop.png',fullPage:true,animations:'disabled'});
