@@ -58,3 +58,14 @@ Material de referencia único: «Inperialismoaren garaia eta Lehen Mundu Gerra (
 - Comprobación posterior: **3 usuarios Auth, 3 perfiles, 1 equipo**, **0** finalizaciones o insignias de la misión 2 de ensayo, 5 conjuntos privados de respuestas, y el título publicado de la misión 2 **continúa siendo** «El reparto de África».
 
 **Pendiente antes de publicar:** validación de sesiones desde navegador con usuarios de ensayo autorizados, integración de interfaz en \`main\`, ajuste sincronizado de \`submit_mission(2,...)\` para evitar rutas de aprobación alternativas y actualización del título público. Las pruebas SQL no reemplazan concurrencia real de dos conexiones HTTP ni el recorrido visual autenticado.
+
+
+## Rediseño visual del ejercicio 1 · concepto de museo a color
+
+El primer ejercicio se ha reconstruido como una **sala de museo con cinco vitrinas** (económica roja, demográfica turquesa, religiosa morada, política verde e ideológica/científica ocre), con iluminación, marcos de madera y latón, ilustraciones SVG vectoriales originales, cartelas de pergamino y mesa expositiva. La vista está desarrollada en **HTML + CSS + JavaScript real**, no consiste en una imagen de fondo con zonas falsas.
+
+Interacción: las 11 cartelas mantienen sus IDs históricos y pueden colocarse haciendo clic en la cartela y después en el botón «+» de una vitrina, o arrastrando y soltando. Las cartelas se **mueven de verdad** del escritorio al interior de la vitrina y pueden reubicarse. «Berriz hasi» limpia el borrador local; «EGIAZTATU» queda disponible cuando todas están colocadas, y sigue invocando la RPC privada de Supabase sin ofrecer pistas si hay errores. No se han alterado preguntas, respuestas, permisos ni el desbloqueo de los cinco ejercicios. Las otras cuatro interfaces conservan su presentación previa para su rediseño individual posterior.
+
+La réplica está inspirada directamente en el concepto ilustrado aprobado por el docente, recreado mediante componentes nativos para permitir accesibilidad, escalado de interfaz y arrastre real. No es una imagen estática ni una promesa de reproducción idéntica píxel a píxel: se prioriza que sea operativa y adaptable.
+
+La prueba \`tests/mission2-browser-smoke.mjs\` realiza un recorrido de las cinco pantallas, comprueba el movimiento entre vitrinas mediante *drag and drop*, la colocación de las 11 cartelas con clics, la activación de verificación y la ausencia de escritura desde el modo de profesor. Se generan capturas para revisar escritorio y móvil.
