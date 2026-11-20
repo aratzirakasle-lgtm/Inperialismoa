@@ -254,6 +254,16 @@ try{
        'La ficha '+id+' debe llegar a '+zone+' mediante '+mode);
     }
     assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+    for(const zone of zones){
+     const target=page.locator('[data-zone="'+zone+'"] .m2-case-target');
+     await target.scrollIntoViewIfNeeded();
+     const canReceive=await target.evaluate(element=>{
+      const rect=element.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+      return element.contains(document.elementFromPoint(x,y)) &&
+       getComputedStyle(element).pointerEvents!=='none' && rect.height>=24;
+     });
+     assert.ok(canReceive,'La zona de soltar en '+zone+' no debe quedar tapada por las tarjetas ('+mode+')');
+    }
     const result=await page.locator('[data-zone]').evaluateAll(cabinets=>cabinets.map(cabinet=>{
      const w=cabinet.querySelector('.m2-case-well'),wr=w.getBoundingClientRect();
      const cards=[...cabinet.querySelectorAll('.m2-archive-card')];
