@@ -4302,3 +4302,43 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-atlas-screen .m2-atlas-statement-select{height:34px;font-size:11px}
  .m2-atlas-screen .m2-atlas-statement-label{font-size:11.5px}
 }
+
+
+/* ETAPA 02 · Retouches: restaurar viajeros pintados (no foto superpuesta)
+   y dejar libre la interpretación crítica a su derecha. */
+@media(min-width:1101px){
+ .m2-atlas-main{
+  grid-template-columns:minmax(0,17fr) minmax(0,18fr) minmax(0,27fr) minmax(0,18fr) minmax(0,20fr);
+ }
+ .m2-atlas-migrants-foreground{
+  width:281px;
+  height:149px;
+  left:-73px;
+  bottom:-79px;
+  max-width:none;
+  mask-image:none!important;
+  clip-path:polygon(0 2%,68% 2%,72% 30%,100% 29%,100% 100%,0 100%);
+  border:none;
+ }
+ .m2-atlas-critical{
+  grid-column:2/5;
+  margin-left:19%;
+  padding-left:17px;
+  line-height:1.18;
+  font-size:clamp(11px,.9vw,14px);
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-label{
+  text-align:left;
+ }
+ .m2-atlas-route-activity>footer .m2-atlas-check,
+ .m2-atlas-facts-activity>footer .m2-atlas-check,
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  background:
+   radial-gradient(ellipse at 38% 0%,#42a98a78,transparent 70%),
+   linear-gradient(180deg,#167b60,#07543e 62%,#073a30);
+  border-color:#e0b361;
+  color:#fff5cc;
+  text-shadow:0 2px 2px #112e21;
+  box-shadow:0 0 0 2px #8b4e24,inset 0 0 0 2px #3a9577,0 5px 6px #1f150ac2;
+ }
+}
