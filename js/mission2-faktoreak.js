@@ -505,6 +505,33 @@ function toggleMulti(group,value){
  state.multi[group]=[...list];render();
  $('[data-multi="'+group+'"][data-value="'+value+'"]')?.focus({preventScroll:true});
 }
+
+/* Los cuatro paneles conservan los campos en draft[3], no corrigen en el cliente.
+   Las respuestas de la misión se validan únicamente mediante la RPC privada. */
+function atlasMoveRoute(location){
+ if(active!==3||!atlasSelectedRoute||!atlasRoutes.some(r=>r.id===location))return;
+ const state=taskState(3);
+ for(const route of atlasRoutes){
+  if(route.id!==atlasSelectedRoute&&state['route_'+route.id]===location)delete state['route_'+route.id];
+ }
+ state['route_'+atlasSelectedRoute]=location;
+ atlasSelectedRoute=null;
+ feedback='';feedbackState='';render();
+}
+function atlasPack(bag){
+ if(active!==3||!atlasSelectedLuggage||!['cause','effect'].includes(bag))return;
+ taskState(3)['bag_'+atlasSelectedLuggage]=bag;
+ atlasSelectedLuggage=null;
+ feedback='';feedbackState='';render();
+}
+function atlasPartCheck(part){
+ const state=taskState(3);
+ const keys=part===1?['1850','1870','1900','migration','missionaries']:
+  part===2?['route_africa','route_asia','route_oceania']:
+  part===3?atlasStatements.map(item=>item[0]):atlasSuitcase.map(item=>'bag_'+item[0]);
+ const ready=keys.every(key=>!!state[key]);
+ setFeedback(ready?'Atala osatuta. Erantzunak amaieran egiaztatuko dira.':'Osatu atal honetako erantzun guztiak.');
+}
 app.addEventListener('click',event=>{
  const elem=event.target.closest('button');
  if(!elem||!app.contains(elem)){
@@ -518,12 +545,24 @@ app.addEventListener('click',event=>{
    return;
  }
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
+ if(active===3&&elem.hasAttribute('data-atlas-route')){
+  atlasSelectedRoute=atlasSelectedRoute===elem.dataset.atlasRoute?null:elem.dataset.atlasRoute;
+  atlasSelectedLuggage=null;render();return;
+ }
+ if(active===3&&elem.hasAttribute('data-atlas-target'))return atlasMoveRoute(elem.dataset.atlasTarget);
+ if(active===3&&elem.hasAttribute('data-atlas-bag-card')){
+  atlasSelectedLuggage=atlasSelectedLuggage===elem.dataset.atlasBagCard?null:elem.dataset.atlasBagCard;
+  atlasSelectedRoute=null;render();return;
+ }
+ if(active===3&&elem.hasAttribute('data-atlas-bag-zone'))return atlasPack(elem.dataset.atlasBagZone);
+ if(active===3&&elem.hasAttribute('data-atlas-stage'))return atlasPartCheck(Number(elem.dataset.atlasStage));
  if(elem.hasAttribute('data-card')){selected=selected===elem.dataset.card?null:elem.dataset.card;const chosen=elem.dataset.card;render();$('[data-card="'+chosen+'"]')?.focus({preventScroll:true});return}
  const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
+ if(active===3&&elem.closest('[data-atlas-bag-zone]'))return atlasPack(elem.closest('[data-atlas-bag-zone]').dataset.atlasBagZone);
  if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
  if(elem.hasAttribute('data-year'))return assignYear(elem.dataset.year);
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
- if(elem.hasAttribute('data-reset')){draft[active]={};selected=null;feedback='';feedbackState='';render();return}
+ if(elem.hasAttribute('data-reset')){draft[active]={};selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render();return}
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
  if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
@@ -532,20 +571,9 @@ app.addEventListener('click',event=>{
 });
 app.addEventListener('change',event=>{
  const target=event.target;
- if(target.matches('select[data-field]'))taskState(active)[target.dataset.field]=target.value;
- if(active===3&&target.matches('select[data-field]')){
-  const state=taskState(3);
-  const keys=['1850','1870','1900','migration','missionaries'];
-  const count=keys.filter(key=>!!state[key]).length;
-  const counter=$('.m2-migration-progress-count');
-  if(counter)counter.textContent=count+' / 5 agiri osatuta';
-  const fill=$('.m2-migration-progress-fill');
-  if(fill)fill.style.width=(count*20)+'%';
-  const form=target.closest('.m2-ledger-year,.m2-migration-question');
-  if(form){
-   const status=form.querySelector('.m2-ledger-entry-status,.m2-migration-question-status');
-   if(status)status.textContent=target.value?(form.classList.contains('m2-ledger-year')?'IDATZITA':'AGIRIA BETETA'):(form.classList.contains('m2-ledger-year')?'HUTSIK':'ERANTZUN GABE');
-  }
+ if(target.matches('select[data-field],input[type="radio"][data-field]'))taskState(active)[target.dataset.field]=target.value;
+ if(active===3&&target.matches('select[data-field],input[type="radio"][data-field]')){
+  render();return;
  }
  if(target.matches('input[data-archive]'))taskState(4)[target.dataset.archive]=target.value;
  const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
@@ -556,6 +584,12 @@ app.addEventListener('keydown',event=>{
  if(zone&&event.target===zone){event.preventDefault();assignToCategory(zone.dataset.zone)}
 });
 app.addEventListener('dragstart',event=>{
+ if(active===3){
+  const route=event.target.closest('[data-atlas-route]');
+  const item=event.target.closest('[data-atlas-bag-card]');
+  if(route){atlasSelectedRoute=route.dataset.atlasRoute;event.dataTransfer?.setData('text/plain','route:'+atlasSelectedRoute);return}
+  if(item){atlasSelectedLuggage=item.dataset.atlasBagCard;event.dataTransfer?.setData('text/plain','bag:'+atlasSelectedLuggage);return}
+ }
  const card=event.target.closest('[data-card]')||event.target.closest('[data-event]');
  if(!card)return;
  selected=card.dataset.card||card.dataset.event;
@@ -563,9 +597,24 @@ app.addEventListener('dragstart',event=>{
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
 });
 app.addEventListener('dragover',event=>{
+ if(active===3&&event.target.closest('[data-atlas-target],[data-atlas-bag-zone]')){
+  event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';return;
+ }
  if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
 });
 app.addEventListener('drop',event=>{
+ if(active===3){
+  const pin=event.target.closest('[data-atlas-target]');
+  const bag=event.target.closest('[data-atlas-bag-zone]');
+  if(pin||bag){
+   event.preventDefault();
+   const type=event.dataTransfer?.getData('text/plain')||'';
+   if(type.startsWith('route:'))atlasSelectedRoute=type.slice(6);
+   if(type.startsWith('bag:'))atlasSelectedLuggage=type.slice(4);
+   if(pin)return atlasMoveRoute(pin.dataset.atlasTarget);
+   if(bag)return atlasPack(bag.dataset.atlasBagZone);
+  }
+ }
  const zone=event.target.closest('[data-zone]');
  const year=event.target.closest('[data-year]');
  const loose=event.target.closest('[data-unassign]');
