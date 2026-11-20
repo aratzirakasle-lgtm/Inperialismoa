@@ -323,7 +323,7 @@ function renderPopulation(){
    '<section class="m2-atlas-pop m2-migration-folio"><h3>Europako biztanleria <small>(milioi biztanle)</small></h3>'+
     '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
     '<div class="m2-atlas-pop-list">'+population+'</div>'+
-    '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false"></section>'+
+    '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-travelers-cutout.webp" alt="" draggable="false"></section>'+
    '<div class="m2-atlas-main-map"><img src="./assets/m2-atlas-original-map.webp" alt="XIX. mendeko atlas historikoaren ilustrazioa" draggable="false">'+
     '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span></div>'+
    '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
@@ -344,7 +344,7 @@ function renderPopulation(){
     '<footer>'+atlasSectionStatus(2,placed,3)+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
    '</section>'+
    '<section class="m2-atlas-facts-activity m2-atlas-activity">'+
-    '<header><span class="m2-atlas-number">3</span><h2>Egia ala gezurra?</h2></header>'+
+    '<header><span class="m2-atlas-number">3</span><h2>Emigrazioaren ondorioak</h2></header>'+
     '<p class="m2-atlas-exercise-instruction">PDFko baieztapenak: aukeratu E (egia) edo G (gezurra). Ez dago pistarik.</p>'+
     '<div class="m2-atlas-fact-head"><span>BAIEZTAPEN HISTORIKOAK</span><span>EGIA · GEZURRA</span></div>'+
     '<div class="m2-atlas-statements">'+statements+'</div>'+
