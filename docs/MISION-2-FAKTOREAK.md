@@ -69,3 +69,19 @@ Interacción: las 11 cartelas mantienen sus IDs históricos y pueden colocarse h
 La réplica está inspirada directamente en el concepto ilustrado aprobado por el docente, recreado mediante componentes nativos para permitir accesibilidad, escalado de interfaz y arrastre real. No es una imagen estática ni una promesa de reproducción idéntica píxel a píxel: se prioriza que sea operativa y adaptable.
 
 La prueba \`tests/mission2-browser-smoke.mjs\` realiza un recorrido de las cinco pantallas, comprueba el movimiento entre vitrinas mediante *drag and drop*, la colocación de las 11 cartelas con clics, la activación de verificación y la ausencia de escritura desde el modo de profesor. Se generan capturas para revisar escritorio y móvil.
+
+
+### Segunda revisión visual: fidelidad a la maqueta colorida
+
+Se ha revisado expresamente la **diferencia** entre la maqueta museística 16:9 aprobada y la captura de Chromium de la primera versión. No se considera una réplica pixel-perfect: se ha llevado a una composición funcional muy próxima.
+
+- Fondo escenográfico con **mapa histórico, una lámpara de época, globo terráqueo, instrumentos, fotografía enmarcada, libros, busto y mueble de madera** mediante \`assets/m2-room-illustration.svg\`.
+- **Cinco escenas históricas policromadas** independientes en \`assets/m2-scene-*.svg\`: monedas, barco con viajeros, iglesia de misión, fortificación con cañón y globo con libros, sobre vitrinas burdeos, turquesa, violeta, verde y dorada.
+- Rediseño horizontal: muebles centrados, márgenes destinados a objetos de museo, cabecera granate amplia y una mesa de cartelas compacta, medidos también en **1672×941** (formato exacto del concepto).
+- Rótulos resumidos en las tarjetas para mejorar lectura; sus descripciones originales se conservan en atributos de accesibilidad/tooltip y **no cambian los IDs ni las respuestas válidas**.
+- Placas doradas ahora **clicables y enfocables con teclado**: nunca se pierde la capacidad de añadir tarjetas a una vitrina por estar llena. Se puede además arrastrar, recolocar o devolver a la mesa.
+- Los compartimentos de las vitrinas crecen automáticamente al añadir tarjetas; Chromium comprueba que ninguna queda recortada aun concentrando once tarjetas en una misma vitrina.
+- La vista previa del profesor muestra también «✓ EGIAZTATU» sin escribir datos; la navegación de revisión se mantiene separada.
+- Efectos de selección dorada y ajustes \`prefers-reduced-motion\` para evitar inestabilidad del arrastre.
+
+La segunda revisión mantiene **intactos** los ejercicios 2 a 5, la lógica de permisos de Supabase, el esquema de corrección y las pantallas de la misión 1. Todos los cambios siguen exclusivamente en la rama de desarrollo / PR n.º 2.
