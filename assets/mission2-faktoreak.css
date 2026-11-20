@@ -4342,3 +4342,28 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   box-shadow:0 0 0 2px #8b4e24,inset 0 0 0 2px #3a9577,0 5px 6px #1f150ac2;
  }
 }
+
+
+/* Etapa 02 · contraste de 1672px con la referencia original.
+   Conservar un solo grupo de viajeros (ya está incluido en el fondo
+   pictórico) y limitar las placas a la anchura real del museo. */
+@media(min-width:1101px){
+ .m2-atlas-heading{
+  width:min(830px,calc(100% - 570px));
+  max-width:830px;
+ }
+ .m2-atlas-intro .m2-atlas-roundel{
+  left:4px;
+  top:-13px;
+  width:63px;
+  height:63px;
+  font-size:33px;
+ }
+ .m2-atlas-migrants-foreground{
+  display:none;
+ }
+ .m2-atlas-row-two .m2-atlas-activity>header h2{
+  flex:0 1 495px;
+  max-width:72%;
+ }
+}
