@@ -129,3 +129,17 @@ La primera pantalla ha incorporado una corrección de composición para mantener
 La prueba de regresión \`tests/mission2-browser-smoke.mjs\` incluye once cartelas acumuladas en vitrinas de cada categoría a resoluciones de **1672, 1365, 768, 390 y 320 px**, una distribución de **3 + 2 + 2 + 2 + 2** a través de arrastre real en escritorio, y la misma distribución mediante selección y pulsación en móvil (alternativa para pantallas táctiles). Comprueba los rectángulos reales de las cartelas y del compartimento, la ausencia de solapes, los textos y miniaturas visibles, el desbordamiento horizontal, y que la franja de recepción no esté cubierta por otra ficha. Las capturas de los estados llenos y distribuidos se guardan como artefactos de GitHub Actions.
 
 No se han modificado contenidos ni respuestas, no hay pistas tras errores, no se ha modificado Supabase y se mantiene la primera misión íntegra.
+
+
+## Atlas de migraciones · fidelidad visual, segunda aproximación (21/11/2026)
+
+En el tercer ejercicio, los cuatro retos se mantienen como HTML real y conservan los identificadores de campo y valores reconocidos por la RPC. Se han ajustado proporciones y el paisaje conforme a la referencia 1672×941:
+
+- Recuperados de la lámina aprobada los instrumentos históricos de cabecera (m2-atlas-header-left.webp y m2-atlas-header-right.webp). Se ha evitado superponer los viajeros dos veces sobre el texto.
+- El segundo reto incorpora un **muelle y barco de vapor ilustrados**, con el mapa, las rutas y sus destinos todavía seleccionables y arrastrables.
+- El tercero se ha transformado en un **expediente con fotografía en sepia** y cinco desplegables auténticos que mantienen los valores egia/gezurra sin pistas.
+- El cuarto contiene una bandeja para ocho cartelas, un bodegón de equipaje y dos maletas de cuero rojo y azul con correajes, cerraduras, asas y herrajes. Las cartelas conservan el arrastre, el traslado entre maletas y sus respuestas.
+- En escritorio se cuidan las proporciones del original; en móviles los paneles se apilan para conservar la legibilidad.
+- Se ha añadido una prueba Chromium que coloca las **ocho cartelas en una sola maleta** en escritorio y móvil para impedir solapamientos o recortes.
+
+No se han cambiado las respuestas ni Supabase; la rama sigue sin publicar. No se afirma identidad píxel a píxel: quedan por refinar las ilustraciones del puerto y del vapor para aproximarlas más a la riqueza pictórica de la referencia.
