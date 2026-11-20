@@ -125,6 +125,17 @@ const museumDrawings={
  microscope:'<path d="M39 11l20 10-17 35-20-10z" fill="#53756a" stroke="#314f4a" stroke-width="4"/><path d="M33 8l37 18" stroke="#d6ab62" stroke-width="7"/><path d="M62 38q22 30-12 33M34 74h49" stroke="#38594e" stroke-width="8" fill="none"/><path d="M21 78h70" stroke="#786144" stroke-width="8"/>',
  maps:'<path d="M10 17l25-6 27 8 28-9v56l-28 8-27-8-25 6z" fill="#e7c47e" stroke="#815f39" stroke-width="3"/><path d="M35 11v55m27-47v55" stroke="#aa8556" stroke-width="2"/><path d="M20 39l16-11 20 18 22-17M52 50l14 9" stroke="#6a9473" stroke-width="5" fill="none"/><circle cx="68" cy="35" r="6" fill="#a34e36"/>'
 };
+/* Figuras históricas decorativas, independientes del contenido evaluable. */
+const museumSceneFigures={
+ economic:'<g transform="translate(152 39)"><path d="M8 17Q-4 0 21 0H40Q58 23 42 40L52 77Q27 90 1 75L0 46Z" fill="#b78b56" stroke="#6c4625" stroke-width="4"/><path d="M8 27Q29 33 43 25M6 56Q30 66 48 56" stroke="#eed19b" stroke-width="3" fill="none"/></g><g transform="translate(194 105)"><rect width="34" height="33" rx="3" fill="#805031" stroke="#30231a" stroke-width="3"/><path d="M3 9H31M17 1V31" stroke="#deb575" stroke-width="3"/></g>',
+ demographic:'<g transform="translate(0 121)" fill="#293c3a" stroke="#ad9571" stroke-width="1.5"><circle cx="20" cy="5" r="7"/><path d="M8 15q12-8 24 0l5 29H4z"/><circle cx="55" cy="5" r="7"/><path d="M43 15q12-8 24 0l6 29H39z"/><circle cx="90" cy="5" r="7"/><path d="M78 15q12-8 24 0l6 29H74z"/></g>',
+ religious:'<g transform="translate(5 112)" stroke="#3b2b29" stroke-width="2"><circle cx="28" cy="8" r="8" fill="#987057"/><path d="M16 19q12-7 24 0l5 29H11z" fill="#3c3535"/><circle cx="73" cy="13" r="8" fill="#986d52"/><path d="M61 24q12-9 24 0l6 23H54z" fill="#a96d48"/><circle cx="119" cy="14" r="8" fill="#a87d62"/><path d="M106 24q13-11 26 0l6 23H98z" fill="#5f7c72"/><circle cx="165" cy="13" r="8" fill="#9c7356"/><path d="M153 23q12-10 24 0l6 23H146z" fill="#895d86"/><circle cx="208" cy="14" r="8" fill="#9c6d54"/><path d="M196 24q12-8 24 0l6 23H190z" fill="#d3a16c"/></g>',
+ political:'<g transform="translate(4 108)" stroke="#2d2926" stroke-width="2"><circle cx="26" cy="10" r="8" fill="#ce9565"/><path d="M16 20q10-9 20 0l5 29H11z" fill="#b43830"/><path d="M16 1H36L40 7H12z" fill="#273234"/><path d="M19 49V65M34 49V65" stroke="#25363b" stroke-width="7"/><circle cx="70" cy="10" r="8" fill="#ca9465"/><path d="M60 20q10-9 20 0l5 29H55z" fill="#a93430"/><path d="M60 1H80L84 7H56z" fill="#273234"/><path d="M63 49V65M78 49V65" stroke="#25363b" stroke-width="7"/></g><path d="M48 108V170M91 108V170" stroke="#444039" stroke-width="3"/>',
+ ideological:'<g transform="translate(151 113)"><path d="M0 13Q18 0 41 13Q61 0 88 15L84 53Q62 42 42 56Q19 42 4 53Z" fill="#eed9a4" stroke="#7e5d34" stroke-width="3"/><path d="M42 15V53" stroke="#b99860" stroke-width="3"/><path d="M8 21q17-7 29 0M8 31q17-7 29 0M47 22q15-7 31 0M47 31q15-7 31 0" fill="none" stroke="#af8b5c" stroke-width="1.5"/></g><g transform="translate(4 108)"><circle cx="38" cy="24" r="24" fill="none" stroke="#d6ac62" stroke-width="4"/><ellipse cx="38" cy="24" rx="11" ry="24" fill="none" stroke="#b68a52" stroke-width="2"/><path d="M12 24H64M38 0V50M38 50V63M16 63H61" stroke="#b88946" stroke-width="4"/></g>'
+};
+function museumSceneDetails(kind){
+ return '<svg class="m2-case-details" aria-hidden="true" focusable="false" viewBox="0 0 240 170">'+(museumSceneFigures[kind]||'')+'</svg>';
+}
 const museumCardArt={
  new_markets:'factory',cheap_resources:'coins',investments:'bullion',
  settlement:'people',working_conditions:'suitcase',
@@ -174,7 +185,7 @@ function renderClassification(){
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
   const cabinetTitle=cat.id==='ideological'?'Ideologikoak /<br> zientifikoak':esc(cat.label);
   return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
-   '<span class="m2-case-crown" aria-hidden="true"></span><div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><span class="m2-case-spot" aria-hidden="true"></span><div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<span class="m2-case-crown" aria-hidden="true"></span><div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg" alt="" loading="eager" draggable="false"><span class="m2-case-spot" aria-hidden="true"></span>'+museumSceneDetails(cat.id)+'<div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
    '<h3 class="m2-case-title"><button type="button" class="m2-case-title-action" aria-label="'+esc(cat.label)+' faktorean kokatu">'+cabinetTitle+'</button></h3></div>'+
    '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
    '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
