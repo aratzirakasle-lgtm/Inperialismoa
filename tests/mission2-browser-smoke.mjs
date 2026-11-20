@@ -49,6 +49,15 @@ try{
   try{
    assert.equal(await page.locator('.m2-step').count(),5);
    assert.equal(await page.locator('[data-card]').count(),11);
+   assert.equal(await page.locator('.m2-archive-card').count(),11,'Once cartelas históricas independientes');
+   const art=await page.locator('.m2-archive-card .m2-card-miniature').evaluateAll(images=>images.map(img=>({
+     loaded:img.complete&&img.naturalWidth>0,
+     src:new URL(img.src).pathname
+   })));
+   assert.equal(art.length,11);
+   assert.equal(new Set(art.map(x=>x.src)).size,11,'Cada concepto debe tener una miniatura diferente');
+   assert.ok(art.every(x=>x.loaded),'Las once miniaturas ilustradas deben cargar');
+
    assert.equal(await page.locator('[data-zone]').count(),5);
    assert.equal(await page.locator('.m2-case-title-action').count(),5);
    assert.equal(await page.locator('.m2-case-crown').count(),5);
@@ -70,8 +79,12 @@ try{
    assert.equal(await page.locator('.m2-case-scene').evaluateAll(els=>els.every(img=>img.complete&&img.naturalWidth>0)),true,'Las cinco escenas históricas deben cargar');
    await mkdir('test-output',{recursive:true});
    await page.screenshot({path:'test-output/m2-e1-desktop.png',fullPage:true,animations:'disabled'});
+
+   await page.locator('[data-card="new_markets"]').click();
+   assert.equal(await page.locator('[data-card="new_markets"]').getAttribute('aria-pressed'),'true','El resplandor de selección debe activarse sin resolver nada');
    await page.locator('[data-card="new_markets"]').dragTo(page.locator('[data-zone="economic"] .m2-case-target'));
    assert.equal(await page.locator('[data-zone="economic"] [data-card="new_markets"]').count(),1);
+   assert.equal(await page.locator('[data-zone="economic"] .m2-card-miniature').count(),1,'Las imágenes deben acompañar a la cartela dentro de la vitrina');
    await page.locator('[data-zone="economic"] [data-card="new_markets"]').dragTo(page.locator('[data-zone="demographic"] .m2-case-target'));
    assert.equal(await page.locator('[data-zone="demographic"] [data-card="new_markets"]').count(),1);
    await page.locator('[data-zone="demographic"] [data-card="new_markets"]').click();
