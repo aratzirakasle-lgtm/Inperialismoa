@@ -19,6 +19,7 @@ jobs:
         run: |
           node --check tests/image-baseline.mjs
           node --check tests/live-supabase-smoke.mjs
+          node --check tests/browser-network-profile.mjs
           node tests/image-baseline.mjs
       - name: Probar permisos e ilustraciones de los ejercicios
         run: node --test tests/*.test.mjs
@@ -43,3 +44,5 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-server.log 2>&1 &
           node tests/browser-smoke.mjs
+      - name: Medir red de HTML, CSS e ilustraciones en Chromium sin ejecutar los juegos
+        run: node tests/browser-network-profile.mjs
