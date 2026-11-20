@@ -234,36 +234,45 @@ try{
    }finally{await context.close()}
   }
  });
- await scenario('Once cartelas repartidas entre las cinco vitrinas sin solaparse',async()=>{
-  const {page,context,errors}=await open('teacher',{width:390,height:844});
-  try{
-   const zones=['economic','demographic','religious','political','ideological'];
-   const ids=await page.locator('.m2-museum-desktop [data-card]').evaluateAll(cards=>cards.map(c=>c.dataset.card));
-   for(const [index,id] of ids.entries()){
-    const zone=zones[index%zones.length];
-    await page.locator('.m2-museum-desktop [data-card="'+id+'"]').dragTo(
-      page.locator('[data-zone="'+zone+'"] .m2-case-well'));
-    assert.equal(await page.locator('[data-zone="'+zone+'"] [data-card="'+id+'"]').count(),1,
-      'La ficha '+id+' debe llegar al interior de '+zone+' al arrastrarla');
-   }
-   assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
-   const result=await page.locator('[data-zone]').evaluateAll(cabinets=>cabinets.map(cabinet=>{
-    const w=cabinet.querySelector('.m2-case-well'),wr=w.getBoundingClientRect();
-    const cards=[...cabinet.querySelectorAll('.m2-archive-card')];
-    return {
-     zone:cabinet.dataset.zone,count:cards.length,
-     fit:cards.every(c=>{
-      const r=c.getBoundingClientRect();
-      return r.left>=wr.left-2&&r.right<=wr.right+2&&r.top>=wr.top-2&&r.bottom<=wr.bottom+2 &&
-       c.querySelector('.m2-card-miniature').naturalWidth>0;
-     })
-    };
-   }));
-   assert.deepEqual(result.map(x=>x.count),[3,2,2,2,2]);
-   assert.ok(result.every(x=>x.fit),JSON.stringify(result));
-   await page.screenshot({path:'test-output/m2-e1-distributed-mobile.png',fullPage:true,animations:'disabled'});
-   assert.deepEqual(errors,[]);
-  }finally{await context.close()}
+ await scenario('Once cartelas repartidas sin recortes: arrastre en escritorio y pulsación móvil',async()=>{
+  for(const mode of ['desktop-drag','mobile-tap']){
+   const size=mode==='desktop-drag'?{width:1365,height:900}:{width:390,height:844};
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    const zones=['economic','demographic','religious','political','ideological'];
+    const ids=await page.locator('.m2-museum-desktop [data-card]').evaluateAll(cards=>cards.map(c=>c.dataset.card));
+    for(const [index,id] of ids.entries()){
+     const zone=zones[index%zones.length];
+     if(mode==='desktop-drag'){
+      await page.locator('.m2-museum-desktop [data-card="'+id+'"]').dragTo(
+       page.locator('[data-zone="'+zone+'"] .m2-case-target'));
+     }else{
+      await page.locator('.m2-museum-desktop [data-card="'+id+'"]').click();
+      await page.locator('[data-zone="'+zone+'"] .m2-case-title-action').click();
+     }
+     assert.equal(await page.locator('[data-zone="'+zone+'"] [data-card="'+id+'"]').count(),1,
+       'La ficha '+id+' debe llegar a '+zone+' mediante '+mode);
+    }
+    assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+    const result=await page.locator('[data-zone]').evaluateAll(cabinets=>cabinets.map(cabinet=>{
+     const w=cabinet.querySelector('.m2-case-well'),wr=w.getBoundingClientRect();
+     const cards=[...cabinet.querySelectorAll('.m2-archive-card')];
+     return {
+      zone:cabinet.dataset.zone,count:cards.length,
+      fit:cards.every(c=>{
+       const r=c.getBoundingClientRect(),text=c.querySelector('.m2-museum-card-copy');
+       return r.left>=wr.left-2&&r.right<=wr.right+2&&r.top>=wr.top-2&&r.bottom<=wr.bottom+2 &&
+        c.querySelector('.m2-card-miniature').naturalWidth>0 &&
+        text.scrollWidth<=text.clientWidth+2 && text.scrollHeight<=text.clientHeight+2;
+      })
+     };
+    }));
+    assert.deepEqual(result.map(x=>x.count),[3,2,2,2,2]);
+    assert.ok(result.every(x=>x.fit),JSON.stringify({mode,result}));
+    await page.screenshot({path:'test-output/m2-e1-distributed-'+mode+'.png',fullPage:true,animations:'disabled'});
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
  });
 
  await scenario('Referencia 16:9 en 1672×941: cinco vitrinas y escenografía visible',async()=>{
