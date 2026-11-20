@@ -107,3 +107,14 @@ Actualización **real en los componentes HTML/CSS** del primer ejercicio, sin ge
 El mostrador inferior se ha reconstruido con madera pulida en perspectiva, molduras, bandeja interior, cartelas de pergamino y cajón frontal. La distribución inicial utiliza seis tarjetas en la primera fila y cinco en una segunda fila que ocupa **todo el ancho del mostrador**. En móvil, la tarjeta que queda sola se centra. El rótulo «Ideologikoak / zientifikoak» aparece en dos líneas para evitar compresión o cortes.
 
 La auditoría automática verifica cargas de las escenas, cinco vitrinas, aristas decorativas, tarjetas arrastrables, recolocación, once cartelas visibles en el mismo compartimento, distribución de la segunda fila, legibilidad del título en móvil y recorrido secuencial de los cinco ejercicios. **Las claves privadas, la RPC y las pantallas de la primera misión no han cambiado.** La rama sigue en borrador, sin publicar ni fusionar.
+
+
+## Rediseño de las once cartelas (20/11/2026)
+
+Se han sustituido los iconos esquemáticos del primer ejercicio por **once miniaturas SVG diferentes**, creadas para esta sala: factorías, mercancías y materias primas, libro de inversiones, viajeros en barco de vapor, maleta de emigración, cruz y libro, capilla de misión, rueda de timón, banderas, documento de teoría racista contextualizado mediante un sello de advertencia, y mapa de exploración. Todas están bajo \`assets/m2-card-*.svg\` y cargan sin servicios de terceros.
+
+Las cartelas son fichas de colección del siglo XIX con pequeño medallón grabado, número de catálogo \`AGIRIA · 01–11\`, pergamino con textura, marco de latón, relieve y lacre decorativo. La **selección ilumina su contorno dorado** sin sugerir a qué categoría corresponde la respuesta. Se mantienen los textos e identificadores, los once conceptos completos en \`aria-label\` y \`title\`, la selección por pulsación, la posibilidad de arrastrar y recolocar, y la corrección privada sin pistas.
+
+Dentro de cada vitrina, las fichas se convierten en etiquetas de catálogo compactas **con miniatura visible** y se expanden verticalmente al acumularse; fuera de la vitrina conservan la disposición de seis más cinco en la mesa. Se han revisado capturas reales a **1672 × 941**, escritorio y móvil.
+
+**Pruebas automatizadas:** GitHub Actions n.º **320**, comprobaciones estáticas y Chromium superadas. El test verifica que se cargan once miniaturas distintas, que el estado de selección funciona y que la ilustración sigue acompañando a la cartela al trasladarla a una vitrina. No se modifica la primera misión, los ejercicios 2–5 ni la función de Supabase. La rama sigue en borrador.
