@@ -143,7 +143,7 @@ try{
     await page.locator('[data-atlas-target="'+dest+'"]').click();
    }
    for(const [id,value] of [['statement_1','egia'],['statement_2','gezurra'],['statement_3','egia'],['statement_4','egia'],['statement_5','gezurra']])
-    await page.locator('input[data-field="'+id+'"][value="'+value+'"]').check();
+    await page.locator('select.m2-atlas-statement-select[data-field="'+id+'"]').selectOption(value);
    for(const [id,bag] of [['growth','cause'],['conditions','cause'],['better','cause'],['conversion','cause'],
       ['settlement','effect'],['missions','effect'],['oceania','effect'],['faith','effect']]){
     await page.locator('[data-atlas-bag-card="'+id+'"]').click();
@@ -373,7 +373,7 @@ try{
    try{
     await page.locator('[data-open="3"]').click();
     const metrics=await page.locator('.m2-atlas-screen').evaluate(root=>{
-     const fields=[...root.querySelectorAll('select,.m2-atlas-radio input,.m2-atlas-truth input,.m2-atlas-luggage-drop,.m2-atlas-pin')];
+     const fields=[...root.querySelectorAll('select,.m2-atlas-radio input,.m2-atlas-luggage-drop,.m2-atlas-pin')];
      const rects=[...root.querySelectorAll('.m2-atlas-activity,.m2-atlas-main,.m2-atlas-heading')].map(el=>{
       const r=el.getBoundingClientRect();return {x:r.left,right:r.right,w:r.width};
      });
