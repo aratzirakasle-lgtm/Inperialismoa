@@ -2153,3 +2153,419 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 .m2-first-room .m2-museum-case{
  align-self:start;
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   ARIKETA 3 · MIGRAZIOEN LIBURUA · museo, registro y expedientes históricos
+   Solo la tercera pantalla. Todas las respuestas siguen siendo <select>
+   accesibles; el progreso indica únicamente apartados rellenados.
+   ════════════════════════════════════════════════════════════════════ */
+.m2-paper:has(.m2-migration-gallery){
+ max-width:1480px;
+ background:
+ radial-gradient(ellipse at 75% 17%,#f9f0d8,transparent 50%),
+ radial-gradient(ellipse at 11% 77%,#b58f6382,transparent 70%),
+ repeating-linear-gradient(16deg,#91714a0c 0 1px,transparent 2px 10px),
+ linear-gradient(125deg,#dfcda6,#f1e6ca 50%,#dfc9a1);
+}
+.m2-paper:has(.m2-migration-gallery)>.m2-work{
+ padding:clamp(9px,1.4vw,20px);
+ border:0;
+ background:
+  radial-gradient(ellipse at 50% 0%,#d3a16d65,transparent 80%),
+  repeating-linear-gradient(94deg,#6a321b28 0 3px,transparent 4px 19px),
+  linear-gradient(135deg,#6e3b24,#341f19 27%,#79462a 75%,#452a1b);
+ box-shadow:0 0 0 4px #b3844d,0 0 0 6px #4b2e1a,0 12px 19px #2d1b15a8,inset 0 0 0 2px #e7b478;
+ border-radius:10px;
+}
+.m2-migration-gallery{position:relative;isolation:isolate;font-family:Georgia,"Libre Baskerville",serif}
+.m2-migration-gallery-head{
+ position:relative;
+ max-width:100%;
+ display:flex;
+ align-items:center;
+ gap:clamp(8px,1.8vw,24px);
+ flex-wrap:wrap;
+ min-height:91px;
+ padding:13px clamp(13px,2vw,26px);
+ border:5px ridge #b98a4c;
+ border-radius:9px 9px 3px 3px;
+ background:
+ radial-gradient(ellipse at 40% -10%,#d5a26d53,transparent 62%),
+ repeating-linear-gradient(3deg,#c15c451a 0 2px,transparent 3px 14px),
+ linear-gradient(145deg,#721a22,#54111b 51%,#7c2428);
+ color:#ffe9c4;
+ box-shadow:inset 0 0 0 2px #dfb777,0 4px 0 #3b1a13,0 8px 11px #190d0cb5;
+}
+.m2-migration-gallery-head:before,.m2-migration-gallery-head:after{
+ content:"✦";
+ position:absolute;top:10px;
+ font:23px/1 Georgia,serif;color:#f6cc85;
+ text-shadow:0 1px 2px #290d09;
+}
+.m2-migration-gallery-head:before{left:8px}
+.m2-migration-gallery-head:after{right:8px}
+.m2-migration-serial{
+ flex:0 1 135px;
+ font:700 10px/1.45 Georgia,serif;
+ letter-spacing:.15em;
+ text-transform:uppercase;
+ color:#fce3ac;
+}
+.m2-migration-gallery-head h3{
+ flex:1 1 290px;
+ margin:0;
+ text-align:center;
+ font:700 clamp(24px,2.7vw,40px)/1.08 Georgia,"Libre Baskerville",serif;
+ color:#fff2c8;
+ text-shadow:0 3px #38120f,0 0 12px #ffc47c59;
+ letter-spacing:-.025em;
+}
+.m2-migration-gallery-head>p{
+ flex:2 1 310px;
+ max-width:370px;
+ margin:0;
+ padding:2px 3px;
+ font:italic 13px/1.5 Georgia,serif;
+ color:#ffe9c9;
+}
+.m2-migration-progress{
+ display:flex;align-items:center;gap:9px;
+ flex:0 1 220px;min-width:165px;
+ margin-inline:auto;
+ font:700 11px/1.4 Georgia,serif;
+ color:#f7deb3;
+ white-space:nowrap;
+}
+.m2-migration-progress-track{
+ display:block;flex:1 1 65px;min-width:57px;
+ height:10px;
+ overflow:hidden;
+ border-radius:10px;
+ border:1px solid #efcc8a;
+ background:#2c1414;
+ box-shadow:inset 0 1px 3px #050407;
+}
+.m2-migration-progress-fill{
+ display:block;height:100%;
+ background:linear-gradient(90deg,#b48c52,#ffe5a7,#bb8349);
+ box-shadow:0 0 6px #ecca79ad;
+ transition:width .2s ease;
+}
+.m2-migration-book{
+ position:relative;
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ align-items:stretch;
+ padding:8px 6px 15px;
+ gap:0;
+ margin:0 auto;
+ width:100%;
+ max-width:1420px;
+ filter:drop-shadow(0 10px 8px #1c100c8a);
+}
+.m2-migration-book:before{
+ content:"";
+ position:absolute;
+ left:calc(50% - 11px);top:10px;bottom:15px;
+ width:22px;z-index:3;pointer-events:none;
+ background:linear-gradient(90deg,#311b1580,#b48b55a8 24%,#643d30a9 51%,#deb47998 80%,#331e1c8f);
+ border-left:2px solid #aa7d4b9e;
+ border-right:2px solid #b68b52;
+ box-shadow:0 0 13px #1f0b097b,inset 0 0 7px #372014;
+}
+.m2-migration-folio{
+ position:relative;
+ min-width:0;
+ padding:clamp(13px,2vw,29px) clamp(14px,2vw,31px) 32px;
+ border:5px double #c9a67a;
+ outline:1px solid #765437;
+ outline-offset:-9px;
+ background:
+ radial-gradient(ellipse at 20% 3%,#fffaf0,transparent 45%),
+ radial-gradient(ellipse at 84% 85%,#d8b8895c,transparent 55%),
+ repeating-linear-gradient(17deg,transparent 0 10px,#77542c0a 11px 12px,transparent 14px 19px),
+ linear-gradient(160deg,#f9ebcf,#f1dcb8 60%,#e5cc9f);
+ color:#3a271c;
+ box-shadow:inset 0 0 31px #95642b47,inset 0 0 0 2px #fff8e3;
+}
+.m2-migration-register{
+ border-radius:14px 4px 4px 16px;
+ padding-right:clamp(18px,2.5vw,38px);
+ box-shadow:inset -14px 0 18px #7e542e55,inset 0 0 31px #95642b40;
+}
+.m2-migration-dossiers{
+ border-radius:4px 14px 16px 4px;
+ padding-left:clamp(19px,2.7vw,41px);
+ box-shadow:inset 13px 0 18px #704a2b47,inset 0 0 31px #95642b40;
+}
+.m2-migration-page-head{
+ display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
+ padding:0 0 9px;margin:0 0 12px;
+ border-bottom:2px solid #b38c59;
+ color:#765333;
+ font:700 clamp(9px,.85vw,12px)/1.3 Georgia,serif;
+ letter-spacing:.09em;
+}
+.m2-migration-engraving{position:relative;margin:0 0 15px}
+.m2-migration-engraving img{
+ display:block;width:100%;height:clamp(122px,12vw,179px);
+ object-fit:cover;object-position:50% 62%;
+ border:5px ridge #c29861;
+ outline:1px solid #594231;
+ box-shadow:0 4px 8px #56372566,inset 0 0 0 3px #ffe7b3;
+ filter:saturate(.91);
+}
+.m2-migration-engraving figcaption{
+ position:absolute;bottom:5px;left:5px;right:5px;
+ padding:6px 9px;
+ border-top:2px solid #daba7b;
+ text-align:center;
+ font:700 clamp(9px,.85vw,11px)/1.3 Georgia,serif;
+ letter-spacing:.16em;
+ color:#fff2cb;
+ background:#291d1cbb;
+ text-shadow:0 2px 2px #160d0b;
+}
+.m2-migration-folio h4{
+ font:700 clamp(19px,1.55vw,26px)/1.24 "Libre Baskerville",Georgia,serif;
+ margin:10px 0 8px;
+ text-align:center;
+ color:#39241b;
+}
+.m2-migration-guidance{
+ margin:0 auto 16px;
+ text-align:center;
+ max-width:560px;
+ font:italic clamp(12px,.95vw,15px)/1.55 Georgia,serif;
+ color:#695239;
+}
+.m2-ledger-year-entries{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:9px;
+ align-items:stretch;
+ margin:17px 0 12px;
+}
+.m2-ledger-year{
+ position:relative;min-width:0;
+ display:flex;flex-direction:column;
+ align-items:stretch;gap:7px;
+ padding:13px 9px 15px;
+ border:4px ridge #b9915c;
+ border-radius:4px 4px 16px 16px;
+ background:
+ linear-gradient(90deg,#d8bf9454,transparent 12% 87%,#b08b655e),
+ repeating-linear-gradient(0deg,transparent 0 19px,#95714c20 20px 21px,transparent 23px 27px),
+ linear-gradient(#fff7e4,#e9d5b1);
+ box-shadow:0 4px 0 #9b754b,0 6px 9px #3f291b62,inset 0 0 0 2px #fff9e9;
+ text-align:center;
+}
+.m2-ledger-year:before,.m2-ledger-year:after{
+ content:"";position:absolute;top:5px;left:5px;
+ width:5px;height:5px;border-radius:50%;
+ background:#966a36;border:1px solid #fce7b9;box-shadow:0 1px 2px #3c2514;
+}
+.m2-ledger-year:after{left:auto;right:5px}
+.m2-ledger-entry{
+ font:700 9px/1.3 Georgia,serif;
+ letter-spacing:.12em;color:#8d633b;
+}
+.m2-ledger-year-number{
+ font:700 clamp(25px,2.2vw,38px)/1 Georgia,serif;
+ color:#5c2c25;text-shadow:0 1px #fff7e6;
+}
+.m2-ledger-year-caption{
+ min-height:32px;
+ display:flex;align-items:center;justify-content:center;
+ font:italic 11px/1.3 Georgia,serif;color:#634d3c;
+}
+.m2-ledger-numeric-slot{display:block;min-width:0}
+.m2-ledger-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.m2-ledger-year select,.m2-migration-question select{
+ display:block;
+ box-sizing:border-box;
+ width:100%;max-width:100%;min-width:0;
+ min-height:47px;
+ margin:0;
+ padding:8px 24px 8px 10px;
+ border:3px ridge #bd9052;
+ border-radius:7px;
+ color:#35271e;
+ background-color:#fff7e7;
+ background-image:linear-gradient(170deg,#fffaf0,#f5e7ca);
+ box-shadow:inset 0 1px 4px #b991595c,0 2px 0 #865c37;
+ font:700 clamp(11px,.89vw,14px)/1.2 Georgia,serif;
+ cursor:pointer;
+ text-overflow:ellipsis;
+}
+.m2-ledger-year select:focus-visible,.m2-migration-question select:focus-visible{
+ outline:3px solid #c89c44;outline-offset:2px;
+ box-shadow:0 0 12px #e4b95b99;
+}
+.m2-ledger-year select:valid,.m2-migration-question select:valid{
+ border-color:#d7a659;
+ background:linear-gradient(165deg,#fff9e8,#f5dfb4);
+}
+.m2-ledger-entry-status{
+ align-self:center;
+ margin-top:auto;
+ padding:4px 6px;
+ border-top:1px solid #af916b;
+ color:#775934;
+ font:700 9px/1.2 Georgia,serif;
+ letter-spacing:.13em;
+}
+.m2-ledger-folio-number{
+ display:block;position:absolute;
+ bottom:12px;right:22px;
+ font:700 10px Georgia,serif;
+ color:#997249;letter-spacing:.17em;
+}
+.m2-migration-dossiers>h4{margin:6px 0 15px}
+.m2-migration-dossier{
+ display:grid;grid-template-columns:minmax(128px,.46fr) minmax(0,1fr);
+ gap:12px;
+ margin:0 0 13px;
+ padding:9px;
+ border:3px double #ad8755;
+ border-radius:5px;
+ background:
+ radial-gradient(ellipse at 85% 12%,#fff9e9,transparent 72%),
+ linear-gradient(130deg,#f7e8ce,#e5cda6);
+ box-shadow:0 2px 5px #73512b33,inset 0 0 0 1px #fff7e5;
+}
+.m2-migration-dossier-image{position:relative;min-width:0}
+.m2-migration-dossier-image img{
+ display:block;
+ width:100%;height:100%;min-height:146px;max-height:205px;
+ object-fit:cover;
+ border:4px ridge #b88e54;
+ box-shadow:0 3px 7px #5b382a7c;
+}
+.m2-migration-dossier-image span{
+ position:absolute;left:4px;right:4px;bottom:3px;
+ background:#32261fd4;
+ padding:5px 4px;
+ font:700 9px/1.2 Georgia,serif;
+ letter-spacing:.1em;color:#fff0c7;
+ text-align:center;
+}
+.m2-migration-question{
+ display:flex;flex-direction:column;
+ min-width:0;gap:8px;
+ align-items:stretch;justify-content:center;
+ padding:3px 3px 4px;
+}
+.m2-migration-question-title{
+ display:block;
+ font:700 clamp(13px,1vw,16px)/1.42 Georgia,serif;
+ color:#402b20;
+}
+.m2-migration-question select{font-size:clamp(12px,.92vw,14px)}
+.m2-migration-question-status{
+ align-self:flex-start;
+ padding:4px 0;
+ font:700 9px Georgia,serif;
+ letter-spacing:.11em;
+ color:#8d6745;
+}
+.m2-migration-historical-note{
+ margin-top:16px;
+ padding:12px 15px 10px;
+ border:2px double #b68b52;
+ border-left:7px solid #855044;
+ background:
+ radial-gradient(ellipse at 0% 0%,#f0ddb8,transparent 80%),
+ linear-gradient(105deg,#e6cfab,#f6e7cc);
+ color:#594334;
+ box-shadow:inset 0 0 0 2px #fff5de;
+}
+.m2-migration-historical-note span{
+ display:block;color:#7d4337;
+ font:700 10px/1.3 Georgia,serif;letter-spacing:.16em;
+}
+.m2-migration-historical-note p{
+ margin:5px 0 0;
+ font:12px/1.58 Georgia,serif;
+}
+/* Fit and reading order: no text is hidden behind the book binding. */
+@media(max-width:1250px){
+ .m2-migration-gallery-head{gap:12px}
+ .m2-migration-serial{flex-basis:100px}
+ .m2-migration-gallery-head>p{flex-basis:245px}
+ .m2-migration-progress{flex-basis:170px}
+ .m2-migration-book:before{left:calc(50% - 8px);width:16px}
+ .m2-migration-folio{padding-inline:16px}
+ .m2-migration-register{padding-right:26px}
+ .m2-migration-dossiers{padding-left:27px}
+ .m2-migration-dossier{grid-template-columns:135px minmax(0,1fr);gap:9px}
+ .m2-migration-dossier-image img{min-height:160px}
+ .m2-ledger-year-entries{gap:6px}
+ .m2-ledger-year{padding:11px 5px 12px}
+}
+@media(max-width:980px){
+ .m2-migration-book{
+  display:flex;flex-direction:column;
+  padding:6px 5px 13px;
+  gap:8px;
+ }
+ .m2-migration-book:before{display:none}
+ .m2-migration-folio,
+ .m2-migration-register,.m2-migration-dossiers{
+  padding:17px 20px 29px;
+  border-radius:10px;
+  box-shadow:inset 0 0 25px #8f623f3f,0 5px 6px #23120e4e;
+ }
+ .m2-migration-engraving img{height:180px}
+ .m2-ledger-year-entries{gap:12px}
+ .m2-migration-dossier{grid-template-columns:minmax(180px,.4fr) minmax(0,1fr)}
+ .m2-migration-dossier-image img{height:180px}
+ .m2-migration-gallery-head h3{text-align:left}
+ .m2-migration-serial{flex:0 0 125px}
+}
+@media(max-width:570px){
+ .m2-paper:has(.m2-migration-gallery)>.m2-work{padding:8px}
+ .m2-migration-gallery-head{
+  gap:5px 9px;
+  min-height:0;padding:14px 15px 11px;
+  border-width:4px;
+ }
+ .m2-migration-serial{flex:1 0 100%;font-size:9px}
+ .m2-migration-gallery-head h3{flex:1 1 100%;font-size:29px;text-align:center}
+ .m2-migration-gallery-head>p{flex:1 1 100%;font-size:12px;text-align:center}
+ .m2-migration-progress{flex:1 1 100%;font-size:10px;justify-content:center}
+ .m2-migration-book{padding:6px 0 11px}
+ .m2-migration-folio,.m2-migration-register,.m2-migration-dossiers{
+  padding:13px 10px 28px;
+  border-width:3px;
+  outline-offset:-6px;
+ }
+ .m2-migration-page-head{font-size:8px}
+ .m2-migration-engraving img{height:135px;border-width:3px}
+ .m2-migration-engraving figcaption{font-size:8px;letter-spacing:.07em}
+ .m2-migration-folio h4{font-size:19px}
+ .m2-migration-guidance{font-size:12px;margin-bottom:12px}
+ .m2-ledger-year-entries{grid-template-columns:1fr;gap:9px}
+ .m2-ledger-year{
+  min-height:76px;
+  flex-direction:row;align-items:center;flex-wrap:wrap;
+  gap:5px 10px;
+  padding:11px 9px;
+  border-radius:7px;
+ }
+ .m2-ledger-year-number{flex:0 0 64px;font-size:25px}
+ .m2-ledger-entry{flex:1 0 calc(100% - 90px);text-align:right}
+ .m2-ledger-year-caption{display:none}
+ .m2-ledger-numeric-slot{flex:1 1 180px;min-width:0}
+ .m2-ledger-entry-status{flex:1 0 auto;margin-left:auto}
+ .m2-ledger-year select{font-size:13px;min-height:43px}
+ .m2-migration-dossier{grid-template-columns:1fr;gap:9px;padding:7px}
+ .m2-migration-dossier-image img{height:137px;min-height:137px}
+ .m2-migration-question{padding:4px 6px 8px}
+ .m2-migration-question-title{font-size:13px}
+ .m2-migration-question select{font-size:12px;min-height:47px}
+ .m2-migration-historical-note{margin-top:9px;padding:9px 10px}
+ .m2-migration-historical-note p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.m2-migration-progress-fill{transition:none}}
