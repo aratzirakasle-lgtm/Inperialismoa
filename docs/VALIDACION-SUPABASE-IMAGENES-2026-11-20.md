@@ -64,3 +64,15 @@ Preparar una clase y equipo NUEVOS de ensayo, dos estudiantes de prueba del mism
 ## Conservación
 
 Ningún cambio en la base de datos, políticas RLS, imágenes, CSS, HTML, ejercicios o lógica de juego. Todos los cambios de esta auditoría son scripts y documentación en rama separada, revisables antes de integrarlos.
+
+
+## Perfil de transferencia con Chromium (recursos estáticos)
+
+También se incluye tests/browser-network-profile.mjs, ejecutado automáticamente por GitHub Actions. Desactiva JavaScript, usa caché nueva en cada pantalla y registra solicitudes de documento, CSS e imágenes. En la primera ejecución sobre el servidor HTTP local del CI, las **cinco páginas se cargaron sin solicitudes fallidas** y la transferencia sin compresión coincidió con las cifras HTML/CSS de la tabla. Se observaron **0 solicitudes separadas de imagen**: las ilustraciones contabilizadas están incrustadas en el HTML o CSS. Esto explica por qué sus bytes se transfieren junto con el documento o los estilos.
+
+Para repetir el perfil desde Chromium contra la web publicada (recurso público, sin iniciar sesión):
+
+    PROFILE_BASE_URL=https://aratzirakasle-lgtm.github.io/Inperialismoa/ \
+    node tests/browser-network-profile.mjs
+
+La medida de la carga estática en el servidor local de CI **no es una medida real de la latencia de un alumno**; faltan los tiempos de red y la experiencia del navegador con JavaScript y Supabase activos. No comparar tiempos de una red local con los de Internet.
