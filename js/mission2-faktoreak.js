@@ -141,7 +141,7 @@ function museumIllustration(kind,large=false){
 }
 function museumHeader(){
  return '<header class="m2-hero m2-museum-title-row">'+
- '<div class="m2-museum-mission-plaque"><span class="m2-museum-world" aria-hidden="true">◉</span><div><strong>2. MISIOA</strong><span>Inperialismoaren<br>faktoreak</span></div></div>'+
+ '<div class="m2-museum-mission-plaque"><span class="m2-museum-world" aria-hidden="true">◉</span><div><strong>2. MISIOA</strong><span>Inperialismoaren faktoreak</span></div></div>'+
  '<div class="m2-museum-title"><h1>1. Kausen kabinetea</h1><p>Inperialismoa zergatik hedatu zen?</p></div>'+
  '<div class="m2-museum-step-holder"><span class="m2-sr-only">Bost ariketak</span>'+nav()+'</div></header>';
 }
