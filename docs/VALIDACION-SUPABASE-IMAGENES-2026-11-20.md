@@ -119,3 +119,25 @@ Ejecución `44749043101` (Chromium 141 con Playwright, runner `ubuntu-24.04`), c
 En las cinco pantallas se contaron **0 solicitudes separadas de tipo imagen**, porque las ilustraciones relevantes van incrustadas como datos en HTML/CSS. No interpretar ese cero como ausencia de imágenes.
 
 La transferencia es menor que el tamaño de origen en la auditoría estática, pero el ejercicio 4 sigue siendo el más pesado (aprox. 3,45 MiB transferidos). Esta es **una muestra de red desde el servidor de GitHub Actions**, sin inicio de sesión ni ejecución del juego. Los milisegundos no equivalen a la latencia del alumnado, ni miden LCP, CLS o interacción. Antes de decidir una compresión es necesario contrastar percepción visual a igualdad de resolución y completar las pruebas autenticadas.
+
+
+## Verificación pública con JavaScript y Supabase reales · 20/11/2026
+
+**GitHub Actions #254, resultado SUCCESS:** <https://github.com/aratzirakasle-lgtm/Inperialismoa/actions/runs/44750608267>. Script `tests/public-live-browser-audit.mjs`, sin credenciales, sin envíos RPC y sin modificaciones de contenido.
+
+- Tres tamaños reales de viewport de Chromium: **1365×900, 768×1024 y 390×844**.
+- Tres cargas con caché aislada para la portada en cada tamaño. Mediana de LCP observada: **164 ms (ordenador), 84 ms (tableta), 88 ms (móvil)**. Mediana CLS: **0** en los tres.
+- Se mostró el formulario de entrada; el botón de acceso permaneció dentro de la ventana y se comprobó **0 px de desbordamiento horizontal** de documento en los tres tamaños.
+- Los ejercicios `bi-sistema.html`, `inperialismoaren-definizioa.html`, `inperioen-aztarnak.html` y `esaldiak-osatu.html` **redireccionaron a login en los tres tamaños** (12 verificaciones de acceso no autenticado superadas).
+- Sin errores JavaScript, sin HTTP 4xx/5xx de recursos propios, sin escrituras RPC inesperadas.
+- Evidencia visual generada: <https://github.com/aratzirakasle-lgtm/Inperialismoa/actions/runs/44750608267/artifacts/14635431138> (tres capturas de la portada).
+
+**Alcance:** los Web Vitals observados son **solo del login desautenticado** desde un runner GitHub Actions, no de juegos con alumnos. No se ha verificado login con contraseña, persistencia de sesión real de dos alumnos ni concurrencia de dos sesiones HTTP autenticadas, por falta de cuentas exclusivas de ensayo autorizadas. No se han usado ni alterado las credenciales reales de los tres usuarios del proyecto.
+
+### Incidencias de revisión sin intervención
+
+- La revisión estática detecta que el **quinto ejercicio identifica visualmente los huecos erróneos** (`classList.add('error')`) después de la comprobación, y su código incluye respuestas de validación local. El ejercicio tercero también incorpora objetivos esperados en el HTML. El servidor comprueba de nuevo las respuestas y las protege mediante permisos, pero la validación local **no equivale a ocultar todas las soluciones del navegador**. Si se interpreta «sin pistas» como no identificar cuáles fallan, este comportamiento necesita una decisión pedagógica: **no se ha modificado**, para respetar el alcance de la auditoría.
+- El asesor de seguridad de Supabase marca **protección de contraseñas filtradas desactivada** y 17 funciones `SECURITY DEFINER` ejecutables por usuarios autenticados. Varias forman parte deliberada del sistema de corrección y control de acceso, por lo que **el aviso no demuestra por sí solo una vulnerabilidad**. Revisión específica pendiente, sin revocar permisos ni cambiar políticas.
+- El asesor de rendimiento informa sobre 13 claves externas sin índice propio. No se añaden índices: primero habría que medir consultas reales y su necesidad, evitando alterar un servicio que está funcionando.
+
+**Resultado:** las comprobaciones disponibles no muestran regresiones de navegación, bloqueo de pantallas ni de la portada. Falta la aceptación final del recorrido real con dos alumnos y docente, que no se puede certificar sin sesiones genuinas de prueba.
