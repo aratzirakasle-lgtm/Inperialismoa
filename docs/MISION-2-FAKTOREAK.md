@@ -46,3 +46,15 @@ Material de referencia único: «Inperialismoaren garaia eta Lehen Mundu Gerra (
 5. Probar misión 1 → los cinco ejercicios de la misión 2 → insignia 2 → misión 3 en sesiones reales y revisar el panel docente. No modificar imágenes, estilos, tarjetas ni tamaños de la misión 1.
 
 **IMPORTANTE:** no ejecutar el SQL de esta rama directamente en un aula activa antes del despliegue coordinado, porque al bloquear la antigua misión 2 los alumnos necesitarán la nueva interfaz. La prueba de Chromium simulada no sustituye la validación autenticada real. Si falta la tabla de progreso, la nueva página informa de que la activación está pendiente y no permite guardar.
+
+
+## Verificación real de Supabase en entorno existente (sin publicar la nueva misión)
+
+**20/11/2026 · preparación aditiva realizada:**
+- Se ha aplicado solo la **parte aditiva** de la migración: tabla de finalización \`mission2_exercise_completions\`, tabla privada \`mission2_answer_keys\`, su política RLS y la función \`submit_mission2_exercise\`. No se ha ejecutado el cambio de \`submit_mission(2,...)\` ni el cambio de nombre de la misión 2 publicada.
+- Se han cargado **cinco juegos de claves de corrección exclusivamente en la tabla privada de Supabase**, sin incluirlos en GitHub. La comprobación de permisos confirmó que el rol \`authenticated\` no puede leer la tabla privada.
+- Prueba transaccional autenticada a nivel SQL con identidades ficticias de dos alumnos de un mismo equipo y un profesor: cinco ejercicios secuenciales aceptados; envío inválido rechazado sin pistas ni posiciones; intento de saltarse ejercicio 1 rechazado; el segundo alumno ve el progreso compartido; no se duplican finalizaciones; el profesor no puede guardar como alumno.
+- Al completar el ejercicio 5, la función creó exactamente una finalización de la misión 2, una insignia y devolvió \`next_mission_id=3\`. Todo el ensayo se hizo dentro de una transacción terminada en **ROLLBACK**.
+- Comprobación posterior: **3 usuarios Auth, 3 perfiles, 1 equipo**, **0** finalizaciones o insignias de la misión 2 de ensayo, 5 conjuntos privados de respuestas, y el título publicado de la misión 2 **continúa siendo** «El reparto de África».
+
+**Pendiente antes de publicar:** validación de sesiones desde navegador con usuarios de ensayo autorizados, integración de interfaz en \`main\`, ajuste sincronizado de \`submit_mission(2,...)\` para evitar rutas de aprobación alternativas y actualización del título público. Las pruebas SQL no reemplazan concurrencia real de dos conexiones HTTP ni el recorrido visual autenticado.
