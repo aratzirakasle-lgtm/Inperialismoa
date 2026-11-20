@@ -3800,3 +3800,505 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 @media(min-width:1101px) and (max-width:1420px){
  .m2-atlas-main:before{left:10.4%;top:99px;width:17.3%}
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   M2 E3 · ETAPA 02: la mitad inferior tiene objetos de época reales.
+   La maqueta 1672×941 guía proporciones y posiciones sin convertir
+   respuestas o botones en partes de una imagen estática.
+   ═══════════════════════════════════════════════════════════════════ */
+/* Libro de afirmaciones: el control es un select real, como en la lámina. */
+.m2-atlas-screen .m2-atlas-statement{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 86px;
+ gap:7px;
+ align-items:center;
+ padding:1px 2px;
+ min-width:0;
+}
+.m2-atlas-screen .m2-atlas-statement-label{
+ min-width:0;
+ overflow-wrap:anywhere;
+}
+.m2-atlas-screen .m2-atlas-truth{
+ display:block;
+ min-width:0;
+}
+.m2-atlas-screen .m2-atlas-statement-select{
+ display:block;
+ width:100%;
+ min-width:0;
+ height:29px;
+ padding:3px 4px;
+ border:3px ridge #ac8864;
+ border-radius:5px;
+ background:linear-gradient(180deg,#fffef7,#e0e7e9 55%,#bdc6cb);
+ box-shadow:inset 0 2px 3px #9b9d9d60,0 2px 2px #67452c54;
+ color:#3c2b1f;
+ font:700 11px/1.1 Georgia,serif;
+ cursor:pointer;
+}
+.m2-atlas-screen .m2-atlas-statement-select:focus-visible{
+ outline:3px solid #c68b35;
+ outline-offset:1px;
+ box-shadow:0 0 9px #b97a43a6;
+}
+.m2-atlas-screen .m2-atlas-statement-select:has(option:checked[value="egia"]),
+.m2-atlas-screen .m2-atlas-statement-select:has(option:checked[value="gezurra"]){
+ background:linear-gradient(#fff7e9,#e3c69d);
+}
+@media(min-width:1101px){
+ /* Reutilización de los instrumentos originales que aparecen sobre el mapa. */
+ .m2-atlas-screen:before{
+  height:77px;
+  background:
+   url('./m2-atlas-header-left.webp') left top / 374px 77px no-repeat,
+   url('./m2-atlas-header-right.webp') right top / 392px 77px no-repeat,
+   linear-gradient(0deg,#754b2b,#30251e);
+ }
+ .m2-atlas-pop{overflow:visible}
+ .m2-atlas-migrants-foreground{
+  pointer-events:none;
+  z-index:8;
+  width:281px;
+  max-width:none;
+  height:149px;
+  left:-73px;
+  bottom:-86px;
+  border:0;
+  border-radius:0;
+  opacity:1;
+  object-fit:contain;
+  object-position:center bottom;
+  mask-image:none;
+  filter:drop-shadow(2px 3px 3px #18120a7c);
+ }
+ /* Dos hojas de atlas talladas y un paisaje portuario en primer plano. */
+ .m2-atlas-row-two{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:5px;
+  margin-top:5px;
+ }
+ .m2-atlas-row-two .m2-atlas-activity{
+  box-sizing:border-box;
+  min-height:301px;
+  padding-bottom:3px;
+  border:7px ridge #b77b3b;
+  border-radius:3px;
+  box-shadow:
+   inset 0 0 0 2px #ffdf97,
+   inset 0 0 19px #8753275c,
+   0 5px 4px #1d100ac9;
+ }
+ .m2-atlas-route-activity{
+  isolation:isolate;
+  overflow:hidden;
+  background:
+   repeating-linear-gradient(21deg,transparent 0 8px,#bb8f4e16 10px 11px,transparent 13px 17px),
+   radial-gradient(ellipse at 25% 0%,#fffae8,transparent 69%),
+   linear-gradient(160deg,#e7c592,#f1debc 50%,#c99b60);
+ }
+ .m2-atlas-route-activity:before{
+  content:"";
+  position:absolute;inset:auto 0 0;
+  height:37%;
+  pointer-events:none;
+  z-index:0;
+  background:url('./m2-atlas-port-original-style.svg') center bottom / cover no-repeat;
+  opacity:.95;
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 26%);
+ }
+ .m2-atlas-route-activity>header,
+ .m2-atlas-route-activity>.m2-atlas-exercise-instruction,
+ .m2-atlas-route-activity>.m2-atlas-route-stage,
+ .m2-atlas-route-activity>footer{position:relative;z-index:1}
+ .m2-atlas-activity>header{
+  min-height:39px;
+  margin:3px 8px 0;
+  gap:5px;
+ }
+ .m2-atlas-activity>header .m2-atlas-number{
+  flex:0 0 51px;
+  width:51px;height:51px;
+  border-radius:50%;
+  margin:-8px 2px 0 -4px;
+  border:6px ridge #deb36a;
+  box-shadow:0 0 0 2px #6f2e1f,0 3px 5px #0009,inset 0 0 0 1px #f9dc9e;
+  font-size:26px;
+ }
+ .m2-atlas-activity>header h2{
+  border:3px ridge #c9954c;
+  border-radius:7px 20px 6px 6px;
+  min-height:30px;
+  padding:4px 13px 3px;
+  font-size:clamp(20px,1.56vw,28px);
+  background:
+   radial-gradient(ellipse at 45% 0%,#a12b2c,transparent 70%),
+   linear-gradient(95deg,#640f19,#4a0914 60%,#78181f);
+  box-shadow:0 2px 4px #281208a6;
+ }
+ .m2-atlas-exercise-instruction{
+  margin:2px 13px 5px;
+  font-size:clamp(11px,.84vw,14px);
+  line-height:1.16;
+ }
+ .m2-atlas-route-stage{
+  grid-template-columns:minmax(0,34%) minmax(0,66%);
+  gap:6px;
+  height:185px;
+  min-height:185px;
+  padding:0 11px;
+ }
+ .m2-atlas-route-labels{gap:6px;justify-content:flex-start}
+ .m2-atlas-route-line{min-height:0}
+ .m2-atlas-route-card{
+  min-height:50px;
+  border:3px ridge #b8874a;
+  border-radius:9px 16px 14px 7px;
+  padding:6px 7px;
+  background:
+   radial-gradient(ellipse at 25% 0%,#fff9d7,transparent 65%),
+   linear-gradient(170deg,#f9e2b3,#e8c393);
+  color:#432416;
+  font:700 clamp(12px,.92vw,16px)/1.14 Georgia,serif;
+  box-shadow:inset 0 0 0 2px #ffedc7,0 3px 2px #3e241b75;
+ }
+ .m2-atlas-route-connector{font-size:24px;color:#a8753c}
+ .m2-atlas-route-map{
+  border-width:5px;
+  border-color:#b88d48;
+  background:#1b657a;
+  box-shadow:inset 0 0 0 2px #f5d6a1,0 3px 5px #1b0c0aa1;
+ }
+ .m2-atlas-route-map>img{
+  filter:saturate(1.27) contrast(1.09);
+ }
+ .m2-atlas-pin{
+  width:27px;height:27px;
+  border-width:4px;
+  border-color:#f4d394;
+  box-shadow:0 0 0 2px #855c2d,0 2px 3px #0009;
+ }
+ .m2-atlas-route-activity>footer{
+  padding:3px 13px 6px;
+  min-height:40px;
+ }
+ .m2-atlas-route-activity>footer .m2-atlas-check{margin-top:-6px}
+ /* Cuaderno de emigración con una fotografía de época sobre otras hojas. */
+ .m2-atlas-facts-activity{
+  position:relative;
+  overflow:hidden;
+  background:
+   radial-gradient(ellipse at 15% 0%,#fff8e6,transparent 65%),
+   repeating-linear-gradient(16deg,transparent 0 8px,#9a6f4313 11px 12px,transparent 14px 22px),
+   linear-gradient(150deg,#eac998,#f4e4c6 65%,#cfad83);
+ }
+ .m2-atlas-facts-activity:before{
+  content:"";
+  position:absolute;
+  right:17px;top:35px;
+  width:193px;height:169px;
+  transform:rotate(6deg);
+  background:
+   repeating-linear-gradient(3deg,transparent 0 17px,#76573722 18px 19px,transparent 21px 30px),
+   linear-gradient(145deg,#fff5df,#d7b88f);
+  border:5px solid #f8e8c6;
+  box-shadow:0 0 0 1px #72513a,0 5px 8px #23110791;
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity:after{
+  content:"";
+  position:absolute;
+  right:27px;top:45px;
+  width:184px;height:162px;
+  transform:rotate(7deg);
+  background:
+   url('./m2-atlas-travelers-cutout.webp') center 83% / 100% auto no-repeat,
+   url('./m2-ledger-voyage.svg') center center/cover no-repeat,
+   #c0ac86;
+  border:6px solid #fff1cf;
+  outline:1px solid #926c4b;
+  box-shadow:inset 0 0 10px #7e5237a6,0 5px 11px #2c1b148c;
+  filter:sepia(.87) saturate(.46) contrast(1.12);
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity>header,
+ .m2-atlas-facts-activity>.m2-atlas-exercise-instruction,
+ .m2-atlas-facts-activity>.m2-atlas-statements,
+ .m2-atlas-facts-activity>.m2-atlas-fact-head,
+ .m2-atlas-facts-activity>footer{position:relative;z-index:1}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin:7px 224px 2px 12px;
+  font-size:9px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements{
+  margin:0 224px 0 11px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  min-height:33px;
+  border-bottom:1px solid #bf936187;
+  font-size:clamp(10px,.75vw,12px);
+  line-height:1.15;
+  grid-template-columns:minmax(0,1fr) 74px;
+  gap:5px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+  height:28px;
+  font-size:11px;
+ }
+ .m2-atlas-facts-activity>footer{
+  min-height:42px;
+  margin:0;
+  padding:2px 13px 6px;
+ }
+ .m2-atlas-facts-activity>footer .m2-atlas-check{
+  position:relative;
+  z-index:2;
+ }
+ /* Escena de maletas: mesa con equipaje, ocho cartelas y dos arcones. */
+ .m2-atlas-luggage-activity{
+  isolation:isolate;
+  overflow:visible;
+  min-height:287px;
+  padding:5px 0 12px;
+  margin-top:5px;
+  border:7px ridge #a5743d;
+  border-radius:3px;
+  background:
+   radial-gradient(ellipse at 84% 0%,#8fd1df5e,transparent 46%),
+   linear-gradient(90deg,#e9c694,#dab38b 23%,#ad7445 45%,#bf935d 77%,#80b9b9);
+  box-shadow:inset 0 0 0 2px #fff0ba,0 5px 5px #0009;
+ }
+ .m2-atlas-luggage-activity:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:0;bottom:1px;
+  width:25%;height:80%;
+  background:url('./m2-atlas-luggage-stilllife.svg') left bottom/100% 100% no-repeat;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity:after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  right:0;bottom:0;
+  width:15%;height:94%;
+  background:
+   linear-gradient(to bottom,#4e6d6c22,transparent 30%),
+   url('./m2-atlas-port-original-style.svg') 78% bottom/auto 100% no-repeat;
+  opacity:.96;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity>header{
+  display:grid;
+  grid-template-columns:47px minmax(0,1fr);
+  gap:3px;
+  position:absolute;
+  top:8px;left:9px;
+  width:23%;
+  margin:0;
+  padding:0 2px;
+  z-index:2;
+ }
+ .m2-atlas-luggage-activity>header .m2-atlas-number{
+  margin:-8px 0 0 -4px;
+  width:51px;height:51px;
+  flex-basis:51px;
+ }
+ .m2-atlas-luggage-activity>header h2{
+  min-height:0;
+  padding:6px 5px;
+  font-size:clamp(18px,1.35vw,25px);
+  white-space:normal;
+  text-align:center;
+ }
+ .m2-atlas-luggage-activity>header p{
+  grid-column:1/-1;
+  width:calc(100% - 66px);
+  margin:12px 0 0 65px;
+  padding:4px 3px 5px;
+  border:0;
+  color:#42291d;
+  font:700 clamp(12px,.93vw,16px)/1.22 Georgia,serif;
+  background:#f5dfb4a8;
+  text-shadow:0 1px #fff1d7;
+  box-shadow:0 0 7px #efcf9cb4;
+ }
+ .m2-atlas-luggage-board{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.16fr);
+  align-items:stretch;
+  gap:11px;
+  margin:0 14.5% 0 23.7%;
+  padding:2px 0 0;
+ }
+ .m2-atlas-luggage-available{
+  min-height:230px;
+  border:12px ridge #986237;
+  border-radius:20px 22px 19px 20px;
+  padding:8px 8px 12px;
+  background:
+   radial-gradient(ellipse at 8% 2%,#efbd7d5e,transparent 55%),
+   repeating-linear-gradient(13deg,transparent 0 11px,#c7864a1c 12px 14px,transparent 15px 26px),
+   linear-gradient(120deg,#56321f,#8e532d 44%,#361c15);
+  box-shadow:0 0 0 2px #3d2317,0 5px 9px #1008059c,inset 0 0 0 3px #d2a269;
+ }
+ .m2-atlas-luggage-note{
+  position:relative;
+  margin:-4px 0 4px;
+  font-size:9px;
+  letter-spacing:.08em;
+  color:#ffe5b5;
+ }
+ .m2-atlas-luggage-cards{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
+  margin:0;
+ }
+ .m2-atlas-luggage-card{
+  min-height:91px;
+  padding:5px 3px;
+  border:5px ridge #ca9a57;
+  border-radius:10px 8px 12px 7px;
+  background:
+   radial-gradient(ellipse at 22% 0%,#fff9eb,transparent 65%),
+   repeating-linear-gradient(14deg,transparent 0 6px,#ab834010 8px 9px,transparent 11px 16px),
+   linear-gradient(160deg,#fff0cc,#eac48e 65%,#dba767);
+  font-size:clamp(10px,.67vw,12px);
+  line-height:1.11;
+  box-shadow:inset 0 0 0 2px #ffe5b8,0 3px 3px #130805ad;
+ }
+ .m2-atlas-luggage-card img{
+  width:clamp(38px,3vw,53px);
+  height:clamp(37px,3vw,53px);
+  margin-bottom:1px;
+  filter:drop-shadow(0 2px 1px #53331b6b);
+ }
+ .m2-atlas-luggage-targets{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:3px;
+  min-height:0;
+  align-items:stretch;
+ }
+ .m2-atlas-suitcase{
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:224px;
+  height:auto;
+  border:0;
+  outline:0;
+  border-radius:0;
+  padding:15px 13px 24px;
+  margin:0;
+  background:url('./m2-atlas-leather-case-red.svg') center center/100% 100% no-repeat;
+  box-shadow:none;
+  color:#fff2da;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-atlas-leather-case-blue.svg') center center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase>header{
+  position:relative;
+  z-index:2;
+  min-height:46px;
+  padding:3px 4px;
+  margin:0 0 6px;
+  border:4px ridge #b88040;
+  border-radius:6px;
+  background:
+   radial-gradient(ellipse at 30% 0%,#fff8e9,transparent 75%),
+   linear-gradient(#f3d7a4,#dfad67);
+  box-shadow:inset 0 0 0 2px #f9eac0,0 2px 4px #321709b0;
+ }
+ .m2-atlas-suitcase>header strong{
+  font-size:clamp(11px,.76vw,14px);
+  line-height:1.05;
+ }
+ .m2-atlas-suitcase>header small{font-size:9px}
+ .m2-atlas-luggage-drop{
+  flex:0 0 auto;
+  position:relative;
+  z-index:3;
+  width:100%;
+  height:28px;
+  border:2px dashed #ffdfb1b3;
+  border-radius:4px;
+  background:#fff1c013;
+  color:#fff5d1;
+  font-size:8.5px;
+  box-shadow:0 0 0 1px #2b1310aa;
+ }
+ .m2-atlas-suitcase-items{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(32px,auto);
+  align-content:start;
+  gap:5px;
+  min-height:72px;
+  padding:4px;
+  border:1px dashed #ffe4aa77;
+  border-radius:4px;
+  background:#170d1017;
+ }
+ .m2-atlas-packed{
+  min-height:34px;
+  font-size:clamp(9px,.67vw,12px);
+  padding:3px 2px;
+ }
+ .m2-atlas-packed img{width:25px;height:25px}
+ .m2-atlas-luggage-activity>footer{
+  position:absolute;
+  z-index:3;
+  right:6px;
+  bottom:8px;
+  width:13.5%;
+  min-height:49px;
+  margin:0;
+  padding:5px 3px;
+  flex-direction:column;
+  gap:2px;
+  align-items:stretch;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  max-width:100%;
+  min-width:0;
+  height:42px;
+  padding:4px 5px;
+  font-size:clamp(12px,.88vw,16px);
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-section-status{
+  text-align:center;
+  font-size:9px;
+ }
+}
+/* Medium screens retain readable two-column dossiers, without hiding photos. */
+@media(min-width:1101px) and (max-width:1480px){
+ .m2-atlas-facts-activity:before{right:12px;width:154px;height:155px}
+ .m2-atlas-facts-activity:after{right:18px;width:148px;height:147px}
+ .m2-atlas-facts-activity .m2-atlas-statements{margin-right:164px}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{margin-right:164px}
+ .m2-atlas-luggage-card{font-size:10px;min-height:87px}
+ .m2-atlas-suitcase{padding-inline:9px}
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-statement{grid-template-columns:minmax(0,1fr) 90px}
+ .m2-atlas-screen .m2-atlas-statement-select{height:34px}
+ .m2-atlas-suitcase{
+  background:url('./m2-atlas-leather-case-red.svg') center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-atlas-leather-case-blue.svg') center/100% 100% no-repeat;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-statement{
+  grid-template-columns:minmax(0,1fr) 80px;
+  min-height:45px;
+ }
+ .m2-atlas-screen .m2-atlas-statement-select{height:34px;font-size:11px}
+ .m2-atlas-screen .m2-atlas-statement-label{font-size:11.5px}
+}
