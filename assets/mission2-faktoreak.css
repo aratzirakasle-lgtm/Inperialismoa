@@ -1106,3 +1106,128 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-museum-interaction,
  .m2-first-room .m2-controls{position:relative;z-index:1}
 }
+
+/* M2 · gabinetes de madera y latón — revisión exclusiva del ejercicio 1 */
+.m2-first-room .m2-museum-interaction{gap:18px;--brass:#d7a156;--bright-brass:#ffe5a0}
+.m2-first-room .m2-museum-case{
+ position:relative;isolation:isolate;
+ border:0!important;padding:8px 7px 0!important;
+ border-radius:47% 47% 5px 5px / 49px 49px 5px 5px;
+ outline:1px solid #61371b;
+ background:radial-gradient(ellipse at 50% 5%,#ffe29c4b,transparent 55%),
+ linear-gradient(90deg,#2f180e 0%,#ffe49a 3%,#a66f32 6%,#4a2716 11%,#59301a 85%,#b87832 92%,#ffe5a2 97%,#3e2111 100%);
+ box-shadow:0 0 0 2px #e4b973,0 0 0 4px #523018,0 14px 13px #000b,
+ inset 4px 0 8px #ffe8b73a,inset -4px 0 10px #140a07a8;
+}
+.m2-first-room .m2-museum-case:before{
+ content:"";position:absolute;inset:4px;z-index:3;pointer-events:none;
+ border:2px solid #ecc178;border-bottom:0;
+ border-radius:47% 47% 3px 3px / 48px 48px 3px 3px;
+ box-shadow:inset 0 0 0 2px #55321b,inset 0 0 0 4px #d29a4d,inset 0 12px 16px #fff0b41c;
+}
+.m2-first-room .m2-museum-case:after{
+ content:"";position:absolute;top:7px;left:12px;right:12px;height:40px;z-index:3;
+ border-top:3px solid #ffdc85;border-radius:50% 50% 0 0;pointer-events:none;
+ filter:drop-shadow(0 2px 1px #422512);
+}
+.m2-first-room .m2-case-crown{
+ display:block;position:absolute;top:-24px;left:-3%;right:-3%;height:36px;z-index:7;
+ pointer-events:none;background:url('./m2-vitrine-gilt-crest.svg') center bottom/100% 100% no-repeat;
+ filter:drop-shadow(0 2px 2px #0009) saturate(1.2);
+}
+.m2-first-room .m2-case-arch{
+ border:4px ridge #ce954a;
+ background:radial-gradient(ellipse at 50% 16%,var(--case-glow),var(--case-color));
+ box-shadow:inset 0 0 0 2px #ffedb0a8,inset 0 -15px 24px #07080b9c,0 0 0 1px #422513,0 5px 7px #090504b5;
+}
+.m2-first-room .m2-case-arch:before{
+ content:"";position:absolute;inset:6px 6px 19px;pointer-events:none;z-index:2;
+ border-radius:46% 46% 3px 3px / 45px 45px 3px 3px;
+ background:radial-gradient(ellipse at 50% 0%,#fffae768,transparent 76%),
+ linear-gradient(115deg,#ffffff35 0 9%,transparent 29% 72%,#ffebaa19 86%);
+ mix-blend-mode:screen;
+}
+.m2-first-room .m2-case-scene{
+ top:3px;left:3px;width:calc(100% - 6px);height:calc(100% - 6px);
+ filter:saturate(1.24) contrast(1.09) brightness(1.035);
+}
+.m2-first-room .m2-case-title{
+ position:relative;z-index:5;min-height:47px;margin:0 -12px -14px;padding:4px 11px;
+ border:4px ridge #bd8139;border-radius:10px 10px 6px 6px;
+ background:
+ radial-gradient(circle at 8px 50%,#fae6a1 0 2px,#754318 2.5px 4px,transparent 4.5px),
+ radial-gradient(circle at calc(100% - 8px) 50%,#fae6a1 0 2px,#754318 2.5px 4px,transparent 4.5px),
+ linear-gradient(180deg,#fff8dd,#e7b565 19%,#ffe7aa 47%,#d8a14e 78%,#aa6a2e);
+ box-shadow:0 0 0 1px #59351c,inset 0 0 0 2px #ffebb7,0 4px 6px #170d08bb;
+ text-shadow:0 1px #fff0c9;font-size:clamp(14px,1.22vw,20px);
+}
+.m2-first-room .m2-case-title-action{min-height:37px;font-weight:700}
+.m2-first-room .m2-case-title-action:hover,.m2-first-room .m2-case-title-action:focus-visible{
+ background:#fff5bd69;outline:2px solid #fff8d3;box-shadow:0 0 15px #ffe3a6a8;
+}
+.m2-first-room .m2-case-well{
+ position:relative;z-index:1;margin:18px 5px 2px;padding:9px 7px;min-height:100px;
+ border:3px solid #ab783b;border-radius:3px;
+ background:radial-gradient(ellipse at 50% 115%,var(--case-glow),transparent 70%),
+ linear-gradient(90deg,#090d0e9f,transparent 12% 88%,#080b0ca8),
+ linear-gradient(180deg,#180e10c4,var(--case-color) 125%);
+ box-shadow:inset 0 0 0 2px #ffe3a64e,inset 0 3px 13px #080406bc,
+ inset 0 -8px 15px #ffbe4c3a,0 1px #ffe099a8;
+}
+.m2-first-room .m2-case-well:before{
+ content:"";position:absolute;inset:4px;border:1px dashed #fce5a5c3;
+ pointer-events:none;border-radius:3px;
+}
+.m2-first-room .m2-case-contents{gap:5px}
+.m2-first-room .m2-case-contents .m2-museum-card{
+ min-height:34px!important;padding:5px 5px!important;
+ font:700 clamp(11px,.82vw,13px)/1.18 Georgia,serif!important;
+ border:2px solid #d5ae69!important;color:#352018!important;
+ background:linear-gradient(165deg,#fff8e1,#e8c18d)!important;
+ box-shadow:0 2px 4px #170d08c9,inset 0 0 0 1px #ffefc5!important;
+ text-align:center;
+}
+.m2-first-room .m2-case-empty{
+ margin:32px auto 14px;position:relative;z-index:0;
+ color:#fceab9;font:italic 12px Georgia,serif;opacity:.85;
+ text-shadow:0 1px 4px #000;white-space:normal;
+}
+.m2-first-room .m2-case-target{
+ top:7px;left:7px;right:7px;bottom:7px;width:calc(100% - 14px);
+ height:calc(100% - 14px);background:transparent;border:0;box-shadow:none;
+}
+.m2-first-room .m2-case-target:focus-visible,.m2-first-room .m2-case-target:hover{
+ outline:2px dashed #ffe4ad;outline-offset:-2px;box-shadow:inset 0 0 16px #ffefa049;
+}
+.m2-first-room .m2-case-foot{display:none}
+.m2-first-room .m2-case-foundation{
+ display:block;position:relative;z-index:5;height:25px;margin:7px -11px -6px;
+ border:3px ridge #c18a44;border-radius:3px;
+ background:radial-gradient(circle at 11px 12px,#ffdfa2 0 2px,#855122 2.5px 5px,transparent 5.5px),
+ radial-gradient(circle at calc(100% - 11px) 12px,#ffdfa2 0 2px,#855122 2.5px 5px,transparent 5.5px),
+ linear-gradient(180deg,#ffdfa4 0 2px,#9a5c2c 3px 7px,#4b2717 8px 18px,#c49249 19px 21px,#47291b 23px);
+ box-shadow:0 6px 0 #2e170c,0 9px 9px #0009;
+}
+.m2-first-room .m2-case-lock{
+ display:block;position:absolute;top:2px;left:calc(50% - 16px);
+ width:32px;height:12px;border:1px solid #64401f;border-radius:2px;
+ background:linear-gradient(#ffe1a1,#ad6927);box-shadow:0 0 0 1px #d59f58;
+}
+.m2-first-room .m2-case-lock:after{
+ content:"";display:block;width:4px;height:4px;margin:3px auto;border-radius:50%;
+ background:#744419;box-shadow:0 0 0 1px #ffde9b;
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-crown{height:31px;top:-21px}
+ .m2-first-room .m2-case-title{font-size:16px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case{padding:6px 5px 0!important}
+ .m2-first-room .m2-case-crown{top:-18px;height:29px}
+ .m2-first-room .m2-case-title{font-size:13px;min-height:40px;padding:3px}
+ .m2-first-room .m2-case-title-action{min-height:32px}
+ .m2-first-room .m2-case-well{margin:16px 2px 1px;padding:6px 4px;min-height:84px}
+ .m2-first-room .m2-case-contents .m2-museum-card{font-size:10px!important}
+ .m2-first-room .m2-case-foundation{height:19px;margin:6px -7px -5px}
+ .m2-first-room .m2-case-lock{top:1px;height:10px}
+}
