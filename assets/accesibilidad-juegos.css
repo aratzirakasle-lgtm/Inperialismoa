@@ -1,0 +1,15 @@
+/* Accesibilidad discreta para los juegos de Inperialismoa.
+ * No altera la composición histórica ni los gestos de arrastre normales. */
+:where(a,button,[role="button"],input,select,textarea,summary):focus-visible{
+  outline:3px solid #d8ad68 !important;
+  outline-offset:3px;
+}
+/* Respetar la preferencia del dispositivo para usuarios sensibles al movimiento. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto !important;
+    animation-duration:0.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.01ms !important;
+  }
+}
