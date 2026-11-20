@@ -2048,3 +2048,98 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   line-height:1.22!important;
  }
 }
+
+
+/* M2 E1 · Zona de arrastre permanente: ninguna cartela puede taparla.
+   Anteriormente el target se extendía por debajo del montón de tarjetas;
+   se conserva ahora como una bandeja de recepción visible SOBRE las tarjetas.
+   Las respuestas, el aspecto general del museo y el resto de juegos no cambian. */
+.m2-first-room .m2-museum-case .m2-case-well{
+ display:flex;
+ flex-direction:column;
+ align-items:stretch;
+ justify-content:flex-start;
+ gap:0;
+}
+.m2-first-room .m2-museum-case .m2-case-target{
+ box-sizing:border-box;
+ display:flex!important;
+ position:relative!important;
+ z-index:4!important;
+ inset:auto!important;
+ top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+ flex:0 0 auto;
+ order:0;
+ width:100%!important;
+ min-width:0;
+ height:29px!important;
+ min-height:29px!important;
+ max-height:none;
+ margin:0 0 7px;
+ padding:2px 4px;
+ border:1px dashed #fbe1a1b3!important;
+ border-radius:5px;
+ background:linear-gradient(180deg,#f9dea81c,#140b0a17)!important;
+ color:#fbe1a1!important;
+ opacity:1!important;
+ box-shadow:inset 0 0 0 1px #fef2b224,inset 0 2px 5px #190e0d6b!important;
+ font:700 16px/1 Georgia,serif;
+ text-shadow:0 1px 3px #130a06;
+ cursor:pointer;
+ pointer-events:auto!important;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+}
+.m2-first-room .m2-museum-case .m2-case-target:before{
+ content:"HEMEN KOKATU";
+ display:inline-block;
+ position:static;
+ inset:auto;
+ width:auto;height:auto;
+ font:700 clamp(8px,.58vw,10px)/1 Georgia,serif;
+ letter-spacing:.09em;
+ color:#fbe1ab;
+ text-shadow:0 1px 2px #140b07;
+ opacity:.9;
+}
+.m2-first-room .m2-museum-case .m2-case-target:hover,
+.m2-first-room .m2-museum-case .m2-case-target:focus-visible{
+ background:linear-gradient(180deg,#eecb724d,#eebc4338)!important;
+ border:1px solid #ffe3a7!important;
+ color:#fff6d2!important;
+ opacity:1!important;
+ box-shadow:inset 0 0 0 1px #fff1bc8f,0 0 9px #ffde9b6b!important;
+ outline:2px solid #ffe7b0;
+ outline-offset:1px;
+}
+.m2-first-room .m2-museum-case .m2-case-contents{
+ order:1;
+ flex:0 0 auto;
+ z-index:2;
+ margin:0;
+}
+.m2-first-room .m2-museum-case .m2-case-empty{
+ order:2;
+ margin:14px auto 10px;
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case .m2-case-target:before{
+  font-size:8px;
+  letter-spacing:.04em;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case .m2-case-target{
+  height:26px!important;
+  min-height:26px!important;
+  margin-bottom:6px;
+  font-size:15px;
+  gap:2px;
+  padding:2px!important;
+ }
+ .m2-first-room .m2-museum-case .m2-case-target:before{
+  font-size:7px;
+  letter-spacing:0;
+ }
+}
