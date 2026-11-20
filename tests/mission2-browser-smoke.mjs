@@ -50,6 +50,9 @@ try{
    assert.equal(await page.locator('.m2-step').count(),5);
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('[data-zone]').count(),5);
+   assert.equal(await page.locator('.m2-case-title-action').count(),5);
+   assert.equal(await page.locator('.m2-case-scene').count(),5);
+   assert.equal(await page.locator('.m2-case-scene').evaluateAll(els=>els.every(img=>img.complete&&img.naturalWidth>0)),true,'Las cinco escenas históricas deben cargar');
    await mkdir('test-output',{recursive:true});
    await page.screenshot({path:'test-output/m2-e1-desktop.png',fullPage:true,animations:'disabled'});
    await page.locator('[data-card="new_markets"]').dragTo(page.locator('[data-zone="economic"] .m2-case-target'));
@@ -76,7 +79,7 @@ try{
    assert.equal(await page.locator('.m2-step:disabled').count(),4);
    for(const id of ['new_markets','cheap_resources','investments','settlement','working_conditions','conversion','missions','sea_routes','chauvinism','racist_theories','exploration']){
     await page.locator('[data-card="'+id+'"]').click();
-    await page.locator('[data-zone="economic"] .m2-case-target').click();
+    await page.locator('[data-zone="economic"] .m2-case-title-action').click();
    }
    assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
    assert.equal(await page.locator('[data-zone="economic"] [data-card]').count(),11);
