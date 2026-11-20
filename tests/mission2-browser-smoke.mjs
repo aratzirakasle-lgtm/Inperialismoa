@@ -70,6 +70,8 @@ try{
    for(const id of ['new_markets','cheap_resources','investments','settlement','working_conditions','conversion','missions','sea_routes','chauvinism','racist_theories','exploration']){
     await page.locator('[data-card="'+id+'"]').click();
     await page.locator('[data-zone="economic"]').click();
+    const pending=await page.locator('.m2-museum-desktop [data-card]').count();
+    console.log('M2 classify',id,'remaining',pending);
    }
    assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
