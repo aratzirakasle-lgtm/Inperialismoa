@@ -242,7 +242,9 @@ try{
    for(const [index,id] of ids.entries()){
     const zone=zones[index%zones.length];
     await page.locator('.m2-museum-desktop [data-card="'+id+'"]').dragTo(
-      page.locator('[data-zone="'+zone+'"] .m2-case-title-action'));
+      page.locator('[data-zone="'+zone+'"] .m2-case-well'));
+    assert.equal(await page.locator('[data-zone="'+zone+'"] [data-card="'+id+'"]').count(),1,
+      'La ficha '+id+' debe llegar al interior de '+zone+' al arrastrarla');
    }
    assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
    const result=await page.locator('[data-zone]').evaluateAll(cabinets=>cabinets.map(cabinet=>{
