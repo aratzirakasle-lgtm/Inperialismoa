@@ -128,6 +128,7 @@ function renderGallery(){
  const canSkip=teacherPreview||completed(team,1);
  mountGallery($("#view"),{
    initial:teacherPreview?{}:current,preview:demo||teacherPreview,
+   draftKey:(!demo&&!teacherPreview&&user?.id)?'inperialismoa:gallery:draft:'+user.id+':'+team:null,
    canSkip,navigationEnabled:teacherPreview,navigationPreview:teacherPreview,
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},
