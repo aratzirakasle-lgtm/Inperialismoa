@@ -41,3 +41,10 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-server.log 2>&1 &
           node tests/browser-smoke.mjs
           node tests/mission2-browser-smoke.mjs
+      - name: Guardar capturas históricas de los cinco ejercicios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mision2-cinco-ejercicios-vista-previa
+          path: test-output/m2-*.png
+          if-no-files-found: ignore
