@@ -349,7 +349,16 @@ function toggleMulti(group,value){
 }
 app.addEventListener('click',event=>{
  const elem=event.target.closest('button');
- if(!elem||!app.contains(elem))return;
+ if(!elem||!app.contains(elem)){
+   const zone=event.target.closest('[data-zone]');
+   if(zone&&app.contains(zone)&&active===1)return assignToCategory(zone.dataset.zone);
+   const desk=event.target.closest('[data-unassign]');
+   if(desk&&selected&&active===1){
+     const assignments=taskState(1).assignments||{};
+     delete assignments[selected];selected=null;feedback='';feedbackState='';render();
+   }
+   return;
+ }
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
  if(elem.hasAttribute('data-card')){selected=selected===elem.dataset.card?null:elem.dataset.card;const chosen=elem.dataset.card;render();$('[data-card="'+chosen+'"]')?.focus({preventScroll:true});return}
  const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
