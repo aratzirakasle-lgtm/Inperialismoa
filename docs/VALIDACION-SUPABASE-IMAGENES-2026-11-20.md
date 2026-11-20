@@ -102,3 +102,20 @@ Después de la transacción, el inventario real siguió siendo: 3 usuarios de Au
 ## Medición sobre GitHub Pages
 
 Se ha añadido en la rama de auditoría un paso de GitHub Actions que ejecuta `tests/browser-network-profile.mjs --json` contra la URL pública con JavaScript desactivado. Registra transferencia y duración de carga de los recursos estáticos de las cinco pantallas sin iniciar sesión ni escribir en Supabase. Al interpretar esos resultados, distinguir siempre la medición real de la web publicada de la experiencia autenticada y los indicadores Lighthouse.
+
+
+### Resultado real de GitHub Pages · GitHub Actions #250
+
+Ejecución `44749043101` (Chromium 141 con Playwright, runner `ubuntu-24.04`), con JavaScript desactivado, caché nueva por pantalla y una pasada. Las cinco peticiones HTTP y sus hojas CSS cargaron sin peticiones fallidas:
+
+| Pantalla | Transferencia HTTP document + CSS (KiB) | Evento `load` (ms) | Fallos |
+| --- | ---: | ---: | ---: |
+| Portada / galería | 292,7 | 906 | 0 |
+| Bi sistema | 463,0 | 180 | 0 |
+| Definizioa | 540,3 | 117 | 0 |
+| Inperioen aztarnak | **3530,1** | 227 | 0 |
+| Esaldiak osatu | 352,1 | 129 | 0 |
+
+En las cinco pantallas se contaron **0 solicitudes separadas de tipo imagen**, porque las ilustraciones relevantes van incrustadas como datos en HTML/CSS. No interpretar ese cero como ausencia de imágenes.
+
+La transferencia es menor que el tamaño de origen en la auditoría estática, pero el ejercicio 4 sigue siendo el más pesado (aprox. 3,45 MiB transferidos). Esta es **una muestra de red desde el servidor de GitHub Actions**, sin inicio de sesión ni ejecución del juego. Los milisegundos no equivalen a la latencia del alumnado, ni miden LCP, CLS o interacción. Antes de decidir una compresión es necesario contrastar percepción visual a igualdad de resolución y completar las pruebas autenticadas.
