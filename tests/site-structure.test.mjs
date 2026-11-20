@@ -93,3 +93,11 @@ test('El refresco de paneles en tiempo real no repite cuatro consultas completas
  assert.match(app,/Promise\.all\(\[\s*db\.from\("gallery_team_state"\)/);
  assert.equal((app.match(/\(\)=>void refreshFromRealtime\(\)/g)||[]).length,4);
 });
+
+test('El foco visible y la preferencia de movimiento se comparten entre los cinco ejercicios',()=>{
+  const css=read('assets/accesibilidad-juegos.css');
+  assert.match(css,/:focus-visible/);
+  assert.match(css,/prefers-reduced-motion:reduce/);
+  for(const file of files.filter(x=>x!=='preview-bi-sistema.html'))
+    assert.match(read(file),/assets\/accesibilidad-juegos\.css/,file);
+});
