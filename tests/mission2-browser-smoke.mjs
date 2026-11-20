@@ -342,6 +342,41 @@ try{
   }finally{await context.close()}
  });
 
+ await scenario('Atlas 3: cinco desplegables reales y ocho cartelas visibles en una sola maleta',async()=>{
+  for(const size of [{width:1672,height:941},{width:390,height:844}]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    await page.locator('[data-open="3"]').click();
+    assert.equal(await page.locator('.m2-atlas-statement-select').count(),5);
+    assert.equal(await page.locator('.m2-atlas-migrants-foreground').evaluate(el=>el.complete&&el.naturalWidth>0&&el.src.includes('m2-atlas-travelers-cutout.webp')),true);
+    await page.locator('.m2-atlas-statement-select[data-field="statement_1"]').selectOption('gezurra');
+    assert.equal(await page.locator('.m2-atlas-statement-select[data-field="statement_1"]').inputValue(),'gezurra');
+    assert.equal(await page.locator('.m2-atlas-screen [data-state="error"]').count(),0);
+    const ids=await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card]').evaluateAll(els=>els.map(el=>el.dataset.atlasBagCard));
+    assert.equal(ids.length,8);
+    for(const id of ids){
+     await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="'+id+'"]').click();
+     await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
+    }
+    assert.equal(await page.locator('.m2-atlas-suitcase-cause .m2-atlas-packed').count(),8);
+    const metrics=await page.locator('.m2-atlas-suitcase-cause').evaluate(box=>{
+     const items=[...box.querySelectorAll('.m2-atlas-packed')];
+     const bound=box.getBoundingClientRect();
+     return {num:items.length,clipped:items.some(el=>{
+      const r=el.getBoundingClientRect();return r.left<bound.left-2||r.right>bound.right+2||r.bottom>bound.bottom+2;
+     }),missing:items.some(el=>el.offsetWidth<25||el.offsetHeight<20),
+     overlapping:items.some((el,i)=>items.slice(0,i).some(prev=>{
+      const a=el.getBoundingClientRect(),b=prev.getBoundingClientRect();
+      return Math.min(a.right,b.right)-Math.max(a.left,b.left)>2 &&
+       Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>2;
+     }))};
+    });
+    assert.deepEqual(metrics,{num:8,clipped:false,missing:false,overlapping:false},JSON.stringify({size,metrics}));
+    assert.ok(await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').isVisible());
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
  await scenario('Atlas 3: cabecera panorámica fiel y respuestas superiores completas',async()=>{
   for(const width of [1672,1365]){
    const {page,context,errors}=await open('teacher',{width,height:941});
