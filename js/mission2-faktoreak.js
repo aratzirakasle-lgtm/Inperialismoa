@@ -238,14 +238,14 @@ const atlasStatements=[
  ['statement_5','Erlijioa ez zen inoiz kolonizazioa justifikatzeko erabili.']
 ];
 const atlasSuitcase=[
- ['growth','Europako biztanleria-hazkundea','m2-atlas-art-growth.webp'],
- ['conditions','Langileen bizi-baldintza neketsuak','m2-atlas-art-conditions.svg'],
- ['better','Bizi-aukera hobeak bilatzeko nahia','m2-atlas-art-better.svg'],
- ['conversion','Tokiko herriak kristautzeko nahia','m2-atlas-art-conversion.svg'],
- ['settlement','Europarrak lurralde berrietan finkatzea','m2-atlas-art-settlement.svg'],
- ['missions','Misio katoliko eta protestanteak sortzea','m2-atlas-art-missions.svg'],
- ['oceania','Misioak Ozeanian zabaltzea','m2-atlas-art-oceania.svg'],
- ['faith','Tokiko erlijioen desagerpena Afrikan','m2-atlas-art-faith.svg']
+ ['growth','Europako biztanleria-hazkundea','m2-suitcase-growth-restored.webp'],
+ ['conditions','Langileen bizi-baldintza neketsuak','m2-suitcase-conditions-restored.webp'],
+ ['better','Bizi-aukera hobeak bilatzeko nahia','m2-suitcase-better-restored.webp'],
+ ['conversion','Tokiko herriak kristautzeko nahia','m2-suitcase-conversion-restored.webp'],
+ ['settlement','Europarrak lurralde berrietan finkatzea','m2-suitcase-settlement-restored.webp'],
+ ['missions','Misio katoliko eta protestanteak sortzea','m2-suitcase-missions-restored.webp'],
+ ['oceania','Misioak Ozeanian zabaltzea','m2-suitcase-oceania-restored.webp'],
+ ['faith','Tokiko erlijioen desagerpena Afrikan','m2-suitcase-faith-restored.webp']
 ];
 const atlasKeys=['1850','1870','1900','migration','missionaries',
  'route_africa','route_asia','route_oceania',
