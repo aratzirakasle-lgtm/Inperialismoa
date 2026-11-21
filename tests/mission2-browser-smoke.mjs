@@ -425,13 +425,15 @@ try{
     const r=el.getBoundingClientRect();
     const cards=[...el.querySelectorAll('.m2-atlas-luggage-card')];
     const inside=cards.every(c=>{const q=c.getBoundingClientRect();return q.width>40&&q.height>55});
+    const captionsFit=cards.every(c=>{const p=c.querySelector('span:last-child');return p&&p.getBoundingClientRect().bottom<=c.getBoundingClientRect().bottom+2});
     return {left:r.left,width:r.width,height:r.height,visibleCards:cards.length,
-      cardsReadable:inside,viewport:innerWidth};
+      cardsReadable:inside,captionsFit,viewport:innerWidth};
    });
    assert.ok(Math.abs(bounds.left-154)<4&&Math.abs(bounds.width-1228)<4,
      'La sala debe centrarse en 16:9 como la captura antigua: '+JSON.stringify(bounds));
    assert.equal(bounds.visibleCards,8);
    assert.equal(bounds.cardsReadable,true);
+   assert.equal(bounds.captionsFit,true,'Los ocho rótulos deben verse completos sin recorte: '+JSON.stringify(bounds));
    await page.screenshot({path:'test-output/m2-e3-reference-1536x691.png',fullPage:true,animations:'disabled'});
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
