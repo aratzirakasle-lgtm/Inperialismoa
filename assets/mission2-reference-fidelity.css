@@ -536,3 +536,90 @@
      la altura automática. No se fuerza 16:9 en una pantalla estrecha. */
   .m2-atlas-screen {container-type:normal}
 }
+
+/* Revisión de comparación 1672×941: cinco afirmaciones sin recorte,
+ * espacio proporcional para el puerto y acciones en el zócalo.
+ * El aspecto 16:9 es mínimo implícito, no recorta maletas llenas. */
+@media (min-width:1101px){
+ .m2-atlas-screen{
+   aspect-ratio:16/9;
+ }
+ .m2-atlas-row-two .m2-atlas-activity{
+   height:18.8cqw;
+ }
+ .m2-atlas-row-two .m2-atlas-activity>header h2{
+   flex-basis:62%;
+   width:62%;
+   max-width:62%;
+ }
+ .m2-atlas-row-two .m2-atlas-route-stage{
+   height:10.85cqw;
+   grid-template-columns:33% 67%;
+ }
+ .m2-atlas-route-card{
+   min-height:3.02cqw;
+ }
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+   display:none;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements{
+   margin-top:.26cqw;
+   padding:.22cqw .3cqw;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+   min-height:2.12cqw;
+   padding:.05cqw .06cqw;
+   line-height:1.05;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+   height:1.55cqw;
+ }
+ .m2-atlas-facts-activity:after{
+   width:11.25cqw;
+   height:10.4cqw;
+ }
+ .m2-atlas-facts-activity:before{
+   width:12.1cqw;
+   height:11.1cqw;
+ }
+ .m2-atlas-final-controls{
+   position:absolute;
+   z-index:11;
+   bottom:0;
+   left:0;
+   right:0;
+   height:1.43cqw;
+   min-height:0;
+   padding:0!important;
+   margin:0!important;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls .m2-controls{
+   height:100%;
+   min-height:0;
+   box-sizing:border-box;
+   margin:0;
+   padding:0 .38cqw;
+   border:1px solid #bc8b50;
+   box-shadow:inset 0 1px #f5be68;
+ }
+ .m2-atlas-final-controls .m2-feedback{
+   font-size:.59cqw;
+ }
+ .m2-atlas-final-controls .m2-button{
+   box-sizing:border-box;
+   height:1.2cqw;
+   min-height:0;
+   padding:.05cqw .5cqw;
+   font-size:.62cqw;
+ }
+}
+/* Al completar muchas fichas, se prioriza la lectura y el crecimiento natural. */
+@media (min-width:1101px){
+ .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(5)){
+   overflow:visible;
+ }
+ .m2-atlas-screen:has(.m2-atlas-packed:nth-child(5)){
+   aspect-ratio:auto;
+   padding-bottom:1.43cqw;
+ }
+}
