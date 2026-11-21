@@ -179,6 +179,56 @@ try{
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
+ await scenario('Misión 2 · Archivo 4 y atlas 5: fuentes, preguntas, interacción y vistas reales',async()=>{
+  for(const [size,label] of [[{width:1672,height:941},'escritorio'],[{width:390,height:844},'movil']]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    const styles=page.locator('link[href*="m2-botere-artxiboa-esploratzaileak.css"]');
+    assert.equal(await styles.count(),1,'El estilo del archivo y atlas debe cargarse');
+    await page.locator('[data-open="4"]').click();
+    await page.locator('.m2-source-file').first().waitFor();
+    assert.equal(await page.locator('.m2-source-file').count(),5);
+    assert.equal(await page.locator('.m2-source-engraving svg').count(),5);
+    assert.equal(await page.locator('input[data-archive]').count(),15);
+    assert.equal(await page.locator('.m2-source-file .m2-source-ref').count(),5);
+    const documentLayout=await page.locator('.m2-source-file').evaluateAll(items=>items.map(el=>{
+     const b=el.getBoundingClientRect();
+     return {width:b.width,inside:b.left>=-1&&b.right<=innerWidth+1};
+    }));
+    assert.ok(documentLayout.every(d=>d.width>215&&d.inside),
+      'Todos los expedientes deben caber en pantalla: '+JSON.stringify(documentLayout));
+    await mkdir('test-output',{recursive:true});
+    await page.screenshot({path:'test-output/m2-e4-boterearen-artxiboa-'+label+'.png',fullPage:true,animations:'disabled'});
+    // Una selección no debe aportar pistas ni navegar fuera del ejercicio.
+    await page.locator('input[data-archive="press"][value="a"]').check();
+    assert.equal(await page.locator('.m2-source-file').count(),5);
+    assert.equal(await page.locator('[data-open="4"]').getAttribute('aria-current'),'step');
+
+    await page.locator('[data-open="5"]').click();
+    await page.locator('.m2-expedition-svg').waitFor();
+    assert.equal(await page.locator('.m2-expedition-panel').count(),5);
+    assert.equal(await page.locator('.m2-expedition-svg .m2-historic-rivers path').count(),4);
+    assert.equal(await page.locator('[data-multi="africa"]').count(),6);
+    assert.equal(await page.locator('[data-multi="asia"]').count(),5);
+    assert.equal(await page.locator('select[data-field]').count(),4);
+    const expLayout=await page.locator('.m2-expedition-research').evaluate(el=>{
+     const root=el.getBoundingClientRect(),atlas=el.querySelector('.m2-atlas').getBoundingClientRect();
+     return {rootWidth:root.width,rootLeft:root.left,rootRight:root.right,
+        atlasRight:atlas.right,viewport:innerWidth};
+    });
+    assert.ok(expLayout.rootLeft>=-1&&expLayout.rootRight<=expLayout.viewport+2
+        &&expLayout.atlasRight<=expLayout.viewport+2,
+      'El atlas y sus preguntas deben caber: '+JSON.stringify(expLayout));
+    await page.screenshot({path:'test-output/m2-e5-esploratzaileen-espedientea-'+label+'.png',fullPage:true,animations:'disabled'});
+    await page.locator('[data-multi="africa"][data-value="congo"]').click();
+    assert.match(await page.locator('.m2-atlas-route-ledger').innerText(),/Kongo/);
+    assert.equal(await page.locator('[data-multi="africa"][data-value="congo"]').getAttribute('aria-pressed'),'true');
+    await page.locator('[data-field="meeting"]').selectOption('1869');
+    assert.equal(await page.locator('[data-field="meeting"]').inputValue(),'1869');
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
  await scenario('Alumno: cinco ejercicios progresivos y desbloqueo de final (servidor simulado)',async()=>{
   const {page,context,errors}=await open('student');
   try{
