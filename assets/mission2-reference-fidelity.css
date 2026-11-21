@@ -655,3 +655,165 @@
    width:100%;
  }
 }
+
+/* Pulido de proporciones tomado de la captura antigua 1536×691:
+   los cambios son solo de presentación y no tocan ningún enunciado,
+   código de respuestas, navegación ni comportamiento de los ejercicios. */
+@media(min-width:1101px){
+  /* 1. Placa superior más corta, como el cartel de esmalte antiguo. */
+  .m2-atlas-heading{
+    width:51%;
+    height:4.22cqw;
+    min-height:4.22cqw;
+    border-width:.35cqw;
+  }
+  .m2-atlas-heading h1{
+    font-size:2.12cqw;
+    letter-spacing:.006em;
+    text-shadow:0 1px 1px #250b0a,0 0 7px #eebc7f91;
+  }
+  /* 2. Alturas de vitrinas: la tercera fila comienza donde empieza en
+     la ilustración, sin empujar el zócalo por debajo del borde. */
+  .m2-atlas-main{
+    grid-template-rows:11.98cqw 3.12cqw;
+    height:15.42cqw;
+    min-height:0;
+  }
+  .m2-atlas-row-two .m2-atlas-activity{
+    height:18.43cqw;
+    min-height:0;
+  }
+  .m2-atlas-row-two .m2-atlas-route-stage{
+    height:10.6cqw;
+    min-height:0;
+  }
+  .m2-atlas-route-card{
+    min-height:3.0cqw;
+  }
+  .m2-atlas-route-numeral{
+    display:none;
+  }
+  /* 3. Formularios de población: desplegables de papel blanco y metal
+     claro como en la referencia, con selección y foco accesibles. */
+  .m2-atlas-pop-row select{
+    color:#34251e;
+    background:linear-gradient(180deg,#fffdf8,#e6e9e8 74%,#c1c5c4);
+    border:1px solid #977d5d;
+    border-radius:.23cqw;
+    box-shadow:inset 0 1px #fff,0 1px 2px #60412487;
+  }
+  .m2-atlas-pop-row select:focus-visible{
+    outline:3px solid #f5d18a;
+    outline-offset:1px;
+  }
+  .m2-atlas-pop-row{
+    border-bottom:1px solid #986e4561;
+    background:linear-gradient(90deg,#fff3d52a,#dab58516);
+  }
+  /* 4. El pergamino de las consecuencias se parece más a una tabla
+     histórica: líneas finas, lectura mejor y controles homogéneos. */
+  .m2-atlas-facts-activity .m2-atlas-statements{
+    margin:.24cqw 13.55cqw .1cqw .55cqw;
+    padding:.12cqw .32cqw;
+    border:1px solid #a57543a6;
+    border-radius:.34cqw;
+    background:linear-gradient(165deg,#fff6dbcc,#f1d0a1c9);
+    box-shadow:inset 0 1px #fff5da8f,0 2px 3px #38211254;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement{
+    min-height:2.11cqw;
+    font-size:.76cqw;
+    border-bottom:1px solid #aa815487;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement:last-child{border-bottom:0}
+  .m2-atlas-facts-activity .m2-atlas-statement-select{
+    background:linear-gradient(#fff,#e8e8e8 74%,#bfc8c9);
+    border:1px solid #9e8669;
+    box-shadow:inset 0 1px 1px #fff;
+  }
+  /* 5. La maleta central no invade el buque. Los dos receptáculos
+     reproducen la anchura pintada de la referencia, dejando más mar. */
+  .m2-atlas-luggage-board{
+    margin-left:23.3%;
+    margin-right:13.2%;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+    gap:.26cqw;
+  }
+  .m2-atlas-luggage-activity:after{
+    width:16.8%;
+    height:100%;
+    opacity:1;
+    background:url('./m2-reference-right-steamer.webp') right bottom/100% 100% no-repeat;
+  }
+  .m2-atlas-luggage-activity>header{
+    width:23.6%;
+  }
+  .m2-atlas-luggage-activity>header h2{
+    font-size:1.39cqw;
+  }
+  .m2-atlas-luggage-available{
+    background-size:107% 100%;
+    background-position:center;
+  }
+  .m2-atlas-luggage-targets{
+    gap:.17cqw;
+  }
+  /* 6. Tarjetas: borde del pergamino más fino para dejar respirar
+     al grabado y rótulos sin recorte. */
+  .m2-atlas-screen .m2-atlas-luggage-card{
+    border-width:.2cqw;
+    border-radius:.5cqw;
+    background:linear-gradient(155deg,#fff8e8,#e8ce9f)!important;
+    box-shadow:inset 0 0 0 1px #fff5dc,0 2px 2px #1b0e0977;
+  }
+  .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+    filter:drop-shadow(0 1px 1px #2a17097d);
+  }
+  /* 7. Botón EGIAZTATU en el mismo espacio del grabado del barco;
+     sigue estando deshabilitado mientras falten las ocho respuestas. */
+  .m2-atlas-luggage-activity>footer{
+    right:.38cqw;
+    bottom:1.03cqw;
+    width:13.8%;
+    min-height:0;
+    z-index:10;
+    padding:0;
+    background:transparent;
+  }
+  .m2-atlas-luggage-activity>footer .m2-atlas-check{
+    width:100%;
+    height:3.04cqw;
+    min-height:3.04cqw;
+    padding:.22cqw .3cqw;
+    font-size:1.1cqw;
+    border-width:.3cqw;
+    border-radius:1.55cqw;
+    color:#fff0b8;
+    text-shadow:0 2px #0b342b;
+    box-shadow:0 0 0 2px #945b30,inset 0 0 0 2px #4d9476,0 3px 5px #25100c92;
+  }
+  .m2-atlas-luggage-activity>footer .m2-atlas-section-status{
+    position:absolute;
+    bottom:100%;
+    right:.3cqw;
+    font-size:.58cqw;
+    color:#442414;
+    background:#e9cd9faa;
+    border-radius:.18cqw;
+    padding:0 .15cqw;
+    white-space:nowrap;
+  }
+  /* 8. Zócalo de acciones discreto, dentro del marco inferior. */
+  .m2-atlas-final-controls{
+    height:1.08cqw;
+  }
+  .m2-atlas-final-controls .m2-button{
+    height:.95cqw;
+    min-height:.95cqw;
+    padding:0 .4cqw;
+    font-size:.55cqw;
+  }
+  .m2-atlas-final-controls .m2-feedback{
+    font-size:.53cqw;
+  }
+}
