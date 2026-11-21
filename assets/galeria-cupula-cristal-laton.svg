@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="168" viewBox="0 0 600 168">
+<title>Cúpula museística de cristal y latón envejecido</title>
+<defs>
+ <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2=".17">
+  <stop stop-color="#321807"/><stop offset=".06" stop-color="#9a5b20"/>
+  <stop offset=".12" stop-color="#f5c978"/><stop offset=".20" stop-color="#ffe3a5"/>
+  <stop offset=".29" stop-color="#a76726"/><stop offset=".42" stop-color="#f4bb57"/>
+  <stop offset=".50" stop-color="#fff2bc"/><stop offset=".59" stop-color="#b4772e"/>
+  <stop offset=".77" stop-color="#f7c674"/><stop offset=".87" stop-color="#ffe5a4"/>
+  <stop offset=".96" stop-color="#8a511c"/><stop offset="1" stop-color="#2c190c"/>
+ </linearGradient>
+ <linearGradient id="gGoldEdge" x1="0" y1="0" x2="0" y2="1">
+  <stop stop-color="#fff2be"/><stop offset=".16" stop-color="#d7a34c"/>
+  <stop offset=".32" stop-color="#653613"/><stop offset=".5" stop-color="#fbe2a1"/>
+  <stop offset=".67" stop-color="#b77a2c"/><stop offset=".85" stop-color="#4c280c"/>
+  <stop offset="1" stop-color="#e6b263"/>
+ </linearGradient>
+ <radialGradient id="gGlass" cx=".38" cy=".03" r=".86">
+  <stop stop-color="#fff2cc" stop-opacity=".83"/>
+  <stop offset=".21" stop-color="#efc688" stop-opacity=".31"/>
+  <stop offset=".40" stop-color="#7e512b" stop-opacity=".13"/>
+  <stop offset=".76" stop-color="#17190e" stop-opacity=".78"/>
+  <stop offset="1" stop-color="#090d0c" stop-opacity=".95"/>
+ </radialGradient>
+ <linearGradient id="gReflect" x1="0" y1="0" x2="1" y2=".22">
+  <stop stop-color="#fff9df" stop-opacity="0"/>
+  <stop offset=".2" stop-color="#fff6df" stop-opacity=".72"/>
+  <stop offset=".28" stop-color="#fff3dd" stop-opacity=".08"/>
+  <stop offset=".62" stop-color="#fff5e1" stop-opacity=".02"/>
+  <stop offset=".83" stop-color="#fff4dd" stop-opacity=".42"/>
+  <stop offset="1" stop-color="#fff4dd" stop-opacity="0"/>
+ </linearGradient>
+ <radialGradient id="gLamp" cx=".5" cy=".45" r=".58">
+  <stop stop-color="#ffffd4" stop-opacity=".95"/><stop offset=".23" stop-color="#ffe69d" stop-opacity=".70"/>
+  <stop offset=".55" stop-color="#eeb955" stop-opacity=".23"/><stop offset="1" stop-color="#eeb955" stop-opacity="0"/>
+ </radialGradient>
+ <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+ <filter id="shadow" x="-.2" width="1.4" y="-.5" height="2"><feGaussianBlur stdDeviation="5"/></filter>
+ <path id="arch" d="M15 149 C22 70 130 13 300 11 C470 13 578 70 585 149 L584 161 L16 161Z"/>
+ <clipPath id="inner"><path d="M43 143 C59 78 153 38 300 36 C447 38 541 78 557 143 L557 155 L43 155Z"/></clipPath>
+</defs>
+<!-- shadow and bronze substructure -->
+<path d="M15 149 C22 70 130 13 300 11 C470 13 578 70 585 149" stroke="#100905" stroke-width="19" fill="none" filter="url(#shadow)" opacity=".88"/>
+<use href="#arch" fill="#3b230d" stroke="#2b1606" stroke-width="12"/>
+<use href="#arch" fill="url(#gBrass)" stroke="#e4b16a" stroke-width="7"/>
+<path d="M31 146 C47 79 145 27 300 25 C455 27 553 79 569 146" fill="none" stroke="#4e2e11" stroke-width="19"/>
+<path d="M41 143 C56 78 151 39 300 37 C449 39 544 78 559 143 L559 157 L41 157Z" fill="url(#gGlass)"/>
+<!-- vaulted glass -->
+<g clip-path="url(#inner)">
+ <path d="M59 142C72 90 157 45 300 42C449 45 527 90 543 142" fill="none" stroke="#f1bc78" stroke-opacity=".35" stroke-width="3"/>
+ <path d="M76 143 Q110 62 264 42 L293 42 Q121 79 119 154Z" fill="url(#gReflect)" opacity=".65"/>
+ <path d="M479 42 Q531 70 542 146 L501 153 Q503 84 448 46Z" fill="#fff9d3" opacity=".22"/>
+ <ellipse cx="300" cy="93" rx="233" ry="80" fill="url(#gLamp)" opacity=".64"/>
+ <path d="M41 153H559" stroke="#fff9d1" stroke-opacity=".37" stroke-width="3"/>
+</g>
+<path d="M42 143 C57 78 150 39 300 37 C450 39 543 78 558 143" stroke="url(#gGoldEdge)" stroke-width="8" fill="none"/>
+<path d="M35 143 C50 71 147 30 300 29 C453 30 550 71 565 143" stroke="#fff0b7" stroke-opacity=".74" stroke-width="2" fill="none"/>
+<path d="M13 143H587V161H13Z" fill="url(#gGoldEdge)" stroke="#2d1409" stroke-width="6"/>
+<path d="M19 147H581M23 155H577" stroke="#ffecb4" stroke-opacity=".78" stroke-width="2"/>
+<path d="M16 159H584" stroke="#3e1c08" stroke-width="5"/>
+<!-- gilded ridge and central emblem -->
+<g transform="translate(300 25)">
+ <path d="M-39 2Q-20-10 0-3Q20-10 39 2M-28 7Q-11-2 0 6Q11-2 28 7" fill="none" stroke="#ffe5a3" stroke-width="2.2" opacity=".9"/>
+ <path d="M0-6L7 3L0 13L-7 3Z" fill="#f6d184" stroke="#773b15" stroke-width="1.7"/>
+ <circle r="3" cy="3" fill="#fff7dd"/>
+</g>
+<!-- delicate brass appliqués -->
+<g fill="none" stroke="#ffe8a8" stroke-linecap="round" opacity=".92">
+ <path d="M44 133q16-20 30-16q12 3 3 12q-7 6-13-1 M556 133q-16-20-30-16q-12 3-3 12q7 6 13-1" stroke-width="2.6"/>
+ <path d="M115 62q19-18 36-13M485 62q-19-18-36-13" stroke-width="2"/>
+</g>
+<g fill="#e5b264" stroke="#5c2e0d" stroke-width="1.2">
+ <circle cx="34" cy="149" r="6"/><circle cx="566" cy="149" r="6"/>
+ <path d="M290 147L300 141L310 147L300 155Z"/>
+</g>
+</svg>
