@@ -224,9 +224,14 @@ try{
      assert.equal(await stylesV2.count(),1,'Debe estar enlazado el CSS de fidelidad');
      assert.equal(await page.locator('.gal-case-column').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none',
        'Los adornos no deben bloquear las zonas de respuesta');
-     const sideArt=await page.locator('.gal-side-art').evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundImage));
-     assert.ok(sideArt[0].includes('m2-museo-izquierdo.svg')&&sideArt[1].includes('m2-museo-derecho.svg'),
-       'Deben reutilizarse los dos fondos históricos laterales del museo');
+     const sideArt=await page.locator('.gal-side-art').evaluateAll(nodes=>nodes.map(el=>({
+       main:getComputedStyle(el).backgroundImage,
+       upper:getComputedStyle(el,'::before').backgroundImage,
+       lower:getComputedStyle(el,'::after').backgroundImage
+     })));
+     assert.ok(sideArt[0].upper.includes('m2-museo-izquierdo.svg')&&sideArt[0].lower.includes('m2-museo-izquierdo.svg')&&
+       sideArt[1].main.includes('m2-museo-derecho.svg'),
+       'Deben conservarse las dos ilustraciones históricas laterales incluso con el mapa inclinado');
      assert.equal(await page.locator('.gal-flag-shelf .gal-flag-illustration').count(),4,'Las cuatro banderas deben estar dentro de las vitrinas');
      assert.equal(await page.locator('[data-gallery-zone]').count(),5,'No deben desaparecer zonas de clasificación');
      assert.equal(await page.locator('.gal-museum-set').getAttribute('aria-hidden'),'true');
