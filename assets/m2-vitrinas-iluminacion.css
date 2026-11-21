@@ -1,0 +1,88 @@
+/* Misión 2 · ejercicio 1 · iluminación interactiva de las cinco vitrinas.
+   Solo CSS: no interviene en las respuestas, en las zonas de destino
+   ni en la evaluación. Todas las vitrinas reciben idéntica luz al
+   seleccionar cualquier cartela; nunca se destaca la respuesta correcta. */
+
+.m2-first-room .m2-museum-case,
+.m2-first-room .m2-museum-case .m2-case-arch,
+.m2-first-room .m2-museum-case .m2-case-scene,
+.m2-first-room .m2-museum-case .m2-case-spot,
+.m2-first-room .m2-museum-case .m2-case-well,
+.m2-first-room .m2-museum-case:before {
+ transition:box-shadow .24s ease,filter .24s ease,background-color .24s ease,opacity .24s ease!important;
+}
+
+/* Una cartela activa prepara por igual los cinco destinos.
+   El selector no depende de la solución ni de la categoría histórica. */
+.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-museum-case {
+ box-shadow:
+  0 0 0 1px #7a471d,0 0 0 3px #dfb66d,
+  0 0 16px #d7a45659,0 12px 14px #000a,
+  inset 3px 0 7px #fff0c65c,inset -4px 0 7px #140a0796;
+}
+.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-case-arch {
+ box-shadow:inset 0 0 0 2px #ffefc1,inset 0 0 0 5px #5a3524,
+  inset 0 11px 22px #ffeab36b,inset 0 -15px 27px #160d0e9a,
+  0 0 0 1px #372416,0 0 12px #e4b66d7a,0 3px 5px #0008;
+}
+.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-case-scene {
+ filter:saturate(1.13) contrast(1.06) brightness(1.13);
+}
+.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-case-spot {
+ filter:drop-shadow(0 0 9px #ffe8bcb5) brightness(1.12);
+}
+.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-museum-case .m2-case-well {
+ box-shadow:inset 0 0 0 1px #ffe6b89c,inset 0 5px 13px #050505a0,
+   inset 0 -10px 17px #e7b36465,0 0 9px #e2b26959;
+}
+
+/* Foco cálido cuando se examina una vitrina con ratón o teclado.
+   Mantener fija su geometría evita saltos de cartelas e hitboxes. */
+.m2-first-room .m2-museum-case:focus-within,
+.m2-first-room .m2-museum-case:has(.m2-case-title-action:focus-visible),
+.m2-first-room .m2-museum-case:has(.m2-case-target:focus-visible){
+ box-shadow:
+  0 0 0 1px #8c5626,0 0 0 3px #f3cf86,
+  0 0 23px #ffd18d94,0 12px 14px #000b,
+  inset 3px 0 8px #ffefba77,inset -4px 0 7px #1209069e!important;
+}
+.m2-first-room .m2-museum-case:focus-within .m2-case-arch{
+ box-shadow:inset 0 0 0 2px #ffedbb,inset 0 0 0 5px #57341f,
+  inset 0 11px 25px #ffdfa97d,inset 0 -15px 26px #170d0e8a,
+  0 0 0 1px #382618,0 0 16px #f3c77bb0,0 3px 5px #0008;
+}
+.m2-first-room .m2-museum-case:focus-within .m2-case-scene{
+ filter:saturate(1.16) contrast(1.055) brightness(1.19);
+}
+.m2-first-room .m2-museum-case:focus-within .m2-case-spot{
+ filter:drop-shadow(0 0 11px #ffefc9) brightness(1.2);
+}
+@media (hover:hover) and (pointer:fine){
+ .m2-first-room .m2-museum-case:hover{
+  box-shadow:
+   0 0 0 1px #865124,0 0 0 3px #ecc47e,
+   0 0 21px #ffd08e8c,0 12px 14px #000b,
+   inset 3px 0 8px #ffefba70,inset -4px 0 7px #1209069e!important;
+ }
+ .m2-first-room .m2-museum-case:hover .m2-case-arch{
+  box-shadow:inset 0 0 0 2px #ffedbb,inset 0 0 0 5px #57341f,
+   inset 0 11px 24px #ffdfa977,inset 0 -15px 26px #170d0e8a,
+   0 0 0 1px #382618,0 0 15px #f3c77baa,0 3px 5px #0008;
+ }
+ .m2-first-room .m2-museum-case:hover .m2-case-scene{
+  filter:saturate(1.16) contrast(1.055) brightness(1.18);
+ }
+ .m2-first-room .m2-museum-case:hover .m2-case-spot{
+  filter:drop-shadow(0 0 11px #ffefc9) brightness(1.19);
+ }
+}
+/* La selección física de una cartela ya está animada en la mesa;
+   no modificar su forma, hitbox ni posición dentro de las vitrinas. */
+@media(prefers-reduced-motion:reduce){
+ .m2-first-room .m2-museum-case,
+ .m2-first-room .m2-museum-case .m2-case-arch,
+ .m2-first-room .m2-museum-case .m2-case-scene,
+ .m2-first-room .m2-museum-case .m2-case-spot,
+ .m2-first-room .m2-museum-case .m2-case-well,
+ .m2-first-room .m2-museum-case:before{transition:none!important}
+}
