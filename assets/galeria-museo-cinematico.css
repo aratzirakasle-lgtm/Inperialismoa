@@ -55,83 +55,24 @@
  background:repeating-linear-gradient(90deg,transparent 0 34px,#c3924a6b 36px 39px,transparent 43px 78px);
  opacity:.45;
 }
+/* Las dos ilustraciones laterales fotorrealistas ya forman parte del repositorio.
+   Se comparten con el resto del museo, sin duplicar imágenes ni peticiones remotas. */
 #app-shell.gallery-active .gal-side-art{
- position:absolute;top:169px;width:clamp(146px,15vw,255px);z-index:0;
+  position:absolute;top:169px;width:clamp(130px,11.7vw,205px);
+  aspect-ratio:174 / 725;height:auto;z-index:0;
+  background-position:center top;background-size:100% 100%;
+  background-repeat:no-repeat;
+  filter:drop-shadow(1px 8px 12px #0009);
+  opacity:.96;
 }
-#app-shell.gallery-active .gal-side-art-left{left:clamp(0px,1vw,19px)}
-#app-shell.gallery-active .gal-side-art-right{right:clamp(0px,1vw,19px)}
-#app-shell.gallery-active .gal-art-frame{
- position:relative;width:94%;padding:9px;border:5px ridge #cfa15e;
- background:linear-gradient(130deg,#67411b,#1e160f 24%,#ad7d42 60%,#412a18);
- box-shadow:0 12px 22px #000b,inset 0 0 0 1px #fde19a,0 0 13px #d0a16557;
- transform:rotate(-.8deg);
+#app-shell.gallery-active .gal-side-art-left{
+  left:0;
+  background-image:url('./m2-museo-izquierdo.svg');
 }
-#app-shell.gallery-active .gal-side-art-right .gal-art-frame{transform:rotate(.8deg);margin-left:auto}
-#app-shell.gallery-active .gal-art-frame svg{
- width:100%;height:auto;display:block;
- border:1px solid #493018;background:#dfc598;
- filter:sepia(.16) contrast(1.08) saturate(.81);
-}
-#app-shell.gallery-active .gal-frame-caption{
- background:linear-gradient(140deg,#f0cf92,#ae7534);border:2px ridge #b08349;
- width:max-content;max-width:100%;
- color:#4a301a;text-align:center;font:700 clamp(9px,.72vw,12px)/1.2 Georgia,serif;
- padding:4px 6px;margin:-8px auto 0;position:relative;z-index:2;
- box-shadow:0 3px 6px #0007;
-}
-#app-shell.gallery-active .gal-antique-books{
- position:absolute;left:4%;top:252px;width:63%;height:82px;
- display:flex;align-items:flex-end;gap:4px;transform:rotate(-2deg);
- filter:drop-shadow(4px 8px 5px #000a);
-}
-#app-shell.gallery-active .gal-antique-books i{
- display:block;flex:1;min-width:8px;height:72%;
- background:linear-gradient(90deg,#1e140f,#a47638 18%,#492717 34%,#7b4b29 62%,#32190f);
- border:1px solid #bd8743;box-shadow:inset 0 6px #d4a15c,inset 0 -6px #d4a15c;
- border-radius:4px 3px 2px 2px;
-}
-#app-shell.gallery-active .gal-antique-books i:nth-child(2){height:99%;background:linear-gradient(90deg,#252018,#688063 18%,#344e43 60%,#1c2422)}
-#app-shell.gallery-active .gal-antique-books i:nth-child(3){height:81%}
-#app-shell.gallery-active .gal-antique-books i:nth-child(4){height:91%}
-#app-shell.gallery-active .gal-globe{
- position:absolute;left:-3%;top:263px;width:clamp(128px,13.7vw,225px);
- filter:drop-shadow(6px 12px 8px #0009);
-}
-#app-shell.gallery-active .gal-globe svg{display:block;width:100%;height:auto}
-#app-shell.gallery-active .gal-side-table{
- position:absolute;left:-13%;top:440px;width:120%;height:140px;
- border-top:9px ridge #c19755;
- border-radius:18px;
- background:repeating-linear-gradient(3deg,#462514 0 7px,#6d4126 8px 13px,#3b1e11 14px 22px);
- box-shadow:inset 0 5px 14px #ba79414a,0 13px 17px #000c;
-}
-#app-shell.gallery-active .gal-archive-props{
- position:absolute;left:10%;top:440px;width:74%;height:80px;
- filter:drop-shadow(2px 8px 4px #0009);
-}
-#app-shell.gallery-active .gal-archive-props svg{display:block;width:100%;height:auto}
-#app-shell.gallery-active .gal-glass-prop{
- width:87%;height:151px;position:absolute;top:268px;right:0;
- border:4px ridge #b98646;border-radius:12px 12px 5px 5px;
- background:
-  radial-gradient(ellipse 50% 16% at 50% 10%,#fff0b7a1,transparent),
-  linear-gradient(106deg,#fff4c72e,transparent 23%,transparent 70%,#fff3cb2b),
-  linear-gradient(#14211dcb,#2f311fdf 77%,#211c15);
- box-shadow:inset 0 0 0 3px #dba762aa,0 4px 0 #3a2415,0 8px 18px #000b;
-}
-#app-shell.gallery-active .gal-glass-prop::before{
- content:'';position:absolute;left:47%;top:-8px;width:9px;height:9px;
- border-radius:50%;background:#f5d38b;box-shadow:0 0 10px #ffe7a6;
-}
-#app-shell.gallery-active .gal-glass-prop svg{
- display:block;width:100%;height:100%;padding:12px;
- filter:drop-shadow(1px 1px 1px #0005);
-}
-#app-shell.gallery-active .gal-telescope-props{
- position:absolute;right:6%;top:418px;width:88%;
-}
-#app-shell.gallery-active .gal-telescope-props svg{
- display:block;width:100%;height:auto;filter:drop-shadow(3px 7px 4px #0009);
+#app-shell.gallery-active .gal-side-art-right{
+  right:0;
+  aspect-ratio:167 / 740;
+  background-image:url('./m2-museo-derecho.svg');
 }
 #app-shell.gallery-active .gal-room-lamp{
  width:46px;height:28px;position:absolute;top:23px;z-index:1;
