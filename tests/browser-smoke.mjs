@@ -140,8 +140,30 @@ try{
      await page.evaluate(()=>{document.activeElement?.blur();scrollTo(0,0)});
      await page.mouse.move(5,5);
      await mkdir('test-output',{recursive:true});
+     // Reconstruir en la captura "antes" el símbolo europeo original,
+     // no fotografiar el nuevo medallón sin sus propios estilos.
+     const medallion=await page.locator('.gal-europe-medallion').evaluate(el=>el.outerHTML);
      await sheet.evaluate(el=>el.disabled=true);
+     await page.evaluate(()=>{
+       const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
+       const star=(cx,cy)=>'<polygon points="'+Array.from({length:10},(_,i)=>{
+         const a=-Math.PI/2+i*Math.PI/5,r=i%2?1.05:2.45;
+         return (cx+Math.cos(a)*r).toFixed(2)+','+(cy+Math.sin(a)*r).toFixed(2);
+       }).join(' ')+'"/>';
+       const stars=Array.from({length:12},(_,i)=>{
+         const a=-Math.PI/2+i*Math.PI/6;
+         return star(31+10.5*Math.cos(a),19.6+10.5*Math.sin(a));
+       }).join('');
+       document.querySelector('.gal-europe-medallion').outerHTML=
+         '<svg class="gal-flag-illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 42" role="img" aria-label="Antiguo símbolo europeo" focusable="false">'+
+         '<defs><clipPath id="gal-flag-cloth-eu"><path d="'+cloth+'"/></clipPath></defs>'+
+         '<g clip-path="url(#gal-flag-cloth-eu)"><rect x="5" y="4" width="52" height="32" fill="#003399"/>'+
+         '<g fill="#ffcc00">'+stars+'</g></g></svg>';
+     });
      await page.screenshot({path:'test-output/m1-galeria-antes-ordenador.png',fullPage:true,animations:'disabled'});
+     await page.evaluate(original=>{
+       document.querySelector('.gal-flag-illustration').outerHTML=original;
+     },medallion);
      await sheet.evaluate(el=>el.disabled=false);
      await page.screenshot({path:'test-output/m1-galeria-despues-ordenador.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile.gal-selected').count(),1);
