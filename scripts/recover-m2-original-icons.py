@@ -18,11 +18,11 @@ SRC=Image.open(ASSETS/'m2-reference-open-leather.webp').convert('RGB')
 MISSION=Image.open(ASSETS/'m2-atlas-original-mission.webp').convert('RGB')
 # Bounds cerrados antes del texto impreso en la vieja pintura.
 CUTS={
-  'growth':(SRC,(271,42,357,88)),
+  'growth':(SRC,(271,42,357,83)),
   'conditions':(SRC,(176,40,251,89)),
   'better':(SRC,(65,40,151,88)),
   'conversion':(SRC,(184,145,222,194)),
-  'settlement':(SRC,(386,39,456,89)),
+  'settlement':(SRC,(386,39,456,83)),
   'missions':(MISSION,(0,0,248,78)),
   'oceania':(SRC,(385,149,470,193)),
   'faith':(SRC,(271,149,359,192)),
@@ -45,12 +45,17 @@ for key,(source,box) in CUTS.items():
       ex=abs((x+.5-w/2)/(w*.55))
       ey=abs((y+.5-h/2)/(h*.56))
       border=max(0,min(1,(1.20-ex*ex-ey*ey)*4))
+      # Desvanecer especialmente los cuatro bordes del recorte del misionero:
+      # su fuente es una fotografía panorámica y no una figura aislada.
+      if key=='missions':
+        fade=min(x,w-1-x,y,h-1-y)
+        border*=max(0,min(1,fade/8))
       mask[x,y]=round(v*border)
   if key=='better':
     # La miga es clara: preservar el pan completo, sin perforar sus luces.
     outline=Image.new('L',(w,h))
     d=ImageDraw.Draw(outline)
-    d.polygon([(4,41),(7,34),(16,23),(27,18),(39,11),(55,5),(72,5),(82,11),(84,17),(78,27),(64,34),(45,43),(22,47),(7,47)],fill=255)
+    d.polygon([(3,36),(7,27),(21,17),(38,10),(60,3),(72,4),(80,10),(82,21),(72,31),(51,39),(29,44),(9,44)],fill=255)
     alpha=outline.filter(ImageFilter.GaussianBlur(.9))
   else:
     alpha=alpha.filter(ImageFilter.GaussianBlur(.46))
