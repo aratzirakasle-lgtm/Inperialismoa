@@ -1,0 +1,188 @@
+/* INPERIALISMOA · Misión 1 / Ejercicio 1.
+   Recuperar el mapa lateral ladeado y mejorar las cartelas de la mesa.
+   Este archivo SOLO toca presentación: mismas fotos WebP, banderas, textos,
+   tarjetas, destinos y comprobación. No crea pistas de respuestas. */
+
+/* Dos secciones de LA MISMA ilustración histórica ya instalada:
+   la superior se inclina como un mapa enmarcado del museo; la inferior
+   conserva el globo, los libros y la instrumentación sin inclinarse.
+   Así no hay que sustituir ni recrear ninguna fotografía del sitio. */
+#app-shell.gallery-active .gal-side-art-left{
+  background-image:none;
+  overflow:visible;
+  isolation:isolate;
+}
+#app-shell.gallery-active .gal-side-art-left::before,
+#app-shell.gallery-active .gal-side-art-left::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  border-radius:0;
+  margin:0;
+  background-image:url('./m2-museo-izquierdo.svg');
+  background-size:100% 100%;
+  background-position:center top;
+  background-repeat:no-repeat;
+  pointer-events:none;
+  box-shadow:none;
+}
+#app-shell.gallery-active .gal-side-art-left::before{
+  z-index:2;
+  clip-path:inset(0 0 60% 0);
+  transform:translate(6px,2px) rotate(8deg) scale(.97);
+  transform-origin:50% 19%;
+  filter:drop-shadow(3px 7px 5px #0b0706ac);
+}
+#app-shell.gallery-active .gal-side-art-left::after{
+  z-index:1;
+  clip-path:inset(40% 0 0 0);
+  transform:none;
+  filter:none;
+}
+/* La cartela se convierte en una ficha antigua enmarcada.
+   El icono ilustrado original se conserva en un sello redondo de latón. */
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){
+  position:relative;
+  min-height:46px;
+  padding:6px 10px 6px 7px;
+  border:3px ridge #bd8d4c;
+  border-radius:7px 5px 8px 5px;
+  background:
+    radial-gradient(ellipse 100% 160% at 48% -65%,#fffef0 0%,#fff1cf82 45%,transparent 81%),
+    radial-gradient(ellipse at 95% 120%,#b77f4628 0%,transparent 78%),
+    repeating-linear-gradient(109deg,transparent 0 13px,#af79390b 14px,transparent 15px 31px),
+    linear-gradient(154deg,#fbe9c1 0%,#f7e0ae 42%,#e9c38a 78%,#d8a56e 100%);
+  box-shadow:
+    inset 0 0 0 1px #fff8dc,
+    inset 0 0 0 3px #d8b47b66,
+    inset 0 4px 9px #fff8df70,
+    inset 0 -5px 7px #9e60201d,
+    0 2px 0 #815025,
+    0 5px 8px #110606a6;
+  font:700 clamp(10px,.79vw,13px)/1.2 Georgia,'Times New Roman',serif;
+  color:#301b10;
+  text-shadow:0 1px 0 #fff8e4;
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease,
+    border-color .16s ease,filter .16s ease;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed)::before{
+  content:'';
+  position:absolute;inset:3px;
+  border:1px solid #ab784595;
+  border-radius:4px 3px 5px 3px;
+  background:
+    linear-gradient(135deg,#97632f 0 5px,transparent 6px) top left / 12px 12px no-repeat,
+    linear-gradient(225deg,#97632f 0 5px,transparent 6px) top right / 12px 12px no-repeat,
+    linear-gradient(45deg,#97632f 0 5px,transparent 6px) bottom left / 12px 12px no-repeat,
+    linear-gradient(315deg,#97632f 0 5px,transparent 6px) bottom right / 12px 12px no-repeat;
+  pointer-events:none;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed)::after{
+  content:'';
+  position:absolute;inset:6px;
+  border-radius:4px;
+  box-shadow:inset 0 1px 0 #fff9ea50;
+  background:
+    radial-gradient(circle at 2px 2px,#ac753b 0 1.4px,transparent 1.7px),
+    radial-gradient(circle at calc(100% - 2px) 2px,#ac753b 0 1.4px,transparent 1.7px),
+    radial-gradient(circle at 2px calc(100% - 2px),#ac753b 0 1.4px,transparent 1.7px),
+    radial-gradient(circle at calc(100% - 2px) calc(100% - 2px),#ac753b 0 1.4px,transparent 1.7px);
+  pointer-events:none;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+  position:relative;
+  flex:0 0 31px;
+  display:grid;
+  place-items:center;
+  width:31px;height:31px;
+  border:1px solid #ad7836;
+  border-radius:50%;
+  background:radial-gradient(circle at 36% 27%,#fff3d1,#ddae64 65%,#9a6631);
+  box-shadow:inset 0 0 0 2px #fff1c59c,0 1px 2px #3a1c0a5e;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon .gal-tile-artwork{
+  width:25px;height:25px;
+  object-fit:contain;
+  filter:drop-shadow(0 1px 1px #2f170a4d);
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name{
+  min-width:0;
+  font-weight:700;
+  line-height:1.24;
+  letter-spacing:.003em;
+  overflow-wrap:break-word;
+  text-wrap:pretty;
+  color:#30200f;
+}
+@media(hover:hover) and (pointer:fine){
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed):hover:not(:disabled){
+    transform:translateY(-2px);
+    border-color:#e2b371;
+    filter:brightness(1.055);
+    box-shadow:inset 0 0 0 1px #fffce7,inset 0 0 0 3px #dfb87a77,
+      inset 0 4px 10px #fffbe38d,0 3px 0 #8d572e,
+      0 9px 14px #0e0504c9,0 0 11px #f0c98c4d;
+  }
+}
+/* Selección inequívoca, idéntica para TODOS los conceptos:
+   la iluminación no indica a qué vitrina pertenece una respuesta. */
+#app-shell.gallery-active .gal-tray .gal-tile.gal-selected{
+  transform:translateY(-2px);
+  border-color:#f1ca83;
+  background:
+    radial-gradient(ellipse at 50% 0,#fff7dc,#efce91 87%,#dab26e);
+  box-shadow:0 0 0 2px #f7e0a6,0 0 0 4px #684321,
+    0 6px 12px #0009,0 0 16px #ffd087ae!important;
+  filter:none;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:focus-visible{
+  outline:3px solid #ffe7a1!important;
+  outline-offset:3px;
+}
+/* Las fichas colocadas comparten materiales, en formato compacto,
+   sin añadir altura fija que recorte las 4+5 de Europa. */
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed{
+  background:
+    radial-gradient(ellipse at 36% -18%,#fff9e5,transparent 88%),
+    linear-gradient(147deg,#f9e8c3,#eacc99 80%,#d7af7a);
+  border:1px solid #b78a51;
+  border-radius:4px;
+  color:#39230f;
+  box-shadow:inset 0 0 0 1px #fff7e3,0 2px 3px #26120850;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon{
+  background:radial-gradient(circle at 34% 30%,#fff1d2,#d3aa68);
+  border:1px solid #bf955b;
+  border-radius:50%;
+  display:grid;place-items:center;
+}
+#app-shell.gallery-active .gal-tile.gal-touch-ghost{
+  box-shadow:0 12px 26px #000b,0 0 0 2px #ffe3a3!important;
+  background:linear-gradient(145deg,#fff9e8,#eacb96)!important;
+}
+/* No reintroducir desplazamientos ni animación con movimiento reducido. */
+@media(max-width:1320px){
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){
+    padding:6px 6px;min-height:46px;
+  }
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+    flex-basis:27px;width:27px;height:27px;
+  }
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon .gal-tile-artwork{width:22px;height:22px}
+}
+@media(max-width:680px){
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){
+    min-height:50px;
+    font-size:11px;
+    padding:6px 7px;
+  }
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+    flex-basis:27px;width:27px;height:27px;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){transition:none!important}
+}
