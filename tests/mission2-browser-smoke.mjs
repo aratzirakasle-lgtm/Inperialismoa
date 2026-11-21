@@ -314,6 +314,38 @@ try{
    assert.equal(await page.locator('.m2-atlas-check[data-atlas-stage="4"]').isDisabled(),true);
    const imgs=await page.locator('.m2-atlas-screen img').evaluateAll(els=>els.map(i=>({name:i.src,loaded:i.complete&&i.naturalWidth>0})));
    assert.ok(imgs.length>=5&&imgs.every(x=>x.loaded),JSON.stringify(imgs));
+   const artAssets=await page.evaluate(async()=>{
+    const files=[
+     'm2-reference-harbor.webp','m2-reference-port-photo.webp',
+     'm2-reference-old-luggage.webp','m2-reference-right-steamer.webp',
+     'm2-reference-red-suitcase.webp','m2-reference-blue-suitcase.webp',
+     'm2-reference-open-leather.webp'
+    ];
+    return Promise.all(files.map(file=>new Promise(resolve=>{
+     const im=new Image();
+     im.onload=()=>resolve({file,loaded:im.naturalWidth>40&&im.naturalHeight>40});
+     im.onerror=()=>resolve({file,loaded:false});
+     im.src='./assets/'+file;
+    })));
+   });
+   assert.ok(artAssets.every(item=>item.loaded),'Las siete piezas de la ilustración aprobada deben cargar: '+JSON.stringify(artAssets));
+   const cssArt=await page.locator('.m2-atlas-screen').evaluate(root=>{
+    const get=(selector,pseudo)=>getComputedStyle(root.querySelector(selector),pseudo).backgroundImage;
+    return {
+     harbour:get('.m2-atlas-route-activity','::before'),
+     photograph:get('.m2-atlas-facts-activity','::after'),
+     tray:get('.m2-atlas-luggage-available'),
+     red:get('.m2-atlas-suitcase-cause'),
+     blue:get('.m2-atlas-suitcase-effect')
+    };
+   });
+   for(const [part,file] of Object.entries({
+    harbour:'m2-reference-harbor.webp',
+    photograph:'m2-reference-port-photo.webp',
+    tray:'m2-reference-open-leather.webp',
+    red:'m2-reference-red-suitcase.webp',
+    blue:'m2-reference-blue-suitcase.webp'
+   }))assert.ok(cssArt[part].includes(file),part+' debería conservar la ilustración original');
    await page.screenshot({path:'test-output/m2-e3-atlas-initial-1672x941.png',fullPage:true,animations:'disabled'});
    // Incorrect entries are allowed; no truth coloring or hints.
    await page.locator('select[data-field="1850"]').selectOption('450');
@@ -373,6 +405,7 @@ try{
     });
     assert.deepEqual(metrics,{num:8,clipped:false,missing:false,overlapping:false},JSON.stringify({size,metrics}));
     assert.ok(await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').isVisible());
+    await page.screenshot({path:'test-output/m2-e3-filled-suitcase-'+size.width+'.png',fullPage:true,animations:'disabled'});
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
