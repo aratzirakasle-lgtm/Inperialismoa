@@ -111,6 +111,7 @@ try{
      assert.ok(Math.max(...cabinets)-Math.min(...cabinets)<5,
        'En escritorio las cuatro vitrinas deben terminar alineadas sin recortar las zonas');
      await page.screenshot({path:'test-output/m1-museo-fidelidad-v2-alumno-escritorio.png',fullPage:true,animations:'disabled'});
+     await page.screenshot({path:'test-output/m1-museo-cupulas-v3-alumno-escritorio.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
      assert.equal(await page.locator('.m1-nav').count(),0);
@@ -169,6 +170,24 @@ try{
      assert.equal(await page.locator('.gal-case-finial').count(),4,'Las cuatro vitrinas deben tener remates de latón');
      assert.equal(await page.locator('.gal-case-column').count(),8,'Cada vitrina debe conservar sus dos columnas');
      assert.equal(await page.locator('.gal-vitrine-velvet').count(),4,'Cada vitrina debe tener base de terciopelo');
+     assert.equal(await page.locator('.gal-case-spotlight').count(),4,'Cada vitrina debe tener su luz interior');
+     assert.equal(await page.locator('.gal-case-glass').count(),4,'Las capas de cristal no pueden desaparecer');
+     assert.equal(await page.locator('.gal-museum-tablefront').count(),1,'La mesa debe mostrar su canto de nogal');
+     assert.equal(await page.locator('.gal-museum-tablefront').evaluate(el=>getComputedStyle(el).pointerEvents),'none',
+       'El canto de la mesa nunca debe bloquear botones');
+     assert.equal(await page.locator('.gal-case-glass').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none');
+     const dome=await page.locator('.gal-vitrine').first().evaluate(el=>getComputedStyle(el,'::before').backgroundImage);
+     assert.ok(dome.includes('galeria-cupula-cristal-laton.svg'),'Debe conservar la cúpula vectorial compartida');
+     const domeAsset=await page.evaluate(async()=>{const r=await fetch('./assets/galeria-cupula-cristal-laton.svg');return {ok:r.ok,svg:(await r.text()).includes('<svg')}}); 
+     assert.ok(domeAsset.ok&&domeAsset.svg,'Debe cargarse el recurso de cúpulas desde la web');
+     const photos=await page.locator('.gal-vitrine-image').evaluateAll(nodes=>nodes.map(el=>{
+       const style=getComputedStyle(el);
+       return {data:style.backgroundImage.includes('data:image/webp'),position:style.backgroundPosition};
+     }));
+     assert.ok(photos.length===4&&photos.every(p=>p.data),
+       'Las cuatro fotografías originales WebP deben permanecer en cada vitrina');
+     assert.equal(new Set(photos.map(p=>p.position)).size,4,
+       'Cada foto debe conservar su encuadre original y distinto');
      assert.equal(await page.locator('.gal-tray-corner').count(),4,'La mesa debe llevar cuatro filigranas');
      const glassBackdrop=await page.locator('.gal-vitrine-ru .gal-zone').evaluate(el=>getComputedStyle(el).backgroundImage);
      assert.ok(glassBackdrop.includes('gradient')&&!glassBackdrop.includes('data:image'),
@@ -221,6 +240,7 @@ try{
      assert.equal(await page.locator('.gal-museum-set').count(),1);
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/m1-museo-cinematico-vacio-movil.png',fullPage:true,animations:'disabled'});
+     await page.screenshot({path:'test-output/m1-museo-cupulas-v3-movil.png',fullPage:true,animations:'disabled'});
      const metrics=await page.evaluate(()=>{
        const cabinets=[...document.querySelectorAll('.gal-vitrine')].map(el=>{
          const r=el.getBoundingClientRect();
