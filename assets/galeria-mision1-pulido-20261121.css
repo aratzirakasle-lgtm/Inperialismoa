@@ -1,0 +1,204 @@
+/* Misión 1 · Potentzia handien galeria
+   Pulido de museo sin alterar zonas, enunciados, tamaños de hitbox,
+   reglas de validación ni el orden original de las veinte cartelas. */
+#app-shell.gallery-active .gal-hall{
+ background:
+  radial-gradient(ellipse 68% 26% at 50% -7%,#b8cbba80,transparent 82%),
+  radial-gradient(ellipse 27% 42% at 0% 37%,#8e764b27,transparent 93%),
+  radial-gradient(ellipse 27% 42% at 100% 37%,#8e764b27,transparent 93%),
+  repeating-linear-gradient(90deg,transparent 0 244px,#c3aa6e0a 245px 247px,transparent 249px),
+  linear-gradient(180deg,#091d1c 0%,#174035 29%,#153b30 67%,#071b18 100%);
+}
+/* Latón trabajado, iluminación de techo y profundidad de las vitrinas. */
+#app-shell.gallery-active .gal-vitrine{
+ border:4px ridge #c99d62;
+ background:linear-gradient(143deg,#fffaeb,#f0e3ca 67%,#d9c3a0);
+ box-shadow:
+  inset 0 0 0 2px #ffebbf,inset 0 0 0 6px #9b6f3d53,
+  0 5px 0 #372519,0 16px 28px #000b,0 0 16px #d4ae7255;
+ transition:box-shadow .25s ease,border-color .25s ease,filter .25s ease;
+}
+#app-shell.gallery-active .gal-vitrine-top{
+ background:
+  radial-gradient(ellipse at 50% -28%,#fff9dc,transparent 73%),
+  linear-gradient(160deg,#fff8e6,#e9d1a9 84%);
+ border-bottom:3px double #a97e43;
+ box-shadow:inset 0 1px #fffdf1,0 2px 4px #5138242e;
+}
+#app-shell.gallery-active .gal-vitrine-top h2{
+ text-shadow:0 1px #fff6df,0 2px 3px #4e321e24;
+ letter-spacing:.025em;
+}
+#app-shell.gallery-active .gal-europe-medallion{
+ display:block;flex:none;
+ width:clamp(39px,3.5vw,62px);height:clamp(31px,2.65vw,45px);
+ overflow:visible;filter:drop-shadow(0 1px 1px #49301f70);
+}
+#app-shell.gallery-active .gal-vitrine-image{
+ position:relative;
+ border-bottom:4px ridge #b18a53;
+ box-shadow:inset 0 9px 17px #f1ce994d,inset 0 -22px 25px #07191162;
+ isolation:isolate;
+}
+#app-shell.gallery-active .gal-vitrine-image::before{
+ content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+ background:
+  linear-gradient(112deg,#fffce633,transparent 17% 76%,#fff0c51f 95%),
+  radial-gradient(ellipse 86% 85% at 50% -12%,#fff8d85f,transparent 78%);
+ mix-blend-mode:screen;
+ opacity:.7;transition:opacity .28s ease;
+}
+#app-shell.gallery-active .gal-vitrine-image::after{
+ content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+ background:linear-gradient(90deg,#27180575,transparent 9% 91%,#27180566);
+ opacity:.62;
+}
+/* Identical ambient light for all cabinets if any card is selected.
+   Never highlight the correct destination or a specific category. */
+#app-shell.gallery-active .gal-hall:has(.gal-tile.gal-selected) .gal-vitrine{
+ border-color:#d9ac68;
+ box-shadow:inset 0 0 0 2px #fff0c8,inset 0 0 0 6px #a77c4358,
+  0 5px 0 #3a261a,0 15px 26px #000b,0 0 24px #f7cc8466;
+}
+#app-shell.gallery-active .gal-hall:has(.gal-tile.gal-selected) .gal-vitrine-image::before{opacity:.93}
+@media(hover:hover) and (pointer:fine){
+ #app-shell.gallery-active .gal-vitrine:hover{
+  border-color:#efc889;
+  box-shadow:inset 0 0 0 2px #fff3d4,inset 0 0 0 6px #b4894966,
+   0 5px 0 #3a2519,0 15px 26px #000a,0 0 27px #f5d294a8;
+ }
+ #app-shell.gallery-active .gal-vitrine:hover .gal-vitrine-image::before{opacity:1}
+}
+#app-shell.gallery-active .gal-vitrine:focus-within{
+ border-color:#efc889;
+ box-shadow:inset 0 0 0 2px #fff3d4,inset 0 0 0 6px #b4894966,
+  0 5px 0 #3a2519,0 15px 26px #000a,0 0 27px #f5d294a8;
+}
+#app-shell.gallery-active .gal-vitrine:focus-within .gal-vitrine-image::before{opacity:1}
+/* The historical archiving surfaces remain in natural flow: no cut-off
+   even when Europe has four + five labels. */
+#app-shell.gallery-active .gal-zone{
+ border:1px solid #a98b5f;
+ background:
+  radial-gradient(ellipse at 47% -14%,#fffaf0,transparent 75%),
+  linear-gradient(145deg,#faf0dc,#e4d0a9);
+ box-shadow:inset 0 0 0 1px #fef4df,0 2px 4px #39291a2e;
+ min-width:0;
+}
+#app-shell.gallery-active .gal-zone-heading{
+ font-size:clamp(10px,.79vw,12px);
+ color:#5c3d21;
+}
+#app-shell.gallery-active .gal-zone-heading small{
+ color:#795e40;font-size:10px;
+}
+#app-shell.gallery-active .gal-zone:hover,
+#app-shell.gallery-active .gal-zone:focus-visible,
+#app-shell.gallery-active .gal-zone.gal-dragover{
+ border-color:#8f5e26;
+ background:linear-gradient(160deg,#fff6e4,#f6e4bb);
+ box-shadow:0 0 0 2px #d2a8658c,inset 0 0 16px #ffd78f8a,0 2px 4px #39291a38;
+}
+/* Walnut archive table — documents are brighter than their wooden base. */
+#app-shell.gallery-active .gal-tray{
+ color:#f4e5c7;
+ border:5px ridge #c49a5b;
+ background:
+  radial-gradient(ellipse 65% 70% at 25% -25%,#edbe7d69,transparent 75%),
+  radial-gradient(ellipse at 95% 115%,#d398503f,transparent 54%),
+  repeating-linear-gradient(2deg,transparent 0 16px,#f8cb8026 17px 18px,transparent 19px 29px),
+  repeating-linear-gradient(92deg,transparent 0 46px,#26120a34 47px 49px,transparent 50px 68px),
+  linear-gradient(160deg,#9e653f,#60371f 43%,#5d301b 70%,#a36a3f);
+ box-shadow:inset 0 0 0 2px #ffdfa799,inset 0 8px 18px #f2bd743d,
+  0 6px 0 #392014,0 16px 26px #000b;
+}
+#app-shell.gallery-active .gal-tray h2{
+ color:#fff0cd;
+ text-shadow:0 2px 3px #1e0c06a8,0 0 8px #ffd49445;
+}
+#app-shell.gallery-active .gal-tray h2>span{color:#f2c780}
+#app-shell.gallery-active .gal-tray h2>small{color:#f6ddb0}
+#app-shell.gallery-active .gal-tile{
+ position:relative;
+ background:
+  radial-gradient(ellipse 74% 80% at 28% -17%,#fffdf4,transparent 95%),
+  linear-gradient(152deg,#fff6e3 0%,#f1d7ad 70%,#dfb680 100%);
+ border:1px solid #b58a50;
+ color:#38291b;
+ box-shadow:0 1px 0 #ffecc9 inset,0 2px 0 #8f633d,0 5px 8px #1d0c0669;
+ border-radius:5px;
+ transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease,filter .15s ease;
+}
+#app-shell.gallery-active .gal-tile-icon{flex-basis:28px;width:28px;height:28px}
+#app-shell.gallery-active .gal-tile-icon .gal-tile-artwork{width:28px;height:28px}
+#app-shell.gallery-active .gal-tile-name{font-weight:650;line-height:1.27}
+#app-shell.gallery-active .gal-tile:hover:not(:disabled){
+ filter:brightness(1.055);transform:translateY(-2px);
+ box-shadow:0 1px 0 #fff2dc inset,0 3px 0 #986b3e,0 7px 11px #0006;
+}
+#app-shell.gallery-active .gal-tile.gal-selected{
+ background:linear-gradient(155deg,#fff8e8,#f5d99c);
+ border:2px solid #c49343;
+ box-shadow:0 0 0 2px #f8dba5,0 0 0 4px #67451d,
+   0 0 14px #ffe5a38c,0 4px 7px #0005;
+ transform:translateY(-1px);
+}
+#app-shell.gallery-active .gal-tile.gal-locked{
+ background:linear-gradient(165deg,#f5e9c8,#dfcb9f);
+ color:#4e3c25;border-color:#a58a59;
+ box-shadow:inset 0 0 0 1px #fff0cf,0 1px 3px #0002;
+ opacity:1;
+}
+#app-shell.gallery-active .gal-tile.gal-locked .gal-tile-check{
+ background:#806839;color:#fff6d9;
+}
+#app-shell.gallery-active .gal-tile.gal-tile-placed{
+ padding:6px 7px;min-height:32px;font-size:clamp(10px,.69vw,12px);
+ line-height:1.32;
+}
+#app-shell.gallery-active .gal-tile-placed .gal-tile-icon{flex-basis:19px;width:19px;height:19px}
+#app-shell.gallery-active .gal-tile-placed .gal-tile-icon .gal-tile-artwork{width:19px;height:19px}
+#app-shell.gallery-active .gal-tile.gal-tile-placed:hover:not(:disabled){transform:none}
+#app-shell.gallery-active .gal-hall .gal-zone:focus-visible,
+#app-shell.gallery-active .gal-hall .gal-tray:focus-visible{
+ outline:3px solid #f2c575;outline-offset:3px;
+}
+#app-shell.gallery-active .gal-bottom-bar{
+ background:linear-gradient(90deg,transparent,#b58b4c1f 18% 82%,transparent);
+ border-top:1px solid #f1c9874b;
+ margin-top:17px;
+}
+#app-shell.gallery-active .gal-action-primary{
+ background:linear-gradient(150deg,#ffedbd,#d7a459 65%,#af7a36);
+ box-shadow:inset 0 1px #fff7dd,0 4px 11px #0008,0 0 9px #efca8160;
+}
+#app-shell.gallery-active .gal-status{font-size:13px;line-height:1.45}
+#app-shell.gallery-active .gal-hint{
+ background:linear-gradient(145deg,#24463b,#15352b);
+ border-color:#e5bd7c;color:#fff0ca;
+}
+/* Responsive layout preserving each card and its label at all sizes. */
+@media(max-width:1300px){
+ #app-shell.gallery-active .gal-tile-icon{flex-basis:25px;width:25px;height:25px}
+ #app-shell.gallery-active .gal-tile-icon .gal-tile-artwork{width:25px;height:25px}
+ #app-shell.gallery-active .gal-tile.gal-tile-placed{font-size:11px}
+}
+@media(max-width:1030px){
+ #app-shell.gallery-active .gal-zone-heading{font-size:11px}
+ #app-shell.gallery-active .gal-europe-medallion{width:47px;height:36px}
+}
+@media(max-width:680px){
+ #app-shell.gallery-active .gal-tray{padding:10px;border-width:3px}
+ #app-shell.gallery-active .gal-zone{padding:5px}
+ #app-shell.gallery-active .gal-zone-heading{font-size:10px}
+ #app-shell.gallery-active .gal-tile.gal-tile-placed{font-size:10px;min-height:34px;padding:5px}
+ #app-shell.gallery-active .gal-tile-placed .gal-tile-icon{flex-basis:17px;width:17px;height:17px}
+ #app-shell.gallery-active .gal-tile-placed .gal-tile-icon .gal-tile-artwork{width:17px;height:17px}
+ #app-shell.gallery-active .gal-tile-name{hyphens:auto;overflow-wrap:anywhere}
+ #app-shell.gallery-active .gal-europe-medallion{width:36px;height:28px}
+}
+@media(prefers-reduced-motion:reduce){
+ #app-shell.gallery-active .gal-vitrine,
+ #app-shell.gallery-active .gal-vitrine-image::before,
+ #app-shell.gallery-active .gal-tile{transition:none!important}
+}
