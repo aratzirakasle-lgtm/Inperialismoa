@@ -32,8 +32,8 @@
 </defs>
 <rect width="512" height="756" fill="url(#sheet)"/>
 <rect width="512" height="756" fill="url(#illum)"/>
-<rect width="512" height="756" filter="url(#fiber)" opacity=".42"/>
-<rect width="512" height="756" filter="url(#wear)" opacity=".15"/>
+
+
 <rect width="512" height="756" fill="url(#dust)" opacity=".55"/>
 <ellipse cx="432" cy="45" rx="126" ry="82" fill="url(#stain)"/>
 <ellipse cx="90" cy="695" rx="171" ry="138" fill="url(#stain)" opacity=".6"/>
