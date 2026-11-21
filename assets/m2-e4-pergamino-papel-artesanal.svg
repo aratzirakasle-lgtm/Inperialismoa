@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 756" width="512" height="756">
+<defs>
+ <linearGradient id="sheet" x1="0" x2="1" y1="0" y2=".15">
+ <stop offset="0" stop-color="#cb9e66"/><stop offset=".035" stop-color="#e9c994"/>
+ <stop offset=".14" stop-color="#f4deb5"/><stop offset=".48" stop-color="#f5e5c6"/>
+ <stop offset=".86" stop-color="#e9cca0"/><stop offset=".97" stop-color="#d6a878"/>
+ <stop offset="1" stop-color="#a87848"/>
+ </linearGradient>
+ <radialGradient id="illum" cx=".36" cy=".27" r=".83">
+  <stop offset="0" stop-color="#fff6e0" stop-opacity=".61"/>
+  <stop offset=".56" stop-color="#f8ebd1" stop-opacity=".11"/>
+  <stop offset=".9" stop-color="#936238" stop-opacity=".08"/>
+  <stop offset="1" stop-color="#764923" stop-opacity=".29"/>
+ </radialGradient>
+ <radialGradient id="stain" cx=".5" cy=".5" r=".5">
+ <stop stop-color="#955b2d" stop-opacity=".26"/><stop offset=".45" stop-color="#ad6e3c" stop-opacity=".1"/>
+ <stop offset="1" stop-color="#ad6e3c" stop-opacity="0"/>
+ </radialGradient>
+ <filter id="fiber" x="-5%" y="-5%" width="110%" height="110%">
+  <feTurbulence type="fractalNoise" baseFrequency=".48 .32" numOctaves="3" seed="11" stitchTiles="stitch" result="t"/>
+  <feColorMatrix in="t" type="saturate" values="0" result="mono"/>
+  <feComponentTransfer in="mono"><feFuncR type="linear" slope=".55" intercept=".28"/><feFuncG type="linear" slope=".45" intercept=".30"/><feFuncB type="linear" slope=".38" intercept=".27"/><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+ </filter>
+ <filter id="wear">
+  <feTurbulence type="fractalNoise" baseFrequency=".03 .055" numOctaves="4" seed="9" stitchTiles="stitch" result="t"/>
+  <feColorMatrix in="t" type="matrix" values=".5 0 0 0 .31  .35 0 0 0 .2  .2 0 0 0 .1   0 0 0 .11 0"/>
+ </filter>
+ <pattern id="dust" width="61" height="93" patternUnits="userSpaceOnUse">
+  <g fill="#805530" opacity=".26"><circle cx="7" cy="19" r=".8"/><circle cx="19" cy="64" r=".5"/><circle cx="47" cy="88" r="1.2"/><circle cx="52" cy="38" r=".7"/></g>
+  <path d="M2 58l7 1m28-31l11 1m-7 48h8" stroke="#7f4e30" stroke-opacity=".09"/>
+ </pattern>
+</defs>
+<rect width="512" height="756" fill="url(#sheet)"/>
+<rect width="512" height="756" fill="url(#illum)"/>
+<rect width="512" height="756" filter="url(#fiber)" opacity=".42"/>
+<rect width="512" height="756" filter="url(#wear)" opacity=".15"/>
+<rect width="512" height="756" fill="url(#dust)" opacity=".55"/>
+<ellipse cx="432" cy="45" rx="126" ry="82" fill="url(#stain)"/>
+<ellipse cx="90" cy="695" rx="171" ry="138" fill="url(#stain)" opacity=".6"/>
+<ellipse cx="481" cy="622" rx="61" ry="122" fill="url(#stain)" opacity=".44"/>
+<path d="M10 9Q18 180 8 309T16 541Q5 645 15 752M502 6Q494 167 502 311T497 583L504 755" fill="none" stroke="#ae7e48" stroke-opacity=".26" stroke-width="10"/>
+<path d="M26 6Q29 177 27 357T21 749M482 3Q483 200 489 382T483 752" fill="none" stroke="#fff9df" stroke-opacity=".47" stroke-width="3"/>
+<path d="M18 72Q79 53 119 73M391 43Q465 22 499 54M6 571Q79 540 109 567M411 744Q474 710 511 724" fill="none" stroke="#7d5632" stroke-opacity=".22" stroke-width="2"/>
+<path d="M42 115Q110 95 178 113M287 564Q390 539 479 564M89 643Q182 620 254 645" fill="none" stroke="#fff8df" stroke-opacity=".2" stroke-width="2"/>
+</svg>
