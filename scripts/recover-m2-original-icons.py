@@ -18,14 +18,14 @@ SRC=Image.open(ASSETS/'m2-reference-open-leather.webp').convert('RGB')
 MISSION=Image.open(ASSETS/'m2-atlas-original-mission.webp').convert('RGB')
 # Bounds cerrados antes del texto impreso en la vieja pintura.
 CUTS={
-  'growth':(SRC,(265,32,365,90)),
-  'conditions':(SRC,(163,27,261,91)),
-  'better':(SRC,(60,31,158,91)),
-  'conversion':(SRC,(177,139,232,200)),
-  'settlement':(SRC,(381,32,468,93)),
+  'growth':(SRC,(271,42,357,88)),
+  'conditions':(SRC,(176,40,251,89)),
+  'better':(SRC,(65,40,151,88)),
+  'conversion':(SRC,(184,145,222,194)),
+  'settlement':(SRC,(386,39,456,89)),
   'missions':(MISSION,(0,0,248,78)),
-  'oceania':(SRC,(375,141,476,201)),
-  'faith':(SRC,(263,138,369,202)),
+  'oceania':(SRC,(385,149,470,193)),
+  'faith':(SRC,(271,149,359,192)),
 }
 for key,(source,box) in CUTS.items():
   crop=source.crop(box)
@@ -50,7 +50,7 @@ for key,(source,box) in CUTS.items():
     # La miga es clara: preservar el pan completo, sin perforar sus luces.
     outline=Image.new('L',(w,h))
     d=ImageDraw.Draw(outline)
-    d.polygon([(7,49),(10,38),(22,27),(39,18),(61,10),(80,8),(89,13),(91,23),(84,34),(67,44),(39,53),(19,56)],fill=255)
+    d.polygon([(4,41),(7,34),(16,23),(27,18),(39,11),(55,5),(72,5),(82,11),(84,17),(78,27),(64,34),(45,43),(22,47),(7,47)],fill=255)
     alpha=outline.filter(ImageFilter.GaussianBlur(.9))
   else:
     alpha=alpha.filter(ImageFilter.GaussianBlur(.46))
