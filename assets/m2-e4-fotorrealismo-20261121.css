@@ -74,7 +74,7 @@
   background:
     radial-gradient(ellipse 85% 47% at 44% -7%,#fff9e99c,transparent 90%),
     linear-gradient(105deg,#fff2d07b 0 2%,transparent 11% 88%,#80532d24 100%),
-    url('./m2-e4-pergamino-papel-artesanal.svg') center center / 100% 100% no-repeat,
+    url('./m2-e4-pergamino-papel-artesanal.svg?v=2') center center / 100% 100% no-repeat,
     linear-gradient(140deg,#e2bd8d,#f4e5c7 52%,#dab180);
   border-radius:7px 11px 8px 12px / 10px 7px 12px 9px;
   box-shadow:
