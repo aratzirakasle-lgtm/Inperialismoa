@@ -107,6 +107,9 @@ try{
      await waitVisible(page,'.gal-hall');
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
+     const cabinets=await page.locator('.gal-vitrine').evaluateAll(nodes=>nodes.map(el=>el.getBoundingClientRect().bottom));
+     assert.ok(Math.max(...cabinets)-Math.min(...cabinets)<5,
+       'En escritorio las cuatro vitrinas deben terminar alineadas sin recortar las zonas');
      await page.screenshot({path:'test-output/m1-museo-fidelidad-v2-alumno-escritorio.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
