@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 110 110" role="img">
+ <defs><radialGradient id="sky"><stop stop-color="#fef0c7"/><stop offset=".56" stop-color="#e7d2a7"/><stop offset="1" stop-color="#6b6271"/></radialGradient><linearGradient id="rim" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#fff6d3"/><stop offset=".32" stop-color="#d7ac67"/><stop offset=".65" stop-color="#84572f"/><stop offset="1" stop-color="#f8dca3"/></linearGradient><filter id="drop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="1" dy="3" stdDeviation="2.6" flood-color="#322315" flood-opacity=".43"/></filter><pattern id="etch" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0l7 7" stroke="#fff5db" stroke-width=".5" opacity=".38"/></pattern></defs>
+ <circle cx="55" cy="55" r="51" fill="#392d26" opacity=".23"/>
+ <circle cx="53" cy="51" r="51" fill="url(#rim)" stroke="#744a23" stroke-width="1.3"/>
+ <circle cx="53" cy="51" r="46" fill="url(#sky)" stroke="#f8e5b0" stroke-width="2"/>
+ <circle cx="53" cy="51" r="45" fill="url(#etch)" opacity=".43"/>
+ <circle cx="53" cy="51" r="44" fill="none" stroke="#5f4931" stroke-width="1" opacity=".48" stroke-dasharray="1 5"/>
+ <g transform="translate(7 5) scale(.9)" filter="url(#drop)"><path d="M22 14v86M72 9v91" stroke="#68452c" stroke-width="6"/><path d="M26 19q25-14 43 2v37q-25-16-43 0Z" fill="#a63231" stroke="#652f2c" stroke-width="3"/><path d="M28 24l39 30M28 54l39-31" stroke="#e8b66f" stroke-width="4"/><path d="M76 13q18-13 29-2v37q-17-9-29 2Z" fill="#d5a34a" stroke="#74552e" stroke-width="3"/><path d="M77 18l23 26" stroke="#fbe3a0" stroke-width="4"/><path d="M17 12l6-8 6 8-6 6Z" fill="#e7bd65"/><path d="M65 9l7-10 8 9-7 6Z" fill="#e2c17f"/><path d="M14 102h76" stroke="#765333" stroke-width="5"/></g>
+ <path d="M15 29Q28 12 47 12" fill="none" stroke="#fff9e8" stroke-width="3" stroke-linecap="round" opacity=".57"/>
+ <path d="M66 94q14-2 23-14" fill="none" stroke="#4f3728" stroke-width="2" stroke-linecap="round" opacity=".48"/>
+ </svg>

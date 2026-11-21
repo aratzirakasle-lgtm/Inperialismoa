@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="941" viewBox="0 0 1672 941" preserveAspectRatio="xMidYMin slice">
+<defs>
+<linearGradient id="stone" x2="1" y2="0"><stop stop-color="#162a2b" stop-opacity=".9"/><stop offset=".23" stop-color="#657676" stop-opacity=".72"/><stop offset=".42" stop-color="#1a3435" stop-opacity=".82"/><stop offset=".73" stop-color="#77827a" stop-opacity=".34"/><stop offset="1" stop-color="#102829" stop-opacity=".9"/></linearGradient>
+<linearGradient id="light" x2="0" y2="1"><stop stop-color="#deb46d" stop-opacity=".5"/><stop offset="1" stop-color="#d9ad67" stop-opacity="0"/></linearGradient>
+<radialGradient id="lampGlow"><stop stop-color="#ffe4a5" stop-opacity=".45"/><stop offset=".46" stop-color="#f7bb59" stop-opacity=".15"/><stop offset="1" stop-color="#d6a05b" stop-opacity="0"/></radialGradient>
+<linearGradient id="pill" x1="0" x2="1"><stop stop-color="#142b2e"/><stop offset=".25" stop-color="#415c5a"/><stop offset=".52" stop-color="#758078"/><stop offset=".7" stop-color="#2c4645"/><stop offset="1" stop-color="#091f21"/></linearGradient>
+<pattern id="blocks" width="86" height="49" patternUnits="userSpaceOnUse"><path d="M0 0H86M0 24H86M43 24V49" stroke="#bfbd9666" stroke-width="1" fill="none" opacity=".19"/></pattern>
+</defs>
+<!-- Vaults sit behind HTML rather than being baked UI. -->
+<path d="M240 0Q420-235 603 0M1052 0Q1260-220 1480 0" fill="none" stroke="#020d12" stroke-width="92" opacity=".48"/>
+<path d="M248 0Q420-207 597 0M1060 0Q1260-195 1477 0" fill="none" stroke="url(#stone)" stroke-width="52" opacity=".9"/>
+<path d="M262 0Q420-175 575 0M1088 0Q1260-163 1457 0" fill="none" stroke="#c3b38b" stroke-width="6" opacity=".48"/>
+<path d="M282 0Q420-153 556 0M1108 0Q1260-148 1438 0" fill="none" stroke="#051719" stroke-width="11" opacity=".78"/>
+<!-- dark temple pillars at scene margins -->
+<g>
+<path d="M202 0H259V665H202Z" fill="url(#pill)" opacity=".64"/>
+<path d="M1444 0H1500V690H1444Z" fill="url(#pill)" opacity=".55"/>
+<path d="M194 135H268V157H194ZM1435 129H1508V151H1435Z" fill="#b58e5c" opacity=".39"/>
+<path d="M200 169H256V513H200ZM1447 169H1497V525H1447Z" fill="url(#blocks)" opacity=".54"/>
+<path d="M202 159H258V165H202ZM1444 156H1499V162H1444Z" fill="#1e1b16" opacity=".6"/>
+<path d="M208 0H214V580M1447 0H1452V600" stroke="#e4cda0" stroke-width="3" opacity=".38"/>
+</g>
+<!-- golden stone cornices -->
+<path d="M0 88H1672" stroke="#cfa86d" stroke-width="5" opacity=".37"/>
+<path d="M0 95H1672" stroke="#0b1416" stroke-width="13" opacity=".6"/>
+<path d="M0 110H1672" stroke="#bc945e" stroke-width="2" opacity=".35"/>
+<!-- right Gothic window seen above and behind decorative portrait -->
+<g transform="translate(1320 0)" opacity=".55">
+<path d="M0 425V75Q0 15 106 0Q210 15 210 75V425" fill="#08272d" stroke="#a58c69" stroke-width="13"/>
+<path d="M15 420V86Q15 28 105 17Q195 28 195 86V420" fill="#36616f" opacity=".38"/>
+<path d="M105 20V420M17 152H194M17 250H194M17 348H194" stroke="#c1b68e" stroke-width="6"/>
+<path d="M18 98L103 25 196 98M18 245L104 155 196 245" stroke="#aeac8d" stroke-width="4" fill="none"/>
+</g>
+<ellipse cx="425" cy="155" rx="305" ry="200" fill="url(#lampGlow)"/>
+<ellipse cx="1280" cy="162" rx="245" ry="160" fill="url(#lampGlow)" opacity=".4"/>
+<!-- vertical molded panels -->
+<path d="M11 135V785M1661 135V785" stroke="#a7804b" stroke-width="9" opacity=".4"/>
+</svg>

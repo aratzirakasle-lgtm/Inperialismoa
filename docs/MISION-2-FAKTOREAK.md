@@ -1,0 +1,162 @@
+# 2. MISIOA · INPERIALISMOAREN FAKTOREAK
+
+**Estado:** desarrollo de cinco pantallas en rama aislada. La rama NO modifica GitHub Pages hasta que se integre. La base de datos NO debe activar la misión 2 antigua y la nueva en momentos distintos.
+
+## Fuente didáctica y actividades
+
+Material de referencia único: «Inperialismoaren garaia eta Lehen Mundu Gerra (kapitalismoaren garapena)», páginas/diapositivas **6 a 18** del PDF proporcionado por el docente.
+
+| Ejercicio | Título | Diapositivas | Actividad interactiva | Contenido de origen |
+| --- | --- | --- | --- | --- |
+| 1 | Kausen kabinetea | 6 | Once tarjetas asignadas a cinco apartados, por selección o arrastre | Económicos, demográficos, religiosos, políticos e ideológicos/científicos |
+| 2 | Kapitalaren ibilbideak | 7–9 | Reconstrucción de tres hitos en línea de tiempo y dos decisiones económicas | Mercados, materias primas, inversión, Suez (1869), Hiyaz (1908), Panamá (1914) |
+| 3 | Migrazioen liburua | 10–12 | Lectura de tres cifras de una gráfica y dos elecciones de contexto | Demografía, condiciones laborales, misiones católicas y protestantes; religiones indígenas |
+| 4 | Boterearen artxiboa | 13–16 | Cinco expedientes históricos de lectura crítica | Control de rutas, prestigio, chauvinismo, justificación racista, documento de 1863 |
+| 5 | Esploratzaileen espedientea | 17–18 | Atlas de selección múltiple, polos, cronología y caso Congo | Nilo, Níger, Congo, Zambeze, Himalaya, Siberia, Australia, Peary, Amundsen, Stanley y Livingstone |
+
+**Discrepancia que existe en el documento original:** la diapositiva 10 dice en su párrafo que Europa pasó de **300 a 450 millones** entre 1850 y 1900, mientras que su **tabla** presenta 1850: **266 millones**, 1870: **310 millones** y 1900: **400 millones**. El ejercicio 3 utiliza expresamente **las cifras de la tabla**, sin mezclar ambas series ni presentar una cifra corregida sin autorización.
+
+**Tratamiento crítico:** la fuente de 1863 de la diapositiva 16 no se reproduce de forma literal porque contiene afirmaciones racistas y deshumanizadoras. Se presenta como ejemplo histórico de racismo utilizado para justificar la dominación, no como conocimiento científico válido. El expediente de Stanley contextualiza su vinculación con la explotación colonial del Congo según la diapositiva 18.
+
+## Reglas del juego
+
+- Solo accede el alumno de un equipo que haya completado la misión 1. El profesor dispone de vista previa con \`?preview=1\`; nunca guarda puntuaciones.
+- Cinco ejercicios secuenciales: el segundo requiere el primero, el tercero requiere el segundo, etc. No se puede avanzar manipulando solo el navegador.
+- Comprobación en Supabase mediante una función \`SECURITY DEFINER\`, con identificador real de usuario y equipo, serialización por equipo y estado compartido.
+- Se devuelve al alumno **solo** si el ejercicio está completado; tras un error no se devuelven respuestas correctas, posiciones equivocadas, aciertos parciales ni pistas.
+- La corrección está preparada para una tabla **privada**, \`public.mission2_answer_keys\`, habilitada con RLS y sin política de lectura. **No hay claves correctas publicadas en el JavaScript, HTML ni migración pública.**
+- Al completar el quinto ejercicio se añade exactamente una finalización del equipo en \`mission_completions(mission_id=2)\`; el disparador existente genera la insignia que desbloquea la misión 3.
+- Reintentos ilimitados, incluida repetición idempotente de un ejercicio ya completado. No se cambia ningún ejercicio de la misión 1.
+
+## Archivos
+
+- \`inperialismoaren-faktoreak.html\`: sala única con cinco ejercicios/pantallas.
+- \`assets/mission2-faktoreak.css\`: diseño de museo histórico, papel, colores coherentes y versión adaptable a escritorio, tableta y móvil.
+- \`js/mission2-faktoreak.js\`: actividades y acceso a Supabase, **sin claves de solución**.
+- \`js/app.js\`: únicamente añade la ruta de entrada para la segunda misión. Las demás misiones se conservan.
+- \`supabase/mission2_faktoreak.sql\`: tablas, seguridad, nueva RPC y cambio de misión 2 cuando se decida publicarla. **No contiene las respuestas privadas**.
+- \`tests/mission2-content.test.mjs\`, \`tests/mission2-browser-smoke.mjs\`: estructura, seguridad y navegación con servidor simulado, sin datos de alumnos.
+
+## Activación segura (aún no publicada)
+
+1. Aprobar primero las pruebas de interfaz y los cinco ejercicios en Chromium de la rama. Realizar una revisión visual con dispositivos y verificar la autenticación de docente y dos estudiantes de ensayo.
+2. Preparar en Supabase el esquema \`mission2_exercise_completions\`, la tabla privada \`mission2_answer_keys\` y la función \`submit_mission2_exercise\`. **Cargar las cinco claves correctas exclusivamente mediante una operación privada de administrador en Supabase**, nunca mediante GitHub, logs, HTML o variables públicas.
+3. Validar cinco envíos correctos y varios erróneos con un equipo temporal en una transacción que termine con \`ROLLBACK\`; comprobar duplicados, concurrencia y roles.
+4. Coordinar el cambio del enlace de la misión 2 en \`main\` con el bloqueo de \`submit_mission(2,...)\` genérico, para que no queden dos vías de aprobación. El cierre se completa actualizando el título de la misión 2 en \`public.missions\`.
+5. Probar misión 1 → los cinco ejercicios de la misión 2 → insignia 2 → misión 3 en sesiones reales y revisar el panel docente. No modificar imágenes, estilos, tarjetas ni tamaños de la misión 1.
+
+**IMPORTANTE:** no ejecutar el SQL de esta rama directamente en un aula activa antes del despliegue coordinado, porque al bloquear la antigua misión 2 los alumnos necesitarán la nueva interfaz. La prueba de Chromium simulada no sustituye la validación autenticada real. Si falta la tabla de progreso, la nueva página informa de que la activación está pendiente y no permite guardar.
+
+
+## Verificación real de Supabase en entorno existente (sin publicar la nueva misión)
+
+**20/11/2026 · preparación aditiva realizada:**
+- Se ha aplicado solo la **parte aditiva** de la migración: tabla de finalización \`mission2_exercise_completions\`, tabla privada \`mission2_answer_keys\`, su política RLS y la función \`submit_mission2_exercise\`. No se ha ejecutado el cambio de \`submit_mission(2,...)\` ni el cambio de nombre de la misión 2 publicada.
+- Se han cargado **cinco juegos de claves de corrección exclusivamente en la tabla privada de Supabase**, sin incluirlos en GitHub. La comprobación de permisos confirmó que el rol \`authenticated\` no puede leer la tabla privada.
+- Prueba transaccional autenticada a nivel SQL con identidades ficticias de dos alumnos de un mismo equipo y un profesor: cinco ejercicios secuenciales aceptados; envío inválido rechazado sin pistas ni posiciones; intento de saltarse ejercicio 1 rechazado; el segundo alumno ve el progreso compartido; no se duplican finalizaciones; el profesor no puede guardar como alumno.
+- Al completar el ejercicio 5, la función creó exactamente una finalización de la misión 2, una insignia y devolvió \`next_mission_id=3\`. Todo el ensayo se hizo dentro de una transacción terminada en **ROLLBACK**.
+- Comprobación posterior: **3 usuarios Auth, 3 perfiles, 1 equipo**, **0** finalizaciones o insignias de la misión 2 de ensayo, 5 conjuntos privados de respuestas, y el título publicado de la misión 2 **continúa siendo** «El reparto de África».
+
+**Pendiente antes de publicar:** validación de sesiones desde navegador con usuarios de ensayo autorizados, integración de interfaz en \`main\`, ajuste sincronizado de \`submit_mission(2,...)\` para evitar rutas de aprobación alternativas y actualización del título público. Las pruebas SQL no reemplazan concurrencia real de dos conexiones HTTP ni el recorrido visual autenticado.
+
+
+## Rediseño visual del ejercicio 1 · concepto de museo a color
+
+El primer ejercicio se ha reconstruido como una **sala de museo con cinco vitrinas** (económica roja, demográfica turquesa, religiosa morada, política verde e ideológica/científica ocre), con iluminación, marcos de madera y latón, ilustraciones SVG vectoriales originales, cartelas de pergamino y mesa expositiva. La vista está desarrollada en **HTML + CSS + JavaScript real**, no consiste en una imagen de fondo con zonas falsas.
+
+Interacción: las 11 cartelas mantienen sus IDs históricos y pueden colocarse haciendo clic en la cartela y después en el botón «+» de una vitrina, o arrastrando y soltando. Las cartelas se **mueven de verdad** del escritorio al interior de la vitrina y pueden reubicarse. «Berriz hasi» limpia el borrador local; «EGIAZTATU» queda disponible cuando todas están colocadas, y sigue invocando la RPC privada de Supabase sin ofrecer pistas si hay errores. No se han alterado preguntas, respuestas, permisos ni el desbloqueo de los cinco ejercicios. Las otras cuatro interfaces conservan su presentación previa para su rediseño individual posterior.
+
+La réplica está inspirada directamente en el concepto ilustrado aprobado por el docente, recreado mediante componentes nativos para permitir accesibilidad, escalado de interfaz y arrastre real. No es una imagen estática ni una promesa de reproducción idéntica píxel a píxel: se prioriza que sea operativa y adaptable.
+
+La prueba \`tests/mission2-browser-smoke.mjs\` realiza un recorrido de las cinco pantallas, comprueba el movimiento entre vitrinas mediante *drag and drop*, la colocación de las 11 cartelas con clics, la activación de verificación y la ausencia de escritura desde el modo de profesor. Se generan capturas para revisar escritorio y móvil.
+
+
+### Segunda revisión visual: fidelidad a la maqueta colorida
+
+Se ha revisado expresamente la **diferencia** entre la maqueta museística 16:9 aprobada y la captura de Chromium de la primera versión. No se considera una réplica pixel-perfect: se ha llevado a una composición funcional muy próxima.
+
+- Fondo escenográfico con **mapa histórico, una lámpara de época, globo terráqueo, instrumentos, fotografía enmarcada, libros, busto y mueble de madera** mediante \`assets/m2-room-illustration.svg\`.
+- **Cinco escenas históricas policromadas** independientes en \`assets/m2-scene-*.svg\`: monedas, barco con viajeros, iglesia de misión, fortificación con cañón y globo con libros, sobre vitrinas burdeos, turquesa, violeta, verde y dorada.
+- Rediseño horizontal: muebles centrados, márgenes destinados a objetos de museo, cabecera granate amplia y una mesa de cartelas compacta, medidos también en **1672×941** (formato exacto del concepto).
+- Rótulos resumidos en las tarjetas para mejorar lectura; sus descripciones originales se conservan en atributos de accesibilidad/tooltip y **no cambian los IDs ni las respuestas válidas**.
+- Placas doradas ahora **clicables y enfocables con teclado**: nunca se pierde la capacidad de añadir tarjetas a una vitrina por estar llena. Se puede además arrastrar, recolocar o devolver a la mesa.
+- Los compartimentos de las vitrinas crecen automáticamente al añadir tarjetas; Chromium comprueba que ninguna queda recortada aun concentrando once tarjetas en una misma vitrina.
+- La vista previa del profesor muestra también «✓ EGIAZTATU» sin escribir datos; la navegación de revisión se mantiene separada.
+- Efectos de selección dorada y ajustes \`prefers-reduced-motion\` para evitar inestabilidad del arrastre.
+
+La segunda revisión mantiene **intactos** los ejercicios 2 a 5, la lógica de permisos de Supabase, el esquema de corrección y las pantallas de la misión 1. Todos los cambios siguen exclusivamente en la rama de desarrollo / PR n.º 2.
+
+
+### Tercera pasada: integración de imágenes del concepto original
+
+El material ilustrado del concepto aprobado se ha convertido en archivos SVG autocontenidos que incrustan imágenes WebP optimizadas. No dependen de URL externas ni caducan:
+
+- \`assets/m2-painted-*.svg\`: cinco fondos pictóricos originales de las vitrinas (monedas, barco de vapor, misión religiosa, cañón costero, globo y libros).
+- \`assets/m2-museo-izquierdo.svg\`: mapa antiguo, globo y prismáticos; \`assets/m2-museo-derecho.svg\`: fotografía, busto y libros.
+- El peso binario total aproximado de los **siete recortes pictóricos** es **56 KiB**; el diseño escenográfico vectorial se mantiene de respaldo.
+- Las decoraciones laterales son \`pointer-events:none\`, en los márgenes exteriores y **no pueden interceptar** el arrastre ni los controles. Se comprueba en Chromium que cada decoración ocupa su lado correcto.
+- La vitrina y las tarjetas continúan siendo DOM/CSS/JavaScript independiente de las imágenes: no se integra la imagen de la maqueta como una pantalla inmóvil.
+
+La validación visual debe incluir las capturas de **1365×900**, **1672×941** y **390×844**, además de los datos de corrección y progresión. La composición es visualmente mucho más cercana al concepto; las tarjetas son once (no las diez visibles en la imagen artística), pues se conserva íntegra la actividad didáctica.
+
+
+### 20/11/2026 · Altzariak: vitrinas y mesa del primer ejercicio
+
+Actualización **real en los componentes HTML/CSS** del primer ejercicio, sin generar una lámina sustitutiva: las cinco vitrinas son muebles interactivos con crestería de latón en `assets/m2-vitrine-gilt-crest.svg`, doble marco, cristal iluminado, placa de clasificación pulsable y pie de madera con herrajes. Cada contenedor crece para mostrar todas las cartelas, aun al depositar once en una sola categoría.
+
+El mostrador inferior se ha reconstruido con madera pulida en perspectiva, molduras, bandeja interior, cartelas de pergamino y cajón frontal. La distribución inicial utiliza seis tarjetas en la primera fila y cinco en una segunda fila que ocupa **todo el ancho del mostrador**. En móvil, la tarjeta que queda sola se centra. El rótulo «Ideologikoak / zientifikoak» aparece en dos líneas para evitar compresión o cortes.
+
+La auditoría automática verifica cargas de las escenas, cinco vitrinas, aristas decorativas, tarjetas arrastrables, recolocación, once cartelas visibles en el mismo compartimento, distribución de la segunda fila, legibilidad del título en móvil y recorrido secuencial de los cinco ejercicios. **Las claves privadas, la RPC y las pantallas de la primera misión no han cambiado.** La rama sigue en borrador, sin publicar ni fusionar.
+
+
+## Rediseño de las once cartelas (20/11/2026)
+
+Se han sustituido los iconos esquemáticos del primer ejercicio por **once miniaturas SVG diferentes**, creadas para esta sala: factorías, mercancías y materias primas, libro de inversiones, viajeros en barco de vapor, maleta de emigración, cruz y libro, capilla de misión, rueda de timón, banderas, documento de teoría racista contextualizado mediante un sello de advertencia, y mapa de exploración. Todas están bajo \`assets/m2-card-*.svg\` y cargan sin servicios de terceros.
+
+Las cartelas son fichas de colección del siglo XIX con pequeño medallón grabado, número de catálogo \`AGIRIA · 01–11\`, pergamino con textura, marco de latón, relieve y lacre decorativo. La **selección ilumina su contorno dorado** sin sugerir a qué categoría corresponde la respuesta. Se mantienen los textos e identificadores, los once conceptos completos en \`aria-label\` y \`title\`, la selección por pulsación, la posibilidad de arrastrar y recolocar, y la corrección privada sin pistas.
+
+Dentro de cada vitrina, las fichas se convierten en etiquetas de catálogo compactas **con miniatura visible** y se expanden verticalmente al acumularse; fuera de la vitrina conservan la disposición de seis más cinco en la mesa. Se han revisado capturas reales a **1672 × 941**, escritorio y móvil.
+
+**Pruebas automatizadas:** GitHub Actions n.º **320**, comprobaciones estáticas y Chromium superadas. El test verifica que se cargan once miniaturas distintas, que el estado de selección funciona y que la ilustración sigue acompañando a la cartela al trasladarla a una vitrina. No se modifica la primera misión, los ejercicios 2–5 ni la función de Supabase. La rama sigue en borrador.
+
+
+### Asegurar la visibilidad y el arrastre de las once cartelas
+
+La primera pantalla ha incorporado una corrección de composición para mantener **todas las cartelas visibles al clasificarlas**. Cada vitrina utiliza una cuadrícula vertical de una sola columna con filas y altura automáticas, sin límite máximo ni barras internas que oculten el final del montón. Los textos largos pueden partir líneas sin desbordar la anchura y cada ficha mantiene su miniatura histórica.
+
+**Fallo reproducido y corregido:** cuando había varias fichas colocadas, sus botones podían quedar superpuestos a la zona de destino del arrastre (que antes ocupaba el fondo de la vitrina). Ahora existe una franja de colocación «HEMEN KOKATU» al principio de cada vitrina, con posición normal en el documento y siempre encima de las tarjetas. El ratón puede soltar nuevas tarjetas ahí aunque ya haya otras colocadas. Solo se expande la vitrina que recibe fichas; las vacías no se estiran con enormes paneles de color.
+
+La prueba de regresión \`tests/mission2-browser-smoke.mjs\` incluye once cartelas acumuladas en vitrinas de cada categoría a resoluciones de **1672, 1365, 768, 390 y 320 px**, una distribución de **3 + 2 + 2 + 2 + 2** a través de arrastre real en escritorio, y la misma distribución mediante selección y pulsación en móvil (alternativa para pantallas táctiles). Comprueba los rectángulos reales de las cartelas y del compartimento, la ausencia de solapes, los textos y miniaturas visibles, el desbordamiento horizontal, y que la franja de recepción no esté cubierta por otra ficha. Las capturas de los estados llenos y distribuidos se guardan como artefactos de GitHub Actions.
+
+No se han modificado contenidos ni respuestas, no hay pistas tras errores, no se ha modificado Supabase y se mantiene la primera misión íntegra.
+
+
+## Atlas de migraciones · fidelidad visual, segunda aproximación (21/11/2026)
+
+En el tercer ejercicio, los cuatro retos se mantienen como HTML real y conservan los identificadores de campo y valores reconocidos por la RPC. Se han ajustado proporciones y el paisaje conforme a la referencia 1672×941:
+
+- Recuperados de la lámina aprobada los instrumentos históricos de cabecera (m2-atlas-header-left.webp y m2-atlas-header-right.webp). Se ha evitado superponer los viajeros dos veces sobre el texto.
+- El segundo reto incorpora un **muelle y barco de vapor ilustrados**, con el mapa, las rutas y sus destinos todavía seleccionables y arrastrables.
+- El tercero se ha transformado en un **expediente con fotografía en sepia** y cinco desplegables auténticos que mantienen los valores egia/gezurra sin pistas.
+- El cuarto contiene una bandeja para ocho cartelas, un bodegón de equipaje y dos maletas de cuero rojo y azul con correajes, cerraduras, asas y herrajes. Las cartelas conservan el arrastre, el traslado entre maletas y sus respuestas.
+- En escritorio se cuidan las proporciones del original; en móviles los paneles se apilan para conservar la legibilidad.
+- Se ha añadido una prueba Chromium que coloca las **ocho cartelas en una sola maleta** en escritorio y móvil para impedir solapamientos o recortes.
+
+No se han cambiado las respuestas ni Supabase; la rama sigue sin publicar. No se afirma identidad píxel a píxel: quedan por refinar las ilustraciones del puerto y del vapor para aproximarlas más a la riqueza pictórica de la referencia.
+
+
+### 21/11/2026 · Cartelas de la maleta con fondo transparente (tercer ejercicio)
+
+El problema anterior se debía a que las ocho miniaturas no eran imágenes propias: el CSS recortaba trozos de una pintura de 512×282 píxeles, generando bordes rectangulares, pixelación y piezas de apariencia poco integrada. Ahora cada cartela utiliza su propio recurso en `assets/m2-atlas-art-*`: la escena de crecimiento urbano usa una imagen WebP de **720×540** con canal alfa, y las otras siete usan grabados **SVG escalables con fondo transparente**, derivados de elementos históricos ya existentes en el proyecto. No hay medallones de fondo ni recortes de un mosaico.
+
+Tanto los botones de la mesa como las cartelas colocadas dentro de las maletas renderizan un elemento `img` auténtico: se conserva la misma ilustración al arrastrar, colocar y recolocar. Los rótulos siguen siendo texto HTML y se mantienen todas las claves de corrección, el orden de los conceptos, la selección dorada y el criterio pedagógico de **no dar pistas por error**.
+
+La estética añade sombras naturales a las figuras, reflejos de pergamino y molduras más discretas. La rejilla sigue expandiéndose cuando una maleta recibe todas las cartelas. La rama es de desarrollo, sin publicación ni modificaciones de producción.
+
+
+### 21/11/2026 · Recuperación exacta de los ocho motivos antiguos de la maleta
+La captura facilitada por el docente confirma que deben aparecer, por este orden: **espigas, chimeneas, barra de pan, cruz, emigrantes, misionero, barco de vapor y libros**. Se descartan las ocho escenas narrativas de familias y ciudades incorporadas posteriormente. Se ha reconstruido la colección a partir de los **dibujos originales todavía conservados** en `m2-reference-open-leather.webp` y `m2-atlas-original-mission.webp` y no mediante motivos nuevos inventados.
+
+`scripts/recover-m2-original-icons.py` recorta los dibujos antes de sus rótulos, sustituye el papel de fondo por canal alfa y exporta imágenes WebP RGBA de 720×540, con interpolación y enfoque. El tamaño resultante permite visualización nítida en las tarjetas, aunque **no recupera detalle fotográfico inexistente** en los pequeños originales de los que parte. `js/mission2-faktoreak.js` utiliza exclusivamente `m2-vintage-*-transparent.webp` para las ocho tarjetas, también cuando se colocan dentro de las maletas. Los archivos `m2-suitcase-*-restored.webp` no se borran, para permitir comparación y reversión.
+
+El cambio afecta solo a las ilustraciones del ejercicio 3 de la segunda misión: **no se alteran ni el texto en euskera, ni las respuestas, ni la lógica de arrastre, ni Supabase**. Sigue en rama de desarrollo; no se fusiona en `main` sin completar la activación y validación del conjunto de la segunda misión.

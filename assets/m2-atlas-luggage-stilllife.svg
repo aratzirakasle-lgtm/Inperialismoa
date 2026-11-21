@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 260" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+<defs>
+ <linearGradient id="leather" x2="1" y2="1"><stop stop-color="#b87939"/><stop offset=".34" stop-color="#63351e"/><stop offset=".68" stop-color="#a3652a"/><stop offset="1" stop-color="#3b2419"/></linearGradient>
+ <linearGradient id="brass"><stop stop-color="#fff0b6"/><stop offset=".5" stop-color="#b17b38"/><stop offset="1" stop-color="#f0c16d"/></linearGradient>
+ <linearGradient id="hat" x2="0" y2="1"><stop stop-color="#78583d"/><stop offset=".43" stop-color="#4d3327"/><stop offset="1" stop-color="#39261e"/></linearGradient>
+ <pattern id="grain" width="19" height="13" patternUnits="userSpaceOnUse"><path d="M0 1l19 8M0 9l19 3" fill="none" stroke="#ffe2a2" stroke-opacity=".1" stroke-width=".8"/></pattern>
+ <filter id="d"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<ellipse cx="176" cy="240" rx="191" ry="19" fill="#160e0a" opacity=".6" filter="url(#d)"/>
+<path d="M5 137L78 105L242 119L241 243H5Z" fill="url(#leather)" stroke="#311d15" stroke-width="8"/>
+<path d="M14 139L232 133V235H12Z" fill="url(#grain)" stroke="#db9b4d" stroke-width="3"/>
+<path d="M14 156H234M14 222h220" fill="none" stroke="#efc381" stroke-width="5"/>
+<path d="M30 137v99M204 137v99" stroke="#e1a454" stroke-width="9"/>
+<g fill="url(#brass)" stroke="#59391f" stroke-width="3"><rect x="26" y="172" width="25" height="38" rx="4"/><rect x="198" y="172" width="24" height="38" rx="4"/><rect x="98" y="146" width="45" height="25" rx="5"/></g>
+<path d="M95 146v-17q4-10 13-11h27q10 3 11 13v15" fill="none" stroke="#362117" stroke-width="12"/>
+<g transform="translate(169 107) rotate(10)">
+ <rect width="136" height="136" rx="13" fill="url(#leather)" stroke="#361f14" stroke-width="7"/>
+ <path d="M8 22h120M8 114h120" stroke="#e5b26c" stroke-width="6"/>
+ <path d="M21 4v126M108 4v126" stroke="#b48146" stroke-width="12"/>
+ <path d="M18 25v86M115 25v86" stroke="#edcc91" stroke-opacity=".5" stroke-width="2" stroke-dasharray="2 7"/>
+ <rect x="49" y="58" width="37" height="29" rx="5" fill="url(#brass)" stroke="#503015" stroke-width="3"/>
+ <circle cx="67" cy="72" r="7" fill="#60462b"/>
+</g>
+<g transform="translate(53 37) rotate(-8)">
+ <path d="M25 43Q10 6 40 0h75q31 9 16 47l-7 15H31Z" fill="url(#hat)" stroke="#2a2019" stroke-width="6"/>
+ <path d="M0 56q71-28 163-8q20 5 0 19Q85 83 13 72Z" fill="#533a28" stroke="#291b16" stroke-width="6"/>
+ <path d="M28 44h100v13H25z" fill="#987343" stroke="#3a261a" stroke-width="2"/>
+ <path d="M32 43h87" stroke="#d8af6c" stroke-width="2"/>
+</g>
+<g transform="translate(286 118) rotate(-8)">
+ <rect x="0" y="0" width="143" height="94" rx="3" fill="#eed6a4" stroke="#a47843" stroke-width="6"/>
+ <path d="M11 17H131M10 76H130M17 10v75M123 10v75" stroke="#c09c64" stroke-width="1.5"/>
+ <text x="70" y="34" font-family="Georgia,serif" text-anchor="middle" font-size="12" fill="#5b372a" font-weight="700">EMIGRANTE</text>
+ <text x="70" y="50" font-family="Georgia,serif" text-anchor="middle" font-size="11" fill="#5b372a">TXARTELA</text>
+ <text x="70" y="71" font-family="Georgia,serif" text-anchor="middle" font-size="16" fill="#5b372a" font-weight="700">Nº 047382</text>
+</g>
+</svg>

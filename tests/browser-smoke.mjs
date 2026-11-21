@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
-const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE_CHROME==='1'?'chrome':undefined,args:['--no-sandbox']});
 let passed=0,failed=0;
 async function open(role,path,viewport={width:1365,height:900}){
  const context=await browser.newContext({viewport,reducedMotion:'reduce'});

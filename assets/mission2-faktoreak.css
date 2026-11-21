@@ -1,0 +1,5228 @@
+/* Misión 2: sala independiente. No afecta a ninguna pantalla de la misión 1. */
+:root{color-scheme:light;--m2-ink:#2d261d;--m2-forest:#18372f;--m2-gold:#aa783c;--m2-paper:#eee0c2;--m2-paper-2:#f8efda;--m2-outline:#b49565;--m2-muted:#665743;--m2-focus:#0c685a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#112c2b;color:var(--m2-ink);font-family:"DM Sans",Arial,sans-serif}
+button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.57}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--m2-focus);outline-offset:3px}
+.m2-page{min-height:100svh;background:radial-gradient(ellipse at 50% -10%,#41574b 0%,#183732 44%,#091f21 100%);display:flex;flex-direction:column}
+.m2-topbar,.m2-footer{color:#f6e5c9;display:flex;align-items:center;justify-content:space-between;gap:14px;font-family:"Libre Baskerville",Georgia,serif}
+.m2-topbar{min-height:60px;padding:10px max(18px,calc((100vw - 1420px)/2));background:#0d2828e8;border-bottom:1px solid #c7a06a80;letter-spacing:.075em}
+.m2-home-link{display:inline-flex;gap:10px;align-items:center;text-decoration:none;color:#f5dec0;font-size:12px;font-weight:700;white-space:nowrap}
+.m2-home-link:hover{text-decoration:underline}.m2-chapter-mark{font-size:11px;text-align:center;opacity:.88}.m2-top-number{font-size:12px;white-space:nowrap}
+.m2-main{flex:1;display:flex;justify-content:center;align-items:flex-start;padding:clamp(14px,3.5vh,36px) 16px}
+.m2-paper{width:min(1360px,100%);min-height:min(750px,78vh);position:relative;isolation:isolate;padding:clamp(22px,3.3vw,46px);overflow:hidden;background:radial-gradient(circle at 13% 10%,#f9efd9 0%,transparent 39%),radial-gradient(circle at 95% 94%,#e5d2ad 0%,transparent 38%),linear-gradient(135deg,#efe2c8,#e9d9b8);border:9px solid #d2b88a;outline:1px solid #d3b07d;outline-offset:3px;box-shadow:0 12px 15px #0003,0 38px 85px #0007,inset 0 0 80px #94682f21}
+.m2-paper:before{content:"";pointer-events:none;position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(15deg,transparent 0px,transparent 6px,#6b4d2510 7px,transparent 8px);opacity:.37}
+.m2-paper:after{content:"✧";font:360px/1 Georgia,serif;color:#9f7f4210;position:absolute;right:2%;top:9%;z-index:-1;pointer-events:none;transform:rotate(-12deg)}
+.m2-footer{min-height:42px;padding:8px max(18px,calc((100vw - 1420px)/2));font-size:10px;letter-spacing:.11em;background:#0b2425}
+.m2-loading,.m2-message-card{text-align:center;padding:75px 12px;max-width:750px;margin:auto}
+.m2-message-card h1{font:700 clamp(26px,3.8vw,44px)/1.25 "Libre Baskerville",Georgia,serif}
+.m2-message-card p{font-size:16px;line-height:1.7}
+.m2-link{display:inline-block;color:var(--m2-forest);font-weight:700;border-bottom:2px solid var(--m2-gold);text-decoration:none;margin:10px}
+.m2-eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#755329}
+.m2-hero{display:grid;grid-template-columns:1fr auto;gap:15px;align-items:start;border-bottom:2px solid #a88656;padding-bottom:18px;margin-bottom:16px}
+.m2-hero h1{font:700 clamp(27px,3vw,42px)/1.18 "Libre Baskerville",Georgia,serif;margin:8px 0 12px;color:#29251f}
+.m2-hero p{font-size:15px;max-width:860px;line-height:1.65;margin:0;color:#504535}
+.m2-hero-seal{width:100px;height:100px;border:4px double #a3743c;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#80603b;transform:rotate(10deg);font-family:"Libre Baskerville",Georgia,serif;line-height:1.15;box-shadow:inset 0 0 0 8px #c7a7711f}
+.m2-hero-seal strong{font-size:36px}.m2-hero-seal span{font-size:10px;text-align:center}
+.m2-steps{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:0;margin:0 0 16px}
+.m2-steps li{margin:0}
+.m2-step{display:flex;align-items:center;gap:8px;padding:10px 9px;width:100%;min-height:64px;text-align:left;border:1px solid #b99c6d;background:#f4e8d0b8;color:#4b3b29;transition:box-shadow .15s,border-color .15s}
+.m2-step strong{font-size:22px;font-family:Georgia,serif;color:#9a7446}.m2-step span{font-size:11px;font-weight:700;line-height:1.35}
+.m2-step[aria-current="step"]{background:#253e33;color:#fbe7c0;border-color:#b48f56;box-shadow:inset 0 0 0 2px #c8a56b,0 5px 14px #0002}
+.m2-step[aria-current="step"] strong{color:#f5d59b}.m2-step.m2-done{background:#d4dfc7;border-color:#7c9b77}
+.m2-section-head{display:flex;align-items:start;justify-content:space-between;gap:14px;margin:22px 0 16px}
+.m2-section-head h2{font:700 clamp(23px,2.65vw,36px)/1.2 "Libre Baskerville",Georgia,serif;margin:7px 0 8px}
+.m2-section-head p{color:var(--m2-muted);font-size:15px;line-height:1.65;margin:0;max-width:870px}
+.m2-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:#e5d2ad;border:1px solid #b79559;border-radius:50px;color:#6d4a1d;padding:7px 13px;white-space:nowrap;font-size:11px;font-weight:700}
+.m2-work{background:#fbf3e5a8;border:1px solid #bea17a;padding:clamp(14px,2vw,27px);box-shadow:inset 0 0 30px #ae8c5624}
+.m2-panels{display:grid;grid-template-columns:1fr 1.18fr;gap:16px}
+.m2-panel{border:1px solid #c6ab83;background:#f7ebd8;padding:15px;min-width:0}
+.m2-panel h3{font:700 18px/1.3 "Libre Baskerville",Georgia,serif;margin:0 0 14px}
+.m2-tray{display:flex;gap:8px;flex-wrap:wrap;align-content:flex-start}
+.m2-tile{border:1px solid #b49a72;background:linear-gradient(140deg,#fff9ed,#e9d7b4);padding:10px 12px;min-height:46px;text-align:left;border-radius:4px;box-shadow:0 2px 0 #8f713e33;color:#382c1f;font-weight:600;font-size:13.5px;line-height:1.45}
+.m2-tile:hover:not(:disabled),.m2-tile:focus-visible{border-color:#895c26;box-shadow:0 0 0 2px #a4824699}
+.m2-tile[aria-pressed="true"]{border-color:#6d4a1e;background:#f1d99e;box-shadow:inset 0 0 0 2px #ac813d,0 0 0 2px #dfb56580}
+.m2-tile.m2-used{opacity:.6}
+.m2-zones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.m2-zone{border:2px dashed #9e855b;padding:11px;background:#f6ecd9;min-height:100px;text-align:left}
+.m2-zone:hover,.m2-zone:focus-visible{background:#f0dfc1;border-style:solid}
+.m2-zone strong{font:700 15px Georgia,serif;display:block;margin-bottom:8px;color:#28443b}
+.m2-zone small{display:block;font-size:12px;color:#67553a;line-height:1.4}
+.m2-zone-items{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.m2-mini{font-size:10px;border:1px solid #baa47e;background:#e8d4af;padding:4px 6px;border-radius:3px}
+.m2-caption{font-size:13.5px;color:#625137;line-height:1.65}
+.m2-timeline{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 26px;padding-top:21px}
+.m2-timeline:before{content:"";height:3px;position:absolute;top:12px;left:10%;right:10%;background:#97743e}
+.m2-year{position:relative;min-height:135px;border:1px solid #aa8a59;background:#f4e6cb;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:21px 12px 12px;font-size:14px}
+.m2-year:before{content:"";position:absolute;border-radius:50%;height:14px;width:14px;background:#b17e38;border:3px solid #f5e8d0;top:-17px;left:calc(50% - 7px)}
+.m2-year strong{font:700 23px Georgia,serif}.m2-year span{font-size:12px;color:#58432c}
+.m2-year.m2-selected-year{border-color:#386955;box-shadow:inset 0 0 0 2px #6e947a}
+.m2-form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.m2-field{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:700;line-height:1.4}
+.m2-field select{min-height:43px;padding:9px;border:1px solid #9d825e;background:#fff9ed;color:#32271c;border-radius:3px}
+.m2-evidence{font-size:12px;line-height:1.65;color:#5e4e38;margin-top:14px;padding:12px;background:#e4d0aa;border-left:3px solid #9f753f}
+.m2-chart{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:end;padding:30px 9px 8px;border-bottom:3px solid #b39b76;min-height:235px}
+.m2-chart-bar{display:flex;flex-direction:column;justify-content:end;gap:10px;align-items:center;text-align:center;min-height:200px}
+.m2-chart-column{width:min(90%,95px);background:linear-gradient(120deg,#9b7a48,#557367);border:2px solid #81683f;box-shadow:inset 8px 0 #fff2;min-height:75px}
+.m2-chart-bar strong{font:700 18px Georgia,serif}
+.m2-chart-bar select{width:100%;max-width:155px;font-size:12px;padding:8px 5px;background:#f8ecd6;border:1px solid #987e52}
+.m2-source-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.m2-source{border:1px solid #b59771;background:linear-gradient(150deg,#f9eed8,#eaddbd);padding:16px;position:relative}
+.m2-source:before{content:"ARCHIVE · XIX";font:700 9px Georgia,serif;letter-spacing:.15em;color:#98764c;position:absolute;right:12px;top:12px}
+.m2-source h3{font:700 17px "Libre Baskerville",Georgia,serif;line-height:1.45;margin:6px 40px 12px 0}
+.m2-source p{font-size:14px;line-height:1.7;color:#584733;margin:0 0 15px}
+.m2-source fieldset{border:0;padding:0;margin:0;display:grid;gap:7px}
+.m2-source legend{font-size:14px;font-weight:700;margin-bottom:9px;color:#3c3328}
+.m2-choice{display:flex;gap:8px;align-items:flex-start;border:1px solid #c5b18e;background:#f9f0de;padding:8px 9px;font-size:14px;line-height:1.45;cursor:pointer}
+.m2-choice:has(input:checked){border-color:#517264;background:#dce5d7}
+.m2-choice input{accent-color:#1e534b;margin:2px 0 0}
+.m2-expedition{display:grid;grid-template-columns:.8fr 1.2fr;gap:20px;align-items:stretch}
+.m2-atlas{position:relative;min-height:430px;background:radial-gradient(ellipse at 35% 40%,#cad0b8 0 13%,transparent 14%),radial-gradient(ellipse at 58% 39%,#b4c9a8 0 13%,transparent 14%),radial-gradient(ellipse at 40% 70%,#b5bd97 0 14%,transparent 15%),linear-gradient(140deg,#bfcac2,#e6dfc3);border:7px solid #c9b58c;box-shadow:inset 0 0 0 1px #8c7658,inset 0 0 40px #967b5155;overflow:hidden}
+.m2-atlas:before{content:"";position:absolute;inset:0;opacity:.4;background:repeating-linear-gradient(0deg,transparent 0 48px,#567d7944 49px 50px),repeating-linear-gradient(90deg,transparent 0 48px,#567d7944 49px 50px);pointer-events:none}
+.m2-atlas-title{position:absolute;top:17px;left:15px;font:700 18px/1.4 "Libre Baskerville",Georgia,serif;max-width:200px}
+.m2-compass{font:50px Georgia,serif;position:absolute;right:15px;bottom:10px;color:#6d704c;transform:rotate(15deg)}
+.m2-atlas-label{position:absolute;padding:8px 10px;background:#f7edcdde;border:1px solid #94835f;color:#36534c;font:700 12px Georgia,serif}
+.m2-atlas-label.a{left:12%;top:39%}.m2-atlas-label.b{right:8%;top:31%}.m2-atlas-label.c{left:23%;bottom:25%}.m2-atlas-label.d{right:9%;bottom:23%}
+.m2-atlas-notes{display:grid;grid-template-columns:1fr;gap:10px}
+.m2-multi{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+.m2-multi .m2-tile{font-size:11px;min-height:36px;padding:7px 9px}
+.m2-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.m2-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:15px;margin:20px 0 0}
+.m2-buttons{display:flex;flex-wrap:wrap;gap:10px}
+.m2-button{border:1px solid #184b3c;background:#184b3c;color:#fff0d0;padding:13px 19px;font-weight:700;font-size:13px;min-height:45px;box-shadow:0 3px 0 #092b24}
+.m2-button:hover:not(:disabled){background:#28614b}.m2-button.secondary{background:transparent;color:#29453c;border-color:#9e8059;box-shadow:none}
+.m2-button.secondary:hover:not(:disabled){background:#e1ceaa}
+.m2-feedback{flex:1;min-width:230px;max-width:650px;font-size:13px;line-height:1.6;color:#503d28}
+.m2-feedback[data-state="error"]{font-weight:700;color:#883829}
+.m2-feedback[data-state="success"]{font-weight:700;color:#235a45}
+.m2-finished{text-align:center;padding:35px 20px;max-width:690px;margin:16px auto;border:3px double #b18a51;background:#f8ecd6}
+.m2-finished .m2-star{font:80px/1 Georgia,serif;color:#9c783e}
+.m2-finished h2{font:700 clamp(24px,3.4vw,41px)/1.3 "Libre Baskerville",Georgia,serif}
+.m2-finished p{font-size:15px;line-height:1.75}
+.m2-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:1050px){.m2-step{min-height:70px;flex-direction:column;align-items:center;justify-content:center;text-align:center}.m2-panels{grid-template-columns:1fr}.m2-zones{grid-template-columns:repeat(3,minmax(0,1fr))}.m2-expedition{grid-template-columns:1fr}.m2-atlas{min-height:290px}}
+@media(max-width:680px){.m2-topbar{padding:10px 12px}.m2-chapter-mark{display:none}.m2-main{padding:15px 9px}.m2-paper{padding:17px 13px;border-width:5px;outline-offset:1px}.m2-paper:after{font-size:200px}.m2-hero{grid-template-columns:1fr}.m2-hero-seal{display:none}.m2-steps{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}.m2-step{padding:8px 3px;min-height:58px}.m2-step strong{font-size:21px}.m2-step span{font-size:0}.m2-section-head{display:block}.m2-section-head .m2-chip{margin-top:8px}.m2-work{padding:12px}.m2-panels,.m2-source-grid,.m2-form-row,.m2-mini-grid{grid-template-columns:1fr}.m2-zones{grid-template-columns:1fr 1fr}.m2-zone{min-height:90px}.m2-timeline{gap:5px}.m2-year{padding:18px 4px 7px;font-size:12px}.m2-year strong{font-size:19px}.m2-year span{font-size:11px}.m2-atlas{min-height:255px}.m2-atlas-title{font-size:14px}.m2-controls{align-items:stretch}.m2-buttons,.m2-buttons .m2-button{width:100%}.m2-feedback{min-width:0}.m2-footer{font-size:9px;flex-direction:column;justify-content:center;gap:5px;padding:9px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* ================================================================
+   MISIOA 02 / ARIKETA 01 — KAUSEN KABINETEA
+   Recreación HTML/CSS del concepto visual aprobado.
+   Afecta EXCLUSIVAMENTE a la primera pantalla, no al resto de juegos.
+   ================================================================ */
+.m2-page.m2-first-active{
+ background:
+  radial-gradient(ellipse at 50% 25%,#6e7767 0%,#284c47 33%,#091e21 76%),
+  repeating-linear-gradient(90deg,#4e3225 0 12px,#30261e 12px 18px);
+}
+.m2-first-active .m2-topbar,.m2-first-active .m2-footer{display:none}
+.m2-first-active .m2-main{padding:0 10px 12px;display:flex;align-items:stretch}
+.m2-paper.m2-first-room{
+ width:min(1760px,100%);
+ min-height:100svh;
+ margin:0 auto;
+ padding:clamp(16px,1.6vw,30px) clamp(12px,2.15vw,38px) 18px;
+ border:11px ridge #bd8c4e;
+ outline:2px solid #53341e;
+ outline-offset:0;
+ border-radius:8px;
+ color:#f8ecd5;
+ background:
+  radial-gradient(ellipse 90% 24% at 50% 11%,#d7b48128,transparent 85%),
+  radial-gradient(ellipse 80% 90% at 50% 20%,#2a5753 0%,#143e3a 45%,#0a2828 100%);
+ box-shadow:0 16px 80px #000b,inset 0 0 85px #070e0f,inset 0 0 0 5px #e9c17c30;
+ overflow:hidden;
+ font-family:Georgia,"Times New Roman",serif;
+}
+.m2-first-room.m2-paper:before{
+ content:"";
+ position:absolute;z-index:-1;inset:0;
+ pointer-events:none;
+ background:
+  radial-gradient(circle at 13% 3%,#ffce7948,transparent 18%),
+  radial-gradient(circle at 86% 3%,#ffce7941,transparent 18%),
+  repeating-linear-gradient(90deg,transparent 0 260px,#cca76b0b 261px,#cca76b0b 262px),
+  repeating-linear-gradient(0deg,transparent 0 142px,#cca76b0c 144px,#cca76b0c 145px);
+}
+.m2-first-room.m2-paper:after{
+ content:"";
+ pointer-events:none;z-index:-1;
+ inset:6px;position:absolute;
+ border:2px solid #d2a05a4f;
+ box-shadow:inset 0 0 0 6px #071e18bd,inset 0 0 0 8px #9a774559;
+ transform:none;
+ background:none;
+}
+.m2-first-room button{font-family:Georgia,"Times New Roman",serif}
+.m2-museum-title-row.m2-hero{
+ display:grid;
+ grid-template-columns:minmax(200px,.94fr) minmax(340px,2fr) minmax(205px,.9fr);
+ gap:clamp(10px,1.4vw,22px);
+ align-items:start;
+ margin:0 0 16px;padding:0;
+ border:0;
+}
+.m2-museum-mission-plaque{
+ min-height:124px;
+ display:flex;align-items:center;justify-content:center;gap:13px;
+ position:relative;
+ padding:13px 16px;
+ color:#2b1b14;
+ background:
+  radial-gradient(ellipse at 20% 20%,#fffcdbb8,transparent 50%),
+  linear-gradient(125deg,#e6c38d,#fae8c5 45%,#dfb678);
+ border:6px double #9b6d3c;
+ border-radius:18px 15px 17px 20px;
+ box-shadow:0 5px 0 #3e2313,0 10px 12px #0007,inset 0 0 0 2px #fff4d5;
+}
+.m2-museum-mission-plaque strong{
+ display:block;font:700 clamp(20px,2vw,31px)/1.13 Georgia,serif;
+}
+.m2-museum-mission-plaque span:not(.m2-museum-world){
+ display:block;font:700 clamp(15px,1.25vw,22px)/1.13 Georgia,serif;
+}
+.m2-museum-world{
+ flex:none;
+ width:57px;height:57px;
+ border:3px solid #8e845c;
+ color:#5b9793;
+ font:700 46px/1 Georgia,serif;
+ border-radius:50%;
+ display:grid;place-items:center;
+ background:radial-gradient(circle at 45% 40%,#a9d0c1,#486962);
+ box-shadow:inset 0 0 0 4px #dec08a;
+}
+.m2-museum-title{
+ min-height:123px;
+ text-align:center;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;
+ background:linear-gradient(0deg,#7c1217,#9e1c1f 50%,#69151d);
+ border:7px ridge #d6aa62;
+ border-radius:15px 16px 22px 22px;
+ box-shadow:0 6px 0 #3b231b,0 11px 23px #0008,inset 0 0 0 2px #f4ce83aa;
+ transform:translateY(-3px);
+ padding:11px;
+ position:relative;
+}
+.m2-museum-title:before,.m2-museum-title:after{
+ content:"✦";font-size:22px;color:#e6b65b;position:absolute;top:12px;
+}
+.m2-museum-title:before{left:12px}.m2-museum-title:after{right:12px}
+.m2-museum-title h1{
+ color:#fff0c5!important;
+ font:700 clamp(30px,3.05vw,55px)/1.08 Georgia,serif!important;
+ text-shadow:0 3px 2px #350c10,0 0 12px #ee9a5166;
+ margin:1px 6px 7px!important;
+}
+.m2-museum-title p{
+ font:italic 700 clamp(14px,1.3vw,22px)/1.2 Georgia,serif!important;
+ color:#502717!important;
+ margin:0!important;
+ padding:5px 22px 8px!important;
+ background:linear-gradient(95deg,#dcbb83,#ffebc4 30%,#e5be85);
+ border:4px ridge #b47d3b;
+ border-radius:8px;
+ text-shadow:0 1px #fff8eb;
+ box-shadow:0 4px 0 #3f2615;
+}
+.m2-museum-step-holder{padding-top:10px;align-self:start}
+.m2-first-room .m2-steps{
+ list-style:none;
+ display:flex;justify-content:center;gap:0;
+ padding:0;margin:0;
+ filter:drop-shadow(0 6px 6px #061311a9);
+}
+.m2-first-room .m2-steps li{min-width:0;flex:0 0 auto}
+.m2-first-room .m2-step{
+ display:grid;
+ place-items:center;
+ width:clamp(34px,3.1vw,53px);height:clamp(34px,3.1vw,53px);
+ padding:0;margin:0 -1px;
+ min-height:0;
+ border:4px ridge #af9575;
+ border-radius:50%;
+ background:radial-gradient(circle at 25% 20%,#8c8984,#3d4143 65%,#131d1f);
+ color:#f6f1e4;
+ box-shadow:inset 0 0 0 2px #241f1a,0 1px 0 #000;
+ transition:transform .18s,box-shadow .18s;
+}
+.m2-first-room .m2-step strong{
+ font:700 clamp(17px,1.5vw,28px)/1 Georgia,serif;
+ color:#e8e0d0;
+}
+.m2-first-room .m2-step span{position:absolute!important;width:1px!important;height:1px!important;clip:rect(0 0 0 0);overflow:hidden;white-space:nowrap}
+.m2-first-room .m2-step[aria-current="step"]{
+ background:radial-gradient(circle at 33% 18%,#ffe1a0,#c87e0d 63%,#a85808);
+ border-color:#f5c673;
+ transform:scale(1.11);
+ box-shadow:inset 0 0 0 2px #f4dfaa,0 0 15px #e8a72b,0 4px 2px #0006;
+ z-index:2;
+ position:relative;
+}
+.m2-first-room .m2-step[aria-current="step"] strong{color:#412506}
+.m2-first-room .m2-step.m2-done{background:radial-gradient(circle at 32% 20%,#9cdbac,#2d6954)}
+.m2-first-room .m2-step:disabled{opacity:.8}
+.m2-museum-instructions{
+ margin:0 auto 15px;
+ max-width:1300px;
+ padding:13px 26px;
+ border:5px ridge #a16a39;
+ border-radius:11px;
+ background:
+  radial-gradient(ellipse at 50% 20%,#fff7e9,#eacaa0 100%);
+ color:#2c1a14;
+ box-shadow:0 5px 12px #0007,inset 0 0 12px #c39b6b;
+ text-align:center;
+ font:700 clamp(16px,1.55vw,24px)/1.3 Georgia,serif;
+}
+.m2-museum-hand{color:#693d27;font:700 35px/1 Georgia,serif;vertical-align:middle;margin-right:10px}
+.m2-museum-preview{
+ max-width:390px;
+ display:inline-block;margin:2px 0 8px;
+ padding:6px 13px;
+ color:#4e371e;
+ background:#ead3a3;
+ border:1px solid #bd945b;border-radius:30px;
+ font:700 11px Georgia,serif;
+ letter-spacing:.02em;
+}
+.m2-museum-room-label{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ margin:0 auto 15px;padding:0 4px;
+ color:#fbe6bf;font-size:13px;font-weight:700;
+ letter-spacing:.07em;
+ text-shadow:0 2px 5px #000;
+}
+.m2-museum-interaction{display:flex;flex-direction:column;gap:18px}
+.m2-museum-cabinet-wall{
+ display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,.9vw,18px);
+ padding:5px 3px 2px;align-items:stretch;
+}
+.m2-museum-case{
+ --case-color:#7e3029;
+ --case-glow:#f2b75a;
+ position:relative;min-width:0;min-height:258px;
+ border:8px ridge #8b5428;
+ border-radius:48% 48% 8px 8px / 49px 49px 8px 8px;
+ padding:7px;
+ background:linear-gradient(110deg,#44230f,#b67535 6%,#714020 9%,#312414 96%,#e2ae5a 98%,#4b2c17);
+ box-shadow:0 9px 0 #3a210f,0 12px 18px #0009,0 0 0 2px #a5753f;
+ transition:transform .14s,box-shadow .14s;
+}
+.m2-museum-case:before{
+ content:"";position:absolute;z-index:2;inset:2px;
+ border-radius:48% 48% 5px 5px / 47px 47px 5px 5px;
+ box-shadow:inset 0 0 25px var(--case-glow),inset 0 0 0 2px #e8bb7859;
+ pointer-events:none;
+}
+.m2-case-economic{--case-color:#75241e;--case-glow:#e8703b}
+.m2-case-demographic{--case-color:#085b68;--case-glow:#63d0e0}
+.m2-case-religious{--case-color:#532759;--case-glow:#e181ca}
+.m2-case-political{--case-color:#305e32;--case-glow:#a3d65a}
+.m2-case-ideological{--case-color:#9d630e;--case-glow:#ffda55}
+.m2-case-arch{
+ min-height:149px;
+ position:relative;
+ text-align:center;
+ border:3px solid #d39c51;
+ border-radius:49% 49% 3px 3px / 53px 53px 3px 3px;
+ padding:14px 8px 34px;
+ background:
+  radial-gradient(ellipse at 50% 15%,#ffffd535,transparent 65%),
+  radial-gradient(ellipse at 50% 95%,#10141085,transparent 70%),
+  var(--case-color);
+ box-shadow:inset 0 0 0 2px #fff3a745,0 2px 5px #0006;
+}
+.m2-case-icon{
+ display:flex;align-items:center;justify-content:center;
+ height:99px;
+ filter:drop-shadow(0 8px 4px #00160b77);
+}
+.m2-illustration{
+ width:55px;height:51px;display:block;flex:none;
+ filter:drop-shadow(1px 2px 0 #3b291a4d);
+}
+.m2-illustration-large{width:min(110px,80%);height:97px}
+.m2-case-title{
+ position:relative;z-index:3;
+ margin:-18px -6px 0;
+ padding:9px 4px 8px;
+ text-align:center;
+ min-height:48px;
+ display:flex;align-items:center;justify-content:center;
+ font:700 clamp(14px,1.2vw,19px)/1.13 Georgia,serif;
+ color:#291e14;
+ background:linear-gradient(105deg,#976225,#ffe7ac 14%,#f2d39a 50%,#ffe4a9 85%,#946020);
+ border:4px ridge #af7f3e;
+ border-radius:17px 17px 8px 8px;
+ text-shadow:0 1px #fff5cf;
+ box-shadow:0 3px 4px #0007,inset 0 0 0 1px #fff0bf;
+}
+.m2-case-well{
+ position:relative;
+ background:
+  repeating-linear-gradient(135deg,#ffffff07 0 5px,#2c1f1807 5px 8px),
+  linear-gradient(150deg,var(--case-color),#1c302caf);
+ min-height:133px;
+ border:3px dashed #f0d0a091;
+ margin:7px 2px 0;
+ padding:9px 6px;
+ display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+ gap:6px;
+}
+.m2-case-target{
+ display:block;width:100%;height:25px;min-height:25px;
+ color:#fbe2ad;opacity:.63;
+ border:1px solid #ffecc44d;
+ background:#0002;
+ font:700 17px Georgia,serif;
+ padding:1px;
+}
+.m2-museum-case:hover .m2-case-target,.m2-case-target:focus-visible{
+ opacity:1;border-color:#ffedb3;box-shadow:inset 0 0 7px #e9bc5f;
+}
+.m2-case-empty{
+ text-align:center;display:block;margin:auto;color:#f9dbb6;
+ font:italic 12px Georgia,serif;
+ opacity:.75;
+}
+.m2-case-contents{display:grid;grid-template-columns:1fr;align-content:start;gap:5px}
+.m2-case-foot{
+ position:absolute;bottom:-11px;left:-5%;right:-5%;height:12px;
+ border:3px ridge #c28a44;border-radius:3px;
+ background:linear-gradient(#a97136,#44240e);
+ box-shadow:0 4px 6px #0007;
+}
+.m2-museum-case:has(.m2-museum-card[aria-pressed="true"]){
+ box-shadow:0 9px 0 #3a210f,0 12px 18px #0009,0 0 0 2px #f5c26f;
+}
+.m2-museum-desktop{
+ position:relative;
+ padding:14px 20px 18px;
+ border:8px ridge #b1773c;
+ border-radius:18px 18px 9px 9px;
+ background:
+  radial-gradient(ellipse at 50% 10%,#ffe0b941,transparent 75%),
+  linear-gradient(100deg,#5b2e18,#9a6033 3%,#4c2919 8%,#6e3e25 50%,#462515 93%,#aa7746 98%,#40210f);
+ box-shadow:0 9px 0 #351a0f,0 12px 21px #0009,inset 0 0 0 2px #e0b780a3;
+}
+.m2-museum-desktop:after{
+ content:"";display:block;position:absolute;left:-12px;right:-12px;bottom:-13px;
+ height:17px;background:linear-gradient(#aa6b34,#4b2814);
+ border:4px ridge #825023;border-radius:2px;box-shadow:0 5px 7px #0006;
+}
+.m2-museum-desktop-top{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;
+ color:#f8e3b2;font:bold 13px Georgia,serif;
+ margin:0 0 12px;
+ text-shadow:0 2px #361e15;
+ letter-spacing:.065em;
+}
+.m2-museum-drag{font-size:12px;color:#ffdc9c}
+.m2-museum-cards{
+ display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+ gap:9px;
+ min-height:78px;
+ padding:0;
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ display:flex;
+ align-items:center;justify-content:flex-start;
+ gap:8px;
+ min-width:0;
+ min-height:77px;
+ border:4px ridge #bf9159;
+ border-radius:10px;
+ padding:5px 8px;
+ color:#402214;
+ background:
+  repeating-linear-gradient(145deg,#b18e5109 0 4px,#7f532a0b 5px 6px),
+  radial-gradient(circle at 15% 10%,#fff6dc,#ecd4a9 90%);
+ box-shadow:inset 0 0 0 2px #fff6dbb0,0 4px 4px #1f150b99;
+ text-align:left;
+ font:700 clamp(11px,1vw,15px)/1.18 Georgia,serif;
+ cursor:grab;
+ transition:background .12s,box-shadow .12s,transform .12s;
+}
+.m2-first-room .m2-museum-card:hover:not(:disabled){
+ background:linear-gradient(140deg,#fff9e8,#f5dcaa);
+ box-shadow:inset 0 0 0 2px #fff6dbb0,0 0 0 2px #ddae64,0 6px 10px #0006;
+ transform:translateY(-2px);
+}
+.m2-first-room .m2-museum-card[aria-pressed="true"]{
+ border-color:#ffcc4f;
+ background:linear-gradient(140deg,#fffbe7,#f5d998);
+ box-shadow:inset 0 0 0 2px #fffce5,0 0 0 3px #ffdc63,0 0 18px #ffc737,0 5px 8px #0007;
+}
+.m2-first-room .m2-museum-card:active{cursor:grabbing}
+.m2-museum-card-art{width:52px;min-width:52px;display:grid;place-items:center}
+.m2-museum-card-copy{flex:1;min-width:0;overflow-wrap:break-word}
+.m2-museum-case .m2-museum-card{
+ min-height:0!important;
+ padding:4px!important;
+ gap:5px!important;
+ border-width:2px!important;
+ border-radius:4px!important;
+ font-size:clamp(10px,.75vw,12px)!important;
+ line-height:1.16!important;
+}
+.m2-museum-case .m2-museum-card-art{width:28px;min-width:28px}
+.m2-museum-case .m2-museum-card-art .m2-illustration{width:25px;height:26px}
+.m2-museum-all-placed{
+ grid-column:1/-1;
+ margin:auto;
+ background:#f8e7b9;border:2px solid #c89c59;color:#583a1c;
+ padding:18px 25px;text-align:center;font-size:15px;
+}
+.m2-first-room .m2-controls{
+ margin:16px auto 0;
+ display:grid;grid-template-columns:1fr auto 1fr;
+ align-items:center;
+ gap:12px;
+ padding:13px 6px;
+ background:transparent;
+}
+.m2-first-room .m2-feedback{
+ color:#f6e4be;text-shadow:0 2px 3px #000;
+ margin:0;
+ max-width:none;
+ min-width:0;
+ font:700 13px/1.4 Georgia,serif;
+}
+.m2-first-room .m2-feedback[data-state="error"]{
+ color:#ffe0b0;
+}
+.m2-first-room .m2-feedback[data-state="success"]{color:#e5f8ba}
+.m2-first-room .m2-buttons{
+ grid-column:2;
+ display:flex;align-items:center;gap:16px;
+ justify-content:center;flex-wrap:wrap;
+}
+.m2-first-room .m2-button{
+ font:700 clamp(14px,1.4vw,22px)/1.2 Georgia,serif;
+ text-shadow:0 2px #061a11;
+ min-height:54px;
+ padding:11px 30px;
+ background:linear-gradient(165deg,#176047,#093f39 60%,#062e2c);
+ border:5px ridge #bf9c58;
+ border-radius:12px;
+ box-shadow:inset 0 0 0 2px #64815e,0 5px 0 #1f160f,0 10px 14px #0008;
+ color:#fff0c7;
+}
+.m2-first-room .m2-button:hover:not(:disabled){
+ background:linear-gradient(165deg,#28745a,#0d5146);
+ border-color:#f7c974;
+ box-shadow:inset 0 0 0 2px #8cbfa4,0 5px 0 #1f160f,0 0 16px #e4c45a99;
+}
+.m2-first-room .m2-button.secondary{
+ font-size:14px;min-height:42px;
+ padding:9px 16px;
+ text-shadow:none;
+ color:#4b2b16;background:linear-gradient(#ffeed3,#d7b887);
+ border:3px ridge #d2a06b;
+ box-shadow:0 3px 5px #0007;
+}
+.m2-first-room .m2-button:disabled{opacity:.73;filter:saturate(.72)}
+.m2-first-room .m2-controls::after{
+ content:"HISTORIA · DBH 4";display:flex;align-items:center;justify-content:flex-end;
+ grid-column:3;color:#f3ddae;letter-spacing:.13em;font:700 12px Georgia,serif;
+}
+@media (max-width:1300px){
+ .m2-museum-title-row.m2-hero{grid-template-columns:200px minmax(320px,1fr) 195px}
+ .m2-museum-cabinet-wall{gap:8px}
+ .m2-museum-case{border-width:6px;padding:4px}
+ .m2-case-arch{min-height:130px}
+ .m2-case-icon{height:75px}
+ .m2-illustration-large{height:75px}
+ .m2-case-title{font-size:14px;min-height:49px}
+ .m2-museum-card-art{width:41px;min-width:41px}
+ .m2-museum-card-art .m2-illustration{width:39px;height:42px}
+ .m2-museum-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .m2-first-room .m2-controls{grid-template-columns:1fr auto}
+ .m2-first-room .m2-buttons{grid-column:2}
+ .m2-first-room .m2-controls::after{display:none}
+}
+@media (max-width:900px){
+ .m2-museum-title-row.m2-hero{
+  grid-template-columns:minmax(130px,.6fr) minmax(0,1.4fr);
+  align-items:center;
+ }
+ .m2-museum-mission-plaque{min-height:100px;padding:8px}
+ .m2-museum-world{display:none}
+ .m2-museum-step-holder{grid-column:1/-1;justify-self:center;padding:0}
+ .m2-museum-title{min-height:100px}
+ .m2-museum-cabinet-wall{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
+ .m2-museum-case{min-height:260px}
+ .m2-case-arch{min-height:138px}
+ .m2-case-icon{height:88px}
+ .m2-museum-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .m2-first-room .m2-controls{display:flex;flex-direction:column;align-items:stretch}
+ .m2-first-room .m2-feedback{text-align:center}
+ .m2-first-room .m2-buttons{justify-content:center}
+}
+@media (max-width:570px){
+ .m2-first-active .m2-main{padding:0}
+ .m2-paper.m2-first-room{
+  border-width:6px;border-radius:0;
+  padding:13px 9px 20px;min-height:100svh;
+ }
+ .m2-museum-title-row.m2-hero{grid-template-columns:1fr;gap:9px}
+ .m2-museum-mission-plaque{min-height:50px;justify-content:center;gap:6px;padding:5px 9px}
+ .m2-museum-mission-plaque strong{font-size:15px;display:inline}
+ .m2-museum-mission-plaque span:not(.m2-museum-world){font-size:14px;display:inline;margin-left:10px}
+ .m2-museum-mission-plaque br{display:none}
+ .m2-museum-title{min-height:85px;transform:none;padding:9px}
+ .m2-museum-title h1{font-size:clamp(24px,7vw,35px)!important}
+ .m2-museum-title p{font-size:13px!important}
+ .m2-museum-instructions{font-size:15px;padding:9px 10px;border-width:3px}
+ .m2-museum-hand{font-size:25px}
+ .m2-museum-room-label{font-size:11px;margin-bottom:13px}
+ .m2-museum-cabinet-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 8px}
+ .m2-museum-case{min-height:210px;padding:3px;border-width:5px}
+ .m2-museum-case:last-child{grid-column:1/-1;width:calc(50% - 4px);min-width:170px;justify-self:center}
+ .m2-case-arch{min-height:120px;padding:9px 4px 24px}
+ .m2-case-icon{height:70px}
+ .m2-illustration-large{height:70px}
+ .m2-case-title{font-size:13px;min-height:43px;padding:5px 2px}
+ .m2-case-well{margin:5px 0 0;padding:4px;min-height:95px}
+ .m2-case-empty{font-size:10px}
+ .m2-museum-case .m2-museum-card{font-size:10px!important}
+ .m2-museum-case .m2-museum-card-art{display:none}
+ .m2-museum-desktop{padding:10px;border-width:5px}
+ .m2-museum-desktop-top{font-size:10px;line-height:1.3}
+ .m2-museum-drag{font-size:10px}
+ .m2-museum-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:78px;padding:5px 6px;font-size:12px;gap:6px}
+ .m2-museum-card-art{width:36px;min-width:36px}
+ .m2-museum-card-art .m2-illustration{width:35px;height:37px}
+ .m2-first-room .m2-controls{gap:10px;margin-top:22px}
+ .m2-first-room .m2-buttons{gap:7px}
+ .m2-first-room .m2-button{padding:10px 18px;font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+ .m2-first-room *{transition:none!important;animation:none!important}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════
+   REFINAMIENTO DEL EJERCICIO 1 — sala de museo 16:9.
+   El gabinete se separa del fondo y se integra en una escena histórica
+   original (SVG); NO altera ningún otro ejercicio de la misión 2.
+   ══════════════════════════════════════════════════════════════════ */
+.m2-page.m2-first-active{
+ background:#131d1d;
+}
+.m2-first-active .m2-main{
+ padding:0;
+ min-height:100svh;
+ background:#1c2523;
+}
+.m2-paper.m2-first-room{
+ width:100%;
+ max-width:1780px;
+ min-height:100svh;
+ margin:0 auto;
+ padding:12px clamp(13px,1.25vw,23px) 26px;
+ border:0;
+ outline:0;
+ border-radius:0;
+ color:#ffedc7;
+ background:
+   linear-gradient(180deg,#081e1e33 0%,#0f272711 70%,#0e1c1c33 100%),
+   url('./m2-room-clean.svg') center top / 100% 100% no-repeat,
+   radial-gradient(ellipse at 55% 30%,#405f56,#092423);
+ box-shadow:0 0 60px #0009,inset 0 0 24px #0008;
+}
+.m2-first-room.m2-paper:before,
+.m2-first-room.m2-paper:after{display:none}
+.m2-museum-title-row.m2-hero{
+ max-width:1680px;
+ grid-template-columns:minmax(195px,1fr) minmax(460px,2.45fr) minmax(180px,1fr);
+ gap:clamp(11px,2vw,35px);
+ margin:0 0 12px;
+ align-items:start;
+}
+.m2-museum-mission-plaque{
+ min-height:100px;
+ max-width:315px;
+ margin:0;
+ border-radius:9px 9px 14px 14px;
+ border-width:5px;
+ padding:10px 12px;
+ transform:rotate(-1deg);
+ background:radial-gradient(circle at 28% 27%,#fff8e2,#f1d6a3 75%,#cba268);
+ box-shadow:0 0 0 2px #48301f,0 5px 0 #33241a,0 9px 12px #0008,inset 0 0 0 3px #fdf2d3;
+}
+.m2-museum-mission-plaque strong{font-size:clamp(20px,2vw,30px)}
+.m2-museum-mission-plaque span:not(.m2-museum-world){font-size:clamp(15px,1.18vw,20px)}
+.m2-museum-world{
+ background:
+ radial-gradient(circle at 35% 30%,#e5cea1 0 13%,transparent 14%),
+ radial-gradient(circle at 66% 60%,#9c9e6d 0 17%,transparent 18%),
+ radial-gradient(circle at 31% 58%,#6e9071 0 18%,transparent 19%),
+ radial-gradient(circle,#a3d3c5,#4a9297);
+ color:#194f54;
+ width:66px;height:66px;
+ font-size:52px;
+ border:3px ridge #b78b51;
+ box-shadow:inset 0 0 0 4px #f8db9d;
+}
+.m2-museum-title{
+ min-height:110px;
+ max-width:720px;
+ margin:0 auto;
+ border:6px ridge #d9a85b;
+ background:linear-gradient(#6a0c13,#9d1720 31%,#7a0f18);
+ box-shadow:0 6px 0 #3e2118,0 10px 10px #0009,inset 0 0 0 2px #f7bf7488;
+ border-radius:5px 5px 18px 18px;
+ transform:translateY(-8px);
+ padding:8px 13px;
+}
+.m2-museum-title h1{
+ font-size:clamp(29px,3.35vw,57px)!important;
+ letter-spacing:-.025em;
+ margin:0 6px 7px!important;
+ white-space:nowrap;
+}
+.m2-museum-title p{
+ font-size:clamp(14px,1.45vw,22px)!important;
+ padding:4px 18px 7px!important;
+ border-radius:8px;
+}
+.m2-museum-step-holder{padding-top:8px;justify-self:end}
+.m2-first-room .m2-step{width:clamp(36px,3.2vw,52px);height:clamp(36px,3.2vw,52px)}
+.m2-museum-instructions{
+ width:min(1200px,calc(100% - clamp(110px,22vw,370px)));
+ max-width:none;
+ margin:0 auto 13px;
+ min-height:50px;
+ padding:9px 17px;
+ font-size:clamp(16px,1.45vw,22px);
+ border-width:4px;
+ border-radius:6px;
+ box-shadow:0 3px 0 #53371c,0 5px 15px #0008,inset 0 1px #fff7d9;
+ background:radial-gradient(ellipse at 40% 18%,#fff7e3,#edd4ac 85%,#d8b587);
+}
+.m2-museum-preview{
+ position:absolute;top:121px;left:clamp(8px,1vw,20px);
+ z-index:4;max-width:230px;
+ margin:0;
+ border-radius:6px;
+ font-size:10px;
+ line-height:1.25;
+ text-align:center;
+ background:#e5c799f0;
+ box-shadow:0 2px 3px #0004;
+}
+.m2-museum-interaction{
+ width:calc(100% - clamp(125px,17.5vw,320px));
+ max-width:1300px;
+ margin:0 auto;
+ gap:11px;
+ position:relative;
+ z-index:1;
+}
+.m2-museum-cabinet-wall{gap:clamp(7px,.75vw,15px);padding:3px 0 5px}
+.m2-museum-case{
+ border-width:6px;
+ border-color:#af7133;
+ border-radius:46% 46% 3px 3px / 46px 46px 3px 3px;
+ padding:4px 4px 6px;
+ min-height:0;
+ background:
+   linear-gradient(90deg,#3f2516,#a56f36 4%,#5b3015 11%,#302010 93%,#c58c41 98%);
+ box-shadow:0 6px 0 #48290f,0 12px 10px #0008,0 0 0 1px #ddab62;
+}
+.m2-museum-case:before{
+ inset:0;border-radius:48% 48% 3px 3px / 47px 47px 3px 3px;
+ box-shadow:inset 0 0 18px var(--case-glow),inset 0 0 0 2px #f1bd7777;
+}
+.m2-case-arch{
+ display:flex;
+ flex-direction:column;
+ justify-content:flex-end;
+ height:clamp(125px,12.8vw,180px);
+ min-height:0;
+ padding:0 5px 0;
+ overflow:visible;
+ border-width:3px;
+ border-radius:50% 50% 3px 3px / 52px 52px 3px 3px;
+ background:var(--case-color);
+}
+.m2-case-scene{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:cover;
+ object-position:center;
+ border-radius:50% 50% 2px 2px / 45px 45px 2px 2px;
+ filter:saturate(1.15) contrast(1.045);
+ pointer-events:none;
+}
+.m2-case-icon{display:none}
+.m2-case-title{
+ align-self:stretch;
+ position:relative;
+ z-index:3;
+ display:flex;
+ min-height:41px;
+ margin:0 -12px -15px;
+ padding:6px 4px 5px;
+ border:4px ridge #bd8f51;
+ border-radius:8px;
+ font-size:clamp(12px,1.23vw,19px);
+ line-height:1.02;
+ color:#291808;
+ background:
+   radial-gradient(ellipse at 50% 0%,#fff7cb99,transparent 75%),
+   linear-gradient(90deg,#b37e37,#ffe6a4 11%,#fce2a0 50%,#ffe6a4 90%,#9c662c);
+ box-shadow:0 4px 5px #130a0875,0 0 0 1px #503517;
+}
+.m2-case-well{
+ margin:17px 2px 0;
+ min-height:83px;
+ padding:6px;
+ border:0;
+ border-radius:5px;
+ display:block;
+ background:linear-gradient(120deg,#300f0c5c,#010e0d45);
+ box-shadow:inset 0 0 0 2px #f7c77d55,inset 0 0 12px #0007;
+}
+.m2-case-contents{
+ display:grid;gap:4px;
+ width:100%;
+ position:relative;z-index:2;
+ pointer-events:none;
+}
+.m2-case-contents .m2-museum-card{pointer-events:auto}
+.m2-case-target{
+ position:absolute;z-index:1;inset:7px;
+ width:calc(100% - 14px);
+ height:calc(100% - 14px);
+ border:2px dashed #ffddb8a3;
+ background:#ffffff05;
+ color:transparent;
+ opacity:.97;
+ transition:box-shadow .13s,background .13s;
+}
+.m2-case-target:hover,.m2-case-target:focus-visible{
+ border:2px dashed #ffebbc;
+ background:#fff19e12;
+ color:#f5d8a4;
+ box-shadow:inset 0 0 12px #fff08a55,0 0 13px #e6a24f66;
+}
+.m2-case-empty{
+ position:relative;
+ display:block;
+ z-index:0;
+ margin:31px auto 7px;
+ text-align:center;
+ font-size:10px;
+ white-space:nowrap;
+ opacity:.63;
+ pointer-events:none;
+}
+.m2-museum-case .m2-museum-card{
+ font-size:clamp(10px,.78vw,12px)!important;
+ padding:5px!important;
+ min-height:35px!important;
+ background:#fbdfae!important;
+ color:#361b11!important;
+ box-shadow:0 2px 2px #0006!important;
+}
+.m2-museum-case .m2-museum-card-art{display:none}
+.m2-case-foot{
+ height:13px;bottom:-12px;
+ background:linear-gradient(#e0a857,#8a4b23 40%,#361b10);
+ border-color:#9b632f;
+}
+.m2-museum-desktop{
+ padding:9px 12px 12px;
+ background:
+  linear-gradient(150deg,#b58a5988,#4b26151a 28%,#1b140c3b 54%,#9c5b2a7a),
+  repeating-linear-gradient(170deg,#bb85551b 0 5px,#3c201618 6px 11px),
+  linear-gradient(#9e6036,#562b19);
+ border:8px ridge #c28a48;
+ border-radius:13px 13px 8px 8px;
+ box-shadow:0 7px 0 #341b0e,0 10px 18px #000a,inset 0 0 0 2px #f0c88995;
+}
+.m2-museum-desktop:after{
+ height:14px;bottom:-15px;left:-11px;right:-11px;
+ background:linear-gradient(#b27d3e,#603013 48%,#2a160b);
+}
+.m2-museum-desktop-top{
+ margin:0 0 8px;min-height:15px;
+ font-size:12px;
+ color:#ffedca;
+}
+.m2-museum-cards{
+ grid-template-columns:repeat(6,minmax(0,1fr));
+ gap:7px;
+ min-height:0;
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ min-height:clamp(63px,5.2vw,77px);
+ padding:5px 6px;
+ gap:6px;
+ border:3px solid #d0a576;
+ border-radius:10px;
+ background:
+  linear-gradient(#fff7e0d9,#f4d4a8c9),
+  repeating-linear-gradient(5deg,#9d652914 0 1px,transparent 2px 7px);
+ font-size:clamp(11px,.92vw,15px);
+ line-height:1.08;
+ font-weight:700;
+ box-shadow:0 0 0 1px #694525,0 3px 4px #12090395,inset 0 0 0 2px #fff0c9;
+ color:#401b16;
+}
+.m2-museum-card-art{width:39px;min-width:39px}
+.m2-museum-card-art .m2-illustration{width:39px;height:43px}
+.m2-museum-card-copy{overflow-wrap:normal;hyphens:auto}
+.m2-first-room .m2-controls{
+ width:calc(100% - clamp(125px,17.5vw,320px));
+ max-width:1300px;
+ margin:17px auto 0;
+ padding:5px 0 0;
+ grid-template-columns:minmax(190px,1fr) auto minmax(190px,1fr);
+}
+.m2-first-room .m2-feedback{
+ font-size:11px;
+ max-width:290px;
+ font-weight:400;
+}
+.m2-first-room .m2-buttons{gap:9px}
+.m2-first-room .m2-button{
+ min-height:48px;
+ padding:8px 21px;
+ font-size:19px;
+ border-width:4px;
+ border-radius:10px;
+}
+.m2-first-room .m2-button.secondary{
+ min-height:35px;padding:8px 13px;font-size:12px;border-width:3px;
+}
+.m2-first-room .m2-controls::after{
+ content:"HISTORIA · DBH 4";
+ display:flex;
+ align-items:center;justify-content:flex-end;
+ grid-column:3;
+ color:#e7c58a;font-size:10px;
+}
+
+/* Keep card stacks visible: vitrines expand freely instead of clipping. */
+.m2-museum-case:has(.m2-museum-card) .m2-case-well{
+ min-height:83px;
+ padding-top:8px;
+ padding-bottom:10px;
+}
+.m2-museum-case:has(.m2-museum-card) .m2-case-empty{display:none}
+.m2-museum-case .m2-case-target:has(+ .m2-case-contents .m2-museum-card){opacity:.18}
+
+@media (max-width:1200px){
+ .m2-museum-title-row.m2-hero{
+  grid-template-columns:minmax(160px,.9fr) minmax(360px,2.5fr) minmax(166px,.8fr);
+  gap:10px;
+ }
+ .m2-museum-interaction,.m2-first-room .m2-controls{
+  width:calc(100% - clamp(55px,11vw,155px));
+ }
+ .m2-museum-title h1{font-size:clamp(26px,3.2vw,45px)!important}
+ .m2-museum-instructions{width:calc(100% - 110px)}
+ .m2-museum-case{border-width:5px}
+ .m2-case-title{font-size:clamp(12px,1.1vw,16px)}
+ .m2-case-arch{height:clamp(133px,13vw,154px)}
+ .m2-museum-cards{grid-template-columns:repeat(6,minmax(0,1fr))}
+ .m2-first-room .m2-controls{grid-template-columns:minmax(130px,1fr) auto minmax(130px,1fr)}
+}
+@media (max-width:900px){
+ .m2-paper.m2-first-room{
+   background:linear-gradient(#08252644,#0c292644),url('./m2-room-clean.svg') center top / auto 900px no-repeat,#113a35;
+ }
+ .m2-museum-title-row.m2-hero{
+   grid-template-columns:minmax(150px,.6fr) minmax(0,1.4fr);
+   gap:8px;
+ }
+ .m2-museum-title{transform:none}
+ .m2-museum-title h1{font-size:clamp(24px,4.3vw,35px)!important;white-space:normal}
+ .m2-museum-step-holder{grid-column:1/-1;justify-self:center;padding-top:0}
+ .m2-museum-instructions{width:100%;margin-bottom:15px}
+ .m2-museum-preview{top:150px}
+ .m2-museum-interaction,.m2-first-room .m2-controls{width:100%}
+ .m2-museum-cabinet-wall{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px 10px}
+ .m2-case-arch{height:160px}
+ .m2-case-title{font-size:16px}
+ .m2-museum-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .m2-first-room .m2-controls{display:flex}
+}
+@media (max-width:570px){
+ .m2-paper.m2-first-room{
+  padding:9px 8px 20px;
+  background:radial-gradient(ellipse at 50% 20%,#426158,#173d3b 55%,#0b2427);
+ }
+ .m2-museum-title-row.m2-hero{grid-template-columns:1fr;gap:8px;margin-bottom:10px}
+ .m2-museum-mission-plaque{
+  min-height:45px;max-width:none;justify-content:center;
+  padding:4px 8px;
+ }
+ .m2-museum-world{width:36px;height:36px;display:grid;font-size:26px}
+ .m2-museum-mission-plaque strong{font-size:17px}
+ .m2-museum-mission-plaque span:not(.m2-museum-world){font-size:14px}
+ .m2-museum-title{min-height:76px}
+ .m2-museum-title h1{font-size:clamp(25px,7vw,36px)!important;white-space:normal}
+ .m2-museum-title p{font-size:13px!important}
+ .m2-museum-instructions{min-height:0;font-size:14px;padding:8px;margin-bottom:11px}
+ .m2-museum-preview{position:static;font-size:9px;max-width:none;padding:4px;margin:0 0 9px}
+ .m2-museum-interaction{gap:13px}
+ .m2-museum-cabinet-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 8px}
+ .m2-museum-case{min-height:0;padding:3px}
+ .m2-museum-case:last-child{grid-column:1/-1;width:calc(50% - 5px);min-width:170px}
+ .m2-case-arch{height:143px}
+ .m2-case-title{font-size:13px;min-height:38px;padding:4px 2px}
+ .m2-case-well{min-height:82px;margin-top:15px;padding:4px}
+ .m2-case-contents .m2-museum-card{font-size:10px!important}
+ .m2-case-empty{font-size:9px}
+ .m2-museum-desktop{padding:8px 7px 10px;border-width:6px}
+ .m2-museum-desktop-top{font-size:10px}
+ .m2-museum-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:70px;font-size:12px;padding:4px}
+ .m2-museum-card-art{width:34px;min-width:34px}
+ .m2-museum-card-art .m2-illustration{width:33px;height:36px}
+ .m2-first-room .m2-controls{margin-top:18px}
+ .m2-first-room .m2-button{font-size:17px}
+}
+
+
+/* Acabados de la segunda revisión: lectura, proporciones y drag estable */
+@media(min-width:901px){
+ .m2-museum-title{width:100%;max-width:590px}
+}
+.m2-first-room .m2-museum-card,
+.m2-first-room .m2-museum-card:hover,
+.m2-first-room .m2-museum-card:focus-visible,
+.m2-museum-case .m2-museum-card{
+ transform:none!important;
+ transition:background-color .12s,box-shadow .12s,border-color .12s!important;
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ font-size:clamp(12px,1.03vw,16px);
+ min-height:69px;
+}
+.m2-first-room .m2-museum-card[aria-pressed="true"]{
+ box-shadow:inset 0 0 0 2px #fef1d3,0 0 0 3px #f7cc55,0 0 15px #ffe080!important;
+}
+.m2-first-room .m2-museum-card.m2-tile:hover:not(:disabled){
+ box-shadow:inset 0 0 0 2px #fff4d6,0 0 0 1px #ffe4a8,0 4px 6px #000a;
+}
+.m2-first-room .m2-button:disabled{
+ opacity:1;
+ filter:none;
+ color:#ffe9b3;
+ cursor:not-allowed;
+ background:linear-gradient(165deg,#195b4d,#12433c);
+}
+.m2-first-room .m2-button[data-preview-next]{
+ font-size:12px;
+ border-width:3px;
+ min-height:35px;
+ padding:9px 12px;
+}
+.m2-first-room .m2-feedback{font-size:12px}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-card.m2-tile{font-size:13px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-card.m2-tile{font-size:12px}
+ .m2-first-room .m2-museum-preview{z-index:3}
+}
+
+/* La placa de latón es destino real de clic/teclado aun con vitrina llena. */
+.m2-case-title-action{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:100%;
+ min-height:30px;
+ border:0;
+ border-radius:3px;
+ padding:0 3px;
+ margin:0;
+ font:inherit;
+ line-height:inherit;
+ color:inherit;
+ background:transparent;
+ text-shadow:inherit;
+ cursor:pointer;
+}
+.m2-case-title-action:hover,.m2-case-title-action:focus-visible{
+ color:#331b08;
+ background:#fff2bf66;
+ outline:2px solid #fff5c6;
+ outline-offset:-2px;
+ box-shadow:0 0 11px #ffe09caa;
+}
+
+
+/* Atrezzo pictórico procedente del concepto aprobado. Los paneles
+   interactivos quedan POR ENCIMA: son decoraciones y no hotspots. */
+@media(min-width:901px){
+ .m2-paper.m2-first-room::before,
+ .m2-paper.m2-first-room::after{
+   content:"";
+   display:block;
+   position:absolute;
+   inset:auto;
+   z-index:0;
+   pointer-events:none;
+   top:clamp(110px,8.1vw,136px);
+   width:clamp(105px,10.42vw,174px);
+   height:clamp(560px,43.4vw,725px);
+   opacity:.98;
+   background-repeat:no-repeat;
+   background-size:100% 100%;
+   border:0;
+   box-shadow:none;
+   transform:none;
+ }
+ .m2-paper.m2-first-room::before{
+   left:0;
+   background-image:url('./m2-museo-izquierdo.svg');
+   -webkit-mask-image:linear-gradient(90deg,#000 0 77%,transparent 100%);
+   mask-image:linear-gradient(90deg,#000 0 77%,transparent 100%);
+ }
+ .m2-paper.m2-first-room::after{
+   right:0;
+   top:clamp(98px,7.2vw,121px);
+   width:clamp(102px,10vw,167px);
+   height:clamp(560px,44.3vw,740px);
+   background-image:url('./m2-museo-derecho.svg');
+   -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22% 100%);
+   mask-image:linear-gradient(90deg,transparent 0%,#000 22% 100%);
+ }
+ .m2-museum-title-row,
+ .m2-museum-instructions,
+ .m2-museum-interaction,
+ .m2-first-room .m2-controls{position:relative;z-index:1}
+}
+
+/* M2 · gabinetes de madera y latón — revisión exclusiva del ejercicio 1 */
+.m2-first-room .m2-museum-interaction{gap:18px;--brass:#d7a156;--bright-brass:#ffe5a0}
+.m2-first-room .m2-museum-case{
+ position:relative;isolation:isolate;
+ border:0!important;padding:8px 7px 0!important;
+ border-radius:47% 47% 5px 5px / 49px 49px 5px 5px;
+ outline:1px solid #61371b;
+ background:radial-gradient(ellipse at 50% 5%,#ffe29c4b,transparent 55%),
+ linear-gradient(90deg,#2f180e 0%,#ffe49a 3%,#a66f32 6%,#4a2716 11%,#59301a 85%,#b87832 92%,#ffe5a2 97%,#3e2111 100%);
+ box-shadow:0 0 0 2px #e4b973,0 0 0 4px #523018,0 14px 13px #000b,
+ inset 4px 0 8px #ffe8b73a,inset -4px 0 10px #140a07a8;
+}
+.m2-first-room .m2-museum-case:before{
+ content:"";position:absolute;inset:4px;z-index:3;pointer-events:none;
+ border:2px solid #ecc178;border-bottom:0;
+ border-radius:47% 47% 3px 3px / 48px 48px 3px 3px;
+ box-shadow:inset 0 0 0 2px #55321b,inset 0 0 0 4px #d29a4d,inset 0 12px 16px #fff0b41c;
+}
+.m2-first-room .m2-museum-case:after{
+ content:"";position:absolute;top:7px;left:12px;right:12px;height:40px;z-index:3;
+ border-top:3px solid #ffdc85;border-radius:50% 50% 0 0;pointer-events:none;
+ filter:drop-shadow(0 2px 1px #422512);
+}
+.m2-first-room .m2-case-crown{
+ display:block;position:absolute;top:-24px;left:-3%;right:-3%;height:36px;z-index:7;
+ pointer-events:none;background:url('./m2-vitrine-gilt-crest.svg') center bottom/100% 100% no-repeat;
+ filter:drop-shadow(0 2px 2px #0009) saturate(1.2);
+}
+.m2-first-room .m2-case-arch{
+ border:4px ridge #ce954a;
+ background:radial-gradient(ellipse at 50% 16%,var(--case-glow),var(--case-color));
+ box-shadow:inset 0 0 0 2px #ffedb0a8,inset 0 -15px 24px #07080b9c,0 0 0 1px #422513,0 5px 7px #090504b5;
+}
+.m2-first-room .m2-case-arch:before{
+ content:"";position:absolute;inset:6px 6px 19px;pointer-events:none;z-index:2;
+ border-radius:46% 46% 3px 3px / 45px 45px 3px 3px;
+ background:radial-gradient(ellipse at 50% 0%,#fffae768,transparent 76%),
+ linear-gradient(115deg,#ffffff35 0 9%,transparent 29% 72%,#ffebaa19 86%);
+ mix-blend-mode:screen;
+}
+.m2-first-room .m2-case-scene{
+ top:3px;left:3px;width:calc(100% - 6px);height:calc(100% - 6px);
+ filter:saturate(1.24) contrast(1.09) brightness(1.035);
+}
+.m2-first-room .m2-case-title{
+ position:relative;z-index:5;min-height:47px;margin:0 -12px -14px;padding:4px 11px;
+ border:4px ridge #bd8139;border-radius:10px 10px 6px 6px;
+ background:
+ radial-gradient(circle at 8px 50%,#fae6a1 0 2px,#754318 2.5px 4px,transparent 4.5px),
+ radial-gradient(circle at calc(100% - 8px) 50%,#fae6a1 0 2px,#754318 2.5px 4px,transparent 4.5px),
+ linear-gradient(180deg,#fff8dd,#e7b565 19%,#ffe7aa 47%,#d8a14e 78%,#aa6a2e);
+ box-shadow:0 0 0 1px #59351c,inset 0 0 0 2px #ffebb7,0 4px 6px #170d08bb;
+ text-shadow:0 1px #fff0c9;font-size:clamp(14px,1.22vw,20px);
+}
+.m2-first-room .m2-case-title-action{min-height:37px;font-weight:700}
+.m2-first-room .m2-case-title-action:hover,.m2-first-room .m2-case-title-action:focus-visible{
+ background:#fff5bd69;outline:2px solid #fff8d3;box-shadow:0 0 15px #ffe3a6a8;
+}
+.m2-first-room .m2-case-well{
+ position:relative;z-index:1;margin:18px 5px 2px;padding:9px 7px;min-height:100px;
+ border:3px solid #ab783b;border-radius:3px;
+ background:radial-gradient(ellipse at 50% 115%,var(--case-glow),transparent 70%),
+ linear-gradient(90deg,#090d0e9f,transparent 12% 88%,#080b0ca8),
+ linear-gradient(180deg,#180e10c4,var(--case-color) 125%);
+ box-shadow:inset 0 0 0 2px #ffe3a64e,inset 0 3px 13px #080406bc,
+ inset 0 -8px 15px #ffbe4c3a,0 1px #ffe099a8;
+}
+.m2-first-room .m2-case-well:before{
+ content:"";position:absolute;inset:4px;border:1px dashed #fce5a5c3;
+ pointer-events:none;border-radius:3px;
+}
+.m2-first-room .m2-case-contents{gap:5px}
+.m2-first-room .m2-case-contents .m2-museum-card{
+ min-height:34px!important;padding:5px 5px!important;
+ font:700 clamp(11px,.82vw,13px)/1.18 Georgia,serif!important;
+ border:2px solid #d5ae69!important;color:#352018!important;
+ background:linear-gradient(165deg,#fff8e1,#e8c18d)!important;
+ box-shadow:0 2px 4px #170d08c9,inset 0 0 0 1px #ffefc5!important;
+ text-align:center;
+}
+.m2-first-room .m2-case-empty{
+ margin:32px auto 14px;position:relative;z-index:0;
+ color:#fceab9;font:italic 12px Georgia,serif;opacity:.85;
+ text-shadow:0 1px 4px #000;white-space:normal;
+}
+.m2-first-room .m2-case-target{
+ top:7px;left:7px;right:7px;bottom:7px;width:calc(100% - 14px);
+ height:calc(100% - 14px);background:transparent;border:0;box-shadow:none;
+}
+.m2-first-room .m2-case-target:focus-visible,.m2-first-room .m2-case-target:hover{
+ outline:2px dashed #ffe4ad;outline-offset:-2px;box-shadow:inset 0 0 16px #ffefa049;
+}
+.m2-first-room .m2-case-foot{display:none}
+.m2-first-room .m2-case-foundation{
+ display:block;position:relative;z-index:5;height:25px;margin:7px -11px -6px;
+ border:3px ridge #c18a44;border-radius:3px;
+ background:radial-gradient(circle at 11px 12px,#ffdfa2 0 2px,#855122 2.5px 5px,transparent 5.5px),
+ radial-gradient(circle at calc(100% - 11px) 12px,#ffdfa2 0 2px,#855122 2.5px 5px,transparent 5.5px),
+ linear-gradient(180deg,#ffdfa4 0 2px,#9a5c2c 3px 7px,#4b2717 8px 18px,#c49249 19px 21px,#47291b 23px);
+ box-shadow:0 6px 0 #2e170c,0 9px 9px #0009;
+}
+.m2-first-room .m2-case-lock{
+ display:block;position:absolute;top:2px;left:calc(50% - 16px);
+ width:32px;height:12px;border:1px solid #64401f;border-radius:2px;
+ background:linear-gradient(#ffe1a1,#ad6927);box-shadow:0 0 0 1px #d59f58;
+}
+.m2-first-room .m2-case-lock:after{
+ content:"";display:block;width:4px;height:4px;margin:3px auto;border-radius:50%;
+ background:#744419;box-shadow:0 0 0 1px #ffde9b;
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-crown{height:31px;top:-21px}
+ .m2-first-room .m2-case-title{font-size:16px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case{padding:6px 5px 0!important}
+ .m2-first-room .m2-case-crown{top:-18px;height:29px}
+ .m2-first-room .m2-case-title{font-size:13px;min-height:40px;padding:3px}
+ .m2-first-room .m2-case-title-action{min-height:32px}
+ .m2-first-room .m2-case-well{margin:16px 2px 1px;padding:6px 4px;min-height:84px}
+ .m2-first-room .m2-case-contents .m2-museum-card{font-size:10px!important}
+ .m2-first-room .m2-case-foundation{height:19px;margin:6px -7px -5px}
+ .m2-first-room .m2-case-lock{top:1px;height:10px}
+}
+
+/* M2 · mostrador de nogal pulido, bandeja con moldura y cartelas de pergamino */
+.m2-first-room .m2-museum-desktop{
+ position:relative;isolation:isolate;
+ padding:14px 17px 8px;margin:0 4px;
+ border:9px ridge #c9924b;border-radius:21px 21px 7px 7px;
+ background:
+ radial-gradient(ellipse at 20% -15%,#ffe5a978,transparent 46%),
+ radial-gradient(ellipse at 72% 110%,#edb36d61,transparent 65%),
+ repeating-linear-gradient(1.9deg,transparent 0 7px,#e5a35c26 8px 9px,transparent 12px 22px),
+ repeating-linear-gradient(95deg,transparent 0 12px,#24100728 14px 16px,transparent 19px 32px),
+ linear-gradient(160deg,#a76536 0%,#5b2d1b 35%,#704021 69%,#bb7847);
+ box-shadow:0 0 0 2px #3e2013,0 0 0 5px #bf8c4c,0 0 0 7px #432217,
+ 0 12px 0 #2f150b,0 18px 15px #000b,
+ inset 0 0 0 2px #ffe5a3b8,inset 0 12px 12px #f8cb7e6f;
+}
+.m2-first-room .m2-museum-desktop:before{
+ content:"";position:absolute;inset:5px 10px 36px;z-index:-1;pointer-events:none;
+ border:4px double #f2c77a;border-radius:14px 14px 5px 5px;
+ background:radial-gradient(ellipse at 30% 0%,#ffe9b36b,transparent 60%),
+ repeating-linear-gradient(6deg,transparent 0 9px,#f9c47721 11px 12px,#25100612 15px 18px),
+ linear-gradient(115deg,#b57e49,#704021 17%,#7d4525 48%,#955728 75%,#b77946);
+ box-shadow:0 0 0 2px #3b1d11,inset 0 0 0 2px #543015,inset 0 6px 9px #2b100b7f;
+}
+.m2-first-room .m2-desk-left-trim,.m2-first-room .m2-desk-right-trim{
+ position:absolute;top:0;bottom:0;width:17px;z-index:2;pointer-events:none;
+ background:linear-gradient(90deg,#603019,#f8d083 29%,#a76b30 50%,#392316 100%);
+ box-shadow:0 0 0 1px #6a3e20;
+}
+.m2-first-room .m2-desk-left-trim{
+ left:0;clip-path:polygon(65% 0,100% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-desk-right-trim{
+ right:0;transform:scaleX(-1);
+ clip-path:polygon(65% 0,100% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-museum-desktop-top{
+ position:relative;z-index:3;min-height:14px;margin:0 5px 8px;
+ color:#ffe5b3;text-shadow:0 1px 4px #1a0b08;
+ font:700 12px/1.3 Georgia,serif;
+}
+.m2-first-room .m2-museum-cards{
+ position:relative;z-index:3;display:grid;
+ grid-template-columns:repeat(6,minmax(0,1fr));
+ gap:9px;padding:3px 4px 6px;border-radius:8px;
+ background:linear-gradient(105deg,#ffd49418,#fbd08a24 40%,transparent 80%),
+ repeating-linear-gradient(1deg,transparent 0 12px,#dfab6b1b 14px 15px,transparent 19px 25px);
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ position:relative;min-height:69px;
+ padding:7px 8px!important;
+ border:4px ridge #bf8745!important;
+ border-radius:10px;
+ background:radial-gradient(ellipse at 31% 0%,#fffef5,transparent 64%),
+ linear-gradient(175deg,#fff9e4,#f2d4a4 80%,#e6bc82)!important;
+ color:#381f14;
+ font:700 clamp(12px,1vw,16px)/1.17 Georgia,serif;
+ text-shadow:0 1px #fffbea;
+ box-shadow:0 0 0 1px #5c361e,0 3px 0 #4e270f,0 7px 8px #1c09078f,
+ inset 0 0 0 2px #fff3d6,inset 0 5px 6px #fffae5!important;
+}
+.m2-first-room .m2-museum-card.m2-tile:before{
+ content:"";position:absolute;inset:3px;pointer-events:none;
+ border:1px solid #bf915b;border-radius:5px;
+ box-shadow:inset 0 0 0 1px #fff8e8;
+}
+.m2-first-room .m2-museum-card-art{
+ min-width:42px;width:42px;filter:drop-shadow(0 2px 2px #64472861);
+}
+.m2-first-room .m2-museum-card-art .m2-illustration{width:41px;height:44px}
+.m2-first-room .m2-museum-card-copy{position:relative;z-index:1}
+.m2-first-room .m2-museum-card:hover:not(:disabled),.m2-first-room .m2-museum-card:focus-visible{
+ border-color:#f8d17c!important;
+ box-shadow:0 0 0 2px #ffe2a4,0 0 16px #ffe19a7d,0 5px 5px #000a!important;
+}
+.m2-first-room .m2-museum-card[aria-pressed="true"]{
+ border-color:#fff0ad!important;
+ box-shadow:0 0 0 3px #ffce4e,0 0 17px #ffd662,0 5px 7px #000a!important;
+}
+.m2-first-room .m2-desk-front{
+ display:block;position:relative;z-index:3;height:24px;
+ margin:10px -13px -12px;
+ border:3px ridge #cb9954;border-radius:4px;
+ background:linear-gradient(180deg,#f5cf88 0 2px,#925026 3px 9px,
+ #3b1b10 10px 14px,#a46631 15px 20px,#f1c276 21px 23px);
+ box-shadow:0 6px 0 #2c160c,0 8px 8px #0009,inset 0 0 0 1px #e9b775;
+}
+.m2-first-room .m2-desk-front:before,.m2-first-room .m2-desk-front:after{
+ content:"";position:absolute;top:5px;width:33%;height:8px;
+ pointer-events:none;border-top:1px solid #f3c882;border-bottom:1px solid #442211;opacity:.8;
+}
+.m2-first-room .m2-desk-front:before{left:5%}
+.m2-first-room .m2-desk-front:after{right:5%}
+.m2-first-room .m2-desk-cabinet{
+ position:absolute;top:3px;left:calc(50% - 30px);
+ width:60px;height:12px;border:2px ridge #ab7540;border-radius:2px;
+ background:linear-gradient(#ffdf9a,#ab6a30);box-shadow:0 0 0 1px #4e301c;
+}
+.m2-first-room .m2-desk-cabinet:after{
+ content:"";display:block;width:6px;height:6px;margin:1px auto;border-radius:50%;
+ background:#6b411c;box-shadow:inset 0 1px 2px #160b06,0 0 0 2px #f7d78d;
+}
+.m2-first-room .m2-museum-desktop:after{display:none}
+.m2-first-room .m2-controls{
+ margin-top:16px;min-height:73px;padding:14px 15px 12px;
+ border-top:5px ridge #cb9a5b;border-bottom:4px ridge #965f34;border-radius:4px;
+ background:radial-gradient(ellipse at 50% 0%,#ffca8564,transparent 68%),
+ repeating-linear-gradient(4deg,#8a472b17 0 9px,#edc08521 11px 12px,#31160a14 14px 21px),
+ linear-gradient(160deg,#aa6b3f,#4b2418 28%,#704025 74%,#a7683f);
+ box-shadow:inset 0 2px 0 #f9d28f,0 5px 13px #0009;
+}
+.m2-first-room .m2-button:not(.secondary){
+ background:linear-gradient(160deg,#247862,#0b5346 38%,#063b33 77%,#082c26);
+ border:5px ridge #e6b865;border-radius:11px;color:#fff5cf;
+ text-shadow:0 2px #15352a,0 0 8px #ffdb9678;
+ box-shadow:0 0 0 1px #59341b,inset 0 0 0 2px #448c76,0 5px 0 #25130c,0 9px 12px #0009;
+}
+.m2-first-room .m2-button.secondary{
+ border:3px ridge #d6a86d;color:#392414;
+ background:linear-gradient(170deg,#fff6dd,#e7c592 78%,#c0945a);
+}
+.m2-first-room .m2-feedback{color:#fff0d0;text-shadow:0 2px 2px #1e1009}
+@media(max-width:1250px){
+ .m2-first-room .m2-museum-cards{gap:6px}
+ .m2-first-room .m2-museum-card.m2-tile{padding:6px 5px!important;font-size:clamp(11px,1vw,14px)}
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .m2-first-room .m2-controls{width:100%;padding:12px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-desktop{margin:0;padding:11px 9px 6px;border-width:6px}
+ .m2-first-room .m2-museum-desktop-top{font-size:10px}
+ .m2-first-room .m2-museum-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:2px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:73px;font-size:12px;padding:5px 3px!important}
+ .m2-first-room .m2-museum-card-art{min-width:32px;width:32px}
+ .m2-first-room .m2-museum-card-art .m2-illustration{width:31px;height:35px}
+ .m2-first-room .m2-desk-front{margin:9px -8px -8px;height:20px}
+ .m2-first-room .m2-controls{margin-top:14px;border-top-width:3px;border-bottom-width:3px}
+}
+
+/* Legibilidad del rótulo largo y equilibrio de las dos filas de tarjetas. */
+.m2-first-room .m2-case-title-action{
+ min-width:0;max-width:100%;white-space:normal;
+ overflow-wrap:anywhere;word-break:normal;text-wrap:balance;
+}
+@media(min-width:901px){
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)){
+  grid-template-columns:repeat(30,minmax(0,1fr));
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)) > .m2-museum-card:nth-child(-n+6){
+  grid-column:span 5;
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(11)) > .m2-museum-card:nth-child(n+7){
+  grid-column:span 6;
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(10)):not(:has(> .m2-museum-card:nth-child(11))){
+  grid-template-columns:repeat(30,minmax(0,1fr));
+ }
+ .m2-first-room .m2-museum-cards:has(> .m2-museum-card:nth-child(10)):not(:has(> .m2-museum-card:nth-child(11))) > .m2-museum-card{
+  grid-column:span 6;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-ideological .m2-case-title{min-height:51px}
+ .m2-first-room .m2-museum-cards > .m2-museum-card:last-child:nth-child(odd){
+  grid-column:1/-1;width:calc(50% - 3px);min-width:150px;justify-self:center;
+ }
+}
+
+
+/* REVISIÓN 3 · continuidad con el concepto museístico aprobado.
+   Cada escena se muestra COMPLETA, con iluminación propia y enmarcado real;
+   la madera inferior envuelve los controles, no un panel independiente. */
+.m2-first-room .m2-case-scene{
+  object-fit:fill;
+  object-position:center center;
+  filter:saturate(1.16) contrast(1.055) brightness(1.06);
+}
+.m2-first-room .m2-case-arch{
+  isolation:isolate;
+  overflow:visible;
+}
+.m2-first-room .m2-case-spot{
+  position:absolute;
+  z-index:4;
+  pointer-events:none;
+  top:6px;
+  left:calc(50% - 10px);
+  width:20px;
+  height:10px;
+  border:2px solid #ad6d2f;
+  border-radius:0 0 9px 9px;
+  background:radial-gradient(ellipse at 50% 0%,#fff9d8,#f5b74a 57%,#713a19);
+  box-shadow:0 0 0 1px #f8cc6b,0 3px 6px #fff1b8d1,0 0 15px var(--case-glow);
+}
+.m2-first-room .m2-case-spot:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:5px;
+  left:-55px;
+  width:125px;
+  height:93px;
+  background:radial-gradient(ellipse at 50% 0%,#fff7cf8f 0%,#fff4a622 38%,transparent 77%);
+  clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.m2-first-room .m2-case-spot:after{
+  content:"";
+  position:absolute;
+  top:0;left:6px;
+  width:4px;height:4px;
+  background:#fffef1;
+  border-radius:50%;
+  box-shadow:0 0 11px 6px #ffe0a8,0 0 20px 7px var(--case-glow);
+}
+.m2-first-room .m2-museum-case{
+  filter:drop-shadow(0 2px 3px #1409097d);
+}
+.m2-first-room .m2-case-well{
+  background:
+    radial-gradient(ellipse 60% 24% at 50% 104%,#fff5ca82,transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 24%,var(--case-color),#10120ecc 100%),
+    linear-gradient(90deg,#070909c2,transparent 13% 87%,#080909b3);
+}
+.m2-first-room .m2-case-title{
+  text-shadow:0 1px 0 #fff8db,0 0 3px #f4c87069;
+}
+.m2-first-room .m2-case-contents .m2-museum-card{
+  box-shadow:0 3px 4px #0008,inset 0 0 0 1px #fff0cd!important;
+}
+.m2-first-room .m2-case-contents .m2-museum-card[aria-pressed="true"]{
+  box-shadow:0 0 0 2px #ffe799,0 0 13px #ffd96f,0 4px 4px #0009!important;
+}
+/* Bandeja con la luz cálida reflejada y aparente inclinación:
+   el trapecio decorativo no transforma los targets de arrastre. */
+.m2-first-room .m2-museum-desktop{
+  background:
+    linear-gradient(180deg,#ffc17d52 0%,transparent 26%),
+    radial-gradient(ellipse at 16% 2%,#ffe3a26d,transparent 39%),
+    radial-gradient(ellipse at 86% 83%,#ffc87433,transparent 52%),
+    repeating-linear-gradient(0deg,#f9c47c0d 0 2px,transparent 3px 9px),
+    repeating-linear-gradient(96deg,transparent 0 24px,#2e130b21 25px 27px,transparent 30px 37px),
+    linear-gradient(170deg,#b47843,#734122 24%,#68391d 64%,#a36234 100%);
+}
+.m2-first-room .m2-museum-desktop:before{
+  inset:5px 11px 28px;
+  border-radius:12px 12px 3px 3px;
+  background:
+    linear-gradient(175deg,#f8deaf66 0%,transparent 26%),
+    linear-gradient(0deg,#fbdba42d,transparent 58%),
+    repeating-linear-gradient(2deg,#dc9f610a 0 3px,transparent 4px 10px),
+    linear-gradient(150deg,#a9703b,#7b4425 50%,#995a30);
+  box-shadow:
+    0 0 0 2px #402410,
+    inset 0 0 0 2px #ffe8a18c,
+    inset 0 5px 10px #36170c8f;
+  clip-path:polygon(1.2% 0,98.8% 0,100% 100%,0 100%);
+}
+.m2-first-room .m2-museum-desktop-top{
+  color:#ffe9bf;
+  letter-spacing:.09em;
+}
+.m2-first-room .m2-desk-front{
+  height:26px;
+  background:
+    radial-gradient(ellipse at 50% 0%,#ffe09b61,transparent 62%),
+    linear-gradient(180deg,#f7d18b 0 2px,#a46a33 3px 8px,#442110 9px 16px,#9d5a2c 17px 21px,#f5c578 22px);
+}
+@media(min-width:901px){
+ .m2-first-room .m2-controls{
+   position:relative;
+   width:100%;
+   max-width:none;
+   margin:13px auto 0;
+   grid-template-columns:minmax(150px,1fr) auto minmax(150px,1fr);
+   padding:11px max(22px,calc((100vw - 1360px)/2)) 14px;
+   border-left:0;
+   border-right:0;
+   border-radius:0;
+   box-shadow:0 -5px 0 #4b250f,0 7px 10px #0008,
+       inset 0 3px 0 #f4c888;
+ }
+ .m2-first-room .m2-controls:before{
+   content:"";
+   position:absolute;
+   pointer-events:none;
+   left:0;right:0;bottom:-14px;
+   height:17px;
+   background:linear-gradient(#7d4728 0 4px,#2d190d 5px 12px,#c08c4a 14px 17px);
+   border-bottom:2px solid #f0c477;
+ }
+ .m2-first-room .m2-controls:after{
+   color:#ffe0a5;
+   grid-column:3;
+ }
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-spot{top:6px}
+ .m2-first-room .m2-case-spot:before{height:76px}
+ .m2-first-room .m2-controls{margin-top:17px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-spot{
+   top:3px;width:16px;height:9px;left:calc(50% - 8px);
+ }
+ .m2-first-room .m2-case-spot:before{
+   left:-38px;width:92px;height:66px;
+ }
+ .m2-first-room .m2-case-spot:after{left:4px}
+}
+
+
+/* Cantoneras forjadas y perspectiva suave, comparadas con la lámina aprobada. */
+.m2-first-room .m2-museum-title{
+  overflow:visible;
+  border-radius:9px 9px 18px 18px;
+  box-shadow:0 0 0 2px #5f2b19,0 6px 0 #412417,0 11px 16px #000b,
+    inset 0 0 0 2px #f7ca82a6,inset 0 4px 10px #efb37132;
+}
+.m2-first-room .m2-museum-title:before,
+.m2-first-room .m2-museum-title:after{
+  content:"";
+  position:absolute;
+  z-index:3;
+  top:-12px;
+  width:64px;height:57px;
+  background:url('./m2-title-brass-corner.svg') center/contain no-repeat;
+  filter:drop-shadow(0 2px 3px #190b09bd);
+  pointer-events:none;
+}
+.m2-first-room .m2-museum-title:before{left:-13px}
+.m2-first-room .m2-museum-title:after{right:-13px;transform:scaleX(-1)}
+.m2-first-room .m2-case-spot:before{
+  background:radial-gradient(ellipse at 50% 0%,#fff7cf40 0%,#ffedb21c 39%,transparent 80%);
+  opacity:.82;
+}
+.m2-first-room .m2-case-spot:after{
+  box-shadow:0 0 7px 3px #ffe7ad,0 0 13px 4px var(--case-glow);
+}
+@media(min-width:901px){
+ .m2-first-room .m2-museum-desktop{
+   clip-path:polygon(1.8% 0,98.2% 0,100% 91%,99% 100%,1% 100%,0 91%);
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-title:before,
+ .m2-first-room .m2-museum-title:after{
+   top:-8px;width:37px;height:34px;
+ }
+ .m2-first-room .m2-museum-title:before{left:-7px}
+ .m2-first-room .m2-museum-title:after{right:-7px}
+}
+
+
+/* Tercera comparación con la lámina aprobada: piedras de época,
+   cartelas ornamentales y escenas con personas y objetos históricos.
+   Solo modifica el ejercicio 1. */
+@media(min-width:901px){
+ .m2-paper.m2-first-room{
+  background:
+   url('./m2-ref-vaults.svg') center top/100% 100% no-repeat,
+   linear-gradient(180deg,#061c1c4a 0%,#0e2f2c14 46%,#091b1b1c 100%),
+   url('./m2-room-clean.svg') center top/100% 100% no-repeat,
+   #10292b;
+ }
+ .m2-first-room .m2-museum-title{max-width:640px}
+ .m2-first-room .m2-museum-instructions{
+  width:min(1100px,calc(100% - 225px));
+  transform:translateX(25px);
+ }
+ .m2-first-room .m2-museum-interaction{
+  max-width:1325px;
+  width:calc(100% - clamp(105px,15vw,270px));
+  gap:12px;
+ }
+ .m2-first-room .m2-controls{padding-top:8px;padding-bottom:9px;margin-top:9px}
+ .m2-first-room .m2-museum-desktop{padding-top:10px;padding-bottom:5px}
+ .m2-first-room .m2-museum-cards{gap:7px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:61px!important}
+}
+.m2-first-room .m2-case-arch{height:clamp(150px,13.1vw,191px)}
+.m2-first-room .m2-case-scene{
+ /* Mantener completas las pinturas, sin recortar personajes ni objetos. */
+ object-fit:fill;
+ object-position:center center;
+ filter:saturate(1.19) contrast(1.1) brightness(1.02);
+}
+.m2-first-room .m2-case-details{
+ position:absolute;inset:0;z-index:3;
+ display:block;width:100%;height:100%;
+ overflow:visible;
+ pointer-events:none;
+ opacity:.94;
+ filter:drop-shadow(0 2px 2px #170a0b8a);
+}
+.m2-first-room .m2-case-title{
+ margin:-1px -14px -17px;
+ padding:1px 11px;
+ min-height:48px;
+ border:0;
+ border-radius:0;
+ background:url('./m2-ref-ornate-plaque.svg') center/100% 100% no-repeat;
+ box-shadow:0 5px 5px #14090599;
+ text-shadow:0 1px #fff2cb;
+}
+.m2-first-room .m2-case-title-action{
+ min-height:44px;
+ line-height:1.12;
+ text-shadow:0 1px #fff6dd;
+}
+.m2-first-room .m2-case-well{margin-top:20px}
+.m2-first-room .m2-museum-desktop{
+ box-shadow:
+  0 0 0 2px #432513,0 0 0 5px #d1a05e,
+  0 10px 0 #452516,0 14px 11px #000b,
+  inset 0 0 0 2px #fff2bdc4,inset 0 9px 15px #f9c17742;
+}
+.m2-first-room .m2-museum-card.m2-tile{
+ border-width:3px!important;
+ box-shadow:0 0 0 1px #65411f,0 3px 0 #4d270e,0 6px 8px #17070678,
+ inset 0 0 0 2px #fff8e2!important;
+}
+@media(min-width:901px) and (max-width:1190px){
+ .m2-first-room .m2-museum-interaction{width:calc(100% - 80px)}
+ .m2-first-room .m2-case-title{margin-left:-10px;margin-right:-10px}
+ .m2-first-room .m2-case-title-action{font-size:13px}
+ .m2-first-room .m2-museum-instructions{width:calc(100% - 130px);transform:none}
+}
+@media(max-width:900px){
+ .m2-first-room .m2-case-details{filter:none;opacity:.93}
+ .m2-first-room .m2-case-title{
+  margin:-1px -11px -16px;
+  min-height:43px;padding:1px 8px;
+ }
+ .m2-first-room .m2-case-title-action{min-height:39px}
+ .m2-first-room .m2-case-arch{height:160px}
+ .m2-first-room .m2-case-well{margin-top:18px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-case-arch{height:143px}
+ .m2-first-room .m2-case-title{
+  min-height:40px;margin:-1px -8px -13px;padding:2px 5px;
+ }
+ .m2-first-room .m2-case-title-action{min-height:37px;font-size:12px}
+ .m2-first-room .m2-case-details{opacity:.9}
+ .m2-first-room .m2-case-well{margin-top:17px}
+ .m2-first-room .m2-museum-card.m2-tile{min-height:70px!important}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   CARTELAS / AGIRIAK — miniaturas históricas de gabinete (revisión visual)
+   Las 11 fichas conservan su data-card, la selección y el drag & drop.
+   Sin codificar en el color la categoría correcta de cada respuesta.
+   ═══════════════════════════════════════════════════════════════════════ */
+.m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile{
+ display:flex;
+ align-items:center;
+ justify-content:flex-start;
+ gap:5px;
+ position:relative;
+ min-height:85px!important;
+ padding:6px 8px 6px 5px!important;
+ border:3px ridge #ca8e47!important;
+ border-radius:12px 10px 12px 10px;
+ color:#352116!important;
+ text-align:left;
+ text-shadow:0 1px 0 #fffaf0;
+ background:
+   radial-gradient(ellipse at 20% 0%,#fffdf1 0%,transparent 65%),
+   radial-gradient(ellipse at 95% 100%,#b67f382a 0%,transparent 55%),
+   repeating-linear-gradient(-23deg,transparent 0 7px,#90612d08 8px 9px,transparent 11px 17px),
+   linear-gradient(145deg,#fff3d5,#efd09c 66%,#deb174)!important;
+ box-shadow:
+   0 0 0 1px #58371e,
+   0 3px 0 #704321,
+   0 6px 8px #120b08a8,
+   inset 0 0 0 2px #ffe7b0,
+   inset 0 5px 8px #fff9e59c!important;
+ font-size:clamp(12px,.89vw,15px)!important;
+ line-height:1.14;
+ cursor:grab;
+ transition:filter .16s,border-color .16s,box-shadow .16s!important;
+}
+.m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile:before{
+ content:"";
+ position:absolute;inset:4px;pointer-events:none;
+ z-index:0;
+ border:1px solid #b38b52;
+ border-radius:8px;
+ box-shadow:inset 0 0 0 1px #fff4d2;
+}
+.m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile:after{
+ content:"";
+ position:absolute;top:7px;bottom:7px;
+ right:5px;width:2px;pointer-events:none;
+ border-radius:2px;
+ background:linear-gradient(#fffcde,#b7854e 45%,#ffefbf);
+ opacity:.6;
+}
+.m2-first-room .m2-archive-card .m2-museum-card-art{
+ width:clamp(55px,4.5vw,67px);
+ height:clamp(55px,4.5vw,67px);
+ min-width:clamp(55px,4.5vw,67px);
+ flex:none;
+ position:relative;
+ z-index:1;
+ display:grid;place-items:center;
+ padding:0;
+ border:0;
+ border-radius:50%;
+ background:transparent;
+ filter:drop-shadow(0 2px 2px #36201874);
+}
+.m2-first-room .m2-archive-card .m2-card-miniature{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:contain;
+ pointer-events:none;
+ user-select:none;
+}
+.m2-first-room .m2-archive-card .m2-card-copy-group{
+ flex:1;min-width:0;
+ position:relative;z-index:2;
+ display:flex;flex-direction:column;
+ align-items:flex-start;
+ justify-content:center;
+ gap:5px;
+ padding:2px 3px 2px 1px;
+}
+.m2-first-room .m2-archive-card .m2-museum-card-copy{
+ display:block;flex:none;
+ font:700 clamp(12px,.9vw,15px)/1.13 Georgia,"Times New Roman",serif;
+ text-align:left;
+ color:#332015;
+ overflow-wrap:break-word;
+ hyphens:auto;
+ text-shadow:0 1px 0 #fffaf0;
+}
+.m2-first-room .m2-archive-card .m2-card-archive-mark{
+ display:block;
+ max-width:100%;
+ padding-top:3px;
+ border-top:1px solid #bc935c9c;
+ font:700 9px/1.1 Georgia,"Times New Roman",serif;
+ letter-spacing:.15em;
+ color:#795935;
+ white-space:nowrap;
+}
+.m2-first-room .m2-archive-card .m2-card-foil{
+ position:absolute;top:4px;right:6px;z-index:3;
+ width:17px;height:17px;
+ display:grid;place-items:center;
+ color:#f5d997;
+ font:700 12px/1 Georgia,serif;
+ background:radial-gradient(circle at 35% 20%,#ba6836,#74321e 65%,#401e15);
+ border:1px solid #d6a257;
+ border-radius:50%;
+ box-shadow:0 0 0 1px #fff2c3,0 1px 2px #4b220e70;
+ pointer-events:none;
+ opacity:.82;
+}
+.m2-first-room .m2-archive-card:hover:not(:disabled),
+.m2-first-room .m2-archive-card:focus-visible{
+ filter:brightness(1.035) saturate(1.1);
+ border-color:#ffe0a0!important;
+ background:linear-gradient(140deg,#fffbea,#f6d7a2)!important;
+ box-shadow:
+   0 0 0 2px #f8c873,
+   0 0 13px #ffdfa47d,
+   0 4px 8px #0009,
+   inset 0 0 0 2px #fff8e7!important;
+}
+.m2-first-room .m2-archive-card[aria-pressed="true"]{
+ border-color:#fff1b5!important;
+ background:linear-gradient(145deg,#fffbe7,#f8da9c)!important;
+ box-shadow:
+   0 0 0 3px #f6c851,
+   0 0 0 5px #a36a2f,
+   0 0 19px #ffe083c9,
+   0 5px 7px #000a,
+   inset 0 0 0 2px #fffaf0!important;
+}
+.m2-first-room .m2-archive-card[aria-pressed="true"] .m2-card-foil{
+ color:#fff8cb;
+ background:radial-gradient(circle at 30% 17%,#ffdd67,#bc7317 74%,#6d3d13);
+ border-color:#ffecb0;
+ box-shadow:0 0 0 1px #ffe09b,0 0 12px #ffce6f;
+ opacity:1;
+}
+.m2-first-room .m2-archive-card[aria-pressed="true"] .m2-card-miniature{
+ filter:drop-shadow(0 0 4px #f5bb5ea1);
+}
+.m2-first-room .m2-archive-card:active{cursor:grabbing}
+.m2-first-room .m2-archive-card:focus-visible{
+ outline:3px solid #fff3c4!important;
+ outline-offset:3px;
+}
+.m2-first-room .m2-museum-card .m2-museum-card-art *{pointer-events:none}
+
+/* En la vitrina, las mismas fichas se convierten en etiquetas de catálogo
+   compactas, con miniatura visible; el compartimento crece sin cortar nada. */
+.m2-first-room .m2-museum-case .m2-archive-card.m2-tile,
+.m2-first-room .m2-case-contents .m2-archive-card.m2-tile{
+ width:100%;
+ min-height:45px!important;
+ padding:3px 5px 3px 2px!important;
+ gap:4px;
+ border:2px ridge #bb8e52!important;
+ border-radius:6px!important;
+ color:#382419!important;
+ background:linear-gradient(155deg,#fff5d9,#e9c48e)!important;
+ box-shadow:0 2px 4px #0008,inset 0 0 0 1px #fff6d7!important;
+ text-align:left;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art,
+.m2-first-room .m2-case-contents .m2-archive-card .m2-museum-card-art{
+ display:grid;
+ width:30px;min-width:30px;height:30px;
+ filter:drop-shadow(0 1px 1px #301b1573);
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-copy-group{
+ padding:0;gap:0;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{
+ font:700 11px/1.13 Georgia,serif!important;
+ text-align:left;
+ color:#342017;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-archive-mark,
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-foil{display:none}
+.m2-first-room .m2-museum-case .m2-archive-card[aria-pressed="true"]{
+ border-color:#ffe5a6!important;
+ box-shadow:0 0 0 2px #f7c352,0 0 13px #ffdb83,0 2px 4px #0009!important;
+}
+@media(min-width:901px){
+ .m2-first-room .m2-museum-desktop .m2-museum-cards{gap:8px}
+ .m2-first-room .m2-museum-desktop{padding-top:9px;padding-bottom:6px}
+ .m2-first-room .m2-museum-desktop-top{margin-bottom:5px}
+}
+@media(max-width:1240px){
+ .m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile{
+  gap:3px;padding:4px!important;
+  min-height:80px!important;
+ }
+ .m2-first-room .m2-archive-card .m2-museum-card-art{
+  width:47px;min-width:47px;height:47px;
+ }
+ .m2-first-room .m2-archive-card .m2-museum-card-copy{font-size:12px}
+ .m2-first-room .m2-archive-card .m2-card-archive-mark{font-size:8px}
+ .m2-first-room .m2-archive-card .m2-card-foil{width:13px;height:13px;font-size:10px}
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-desktop .m2-museum-cards{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile{min-height:79px!important}
+ .m2-first-room .m2-archive-card .m2-museum-card-art{width:53px;min-width:53px;height:53px}
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-desktop .m2-museum-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile{
+   min-height:84px!important;
+   gap:4px;padding:4px 5px 4px 2px!important;
+ }
+ .m2-first-room .m2-archive-card .m2-museum-card-art{
+  width:44px;min-width:44px;height:44px;
+ }
+ .m2-first-room .m2-archive-card .m2-museum-card-copy{font-size:11.5px}
+ .m2-first-room .m2-archive-card .m2-card-archive-mark{font-size:7px;letter-spacing:.1em}
+ .m2-first-room .m2-archive-card .m2-card-foil{top:3px;right:3px}
+ .m2-first-room .m2-museum-case .m2-archive-card.m2-tile{
+  min-height:42px!important;padding:3px!important;
+ }
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{width:25px;min-width:25px;height:25px}
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{font-size:10.5px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-first-room .m2-archive-card{transition:none!important}
+}
+
+
+/* ═══ M2 E1 · cartelas completas en vitrinas (sin recortes) ═══
+   Un volumen de tarjetas variable nunca debe superar el fondo, quedarse
+   detrás de los herrajes ni forzar la anchura del resto de los muebles.
+   No afecta a ninguna otra pantalla. */
+.m2-first-room .m2-museum-cabinet-wall{
+ align-items:stretch;
+ grid-auto-rows:minmax(min-content,auto);
+}
+.m2-first-room .m2-museum-case{
+ min-width:0;
+ height:auto;
+ max-height:none;
+ overflow:visible;
+ align-self:stretch;
+}
+.m2-first-room .m2-museum-case .m2-case-well{
+ box-sizing:border-box;
+ display:block;
+ min-width:0;
+ width:auto;
+ height:auto!important;
+ min-height:100px;
+ max-height:none!important;
+ overflow:visible!important;
+ padding:9px 7px 12px;
+}
+.m2-first-room .m2-museum-case .m2-case-contents{
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ grid-auto-flow:row;
+ grid-auto-rows:minmax(min-content,auto);
+ align-content:start;
+ align-items:stretch;
+ gap:5px;
+ width:100%;
+ min-width:0;
+ height:auto!important;
+ max-height:none!important;
+ overflow:visible!important;
+ position:relative;
+ z-index:2;
+}
+.m2-first-room .m2-museum-case .m2-case-contents .m2-archive-card.m2-tile{
+ box-sizing:border-box;
+ position:relative;
+ width:100%;
+ max-width:100%;
+ min-width:0;
+ height:auto!important;
+ min-height:45px!important;
+ overflow:visible!important;
+ display:flex!important;
+ flex-direction:row;
+ flex-wrap:nowrap;
+ align-items:center;
+ justify-content:flex-start;
+ gap:4px;
+ padding:4px 5px 4px 3px!important;
+ border-radius:6px!important;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+ box-sizing:border-box;
+ flex:0 0 28px;
+ width:28px;
+ min-width:28px;
+ height:28px;
+ display:grid!important;
+ place-items:center;
+ padding:0;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-miniature{
+ display:block;
+ width:100%;
+ height:100%;
+ max-width:100%;
+ object-fit:contain;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-card-copy-group{
+ display:flex;
+ flex:1 1 auto;
+ min-width:0;
+ width:auto;
+ max-width:100%;
+ height:auto;
+ padding:0;
+ overflow:visible;
+ align-items:flex-start;
+}
+.m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{
+ display:block;
+ width:100%;
+ min-width:0;
+ max-width:100%;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
+ word-break:normal;
+ hyphens:auto;
+ line-height:1.22!important;
+ text-align:left;
+ text-overflow:clip;
+ overflow:visible;
+}
+.m2-first-room .m2-museum-case .m2-case-foundation{
+ position:relative;
+ margin-top:9px;
+}
+/* Ajustes de la miniatura a paneles estrechos, sin ocultarla. */
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case .m2-case-well{padding:8px 5px 12px}
+ .m2-first-room .m2-museum-case .m2-case-contents{gap:5px}
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+  flex-basis:26px;width:26px;min-width:26px;height:26px;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case .m2-case-well{
+  min-height:84px;
+  padding:7px 4px 10px;
+ }
+ .m2-first-room .m2-museum-case .m2-case-contents{gap:4px}
+ .m2-first-room .m2-museum-case .m2-case-contents .m2-archive-card.m2-tile{
+  min-height:43px!important;
+  padding:4px 3px!important;
+  gap:3px;
+ }
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-art{
+  flex-basis:24px;width:24px;min-width:24px;height:24px;
+ }
+ .m2-first-room .m2-museum-case .m2-archive-card .m2-museum-card-copy{
+  font-size:clamp(10px,2.65vw,11px)!important;
+  line-height:1.22!important;
+ }
+}
+
+
+/* M2 E1 · Zona de arrastre permanente: ninguna cartela puede taparla.
+   Anteriormente el target se extendía por debajo del montón de tarjetas;
+   se conserva ahora como una bandeja de recepción visible SOBRE las tarjetas.
+   Las respuestas, el aspecto general del museo y el resto de juegos no cambian. */
+.m2-first-room .m2-museum-case .m2-case-well{
+ display:flex;
+ flex-direction:column;
+ align-items:stretch;
+ justify-content:flex-start;
+ gap:0;
+}
+.m2-first-room .m2-museum-case .m2-case-target{
+ box-sizing:border-box;
+ display:flex!important;
+ position:relative!important;
+ z-index:4!important;
+ inset:auto!important;
+ top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+ flex:0 0 auto;
+ order:0;
+ width:100%!important;
+ min-width:0;
+ height:29px!important;
+ min-height:29px!important;
+ max-height:none;
+ margin:0 0 7px;
+ padding:2px 4px;
+ border:1px dashed #fbe1a1b3!important;
+ border-radius:5px;
+ background:linear-gradient(180deg,#f9dea81c,#140b0a17)!important;
+ color:#fbe1a1!important;
+ opacity:1!important;
+ box-shadow:inset 0 0 0 1px #fef2b224,inset 0 2px 5px #190e0d6b!important;
+ font:700 16px/1 Georgia,serif;
+ text-shadow:0 1px 3px #130a06;
+ cursor:pointer;
+ pointer-events:auto!important;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+}
+.m2-first-room .m2-museum-case .m2-case-target:before{
+ content:"HEMEN KOKATU";
+ display:inline-block;
+ position:static;
+ inset:auto;
+ width:auto;height:auto;
+ font:700 clamp(8px,.58vw,10px)/1 Georgia,serif;
+ letter-spacing:.09em;
+ color:#fbe1ab;
+ text-shadow:0 1px 2px #140b07;
+ opacity:.9;
+}
+.m2-first-room .m2-museum-case .m2-case-target:hover,
+.m2-first-room .m2-museum-case .m2-case-target:focus-visible{
+ background:linear-gradient(180deg,#eecb724d,#eebc4338)!important;
+ border:1px solid #ffe3a7!important;
+ color:#fff6d2!important;
+ opacity:1!important;
+ box-shadow:inset 0 0 0 1px #fff1bc8f,0 0 9px #ffde9b6b!important;
+ outline:2px solid #ffe7b0;
+ outline-offset:1px;
+}
+.m2-first-room .m2-museum-case .m2-case-contents{
+ order:1;
+ flex:0 0 auto;
+ z-index:2;
+ margin:0;
+}
+.m2-first-room .m2-museum-case .m2-case-empty{
+ order:2;
+ margin:14px auto 10px;
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case .m2-case-target:before{
+  font-size:8px;
+  letter-spacing:.04em;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case .m2-case-target{
+  height:26px!important;
+  min-height:26px!important;
+  margin-bottom:6px;
+  font-size:15px;
+  gap:2px;
+  padding:2px!important;
+ }
+ .m2-first-room .m2-museum-case .m2-case-target:before{
+  font-size:7px;
+  letter-spacing:0;
+ }
+}
+
+
+/* Solo se estira la vitrina que recibe más tarjetas; las demás conservan
+   su tamaño de museo, sin grandes paneles vacíos a los lados. */
+.m2-first-room .m2-museum-cabinet-wall{
+ align-items:start;
+}
+.m2-first-room .m2-museum-case{
+ align-self:start;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   ARIKETA 3 · MIGRAZIOEN LIBURUA · museo, registro y expedientes históricos
+   Solo la tercera pantalla. Todas las respuestas siguen siendo <select>
+   accesibles; el progreso indica únicamente apartados rellenados.
+   ════════════════════════════════════════════════════════════════════ */
+.m2-paper:has(.m2-migration-gallery){
+ max-width:1480px;
+ background:
+ radial-gradient(ellipse at 75% 17%,#f9f0d8,transparent 50%),
+ radial-gradient(ellipse at 11% 77%,#b58f6382,transparent 70%),
+ repeating-linear-gradient(16deg,#91714a0c 0 1px,transparent 2px 10px),
+ linear-gradient(125deg,#dfcda6,#f1e6ca 50%,#dfc9a1);
+}
+.m2-paper:has(.m2-migration-gallery)>.m2-work{
+ padding:clamp(9px,1.4vw,20px);
+ border:0;
+ background:
+  radial-gradient(ellipse at 50% 0%,#d3a16d65,transparent 80%),
+  repeating-linear-gradient(94deg,#6a321b28 0 3px,transparent 4px 19px),
+  linear-gradient(135deg,#6e3b24,#341f19 27%,#79462a 75%,#452a1b);
+ box-shadow:0 0 0 4px #b3844d,0 0 0 6px #4b2e1a,0 12px 19px #2d1b15a8,inset 0 0 0 2px #e7b478;
+ border-radius:10px;
+}
+.m2-migration-gallery{position:relative;isolation:isolate;font-family:Georgia,"Libre Baskerville",serif}
+.m2-migration-gallery-head{
+ position:relative;
+ max-width:100%;
+ display:flex;
+ align-items:center;
+ gap:clamp(8px,1.8vw,24px);
+ flex-wrap:wrap;
+ min-height:91px;
+ padding:13px clamp(13px,2vw,26px);
+ border:5px ridge #b98a4c;
+ border-radius:9px 9px 3px 3px;
+ background:
+ radial-gradient(ellipse at 40% -10%,#d5a26d53,transparent 62%),
+ repeating-linear-gradient(3deg,#c15c451a 0 2px,transparent 3px 14px),
+ linear-gradient(145deg,#721a22,#54111b 51%,#7c2428);
+ color:#ffe9c4;
+ box-shadow:inset 0 0 0 2px #dfb777,0 4px 0 #3b1a13,0 8px 11px #190d0cb5;
+}
+.m2-migration-gallery-head:before,.m2-migration-gallery-head:after{
+ content:"✦";
+ position:absolute;top:10px;
+ font:23px/1 Georgia,serif;color:#f6cc85;
+ text-shadow:0 1px 2px #290d09;
+}
+.m2-migration-gallery-head:before{left:8px}
+.m2-migration-gallery-head:after{right:8px}
+.m2-migration-serial{
+ flex:0 1 135px;
+ font:700 10px/1.45 Georgia,serif;
+ letter-spacing:.15em;
+ text-transform:uppercase;
+ color:#fce3ac;
+}
+.m2-migration-gallery-head h3{
+ flex:1 1 290px;
+ margin:0;
+ text-align:center;
+ font:700 clamp(24px,2.7vw,40px)/1.08 Georgia,"Libre Baskerville",serif;
+ color:#fff2c8;
+ text-shadow:0 3px #38120f,0 0 12px #ffc47c59;
+ letter-spacing:-.025em;
+}
+.m2-migration-gallery-head>p{
+ flex:2 1 310px;
+ max-width:370px;
+ margin:0;
+ padding:2px 3px;
+ font:italic 13px/1.5 Georgia,serif;
+ color:#ffe9c9;
+}
+.m2-migration-progress{
+ display:flex;align-items:center;gap:9px;
+ flex:0 1 220px;min-width:165px;
+ margin-inline:auto;
+ font:700 11px/1.4 Georgia,serif;
+ color:#f7deb3;
+ white-space:nowrap;
+}
+.m2-migration-progress-track{
+ display:block;flex:1 1 65px;min-width:57px;
+ height:10px;
+ overflow:hidden;
+ border-radius:10px;
+ border:1px solid #efcc8a;
+ background:#2c1414;
+ box-shadow:inset 0 1px 3px #050407;
+}
+.m2-migration-progress-fill{
+ display:block;height:100%;
+ background:linear-gradient(90deg,#b48c52,#ffe5a7,#bb8349);
+ box-shadow:0 0 6px #ecca79ad;
+ transition:width .2s ease;
+}
+.m2-migration-book{
+ position:relative;
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ align-items:stretch;
+ padding:8px 6px 15px;
+ gap:0;
+ margin:0 auto;
+ width:100%;
+ max-width:1420px;
+ filter:drop-shadow(0 10px 8px #1c100c8a);
+}
+.m2-migration-book:before{
+ content:"";
+ position:absolute;
+ left:calc(50% - 11px);top:10px;bottom:15px;
+ width:22px;z-index:3;pointer-events:none;
+ background:linear-gradient(90deg,#311b1580,#b48b55a8 24%,#643d30a9 51%,#deb47998 80%,#331e1c8f);
+ border-left:2px solid #aa7d4b9e;
+ border-right:2px solid #b68b52;
+ box-shadow:0 0 13px #1f0b097b,inset 0 0 7px #372014;
+}
+.m2-migration-folio{
+ position:relative;
+ min-width:0;
+ padding:clamp(13px,2vw,29px) clamp(14px,2vw,31px) 32px;
+ border:5px double #c9a67a;
+ outline:1px solid #765437;
+ outline-offset:-9px;
+ background:
+ radial-gradient(ellipse at 20% 3%,#fffaf0,transparent 45%),
+ radial-gradient(ellipse at 84% 85%,#d8b8895c,transparent 55%),
+ repeating-linear-gradient(17deg,transparent 0 10px,#77542c0a 11px 12px,transparent 14px 19px),
+ linear-gradient(160deg,#f9ebcf,#f1dcb8 60%,#e5cc9f);
+ color:#3a271c;
+ box-shadow:inset 0 0 31px #95642b47,inset 0 0 0 2px #fff8e3;
+}
+.m2-migration-register{
+ border-radius:14px 4px 4px 16px;
+ padding-right:clamp(18px,2.5vw,38px);
+ box-shadow:inset -14px 0 18px #7e542e55,inset 0 0 31px #95642b40;
+}
+.m2-migration-dossiers{
+ border-radius:4px 14px 16px 4px;
+ padding-left:clamp(19px,2.7vw,41px);
+ box-shadow:inset 13px 0 18px #704a2b47,inset 0 0 31px #95642b40;
+}
+.m2-migration-page-head{
+ display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;
+ padding:0 0 9px;margin:0 0 12px;
+ border-bottom:2px solid #b38c59;
+ color:#765333;
+ font:700 clamp(9px,.85vw,12px)/1.3 Georgia,serif;
+ letter-spacing:.09em;
+}
+.m2-migration-engraving{position:relative;margin:0 0 15px}
+.m2-migration-engraving img{
+ display:block;width:100%;height:clamp(122px,12vw,179px);
+ object-fit:cover;object-position:50% 62%;
+ border:5px ridge #c29861;
+ outline:1px solid #594231;
+ box-shadow:0 4px 8px #56372566,inset 0 0 0 3px #ffe7b3;
+ filter:saturate(.91);
+}
+.m2-migration-engraving figcaption{
+ position:absolute;bottom:5px;left:5px;right:5px;
+ padding:6px 9px;
+ border-top:2px solid #daba7b;
+ text-align:center;
+ font:700 clamp(9px,.85vw,11px)/1.3 Georgia,serif;
+ letter-spacing:.16em;
+ color:#fff2cb;
+ background:#291d1cbb;
+ text-shadow:0 2px 2px #160d0b;
+}
+.m2-migration-folio h4{
+ font:700 clamp(19px,1.55vw,26px)/1.24 "Libre Baskerville",Georgia,serif;
+ margin:10px 0 8px;
+ text-align:center;
+ color:#39241b;
+}
+.m2-migration-guidance{
+ margin:0 auto 16px;
+ text-align:center;
+ max-width:560px;
+ font:italic clamp(12px,.95vw,15px)/1.55 Georgia,serif;
+ color:#695239;
+}
+.m2-ledger-year-entries{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:9px;
+ align-items:stretch;
+ margin:17px 0 12px;
+}
+.m2-ledger-year{
+ position:relative;min-width:0;
+ display:flex;flex-direction:column;
+ align-items:stretch;gap:7px;
+ padding:13px 9px 15px;
+ border:4px ridge #b9915c;
+ border-radius:4px 4px 16px 16px;
+ background:
+ linear-gradient(90deg,#d8bf9454,transparent 12% 87%,#b08b655e),
+ repeating-linear-gradient(0deg,transparent 0 19px,#95714c20 20px 21px,transparent 23px 27px),
+ linear-gradient(#fff7e4,#e9d5b1);
+ box-shadow:0 4px 0 #9b754b,0 6px 9px #3f291b62,inset 0 0 0 2px #fff9e9;
+ text-align:center;
+}
+.m2-ledger-year:before,.m2-ledger-year:after{
+ content:"";position:absolute;top:5px;left:5px;
+ width:5px;height:5px;border-radius:50%;
+ background:#966a36;border:1px solid #fce7b9;box-shadow:0 1px 2px #3c2514;
+}
+.m2-ledger-year:after{left:auto;right:5px}
+.m2-ledger-entry{
+ font:700 9px/1.3 Georgia,serif;
+ letter-spacing:.12em;color:#8d633b;
+}
+.m2-ledger-year-number{
+ font:700 clamp(25px,2.2vw,38px)/1 Georgia,serif;
+ color:#5c2c25;text-shadow:0 1px #fff7e6;
+}
+.m2-ledger-year-caption{
+ min-height:32px;
+ display:flex;align-items:center;justify-content:center;
+ font:italic 11px/1.3 Georgia,serif;color:#634d3c;
+}
+.m2-ledger-numeric-slot{display:block;min-width:0}
+.m2-ledger-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.m2-ledger-year select,.m2-migration-question select{
+ display:block;
+ box-sizing:border-box;
+ width:100%;max-width:100%;min-width:0;
+ min-height:47px;
+ margin:0;
+ padding:8px 24px 8px 10px;
+ border:3px ridge #bd9052;
+ border-radius:7px;
+ color:#35271e;
+ background-color:#fff7e7;
+ background-image:linear-gradient(170deg,#fffaf0,#f5e7ca);
+ box-shadow:inset 0 1px 4px #b991595c,0 2px 0 #865c37;
+ font:700 clamp(11px,.89vw,14px)/1.2 Georgia,serif;
+ cursor:pointer;
+ text-overflow:ellipsis;
+}
+.m2-ledger-year select:focus-visible,.m2-migration-question select:focus-visible{
+ outline:3px solid #c89c44;outline-offset:2px;
+ box-shadow:0 0 12px #e4b95b99;
+}
+.m2-ledger-year select:valid,.m2-migration-question select:valid{
+ border-color:#d7a659;
+ background:linear-gradient(165deg,#fff9e8,#f5dfb4);
+}
+.m2-ledger-entry-status{
+ align-self:center;
+ margin-top:auto;
+ padding:4px 6px;
+ border-top:1px solid #af916b;
+ color:#775934;
+ font:700 9px/1.2 Georgia,serif;
+ letter-spacing:.13em;
+}
+.m2-ledger-folio-number{
+ display:block;position:absolute;
+ bottom:12px;right:22px;
+ font:700 10px Georgia,serif;
+ color:#997249;letter-spacing:.17em;
+}
+.m2-migration-dossiers>h4{margin:6px 0 15px}
+.m2-migration-dossier{
+ display:grid;grid-template-columns:minmax(128px,.46fr) minmax(0,1fr);
+ gap:12px;
+ margin:0 0 13px;
+ padding:9px;
+ border:3px double #ad8755;
+ border-radius:5px;
+ background:
+ radial-gradient(ellipse at 85% 12%,#fff9e9,transparent 72%),
+ linear-gradient(130deg,#f7e8ce,#e5cda6);
+ box-shadow:0 2px 5px #73512b33,inset 0 0 0 1px #fff7e5;
+}
+.m2-migration-dossier-image{position:relative;min-width:0}
+.m2-migration-dossier-image img{
+ display:block;
+ width:100%;height:100%;min-height:146px;max-height:205px;
+ object-fit:cover;
+ border:4px ridge #b88e54;
+ box-shadow:0 3px 7px #5b382a7c;
+}
+.m2-migration-dossier-image span{
+ position:absolute;left:4px;right:4px;bottom:3px;
+ background:#32261fd4;
+ padding:5px 4px;
+ font:700 9px/1.2 Georgia,serif;
+ letter-spacing:.1em;color:#fff0c7;
+ text-align:center;
+}
+.m2-migration-question{
+ display:flex;flex-direction:column;
+ min-width:0;gap:8px;
+ align-items:stretch;justify-content:center;
+ padding:3px 3px 4px;
+}
+.m2-migration-question-title{
+ display:block;
+ font:700 clamp(13px,1vw,16px)/1.42 Georgia,serif;
+ color:#402b20;
+}
+.m2-migration-question select{font-size:clamp(12px,.92vw,14px)}
+.m2-migration-question-status{
+ align-self:flex-start;
+ padding:4px 0;
+ font:700 9px Georgia,serif;
+ letter-spacing:.11em;
+ color:#8d6745;
+}
+.m2-migration-historical-note{
+ margin-top:16px;
+ padding:12px 15px 10px;
+ border:2px double #b68b52;
+ border-left:7px solid #855044;
+ background:
+ radial-gradient(ellipse at 0% 0%,#f0ddb8,transparent 80%),
+ linear-gradient(105deg,#e6cfab,#f6e7cc);
+ color:#594334;
+ box-shadow:inset 0 0 0 2px #fff5de;
+}
+.m2-migration-historical-note span{
+ display:block;color:#7d4337;
+ font:700 10px/1.3 Georgia,serif;letter-spacing:.16em;
+}
+.m2-migration-historical-note p{
+ margin:5px 0 0;
+ font:12px/1.58 Georgia,serif;
+}
+/* Fit and reading order: no text is hidden behind the book binding. */
+@media(max-width:1250px){
+ .m2-migration-gallery-head{gap:12px}
+ .m2-migration-serial{flex-basis:100px}
+ .m2-migration-gallery-head>p{flex-basis:245px}
+ .m2-migration-progress{flex-basis:170px}
+ .m2-migration-book:before{left:calc(50% - 8px);width:16px}
+ .m2-migration-folio{padding-inline:16px}
+ .m2-migration-register{padding-right:26px}
+ .m2-migration-dossiers{padding-left:27px}
+ .m2-migration-dossier{grid-template-columns:135px minmax(0,1fr);gap:9px}
+ .m2-migration-dossier-image img{min-height:160px}
+ .m2-ledger-year-entries{gap:6px}
+ .m2-ledger-year{padding:11px 5px 12px}
+}
+@media(max-width:980px){
+ .m2-migration-book{
+  display:flex;flex-direction:column;
+  padding:6px 5px 13px;
+  gap:8px;
+ }
+ .m2-migration-book:before{display:none}
+ .m2-migration-folio,
+ .m2-migration-register,.m2-migration-dossiers{
+  padding:17px 20px 29px;
+  border-radius:10px;
+  box-shadow:inset 0 0 25px #8f623f3f,0 5px 6px #23120e4e;
+ }
+ .m2-migration-engraving img{height:180px}
+ .m2-ledger-year-entries{gap:12px}
+ .m2-migration-dossier{grid-template-columns:minmax(180px,.4fr) minmax(0,1fr)}
+ .m2-migration-dossier-image img{height:180px}
+ .m2-migration-gallery-head h3{text-align:left}
+ .m2-migration-serial{flex:0 0 125px}
+}
+@media(max-width:570px){
+ .m2-paper:has(.m2-migration-gallery)>.m2-work{padding:8px}
+ .m2-migration-gallery-head{
+  gap:5px 9px;
+  min-height:0;padding:14px 15px 11px;
+  border-width:4px;
+ }
+ .m2-migration-serial{flex:1 0 100%;font-size:9px}
+ .m2-migration-gallery-head h3{flex:1 1 100%;font-size:29px;text-align:center}
+ .m2-migration-gallery-head>p{flex:1 1 100%;font-size:12px;text-align:center}
+ .m2-migration-progress{flex:1 1 100%;font-size:10px;justify-content:center}
+ .m2-migration-book{padding:6px 0 11px}
+ .m2-migration-folio,.m2-migration-register,.m2-migration-dossiers{
+  padding:13px 10px 28px;
+  border-width:3px;
+  outline-offset:-6px;
+ }
+ .m2-migration-page-head{font-size:8px}
+ .m2-migration-engraving img{height:135px;border-width:3px}
+ .m2-migration-engraving figcaption{font-size:8px;letter-spacing:.07em}
+ .m2-migration-folio h4{font-size:19px}
+ .m2-migration-guidance{font-size:12px;margin-bottom:12px}
+ .m2-ledger-year-entries{grid-template-columns:1fr;gap:9px}
+ .m2-ledger-year{
+  min-height:76px;
+  flex-direction:row;align-items:center;flex-wrap:wrap;
+  gap:5px 10px;
+  padding:11px 9px;
+  border-radius:7px;
+ }
+ .m2-ledger-year-number{flex:0 0 64px;font-size:25px}
+ .m2-ledger-entry{flex:1 0 calc(100% - 90px);text-align:right}
+ .m2-ledger-year-caption{display:none}
+ .m2-ledger-numeric-slot{flex:1 1 180px;min-width:0}
+ .m2-ledger-entry-status{flex:1 0 auto;margin-left:auto}
+ .m2-ledger-year select{font-size:13px;min-height:43px}
+ .m2-migration-dossier{grid-template-columns:1fr;gap:9px;padding:7px}
+ .m2-migration-dossier-image img{height:137px;min-height:137px}
+ .m2-migration-question{padding:4px 6px 8px}
+ .m2-migration-question-title{font-size:13px}
+ .m2-migration-question select{font-size:12px;min-height:47px}
+ .m2-migration-historical-note{margin-top:9px;padding:9px 10px}
+ .m2-migration-historical-note p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.m2-migration-progress-fill{transition:none}}
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   MISIÓN II / EJERCICIO III · MIGRAZIOEN BULEGOA (1850–1900)
+   Escenografía fiel a la lámina B aprobada: atlas turquesa, marco antiguo,
+   pergamino con bordes de latón, dos paneles de época y dos maletas.
+   Interacción HTML real; clase estrictamente limitada a este ejercicio.
+   ══════════════════════════════════════════════════════════════════════ */
+.m2-page.m2-atlas-page{
+ background:
+ radial-gradient(circle at 50% 0%,#1b5562,#071a1d 72%),
+ repeating-linear-gradient(0deg,#133e3b 0 4px,#0c272b 5px 13px);
+ color:#f6eac9;
+}
+.m2-atlas-page .m2-topbar{
+ min-height:36px;
+ padding:5px max(15px,calc((100vw - 1672px)/2));
+ border-bottom:2px solid #bb8b46;
+ background:linear-gradient(90deg,#241714,#103a3a 40%,#211813);
+}
+.m2-atlas-page .m2-main{padding:7px 9px 18px;align-items:flex-start}
+.m2-atlas-page .m2-footer{min-height:32px;background:#071d21;padding-block:5px}
+.m2-paper.m2-atlas-active{
+ width:min(1672px,100%);
+ max-width:1672px;
+ min-height:0;
+ padding:12px;
+ margin:0 auto;
+ overflow:visible;
+ border:11px ridge #b88947;
+ outline:2px solid #4b2b16;
+ outline-offset:-4px;
+ border-radius:11px;
+ background:
+  linear-gradient(155deg,#132e2f17,#0820220c),
+  repeating-linear-gradient(91deg,#082c33 0 17px,#0a343c 18px 22px,#16464a 24px 61px),
+  #0b343c;
+ box-shadow:inset 0 0 0 3px #e4b873,inset 0 0 45px #051719,0 13px 25px #000a;
+}
+.m2-paper.m2-atlas-active:before{
+ inset:6px;z-index:0;opacity:.44;
+ background:repeating-linear-gradient(90deg,transparent 0 35px,#e7d09615 37px 38px,transparent 41px 67px);
+}
+.m2-paper.m2-atlas-active:after{display:none}
+.m2-atlas-screen{
+ position:relative;z-index:1;
+ color:#372719;
+ font-family:Georgia,"Libre Baskerville",serif;
+}
+.m2-atlas-screen *{box-sizing:border-box}
+.m2-atlas-screen button,.m2-atlas-screen select{
+ font-family:Georgia,"Libre Baskerville",serif;
+}
+.m2-atlas-screen button:focus-visible,
+.m2-atlas-screen select:focus-visible,
+.m2-atlas-screen input:focus-visible+span{
+ outline:3px solid #ffdc87;
+ outline-offset:2px;
+ box-shadow:0 0 0 4px #502e1a,0 0 16px #f8c675c5;
+}
+.m2-atlas-heading{
+ min-height:63px;
+ padding:6px 20px 7px;
+ display:flex;align-items:center;justify-content:space-between;gap:16px;
+ border:5px ridge #c89549;
+ border-radius:29px 29px 12px 12px;
+ background:
+ radial-gradient(ellipse at 50% 0%,#ba503e8c,transparent 55%),
+ linear-gradient(180deg,#682126,#3f0f18 53%,#651e26);
+ color:#fff0bb;
+ box-shadow:inset 0 0 0 2px #f4ca76,0 5px 0 #38170f,0 7px 8px #0009;
+ text-shadow:0 2px #321011;
+}
+.m2-atlas-heading:before,.m2-atlas-heading:after{
+ content:"❧";color:#f7c55f;font-size:21px;
+ filter:drop-shadow(0 1px 2px #230b06);
+}
+.m2-atlas-heading:before{order:0}
+.m2-atlas-heading:after{order:4;transform:scaleX(-1)}
+.m2-atlas-navigation{
+ order:1;flex:0 0 118px;
+ color:#ffe1ad;
+ font:700 11px/1.4 Georgia,serif;
+ letter-spacing:.12em;
+}
+.m2-atlas-heading h1{
+ order:2;flex:1 1 auto;margin:0;
+ font:700 clamp(25px,3.15vw,46px)/1.08 Georgia,serif;
+ letter-spacing:.015em;
+ text-align:center;
+ color:#ffebad;
+ white-space:normal;
+ text-shadow:0 2px 0 #411717,0 0 10px #ffda9a75;
+}
+.m2-atlas-heading h1 em{
+ font-style:normal;font-size:.62em;
+ white-space:nowrap;
+}
+.m2-atlas-total{
+ order:3;flex:0 0 115px;
+ color:#ffe6bc;
+ font:700 12px Georgia,serif;
+ text-align:center;
+}
+.m2-atlas-navigation-strip{
+ display:flex;justify-content:center;
+ min-height:30px;
+ padding:7px 5px 1px;
+}
+.m2-atlas-navigation-strip .m2-steps{
+ display:flex;align-items:center;justify-content:center;
+ gap:6px;margin:0;padding:0;
+ list-style:none;
+}
+.m2-atlas-navigation-strip .m2-step{
+ min-height:26px;
+ width:33px;height:27px;
+ padding:2px;
+ border:2px ridge #b89152;
+ border-radius:12px;
+ display:grid;place-items:center;
+ background:linear-gradient(#f6e7bc,#bd9967);
+ color:#4d2b1e;
+ box-shadow:0 2px 3px #0008;
+}
+.m2-atlas-navigation-strip .m2-step span{display:none}
+.m2-atlas-navigation-strip .m2-step strong{font:700 13px Georgia,serif}
+.m2-atlas-navigation-strip .m2-step[aria-current="step"]{
+ background:linear-gradient(#f0b854,#b5532e);
+ border-color:#ffdd7f;color:#fff6ce;
+}
+.m2-atlas-navigation-strip .m2-step:disabled{opacity:.48}
+.m2-atlas-teacher{
+ display:block;margin:4px 10px;
+ text-align:center;color:#fae2ab;font:700 10px Georgia,serif;
+}
+.m2-atlas-main{
+ position:relative;
+ display:grid;
+ grid-template-columns:minmax(0,14fr) minmax(0,22fr) minmax(0,27fr) minmax(0,18fr) minmax(0,19fr);
+ grid-template-rows:minmax(0,1fr) auto;
+ gap:6px;
+ min-height:335px;
+ margin-top:4px;
+ background:
+ linear-gradient(90deg,#0d494c30,#0b475249),
+ url('./m2-atlas-original-map.webp') center/cover no-repeat;
+ border:4px ridge #a47c47;
+ box-shadow:inset 0 0 12px #11191a,0 4px 7px #0009;
+}
+.m2-atlas-intro,
+.m2-atlas-pop,
+.m2-atlas-top-question{
+ position:relative;
+ min-width:0;
+ padding:14px 12px 10px;
+ border:5px ridge #d2a362;
+ border-radius:9px 9px 16px 10px;
+ background:
+ radial-gradient(circle at 20% 10%,#fff9df,transparent 55%),
+ radial-gradient(circle at 97% 95%,#c19f685c,transparent 50%),
+ repeating-linear-gradient(18deg,transparent 0 8px,#b99c6b16 9px 10px,transparent 12px 19px),
+ linear-gradient(132deg,#f4dfb4,#f1d4a5 57%,#dec08c);
+ box-shadow:inset 0 0 0 2px #ffedc2,0 6px 7px #16110ba3;
+ color:#39251b;
+}
+.m2-atlas-intro{grid-column:1;grid-row:1;z-index:4}
+.m2-atlas-roundel,.m2-atlas-number{
+ display:grid;place-items:center;
+ width:43px;height:43px;
+ border:5px ridge #c59345;border-radius:50%;
+ background:linear-gradient(145deg,#a20e20,#6a0616);
+ box-shadow:0 2px 0 #3c160e,0 4px 5px #0008,inset 0 0 0 1px #f7e8bd;
+ color:#fff2c6;text-shadow:0 1px 2px #200604;
+ font:700 23px/1 Georgia,serif;
+}
+.m2-atlas-roundel{position:absolute;left:-19px;top:-15px}
+.m2-atlas-intro h2{
+ margin:13px 0 12px;font:700 clamp(17px,1.72vw,29px)/1.12 Georgia,serif;
+ text-align:center;color:#441b1a;
+}
+.m2-atlas-intro p{font:700 clamp(11px,.91vw,15px)/1.32 Georgia,serif;margin:0}
+.m2-atlas-intro-ornament{
+ display:block;margin-top:12px;text-align:center;
+ color:#946b3b;font-size:15px;
+}
+.m2-atlas-pop{
+ grid-column:2;grid-row:1;z-index:4;
+ padding:11px 11px 35px;
+}
+.m2-atlas-pop h3{
+ margin:0 0 3px;
+ font:700 clamp(14px,1.1vw,19px)/1.2 Georgia,serif;
+ text-align:center;color:#3a261d;
+}
+.m2-atlas-pop h3 small{display:block;font-size:.76em}
+.m2-atlas-pop p{
+ font:italic 10px/1.15 Georgia,serif;
+ margin:3px 0 6px;text-align:center;
+}
+.m2-atlas-pop-list{display:flex;flex-direction:column;gap:4px;position:relative;z-index:2}
+.m2-atlas-pop-row{
+ display:grid;grid-template-columns:49px minmax(0,1fr) 35px;
+ gap:5px;align-items:center;
+ min-height:34px;
+ border-bottom:1px solid #9a72415b;
+}
+.m2-atlas-pop-row small{font:700 10px/1 Georgia,serif}
+.m2-atlas-pop-year{
+ font:700 clamp(16px,1.35vw,23px)/1 Georgia,serif;
+ text-align:center;color:#472918;
+}
+.m2-atlas-pop-row select{
+ min-width:0;width:100%;height:31px;
+ padding:4px 3px;
+ border:3px ridge #b48951;
+ border-radius:5px;
+ background:linear-gradient(#fffdfa,#f7e3b8);
+ color:#271f1c;
+ font:700 11px Georgia,serif;
+}
+.m2-atlas-migrants-foreground{
+ position:absolute;
+ bottom:-10px;left:-9px;
+ width:100%;height:80px;
+ object-fit:cover;object-position:50% 83%;
+ border-top:2px solid #bb8744;
+ border-radius:0 0 10px 10px;
+ opacity:.84;
+}
+.m2-atlas-main-map{
+ grid-column:3;grid-row:1;
+ overflow:hidden;position:relative;
+ min-height:235px;
+ border:5px ridge #ae905b;
+ background:#126778;
+ box-shadow:inset 0 0 19px #122c31,0 3px 6px #0008;
+}
+.m2-atlas-main-map img{
+ display:block;
+ width:100%;height:100%;
+ object-fit:cover;
+ object-position:50% 50%;
+ filter:saturate(1.18) contrast(1.05);
+}
+.m2-atlas-map-label{
+ position:absolute;left:6px;bottom:8px;
+ padding:4px 8px;border:1px solid #a8804a;
+ background:#f2e0b8d9;
+ color:#3f2e23;font:700 9px Georgia,serif;
+}
+.m2-atlas-map-stamp{
+ position:absolute;right:12px;bottom:16px;
+ color:#e9c57a;font:700 26px Georgia,serif;
+ text-shadow:0 1px 4px #16242a;
+}
+.m2-atlas-top-question{
+ padding:10px 10px 7px;
+ display:flex;flex-direction:column;
+}
+.m2-atlas-top-migration{grid-column:4}
+.m2-atlas-top-mission{grid-column:5}
+.m2-atlas-top-scene{
+ display:block;width:100%;height:54px;
+ border:2px ridge #a7794c;
+ object-fit:cover;
+ filter:sepia(.19) saturate(.82);
+ box-shadow:0 2px 3px #5d3a2866;
+}
+.m2-atlas-top-question h3{
+ font:700 clamp(15px,1.12vw,19px)/1.08 Georgia,serif;
+ color:#4a1e1a;
+ margin:6px 0 4px;
+ text-align:center;
+}
+.m2-atlas-radios{margin:0;padding:0;border:0;min-width:0}
+.m2-atlas-radios legend{
+ float:left;
+ width:100%;
+ font:700 clamp(11px,.88vw,14px)/1.16 Georgia,serif;
+ margin:0 0 5px;text-align:center;
+}
+.m2-atlas-radio{
+ display:flex;align-items:flex-start;gap:5px;
+ margin:4px 0 2px;cursor:pointer;
+ font:700 clamp(10px,.72vw,12px)/1.13 Georgia,serif;
+}
+.m2-atlas-radio input{
+ flex:0 0 14px;
+ width:14px;height:14px;
+ margin:0;accent-color:#9e542b;
+ cursor:pointer;
+}
+.m2-atlas-radio-circle{display:none}
+.m2-atlas-radio:hover{color:#9b3e2b}
+.m2-atlas-critical{
+ grid-column:1/5;grid-row:2;z-index:4;
+ margin:0 2px 4px;
+ min-height:49px;
+ display:flex;align-items:center;
+ gap:5px;
+ padding:9px 14px;
+ border:4px ridge #d6ae72;
+ border-radius:6px;
+ background:linear-gradient(#fff1d4,#e8cba0);
+ box-shadow:0 4px 5px #0008;
+ font:italic clamp(10px,.85vw,14px)/1.24 Georgia,serif;
+}
+.m2-atlas-critical strong{font-style:normal}
+.m2-atlas-top-check{
+ grid-column:5;grid-row:2;
+ display:flex;align-items:center;justify-content:center;
+ margin-bottom:4px;
+}
+.m2-atlas-check{
+ display:inline-flex;justify-content:center;align-items:center;
+ min-width:125px;min-height:35px;
+ max-width:100%;
+ padding:7px 16px;
+ border:5px ridge #d9b16c;
+ border-radius:11px;
+ background:linear-gradient(145deg,#1b775e,#084b3e 50%,#03342b);
+ color:#fff3c8;
+ font:700 clamp(12px,1.05vw,17px)/1 Georgia,serif;
+ text-shadow:0 2px #0c2a25;
+ box-shadow:inset 0 0 0 2px #3b8871,0 4px 0 #2b180f,0 6px 9px #0009;
+ cursor:pointer;
+}
+.m2-atlas-check:hover:not(:disabled){filter:brightness(1.18);box-shadow:0 0 0 2px #e3c275,0 0 12px #f3bd73b5}
+.m2-atlas-check:disabled{opacity:.66;cursor:not-allowed}
+.m2-atlas-row-two{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ gap:8px;
+ margin-top:8px;
+}
+.m2-atlas-activity{
+ position:relative;
+ min-width:0;
+ border:8px ridge #c08b47;
+ border-radius:7px;
+ background:
+ radial-gradient(ellipse at 35% 10%,#fff1c9,transparent 48%),
+ repeating-linear-gradient(19deg,transparent 0 7px,#97704714 8px 9px,transparent 11px 18px),
+ linear-gradient(155deg,#edd2a1,#f6e6c6 55%,#ddba88);
+ box-shadow:inset 0 0 0 2px #ffebba,0 8px 9px #0008;
+}
+.m2-atlas-activity>header{
+ display:flex;align-items:center;
+ min-height:42px;
+ margin:6px 12px 0;
+ gap:10px;
+}
+.m2-atlas-number{flex:0 0 39px;width:39px;height:39px;font-size:21px}
+.m2-atlas-activity>header h2{
+ margin:0;flex:1;min-width:0;
+ padding:6px 12px 6px;
+ background:linear-gradient(165deg,#7e161d,#461217 65%,#7c1721);
+ border:4px ridge #d6aa63;
+ border-radius:6px 14px 6px 14px;
+ color:#ffefba;text-shadow:0 2px #361515;
+ font:700 clamp(17px,1.55vw,25px)/1.08 Georgia,serif;
+ text-align:left;
+ box-shadow:0 2px 4px #3116097b;
+}
+.m2-atlas-exercise-instruction{
+ margin:5px 15px 8px;
+ text-align:center;
+ font:700 clamp(10px,.85vw,13px)/1.28 Georgia,serif;
+ color:#573525;
+}
+.m2-atlas-activity>footer{
+ display:flex;justify-content:flex-end;align-items:center;gap:12px;
+ padding:7px 12px 10px;
+ min-height:52px;
+}
+.m2-atlas-section-status{
+ font:700 11px/1.2 Georgia,serif;
+ color:#815c31;
+}
+.m2-atlas-route-activity{
+ background:
+ linear-gradient(#f1d29c3d,#ebd0a1b8),
+ url('./m2-atlas-original-map.webp') center/cover no-repeat,
+ #dfc49b;
+}
+.m2-atlas-route-stage{
+ display:grid;
+ grid-template-columns:minmax(120px,34%) minmax(0,1fr);
+ gap:7px;
+ align-items:stretch;
+ padding:0 11px 0;
+ height:210px;
+}
+.m2-atlas-route-labels{
+ display:flex;flex-direction:column;justify-content:center;gap:7px;
+}
+.m2-atlas-route-card{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:4px;
+ width:100%;
+ padding:9px 7px;
+ border:3px ridge #a87942;
+ border-radius:7px 3px 3px 7px;
+ background:linear-gradient(#fff3d6,#ebc990);
+ color:#36231a;
+ font:700 clamp(12px,.93vw,16px)/1.17 Georgia,serif;
+ box-shadow:0 2px 4px #3c21168f;
+ cursor:grab;
+ text-align:center;
+}
+.m2-atlas-route-card:hover,.m2-atlas-route-card[aria-pressed="true"]{
+ border-color:#e6b763;
+ box-shadow:0 0 0 2px #f5ca68,0 0 12px #d7ad5dc2;
+}
+.m2-atlas-route-numeral{color:#855737;font-size:10px;opacity:.8}
+.m2-atlas-route-connector{color:#ac6c26;font-size:22px;line-height:1}
+.m2-atlas-route-map{
+ position:relative;min-width:0;
+ border:5px ridge #af925b;
+ border-radius:4px;
+ overflow:hidden;
+ background:#236875;
+ box-shadow:inset 0 0 12px #071820,0 2px 4px #0008;
+}
+.m2-atlas-route-map>img{
+ display:block;width:100%;height:100%;
+ object-fit:cover;
+ object-position:center;
+}
+.m2-atlas-route-lines{
+ position:absolute;inset:0;pointer-events:none;
+ width:100%;height:100%;
+}
+.m2-atlas-pin{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ width:29px;height:29px;
+ padding:0;
+ display:grid;place-items:center;
+ border:5px ridge #d1ad65;
+ border-radius:50%;
+ background:radial-gradient(#fff1ca,#d29f54);
+ color:#762d1a;font:700 16px Georgia,serif;
+ box-shadow:0 2px 5px #0009;
+ cursor:crosshair;
+}
+.m2-atlas-pin:hover,.m2-atlas-pin:focus-visible{
+ background:#ffe5ac;box-shadow:0 0 0 3px #d64f28,0 0 12px #ffd68b;
+}
+.m2-atlas-pin.m2-pin-used{background:#e2c18a}
+.m2-atlas-facts-activity{padding-bottom:0}
+.m2-atlas-fact-head{
+ display:flex;justify-content:space-between;
+ margin:9px 17px 4px;
+ border-bottom:2px solid #a77e4c;
+ color:#8c5b3f;
+ font:700 10px Georgia,serif;
+ letter-spacing:.08em;
+}
+.m2-atlas-statements{margin:0 15px}
+.m2-atlas-statement{
+ display:grid;grid-template-columns:minmax(0,1fr) 105px;
+ align-items:center;
+ min-height:39px;
+ border-bottom:1px solid #ab8457;
+ gap:10px;
+ font:700 clamp(10px,.88vw,13px)/1.17 Georgia,serif;
+}
+.m2-atlas-truth{display:flex;justify-content:space-evenly;gap:7px}
+.m2-atlas-truth-option{display:grid;place-items:center;cursor:pointer}
+.m2-atlas-truth-option input{
+ position:absolute;opacity:0;width:25px;height:25px;
+}
+.m2-atlas-truth-option span{
+ display:grid;place-items:center;
+ width:28px;height:28px;
+ border:3px ridge #ae8752;
+ border-radius:50%;
+ background:linear-gradient(#fff8e7,#deb986);
+ color:#3c271a;font:700 14px Georgia,serif;
+ box-shadow:0 1px 2px #0004;
+}
+.m2-atlas-truth-option input:checked+span{
+ color:#fff6d3;
+ border-color:#e5bb6a;
+ background:linear-gradient(#a63b29,#691a17);
+ box-shadow:0 0 0 2px #e1b967,0 0 9px #ad6e337a;
+}
+.m2-atlas-truth-option:first-child input:checked+span{
+ background:linear-gradient(#498a6c,#11503f);
+}
+/* A final activity filling the entire width, with brass-framed suitcases. */
+.m2-atlas-luggage-activity{
+ margin-top:8px;
+ min-height:250px;
+ background:
+ linear-gradient(90deg,#e4c19bdb,transparent 27% 78%,#e6c9a6cb),
+ url('./m2-atlas-original-map.webp') center/cover no-repeat,
+ #b68a62;
+}
+.m2-atlas-luggage-activity>header{
+ margin:9px 12px 9px;
+ display:grid;
+ grid-template-columns:42px minmax(0,1fr) minmax(100px,1.5fr);
+ gap:8px;
+}
+.m2-atlas-luggage-activity>header h2{font-size:clamp(19px,1.72vw,28px)}
+.m2-atlas-luggage-activity>header p{
+ margin:0;padding:5px;
+ font:700 clamp(11px,.87vw,13px)/1.3 Georgia,serif;
+ color:#472c21;
+}
+.m2-atlas-luggage-board{
+ display:grid;
+ grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+ gap:12px;
+ padding:0 14px 2px;
+ align-items:stretch;
+}
+.m2-atlas-luggage-available{
+ min-width:0;
+ position:relative;
+ border:9px ridge #87542c;
+ border-radius:15px 15px 25px 25px;
+ padding:8px 9px 12px;
+ background:
+ radial-gradient(ellipse at 15% 0%,#f4c98873,transparent 60%),
+ repeating-linear-gradient(13deg,#70452216 0 4px,transparent 5px 15px),
+ linear-gradient(125deg,#55321f,#704321 45%,#382019);
+ box-shadow:inset 0 0 0 2px #d9ad65,0 6px 7px #170c0b9c;
+}
+.m2-atlas-luggage-note{
+ display:block;
+ font:700 10px Georgia,serif;
+ letter-spacing:.14em;
+ color:#ffdfa6;
+ text-align:center;
+ text-shadow:0 1px #321d14;
+}
+.m2-atlas-luggage-cards{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:7px;
+ margin-top:6px;
+ align-items:stretch;
+}
+.m2-atlas-luggage-card{
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ min-width:0;min-height:83px;
+ padding:5px 6px;
+ border:4px ridge #c39a63;
+ border-radius:5px;
+ background:linear-gradient(150deg,#fff5dc,#e6c18c);
+ box-shadow:0 2px 5px #1309069a,inset 0 0 0 1px #ffeac0;
+ color:#332219;
+ font:700 clamp(9px,.73vw,12px)/1.15 Georgia,serif;
+ text-align:center;
+ cursor:grab;
+}
+.m2-atlas-luggage-card img{width:44px;height:44px;object-fit:contain;pointer-events:none}
+.m2-atlas-luggage-card:hover,.m2-atlas-luggage-card[aria-pressed="true"]{
+ border-color:#fce2a1;
+ box-shadow:0 0 0 2px #f9c753,0 0 12px #f3c66c,0 4px 5px #000a;
+}
+.m2-atlas-luggage-targets{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+}
+.m2-atlas-suitcase{
+ position:relative;min-width:0;
+ padding:7px 7px 10px;
+ border:9px ridge #be8d4f;
+ border-radius:20px 20px 18px 18px;
+ box-shadow:inset 0 0 0 3px #d8ad65,0 6px 8px #170b0a9c;
+ background:
+ repeating-linear-gradient(12deg,#e3b47e15 0 4px,transparent 5px 15px),
+ linear-gradient(115deg,#531d20,#7d2a2a 58%,#391319);
+ color:#fdf0d0;
+}
+.m2-atlas-suitcase-effect{
+ background:
+ repeating-linear-gradient(12deg,#a6d3cf13 0 4px,transparent 5px 15px),
+ linear-gradient(115deg,#103c53,#195876 58%,#0e2c3d);
+}
+.m2-atlas-suitcase>header{
+ display:flex;flex-direction:column;align-items:center;
+ min-height:35px;gap:2px;
+ padding:4px 7px;margin:-5px 0 8px;
+ border:4px ridge #d9ad6c;
+ border-radius:9px;
+ background:linear-gradient(#fff1d2,#ddba83);
+ box-shadow:0 3px 4px #0009;
+ color:#4d251b;
+ text-align:center;
+}
+.m2-atlas-suitcase>header strong{font:700 clamp(11px,.85vw,14px)/1 Georgia,serif}
+.m2-atlas-suitcase>header small{font:700 9px Georgia,serif;letter-spacing:.08em}
+.m2-atlas-luggage-drop{
+ display:block;
+ width:100%;height:27px;
+ margin:0 0 5px;
+ padding:3px 4px;
+ border:2px dashed #f5dab3ac;
+ border-radius:4px;
+ background:#fff2d312;
+ color:#fff1c8;
+ font:700 9px Georgia,serif;
+ cursor:pointer;
+}
+.m2-atlas-luggage-drop:hover,.m2-atlas-luggage-drop:focus-visible{
+ border-color:#ffe3a0;background:#f9d58b4a;
+}
+.m2-atlas-suitcase-items{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:5px;
+ min-height:80px;
+}
+.m2-atlas-packed{
+ min-width:0;min-height:38px;
+ display:flex;align-items:center;justify-content:flex-start;
+ gap:3px;padding:3px 4px;
+ border:2px ridge #be995a;
+ border-radius:5px;
+ background:linear-gradient(#f9ecd3,#dfbb85);
+ color:#3d2718;
+ font:700 clamp(9px,.68vw,11px)/1.1 Georgia,serif;
+ text-align:left;
+ cursor:grab;
+}
+.m2-atlas-packed img{width:27px;height:27px;object-fit:contain;flex:none}
+.m2-atlas-packed:hover{border-color:#f9e0a1;box-shadow:0 0 9px #ffe1a3}
+.m2-atlas-luggage-activity>footer{
+ margin-top:3px;
+ padding:5px 13px 8px;
+}
+.m2-atlas-final-controls .m2-controls{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ margin:9px 0 0;
+ padding:7px 12px;
+ border:4px ridge #ba8a4e;
+ border-radius:5px;
+ background:linear-gradient(105deg,#4e1b20,#733034 42%,#4e1c23);
+ box-shadow:0 4px 5px #000a;
+ color:#fff0c8;
+}
+.m2-atlas-final-controls .m2-feedback{
+ flex:1;min-width:0;
+ color:#fff0c8;text-shadow:0 1px 3px #1e0908;
+ font:700 12px/1.35 Georgia,serif;
+}
+.m2-atlas-final-controls .m2-buttons{
+ display:flex;gap:9px;flex-wrap:wrap;align-items:center;
+}
+.m2-atlas-final-controls .m2-button{
+ min-height:35px;
+ border:4px ridge #d2a463;
+ border-radius:8px;
+ padding:5px 14px;
+ background:linear-gradient(#0f7360,#073e34);
+ color:#fff0c6;
+ font:700 12px Georgia,serif;
+ box-shadow:0 3px 4px #0008;
+}
+.m2-atlas-final-controls .m2-button.secondary{
+ color:#39261d;
+ background:linear-gradient(#fff2d1,#ddb881);
+}
+.m2-atlas-final-controls .m2-button:disabled{opacity:.6}
+/* Responsive: true HTML content gets room to breathe on mobile rather
+   than shrinking the whole image into unreadable pixels. */
+@media(max-width:1300px){
+ .m2-atlas-heading h1{font-size:clamp(23px,3vw,36px)}
+ .m2-atlas-heading{padding:6px 10px}
+ .m2-atlas-navigation{flex-basis:93px;font-size:9px}
+ .m2-atlas-total{flex-basis:85px;font-size:10px}
+ .m2-atlas-main{grid-template-columns:minmax(0,15fr) minmax(0,21fr) minmax(0,26fr) minmax(0,19fr) minmax(0,19fr)}
+ .m2-atlas-pop{padding:10px 6px 26px}
+ .m2-atlas-intro{padding:11px 7px 6px}
+ .m2-atlas-top-question{padding:8px 6px}
+ .m2-atlas-pop-row{grid-template-columns:43px minmax(0,1fr) 29px;gap:3px}
+ .m2-atlas-radio{font-size:10px;line-height:1.16}
+ .m2-atlas-main-map{min-height:220px}
+ .m2-atlas-luggage-card{min-height:78px;font-size:10px}
+ .m2-atlas-luggage-card img{width:34px;height:34px}
+}
+@media(max-width:1010px){
+ .m2-atlas-main{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.5fr);
+  grid-template-rows:auto auto auto;
+ }
+ .m2-atlas-intro{grid-column:1;grid-row:1}
+ .m2-atlas-pop{grid-column:2;grid-row:1}
+ .m2-atlas-main-map{grid-column:3;grid-row:1}
+ .m2-atlas-top-migration{grid-column:1/3;grid-row:2}
+ .m2-atlas-top-mission{grid-column:3;grid-row:2}
+ .m2-atlas-critical{grid-column:1/3;grid-row:3}
+ .m2-atlas-top-check{grid-column:3;grid-row:3}
+ .m2-atlas-top-question{min-height:172px;padding:12px}
+ .m2-atlas-top-question .m2-atlas-radios{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+ .m2-atlas-top-question .m2-atlas-radios legend{float:none}
+ .m2-atlas-top-scene{height:70px}
+ .m2-atlas-radio{font-size:11px}
+ .m2-atlas-row-two{grid-template-columns:1fr}
+ .m2-atlas-route-stage{height:240px}
+ .m2-atlas-statement{font-size:13px;min-height:42px}
+ .m2-atlas-luggage-board{grid-template-columns:1fr}
+ .m2-atlas-luggage-card{font-size:12px}
+ .m2-atlas-luggage-targets{min-height:160px}
+ .m2-atlas-suitcase>header strong{font-size:13px}
+ .m2-atlas-packed{font-size:11px}
+}
+@media(max-width:680px){
+ .m2-atlas-page .m2-main{padding:5px 3px 12px}
+ .m2-paper.m2-atlas-active{padding:6px;border-width:7px}
+ .m2-atlas-heading{min-height:0;display:flex;flex-wrap:wrap;gap:5px;padding:7px}
+ .m2-atlas-heading:before,.m2-atlas-heading:after{font-size:13px}
+ .m2-atlas-navigation{flex:1 1 40%;order:0}
+ .m2-atlas-total{flex:1 1 40%;order:1;text-align:right}
+ .m2-atlas-heading h1{order:2;flex:1 1 100%;font-size:clamp(24px,6vw,32px)}
+ .m2-atlas-heading:before,.m2-atlas-heading:after{display:none}
+ .m2-atlas-navigation-strip{padding:5px 0}
+ .m2-atlas-main{grid-template-columns:1fr 1fr;grid-template-rows:auto;gap:6px}
+ .m2-atlas-intro{grid-column:1;grid-row:1}
+ .m2-atlas-pop{grid-column:2;grid-row:1}
+ .m2-atlas-main-map{grid-column:1/-1;grid-row:2;min-height:190px;max-height:255px}
+ .m2-atlas-top-migration{grid-column:1/-1;grid-row:3}
+ .m2-atlas-top-mission{grid-column:1/-1;grid-row:4}
+ .m2-atlas-critical{grid-column:1/-1;grid-row:5;font-size:12px}
+ .m2-atlas-top-check{grid-column:1/-1;grid-row:6;padding:5px}
+ .m2-atlas-intro h2{font-size:22px}
+ .m2-atlas-intro p{font-size:12px}
+ .m2-atlas-pop h3{font-size:14px}
+ .m2-atlas-pop p{font-size:10px}
+ .m2-atlas-pop-row{grid-template-columns:40px minmax(0,1fr);gap:3px}
+ .m2-atlas-pop-row small{display:none}
+ .m2-atlas-pop-year{font-size:17px}
+ .m2-atlas-migrants-foreground{height:60px}
+ .m2-atlas-pop-list{padding-bottom:47px}
+ .m2-atlas-top-question{min-height:0}
+ .m2-atlas-top-question .m2-atlas-radios{display:block}
+ .m2-atlas-top-question .m2-atlas-radios legend{font-size:14px}
+ .m2-atlas-radio{font-size:13px;margin:7px 0}
+ .m2-atlas-top-scene{height:100px}
+ .m2-atlas-route-stage{grid-template-columns:1fr;height:auto}
+ .m2-atlas-route-labels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+ .m2-atlas-route-card{font-size:11px;padding:5px 3px;flex-wrap:wrap;justify-content:center}
+ .m2-atlas-route-connector{display:none}
+ .m2-atlas-route-numeral{display:none}
+ .m2-atlas-route-map{height:215px}
+ .m2-atlas-exercise-instruction{font-size:12px}
+ .m2-atlas-fact-head{font-size:9px}
+ .m2-atlas-statements{margin:0 8px}
+ .m2-atlas-statement{grid-template-columns:minmax(0,1fr) 68px;gap:4px;font-size:12px}
+ .m2-atlas-truth{gap:3px}
+ .m2-atlas-truth-option span{width:26px;height:26px}
+ .m2-atlas-luggage-activity>header{grid-template-columns:36px minmax(0,1fr);gap:5px}
+ .m2-atlas-luggage-activity>header p{grid-column:1/-1;text-align:center}
+ .m2-atlas-luggage-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .m2-atlas-luggage-card{min-height:77px;font-size:11px}
+ .m2-atlas-luggage-targets{gap:6px}
+ .m2-atlas-suitcase{padding:5px;border-width:5px}
+ .m2-atlas-suitcase-items{grid-template-columns:1fr}
+ .m2-atlas-suitcase>header{padding:4px;min-height:49px}
+ .m2-atlas-suitcase>header strong{font-size:11px}
+ .m2-atlas-packed{font-size:11px;min-height:40px}
+ .m2-atlas-activity>header{margin:6px 6px 0;gap:5px}
+ .m2-atlas-number{width:34px;height:34px;flex-basis:34px;font-size:18px}
+ .m2-atlas-activity>header h2{font-size:clamp(16px,4.5vw,22px)}
+ .m2-atlas-activity>footer{gap:7px;padding:7px}
+ .m2-atlas-section-status{font-size:10px}
+ .m2-atlas-check{min-width:113px;padding:5px 8px;font-size:13px}
+ .m2-atlas-final-controls .m2-controls{flex-direction:column;align-items:stretch}
+ .m2-atlas-final-controls .m2-buttons{justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-atlas-screen *{transition:none!important;scroll-behavior:auto!important}
+}
+
+.m2-atlas-top-migration{grid-column:4;grid-row:1}
+.m2-atlas-top-mission{grid-column:5;grid-row:1}
+@media(max-width:1010px){.m2-atlas-top-migration{grid-column:1/3;grid-row:2}.m2-atlas-top-mission{grid-column:3;grid-row:2}}
+@media(max-width:680px){.m2-atlas-top-migration{grid-column:1/-1;grid-row:3}.m2-atlas-top-mission{grid-column:1/-1;grid-row:4}}
+
+/* Corrección de desbordamiento en las opciones del atlas */
+.m2-atlas-screen .m2-atlas-radios{
+ display:flex!important;flex-direction:column;flex:1 1 auto;width:100%;min-width:0;
+ gap:3px;padding:0!important;margin:0!important;border:0!important;
+}
+.m2-atlas-screen .m2-atlas-radios legend{
+ display:contents;float:none!important;width:auto!important;max-width:100%;
+ margin:0!important;padding:0!important;
+ font:700 clamp(11px,.85vw,14px)/1.2 Georgia,serif;text-align:center;
+ overflow-wrap:break-word;
+}
+.m2-atlas-screen .m2-atlas-radio{
+ box-sizing:border-box;display:flex!important;width:100%;min-width:0;
+ flex:0 0 auto;align-items:flex-start;gap:5px;
+ padding:2px 1px;margin:0!important;
+ white-space:normal!important;overflow-wrap:anywhere;
+ font:700 clamp(11px,.78vw,13px)/1.16 Georgia,serif;
+}
+.m2-atlas-screen .m2-atlas-radio>input{
+ display:block;flex:0 0 16px;width:16px;height:16px;min-width:16px;margin:1px 1px 0 0;
+}
+.m2-atlas-screen .m2-atlas-radio>span:last-child{
+ display:block;min-width:0;flex:1 1 auto;
+ white-space:normal!important;overflow-wrap:anywhere;word-break:normal;
+}
+.m2-atlas-screen .m2-atlas-top-question{min-width:0;overflow:visible}
+.m2-atlas-screen .m2-atlas-top-question h3{overflow-wrap:break-word}
+@media(max-width:1010px){
+ .m2-atlas-screen .m2-atlas-top-question .m2-atlas-radios{display:flex!important}
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-radio{font-size:13px;line-height:1.3;padding:3px 0}
+ .m2-atlas-screen .m2-atlas-radios legend{font-size:14px;line-height:1.3}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+  M2 E3 · FIDELIDAD A LA LÁMINA 1672×941 · ETAPA 01
+  Prioridad: cabecera, mapa y primer panel sin reescribir ningún enunciado.
+  Las zonas de respuesta son controles HTML, no texto pintado en una imagen.
+  ═══════════════════════════════════════════════════════════════════ */
+@media(min-width:1101px){
+ .m2-atlas-page .m2-topbar,
+ .m2-atlas-page .m2-footer{display:none}
+ .m2-atlas-page .m2-main{padding:0;align-items:flex-start}
+ .m2-paper.m2-atlas-active{
+  width:min(1672px,100%);
+  max-width:1672px;
+  margin:0 auto;
+  padding:0;
+  border:0;
+  outline:0;
+  border-radius:0;
+  background:#3b261b;
+  box-shadow:0 0 0 2px #7b4f2f,0 13px 26px #0008;
+ }
+ .m2-paper.m2-atlas-active:before{display:none}
+ .m2-atlas-screen{
+  width:100%;
+  max-width:1672px;
+  padding:0;
+  margin:0;
+  border:0;
+  position:relative;
+  isolation:isolate;
+  background:
+   repeating-linear-gradient(2deg,#21140b00 0 9px,#d9b0760e 11px 12px,#21140b00 13px 24px),
+   linear-gradient(90deg,#673d22,#38221c 17%,#41251a 82%,#764b2d);
+ }
+ .m2-atlas-screen:before{
+  content:"";
+  position:absolute;z-index:-1;
+  inset:0 0 auto;
+  height:85px;
+  pointer-events:none;
+  background:url('./m2-atlas-top-objects.svg') center top/100% 85px no-repeat;
+ }
+ .m2-atlas-heading{
+  box-sizing:border-box;
+  position:relative;
+  width:min(900px,calc(100% - 530px));
+  max-width:900px;
+  height:62px;
+  min-height:62px;
+  margin:7px auto 10px;
+  padding:2px 28px 4px;
+  gap:0;
+  border:6px ridge #c59447;
+  border-radius:25px 25px 18px 18px;
+  background:
+   radial-gradient(ellipse at 50% -10%,#ab3f2c98,transparent 65%),
+   linear-gradient(180deg,#7d2024,#4e0712 55%,#730f18);
+  box-shadow:0 0 0 2px #4f2819,inset 0 0 0 2px #f6cb70,0 4px 0 #2c160d,0 7px 8px #0008;
+ }
+ .m2-atlas-heading h1{
+  flex:1 1 auto;
+  font-size:clamp(28px,2.55vw,42px);
+  text-shadow:0 2px 1px #2b100c,0 0 7px #ffd68a7c;
+  letter-spacing:.025em;
+  white-space:nowrap;
+ }
+ .m2-atlas-heading h1 em{font-size:.72em}
+ .m2-atlas-heading:before,.m2-atlas-heading:after{
+  position:absolute;
+  top:9px;
+  font-size:24px;
+  color:#f9d780;
+ }
+ .m2-atlas-heading:before{left:12px}
+ .m2-atlas-heading:after{right:12px}
+ .m2-atlas-navigation{display:none}
+ .m2-atlas-total{
+  position:absolute;
+  top:52px;right:6px;
+  background:#44271fa8;
+  padding:2px 5px;
+  border:1px solid #c29a5b;
+  border-radius:3px;
+  font-size:9px;
+  white-space:nowrap;
+  opacity:.7;
+ }
+ .m2-atlas-navigation-strip{
+  position:absolute;
+  top:17px;
+  right:19px;
+  z-index:9;
+  min-height:0;
+  padding:0;
+  margin:0;
+ }
+ .m2-atlas-navigation-strip .m2-step{
+  width:25px;
+  height:24px;
+  min-height:24px;
+  border-width:2px;
+  border-radius:50%;
+  padding:0;
+ }
+ .m2-atlas-navigation-strip .m2-step strong{font-size:11px}
+ .m2-atlas-navigation-strip .m2-steps{gap:3px}
+ .m2-atlas-teacher{
+  position:absolute;top:55px;right:95px;z-index:5;
+  padding:1px 5px;
+  background:#522e24ab;
+  font-size:9px;opacity:.7;
+ }
+ .m2-atlas-main{
+  display:grid;
+  grid-template-columns:minmax(0,16fr) minmax(0,19fr) minmax(0,27fr) minmax(0,19fr) minmax(0,19fr);
+  grid-template-rows:204px 53px;
+  gap:3px;
+  height:263px;
+  min-height:263px;
+  padding:0 6px 4px;
+  margin:0;
+  border:0;
+  border-top:3px solid #d9a864;
+  border-bottom:6px ridge #d7ab67;
+  border-radius:0;
+  background:
+   linear-gradient(90deg,#271d1531,#073d4c25 33%,#12596e26 67%,#38211730),
+   url('./m2-atlas-original-map.webp') center center/cover no-repeat;
+  box-shadow:inset 0 0 10px #251408a3;
+ }
+ .m2-atlas-intro,.m2-atlas-pop,.m2-atlas-top-question{
+  border-width:4px;
+  border-style:ridge;
+  border-color:#c09255;
+  border-radius:10px 10px 12px 7px;
+  background:
+   radial-gradient(ellipse at 25% 12%,#fffdf0ba,transparent 64%),
+   repeating-linear-gradient(36deg,transparent 0 7px,#855a2a0c 8px 9px,transparent 10px 17px),
+   linear-gradient(130deg,#f8dfb6 0%,#f1d6a7 65%,#c99e6c 100%);
+  box-shadow:inset 0 0 0 2px #ffedc4,0 3px 5px #22130a91;
+ }
+ .m2-atlas-intro{
+  padding:11px 12px 8px 20px;
+  overflow:visible;
+ }
+ .m2-atlas-roundel{
+  left:-13px;top:-14px;
+  width:54px;height:54px;
+  font-size:31px;
+  border:6px ridge #e1b35e;
+  box-shadow:0 0 0 3px #63321c,0 4px 5px #000a,inset 0 0 0 2px #ffe49d;
+ }
+ .m2-atlas-intro h2{
+  font-size:clamp(21px,1.67vw,29px);
+  line-height:1.07;
+  margin:5px 0 10px;
+  text-align:center;
+ }
+ .m2-atlas-intro p{font-size:clamp(12px,.94vw,16px);line-height:1.15}
+ .m2-atlas-intro-ornament{display:none}
+ .m2-atlas-pop{
+  padding:10px 10px 0;
+  overflow:hidden;
+  z-index:6;
+ }
+ .m2-atlas-pop h3{font-size:clamp(16px,1.1vw,20px);line-height:1.08;margin:0 0 8px}
+ .m2-atlas-pop h3 small{font-size:.77em}
+ .m2-atlas-pop>p{display:none}
+ .m2-atlas-pop-list{gap:0;padding-bottom:0}
+ .m2-atlas-pop-row{
+  min-height:38px;
+  height:38px;
+  grid-template-columns:59px minmax(0,1fr) 41px;
+  gap:4px;
+  padding:1px 2px;
+  border-bottom:1px solid #976f41a8;
+  background:transparent;
+  box-shadow:none;
+  border-radius:0;
+ }
+ .m2-atlas-pop-year{font-size:23px}
+ .m2-atlas-pop-row select{
+  height:31px;
+  border-width:2px;
+  border-color:#b4a39a;
+  border-radius:4px;
+  background:linear-gradient(#fff,#dbe3e8);
+  font-size:12px;
+  box-shadow:inset 0 1px 2px #595f6f55,0 1px 2px #47301a4a;
+ }
+ .m2-atlas-pop-row small{font-size:12px}
+ .m2-atlas-migrants-foreground{
+  left:-3px;bottom:-3px;
+  width:106%;
+  height:35px;
+  opacity:.87;
+  object-position:center 70%;
+  border-top:0;
+  mask-image:linear-gradient(to bottom,transparent,#000 35% 100%);
+ }
+ .m2-atlas-main-map{
+  min-height:0;
+  overflow:hidden;
+  border:0;
+  border-radius:0;
+  background:#146c7c;
+  box-shadow:none;
+ }
+ .m2-atlas-main-map img{
+  width:100%;height:100%;
+  object-fit:fill;
+  filter:saturate(1.12) contrast(1.04);
+ }
+ .m2-atlas-map-label,.m2-atlas-map-stamp{display:none}
+ .m2-atlas-top-question{
+  min-height:0;
+  height:100%;
+  padding:8px 9px 5px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+ }
+ .m2-atlas-top-scene{
+  position:absolute;
+  top:8px;left:8px;
+  width:87px;height:66px;
+  border:0;
+  border-radius:4px;
+  object-fit:cover;
+  box-shadow:0 2px 4px #4b2d1970;
+  filter:saturate(1.03) sepia(.12);
+ }
+ .m2-atlas-top-question h3{
+  min-height:25px;
+  max-width:calc(100% - 88px);
+  margin:3px 0 1px 93px;
+  padding:0;
+  font-size:clamp(18px,1.35vw,23px);
+  text-align:center;
+  line-height:1.06;
+ }
+ .m2-atlas-screen .m2-atlas-radios{
+  display:flex!important;
+  flex-direction:column!important;
+  flex:1 1 auto;
+  gap:2px;
+  min-height:0;
+  margin:0!important;
+  padding:0!important;
+ }
+ .m2-atlas-screen .m2-atlas-radios legend{
+  display:block!important;
+  float:none!important;
+  box-sizing:border-box;
+  max-width:calc(100% - 92px)!important;
+  width:auto!important;
+  min-height:43px;
+  margin:0 0 1px 92px!important;
+  padding:0!important;
+  text-align:left;
+  font:700 clamp(11px,.81vw,13px)/1.1 Georgia,serif;
+  overflow-wrap:break-word;
+ }
+ .m2-atlas-screen .m2-atlas-radio{
+  gap:5px;
+  padding:1px 0!important;
+  font-size:clamp(11px,.82vw,14px);
+  line-height:1.13;
+ }
+ .m2-atlas-screen .m2-atlas-radio>input{width:15px;height:15px;flex-basis:15px}
+ .m2-atlas-critical{
+  grid-column:2/5;
+  margin:0 0 0 16%;
+  padding:5px 13px;
+  min-height:0;
+  border:3px ridge #bf995b;
+  font-size:clamp(11px,.83vw,14px);
+  line-height:1.1;
+  background:linear-gradient(150deg,#fbecd1,#e5c294);
+  box-shadow:0 3px 5px #0008;
+ }
+ .m2-atlas-top-check{
+  margin:0;
+  padding:3px 8px;
+ }
+ .m2-atlas-check{
+  min-height:38px;
+  border-radius:10px;
+  border-width:4px;
+  font-size:clamp(13px,1.16vw,20px);
+  letter-spacing:.03em;
+  box-shadow:0 0 0 2px #8e551c,inset 0 0 0 2px #2b916c,0 4px 4px #0009;
+ }
+}
+
+
+/* Segunda pasada focalizada: legibilidad de pergaminos, retorno y
+   proporciones de los paneles inferiores. Sin alterar juegos ni respuestas. */
+.m2-atlas-home-link{
+ position:absolute;
+ left:-315px;top:21px;z-index:12;
+ display:block;
+ padding:4px 7px;
+ border:1px solid #d5a86b;
+ border-radius:5px;
+ background:#4c271abf;
+ color:#ffe2a8;
+ font:700 11px/1.15 Georgia,serif;
+ text-decoration:none;
+ text-shadow:0 1px 2px #100704;
+}
+.m2-atlas-home-link:hover,.m2-atlas-home-link:focus-visible{
+ color:#fff9d6;outline:2px solid #f6d488;
+ background:#73452b;
+}
+@media(min-width:1101px){
+ .m2-atlas-pop-row{grid-template-columns:56px 96px 51px;justify-content:space-around}
+ .m2-atlas-pop-row select{font-size:13px}
+ .m2-atlas-screen .m2-atlas-radios legend{font-size:clamp(12px,.83vw,14px)}
+ .m2-atlas-screen .m2-atlas-radio{
+  font-size:clamp(12px,.86vw,15px);
+  line-height:1.12;
+ }
+ .m2-atlas-row-two{
+  margin-top:4px;
+  gap:6px;
+ }
+ .m2-atlas-row-two .m2-atlas-route-stage{height:182px}
+ .m2-atlas-row-two .m2-atlas-activity>header{
+  min-height:38px;
+  margin-top:3px;
+ }
+ .m2-atlas-row-two .m2-atlas-activity>footer{
+  min-height:39px;
+  padding:3px 12px 5px;
+ }
+ .m2-atlas-row-two .m2-atlas-exercise-instruction{
+  margin-top:4px;margin-bottom:4px;
+  line-height:1.2;
+ }
+ .m2-atlas-row-two .m2-atlas-number{width:37px;height:37px;flex-basis:37px}
+ .m2-atlas-row-two .m2-atlas-route-map img{object-fit:cover}
+ .m2-atlas-luggage-activity{
+  min-height:0;
+  margin-top:5px;
+ }
+ .m2-atlas-luggage-activity>header{
+  margin:5px 12px 6px;
+  min-height:40px;
+ }
+ .m2-atlas-luggage-board{gap:8px}
+ .m2-atlas-luggage-cards{gap:5px;margin-top:5px}
+ .m2-atlas-luggage-card{
+  min-height:69px;
+  padding:3px 5px;
+  font-size:clamp(10px,.79vw,13px);
+ }
+ .m2-atlas-luggage-card img{width:36px;height:36px}
+ .m2-atlas-luggage-activity>footer{
+  min-height:38px;
+  padding:3px 13px 6px;
+ }
+ .m2-atlas-luggage-available{
+  padding:6px 8px 8px;
+  border-width:7px;
+ }
+ .m2-atlas-luggage-targets{gap:8px}
+ .m2-atlas-suitcase{padding:5px;border-width:7px}
+ .m2-atlas-suitcase>header{min-height:31px;padding:2px 5px;margin:-3px 0 5px}
+ .m2-atlas-suitcase-items{min-height:65px}
+ .m2-atlas-final-controls .m2-controls{margin-top:3px;padding-block:4px}
+}
+@media(max-width:1100px){
+ .m2-atlas-home-link{
+  position:static;
+  flex:0 1 auto;
+  font-size:10px;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-home-link{order:3}
+}
+
+
+/* Arte ORIGINAL de la imagen aprobada, no iconos reconstruidos.
+   Recortado, comprimido y reutilizado como capas decorativas no interactivas. */
+@media(min-width:1101px){
+ .m2-atlas-screen:before{
+  height:77px;
+  background:
+   url('./m2-atlas-header-left.webp') left top/auto 77px no-repeat,
+   url('./m2-atlas-header-right.webp') right top/auto 77px no-repeat,
+   linear-gradient(90deg,#5a311f,#2c1c17 35%,#382219 65%,#693c22);
+ }
+ .m2-atlas-main:before{
+  content:"";
+  position:absolute;
+  z-index:7;
+  left:10.65%;
+  top:clamp(89px,6.88vw,115px);
+  width:16.81%;
+  aspect-ratio:281/149;
+  background:url('./m2-atlas-travelers-cutout.webp') center/100% 100% no-repeat;
+  pointer-events:none;
+  filter:drop-shadow(0 3px 2px #1c120e70);
+ }
+ .m2-atlas-main .m2-atlas-pop-list{position:relative;z-index:9}
+ .m2-atlas-main .m2-atlas-pop{
+  z-index:auto;
+ }
+}
+@media(min-width:1101px) and (max-width:1420px){
+ .m2-atlas-main:before{left:10.4%;top:99px;width:17.3%}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   M2 E3 · ETAPA 02: la mitad inferior tiene objetos de época reales.
+   La maqueta 1672×941 guía proporciones y posiciones sin convertir
+   respuestas o botones en partes de una imagen estática.
+   ═══════════════════════════════════════════════════════════════════ */
+/* Libro de afirmaciones: el control es un select real, como en la lámina. */
+.m2-atlas-screen .m2-atlas-statement{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 86px;
+ gap:7px;
+ align-items:center;
+ padding:1px 2px;
+ min-width:0;
+}
+.m2-atlas-screen .m2-atlas-statement-label{
+ min-width:0;
+ overflow-wrap:anywhere;
+}
+.m2-atlas-screen .m2-atlas-truth{
+ display:block;
+ min-width:0;
+}
+.m2-atlas-screen .m2-atlas-statement-select{
+ display:block;
+ width:100%;
+ min-width:0;
+ height:29px;
+ padding:3px 4px;
+ border:3px ridge #ac8864;
+ border-radius:5px;
+ background:linear-gradient(180deg,#fffef7,#e0e7e9 55%,#bdc6cb);
+ box-shadow:inset 0 2px 3px #9b9d9d60,0 2px 2px #67452c54;
+ color:#3c2b1f;
+ font:700 11px/1.1 Georgia,serif;
+ cursor:pointer;
+}
+.m2-atlas-screen .m2-atlas-statement-select:focus-visible{
+ outline:3px solid #c68b35;
+ outline-offset:1px;
+ box-shadow:0 0 9px #b97a43a6;
+}
+.m2-atlas-screen .m2-atlas-statement-select:has(option:checked[value="egia"]),
+.m2-atlas-screen .m2-atlas-statement-select:has(option:checked[value="gezurra"]){
+ background:linear-gradient(#fff7e9,#e3c69d);
+}
+@media(min-width:1101px){
+ /* Reutilización de los instrumentos originales que aparecen sobre el mapa. */
+ .m2-atlas-screen:before{
+  height:77px;
+  background:
+   url('./m2-atlas-header-left.webp') left top / 374px 77px no-repeat,
+   url('./m2-atlas-header-right.webp') right top / 392px 77px no-repeat,
+   linear-gradient(0deg,#754b2b,#30251e);
+ }
+ .m2-atlas-pop{overflow:visible}
+ .m2-atlas-migrants-foreground{
+  pointer-events:none;
+  z-index:8;
+  width:281px;
+  max-width:none;
+  height:149px;
+  left:-73px;
+  bottom:-86px;
+  border:0;
+  border-radius:0;
+  opacity:1;
+  object-fit:contain;
+  object-position:center bottom;
+  mask-image:none;
+  filter:drop-shadow(2px 3px 3px #18120a7c);
+ }
+ /* Dos hojas de atlas talladas y un paisaje portuario en primer plano. */
+ .m2-atlas-row-two{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:5px;
+  margin-top:5px;
+ }
+ .m2-atlas-row-two .m2-atlas-activity{
+  box-sizing:border-box;
+  min-height:301px;
+  padding-bottom:3px;
+  border:7px ridge #b77b3b;
+  border-radius:3px;
+  box-shadow:
+   inset 0 0 0 2px #ffdf97,
+   inset 0 0 19px #8753275c,
+   0 5px 4px #1d100ac9;
+ }
+ .m2-atlas-route-activity{
+  isolation:isolate;
+  overflow:hidden;
+  background:
+   repeating-linear-gradient(21deg,transparent 0 8px,#bb8f4e16 10px 11px,transparent 13px 17px),
+   radial-gradient(ellipse at 25% 0%,#fffae8,transparent 69%),
+   linear-gradient(160deg,#e7c592,#f1debc 50%,#c99b60);
+ }
+ .m2-atlas-route-activity:before{
+  content:"";
+  position:absolute;inset:auto 0 0;
+  height:37%;
+  pointer-events:none;
+  z-index:0;
+  background:url('./m2-atlas-port-original-style.svg') center bottom / cover no-repeat;
+  opacity:.95;
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 26%);
+ }
+ .m2-atlas-route-activity>header,
+ .m2-atlas-route-activity>.m2-atlas-exercise-instruction,
+ .m2-atlas-route-activity>.m2-atlas-route-stage,
+ .m2-atlas-route-activity>footer{position:relative;z-index:1}
+ .m2-atlas-activity>header{
+  min-height:39px;
+  margin:3px 8px 0;
+  gap:5px;
+ }
+ .m2-atlas-activity>header .m2-atlas-number{
+  flex:0 0 51px;
+  width:51px;height:51px;
+  border-radius:50%;
+  margin:-8px 2px 0 -4px;
+  border:6px ridge #deb36a;
+  box-shadow:0 0 0 2px #6f2e1f,0 3px 5px #0009,inset 0 0 0 1px #f9dc9e;
+  font-size:26px;
+ }
+ .m2-atlas-activity>header h2{
+  border:3px ridge #c9954c;
+  border-radius:7px 20px 6px 6px;
+  min-height:30px;
+  padding:4px 13px 3px;
+  font-size:clamp(20px,1.56vw,28px);
+  background:
+   radial-gradient(ellipse at 45% 0%,#a12b2c,transparent 70%),
+   linear-gradient(95deg,#640f19,#4a0914 60%,#78181f);
+  box-shadow:0 2px 4px #281208a6;
+ }
+ .m2-atlas-exercise-instruction{
+  margin:2px 13px 5px;
+  font-size:clamp(11px,.84vw,14px);
+  line-height:1.16;
+ }
+ .m2-atlas-route-stage{
+  grid-template-columns:minmax(0,34%) minmax(0,66%);
+  gap:6px;
+  height:185px;
+  min-height:185px;
+  padding:0 11px;
+ }
+ .m2-atlas-route-labels{gap:6px;justify-content:flex-start}
+ .m2-atlas-route-line{min-height:0}
+ .m2-atlas-route-card{
+  min-height:50px;
+  border:3px ridge #b8874a;
+  border-radius:9px 16px 14px 7px;
+  padding:6px 7px;
+  background:
+   radial-gradient(ellipse at 25% 0%,#fff9d7,transparent 65%),
+   linear-gradient(170deg,#f9e2b3,#e8c393);
+  color:#432416;
+  font:700 clamp(12px,.92vw,16px)/1.14 Georgia,serif;
+  box-shadow:inset 0 0 0 2px #ffedc7,0 3px 2px #3e241b75;
+ }
+ .m2-atlas-route-connector{font-size:24px;color:#a8753c}
+ .m2-atlas-route-map{
+  border-width:5px;
+  border-color:#b88d48;
+  background:#1b657a;
+  box-shadow:inset 0 0 0 2px #f5d6a1,0 3px 5px #1b0c0aa1;
+ }
+ .m2-atlas-route-map>img{
+  filter:saturate(1.27) contrast(1.09);
+ }
+ .m2-atlas-pin{
+  width:27px;height:27px;
+  border-width:4px;
+  border-color:#f4d394;
+  box-shadow:0 0 0 2px #855c2d,0 2px 3px #0009;
+ }
+ .m2-atlas-route-activity>footer{
+  padding:3px 13px 6px;
+  min-height:40px;
+ }
+ .m2-atlas-route-activity>footer .m2-atlas-check{margin-top:-6px}
+ /* Cuaderno de emigración con una fotografía de época sobre otras hojas. */
+ .m2-atlas-facts-activity{
+  position:relative;
+  overflow:hidden;
+  background:
+   radial-gradient(ellipse at 15% 0%,#fff8e6,transparent 65%),
+   repeating-linear-gradient(16deg,transparent 0 8px,#9a6f4313 11px 12px,transparent 14px 22px),
+   linear-gradient(150deg,#eac998,#f4e4c6 65%,#cfad83);
+ }
+ .m2-atlas-facts-activity:before{
+  content:"";
+  position:absolute;
+  right:17px;top:35px;
+  width:193px;height:169px;
+  transform:rotate(6deg);
+  background:
+   repeating-linear-gradient(3deg,transparent 0 17px,#76573722 18px 19px,transparent 21px 30px),
+   linear-gradient(145deg,#fff5df,#d7b88f);
+  border:5px solid #f8e8c6;
+  box-shadow:0 0 0 1px #72513a,0 5px 8px #23110791;
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity:after{
+  content:"";
+  position:absolute;
+  right:27px;top:45px;
+  width:184px;height:162px;
+  transform:rotate(7deg);
+  background:
+   url('./m2-atlas-travelers-cutout.webp') center 83% / 100% auto no-repeat,
+   url('./m2-ledger-voyage.svg') center center/cover no-repeat,
+   #c0ac86;
+  border:6px solid #fff1cf;
+  outline:1px solid #926c4b;
+  box-shadow:inset 0 0 10px #7e5237a6,0 5px 11px #2c1b148c;
+  filter:sepia(.87) saturate(.46) contrast(1.12);
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity>header,
+ .m2-atlas-facts-activity>.m2-atlas-exercise-instruction,
+ .m2-atlas-facts-activity>.m2-atlas-statements,
+ .m2-atlas-facts-activity>.m2-atlas-fact-head,
+ .m2-atlas-facts-activity>footer{position:relative;z-index:1}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin:7px 224px 2px 12px;
+  font-size:9px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements{
+  margin:0 224px 0 11px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  min-height:33px;
+  border-bottom:1px solid #bf936187;
+  font-size:clamp(10px,.75vw,12px);
+  line-height:1.15;
+  grid-template-columns:minmax(0,1fr) 74px;
+  gap:5px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+  height:28px;
+  font-size:11px;
+ }
+ .m2-atlas-facts-activity>footer{
+  min-height:42px;
+  margin:0;
+  padding:2px 13px 6px;
+ }
+ .m2-atlas-facts-activity>footer .m2-atlas-check{
+  position:relative;
+  z-index:2;
+ }
+ /* Escena de maletas: mesa con equipaje, ocho cartelas y dos arcones. */
+ .m2-atlas-luggage-activity{
+  isolation:isolate;
+  overflow:visible;
+  min-height:287px;
+  padding:5px 0 12px;
+  margin-top:5px;
+  border:7px ridge #a5743d;
+  border-radius:3px;
+  background:
+   radial-gradient(ellipse at 84% 0%,#8fd1df5e,transparent 46%),
+   linear-gradient(90deg,#e9c694,#dab38b 23%,#ad7445 45%,#bf935d 77%,#80b9b9);
+  box-shadow:inset 0 0 0 2px #fff0ba,0 5px 5px #0009;
+ }
+ .m2-atlas-luggage-activity:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:0;bottom:1px;
+  width:25%;height:80%;
+  background:url('./m2-atlas-luggage-stilllife.svg') left bottom/100% 100% no-repeat;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity:after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  right:0;bottom:0;
+  width:15%;height:94%;
+  background:
+   linear-gradient(to bottom,#4e6d6c22,transparent 30%),
+   url('./m2-atlas-port-original-style.svg') 78% bottom/auto 100% no-repeat;
+  opacity:.96;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity>header{
+  display:grid;
+  grid-template-columns:47px minmax(0,1fr);
+  gap:3px;
+  position:absolute;
+  top:8px;left:9px;
+  width:23%;
+  margin:0;
+  padding:0 2px;
+  z-index:2;
+ }
+ .m2-atlas-luggage-activity>header .m2-atlas-number{
+  margin:-8px 0 0 -4px;
+  width:51px;height:51px;
+  flex-basis:51px;
+ }
+ .m2-atlas-luggage-activity>header h2{
+  min-height:0;
+  padding:6px 5px;
+  font-size:clamp(18px,1.35vw,25px);
+  white-space:normal;
+  text-align:center;
+ }
+ .m2-atlas-luggage-activity>header p{
+  grid-column:1/-1;
+  width:calc(100% - 66px);
+  margin:12px 0 0 65px;
+  padding:4px 3px 5px;
+  border:0;
+  color:#42291d;
+  font:700 clamp(12px,.93vw,16px)/1.22 Georgia,serif;
+  background:#f5dfb4a8;
+  text-shadow:0 1px #fff1d7;
+  box-shadow:0 0 7px #efcf9cb4;
+ }
+ .m2-atlas-luggage-board{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.16fr);
+  align-items:stretch;
+  gap:11px;
+  margin:0 14.5% 0 23.7%;
+  padding:2px 0 0;
+ }
+ .m2-atlas-luggage-available{
+  min-height:230px;
+  border:12px ridge #986237;
+  border-radius:20px 22px 19px 20px;
+  padding:8px 8px 12px;
+  background:
+   radial-gradient(ellipse at 8% 2%,#efbd7d5e,transparent 55%),
+   repeating-linear-gradient(13deg,transparent 0 11px,#c7864a1c 12px 14px,transparent 15px 26px),
+   linear-gradient(120deg,#56321f,#8e532d 44%,#361c15);
+  box-shadow:0 0 0 2px #3d2317,0 5px 9px #1008059c,inset 0 0 0 3px #d2a269;
+ }
+ .m2-atlas-luggage-note{
+  position:relative;
+  margin:-4px 0 4px;
+  font-size:9px;
+  letter-spacing:.08em;
+  color:#ffe5b5;
+ }
+ .m2-atlas-luggage-cards{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
+  margin:0;
+ }
+ .m2-atlas-luggage-card{
+  min-height:91px;
+  padding:5px 3px;
+  border:5px ridge #ca9a57;
+  border-radius:10px 8px 12px 7px;
+  background:
+   radial-gradient(ellipse at 22% 0%,#fff9eb,transparent 65%),
+   repeating-linear-gradient(14deg,transparent 0 6px,#ab834010 8px 9px,transparent 11px 16px),
+   linear-gradient(160deg,#fff0cc,#eac48e 65%,#dba767);
+  font-size:clamp(10px,.67vw,12px);
+  line-height:1.11;
+  box-shadow:inset 0 0 0 2px #ffe5b8,0 3px 3px #130805ad;
+ }
+ .m2-atlas-luggage-card img{
+  width:clamp(38px,3vw,53px);
+  height:clamp(37px,3vw,53px);
+  margin-bottom:1px;
+  filter:drop-shadow(0 2px 1px #53331b6b);
+ }
+ .m2-atlas-luggage-targets{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:3px;
+  min-height:0;
+  align-items:stretch;
+ }
+ .m2-atlas-suitcase{
+  isolation:isolate;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:224px;
+  height:auto;
+  border:0;
+  outline:0;
+  border-radius:0;
+  padding:15px 13px 24px;
+  margin:0;
+  background:url('./m2-atlas-leather-case-red.svg') center center/100% 100% no-repeat;
+  box-shadow:none;
+  color:#fff2da;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-atlas-leather-case-blue.svg') center center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase>header{
+  position:relative;
+  z-index:2;
+  min-height:46px;
+  padding:3px 4px;
+  margin:0 0 6px;
+  border:4px ridge #b88040;
+  border-radius:6px;
+  background:
+   radial-gradient(ellipse at 30% 0%,#fff8e9,transparent 75%),
+   linear-gradient(#f3d7a4,#dfad67);
+  box-shadow:inset 0 0 0 2px #f9eac0,0 2px 4px #321709b0;
+ }
+ .m2-atlas-suitcase>header strong{
+  font-size:clamp(11px,.76vw,14px);
+  line-height:1.05;
+ }
+ .m2-atlas-suitcase>header small{font-size:9px}
+ .m2-atlas-luggage-drop{
+  flex:0 0 auto;
+  position:relative;
+  z-index:3;
+  width:100%;
+  height:28px;
+  border:2px dashed #ffdfb1b3;
+  border-radius:4px;
+  background:#fff1c013;
+  color:#fff5d1;
+  font-size:8.5px;
+  box-shadow:0 0 0 1px #2b1310aa;
+ }
+ .m2-atlas-suitcase-items{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(32px,auto);
+  align-content:start;
+  gap:5px;
+  min-height:72px;
+  padding:4px;
+  border:1px dashed #ffe4aa77;
+  border-radius:4px;
+  background:#170d1017;
+ }
+ .m2-atlas-packed{
+  min-height:34px;
+  font-size:clamp(9px,.67vw,12px);
+  padding:3px 2px;
+ }
+ .m2-atlas-packed img{width:25px;height:25px}
+ .m2-atlas-luggage-activity>footer{
+  position:absolute;
+  z-index:3;
+  right:6px;
+  bottom:8px;
+  width:13.5%;
+  min-height:49px;
+  margin:0;
+  padding:5px 3px;
+  flex-direction:column;
+  gap:2px;
+  align-items:stretch;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  max-width:100%;
+  min-width:0;
+  height:42px;
+  padding:4px 5px;
+  font-size:clamp(12px,.88vw,16px);
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-section-status{
+  text-align:center;
+  font-size:9px;
+ }
+}
+/* Medium screens retain readable two-column dossiers, without hiding photos. */
+@media(min-width:1101px) and (max-width:1480px){
+ .m2-atlas-facts-activity:before{right:12px;width:154px;height:155px}
+ .m2-atlas-facts-activity:after{right:18px;width:148px;height:147px}
+ .m2-atlas-facts-activity .m2-atlas-statements{margin-right:164px}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{margin-right:164px}
+ .m2-atlas-luggage-card{font-size:10px;min-height:87px}
+ .m2-atlas-suitcase{padding-inline:9px}
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-statement{grid-template-columns:minmax(0,1fr) 90px}
+ .m2-atlas-screen .m2-atlas-statement-select{height:34px}
+ .m2-atlas-suitcase{
+  background:url('./m2-atlas-leather-case-red.svg') center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-atlas-leather-case-blue.svg') center/100% 100% no-repeat;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-statement{
+  grid-template-columns:minmax(0,1fr) 80px;
+  min-height:45px;
+ }
+ .m2-atlas-screen .m2-atlas-statement-select{height:34px;font-size:11px}
+ .m2-atlas-screen .m2-atlas-statement-label{font-size:11.5px}
+}
+
+
+/* ETAPA 02 · Retouches: restaurar viajeros pintados (no foto superpuesta)
+   y dejar libre la interpretación crítica a su derecha. */
+@media(min-width:1101px){
+ .m2-atlas-main{
+  grid-template-columns:minmax(0,17fr) minmax(0,18fr) minmax(0,27fr) minmax(0,18fr) minmax(0,20fr);
+ }
+ .m2-atlas-migrants-foreground{
+  width:281px;
+  height:149px;
+  left:-73px;
+  bottom:-79px;
+  max-width:none;
+  mask-image:none!important;
+  clip-path:polygon(0 2%,68% 2%,72% 30%,100% 29%,100% 100%,0 100%);
+  border:none;
+ }
+ .m2-atlas-critical{
+  grid-column:2/5;
+  margin-left:19%;
+  padding-left:17px;
+  line-height:1.18;
+  font-size:clamp(11px,.9vw,14px);
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-label{
+  text-align:left;
+ }
+ .m2-atlas-route-activity>footer .m2-atlas-check,
+ .m2-atlas-facts-activity>footer .m2-atlas-check,
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  background:
+   radial-gradient(ellipse at 38% 0%,#42a98a78,transparent 70%),
+   linear-gradient(180deg,#167b60,#07543e 62%,#073a30);
+  border-color:#e0b361;
+  color:#fff5cc;
+  text-shadow:0 2px 2px #112e21;
+  box-shadow:0 0 0 2px #8b4e24,inset 0 0 0 2px #3a9577,0 5px 6px #1f150ac2;
+ }
+}
+
+
+/* Etapa 02 · contraste de 1672px con la referencia original.
+   Conservar un solo grupo de viajeros (ya está incluido en el fondo
+   pictórico) y limitar las placas a la anchura real del museo. */
+@media(min-width:1101px){
+ .m2-atlas-heading{
+  width:min(830px,calc(100% - 570px));
+  max-width:830px;
+ }
+ .m2-atlas-intro .m2-atlas-roundel{
+  left:4px;
+  top:-13px;
+  width:63px;
+  height:63px;
+  font-size:33px;
+ }
+ .m2-atlas-migrants-foreground{
+  display:none;
+ }
+ .m2-atlas-row-two .m2-atlas-activity>header h2{
+  flex:0 1 495px;
+  max-width:72%;
+ }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════
+   MIGRAZIOEN BULEGOA · ETAPA 03 · arte real aprobado / HTML interactivo
+   Siete fragmentos recuperados de la lámina 1672×941. Las preguntas,
+   conceptos y mecanismos no son imágenes incrustadas; continúan en HTML.
+   ════════════════════════════════════════════════════════════════════ */
+@media (min-width:1101px){
+ .m2-atlas-row-two .m2-atlas-route-activity{
+  background:
+   radial-gradient(ellipse at 38% -15%,#fff6d6d9,transparent 57%),
+   repeating-linear-gradient(13deg,#90734c0c 0 7px,transparent 9px 17px),
+   linear-gradient(165deg,#f3dbb0,#e8c796 60%,#be8f57);
+  border-image:none;
+  border:7px ridge #c08c44;
+ }
+ .m2-atlas-row-two .m2-atlas-route-activity:before{
+  left:0;right:0;bottom:0;top:auto;
+  width:100%;height:116px;
+  z-index:0;opacity:1;
+  background:url('./m2-reference-harbor.webp') center bottom/100% auto no-repeat;
+  background-color:transparent;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 32%);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 32%);
+  pointer-events:none;
+ }
+ .m2-atlas-row-two .m2-atlas-route-stage{
+  height:182px;min-height:182px;
+  grid-template-columns:minmax(0,33%) minmax(0,67%);
+ }
+ .m2-atlas-route-labels{
+  z-index:3;position:relative;
+ }
+ .m2-atlas-route-map{
+  z-index:2;position:relative;
+  border:5px ridge #c69a55;
+  border-radius:7px;
+  box-shadow:0 4px 6px #1d0e0887,inset 0 0 0 1px #fff0ba;
+ }
+ .m2-atlas-route-card{
+  background:
+    radial-gradient(ellipse at 45% 0%,#fffbec 0%,transparent 65%),
+    linear-gradient(168deg,#fbe7ba,#e5bb82 85%);
+  border:4px ridge #b47b3e;
+  border-radius:9px 18px 15px 9px;
+  box-shadow:inset 0 0 0 2px #fff4cc,0 3px 3px #391e0f87;
+  font-size:clamp(12px,.85vw,15px);
+ }
+ .m2-atlas-facts-activity{
+  background:
+   repeating-linear-gradient(15deg,transparent 0 7px,#9f743d1c 9px 10px,transparent 13px 19px),
+   radial-gradient(ellipse at 20% 5%,#fff8e6,transparent 60%),
+   linear-gradient(135deg,#f2dfb8,#e2bb82 96%);
+ }
+ .m2-atlas-facts-activity:after{
+  right:22px;top:42px;
+  width:184px;height:158px;
+  background:url('./m2-reference-port-photo.webp') center /cover no-repeat;
+  border:0;
+  outline:0;
+  transform:rotate(3deg);
+  box-shadow:0 5px 11px #2c1b1490;
+  filter:saturate(.94) contrast(1.07);
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity:before{
+  right:20px;top:41px;
+  width:202px;height:173px;
+  transform:rotate(-4deg);
+  background:linear-gradient(165deg,#fff0d3,#d7b083);
+  border:5px solid #f6e5c0;
+  box-shadow:0 0 0 1px #956f46,0 5px 11px #2c1b1490;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements,
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin-right:225px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  min-height:32px;
+  padding:2px 2px;
+  font-size:clamp(10.5px,.75vw,12px);
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+  background:linear-gradient(180deg,#fffef8,#e8edf1 69%,#bac4cc);
+  border-color:#a5927d;
+ }
+ /* La escena pintada del referente sustituye a los objetos vectoriales. */
+ .m2-atlas-luggage-activity{
+  min-height:282px;
+  background:
+   linear-gradient(90deg,#e8c79b 0%,#e7cfaa 21%,#b78856 45%,#bb8759 81%,#7db7c1 100%);
+  border:7px ridge #ac8049;
+  box-shadow:inset 0 0 0 2px #ffedc0,0 5px 5px #12070798;
+ }
+ .m2-atlas-luggage-activity:before{
+  position:absolute;
+  z-index:0;
+  left:0;bottom:0;
+  width:26%;height:185px;
+  background:url('./m2-reference-old-luggage.webp') left bottom/auto 190px no-repeat;
+  opacity:1;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 29%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 29%);
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity:after{
+  position:absolute;z-index:0;
+  right:0;bottom:0;
+  width:15.8%;height:238px;
+  opacity:1;
+  background:url('./m2-reference-right-steamer.webp') right bottom/100% 100% no-repeat;
+  -webkit-mask-image:none;
+  mask-image:none;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity>header{z-index:3}
+ .m2-atlas-luggage-board{
+  position:relative;
+  z-index:3;
+  grid-template-columns:minmax(0,.96fr) minmax(0,1.05fr);
+  gap:9px;
+  margin:0 15.3% 0 24.0%;
+ }
+ .m2-atlas-luggage-available{
+  position:relative;
+  isolation:isolate;
+  min-height:236px;
+  padding:18px 13px 20px;
+  border:0;
+  outline:0;
+  border-radius:6px;
+  background:url('./m2-reference-open-leather.webp') center/100% 100% no-repeat;
+  box-shadow:none;
+ }
+ .m2-atlas-luggage-available:before{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:-1;
+  left:7%;right:6.5%;top:13%;bottom:19%;
+  background:
+   radial-gradient(ellipse at 50% 0%,#c58c4b44,transparent 65%),
+   repeating-linear-gradient(6deg,transparent 0 14px,#d69b5330 16px 17px,transparent 19px 29px),
+   linear-gradient(125deg,#5a341e,#764320 54%,#3e2216);
+  border-radius:9px;
+  box-shadow:inset 0 0 10px #160908b8;
+ }
+ .m2-atlas-luggage-note{
+  position:relative;
+  z-index:2;
+  display:block;
+  min-height:15px;
+  margin:0 0 3px;
+  padding:0;
+  font-size:9px;
+  color:#fff2d8;
+  text-shadow:0 2px 3px #140803;
+ }
+ .m2-atlas-luggage-cards{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:4px;
+  position:relative;
+  z-index:3;
+  margin:0;
+ }
+ .m2-atlas-luggage-card{
+  position:relative;
+  min-height:85px;
+  padding:4px 2px;
+  border:4px ridge #d6a362;
+  border-radius:9px 8px 11px 8px;
+  background:radial-gradient(ellipse at 24% 0%,#fffef3,transparent 65%),
+             linear-gradient(155deg,#fff1ca,#e3bd84)!important;
+  color:#3b2117;
+  font:700 clamp(10px,.72vw,12px)/1.13 Georgia,serif;
+  text-shadow:0 1px #fff2d7;
+  box-shadow:inset 0 0 0 1px #ffefcc,0 2px 3px #1b0e0985;
+ }
+ .m2-atlas-luggage-card img{
+  width:clamp(37px,2.85vw,49px);
+  height:clamp(36px,2.7vw,48px);
+ }
+ .m2-atlas-luggage-targets{
+  align-items:start;
+  gap:4px;
+ }
+ .m2-atlas-suitcase,.m2-atlas-suitcase-effect{
+  position:relative;
+  isolation:isolate;
+  min-height:242px;
+  height:auto;
+  padding:67px 12px 28px;
+  border:0;
+  box-shadow:none;
+  background:url('./m2-reference-red-suitcase.webp') center/100% 100% no-repeat;
+  border-radius:15px 15px 22px 22px;
+  overflow:visible;
+ }
+ .m2-atlas-suitcase-effect{
+  background-image:url('./m2-reference-blue-suitcase.webp');
+ }
+ /* Los títulos están impresos en la ilustración aprobada; conservar el
+    texto real accesible para lectores de pantalla. */
+ .m2-atlas-suitcase>header{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  margin:0!important;padding:0!important;
+  overflow:hidden!important;
+  clip-path:inset(50%);
+  white-space:nowrap;
+ }
+ .m2-atlas-luggage-drop{
+  position:relative;
+  z-index:4;
+  height:22px;min-height:22px;
+  margin:0 4px 3px;
+  width:calc(100% - 8px);
+  background:#3019117d;
+  color:#ffe7ba;
+  border:1px dashed #f8d9a9cc;
+  border-radius:4px;
+  font:700 8px/1 Georgia,serif;
+  box-shadow:0 0 0 1px #1c0d097a;
+  cursor:pointer;
+ }
+ .m2-atlas-luggage-drop:hover,
+ .m2-atlas-luggage-drop:focus-visible{
+  background:#ffe8aa42;
+  border-color:#fff1ce;
+  outline:2px solid #ffe0a0;
+ }
+ .m2-atlas-suitcase-items{
+  position:relative;
+  z-index:3;
+  margin:0 3px;
+  padding:2px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(42px,auto);
+  align-content:start;
+  gap:5px;
+  min-height:96px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  overflow:visible;
+ }
+ .m2-atlas-packed{
+  width:100%;
+  min-width:0;
+  min-height:43px;
+  padding:3px 2px;
+  border:2px ridge #cfad70;
+  border-radius:6px;
+  background:linear-gradient(145deg,#fff6d9,#e6c493);
+  font:700 clamp(9px,.63vw,11px)/1.1 Georgia,serif;
+  color:#40251c;
+  box-shadow:0 2px 4px #1b0c07a8;
+  overflow-wrap:break-word;
+ }
+ .m2-atlas-packed img{width:24px;height:24px}
+ /* En estados de 5 a 8 fichas la maleta crece: no cubrir su contenido. */
+ .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(5)){
+  min-height:310px;
+  padding-bottom:30px;
+  background-size:100% 100%;
+ }
+ .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(7)){
+  min-height:367px;
+ }
+ .m2-atlas-luggage-activity>footer{
+  z-index:4;
+  right:5px;bottom:6px;
+  width:14.2%;
+  background:transparent;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  border-width:5px;
+  border-radius:18px;
+  box-shadow:inset 0 0 0 2px #6dc49b,0 0 0 2px #804f2f,0 5px 5px #2414059d;
+ }
+}
+/* In smaller windows the original artwork remains, while the layout
+   stacks naturally and controls remain reachable and legible. */
+@media (max-width:1100px){
+ .m2-atlas-route-activity:before{
+  background:url('./m2-reference-harbor.webp') center bottom/cover no-repeat;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 38%);
+  mask-image:linear-gradient(to bottom,transparent 0%,black 38%);
+ }
+ .m2-atlas-facts-activity:after{
+  background:url('./m2-reference-port-photo.webp') center /cover no-repeat;
+  filter:saturate(.95);
+ }
+ .m2-atlas-luggage-activity:before{
+  background:url('./m2-reference-old-luggage.webp') left bottom/auto 100% no-repeat;
+ }
+ .m2-atlas-luggage-activity:after{
+  background:url('./m2-reference-right-steamer.webp') right bottom /cover no-repeat;
+ }
+ .m2-atlas-luggage-available{
+  background:url('./m2-reference-open-leather.webp') center /100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase{
+  background:url('./m2-reference-red-suitcase.webp') center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-reference-blue-suitcase.webp') center/100% 100% no-repeat;
+ }
+}
+@media (max-width:680px){
+ /* Keep live titles on phones; cropped lettering must never replace
+    accessible, reflowing content. */
+ .m2-atlas-suitcase>header{
+  position:relative;
+  z-index:2;
+  background:linear-gradient(#fff7dc,#dbb172);
+ }
+ .m2-atlas-luggage-available{background-size:100% 100%}
+ .m2-atlas-facts-activity:after{opacity:.68}
+ .m2-atlas-route-activity:before{opacity:.72}
+}
+
+
+/* Atlas, etapa 03b — solapar con precisión los controles sobre los huecos
+   de las maletas pintadas y no mostrar rótulos estáticos fuera de contexto. */
+@media (min-width:1101px){
+ .m2-atlas-luggage-activity:before{
+  /* El fragmento artístico incluye una pequeña frase impresa en la esquina
+     superior derecha: se elimina esa esquina, manteniendo sombrero y maletas. */
+  -webkit-clip-path:polygon(0 0,56% 0,56% 24%,100% 24%,100% 100%,0 100%);
+  clip-path:polygon(0 0,56% 0,56% 24%,100% 24%,100% 100%,0 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000,#000);
+  mask-image:linear-gradient(to bottom,#000,#000);
+ }
+ .m2-atlas-luggage-board{
+  grid-template-columns:minmax(0,1.12fr) minmax(0,1.05fr);
+  margin:0 9.5% 0 23.7%;
+  gap:7px;
+ }
+ .m2-atlas-luggage-available{
+  background-position:50% 50%;
+  background-size:110% 100%;
+ }
+ .m2-atlas-suitcase,
+ .m2-atlas-suitcase-effect{
+  padding-top:77px;
+  background-size:100% 100%;
+ }
+ .m2-atlas-luggage-drop{
+  height:16px;
+  min-height:16px;
+  padding:0 2px;
+  margin:0 4px 3px;
+  border-color:#edd5a796;
+  background:#3d231994;
+  font-size:7px;
+  line-height:1;
+ }
+ .m2-atlas-suitcase-items{
+  grid-auto-rows:minmax(43px,auto);
+ }
+ .m2-atlas-luggage-activity>footer{
+  width:9.3%;
+  background:#5c382a43;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  font-size:clamp(11px,.72vw,14px);
+  padding:4px 2px;
+ }
+}
+
+
+/* Atlas 03c · texto impreso antiguo sin duplicados y bandeja realmente vacía. */
+@media(min-width:1101px){
+ .m2-atlas-luggage-activity:before{
+  -webkit-clip-path:none;
+  clip-path:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+  background:
+   radial-gradient(ellipse at 35% 20%,#f0d9b1,#e7c89b 65%,#e3bc84)
+     right bottom 109px / 67% 77px no-repeat,
+   url('./m2-reference-old-luggage.webp') left bottom / auto 190px no-repeat;
+ }
+ .m2-atlas-luggage-available:before{
+  content:"";
+  inset:13% 6.5% 18% 7%;
+  border:0;
+  border-radius:8px;
+  background:
+    url('./m2-atlas-empty-tray-compartments.svg') center/100% 100% no-repeat,
+    linear-gradient(135deg,#523019,#754527 55%,#482719);
+  box-shadow:inset 0 0 13px #170b08b8,0 0 0 2px #82542c;
+ }
+ .m2-atlas-luggage-activity>header p{
+  position:relative;
+  z-index:7;
+  min-height:65px;
+  padding:5px 7px 7px;
+  background:linear-gradient(150deg,#f7e3bd,#e9cc9a);
+  border:1px solid #c19257;
+  border-radius:4px;
+  box-shadow:0 2px 5px #6c4d2b70;
+ }
+}
+
+
+/* Atlas 03d · sin parche rectangular: la ilustración del equipaje conserva
+   el sombrero y las maletas originales y oculta únicamente la frase impresa
+   que ya está expresada mediante texto HTML accesible. */
+@media(min-width:1101px){
+ .m2-atlas-luggage-activity:before{
+  background:url('./m2-atlas-original-luggage-clean.svg') left bottom /auto 190px no-repeat;
+  -webkit-clip-path:none;
+  clip-path:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+ }
+}
+
+
+/* Atlas 03e · eliminar los números pintados que aparecían duplicados
+   sobre la fila de 1900 sin recortar a los viajeros de la imagen original. */
+@media(min-width:1101px){
+ .m2-atlas-main:before{
+  -webkit-clip-path:polygon(0 0,55% 0,55% 31%,100% 31%,100% 100%,0 100%);
+  clip-path:polygon(0 0,55% 0,55% 31%,100% 31%,100% 100%,0 100%);
+ }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+  M2 E3 · Etapa 04: ocho grabados originales de la lámina elegida.
+  Recortes visuales de m2-reference-open-leather.webp:
+  nada de medallones modernos ni textos incrustados en las respuestas.
+  Las fichas siguen siendo botones HTML arrastrables.
+  ═══════════════════════════════════════════════════════════════ */
+.m2-atlas-screen [data-atlas-bag-card]{
+ --atlas-crop-x:-62px;
+ --atlas-crop-y:-33px;
+ --atlas-crop-mini-x:-31px;
+ --atlas-crop-mini-y:-16.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="growth"]{
+ --atlas-crop-x:-274px;--atlas-crop-y:-31px;
+ --atlas-crop-mini-x:-137px;--atlas-crop-mini-y:-15.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="conditions"]{
+ --atlas-crop-x:-169px;--atlas-crop-y:-34px;
+ --atlas-crop-mini-x:-84.5px;--atlas-crop-mini-y:-17px;
+}
+.m2-atlas-screen [data-atlas-bag-card="better"]{
+ --atlas-crop-x:-63px;--atlas-crop-y:-35px;
+ --atlas-crop-mini-x:-31.5px;--atlas-crop-mini-y:-17.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="conversion"]{
+ --atlas-crop-x:-174px;--atlas-crop-y:-140px;
+ --atlas-crop-mini-x:-87px;--atlas-crop-mini-y:-70px;
+}
+.m2-atlas-screen [data-atlas-bag-card="settlement"]{
+ --atlas-crop-x:-368px;--atlas-crop-y:-35px;
+ --atlas-crop-mini-x:-184px;--atlas-crop-mini-y:-17.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="oceania"]{
+ --atlas-crop-x:-376px;--atlas-crop-y:-143px;
+ --atlas-crop-mini-x:-188px;--atlas-crop-mini-y:-71.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="faith"]{
+ --atlas-crop-x:-277px;--atlas-crop-y:-141px;
+ --atlas-crop-mini-x:-138.5px;--atlas-crop-mini-y:-70.5px;
+}
+.m2-atlas-screen .m2-atlas-luggage-card img,
+.m2-atlas-screen .m2-atlas-packed img{
+ display:none;
+}
+.m2-atlas-screen .m2-atlas-ref-icon{
+ flex:0 0 auto;
+ display:block;
+ box-sizing:border-box;
+ width:80px;
+ max-width:100%;
+ height:45px;
+ margin:0 auto 2px;
+ background-image:url('./m2-reference-open-leather.webp');
+ background-repeat:no-repeat;
+ background-size:512px 282px;
+ background-position:var(--atlas-crop-x) var(--atlas-crop-y);
+ -webkit-mask-image:radial-gradient(ellipse 75% 78% at 50% 51%,#000 60%,transparent 100%);
+ mask-image:radial-gradient(ellipse 75% 78% at 50% 51%,#000 60%,transparent 100%);
+ pointer-events:none;
+ filter:contrast(1.08) saturate(1.07) drop-shadow(0 1px 1px #4a2f1b5e);
+}
+.m2-atlas-screen [data-atlas-bag-card="missions"] .m2-atlas-ref-icon{
+ background-image:url('./m2-atlas-original-mission.webp');
+ background-position:50% 38%;
+ background-size:cover;
+ border-radius:3px;
+}
+.m2-atlas-screen .m2-atlas-packed .m2-atlas-ref-icon{
+ flex:0 0 40px;
+ width:40px;
+ height:27px;
+ margin:0 2px 0 0;
+ background-size:256px 141px;
+ background-position:var(--atlas-crop-mini-x) var(--atlas-crop-mini-y);
+ filter:contrast(1.08);
+}
+.m2-atlas-screen .m2-atlas-packed[data-atlas-bag-card="missions"] .m2-atlas-ref-icon{
+ background-size:cover;
+ background-position:50% 40%;
+}
+.m2-atlas-screen .m2-atlas-luggage-card{
+ cursor:grab;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:focus-visible,
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"]{
+ border-color:#fff0be!important;
+ box-shadow:0 0 0 3px #ffce5b,0 0 12px #ffe4a4,0 3px 5px #281404b5!important;
+}
+@media(min-width:1101px){
+ .m2-atlas-main{
+  grid-template-rows:213px 54px;
+  height:273px;
+  min-height:273px;
+ }
+ .m2-atlas-row-two{margin-top:6px}
+ .m2-atlas-facts-activity .m2-atlas-statements{
+  position:relative;
+  margin:4px 219px 2px 12px;
+  padding:5px 8px 8px;
+  min-height:179px;
+  border:4px double #b98a4b;
+  border-radius:7px 5px 9px 6px;
+  background:
+   radial-gradient(ellipse at 31% -15%,#fffaf0 0%,transparent 65%),
+   repeating-linear-gradient(2deg,#ab895514 0 1px,transparent 2px 12px),
+   linear-gradient(175deg,#f9e7c5,#efce9c 72%,#e3bc87);
+  box-shadow:0 0 0 1px #efc687,0 5px 9px #32201065,inset 0 0 0 1px #fff6de;
+ }
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin:5px 219px 2px 13px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  padding:2px 3px;
+  min-height:31px;
+  border-bottom:1px solid #ba915f97;
+  background:transparent;
+ }
+ .m2-atlas-luggage-activity{
+  min-height:286px;
+ }
+ .m2-atlas-luggage-available{
+  padding-top:11px;
+  padding-bottom:13px;
+ }
+ .m2-atlas-luggage-available:before{
+  background:
+   url('./m2-atlas-empty-tray-compartments.svg') center/100% 100% no-repeat,
+   linear-gradient(145deg,#6a3a1d,#3e2315);
+ }
+ .m2-atlas-luggage-cards{
+  gap:4px;
+  align-items:stretch;
+ }
+ .m2-atlas-luggage-card{
+  justify-content:flex-start;
+  min-height:96px;
+  padding:8px 2px 5px;
+  border:4px ridge #cfa16b;
+  border-radius:9px 11px 8px 12px;
+  color:#352217;
+  background:
+   radial-gradient(ellipse at 50% -5%,#fffdf2 0%,transparent 71%),
+   repeating-linear-gradient(15deg,#d3ad7540 0 1px,transparent 2px 13px),
+   linear-gradient(#ffeed0,#e5c18c)!important;
+  box-shadow:0 0 0 1px #7a4d30,0 3px 5px #2111058f,
+   inset 0 0 0 2px #fff4d9,inset 0 8px 11px #f5e2bd!important;
+  font:700 clamp(10px,.72vw,13px)/1.11 Georgia,serif;
+  text-shadow:0 1px #fff7e8;
+ }
+ .m2-atlas-luggage-card>span:last-child{
+  display:block;
+  flex:1 1 auto;
+  width:100%;
+  min-width:0;
+  padding:1px 0 0;
+  text-align:center;
+  overflow-wrap:break-word;
+ }
+ .m2-atlas-final-controls .m2-controls{
+  margin-top:2px;
+  min-height:30px;
+  padding:3px 8px;
+  border-width:2px;
+  border-radius:3px;
+ }
+ .m2-atlas-final-controls .m2-feedback{
+  font-size:10px;
+  line-height:1.2;
+ }
+ .m2-atlas-final-controls .m2-button{
+  min-height:26px;
+  padding:2px 8px;
+  border-width:2px;
+  border-radius:5px;
+  font-size:10px;
+ }
+}
+@media(min-width:1101px) and (max-width:1350px){
+ .m2-atlas-facts-activity .m2-atlas-statements{margin-right:174px}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{margin-right:174px}
+ .m2-atlas-luggage-card{min-height:91px}
+ .m2-atlas-ref-icon{width:70px;max-width:95%;height:42px}
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-luggage-card .m2-atlas-ref-icon{
+  width:75px;
+  height:43px;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card .m2-atlas-ref-icon{
+  width:69px;
+  height:42px;
+ }
+ .m2-atlas-screen .m2-atlas-packed .m2-atlas-ref-icon{
+  flex-basis:36px;
+  width:36px;
+  height:25px;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-atlas-screen .m2-atlas-luggage-card{
+  transition:none!important;
+ }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   M2 / ARIKETA 3 — ilustrazioak benetako gardentasunarekin.
+   Los recortes de la maleta pasan a ser imágenes reales de alta definición
+   / grabados SVG escalables, en lugar de trozos de una imagen 512×282.
+   El HTML sigue siendo arrastrable, seleccionable y totalmente accesible.
+   ═══════════════════════════════════════════════════════════════════════ */
+.m2-atlas-screen .m2-atlas-ref-icon{display:none!important}
+.m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+ display:block!important;
+ position:relative;
+ z-index:2;
+ box-sizing:border-box;
+ flex:0 0 auto;
+ width:min(100%,104px)!important;
+ height:61px!important;
+ min-height:0;
+ max-height:61px;
+ margin:0 auto 3px!important;
+ padding:0!important;
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ object-fit:contain!important;
+ object-position:center bottom;
+ box-shadow:none!important;
+ filter:drop-shadow(0 2px 2px #39231591) saturate(1.09) contrast(1.05);
+ image-rendering:auto;
+ pointer-events:none;
+ user-select:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card{
+ isolation:isolate;
+ cursor:grab;
+ overflow:visible;
+}
+.m2-atlas-screen .m2-atlas-luggage-card>span:last-child{
+ display:block;
+ position:relative;
+ z-index:2;
+ margin:0;
+ padding:0 3px 1px;
+ width:100%;
+ min-width:0;
+ font:700 clamp(10px,.74vw,13px)/1.16 Georgia,serif;
+ text-align:center;
+ overflow-wrap:break-word;
+ text-shadow:0 1px 0 #fff9e7;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:before{
+ content:"";
+ position:absolute;z-index:0;inset:3px;
+ border-radius:7px;
+ background:
+ radial-gradient(ellipse at 50% 0%,#fff9e4d1,transparent 76%),
+ repeating-linear-gradient(7deg,#f8ddb522 0 1px,transparent 2px 11px);
+ border:1px solid #d5ad70;
+ pointer-events:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:after{
+ content:"✦";
+ position:absolute;z-index:3;
+ right:3px;top:2px;
+ color:#b88945;
+ opacity:.76;
+ font:700 10px Georgia,serif;
+ pointer-events:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"]{
+ border-color:#ffeba3!important;
+ box-shadow:
+ 0 0 0 2px #f7c56d,
+ 0 0 17px #fbd891cf,
+ 0 3px 7px #201009a8,
+ inset 0 0 0 2px #fff0cb!important;
+}
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"] img.m2-atlas-card-illustration{
+ filter:drop-shadow(0 0 5px #eebd62) drop-shadow(0 2px 1px #29150a9c);
+}
+.m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ display:block!important;
+ flex:0 0 47px!important;
+ width:47px!important;
+ height:35px!important;
+ max-width:47px;
+ max-height:35px;
+ min-width:0;
+ min-height:0;
+ margin:0 4px 0 0!important;
+ padding:0!important;
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ object-fit:contain!important;
+ object-position:center center;
+ filter:drop-shadow(0 1px 1px #26120b73);
+ pointer-events:none;
+ user-select:none;
+}
+.m2-atlas-screen .m2-atlas-packed{
+ display:flex;
+ align-items:center;
+ justify-content:flex-start;
+ text-align:left;
+ gap:2px;
+ min-width:0;
+ overflow:visible;
+ word-break:normal;
+ overflow-wrap:anywhere;
+}
+.m2-atlas-screen .m2-atlas-packed:hover,
+.m2-atlas-screen .m2-atlas-packed:focus-visible{
+ outline:2px solid #fce4a1;
+ outline-offset:0;
+ box-shadow:0 0 12px #ffda8a9a,0 2px 4px #190d07a8;
+}
+@media(min-width:1101px){
+ .m2-atlas-screen .m2-atlas-luggage-card{
+  box-sizing:border-box;
+  min-height:99px!important;
+  padding:4px 3px 5px!important;
+  gap:0;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-cards{
+  grid-auto-rows:minmax(99px,auto);
+  gap:5px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-available{
+  padding-top:9px;
+  padding-bottom:9px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity>footer{
+  padding:3px 2px;
+  min-height:35px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity .m2-atlas-section-status{
+  margin:0;
+  font-size:9px;
+  line-height:1.1;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity .m2-atlas-check{
+  min-height:30px;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls{
+  padding-top:0;
+  padding-bottom:0;
+  margin:0;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls .m2-controls{
+  margin-top:0;
+  padding-block:2px;
+ }
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,112px)!important;height:70px!important;max-height:70px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card{min-height:100px!important}
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:44px!important;width:44px!important;height:34px!important;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,90px)!important;height:56px!important;max-height:56px;
+ }
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:37px!important;width:37px!important;height:29px!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card>span:last-child{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-atlas-screen .m2-atlas-luggage-card{transition:none!important}
+}
+
+
+/* M2·3 / Maletas: restauración de las ocho fotografías de época recortadas,
+   una por concepto. WebP con transparencia alfa, sin fondos rectangulares. */
+.m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+ width:min(100%,112px)!important;
+ max-width:112px!important;
+ height:65px!important;
+ max-height:65px!important;
+ object-fit:contain!important;
+ object-position:center bottom!important;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ mix-blend-mode:normal;
+ image-rendering:auto;
+ filter:drop-shadow(0 2px 2px #23150878);
+}
+.m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ flex:0 0 47px!important;
+ width:47px!important;
+ height:38px!important;
+ max-width:47px!important;
+ max-height:38px!important;
+ object-fit:contain!important;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 1px 1px #2315088b);
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,94px)!important;
+  height:59px!important;
+  max-height:59px!important;
+ }
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:37px!important;
+  width:37px!important;
+  height:30px!important;
+  max-width:37px!important;
+  max-height:30px!important;
+ }
+}

@@ -1,0 +1,837 @@
+/* Misión 2 / ejercicio 3 · fidelidad panorámica a la referencia del docente.
+ * Solo afecta a Migrazioen bulegoa en escritorio horizontal. Las cinco
+ * actividades, las respuestas y el arrastre continúan siendo DOM real.
+ * El encuadre de la referencia es 16:9: en ventanas apaisadas se centra
+ * al ancho que admite la altura, como en la captura del dispositivo. */
+@media (min-width:1101px) {
+  .m2-page.m2-atlas-page {
+    min-height:100svh;
+    justify-content:flex-start;
+    background:#080706;
+  }
+  .m2-atlas-page .m2-main {
+    width:100%;
+    max-width:none;
+    min-height:0;
+    flex:1 0 auto;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:0!important;
+    margin:0;
+    background:#080706;
+  }
+  .m2-paper.m2-atlas-active {
+    flex:0 0 auto;
+    width:min(100vw,177.7778svh,1672px);
+    max-width:100%;
+    min-height:0;
+    padding:0;
+    margin:0 auto;
+  }
+  .m2-atlas-screen {
+    box-sizing:border-box;
+    width:100%;
+    max-width:none;
+    min-height:0;
+    container-type:inline-size;
+    isolation:isolate;
+    background:linear-gradient(90deg,#774724 0%,#482a1b 13%,#493020 88%,#76502f 100%);
+  }
+  .m2-atlas-screen:before {
+    height:5.1cqw;
+    background:
+      url('./m2-atlas-header-left.webp') left top/28.4% 100% no-repeat,
+      url('./m2-atlas-header-right.webp') right top/29.3% 100% no-repeat,
+      linear-gradient(#65432a,#312b25);
+  }
+  .m2-atlas-heading {
+    box-sizing:border-box;
+    width:53.8%;
+    max-width:none;
+    height:4.35cqw;
+    min-height:0;
+    margin:.38cqw auto .44cqw;
+    padding:.25cqw 2.3cqw;
+    border-width:.4cqw;
+    border-radius:1.7cqw 1.7cqw 1.15cqw 1.15cqw;
+    box-shadow:0 0 0 1px #512818,inset 0 0 0 2px #f6cf7c,0 2px 0 #4c2612,0 4px 8px #0009;
+  }
+  .m2-atlas-heading h1 {
+    font-size:2.32cqw;
+    line-height:1.07;
+    white-space:nowrap;
+    letter-spacing:.018em;
+  }
+  .m2-atlas-heading h1 em {font-size:.74em}
+  .m2-atlas-heading:before,.m2-atlas-heading:after {
+    top:.75cqw;
+    font-size:1.5cqw;
+  }
+  .m2-atlas-heading:before{left:.85cqw}
+  .m2-atlas-heading:after{right:.85cqw}
+  .m2-atlas-total {
+    right:.45cqw;
+    top:3.95cqw;
+    padding:1px 3px;
+    font-size:.59cqw;
+    opacity:.7;
+  }
+  .m2-atlas-navigation-strip {
+    right:1.12cqw;
+    top:.95cqw;
+  }
+  .m2-atlas-navigation-strip .m2-step {
+    width:1.7cqw;
+    height:1.7cqw;
+    min-height:1.7cqw;
+    border-width:1px;
+  }
+  .m2-atlas-navigation-strip .m2-step strong {font-size:.8cqw}
+  .m2-atlas-navigation-strip .m2-steps {gap:.2cqw}
+  .m2-atlas-home-link {
+    left:auto;
+    right:calc(100% + .55cqw);
+    top:1.1cqw;
+    font-size:.65cqw;
+    white-space:nowrap;
+  }
+  .m2-atlas-teacher {
+    top:4.15cqw;
+    right:5.5cqw;
+    font-size:.56cqw;
+  }
+
+  /* La primera línea del atlas y la nota histórica están en una sola vitrina. */
+  .m2-atlas-main {
+    grid-template-columns:minmax(0,17fr) minmax(0,18fr) minmax(0,27fr) minmax(0,18fr) minmax(0,20fr);
+    grid-template-rows:12.35cqw 3.35cqw;
+    gap:.19cqw;
+    height:15.98cqw;
+    min-height:0;
+    padding:0 .3cqw .2cqw;
+    border-top-width:2px;
+    border-bottom-width:.31cqw;
+  }
+  .m2-atlas-intro,.m2-atlas-pop,.m2-atlas-top-question {
+    border-width:.3cqw;
+    border-radius:.65cqw .65cqw .8cqw .65cqw;
+    box-shadow:inset 0 0 0 1px #fff1d4,0 2px 3px #2110069c;
+  }
+  .m2-atlas-intro {padding:.68cqw .56cqw .3cqw 1.55cqw}
+  .m2-atlas-intro .m2-atlas-roundel {
+    top:-.65cqw;left:.2cqw;
+    width:4.1cqw;height:4.1cqw;
+    border-width:.35cqw;
+    font-size:2.35cqw;
+  }
+  .m2-atlas-intro h2 {
+    margin:.15cqw 0 .5cqw;
+    font-size:1.8cqw;
+    line-height:1.02;
+  }
+  .m2-atlas-intro p {
+    font-size:.99cqw;
+    line-height:1.12;
+  }
+  .m2-atlas-pop {
+    padding:.54cqw .48cqw .2cqw;
+    overflow:visible;
+  }
+  .m2-atlas-pop h3 {
+    margin:0 0 .42cqw;
+    font-size:1.2cqw;
+  }
+  .m2-atlas-pop-row {
+    grid-template-columns:24% 54% 22%;
+    justify-content:stretch;
+    min-height:2.08cqw;
+    padding:0 .2cqw;
+    gap:.15cqw;
+  }
+  .m2-atlas-pop-year{font-size:1.53cqw}
+  .m2-atlas-pop-row select {
+    font-size:.82cqw;
+    min-height:1.55cqw;
+    height:1.6cqw;
+    padding:.05cqw .2cqw;
+  }
+  .m2-atlas-pop-row small{font-size:.75cqw}
+  .m2-atlas-main-map {min-height:0}
+  .m2-atlas-top-question {
+    padding:.42cqw .4cqw .3cqw;
+    overflow:hidden;
+  }
+  .m2-atlas-top-scene {
+    left:.4cqw;top:.32cqw;
+    width:4.3cqw;height:3.25cqw;
+    border:0;
+    border-radius:.2cqw;
+    object-fit:cover;
+  }
+  .m2-atlas-top-question h3 {
+    max-width:calc(100% - 4.8cqw);
+    min-height:1.45cqw;
+    margin:.15cqw 0 .1cqw 4.7cqw;
+    font-size:1.31cqw;
+    line-height:1.07;
+  }
+  .m2-atlas-screen .m2-atlas-radios legend {
+    margin:0 0 .2cqw 4.75cqw!important;
+    max-width:calc(100% - 4.85cqw)!important;
+    min-height:2.6cqw;
+    font-size:.79cqw;
+    line-height:1.08;
+  }
+  .m2-atlas-screen .m2-atlas-radios{gap:.1cqw}
+  .m2-atlas-screen .m2-atlas-radio {
+    margin:0;
+    padding:0!important;
+    gap:.32cqw;
+    font-size:.84cqw;
+    line-height:1.07;
+  }
+  .m2-atlas-screen .m2-atlas-radio>input {
+    width:1.08cqw;height:1.08cqw;flex-basis:1.08cqw;
+  }
+  .m2-atlas-critical {
+    grid-column:2/5;
+    min-height:0;
+    margin:0 0 0 18%;
+    padding:.3cqw .85cqw;
+    border-width:.24cqw;
+    border-radius:.5cqw;
+    font-size:.83cqw;
+    line-height:1.13;
+  }
+  .m2-atlas-top-check {padding:.14cqw .45cqw;margin:0}
+  .m2-atlas-check {
+    min-width:0;
+    min-height:2.45cqw;
+    padding:.26cqw 1.05cqw;
+    border-width:.3cqw;
+    border-radius:1.4cqw;
+    font-size:1.08cqw;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  /* Dos expedientes equilibrados con grabado del puerto y fotografía. */
+  .m2-atlas-row-two {
+    grid-template-columns:1fr 1fr;
+    gap:.27cqw;
+    margin-top:.25cqw;
+  }
+  .m2-atlas-row-two .m2-atlas-activity {
+    box-sizing:border-box;
+    height:18.25cqw;
+    min-height:0;
+    border-width:.43cqw;
+    border-radius:.2cqw;
+    padding-bottom:0;
+    overflow:hidden;
+  }
+  .m2-atlas-row-two .m2-atlas-activity>header {
+    min-height:2.4cqw;
+    margin:.26cqw .48cqw 0;
+    gap:.3cqw;
+  }
+  .m2-atlas-row-two .m2-atlas-activity>header .m2-atlas-number {
+    flex:0 0 3.55cqw;
+    width:3.55cqw;height:3.55cqw;
+    margin:-.55cqw 0 0 -.15cqw;
+    border-width:.36cqw;
+    font-size:1.72cqw;
+  }
+  .m2-atlas-row-two .m2-atlas-activity>header h2 {
+    flex:0 1 70%;
+    width:70%;
+    max-width:70%;
+    min-height:2.55cqw;
+    padding:.2cqw .7cqw;
+    border-width:.22cqw;
+    border-radius:.3cqw .9cqw .25cqw .25cqw;
+    font-size:1.5cqw;
+    line-height:1.06;
+  }
+  .m2-atlas-row-two .m2-atlas-exercise-instruction {
+    margin:.12cqw .5cqw .3cqw;
+    font-size:.76cqw;
+    line-height:1.14;
+    white-space:normal;
+  }
+  .m2-atlas-row-two .m2-atlas-route-stage {
+    height:11.5cqw;
+    min-height:0;
+    grid-template-columns:33% 67%;
+    gap:.3cqw;
+    padding:0 .53cqw;
+  }
+  .m2-atlas-route-labels {gap:.36cqw}
+  .m2-atlas-route-card {
+    min-height:3.3cqw;
+    padding:.32cqw .3cqw;
+    border-width:.23cqw;
+    border-radius:.45cqw .9cqw .65cqw .45cqw;
+    font-size:.81cqw;
+    line-height:1.05;
+  }
+  .m2-atlas-route-map {border-width:.3cqw;border-radius:.55cqw}
+  .m2-atlas-route-activity:before {
+    height:7.9cqw;
+    background:url('./m2-reference-harbor.webp') center bottom/100% auto no-repeat;
+  }
+  .m2-atlas-route-activity>footer,
+  .m2-atlas-facts-activity>footer {
+    position:absolute;
+    bottom:.22cqw;
+    right:.35cqw;
+    z-index:6;
+    min-height:0;
+    margin:0;
+    padding:.1cqw;
+  }
+  .m2-atlas-row-two .m2-atlas-activity>footer .m2-atlas-check {
+    min-height:2.25cqw;
+    margin:0;
+    padding:.2cqw .8cqw;
+    font-size:1cqw;
+  }
+  .m2-atlas-facts-activity:before {
+    top:3.3cqw;right:1.25cqw;
+    width:12.7cqw;height:11.9cqw;
+    border-width:.35cqw;
+  }
+  .m2-atlas-facts-activity:after {
+    top:3.45cqw;right:1.35cqw;
+    width:11.9cqw;height:10.9cqw;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statements {
+    margin:0 13.8cqw .15cqw .55cqw;
+    padding:.25cqw .35cqw;
+    min-height:0;
+  }
+  .m2-atlas-facts-activity .m2-atlas-fact-head {
+    margin:.1cqw 13.8cqw .12cqw .6cqw;
+    font-size:.56cqw;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement {
+    min-height:2.55cqw;
+    padding:.1cqw .08cqw;
+    grid-template-columns:minmax(0,1fr) 5.5cqw;
+    gap:.25cqw;
+    font-size:.73cqw;
+    line-height:1.05;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement-select {
+    min-width:0;
+    height:1.65cqw;
+    font-size:.7cqw;
+    padding:0 .14cqw;
+  }
+
+  /* Maleta abierta, ocho fichas originales y dos receptáculos estampados. */
+  .m2-atlas-luggage-activity {
+    position:relative;
+    height:16.35cqw;
+    min-height:0;
+    margin-top:.24cqw;
+    padding:.15cqw 0 .12cqw;
+    border-width:.4cqw;
+    overflow:visible;
+  }
+  .m2-atlas-luggage-activity>header {
+    top:.35cqw;left:.42cqw;
+    width:24.2%;
+    grid-template-columns:3.5cqw minmax(0,1fr);
+    gap:.1cqw;
+  }
+  .m2-atlas-luggage-activity>header .m2-atlas-number {
+    width:3.6cqw;height:3.6cqw;
+    margin:-.3cqw 0 0 -.2cqw;
+    border-width:.36cqw;
+    font-size:1.65cqw;
+  }
+  .m2-atlas-luggage-activity>header h2 {
+    min-height:0;
+    padding:.25cqw .18cqw;
+    border-width:.25cqw;
+    font-size:1.48cqw;
+    line-height:1.07;
+  }
+  .m2-atlas-luggage-activity>header p {
+    min-height:0;
+    width:calc(100% - 4.5cqw);
+    margin:.7cqw 0 0 4.4cqw;
+    padding:.25cqw .25cqw;
+    font-size:.88cqw;
+    line-height:1.15;
+  }
+  .m2-atlas-luggage-activity:before {
+    width:24.5%;
+    height:100%;
+    background:url('./m2-atlas-original-luggage-clean.svg') left bottom/auto 12.7cqw no-repeat;
+  }
+  .m2-atlas-luggage-activity:after {
+    width:15.1%;
+    height:100%;
+    background:url('./m2-reference-right-steamer.webp') right bottom/100% 100% no-repeat;
+  }
+  .m2-atlas-luggage-board {
+    box-sizing:border-box;
+    height:15.35cqw;
+    min-height:0;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.16fr);
+    gap:.28cqw;
+    margin:0 9.5% 0 23.7%;
+    padding:.08cqw 0 0;
+  }
+  .m2-atlas-luggage-available {
+    box-sizing:border-box;
+    height:100%;
+    min-height:0;
+    padding:.95cqw .56cqw .6cqw;
+    border:0;
+    background:url('./m2-reference-open-leather.webp') center/108% 100% no-repeat;
+  }
+  .m2-atlas-luggage-available:before {
+    inset:12% 6% 18% 7%;
+    background:
+      url('./m2-atlas-empty-tray-compartments.svg') center/100% 100% no-repeat,
+      linear-gradient(#58331d,#7a4a2b);
+  }
+  .m2-atlas-luggage-note {
+    min-height:.8cqw;
+    margin:-.15cqw 0 .25cqw;
+    font-size:.53cqw;
+    letter-spacing:.06em;
+  }
+  .m2-atlas-luggage-cards {
+    height:calc(100% - .7cqw);
+    min-height:0;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-rows:repeat(2,minmax(0,1fr));
+    grid-auto-rows:minmax(0,1fr);
+    gap:.3cqw;
+    margin:0;
+  }
+  .m2-atlas-screen .m2-atlas-luggage-card {
+    box-sizing:border-box;
+    min-height:0!important;
+    height:100%;
+    padding:.15cqw .13cqw .18cqw!important;
+    border-width:.25cqw;
+    border-radius:.55cqw;
+    overflow:hidden;
+    gap:.05cqw;
+  }
+  .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration {
+    width:92%!important;
+    max-width:100%!important;
+    height:3.75cqw!important;
+    max-height:3.75cqw!important;
+    margin:0 auto .1cqw!important;
+    object-fit:contain;
+  }
+  .m2-atlas-screen .m2-atlas-luggage-card>span:last-child {
+    font-size:.72cqw;
+    line-height:1.04;
+    padding:0 .05cqw;
+    word-break:normal;
+    overflow-wrap:break-word;
+  }
+  .m2-atlas-luggage-targets {
+    min-height:0;
+    gap:.2cqw;
+    align-items:stretch;
+  }
+  .m2-atlas-suitcase,
+  .m2-atlas-suitcase-effect {
+    box-sizing:border-box;
+    min-height:0;
+    height:100%;
+    padding:4.85cqw .78cqw 1.2cqw;
+    border:0;
+    border-radius:1cqw 1cqw 1.4cqw 1.4cqw;
+    background-size:100% 100%;
+  }
+  .m2-atlas-luggage-drop {
+    width:calc(100% - .4cqw);
+    min-height:1.16cqw;
+    height:1.16cqw;
+    margin:0 .2cqw .2cqw;
+    padding:0 .1cqw;
+    font-size:.45cqw;
+    line-height:1;
+  }
+  .m2-atlas-suitcase-items {
+    min-height:5.7cqw;
+    margin:0 .2cqw;
+    gap:.3cqw;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-auto-rows:minmax(2.2cqw,auto);
+  }
+  .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(5)) {
+    height:auto;
+    min-height:21.5cqw;
+    padding-bottom:2cqw;
+  }
+  .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(7)) {
+    min-height:25cqw;
+  }
+  .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(5)) {
+    height:auto;
+    min-height:22.8cqw;
+  }
+  .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(5)) .m2-atlas-luggage-board {
+    height:auto;
+    min-height:21.8cqw;
+  }
+  .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(7)) {
+    min-height:26.1cqw;
+  }
+  .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(7)) .m2-atlas-luggage-board {
+    min-height:25.2cqw;
+  }
+  .m2-atlas-luggage-activity>footer {
+    right:.4cqw;
+    bottom:.22cqw;
+    width:9%;
+    min-height:0;
+    padding:.08cqw;
+  }
+  .m2-atlas-luggage-activity>footer .m2-atlas-check {
+    width:100%;
+    min-height:2.15cqw;
+    height:2.4cqw;
+    padding:.2cqw;
+    font-size:.85cqw;
+    border-width:.25cqw;
+  }
+
+  /* Acciones secundarias visibles pero reducidas al tamaño de una placa de pie. */
+  .m2-atlas-final-controls .m2-controls {
+    min-height:1.36cqw;
+    margin:0;
+    padding:0 .35cqw;
+    border-width:.15cqw;
+    border-radius:0;
+    gap:.3cqw;
+  }
+  .m2-atlas-final-controls .m2-feedback {
+    font-size:.65cqw;
+    line-height:1.05;
+  }
+  .m2-atlas-final-controls .m2-button {
+    min-height:1.24cqw;
+    padding:.15cqw .55cqw;
+    border-width:1px;
+    font-size:.63cqw;
+  }
+  .m2-atlas-final-controls .m2-buttons {gap:.35cqw}
+}
+@media (max-width:1100px){
+  /* La versión vertical conserva el flujo apilado, los controles y
+     la altura automática. No se fuerza 16:9 en una pantalla estrecha. */
+  .m2-atlas-screen {container-type:normal}
+}
+
+/* Revisión de comparación 1672×941: cinco afirmaciones sin recorte,
+ * espacio proporcional para el puerto y acciones en el zócalo.
+ * El aspecto 16:9 es mínimo implícito, no recorta maletas llenas. */
+@media (min-width:1101px){
+ .m2-atlas-screen{
+   aspect-ratio:16/9;
+ }
+ .m2-atlas-row-two .m2-atlas-activity{
+   height:18.8cqw;
+ }
+ .m2-atlas-row-two .m2-atlas-activity>header h2{
+   flex-basis:62%;
+   width:62%;
+   max-width:62%;
+ }
+ .m2-atlas-row-two .m2-atlas-route-stage{
+   height:10.85cqw;
+   grid-template-columns:33% 67%;
+ }
+ .m2-atlas-route-card{
+   min-height:3.02cqw;
+ }
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+   display:none;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements{
+   margin-top:.26cqw;
+   padding:.22cqw .3cqw;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+   min-height:2.12cqw;
+   padding:.05cqw .06cqw;
+   line-height:1.05;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+   height:1.55cqw;
+ }
+ .m2-atlas-facts-activity:after{
+   width:11.25cqw;
+   height:10.4cqw;
+ }
+ .m2-atlas-facts-activity:before{
+   width:12.1cqw;
+   height:11.1cqw;
+ }
+ .m2-atlas-final-controls{
+   position:absolute;
+   z-index:11;
+   bottom:0;
+   left:0;
+   right:0;
+   height:1.43cqw;
+   min-height:0;
+   padding:0!important;
+   margin:0!important;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls .m2-controls{
+   height:100%;
+   min-height:0;
+   box-sizing:border-box;
+   margin:0;
+   padding:0 .38cqw;
+   border:1px solid #bc8b50;
+   box-shadow:inset 0 1px #f5be68;
+ }
+ .m2-atlas-final-controls .m2-feedback{
+   font-size:.59cqw;
+ }
+ .m2-atlas-final-controls .m2-button{
+   box-sizing:border-box;
+   height:1.2cqw;
+   min-height:0;
+   padding:.05cqw .5cqw;
+   font-size:.62cqw;
+ }
+}
+/* Al completar muchas fichas, se prioriza la lectura y el crecimiento natural. */
+@media (min-width:1101px){
+ .m2-atlas-luggage-activity:has(.m2-atlas-packed:nth-child(5)){
+   overflow:visible;
+ }
+ .m2-atlas-screen:has(.m2-atlas-packed:nth-child(5)){
+   aspect-ratio:auto;
+   padding-bottom:1.43cqw;
+ }
+}
+
+/* Las ocho cartelas deben caber completas en dos filas: la miniatura nunca
+   debe empujar el rótulo fuera del pergamino, ni en 1672 ni en 1536×691. */
+@media(min-width:1101px){
+ .m2-atlas-luggage-available{
+   padding-top:.57cqw;
+   padding-bottom:.35cqw;
+ }
+ .m2-atlas-luggage-note{
+   margin:-.05cqw 0 .18cqw;
+   min-height:.7cqw;
+ }
+ .m2-atlas-luggage-cards{
+   height:auto!important;
+   grid-template-rows:repeat(2,5.9cqw)!important;
+   grid-auto-rows:minmax(5.9cqw,auto)!important;
+   gap:.2cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card{
+   justify-content:center;
+   padding:.12cqw .12cqw .12cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+   height:3.15cqw!important;
+   max-height:3.15cqw!important;
+   margin:0 auto .08cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card>span:last-child{
+   font:700 clamp(9px,.71cqw,12px)/1.07 Georgia,serif;
+   width:100%;
+ }
+}
+
+/* Pulido de proporciones tomado de la captura antigua 1536×691:
+   los cambios son solo de presentación y no tocan ningún enunciado,
+   código de respuestas, navegación ni comportamiento de los ejercicios. */
+@media(min-width:1101px){
+  /* 1. Placa superior más corta, como el cartel de esmalte antiguo. */
+  .m2-atlas-heading{
+    width:51%;
+    height:4.22cqw;
+    min-height:4.22cqw;
+    border-width:.35cqw;
+  }
+  .m2-atlas-heading h1{
+    font-size:2.12cqw;
+    letter-spacing:.006em;
+    text-shadow:0 1px 1px #250b0a,0 0 7px #eebc7f91;
+  }
+  /* 2. Alturas de vitrinas: la tercera fila comienza donde empieza en
+     la ilustración, sin empujar el zócalo por debajo del borde. */
+  .m2-atlas-main{
+    grid-template-rows:11.98cqw 3.12cqw;
+    height:15.42cqw;
+    min-height:0;
+  }
+  .m2-atlas-row-two .m2-atlas-activity{
+    height:18.43cqw;
+    min-height:0;
+  }
+  .m2-atlas-row-two .m2-atlas-route-stage{
+    height:10.6cqw;
+    min-height:0;
+  }
+  .m2-atlas-route-card{
+    min-height:3.0cqw;
+  }
+  .m2-atlas-route-numeral{
+    display:none;
+  }
+  /* 3. Formularios de población: desplegables de papel blanco y metal
+     claro como en la referencia, con selección y foco accesibles. */
+  .m2-atlas-pop-row select{
+    color:#34251e;
+    background:linear-gradient(180deg,#fffdf8,#e6e9e8 74%,#c1c5c4);
+    border:1px solid #977d5d;
+    border-radius:.23cqw;
+    box-shadow:inset 0 1px #fff,0 1px 2px #60412487;
+  }
+  .m2-atlas-pop-row select:focus-visible{
+    outline:3px solid #f5d18a;
+    outline-offset:1px;
+  }
+  .m2-atlas-pop-row{
+    border-bottom:1px solid #986e4561;
+    background:linear-gradient(90deg,#fff3d52a,#dab58516);
+  }
+  /* 4. El pergamino de las consecuencias se parece más a una tabla
+     histórica: líneas finas, lectura mejor y controles homogéneos. */
+  .m2-atlas-facts-activity .m2-atlas-statements{
+    margin:.24cqw 13.55cqw .1cqw .55cqw;
+    padding:.12cqw .32cqw;
+    border:1px solid #a57543a6;
+    border-radius:.34cqw;
+    background:linear-gradient(165deg,#fff6dbcc,#f1d0a1c9);
+    box-shadow:inset 0 1px #fff5da8f,0 2px 3px #38211254;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement{
+    min-height:2.11cqw;
+    font-size:.76cqw;
+    border-bottom:1px solid #aa815487;
+  }
+  .m2-atlas-facts-activity .m2-atlas-statement:last-child{border-bottom:0}
+  .m2-atlas-facts-activity .m2-atlas-statement-select{
+    background:linear-gradient(#fff,#e8e8e8 74%,#bfc8c9);
+    border:1px solid #9e8669;
+    box-shadow:inset 0 1px 1px #fff;
+  }
+  /* 5. La maleta central no invade el buque. Los dos receptáculos
+     reproducen la anchura pintada de la referencia, dejando más mar. */
+  .m2-atlas-luggage-board{
+    margin-left:23.3%;
+    margin-right:13.2%;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+    gap:.26cqw;
+  }
+  .m2-atlas-luggage-activity:after{
+    width:16.8%;
+    height:100%;
+    opacity:1;
+    background:url('./m2-reference-right-steamer.webp') right bottom/100% 100% no-repeat;
+  }
+  .m2-atlas-luggage-activity>header{
+    width:23.6%;
+  }
+  .m2-atlas-luggage-activity>header h2{
+    font-size:1.39cqw;
+  }
+  .m2-atlas-luggage-available{
+    background-size:107% 100%;
+    background-position:center;
+  }
+  .m2-atlas-luggage-targets{
+    gap:.17cqw;
+  }
+  /* 6. Tarjetas: borde del pergamino más fino para dejar respirar
+     al grabado y rótulos sin recorte. */
+  .m2-atlas-screen .m2-atlas-luggage-card{
+    border-width:.2cqw;
+    border-radius:.5cqw;
+    background:linear-gradient(155deg,#fff8e8,#e8ce9f)!important;
+    box-shadow:inset 0 0 0 1px #fff5dc,0 2px 2px #1b0e0977;
+  }
+  .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+    filter:drop-shadow(0 1px 1px #2a17097d);
+  }
+  /* 7. Botón EGIAZTATU en el mismo espacio del grabado del barco;
+     sigue estando deshabilitado mientras falten las ocho respuestas. */
+  .m2-atlas-luggage-activity>footer{
+    right:.38cqw;
+    bottom:1.03cqw;
+    width:13.8%;
+    min-height:0;
+    z-index:10;
+    padding:0;
+    background:transparent;
+  }
+  .m2-atlas-luggage-activity>footer .m2-atlas-check{
+    width:100%;
+    height:3.04cqw;
+    min-height:3.04cqw;
+    padding:.22cqw .3cqw;
+    font-size:1.1cqw;
+    border-width:.3cqw;
+    border-radius:1.55cqw;
+    color:#fff0b8;
+    text-shadow:0 2px #0b342b;
+    box-shadow:0 0 0 2px #945b30,inset 0 0 0 2px #4d9476,0 3px 5px #25100c92;
+  }
+  .m2-atlas-luggage-activity>footer .m2-atlas-section-status{
+    position:absolute;
+    bottom:100%;
+    right:.3cqw;
+    font-size:.58cqw;
+    color:#442414;
+    background:#e9cd9faa;
+    border-radius:.18cqw;
+    padding:0 .15cqw;
+    white-space:nowrap;
+  }
+  /* 8. Zócalo de acciones discreto, dentro del marco inferior. */
+  .m2-atlas-final-controls{
+    height:1.08cqw;
+  }
+  .m2-atlas-final-controls .m2-button{
+    height:.95cqw;
+    min-height:.95cqw;
+    padding:0 .4cqw;
+    font-size:.55cqw;
+  }
+  .m2-atlas-final-controls .m2-feedback{
+    font-size:.53cqw;
+  }
+}
+
+/* Último contraste visual: el recorte de viajeros debe terminar justo
+   antes del título 2, no taparlo en pantallas de 16:9. */
+@media(min-width:1101px){
+ .m2-atlas-main:before{
+   left:12.95%;
+   top:6.52cqw;
+   width:13.3%;
+   height:8.7cqw;
+   aspect-ratio:auto;
+   background-size:100% 100%;
+   background-position:center bottom;
+ }
+ .m2-atlas-check:disabled{
+   /* Mantener el esmeralda de la referencia sin habilitar el botón. */
+   opacity:.88;
+ }
+}
