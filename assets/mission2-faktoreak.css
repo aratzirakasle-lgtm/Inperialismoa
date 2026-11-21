@@ -5005,3 +5005,180 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   transition:none!important;
  }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   M2 / ARIKETA 3 — ilustrazioak benetako gardentasunarekin.
+   Los recortes de la maleta pasan a ser imágenes reales de alta definición
+   / grabados SVG escalables, en lugar de trozos de una imagen 512×282.
+   El HTML sigue siendo arrastrable, seleccionable y totalmente accesible.
+   ═══════════════════════════════════════════════════════════════════════ */
+.m2-atlas-screen .m2-atlas-ref-icon{display:none!important}
+.m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+ display:block!important;
+ position:relative;
+ z-index:2;
+ box-sizing:border-box;
+ flex:0 0 auto;
+ width:min(100%,104px)!important;
+ height:61px!important;
+ min-height:0;
+ max-height:61px;
+ margin:0 auto 3px!important;
+ padding:0!important;
+ border:0!important;
+ outline:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ object-fit:contain!important;
+ object-position:center bottom;
+ box-shadow:none!important;
+ filter:drop-shadow(0 2px 2px #39231591) saturate(1.09) contrast(1.05);
+ image-rendering:auto;
+ pointer-events:none;
+ user-select:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card{
+ isolation:isolate;
+ cursor:grab;
+ overflow:visible;
+}
+.m2-atlas-screen .m2-atlas-luggage-card>span:last-child{
+ display:block;
+ position:relative;
+ z-index:2;
+ margin:0;
+ padding:0 3px 1px;
+ width:100%;
+ min-width:0;
+ font:700 clamp(10px,.74vw,13px)/1.16 Georgia,serif;
+ text-align:center;
+ overflow-wrap:break-word;
+ text-shadow:0 1px 0 #fff9e7;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:before{
+ content:"";
+ position:absolute;z-index:0;inset:3px;
+ border-radius:7px;
+ background:
+ radial-gradient(ellipse at 50% 0%,#fff9e4d1,transparent 76%),
+ repeating-linear-gradient(7deg,#f8ddb522 0 1px,transparent 2px 11px);
+ border:1px solid #d5ad70;
+ pointer-events:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:after{
+ content:"✦";
+ position:absolute;z-index:3;
+ right:3px;top:2px;
+ color:#b88945;
+ opacity:.76;
+ font:700 10px Georgia,serif;
+ pointer-events:none;
+}
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"]{
+ border-color:#ffeba3!important;
+ box-shadow:
+ 0 0 0 2px #f7c56d,
+ 0 0 17px #fbd891cf,
+ 0 3px 7px #201009a8,
+ inset 0 0 0 2px #fff0cb!important;
+}
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"] img.m2-atlas-card-illustration{
+ filter:drop-shadow(0 0 5px #eebd62) drop-shadow(0 2px 1px #29150a9c);
+}
+.m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ display:block!important;
+ flex:0 0 47px!important;
+ width:47px!important;
+ height:35px!important;
+ max-width:47px;
+ max-height:35px;
+ min-width:0;
+ min-height:0;
+ margin:0 4px 0 0!important;
+ padding:0!important;
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ object-fit:contain!important;
+ object-position:center center;
+ filter:drop-shadow(0 1px 1px #26120b73);
+ pointer-events:none;
+ user-select:none;
+}
+.m2-atlas-screen .m2-atlas-packed{
+ display:flex;
+ align-items:center;
+ justify-content:flex-start;
+ text-align:left;
+ gap:2px;
+ min-width:0;
+ overflow:visible;
+ word-break:normal;
+ overflow-wrap:anywhere;
+}
+.m2-atlas-screen .m2-atlas-packed:hover,
+.m2-atlas-screen .m2-atlas-packed:focus-visible{
+ outline:2px solid #fce4a1;
+ outline-offset:0;
+ box-shadow:0 0 12px #ffda8a9a,0 2px 4px #190d07a8;
+}
+@media(min-width:1101px){
+ .m2-atlas-screen .m2-atlas-luggage-card{
+  box-sizing:border-box;
+  min-height:99px!important;
+  padding:4px 3px 5px!important;
+  gap:0;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-cards{
+  grid-auto-rows:minmax(99px,auto);
+  gap:5px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-available{
+  padding-top:9px;
+  padding-bottom:9px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity>footer{
+  padding:3px 2px;
+  min-height:35px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity .m2-atlas-section-status{
+  margin:0;
+  font-size:9px;
+  line-height:1.1;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-activity .m2-atlas-check{
+  min-height:30px;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls{
+  padding-top:0;
+  padding-bottom:0;
+  margin:0;
+ }
+ .m2-atlas-screen .m2-atlas-final-controls .m2-controls{
+  margin-top:0;
+  padding-block:2px;
+ }
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,112px)!important;height:70px!important;max-height:70px;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card{min-height:100px!important}
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:44px!important;width:44px!important;height:34px!important;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,90px)!important;height:56px!important;max-height:56px;
+ }
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:37px!important;width:37px!important;height:29px!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card>span:last-child{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-atlas-screen .m2-atlas-luggage-card{transition:none!important}
+}
