@@ -238,7 +238,7 @@ async function check(){
   if(solved||window.m1ThirdSaving||[...state.values()].filter(Boolean).length!==5)return;
   if(!window.m1ThirdProgress){showMessage('Saioa egiaztatzen… Berritu orria behar izanez gero.');return}
   const wrong=model.slots.filter(slot=>occupied(slot.id)!==slot.expected);
-  if(wrong.length){showMessage('Begiratu dokumentua berriro: '+wrong.length+' lotura zuzendu behar dira.');announce('Aztertu berriro eskema. Saiatu berriz.');return}
+  if(wrong.length){showMessage('Ez da zuzena. Berrikusi erantzunak eta saiatu berriro.');announce('Ez da zuzena. Berrikusi erantzunak eta saiatu berriro.');return}
   window.m1ThirdSaving=true;const btn=$('#check');btn.disabled=true;
   try{
     const answers=Object.fromEntries(model.items.map(item=>[item.id,state.get(item.id)]));
