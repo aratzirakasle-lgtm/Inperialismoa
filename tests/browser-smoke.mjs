@@ -388,9 +388,50 @@ try{
      await waitVisible(page,'#bi-stage');
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/m1-ejercicio2-bi-sistema-actual.png',fullPage:true,animations:'disabled'});
+     const parchmentSheet=page.locator('link[href*="bi-sistema-pergamino-20261121.css"]');
+     assert.equal(await parchmentSheet.count(),1,'El ejercicio 2 debe cargar las cartelas de pergamino');
+     assert.equal(await page.locator('.bi-desk-chips .bi-card-tray').count(),7);
+     const clipping=await page.locator('.bi-desk-chips .bi-card-tray').evaluateAll(cards=>cards.map(card=>{
+       const word=card.querySelector('.bi-card-word');
+       const range=document.createRange();range.selectNodeContents(word);
+       const r=card.getBoundingClientRect();
+       const rects=[...range.getClientRects()];
+       return {id:card.dataset.biCard,width:Math.round(r.width),height:Math.round(r.height),
+         overflow:rects.some(x=>x.left<r.left-1||x.right>r.right+1||x.top<r.top-1||x.bottom>r.bottom+1)};
+     }));
+     assert.ok(clipping.every(c=>!c.overflow),'No debe sobresalir ningún texto de la mesa: '+JSON.stringify(clipping));
+     const socialist=clipping.find(c=>c.id==='socialist');
+     assert.ok(socialist.width>clipping[0].width*1.5,'La cartela socialista debe aprovechar el hueco libre de la fila');
+     await page.screenshot({path:'test-output/m1-ejercicio2-pergamino-actual.png',fullPage:true,animations:'disabled'});
+     await page.locator('.bi-desk-chips [data-bi-card="socialist"]').click();
+     await page.locator('#bi-lib-slots').click({position:{x:30,y:30}});
+     assert.equal(await page.locator('#bi-lib-slots [data-bi-card="socialist"]').count(),1,
+       'La nueva cartela debe seguir siendo interactiva');
+     await page.screenshot({path:'test-output/m1-ejercicio2-pergamino-colocada.png',fullPage:true,animations:'disabled'});
      await page.getByRole('button',{name:'Amaierako pantaila'}).click();
      assert.equal(await page.locator('#bi-stage').getAttribute('data-phase'),'complete');
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Segundo ejercicio móvil: pergamino legible, siete conceptos y sin desbordes',async()=>{
+   const {page,context,errors}=await open('teacher','bi-sistema.html?preview=1',{width:390,height:844});
+   try{
+     await waitVisible(page,'#bi-stage');
+     await page.locator('.bi-desk-chips .bi-card-tray').first().waitFor({state:'visible'});
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/m1-ejercicio2-pergamino-movil.png',fullPage:true,animations:'disabled'});
+     const cardBoxes=await page.locator('.bi-desk-chips .bi-card-tray').evaluateAll(cards=>cards.map(c=>{
+       const box=c.getBoundingClientRect();
+       const word=c.querySelector('.bi-card-word');
+       const range=document.createRange();range.selectNodeContents(word);
+       return {id:c.dataset.biCard,width:Math.round(box.width),
+         overflow:[...range.getClientRects()].some(r=>r.right>box.right+1||r.bottom>box.bottom+1||r.left<box.left-1||r.top<box.top-1),
+         outsideViewport:box.left<0||box.right>innerWidth+1};
+     }));
+     assert.equal(cardBoxes.length,7);
+     assert.ok(cardBoxes.every(c=>!c.overflow&&!c.outsideViewport),
+       'Las cartelas móviles deben caber completamente: '+JSON.stringify(cardBoxes));
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
