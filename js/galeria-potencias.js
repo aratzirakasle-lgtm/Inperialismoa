@@ -29,7 +29,11 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,draftKey=null}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
- root.__galleryCleanup=()=>controller.abort();
+ let touchDrag=null,suppressTouchClick=false;
+ root.__galleryCleanup=()=>{
+   touchDrag?.ghost?.remove();
+   controller.abort();
+ };
  const state={placements:{},locked:new Set(Array.isArray(initial.locked_ids)?initial.locked_ids:[]),completed:!!initial.completed_at,selected:null,busy:false,attempts:0,feedback:"",wrong:new Set(),help:false};
  for(const [id,zone] of Object.entries(initial.locked_positions||{})){if(LOOKUP.has(id)&&ZONES.has(zone)&&state.locked.has(id))state.placements[id]=zone}
  // Guardado local solo de las colocaciones provisionales de esta pestaña.
@@ -109,7 +113,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    showcase('ru','ERRUSIA','🇷🇺','Errusiako tsarraren garaiko irudia',target('ru','Errusiaren ezaugarriak',4))+
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
    showcase('jp','JAPONIA','🇯🇵','Japoniako eraikin historikoa',target('jp','Japoniaren ezaugarriak',3))+
-   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+(tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':state.feedback||'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.')+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||Object.keys(state.placements).length===state.locked.size?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako banderak adibideak dira, ez XIX. mendeko Europa osoaren bandera. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
+   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+(tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||Object.keys(state.placements).length===state.locked.size?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako banderak adibideak dira, ez XIX. mendeko Europa osoaren bandera. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
  }
  async function check(){
    if(state.busy||state.completed)return;
@@ -132,6 +136,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    finally{state.busy=false;draw()}
  }
  root.addEventListener('click',e=>{
+   if(suppressTouchClick){suppressTouchClick=false;return}
    const action=e.target.closest('[data-gallery-action]')?.dataset.galleryAction;
    if(action){if(action==='preview-start'&&navigationPreview){state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-complete'&&navigationPreview){state.completed=true;state.feedback='Irakaslearen simulazioa: amaierako egoera.';draw();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
    const card=e.target.closest('[data-gallery-card]');
@@ -150,6 +155,66 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      refocus('[data-gallery-tray]');return;
    }
    const zone=e.target.matches('[data-gallery-zone]')?e.target:null;if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}},{signal:controller.signal});
+ // Arrastre táctil real: se mantiene además el método de pulsar cartela y vitrina.
+ // No calcula respuestas correctas ni modifica la comprobación de Supabase.
+ const touchTargets=()=>root.querySelectorAll('.gal-touch-target');
+ const cleanTouch=()=>{
+   touchDrag?.ghost?.remove();
+   touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
+   touchDrag=null;
+ };
+ root.addEventListener('pointerdown',e=>{
+   if(e.pointerType==='mouse'||touchDrag)return;
+   const card=e.target.closest('[data-gallery-card]');
+   if(!card||!canMove(card.dataset.galleryCard))return;
+   touchDrag={id:card.dataset.galleryCard,pid:e.pointerId,card,
+     x:e.clientX,y:e.clientY,moving:false,ghost:null};
+   if(card.setPointerCapture)card.setPointerCapture(e.pointerId);
+ },{signal:controller.signal});
+ root.addEventListener('pointermove',e=>{
+   const d=touchDrag;
+   if(!d||d.pid!==e.pointerId)return;
+   if(!d.moving&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<12)return;
+   if(!d.moving){
+     d.moving=true;
+     const ghost=d.card.cloneNode(true);
+     ghost.removeAttribute('data-gallery-card');
+     ghost.removeAttribute('draggable');
+     ghost.removeAttribute('aria-pressed');
+     ghost.setAttribute('aria-hidden','true');
+     ghost.classList.remove('gal-selected');
+     ghost.classList.add('gal-touch-ghost');
+     ghost.style.width=Math.min(310,Math.max(175,d.card.getBoundingClientRect().width))+'px';
+     root.append(ghost);d.ghost=ghost;
+     d.card.classList.add('gal-touch-source');
+   }
+   e.preventDefault();
+   d.ghost.style.left=e.clientX+'px';
+   d.ghost.style.top=e.clientY+'px';
+   touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
+   const hit=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-gallery-zone], [data-gallery-tray]');
+   if(hit&&root.contains(hit))hit.classList.add('gal-touch-target');
+ },{signal:controller.signal,passive:false});
+ root.addEventListener('pointerup',e=>{
+   const d=touchDrag;
+   if(!d||d.pid!==e.pointerId)return;
+   const hit=d.moving?document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-gallery-zone], [data-gallery-tray]'):null;
+   if(d.card.hasPointerCapture?.(e.pointerId))d.card.releasePointerCapture(e.pointerId);
+   cleanTouch();
+   if(!d.moving)return; // Una pulsación normal sigue seleccionando la cartela.
+   e.preventDefault();
+   suppressTouchClick=true;
+   window.setTimeout(()=>{suppressTouchClick=false},160);
+   if(!hit||!root.contains(hit))return; // Dejar la tarjeta donde estaba.
+   if(hit.hasAttribute('data-gallery-tray')){
+     if(canMove(d.id)){
+       delete state.placements[d.id];state.selected=null;saveDraft();draw();
+     }
+   }else place(d.id,hit.dataset.galleryZone);
+ },{signal:controller.signal});
+ root.addEventListener('pointercancel',e=>{
+   if(touchDrag?.pid===e.pointerId)cleanTouch();
+ },{signal:controller.signal});
  root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
  root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
  root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
