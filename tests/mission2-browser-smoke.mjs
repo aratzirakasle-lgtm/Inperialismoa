@@ -56,6 +56,12 @@ try{
   const {page,context,errors}=await open('teacher');
   try{
    assert.equal(await page.locator('.m2-step').count(),5);
+   assert.equal(await page.locator('.m2-passport').count(),1,'El pasaporte debe existir en la navegación');
+   assert.match(await page.locator('.m2-passport-count').innerText(),/AURREBISTA/);
+   assert.equal(await page.locator('.m2-passport-stamps .is-stamped').count(),0,'La vista docente no concede sellos');
+   await page.locator('.m2-passport summary').click();
+   assert.equal(await page.locator('.m2-passport-stamps li').count(),5);
+   await page.locator('.m2-passport summary').click();
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('.m2-archive-card').count(),11,'Once cartelas históricas independientes');
    const art=await page.locator('.m2-archive-card .m2-card-miniature').evaluateAll(images=>images.map(img=>({
@@ -113,6 +119,8 @@ try{
   const {page,context,errors}=await open('student');
   try{
    assert.equal(await page.locator('.m2-step:disabled').count(),4);
+   assert.match(await page.locator('.m2-passport-count').innerText(),/0 \/ 5/);
+   assert.equal(await page.locator('.m2-passport-stamps .is-stamped').count(),0);
    for(const id of ['new_markets','cheap_resources','investments','settlement','working_conditions','conversion','missions','sea_routes','chauvinism','racist_theories','exploration']){
     await page.locator('[data-card="'+id+'"]').click();
     await page.locator('[data-zone="economic"] .m2-case-title-action').click();
@@ -180,6 +188,8 @@ try{
    assert.equal(await page.locator('.m2-finished').count(),1);
    assert.equal(await page.locator('.m2-finished').innerText().then(t=>t.includes('3. misioa')),true);
    assert.deepEqual((await page.evaluate(()=>window.__m2RpcCalls)).map(x=>x.exercise),[1,2,3,4,5]);
+   assert.match(await page.locator('.m2-passport-count').innerText(),/5 \/ 5/);
+   assert.equal(await page.locator('.m2-passport-stamps .is-stamped').count(),5,'Solo se sellan las cinco respuestas aprobadas por el servidor simulado');
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
