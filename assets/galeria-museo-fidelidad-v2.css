@@ -488,7 +488,8 @@
   box-shadow:inset 0 0 0 2px #fff0be69,inset 0 0 15px #160b07a8,0 5px 10px #0009;
   background:linear-gradient(110deg,#fff4dc20,transparent 38% 76%,#1509071d);
 }
-#app-shell.gallery-active .gal-side-art-right::before{height:36%}
+#app-shell.gallery-active .gal-side-art-right::before{height:27%}
+#app-shell.gallery-active .gal-side-art-right::after{top:27%}
 #app-shell.gallery-active .gal-side-art::after{
   content:'';position:absolute;pointer-events:none;
   left:3%;top:36%;width:94%;height:8px;
@@ -566,22 +567,6 @@
 #app-shell.gallery-active .gal-flag-shelf::after{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(112deg,#fff4d82f 0 11%,transparent 24% 76%,#fff1c321 91%);
-}
-#app-shell.gallery-active .gal-case-spotlight{
-  position:absolute;left:50%;top:74px;transform:translateX(-50%);
-  width:31px;height:10px;border-radius:0 0 50% 50%;
-  background:radial-gradient(ellipse at 50% 99%,#fff9d4,#f4cb79 39%,#8f561f 79%,#281509);
-  border:2px ridge #e3b36a;
-  box-shadow:0 1px 0 #fff0b8,0 2px 11px #ffd385a8,0 0 14px #e0a94a66;
-  z-index:6;pointer-events:none;
-}
-#app-shell.gallery-active .gal-case-spotlight::after{
-  content:'';position:absolute;left:50%;top:5px;transform:translateX(-50%);
-  width:clamp(130px,12vw,180px);height:160px;z-index:-1;
-  clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);
-  background:linear-gradient(180deg,#fff7c250 0,#ffde8644 44%,transparent 99%);
-  filter:blur(8px);
-  opacity:.50;pointer-events:none;
 }
 #app-shell.gallery-active .gal-vitrine-image{
   /* Mismos cuatro fotogramas WebP; se modifica solo el marco. */
@@ -689,7 +674,6 @@
 @media(max-width:1100px){
  #app-shell.gallery-active .gal-case-glass{top:95px;bottom:15px}
  #app-shell.gallery-active .gal-museum-tablefront{height:23px;margin:-6px auto -9px;width:98%}
- #app-shell.gallery-active .gal-case-spotlight{top:70px}
 }
 @media(max-width:680px){
  #app-shell.gallery-active .gal-vitrine::before,
@@ -697,8 +681,6 @@
   top:-37px;height:63px;width:106%;background-size:100% 100%;
  }
  #app-shell.gallery-active .gal-case-finial{top:-52px}
- #app-shell.gallery-active .gal-case-spotlight{top:56px;width:21px;height:8px}
- #app-shell.gallery-active .gal-case-spotlight::after{height:100px;width:95px;opacity:.20}
  #app-shell.gallery-active .gal-case-glass{left:7px;right:7px;top:90px;bottom:12px;opacity:.2}
  #app-shell.gallery-active .gal-museum-tablefront{display:none}
  #app-shell.gallery-active .gal-side-art::before,
@@ -708,10 +690,8 @@
 @media(max-width:480px){
  #app-shell.gallery-active .gal-vitrine::before,
  #app-shell.gallery-active .gal-vitrine-eu::before{top:-39px;height:73px}
- #app-shell.gallery-active .gal-case-spotlight{top:77px}
 }
 @media(prefers-reduced-motion:reduce){
  #app-shell.gallery-active .gal-case-glass,
- #app-shell.gallery-active .gal-case-spotlight,
  #app-shell.gallery-active .gal-museum-tablefront{animation:none!important;transition:none!important}
 }
