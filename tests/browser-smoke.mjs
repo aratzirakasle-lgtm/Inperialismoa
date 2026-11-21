@@ -132,6 +132,14 @@ try{
      for(const [id,zone] of [['eu_auth_head','eu_auth'],['eu_liberal_head','eu_liberal'],['ru_tsar','ru'],['us_west','us'],['jp_meiji','jp']])
        await setCard(page,id,zone);
      assert.equal(await page.locator('.gal-tile').count(),20);
+     const sceneInfo=await page.evaluate(()=>{
+       const el=document.querySelector('.gal-display');
+       const rect=el.getBoundingClientRect();
+       return {width:rect.width,viewport:innerWidth,columns:getComputedStyle(el).gridTemplateColumns.split(' ').length,
+         imageCount:document.querySelectorAll('.gal-vitrine-image').length};
+     });
+     assert.equal(sceneInfo.columns,4,'En ordenador debe haber cuatro vitrinas en la misma fila');
+     assert.equal(sceneInfo.imageCount,4);
      await page.locator('[data-gallery-card="eu_army"]').focus();
      await page.keyboard.press('Enter');
      assert.equal(await page.locator('[data-gallery-card="eu_army"]').getAttribute('aria-pressed'),'true');
@@ -148,6 +156,12 @@ try{
      await page.screenshot({path:'test-output/m1-galeria-despues-ordenador.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile.gal-selected').count(),1);
      assert.equal(await page.locator('.gal-vitrine').count(),4);
+     assert.equal(await page.locator('.gal-museum-set').count(),1,'La escenografía debe estar montada');
+     assert.equal(await page.locator('.gal-side-art').count(),2,'El museo debe incluir sus objetos laterales');
+     assert.equal(await page.locator('.gal-globe svg').count(),1,'El globo histórico debe estar presente');
+     assert.equal(await page.locator('.gal-flag-shelf .gal-flag-illustration').count(),4,'Las cuatro banderas deben estar dentro de las vitrinas');
+     assert.equal(await page.locator('[data-gallery-zone]').count(),5,'No deben desaparecer zonas de clasificación');
+     assert.equal(await page.locator('.gal-museum-set').getAttribute('aria-hidden'),'true');
      assert.equal(await page.locator('.gal-tile').count(),20);
      await page.locator('[data-gallery-card="eu_army"]').focus();
      await page.keyboard.press('Escape');
@@ -183,6 +197,7 @@ try{
      assert.equal(await page.locator('.gal-vitrine').count(),4);
      assert.equal(await page.locator('.gal-vitrine-eu .gal-flag-illustration').count(),1);
      assert.equal(await page.locator('.gal-tile').count(),20);
+     assert.equal(await page.locator('.gal-museum-set').count(),1);
      const metrics=await page.evaluate(()=>{
        const cabinets=[...document.querySelectorAll('.gal-vitrine')].map(el=>{
          const r=el.getBoundingClientRect();
