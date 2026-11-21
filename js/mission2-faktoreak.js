@@ -386,23 +386,36 @@ function archiveEngraving(type){
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 126" focusable="false" aria-hidden="true">'+(groups[type]||groups.manuscript)+'</svg>';
 }
 function renderArchive(){
- const state=taskState(4);
+ const state=taskState(4),answered=archives.filter(a=>Boolean(state[a.id])).length;
  const cards=archives.map((a,i)=>{
-  return '<article class="m2-source m2-source-file m2-source-'+a.art+'" data-source="'+esc(a.id)+'">'+
-    '<header class="m2-source-heading"><span class="m2-source-index">AGIRIA '+String(i+1).padStart(2,'0')+'</span>'+
-      '<span class="m2-source-kind">'+esc(a.type)+'</span></header>'+
-    '<div class="m2-source-top"><div class="m2-source-engraving" aria-hidden="true">'+archiveEngraving(a.art)+'</div>'+
-      '<div class="m2-source-titling"><h3>'+esc(a.title)+'</h3><span class="m2-source-ref">'+esc(a.ref)+'</span></div></div>'+
-    '<p class="m2-source-text">'+esc(a.body)+'</p>'+
-    '<fieldset><legend>'+esc(a.question)+'</legend>'+
-    a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+a.id+'" value="'+key+'" data-archive="'+a.id+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+
-    '</fieldset><span class="m2-source-seal" aria-hidden="true">XIX</span></article>';
+  const chosen=Boolean(state[a.id]);
+  return '<article class="m2-source m2-source-file m2-source-'+a.art+' m2-archive-dossier" data-source="'+esc(a.id)+'" data-answered="'+chosen+'">'+
+   '<span class="m2-archive-folder-tab" aria-hidden="true"></span><span class="m2-archive-fileclip" aria-hidden="true"></span>'+
+   '<header class="m2-source-heading"><span class="m2-source-index">AGIRIA '+String(i+1).padStart(2,'0')+'</span>'+
+    '<span class="m2-source-kind">'+esc(a.type)+'</span></header>'+
+   '<div class="m2-archive-card-body">'+
+    '<div class="m2-archive-illustration"><div class="m2-source-engraving" aria-hidden="true">'+archiveEngraving(a.art)+'</div>'+
+     '<span class="m2-archive-image-caption">'+esc(a.ref)+'</span></div>'+
+    '<div class="m2-archive-card-writing"><div class="m2-source-titling"><h3>'+esc(a.title)+'</h3></div>'+
+     '<p class="m2-source-text">'+esc(a.body)+'</p>'+
+     '<fieldset><legend><span class="m2-archive-question-mark" aria-hidden="true">?</span>'+esc(a.question)+'</legend>'+
+      a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+esc(a.id)+'" value="'+esc(key)+'" data-archive="'+esc(a.id)+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+
+     '</fieldset></div>'+
+   '</div><span class="m2-source-seal" aria-hidden="true">ARTXIBOA</span></article>';
  }).join('');
- return '<section class="m2-archive-intro" aria-label="Iturrien analisi kritikoa"><div class="m2-archive-emblem" aria-hidden="true">❧</div>'+
-  '<div><span class="m2-archive-eyebrow">IKERKETA HISTORIKOA · 04 / 05</span><h3>Boterearen artxiboko bost agiri</h3>'+
-  '<p>Aztertu dokumentuak eta hautatu azalpen bakoitzari dagokion interpretazioa. Iturrien egileak, interesak eta testuingurua kontuan hartu.</p></div></section>'+
-  '<div class="m2-source-grid m2-source-grid-museum">'+cards+'</div>'+
-  '<aside class="m2-evidence m2-archive-warning"><strong>Iturrien irakurketa kritikoa:</strong> arrazismo zientifikoa deritzona ez zen giza taldeen desberdintasunak frogatzen zituen zientzia, baizik eta kolonialismoa justifikatzeko erabilitako ideologia arrazista. Erantzun okerrek ez dute pistarik emango.</aside>';
+ return '<div class="m2-archive-scene">'+
+   '<div class="m2-archive-room-props" aria-hidden="true"></div>'+
+   '<div class="m2-archive-desk">'+
+    '<div class="m2-archive-desk-crest"><span aria-hidden="true">❧</span><div><span class="m2-archive-eyebrow">IKERKETA HISTORIKOA · 04 / 05</span>'+
+     '<h3>Boterearen artxiboa</h3><p>Aztertu bost agiriak eta aukeratu galdera bakoitzaren erantzuna.</p></div>'+
+     '<div class="m2-archive-progress" role="status" aria-live="polite"><span>AZTERTUTAKO AGIRIAK</span><strong data-archive-progress>'+answered+' / 5</strong></div>'+
+    '</div>'+
+    '<div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+'</div>'+
+    '<div class="m2-archive-desk-front" aria-hidden="true"><span>ARTXIBO HISTORIKOA · XIX. MENDEA</span></div>'+
+   '</div>'+
+   '<aside class="m2-evidence m2-archive-warning"><span class="m2-archive-warning-emblem" aria-hidden="true">!</span>'+
+    '<div><strong>OHAR KRITIKOA</strong><p>Arrazismoa justifikatzeko erabiltzen ziren teoriak ideologia historikoak ziren, ez zientzia baliozkoa. Horrelako argudioek kolonialismoa eta diskriminazioa legitimatzeko balio izan zuten.</p></div></aside>'+
+  '</div>';
 }
 function multiButtons(group,options,selectedIds){
  const ids=new Set(selectedIds||[]);
@@ -663,7 +676,13 @@ app.addEventListener('change',event=>{
  if(active===3&&target.matches('select[data-field],input[type="radio"][data-field]')){
   render();return;
  }
- if(target.matches('input[data-archive]'))taskState(4)[target.dataset.archive]=target.value;
+ if(target.matches('input[data-archive]')){
+  taskState(4)[target.dataset.archive]=target.value;
+  const dossier=target.closest('.m2-archive-dossier');
+  if(dossier)dossier.dataset.answered='true';
+  const badge=$('[data-archive-progress]');
+  if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
+ }
  const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
 });
 app.addEventListener('keydown',event=>{
