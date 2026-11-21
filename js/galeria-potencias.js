@@ -111,7 +111,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    <div class="gal-room-cornice"></div>
    <div class="gal-room-lamp gal-room-lamp-one"></div>
    <div class="gal-room-lamp gal-room-lamp-two"></div>
-   <aside class="gal-side-art gal-side-art-left"></aside>
+   <aside class="gal-side-art gal-side-art-left"><span class="gal-historical-map-frame" aria-hidden="true"></span></aside>
    <aside class="gal-side-art gal-side-art-right"></aside>
  </div>`;
  function draw(){
