@@ -327,6 +327,12 @@ try{
      };
    }));
    assert.equal(new Set(art.map(img=>img.url)).size,8,'Cada cartela debe tener su propia escena');
+   const expectedBagArt=['growth','conditions','better','conversion','settlement','missions','oceania','faith'];
+   assert.deepEqual(
+    art.map(img=>img.url.split('/').pop()),
+    expectedBagArt.map(name=>'m2-suitcase-'+name+'-restored.webp'),
+    'Las ocho imágenes de las maletas deben ser las escenas pictóricas restauradas, no iconos SVG'
+   );
    assert.ok(art.every(img=>img.loaded&&img.visible&&img.transparent),JSON.stringify(art));
    assert.equal(await page.locator('[data-atlas-bag-zone].m2-atlas-suitcase').count(),2);
    assert.equal(await page.locator('.m2-atlas-check[data-atlas-stage="4"]').isDisabled(),true);
@@ -414,6 +420,12 @@ try{
      await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
     }
     assert.equal(await page.locator('.m2-atlas-suitcase-cause .m2-atlas-packed').count(),8);
+    const allPacked=await page.locator('.m2-atlas-suitcase-cause .m2-atlas-packed img').evaluateAll(imgs=>imgs.map(img=>({
+     source:new URL(img.src).pathname.split('/').pop(),
+     loaded:img.complete&&img.naturalWidth>=680,
+     visible:img.getBoundingClientRect().width>=32
+    })));
+    assert.ok(allPacked.every(x=>x.loaded&&x.visible&&x.source.endsWith('-restored.webp')),JSON.stringify(allPacked));
     const metrics=await page.locator('.m2-atlas-suitcase-cause').evaluate(box=>{
      const items=[...box.querySelectorAll('.m2-atlas-packed')];
      const bound=box.getBoundingClientRect();
