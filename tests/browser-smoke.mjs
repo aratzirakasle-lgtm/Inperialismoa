@@ -114,17 +114,18 @@ try{
      await detailSheet.evaluate(el=>{el.disabled=false});
      await page.screenshot({path:'test-output/m1-mapa-cartelas-despues-20261121.png',fullPage:true,animations:'disabled'});
      const mapInfo=await page.locator('.gal-side-art-left').evaluate(el=>{
-       const before=getComputedStyle(el,'::before');
-       const after=getComputedStyle(el,'::after');
+       const map=getComputedStyle(el.querySelector('.gal-historical-map-frame'));
+       const lower=getComputedStyle(el,'::after');
        return {background:getComputedStyle(el).backgroundImage,
-         tilted:before.transform,upperImage:before.backgroundImage,
-         lowerImage:after.backgroundImage,upperClip:before.clipPath,lowerClip:after.clipPath};
+         tilted:map.transform,upperImage:map.backgroundImage,
+         border:map.borderStyle,lowerImage:lower.backgroundImage,lowerClip:lower.clipPath};
      });
-     assert.equal(mapInfo.background,'none','La fotografía lateral debe dividirse para inclinar solo el mapa');
+     assert.equal(mapInfo.background,'none','El mapa y los objetos inferiores deben mostrarse por separado');
      assert.notEqual(mapInfo.tilted,'none','El mapa debe quedar ladeado');
+     assert.equal(mapInfo.border,'ridge','El mapa ladeado debe conservar su marco de museo');
      assert.ok(mapInfo.upperImage.includes('m2-museo-izquierdo.svg')&&mapInfo.lowerImage.includes('m2-museo-izquierdo.svg'),
        'Mapa y globo deben conservar la misma ilustración original');
-     assert.match(mapInfo.upperClip,/inset/);
+     assert.match(mapInfo.lowerClip,/inset/);
      const paper=await page.locator('.gal-tray .gal-tile').first().evaluate(el=>{
        const css=getComputedStyle(el);
        const icon=getComputedStyle(el.querySelector('.gal-tile-icon'));
@@ -226,7 +227,9 @@ try{
        'Los adornos no deben bloquear las zonas de respuesta');
      const sideArt=await page.locator('.gal-side-art').evaluateAll(nodes=>nodes.map(el=>({
        main:getComputedStyle(el).backgroundImage,
-       upper:getComputedStyle(el,'::before').backgroundImage,
+       upper:el.querySelector('.gal-historical-map-frame')
+         ? getComputedStyle(el.querySelector('.gal-historical-map-frame')).backgroundImage
+         : getComputedStyle(el,'::before').backgroundImage,
        lower:getComputedStyle(el,'::after').backgroundImage
      })));
      assert.ok(sideArt[0].upper.includes('m2-museo-izquierdo.svg')&&sideArt[0].lower.includes('m2-museo-izquierdo.svg')&&
