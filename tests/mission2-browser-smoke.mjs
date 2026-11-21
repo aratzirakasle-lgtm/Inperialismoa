@@ -310,6 +310,16 @@ try{
    assert.equal(await page.locator('.m2-atlas-route-card').count(),3);
    assert.equal(await page.locator('.m2-atlas-statement').count(),5);
    assert.equal(await page.locator('.m2-atlas-luggage-card').count(),8);
+   assert.equal(await page.locator('.m2-atlas-luggage-card .m2-atlas-ref-icon').count(),8,'Las ocho fichas deben ilustrarse con el arte original');
+   const engravings=await page.locator('.m2-atlas-luggage-card .m2-atlas-ref-icon').evaluateAll(icons=>icons.map(el=>({
+     image:getComputedStyle(el).backgroundImage,
+     position:getComputedStyle(el).backgroundPosition,
+     visible:el.getBoundingClientRect().width>=65&&el.getBoundingClientRect().height>=38
+   })));
+   assert.ok(engravings.every(v=>v.visible&&(v.image.includes('m2-reference-open-leather.webp')||v.image.includes('m2-atlas-original-mission.webp'))),
+     'Las ocho miniaturas deben reutilizar pinturas auténticas de la referencia: '+JSON.stringify(engravings));
+   assert.ok(new Set(engravings.map(v=>v.image+'|'+v.position)).size>=8,
+     'Cada ficha debe ilustrar un objeto distinto');
    assert.equal(await page.locator('[data-atlas-bag-zone].m2-atlas-suitcase').count(),2);
    assert.equal(await page.locator('.m2-atlas-check[data-atlas-stage="4"]').isDisabled(),true);
    const imgs=await page.locator('.m2-atlas-screen img').evaluateAll(els=>els.map(i=>({name:i.src,loaded:i.complete&&i.naturalWidth>0})));
@@ -363,6 +373,8 @@ try{
    assert.equal(await page.locator('[data-atlas-bag-card="growth"]').getAttribute('aria-pressed'),'true');
    await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
    assert.equal(await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').count(),1);
+   assert.equal(await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"] .m2-atlas-ref-icon').count(),1,
+     'La misma ilustración debe acompañar a la ficha al colocarla');
    await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').click();
    await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="effect"]').click();
    assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
