@@ -102,9 +102,11 @@ function verifyCardsInsideZones(page){
 
 try{
  await scenario('Alumno: el primer ejercicio tiene 20 tarjetas y no permite saltar al segundo',async()=>{
-   const {page,context,errors}=await open('student','index.html#mission1gallery');
+   const {page,context,errors}=await open('student','index.html#mission1gallery',{width:1672,height:941});
    try{
      await waitVisible(page,'.gal-hall');
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
      assert.equal(await page.locator('.m1-nav').count(),0);
