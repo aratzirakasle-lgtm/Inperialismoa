@@ -152,3 +152,11 @@ El problema anterior se debía a que las ocho miniaturas no eran imágenes propi
 Tanto los botones de la mesa como las cartelas colocadas dentro de las maletas renderizan un elemento `img` auténtico: se conserva la misma ilustración al arrastrar, colocar y recolocar. Los rótulos siguen siendo texto HTML y se mantienen todas las claves de corrección, el orden de los conceptos, la selección dorada y el criterio pedagógico de **no dar pistas por error**.
 
 La estética añade sombras naturales a las figuras, reflejos de pergamino y molduras más discretas. La rejilla sigue expandiéndose cuando una maleta recibe todas las cartelas. La rama es de desarrollo, sin publicación ni modificaciones de producción.
+
+
+### 21/11/2026 · Recuperación exacta de los ocho motivos antiguos de la maleta
+La captura facilitada por el docente confirma que deben aparecer, por este orden: **espigas, chimeneas, barra de pan, cruz, emigrantes, misionero, barco de vapor y libros**. Se descartan las ocho escenas narrativas de familias y ciudades incorporadas posteriormente. Se ha reconstruido la colección a partir de los **dibujos originales todavía conservados** en `m2-reference-open-leather.webp` y `m2-atlas-original-mission.webp` y no mediante motivos nuevos inventados.
+
+`scripts/recover-m2-original-icons.py` recorta los dibujos antes de sus rótulos, sustituye el papel de fondo por canal alfa y exporta imágenes WebP RGBA de 720×540, con interpolación y enfoque. El tamaño resultante permite visualización nítida en las tarjetas, aunque **no recupera detalle fotográfico inexistente** en los pequeños originales de los que parte. `js/mission2-faktoreak.js` utiliza exclusivamente `m2-vintage-*-transparent.webp` para las ocho tarjetas, también cuando se colocan dentro de las maletas. Los archivos `m2-suitcase-*-restored.webp` no se borran, para permitir comparación y reversión.
+
+El cambio afecta solo a las ilustraciones del ejercicio 3 de la segunda misión: **no se alteran ni el texto en euskera, ni las respuestas, ni la lógica de arrastre, ni Supabase**. Sigue en rama de desarrollo; no se fusiona en `main` sin completar la activación y validación del conjunto de la segunda misión.
