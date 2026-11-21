@@ -61,6 +61,8 @@ try{
    assert.equal(await page.locator('.m2-passport-stamps .is-stamped').count(),0,'La vista docente no concede sellos');
    await page.locator('.m2-passport summary').click();
    assert.equal(await page.locator('.m2-passport-stamps li').count(),5);
+   await mkdir('test-output',{recursive:true});
+   await page.screenshot({path:'test-output/m2-passport-e1-desktop.png',fullPage:true,animations:'disabled'});
    await page.locator('.m2-passport summary').click();
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('.m2-archive-card').count(),11,'Once cartelas históricas independientes');
