@@ -519,6 +519,8 @@ function render(){
  const atlasRoom=active===3&&!teacherEnding;
  app.classList.toggle('m2-first-room',firstRoom);
  app.classList.toggle('m2-atlas-active',atlasRoom);
+ app.classList.toggle('m2-archive-active',active===4&&!teacherEnding);
+ app.classList.toggle('m2-expedition-active',active===5&&!teacherEnding);
  document.querySelector('.m2-page')?.classList.toggle('m2-first-active',firstRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-atlas-page',atlasRoom);
  if(teacherEnding){app.innerHTML=renderEnd();return}
