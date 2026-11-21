@@ -72,10 +72,11 @@
 }
 #m2-app.m2-archive-active .m2-archive-dossier{
   background:
-    radial-gradient(ellipse 85% 47% at 44% -7%,#fff9e99c,transparent 90%),
-    linear-gradient(105deg,#fff2d07b 0 2%,transparent 11% 88%,#80532d24 100%),
-    url('./m2-e4-pergamino-papel-artesanal.svg?v=2') center center / 100% 100% no-repeat,
-    linear-gradient(140deg,#e2bd8d,#f4e5c7 52%,#dab180);
+    radial-gradient(ellipse 85% 44% at 41% -10%,#fffdf0b0,transparent 89%),
+    radial-gradient(ellipse 56% 79% at 100% 98%,#b888502f,transparent 91%),
+    repeating-linear-gradient(12deg,transparent 0 9px,#8552260b 10px,transparent 11px 26px),
+    repeating-linear-gradient(93deg,transparent 0 21px,#976b3b08 22px,transparent 23px 45px),
+    linear-gradient(118deg,#d5a673 0%,#efdab5 4%,#f8e9cd 50%,#ebd1a9 90%,#c5965f 100%);
   border-radius:7px 11px 8px 12px / 10px 7px 12px 9px;
   box-shadow:
     inset 0 0 0 1px #fff2d3,
