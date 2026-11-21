@@ -81,18 +81,31 @@
   }
 }
 
-/* Atlas: los viajeros pasan a la franja decorativa inferior del folio
-   en lugar de solaparse con años y selectores. No se elimina la imagen. */
+/* Atlas: los viajeros reaparecen completos y reducidos en el zócalo libre,
+   sin solaparse con los años ni los selectores. Se conserva la imagen original. */
 @media (min-width:1101px){
-  .m2-page .m2-atlas-main:before{display:none!important}
+  .m2-page .m2-atlas-main:before{
+    display:block!important;
+    z-index:3;
+    left:17.5%!important;
+    top:14cqw!important;
+    width:6.6cqw!important;
+    height:3.5cqw!important;
+    aspect-ratio:281 / 149!important;
+    background-size:100% 100%;
+    background-position:center;
+    clip-path:none!important;
+    -webkit-clip-path:none!important;
+    pointer-events:none;
+  }
   .m2-page .m2-atlas-pop{overflow:hidden}
   .m2-page .m2-atlas-pop-list{
     position:relative;
     z-index:2;
-    padding-bottom:clamp(21px,1.5cqw,25px)!important;
+    padding-bottom:0!important;
   }
   .m2-page .m2-atlas-migrants-foreground{
-    display:block!important;
+    display:none!important;
     position:absolute;
     z-index:1;
     left:2%;
