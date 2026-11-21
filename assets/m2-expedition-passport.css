@@ -50,6 +50,26 @@
  .m2-first-active .m2-topbar>:not(.m2-passport){display:none!important}
  .m2-first-active .m2-topbar .m2-passport{margin:0}
 }
+/* En el atlas panorámico de escritorio la cabecera se oculta para
+   conservar la composición 16:9. El pasaporte se coloca en el margen
+   fotográfico superior, lejos de mapas y controles evaluables. */
+@media(min-width:1101px){
+ .m2-atlas-page .m2-topbar{
+  display:flex!important;
+  position:absolute;
+  z-index:60;
+  left:15px;
+  top:36px;
+  width:auto;
+  min-height:0;
+  padding:0;
+  border:0;
+  background:transparent;
+ }
+ .m2-atlas-page .m2-topbar>:not(.m2-passport){display:none!important}
+ .m2-atlas-page .m2-topbar .m2-passport{margin:0}
+ .m2-atlas-page .m2-passport summary{min-height:28px;padding:3px 7px}
+}
 @media(max-width:680px){
  .m2-topbar .m2-top-number{display:none}
  .m2-passport summary{padding:5px 7px;font-size:10px;gap:5px}
