@@ -299,14 +299,14 @@ function renderPopulation(){
   '</select></span></label>').join('');
  const cards=atlasSuitcase.filter(c=>!state['bag_'+c[0]]).map(c=>
   '<button type="button" draggable="true" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" class="m2-atlas-luggage-card">'+
-  '<img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="112" height="76" alt="" loading="eager" decoding="async" draggable="false"><span>'+esc(c[1])+'</span></button>').join('');
+  '<img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="112" height="76" alt="" loading="eager" decoding="sync" draggable="false" fetchpriority="high"><span>'+esc(c[1])+'</span></button>').join('');
  const cases=[['cause','Emigrazioaren kausak','ZERGATIK?'],['effect','Emigrazioaren ondorioak','ZER ERAGIN?']].map(([key,title,subtitle])=>{
   const inside=atlasSuitcase.filter(c=>state['bag_'+c[0]]===key);
   return '<section class="m2-atlas-suitcase m2-atlas-suitcase-'+key+'" data-atlas-bag-zone="'+key+'">'+
    '<header><strong>'+esc(title)+'</strong><small>'+subtitle+'</small></header>'+
    '<button type="button" class="m2-atlas-luggage-drop" data-atlas-bag-zone="'+key+'" aria-label="'+esc(title)+' maletan kokatu">+ KOKATU HEMEN</button>'+
    '<div class="m2-atlas-suitcase-items">'+inside.map(c=>
-     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" decoding="async" draggable="false">'+esc(c[1])+'</button>').join('')+
+     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" loading="eager" decoding="sync" draggable="false">'+esc(c[1])+'</button>').join('')+
    '</div></section>';
  }).join('');
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
