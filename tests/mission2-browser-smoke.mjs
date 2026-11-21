@@ -89,6 +89,38 @@ try{
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
+ await scenario('Vitrinas resueltas: antes y después en el mismo encuadre de ordenador',async()=>{
+  const {page,context,errors}=await open('teacher',{width:1672,height:941});
+  try{
+   const assignment={
+    economic:['new_markets','cheap_resources','investments'],
+    demographic:['settlement','working_conditions'],
+    religious:['conversion','missions'],
+    political:['sea_routes','chauvinism'],
+    ideological:['racist_theories','exploration']
+   };
+   for(const [zone,ids] of Object.entries(assignment)){
+    for(const id of ids){
+     await page.locator('.m2-museum-desktop [data-card="'+id+'"]').click();
+     await page.locator('[data-zone="'+zone+'"] .m2-case-title-action').click();
+    }
+   }
+   assert.equal(await page.locator('.m2-museum-desktop [data-card]').count(),0);
+   assert.equal(await page.locator('.m2-museum-case .m2-archive-card').count(),11);
+   for(const [zone,ids] of Object.entries(assignment)){
+    assert.equal(await page.locator('[data-zone="'+zone+'"] .m2-archive-card').count(),ids.length);
+   }
+   await page.locator('[data-zone="political"] .m2-case-title-action').hover();
+   const sheet=page.locator('link[href*="m2-vitrinas-iluminacion.css"]');
+   assert.equal(await sheet.count(),1);
+   await sheet.evaluate(el=>el.disabled=true);
+   await page.screenshot({path:'test-output/m2-resuelto-antes-1672.png',fullPage:true,animations:'disabled'});
+   await sheet.evaluate(el=>el.disabled=false);
+   await page.locator('[data-zone="political"] .m2-case-title-action').hover();
+   await page.screenshot({path:'test-output/m2-resuelto-despues-1672.png',fullPage:true,animations:'disabled'});
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
  await scenario('Profesor: cinco pantallas y final navegables, sin escrituras',async()=>{
   const {page,context,errors}=await open('teacher');
   try{
