@@ -165,6 +165,7 @@
  border:4px ridge #b48341;border-radius:9px;
  box-shadow:0 5px 13px #000a,inset 0 0 0 1px #e9c07870;
 }
+#app-shell.gallery-active .gal-title-prefix{color:#f9daa0;white-space:nowrap}
 #app-shell.gallery-active .gal-titlebar p{
  width:min(780px,100%);padding:13px 18px 13px 52px;
  margin:0 auto;position:relative;color:#3c2916;
@@ -446,6 +447,7 @@
  #app-shell.gallery-active .gal-return{top:60px;left:1px}
  #app-shell.gallery-active .gal-titlebar{position:absolute;left:0;right:0;top:90px;width:100%}
  #app-shell.gallery-active .gal-titlebar h1{font-size:clamp(18px,5vw,25px);margin-bottom:7px;padding:8px}
+ #app-shell.gallery-active .gal-title-prefix{display:none}
  #app-shell.gallery-active .gal-titlebar p{padding:10px 9px 10px 38px;font-size:12px}
  #app-shell.gallery-active .gal-titlebar p::before{left:8px;width:19px;height:19px;font-size:12px}
  #app-shell.gallery-active .gal-progress-chips{position:absolute;left:0;right:0;bottom:3px;margin:0}
