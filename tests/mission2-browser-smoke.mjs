@@ -314,9 +314,11 @@ try{
      'Las ocho cartelas deben llevar una imagen independiente y sin fondo');
    const art=await page.locator('.m2-atlas-luggage-card img.m2-atlas-card-illustration').evaluateAll(imgs=>imgs.map(img=>{
      const canvas=document.createElement('canvas');
-     canvas.width=2;canvas.height=2;
+     // No reducir a 2×2: el reescalado mezclaría píxeles opacos y
+     // transparentes, produciendo un falso fallo en los bordes.
+     canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;
      const ctx=canvas.getContext('2d',{willReadFrequently:true});
-     ctx.drawImage(img,0,0,2,2);
+     ctx.drawImage(img,0,0);
      return {
       url:new URL(img.src).pathname,
       loaded:img.complete&&img.naturalWidth>=680&&img.naturalHeight>=500,
