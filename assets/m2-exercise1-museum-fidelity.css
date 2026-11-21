@@ -1,0 +1,205 @@
+/* Segunda misión, ejercicio 1 · pulido pictórico de la sala de vitrinas.
+   Incrementa la fidelidad del museo aprobado; no modifica las cinco áreas
+   de destino, ninguna tarjeta, las preguntas ni las funciones de Supabase.
+   Se aplica exclusivamente mientras #m2-app tiene .m2-first-room. */
+
+/* Materiales de época: el relieve de la placa es parte del HTML real. */
+.m2-first-room .m2-museum-title{
+ background:
+   radial-gradient(ellipse at 50% -20%,#ffd6a926,transparent 69%),
+   linear-gradient(98deg,#750f1b 0%,#a51c27 14%,#8e1021 48%,#a51c27 86%,#6d101b 100%);
+ border:5px ridge #c2924b;
+ box-shadow:0 0 0 1px #4c2815,0 0 0 4px #dfa84b,0 5px 0 #5b3219,
+            0 12px 17px #160a08bf,inset 0 0 0 2px #fbe1a3,
+            inset 0 0 0 5px #74320d,inset 0 11px 15px #ffcf9a24;
+}
+.m2-first-room .m2-museum-title h1{
+ color:#fff1c3;
+ text-shadow:0 1px 0 #f7d28c,0 3px 0 #4b1718,0 5px 7px #190508c9,
+             0 0 15px #f8ca6c3f;
+}
+.m2-first-room .m2-museum-title p{
+ background:linear-gradient(180deg,#fff4d5 0%,#eac58a 56%,#d29c58 100%);
+ border:2px ridge #cb933e;
+ box-shadow:inset 0 0 0 1px #fff7df,0 2px 4px #23090bd1;
+ color:#5b2515;
+ text-shadow:0 1px #fff8e9;
+}
+
+/* La instrucción se integra como una cartela colgada de la pared. */
+.m2-first-room .m2-museum-instructions{
+ background:
+   radial-gradient(ellipse at 23% 4%,#fffaf0 0%,transparent 57%),
+   repeating-linear-gradient(4deg,#8f653405 0 2px,transparent 3px 9px),
+   linear-gradient(160deg,#f9e9c7,#e7c79b 75%,#d2a976);
+ border:4px ridge #c4934f;
+ box-shadow:0 0 0 1px #633920,0 5px 0 #683d23,0 9px 14px #160b08a8,
+            inset 0 0 0 2px #fff6df,inset 0 8px 10px #fff8e18c;
+ color:#3c2318;
+ text-shadow:0 1px #fff6d9;
+}
+
+/* Se mantiene la composición y todas las ilustraciones originales. */
+.m2-first-room .m2-museum-case{
+ background:
+   radial-gradient(ellipse at 50% -8%,#fff3b37a 0%,transparent 36%),
+   linear-gradient(90deg,#23150f 0%,#d7a35b 2.5%,#fbe1a2 4.5%,#8c542c 7%,
+                   #422617 10%,#3e2418 89%,#aa7540 93%,#ffe4a4 96%,#4b2b18 100%);
+ box-shadow:0 0 0 1px #6b3d1a,0 0 0 3px #d5a65c,
+            0 7px 0 #542e18,0 13px 14px #120b08bd,
+            inset 3px 0 5px #fff0c665,inset -4px 0 7px #0b0706b3;
+}
+.m2-first-room .m2-museum-case:before{
+ border-color:#f8d68f;
+ box-shadow:inset 0 0 0 2px #3e2419,inset 0 0 0 4px #bb8349,
+            inset 0 8px 9px #fce6a433,inset 0 -13px 13px #2b130c9e;
+}
+.m2-first-room .m2-case-crown{
+ filter:drop-shadow(0 3px 2px #1b0a06cc) saturate(.96) contrast(1.06);
+}
+.m2-first-room .m2-case-arch{
+ border-color:#ca995c;
+ box-shadow:inset 0 0 0 2px #ffebbb,inset 0 0 0 5px #5a3524,
+            inset 0 12px 14px #fff7c02b,inset 0 -16px 27px #160d0eab,
+            0 0 0 1px #372416,0 3px 5px #000b;
+}
+.m2-first-room .m2-case-arch:before{
+ background:
+   linear-gradient(111deg,#fffce03d 0%,#fff8d410 9%,transparent 22% 67%,#fff4e01d 81%,transparent 94%),
+   radial-gradient(ellipse at 50% 0%,#fff2b950 0%,transparent 61%);
+ opacity:.9;
+ mix-blend-mode:screen;
+}
+.m2-first-room .m2-case-spot{
+ filter:drop-shadow(0 0 4px #ffeab990);
+}
+.m2-first-room .m2-case-scene{
+ object-fit:fill;
+ filter:saturate(1.11) contrast(1.065) brightness(1.055);
+}
+.m2-first-room .m2-case-title{
+ filter:drop-shadow(0 2px 1px #2a1708a8);
+}
+.m2-first-room .m2-case-title-action{
+ color:#3b230f;
+ text-shadow:0 1px #fffce5,0 0 3px #f7e8b0;
+}
+.m2-first-room .m2-case-title-action:hover,
+.m2-first-room .m2-case-title-action:focus-visible{
+ box-shadow:inset 0 0 0 2px #fff6db,0 0 10px #ffe3a98f;
+ background:#f8df9b55;
+}
+
+/* Fondo de los cajones ligeramente translúcido, sin tapar las tarjetas
+   que se añaden: el crecimiento vertical sigue siendo natural. */
+.m2-first-room .m2-museum-case .m2-case-well{
+ background:
+   radial-gradient(ellipse at 50% 103%,var(--case-glow) 0%,transparent 56%),
+   linear-gradient(90deg,#090b0cb8 0%,transparent 12% 88%,#060908aa 100%),
+   linear-gradient(180deg,#120e12e3,var(--case-color));
+ border:3px ridge #be8c50;
+ box-shadow:inset 0 0 0 1px #fce6ae7d,inset 0 5px 13px #070707a8,
+            inset 0 -6px 9px #efbe5c28,0 2px 3px #1e0b099f;
+}
+.m2-first-room .m2-museum-case .m2-case-target{
+ background:linear-gradient(180deg,#f2d49c18 0%,#150b0b35 100%)!important;
+ border:1px dashed #f8d9a2c7!important;
+ text-shadow:0 1px 3px #090504;
+}
+.m2-first-room .m2-museum-case .m2-case-target:hover,
+.m2-first-room .m2-museum-case .m2-case-target:focus-visible{
+ box-shadow:inset 0 0 0 1px #ffeab0,0 0 14px #ffe1a774!important;
+ outline:2px solid #ffdda1;
+ outline-offset:1px;
+}
+.m2-first-room .m2-museum-case .m2-case-foundation{
+ background:
+   radial-gradient(circle at 11px 12px,#ffe1a3 0 2px,#855122 2.5px 5px,transparent 5.5px),
+   radial-gradient(circle at calc(100% - 11px) 12px,#ffe1a3 0 2px,#855122 2.5px 5px,transparent 5.5px),
+   linear-gradient(180deg,#ffe4ae 0 2px,#b47a3b 3px 7px,#3f2117 8px 17px,
+                   #ab6f36 18px 21px,#4b2b1a 23px);
+}
+
+/* Nogal tallado y pergamino: contraste sin crear recuadros ajenos al mueble. */
+.m2-first-room .m2-museum-desktop{
+ background:
+   radial-gradient(ellipse at 15% 2%,#ffe0a77b 0%,transparent 37%),
+   radial-gradient(ellipse at 83% 95%,#d8944c40 0%,transparent 48%),
+   repeating-linear-gradient(2deg,transparent 0 12px,#f3ca8530 13px 14px,transparent 15px 27px),
+   repeating-linear-gradient(94deg,transparent 0 31px,#23100a28 32px 34px,transparent 35px 46px),
+   linear-gradient(166deg,#a96940 0%,#6d3e25 37%,#603018 67%,#b47647 100%);
+ box-shadow:0 0 0 2px #3f2113,0 0 0 5px #cf9c55,0 9px 0 #3d2014,
+            0 16px 15px #000b,inset 0 0 0 2px #fff0bbad,
+            inset 0 9px 14px #ffcd8658;
+}
+.m2-first-room .m2-museum-desktop-top{
+ color:#ffe4b6;
+ text-shadow:0 1px 2px #190b07,0 0 6px #f8c17e46;
+}
+.m2-first-room .m2-museum-desktop .m2-archive-card.m2-tile{
+ background:
+  radial-gradient(ellipse at 30% 0%,#fffef4 0%,transparent 55%),
+  repeating-linear-gradient(17deg,transparent 0 9px,#93623309 10px 11px,transparent 12px 18px),
+  linear-gradient(150deg,#fff4d8 0%,#f3d7a9 50%,#dfb477 100%)!important;
+ border-color:#c69753!important;
+ box-shadow:0 0 0 1px #604123,0 2px 0 #694026,0 5px 7px #1b0d08a6,
+           inset 0 0 0 2px #fff4d6,inset 0 4px 6px #fffdf18a!important;
+}
+.m2-first-room .m2-archive-card .m2-museum-card-copy{
+ color:#312014;
+ text-shadow:0 1px #fff9ed;
+}
+.m2-first-room .m2-archive-card[aria-pressed="true"]{
+ border-color:#ffecb8!important;
+ box-shadow:0 0 0 2px #f3c262,0 0 0 4px #765022,
+            0 0 13px #ffd3779e,0 4px 6px #130b09a8,
+            inset 0 0 0 2px #fff8e3!important;
+}
+.m2-first-room .m2-museum-case .m2-archive-card.m2-tile{
+ background:linear-gradient(160deg,#fff5de 0%,#eccb94 100%)!important;
+}
+
+/* Zócalo inferior con metal ligeramente envejecido. */
+.m2-first-room .m2-controls{
+ background:
+  radial-gradient(ellipse at 50% -10%,#edb97658,transparent 65%),
+  repeating-linear-gradient(3deg,#dfaa6214 0 9px,#2b140d12 10px 18px),
+  linear-gradient(165deg,#975932,#54291b 30%,#744326 70%,#985c35);
+ box-shadow:inset 0 2px #f3c887,0 6px 12px #0009;
+}
+.m2-first-room .m2-button:not(.secondary){
+ background:linear-gradient(160deg,#2a836b 0%,#12634f 43%,#064536 100%);
+ text-shadow:0 2px #18372c,0 0 7px #f7d68b47;
+ box-shadow:0 0 0 1px #623a1d,inset 0 0 0 2px #79b29c,
+            0 4px 0 #29160c,0 8px 10px #0009;
+}
+.m2-first-room .m2-button:not(.secondary):hover:not(:disabled),
+.m2-first-room .m2-button:not(.secondary):focus-visible{
+ filter:brightness(1.07);
+ box-shadow:0 0 0 2px #ffe09d,0 0 18px #fbd4849c,
+            inset 0 0 0 2px #9ed1b0,0 4px 0 #29160c;
+}
+
+/* Iluminación cinematográfica solo en paisaje; no se redimensionan ni
+   transforman hitboxes de las tarjetas y vitrinas. */
+@media(min-width:901px){
+ .m2-paper.m2-first-room{
+  box-shadow:inset 0 0 66px #020d0fa8,inset 0 0 0 1px #be91472c;
+ }
+ .m2-first-room .m2-museum-case .m2-case-well{
+  min-height:100px;
+ }
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case .m2-case-well{
+  border-width:2px;
+ }
+ .m2-first-room .m2-museum-title h1{
+  text-shadow:0 1px #f9d28c,0 3px 4px #1d0911b8;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-first-room .m2-museum-case,.m2-first-room .m2-archive-card{
+  transition:none!important;
+ }
+}
