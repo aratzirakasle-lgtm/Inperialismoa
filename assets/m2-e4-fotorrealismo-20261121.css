@@ -1,0 +1,284 @@
+/*
+ * M2 E4 · Pulido de material fotográfico sin alterar ejercicios,
+ * etiquetas, archivos históricos, preguntas ni Supabase.
+ * La nueva capa se limita estrictamente a .m2-archive-active.
+ * Fotografías: recursos existentes del propio repositorio.
+ */
+#m2-app.m2-archive-active .m2-archive-scene{
+  background:
+    radial-gradient(ellipse 34% 57% at 12% 23%,#b9762955,transparent 80%),
+    radial-gradient(ellipse 34% 43% at 88% 27%,#d5a05731,transparent 81%),
+    radial-gradient(ellipse 80% 30% at 50% -17%,#d2a26031,transparent 93%),
+    linear-gradient(93deg,#08140e 0%,#14261e 12%,#23392c 47%,#182a22 86%,#08120f 100%);
+  box-shadow:inset 0 0 0 2px #f9d6a4,inset 0 0 45px #000d,
+    0 9px 15px #1609068a,0 0 16px #865c2e65;
+}
+#m2-app.m2-archive-active .m2-archive-scene::before{
+  opacity:.75;
+  background:
+   radial-gradient(ellipse at 20% 19%,#ebcb8b35,transparent 34%),
+   radial-gradient(ellipse at 78% 22%,#ffd68b30,transparent 32%),
+   repeating-linear-gradient(90deg,transparent 0 17%,#b68a4b14 17.2%,#100e0b73 17.5%,transparent 17.8% 37%),
+   linear-gradient(90deg,#121c15,#3044352d 50%,#111b15);
+}
+#m2-app.m2-archive-active .m2-archive-room-props{
+  background-size:100% auto;
+  background-position:center top;
+  filter:drop-shadow(0 4px 11px #0204038f);
+}
+/* Piezas físicas de fondo recuperadas del museo original:
+   latón, óptica y documentos. Se colocan por debajo de las cartas. */
+#m2-app.m2-archive-active .m2-archive-room-props::before,
+#m2-app.m2-archive-active .m2-archive-room-props::after{
+  content:'';
+  display:block;
+  position:absolute;z-index:2;
+  height:clamp(86px,10vw,151px);
+  width:clamp(160px,17vw,262px);
+  background-repeat:no-repeat;
+  background-size:cover;
+  border-radius:18px;
+  opacity:.94;
+  pointer-events:none;
+  mix-blend-mode:normal;
+  -webkit-mask-image:radial-gradient(ellipse 66% 62% at 50% 50%,#000 38%,#000a 72%,transparent 97%);
+  mask-image:radial-gradient(ellipse 66% 62% at 50% 50%,#000 38%,#000a 72%,transparent 97%);
+  filter:sepia(.08) saturate(.9) contrast(1.06) drop-shadow(5px 6px 7px #100907ad);
+}
+#m2-app.m2-archive-active .m2-archive-room-props::before{
+  bottom:6%;left:0;
+  background-image:url('./m2-atlas-header-left.webp');
+  transform:rotate(-14deg);
+}
+#m2-app.m2-archive-active .m2-archive-room-props::after{
+  bottom:7%;right:0;
+  background-image:url('./m2-atlas-header-right.webp');
+  transform:rotate(12deg);
+}
+/* Luz de lámpara dirigida físicamente a los folios; los objetos NO
+   interceptan ningún clic ni actúan como pista de respuesta. */
+#m2-app.m2-archive-active .m2-archive-desk::after{
+  content:'';
+  position:absolute;
+  top:-3%;left:-8%;
+  width:54%;height:56%;
+  pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse 64% 62% at 9% 0%,#fff4cf24,transparent 93%);
+  filter:blur(10px);
+  mix-blend-mode:screen;
+}
+#m2-app.m2-archive-active .m2-archive-five-files{
+  z-index:2;
+}
+#m2-app.m2-archive-active .m2-archive-dossier{
+  background:
+    radial-gradient(ellipse 85% 47% at 44% -7%,#fff9e99c,transparent 90%),
+    linear-gradient(105deg,#fff2d07b 0 2%,transparent 11% 88%,#80532d24 100%),
+    url('./m2-e4-pergamino-papel-artesanal.svg') center center / 100% 100% no-repeat,
+    linear-gradient(140deg,#e2bd8d,#f4e5c7 52%,#dab180);
+  border-radius:7px 11px 8px 12px / 10px 7px 12px 9px;
+  box-shadow:
+    inset 0 0 0 1px #fff2d3,
+    inset 0 0 0 4px #9f774a9f,
+    inset 0 0 0 5px #f4d6a0,
+    inset 6px 0 10px #fff8e16a,
+    inset -7px 0 10px #754f3068,
+    inset 0 -9px 15px #7f542d24,
+    0 4px 0 #6b492a,
+    2px 8px 5px #140905a6,
+    0 14px 23px #0008;
+}
+#m2-app.m2-archive-active .m2-archive-dossier::before{
+  content:'';
+  display:block;position:absolute;inset:5px;
+  border-radius:5px 8px 5px 9px;
+  border:1px solid #c59c67bf;
+  background:
+    linear-gradient(146deg,#9a6d34a6 0 5px,transparent 6px) top left / 16px 16px no-repeat,
+    linear-gradient(226deg,#9a6d34a6 0 5px,transparent 6px) top right / 16px 16px no-repeat,
+    linear-gradient(46deg,#9a6d34a6 0 5px,transparent 6px) bottom left / 16px 16px no-repeat,
+    linear-gradient(316deg,#9a6d34a6 0 5px,transparent 6px) bottom right / 16px 16px no-repeat;
+  box-shadow:inset 0 0 0 2px #fff9e280;
+  pointer-events:none;
+}
+#m2-app.m2-archive-active .m2-archive-dossier::after{
+  opacity:.18;
+  filter:sepia(.32);
+}
+#m2-app.m2-archive-active .m2-archive-folder-tab{
+  background:linear-gradient(90deg,#ac783d,#fce2b6 30%,#edcd94 75%,#82562d);
+  border-color:#a37847;
+}
+#m2-app.m2-archive-active .m2-archive-fileclip{
+  background:linear-gradient(90deg,#fff1bb22,#cc944d6e,#3a200e45);
+  box-shadow:inset 1px 0 #fff5c8,1px 2px 4px #291407ba,0 0 2px #ffe4a8;
+}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-source-heading{
+  text-shadow:0 1px #fff1cc;
+}
+#m2-app.m2-archive-active .m2-source-index{
+  border-radius:5px 10px 5px 11px;
+  background:
+    radial-gradient(ellipse at 44% -9%,#fff9dc,transparent 74%),
+    linear-gradient(140deg,#e0af64,#f7e3af 48%,#b37c3e);
+  border:3px ridge #b78849;
+  box-shadow:inset 0 0 0 1px #fff2c8,0 2px 4px #27130a7b;
+}
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  border:6px ridge #af8754;
+  border-radius:2px;
+  background:
+    radial-gradient(ellipse at 40% -20%,#fef6de,transparent 81%),
+    linear-gradient(120deg,#e7c998,#cfaa71);
+  box-shadow:inset 0 0 0 2px #fae3b5,
+    inset 0 0 12px #4e342096,
+    inset 0 12px 15px #fff5d562,
+    0 3px 4px #180d088c;
+}
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving::before{
+  content:'';
+  position:absolute;inset:2px;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 0%,#fff6d5ba,transparent 75%),
+    repeating-linear-gradient(0deg,#42290c14 0 1px,transparent 1px 4px);
+  mix-blend-mode:multiply;
+}
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving::after{
+  content:'';
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    linear-gradient(118deg,#fff7dc42 0 10%,transparent 34% 88%,#24140622 100%),
+    radial-gradient(ellipse at 50% 45%,transparent 40%,#43260749 100%);
+  box-shadow:inset 0 0 0 2px #fff3d270,inset 0 0 19px #38220f7a;
+}
+#m2-app.m2-archive-active .m2-source-engraving svg{
+  position:relative;z-index:1;
+  filter:sepia(.70) grayscale(.5) contrast(1.33) drop-shadow(1px 2px 2px #33241366);
+}
+/* Ilustraciones auténticas ya publicadas en Inperialismoa.
+   No se identifican como retratos de dirigentes concretos. */
+#m2-app.m2-archive-active .m2-source-chart .m2-source-engraving{
+  background:
+   linear-gradient(95deg,#d4a06a44,#f5ddad13),
+   url('./m2-reference-port-photo.webp') center / cover no-repeat;
+}
+#m2-app.m2-archive-active .m2-source-newspaper .m2-source-engraving{
+  background:
+    linear-gradient(125deg,#f5e3bd55,#b68a5c33),
+    url('./m2-reference-right-steamer.webp') 38% center / cover no-repeat;
+}
+#m2-app.m2-archive-active .m2-source-portrait .m2-source-engraving{
+  background:
+    linear-gradient(120deg,#fff2cb55,#8f60385e),
+    url('./m2-reference-harbor.webp') center / cover no-repeat;
+}
+#m2-app.m2-archive-active .m2-source-chart .m2-source-engraving svg,
+#m2-app.m2-archive-active .m2-source-newspaper .m2-source-engraving svg,
+#m2-app.m2-archive-active .m2-source-portrait .m2-source-engraving svg{
+  opacity:.08;
+  mix-blend-mode:multiply;
+}
+#m2-app.m2-archive-active .m2-source-science .m2-source-engraving{
+  background:
+    linear-gradient(130deg,#e7cba262,#ae7e4933),
+    url('./m2-atlas-header-right.webp') 0% 56% / auto 185% no-repeat,
+    linear-gradient(#ead8b5,#b8a17d);
+}
+#m2-app.m2-archive-active .m2-source-science .m2-source-engraving svg{
+  opacity:.56;
+  mix-blend-mode:multiply;
+}
+#m2-app.m2-archive-active .m2-source-manuscript .m2-source-engraving{
+  background:
+    linear-gradient(145deg,#fff8e9,#d2b07d);
+}
+#m2-app.m2-archive-active .m2-source-manuscript .m2-source-engraving svg{
+  opacity:.88;
+}
+/* Legibilidad sobre papel: las opciones siguen siendo controles HTML. */
+#m2-app.m2-archive-active .m2-archive-card-writing .m2-source-text{
+  color:#3b2918;
+  border-bottom:1px solid #9f7547b5;
+  text-shadow:0 1px #fff4dc84;
+}
+#m2-app.m2-archive-active .m2-archive-card-writing .m2-choice{
+  background:
+    radial-gradient(ellipse at 41% -35%,#fffdf0,transparent 82%),
+    linear-gradient(100deg,#f9eccf,#f5e0be 86%,#e9cc9d);
+  border:1px solid #c3a06c;
+  box-shadow:inset 0 0 0 1px #fff9e2,
+    inset 0 2px 3px #fff9e68a,0 1px 3px #3e27183d;
+}
+#m2-app.m2-archive-active .m2-archive-card-writing .m2-choice:has(input:checked){
+  background:linear-gradient(140deg,#e4efde,#c9d8c2);
+  border-color:#31644a;
+  box-shadow:inset 0 0 0 1px #f0f7e5,0 0 0 1px #416d567a,0 2px 4px #1710085c;
+}
+/* Realzar marco frontal y pátina del mobiliario sin tapar la lectura. */
+#m2-app.m2-archive-active .m2-archive-desk{
+  background:
+    radial-gradient(ellipse 74% 48% at 49% -16%,#d2a27333,transparent 87%),
+    repeating-linear-gradient(100deg,#ffe8b10a 0 2px,transparent 2px 13px),
+    linear-gradient(124deg,#362015,#79502edc 46%,#4c2b18f2);
+  box-shadow:
+    inset 0 0 0 2px #f1c992,inset 0 0 0 5px #402519,
+    inset 0 11px 27px #100905cf,0 4px 1px #2a160a,
+    0 12px 22px #000d,0 0 15px #f3be7961;
+}
+#m2-app.m2-archive-active .m2-archive-desk-crest{
+  background:
+    radial-gradient(ellipse at 35% -30%,#fffee6,transparent 70%),
+    linear-gradient(130deg,#ddb77f,#f9e9c6 45%,#dcb682 100%);
+  box-shadow:inset 0 0 0 2px #fff9e4,inset 0 0 13px #b3824a8c,
+    0 4px 12px #170c088c;
+}
+#m2-app.m2-archive-active .m2-archive-desk-front{
+  background:
+    radial-gradient(ellipse at 50% 0,#fff0ba2f,transparent 72%),
+    repeating-linear-gradient(88deg,#dcad692c 0 1px,#2a140c11 2px 30px,transparent 31px 54px),
+    linear-gradient(180deg,#b47f47,#7e4622 22%,#291407 58%,#5e321b 83%,#1c0d06);
+}
+#m2-app.m2-archive-active .m2-archive-warning{
+  background:
+    radial-gradient(ellipse at 45% -24%,#fffbe4 0,transparent 90%),
+    url('./m2-e4-pergamino-papel-artesanal.svg') center / 100% 100% no-repeat;
+  box-shadow:inset 0 0 0 2px #fff4d9,inset 0 0 15px #98744758,0 5px 13px #000a;
+}
+@media(min-width:761px){
+ #m2-app.m2-archive-active .m2-archive-dossier:hover .m2-archive-folder-tab{
+  filter:brightness(1.08);
+ }
+}
+@media(max-width:1150px){
+ #m2-app.m2-archive-active .m2-archive-room-props::before,
+ #m2-app.m2-archive-active .m2-archive-room-props::after{
+   width:135px;height:77px;
+   opacity:.63;
+ }
+}
+@media(max-width:760px){
+ #m2-app.m2-archive-active .m2-archive-room-props{
+   opacity:.64;
+ }
+ #m2-app.m2-archive-active .m2-archive-room-props::before,
+ #m2-app.m2-archive-active .m2-archive-room-props::after{
+   width:85px;height:58px;opacity:.44;
+ }
+ #m2-app.m2-archive-active .m2-archive-dossier{
+  box-shadow:
+    inset 0 0 0 1px #fff7dd,
+    inset 0 0 0 3px #a77b49ad,
+    inset 0 0 0 5px #e4c18e,
+    inset 0 0 14px #74512c49,
+    0 5px 10px #000a;
+ }
+ #m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving{
+   border-width:3px;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app.m2-archive-active .m2-archive-dossier{transition:none!important}
+}
