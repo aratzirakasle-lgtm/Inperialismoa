@@ -4788,3 +4788,13 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   mask-image:none;
  }
 }
+
+
+/* Atlas 03e · eliminar los números pintados que aparecían duplicados
+   sobre la fila de 1900 sin recortar a los viajeros de la imagen original. */
+@media(min-width:1101px){
+ .m2-atlas-main:before{
+  -webkit-clip-path:polygon(0 0,55% 0,55% 31%,100% 31%,100% 100%,0 100%);
+  clip-path:polygon(0 0,55% 0,55% 31%,100% 31%,100% 100%,0 100%);
+ }
+}
