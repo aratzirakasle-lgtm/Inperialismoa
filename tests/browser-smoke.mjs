@@ -160,7 +160,9 @@ try{
      assert.equal(await page.locator('.gal-vitrine').count(),4);
      assert.equal(await page.locator('.gal-museum-set').count(),1,'La escenografía debe estar montada');
      assert.equal(await page.locator('.gal-side-art').count(),2,'El museo debe incluir sus objetos laterales');
-     assert.equal(await page.locator('.gal-globe svg').count(),1,'El globo histórico debe estar presente');
+     const sideArt=await page.locator('.gal-side-art').evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundImage));
+     assert.ok(sideArt[0].includes('m2-museo-izquierdo.svg')&&sideArt[1].includes('m2-museo-derecho.svg'),
+       'Deben reutilizarse los dos fondos históricos laterales del museo');
      assert.equal(await page.locator('.gal-flag-shelf .gal-flag-illustration').count(),4,'Las cuatro banderas deben estar dentro de las vitrinas');
      assert.equal(await page.locator('[data-gallery-zone]').count(),5,'No deben desaparecer zonas de clasificación');
      assert.equal(await page.locator('.gal-museum-set').getAttribute('aria-hidden'),'true');
@@ -211,6 +213,14 @@ try{
      });
      assert.ok(metrics.scrollWidth<=metrics.viewport+2,JSON.stringify(metrics));
      assert.ok(metrics.cabinets.every(c=>c.left>=-2&&c.right<=metrics.viewport+2&&c.width>270),JSON.stringify(metrics));
+     const mobileCards=await page.locator('.gal-tray [data-gallery-card]').evaluateAll(cards=>{
+       const positions=cards.map(c=>{const r=c.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}});
+       return {firstFour:positions.slice(0,4),narrow:positions.filter(p=>p.w<100).length};
+     });
+     assert.equal(mobileCards.narrow,0,'En móviles no deben comprimirse las tarjetas hasta poner el texto vertical');
+     assert.ok(mobileCards.firstFour[0].y===mobileCards.firstFour[1].y&&
+       mobileCards.firstFour[0].y<mobileCards.firstFour[2].y,
+       'En móvil debe haber dos columnas de cartelas legibles');
      await setCard(page,'ru_tsar','ru');
      assert.equal(await page.locator('[data-gallery-zone="ru"] [data-gallery-card="ru_tsar"]').count(),1);
      assert.deepEqual(errors,[]);
