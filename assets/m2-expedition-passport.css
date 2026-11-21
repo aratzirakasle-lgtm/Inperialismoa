@@ -21,6 +21,35 @@
 .m2-passport-state{display:block;margin-top:2px;font:italic 11px/1.25 Georgia,serif;color:#80644b}
 .m2-passport-stamps li.is-stamped .m2-passport-state{color:#8b3730}
 .m2-passport-foot{margin:11px 0 0;padding-top:8px;border-top:1px solid #b89d70;color:#76583b;font:italic 11px/1.45 Georgia,serif}
+/* La primera sala oculta su cabecera habitual: conservar el pasaporte
+   como pequeña placa independiente, sin invadir las vitrinas. */
+@media(min-width:901px){
+ .m2-first-active .m2-topbar{
+  display:flex!important;
+  position:absolute;
+  z-index:60;
+  top:73px;
+  right:15px;
+  width:auto;
+  min-height:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+ }
+ .m2-first-active .m2-topbar>:not(.m2-passport){display:none!important}
+ .m2-first-active .m2-topbar .m2-passport{margin:0}
+}
+@media(max-width:900px){
+ .m2-first-active .m2-topbar{
+  display:flex!important;
+  justify-content:center;
+  min-height:43px;
+  padding:5px 12px;
+ }
+ .m2-first-active .m2-topbar>:not(.m2-passport){display:none!important}
+ .m2-first-active .m2-topbar .m2-passport{margin:0}
+}
 @media(max-width:680px){
  .m2-topbar .m2-top-number{display:none}
  .m2-passport summary{padding:5px 7px;font-size:10px;gap:5px}
