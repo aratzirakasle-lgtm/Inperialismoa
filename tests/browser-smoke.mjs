@@ -129,6 +129,8 @@ try{
      assert.equal(await sheet.count(),1,'El pulido gráfico debe estar enlazado');
      assert.equal(await page.locator('.gal-vitrine-eu .gal-flag-illustration').count(),1,'Debe conservarse la bandera europea original');
      assert.match(await page.locator('.gal-vitrine-eu .gal-flag-illustration').getAttribute('aria-label'),/Europar Batasuneko bandera/);
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/m1-museo-cinematico-vacio-escritorio.png',fullPage:true,animations:'disabled'});
      for(const [id,zone] of [['eu_auth_head','eu_auth'],['eu_liberal_head','eu_liberal'],['ru_tsar','ru'],['us_west','us'],['jp_meiji','jp']])
        await setCard(page,id,zone);
      assert.equal(await page.locator('.gal-tile').count(),20);
@@ -198,6 +200,8 @@ try{
      assert.equal(await page.locator('.gal-vitrine-eu .gal-flag-illustration').count(),1);
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('.gal-museum-set').count(),1);
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/m1-museo-cinematico-vacio-movil.png',fullPage:true,animations:'disabled'});
      const metrics=await page.evaluate(()=>{
        const cabinets=[...document.querySelectorAll('.gal-vitrine')].map(el=>{
          const r=el.getBoundingClientRect();
