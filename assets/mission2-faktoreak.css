@@ -4367,3 +4367,326 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   max-width:72%;
  }
 }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   MIGRAZIOEN BULEGOA · ETAPA 03 · arte real aprobado / HTML interactivo
+   Siete fragmentos recuperados de la lámina 1672×941. Las preguntas,
+   conceptos y mecanismos no son imágenes incrustadas; continúan en HTML.
+   ════════════════════════════════════════════════════════════════════ */
+@media (min-width:1101px){
+ .m2-atlas-row-two .m2-atlas-route-activity{
+  background:
+   radial-gradient(ellipse at 38% -15%,#fff6d6d9,transparent 57%),
+   repeating-linear-gradient(13deg,#90734c0c 0 7px,transparent 9px 17px),
+   linear-gradient(165deg,#f3dbb0,#e8c796 60%,#be8f57);
+  border-image:none;
+  border:7px ridge #c08c44;
+ }
+ .m2-atlas-row-two .m2-atlas-route-activity:before{
+  left:0;right:0;bottom:0;top:auto;
+  width:100%;height:116px;
+  z-index:0;opacity:1;
+  background:url('./m2-reference-harbor.webp') center bottom/100% auto no-repeat;
+  background-color:transparent;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 32%);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 32%);
+  pointer-events:none;
+ }
+ .m2-atlas-row-two .m2-atlas-route-stage{
+  height:182px;min-height:182px;
+  grid-template-columns:minmax(0,33%) minmax(0,67%);
+ }
+ .m2-atlas-route-labels{
+  z-index:3;position:relative;
+ }
+ .m2-atlas-route-map{
+  z-index:2;position:relative;
+  border:5px ridge #c69a55;
+  border-radius:7px;
+  box-shadow:0 4px 6px #1d0e0887,inset 0 0 0 1px #fff0ba;
+ }
+ .m2-atlas-route-card{
+  background:
+    radial-gradient(ellipse at 45% 0%,#fffbec 0%,transparent 65%),
+    linear-gradient(168deg,#fbe7ba,#e5bb82 85%);
+  border:4px ridge #b47b3e;
+  border-radius:9px 18px 15px 9px;
+  box-shadow:inset 0 0 0 2px #fff4cc,0 3px 3px #391e0f87;
+  font-size:clamp(12px,.85vw,15px);
+ }
+ .m2-atlas-facts-activity{
+  background:
+   repeating-linear-gradient(15deg,transparent 0 7px,#9f743d1c 9px 10px,transparent 13px 19px),
+   radial-gradient(ellipse at 20% 5%,#fff8e6,transparent 60%),
+   linear-gradient(135deg,#f2dfb8,#e2bb82 96%);
+ }
+ .m2-atlas-facts-activity:after{
+  right:22px;top:42px;
+  width:184px;height:158px;
+  background:url('./m2-reference-port-photo.webp') center /cover no-repeat;
+  border:0;
+  outline:0;
+  transform:rotate(3deg);
+  box-shadow:0 5px 11px #2c1b1490;
+  filter:saturate(.94) contrast(1.07);
+  pointer-events:none;
+ }
+ .m2-atlas-facts-activity:before{
+  right:20px;top:41px;
+  width:202px;height:173px;
+  transform:rotate(-4deg);
+  background:linear-gradient(165deg,#fff0d3,#d7b083);
+  border:5px solid #f6e5c0;
+  box-shadow:0 0 0 1px #956f46,0 5px 11px #2c1b1490;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statements,
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin-right:225px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  min-height:32px;
+  padding:2px 2px;
+  font-size:clamp(10.5px,.75vw,12px);
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement-select{
+  background:linear-gradient(180deg,#fffef8,#e8edf1 69%,#bac4cc);
+  border-color:#a5927d;
+ }
+ /* La escena pintada del referente sustituye a los objetos vectoriales. */
+ .m2-atlas-luggage-activity{
+  min-height:282px;
+  background:
+   linear-gradient(90deg,#e8c79b 0%,#e7cfaa 21%,#b78856 45%,#bb8759 81%,#7db7c1 100%);
+  border:7px ridge #ac8049;
+  box-shadow:inset 0 0 0 2px #ffedc0,0 5px 5px #12070798;
+ }
+ .m2-atlas-luggage-activity:before{
+  position:absolute;
+  z-index:0;
+  left:0;bottom:0;
+  width:26%;height:185px;
+  background:url('./m2-reference-old-luggage.webp') left bottom/auto 190px no-repeat;
+  opacity:1;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 29%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 29%);
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity:after{
+  position:absolute;z-index:0;
+  right:0;bottom:0;
+  width:15.8%;height:238px;
+  opacity:1;
+  background:url('./m2-reference-right-steamer.webp') right bottom/100% 100% no-repeat;
+  -webkit-mask-image:none;
+  mask-image:none;
+  pointer-events:none;
+ }
+ .m2-atlas-luggage-activity>header{z-index:3}
+ .m2-atlas-luggage-board{
+  position:relative;
+  z-index:3;
+  grid-template-columns:minmax(0,.96fr) minmax(0,1.05fr);
+  gap:9px;
+  margin:0 15.3% 0 24.0%;
+ }
+ .m2-atlas-luggage-available{
+  position:relative;
+  isolation:isolate;
+  min-height:236px;
+  padding:18px 13px 20px;
+  border:0;
+  outline:0;
+  border-radius:6px;
+  background:url('./m2-reference-open-leather.webp') center/100% 100% no-repeat;
+  box-shadow:none;
+ }
+ .m2-atlas-luggage-available:before{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:-1;
+  left:7%;right:6.5%;top:13%;bottom:19%;
+  background:
+   radial-gradient(ellipse at 50% 0%,#c58c4b44,transparent 65%),
+   repeating-linear-gradient(6deg,transparent 0 14px,#d69b5330 16px 17px,transparent 19px 29px),
+   linear-gradient(125deg,#5a341e,#764320 54%,#3e2216);
+  border-radius:9px;
+  box-shadow:inset 0 0 10px #160908b8;
+ }
+ .m2-atlas-luggage-note{
+  position:relative;
+  z-index:2;
+  display:block;
+  min-height:15px;
+  margin:0 0 3px;
+  padding:0;
+  font-size:9px;
+  color:#fff2d8;
+  text-shadow:0 2px 3px #140803;
+ }
+ .m2-atlas-luggage-cards{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:4px;
+  position:relative;
+  z-index:3;
+  margin:0;
+ }
+ .m2-atlas-luggage-card{
+  position:relative;
+  min-height:85px;
+  padding:4px 2px;
+  border:4px ridge #d6a362;
+  border-radius:9px 8px 11px 8px;
+  background:radial-gradient(ellipse at 24% 0%,#fffef3,transparent 65%),
+             linear-gradient(155deg,#fff1ca,#e3bd84)!important;
+  color:#3b2117;
+  font:700 clamp(10px,.72vw,12px)/1.13 Georgia,serif;
+  text-shadow:0 1px #fff2d7;
+  box-shadow:inset 0 0 0 1px #ffefcc,0 2px 3px #1b0e0985;
+ }
+ .m2-atlas-luggage-card img{
+  width:clamp(37px,2.85vw,49px);
+  height:clamp(36px,2.7vw,48px);
+ }
+ .m2-atlas-luggage-targets{
+  align-items:start;
+  gap:4px;
+ }
+ .m2-atlas-suitcase,.m2-atlas-suitcase-effect{
+  position:relative;
+  isolation:isolate;
+  min-height:242px;
+  height:auto;
+  padding:67px 12px 28px;
+  border:0;
+  box-shadow:none;
+  background:url('./m2-reference-red-suitcase.webp') center/100% 100% no-repeat;
+  border-radius:15px 15px 22px 22px;
+  overflow:visible;
+ }
+ .m2-atlas-suitcase-effect{
+  background-image:url('./m2-reference-blue-suitcase.webp');
+ }
+ /* Los títulos están impresos en la ilustración aprobada; conservar el
+    texto real accesible para lectores de pantalla. */
+ .m2-atlas-suitcase>header{
+  position:absolute!important;
+  width:1px!important;height:1px!important;
+  margin:0!important;padding:0!important;
+  overflow:hidden!important;
+  clip-path:inset(50%);
+  white-space:nowrap;
+ }
+ .m2-atlas-luggage-drop{
+  position:relative;
+  z-index:4;
+  height:22px;min-height:22px;
+  margin:0 4px 3px;
+  width:calc(100% - 8px);
+  background:#3019117d;
+  color:#ffe7ba;
+  border:1px dashed #f8d9a9cc;
+  border-radius:4px;
+  font:700 8px/1 Georgia,serif;
+  box-shadow:0 0 0 1px #1c0d097a;
+  cursor:pointer;
+ }
+ .m2-atlas-luggage-drop:hover,
+ .m2-atlas-luggage-drop:focus-visible{
+  background:#ffe8aa42;
+  border-color:#fff1ce;
+  outline:2px solid #ffe0a0;
+ }
+ .m2-atlas-suitcase-items{
+  position:relative;
+  z-index:3;
+  margin:0 3px;
+  padding:2px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(42px,auto);
+  align-content:start;
+  gap:5px;
+  min-height:96px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  overflow:visible;
+ }
+ .m2-atlas-packed{
+  width:100%;
+  min-width:0;
+  min-height:43px;
+  padding:3px 2px;
+  border:2px ridge #cfad70;
+  border-radius:6px;
+  background:linear-gradient(145deg,#fff6d9,#e6c493);
+  font:700 clamp(9px,.63vw,11px)/1.1 Georgia,serif;
+  color:#40251c;
+  box-shadow:0 2px 4px #1b0c07a8;
+  overflow-wrap:break-word;
+ }
+ .m2-atlas-packed img{width:24px;height:24px}
+ /* En estados de 5 a 8 fichas la maleta crece: no cubrir su contenido. */
+ .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(5)){
+  min-height:310px;
+  padding-bottom:30px;
+  background-size:100% 100%;
+ }
+ .m2-atlas-suitcase:has(.m2-atlas-packed:nth-child(7)){
+  min-height:367px;
+ }
+ .m2-atlas-luggage-activity>footer{
+  z-index:4;
+  right:5px;bottom:6px;
+  width:14.2%;
+  background:transparent;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  border-width:5px;
+  border-radius:18px;
+  box-shadow:inset 0 0 0 2px #6dc49b,0 0 0 2px #804f2f,0 5px 5px #2414059d;
+ }
+}
+/* In smaller windows the original artwork remains, while the layout
+   stacks naturally and controls remain reachable and legible. */
+@media (max-width:1100px){
+ .m2-atlas-route-activity:before{
+  background:url('./m2-reference-harbor.webp') center bottom/cover no-repeat;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 38%);
+  mask-image:linear-gradient(to bottom,transparent 0%,black 38%);
+ }
+ .m2-atlas-facts-activity:after{
+  background:url('./m2-reference-port-photo.webp') center /cover no-repeat;
+  filter:saturate(.95);
+ }
+ .m2-atlas-luggage-activity:before{
+  background:url('./m2-reference-old-luggage.webp') left bottom/auto 100% no-repeat;
+ }
+ .m2-atlas-luggage-activity:after{
+  background:url('./m2-reference-right-steamer.webp') right bottom /cover no-repeat;
+ }
+ .m2-atlas-luggage-available{
+  background:url('./m2-reference-open-leather.webp') center /100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase{
+  background:url('./m2-reference-red-suitcase.webp') center/100% 100% no-repeat;
+ }
+ .m2-atlas-suitcase-effect{
+  background:url('./m2-reference-blue-suitcase.webp') center/100% 100% no-repeat;
+ }
+}
+@media (max-width:680px){
+ /* Keep live titles on phones; cropped lettering must never replace
+    accessible, reflowing content. */
+ .m2-atlas-suitcase>header{
+  position:relative;
+  z-index:2;
+  background:linear-gradient(#fff7dc,#dbb172);
+ }
+ .m2-atlas-luggage-available{background-size:100% 100%}
+ .m2-atlas-facts-activity:after{opacity:.68}
+ .m2-atlas-route-activity:before{opacity:.72}
+}
