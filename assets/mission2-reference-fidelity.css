@@ -623,3 +623,35 @@
    padding-bottom:1.43cqw;
  }
 }
+
+/* Las ocho cartelas deben caber completas en dos filas: la miniatura nunca
+   debe empujar el rótulo fuera del pergamino, ni en 1672 ni en 1536×691. */
+@media(min-width:1101px){
+ .m2-atlas-luggage-available{
+   padding-top:.57cqw;
+   padding-bottom:.35cqw;
+ }
+ .m2-atlas-luggage-note{
+   margin:-.05cqw 0 .18cqw;
+   min-height:.7cqw;
+ }
+ .m2-atlas-luggage-cards{
+   height:auto!important;
+   grid-template-rows:repeat(2,5.9cqw)!important;
+   grid-auto-rows:minmax(5.9cqw,auto)!important;
+   gap:.2cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card{
+   justify-content:center;
+   padding:.12cqw .12cqw .12cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+   height:2.85cqw!important;
+   max-height:2.85cqw!important;
+   margin:0 auto .08cqw!important;
+ }
+ .m2-atlas-screen .m2-atlas-luggage-card>span:last-child{
+   font:700 clamp(9px,.71cqw,12px)/1.07 Georgia,serif;
+   width:100%;
+ }
+}
