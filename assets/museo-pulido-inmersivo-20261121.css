@@ -60,19 +60,24 @@
    Se mantiene el orden del DOM, las cinco zonas y sus botones de destino. */
 @media (min-width:571px) and (max-width:900px){
   .m2-page .m2-first-room .m2-museum-cabinet-wall{
-    display:block;
-    columns:3;
-    column-gap:clamp(8px,1.3vw,15px);
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px 10px;
+    align-items:start;
   }
   .m2-page .m2-first-room .m2-museum-cabinet-wall>.m2-museum-case{
-    display:inline-block;
-    width:100%;
+    display:block;
+    width:auto;
     max-width:100%;
     min-width:0;
-    margin:0 0 18px;
-    vertical-align:top;
-    break-inside:avoid;
-    page-break-inside:avoid;
+    margin:0;
+    align-self:start;
+  }
+  /* Una vitrina con siete o más cartelas ocupa dos filas.
+     Las otras cuatro se distribuyen en las columnas libres. */
+  .m2-page .m2-first-room .m2-museum-cabinet-wall>.m2-museum-case:has(.m2-case-contents>.m2-archive-card:nth-child(7)){
+    grid-column:1;
+    grid-row:1 / span 2;
   }
 }
 
@@ -84,7 +89,7 @@
   .m2-page .m2-atlas-pop-list{
     position:relative;
     z-index:2;
-    padding-bottom:clamp(30px,2.45cqw,42px)!important;
+    padding-bottom:clamp(21px,1.5cqw,25px)!important;
   }
   .m2-page .m2-atlas-migrants-foreground{
     display:block!important;
@@ -93,7 +98,7 @@
     left:2%;
     bottom:1px;
     width:96%;
-    height:clamp(29px,2.4cqw,39px);
+    height:clamp(17px,1.25cqw,21px);
     max-width:96%;
     object-fit:cover;
     object-position:center 75%;
@@ -103,8 +108,8 @@
     pointer-events:none;
   }
   .m2-page .m2-atlas-intro .m2-atlas-roundel{
-    left:-.85cqw;
-    top:-.95cqw;
+    left:.25cqw;
+    top:-.55cqw;
     width:3.15cqw;
     height:3.15cqw;
     font-size:1.75cqw;
