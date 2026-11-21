@@ -1,0 +1,156 @@
+/* Pulido inmersivo conservador · 21-11-2026
+   Solo presentación: sin cambios en respuestas, puntuaciones, navegación o Supabase.
+   Mantener al final de las hojas de estilo para poder revertirlo sin perder diseños. */
+
+/* Señales honestas de interacción: nunca parecer clicable si el control está bloqueado. */
+.m2-page button:disabled{cursor:not-allowed!important}
+.m2-page .m2-button:disabled,
+.m2-page .m2-first-room .m2-button:disabled,
+.m2-page .m2-atlas-screen .m2-atlas-check:disabled{
+  opacity:.46!important;
+  filter:saturate(.28) brightness(.88)!important;
+  text-shadow:none!important;
+  box-shadow:inset 0 1px 3px #160e0875!important;
+  transform:none!important;
+}
+.m2-page .m2-button:focus-visible,
+.m2-page .m2-atlas-check:focus-visible,
+.m2-page .m2-step:focus-visible{
+  outline:3px solid #ffe1a3;
+  outline-offset:3px;
+}
+.m2-page .m2-step:disabled{
+  opacity:.42!important;
+  filter:saturate(.38);
+}
+
+/* Cartelas: leve elevación y reflejo de latón únicamente en la mesa.
+   En las vitrinas se conserva su tamaño para no recortar ni una tarjeta. */
+.m2-page .m2-first-room .m2-museum-desktop .m2-archive-card{
+  transform-origin:50% 80%;
+  transition:transform .16s ease,filter .16s ease,box-shadow .16s ease!important;
+}
+.m2-page .m2-first-room .m2-museum-desktop .m2-archive-card:hover:not(:disabled){
+  transform:translateY(-2px);
+  filter:brightness(1.045);
+}
+.m2-page .m2-first-room .m2-museum-desktop .m2-archive-card[aria-pressed="true"]{
+  transform:translateY(-2px);
+  filter:brightness(1.05);
+}
+.m2-page .m2-first-room .m2-museum-case:has(.m2-archive-card[aria-pressed="true"]) .m2-case-well{
+  box-shadow:inset 0 0 0 1px #ffefb3,inset 0 0 16px #f4c56b62,0 0 9px #e4b56d73;
+}
+#app-shell.gallery-active .gal-tile.gal-selected{
+  border-width:1px;
+  box-shadow:0 0 0 2px #d8af65,0 0 12px #e7c27672,inset 0 0 0 1px #f6e4be,0 3px 5px #0003;
+}
+#app-shell.gallery-active .gal-zone.gal-dragover{
+  border-color:#eac47c;
+  box-shadow:0 0 0 2px #e4bc70a6,inset 0 0 16px #fbd89b68;
+}
+#app-shell.gallery-active .gal-action:disabled{
+  opacity:.4;
+  filter:saturate(.3);
+  box-shadow:inset 0 1px 3px #0005;
+  transform:none;
+}
+
+/* Tablet: vitrinas de altura variable, sin el vacío de una fila rígida.
+   Se mantiene el orden del DOM, las cinco zonas y sus botones de destino. */
+@media (min-width:571px) and (max-width:900px){
+  .m2-page .m2-first-room .m2-museum-cabinet-wall{
+    display:block;
+    columns:3;
+    column-gap:clamp(8px,1.3vw,15px);
+  }
+  .m2-page .m2-first-room .m2-museum-cabinet-wall>.m2-museum-case{
+    display:inline-block;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin:0 0 18px;
+    vertical-align:top;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+}
+
+/* Atlas: los viajeros pasan a la franja decorativa inferior del folio
+   en lugar de solaparse con años y selectores. No se elimina la imagen. */
+@media (min-width:1101px){
+  .m2-page .m2-atlas-main:before{display:none!important}
+  .m2-page .m2-atlas-pop{overflow:hidden}
+  .m2-page .m2-atlas-pop-list{
+    position:relative;
+    z-index:2;
+    padding-bottom:clamp(30px,2.45cqw,42px)!important;
+  }
+  .m2-page .m2-atlas-migrants-foreground{
+    display:block!important;
+    position:absolute;
+    z-index:1;
+    left:2%;
+    bottom:1px;
+    width:96%;
+    height:clamp(29px,2.4cqw,39px);
+    max-width:96%;
+    object-fit:cover;
+    object-position:center 75%;
+    border:0;
+    border-radius:0 0 7px 7px;
+    opacity:.82;
+    pointer-events:none;
+  }
+  .m2-page .m2-atlas-intro .m2-atlas-roundel{
+    left:-.85cqw;
+    top:-.95cqw;
+    width:3.15cqw;
+    height:3.15cqw;
+    font-size:1.75cqw;
+  }
+  .m2-page .m2-atlas-luggage-drop{
+    font-size:clamp(10px,.65cqw,11px);
+    min-height:21px;
+    height:auto;
+    line-height:1.1;
+  }
+}
+
+/* Legibilidad: el pequeño folio no debe reducir botones esenciales a 6-8 px. */
+@media (max-width:680px){
+  .m2-page .m2-atlas-intro{
+    padding-top:32px;
+  }
+  .m2-page .m2-atlas-intro .m2-atlas-roundel{
+    top:-9px;
+    left:5px;
+    width:37px;
+    height:37px;
+    font-size:21px;
+    border-width:4px;
+  }
+  .m2-page .m2-atlas-pop-row select{
+    font-size:clamp(12px,3vw,14px)!important;
+    min-height:30px;
+  }
+  .m2-page .m2-atlas-screen .m2-atlas-luggage-drop{
+    font-size:11px;
+    min-height:28px;
+    line-height:1.1;
+    padding:4px;
+  }
+  .m2-page .m2-atlas-screen .m2-atlas-check{
+    font-size:clamp(12px,3.2vw,14px);
+    min-height:36px;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .m2-page .m2-first-room .m2-museum-desktop .m2-archive-card{
+    transform:none!important;
+    transition:none!important;
+  }
+  #app-shell.gallery-active .gal-tile{
+    transform:none!important;
+  }
+}
