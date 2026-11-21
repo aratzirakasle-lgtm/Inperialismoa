@@ -205,8 +205,8 @@ try{
       pointer:getComputedStyle(el.querySelector('.m2-choice')).pointerEvents,
       index:i
     })));
-    assert.ok(galleryMaterials.every(d=>d.paper.includes('m2-e4-pergamino-papel-artesanal.svg')),
-      'Los cinco expedientes deben utilizar papel antiguo realista');
+    assert.ok(galleryMaterials.every(d=>d.paper.includes('gradient')&&!d.paper.includes('pergamino-papel-artesanal.svg')),
+      'Los cinco expedientes deben utilizar papel antiguo sin textura SVG que oscurezca el texto');
     assert.ok(['m2-reference-port-photo.webp','m2-reference-right-steamer.webp'].every((src,i)=>galleryMaterials[i].illustration.includes(src)),
       'Los primeros expedientes deben conservar fotografías históricas del propio proyecto');
     assert.ok(galleryMaterials.slice(2).every(d=>!d.illustration.includes('.webp')),
