@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" role="img" aria-label="Dekorazioa: artxibo historikoko mahai, lanpara, liburu eta lur-globoa">
+<defs>
+ <linearGradient id="wall" x2="1" y2=".2"><stop stop-color="#050d0b"/><stop offset=".18" stop-color="#263b30"/><stop offset=".48" stop-color="#152a24"/><stop offset=".8" stop-color="#1d3229"/><stop offset="1" stop-color="#07110f"/></linearGradient>
+ <linearGradient id="leather" x2=".9" y2="1"><stop stop-color="#563a25"/><stop offset=".26" stop-color="#724728"/><stop offset=".59" stop-color="#422815"/><stop offset=".8" stop-color="#664029"/><stop offset="1" stop-color="#24140f"/></linearGradient>
+ <linearGradient id="wood" x2="0" y2="1"><stop stop-color="#130a08"/><stop offset=".08" stop-color="#b27a3c"/><stop offset=".22" stop-color="#5d311a"/><stop offset=".5" stop-color="#8b5127"/><stop offset=".78" stop-color="#2a120c"/><stop offset=".95" stop-color="#653518"/><stop offset="1" stop-color="#1a0e0a"/></linearGradient>
+ <linearGradient id="gold" x2="1" y2=".15"><stop stop-color="#45220e"/><stop offset=".15" stop-color="#ffc978"/><stop offset=".36" stop-color="#b7792f"/><stop offset=".52" stop-color="#fff2b7"/><stop offset=".77" stop-color="#ad722d"/><stop offset="1" stop-color="#40220c"/></linearGradient>
+ <radialGradient id="lampGlow" cx=".48" cy=".04" r=".65"><stop stop-color="#fff4c5" stop-opacity=".94"/><stop offset=".28" stop-color="#ffde8c" stop-opacity=".64"/><stop offset=".68" stop-color="#e5b363" stop-opacity=".12"/><stop offset="1" stop-color="#eeb25c" stop-opacity="0"/></radialGradient>
+ <radialGradient id="shade" cx=".38" cy=".2" r=".87"><stop stop-color="#5b9777"/><stop offset=".37" stop-color="#225941"/><stop offset=".84" stop-color="#0b2924"/><stop offset="1" stop-color="#071b19"/></radialGradient>
+ <radialGradient id="globe" cx=".3" cy=".2" r=".82"><stop stop-color="#f3e5b5"/><stop offset=".52" stop-color="#d2b375"/><stop offset=".81" stop-color="#93764c"/><stop offset="1" stop-color="#56462b"/></radialGradient>
+ <linearGradient id="glass" x2="1" y2="0"><stop stop-color="#fff7d0" stop-opacity=".18"/><stop offset=".26" stop-color="#e7c17c" stop-opacity=".03"/><stop offset=".78" stop-color="#fff1c9" stop-opacity=".03"/><stop offset="1" stop-color="#fff4cd" stop-opacity=".13"/></linearGradient>
+ <pattern id="grain" width="94" height="42" patternUnits="userSpaceOnUse"><path d="M0 5Q34-2 94 7M0 21Q33 13 94 20M0 36Q55 26 94 38" fill="none" stroke="#ecb973" stroke-opacity=".09" stroke-width="2"/></pattern>
+ <pattern id="leatherGrain" width="17" height="19" patternUnits="userSpaceOnUse"><path d="M2 5l2 1M11 12l2 1M5 18l1-2" stroke="#fff3d9" stroke-opacity=".13" stroke-width="1" fill="none"/></pattern>
+ <filter id="blurLarge"><feGaussianBlur stdDeviation="22"/></filter><filter id="blurSmall"><feGaussianBlur stdDeviation="6"/></filter>
+ <filter id="shadow" x="-.4" y="-.4" width="1.8" height="2"><feDropShadow dx="9" dy="13" stdDeviation="9" flood-color="#040302" flood-opacity=".83"/></filter>
+ <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<!-- Ambientación de galería: paredes y vitrinas a ambos lados -->
+<rect width="1600" height="980" fill="url(#wall)"/>
+<g opacity=".6">
+ <rect x="3" y="0" width="96" height="630" fill="#120e0b" stroke="#bc8245" stroke-width="8"/>
+ <path d="M16 8H88V590H16Z" fill="#273b31" stroke="#c49351" stroke-width="3"/>
+ <path d="M16 36H88M16 172H88M16 320H88M16 490H88" stroke="#d5ae71" stroke-opacity=".7" stroke-width="4"/>
+ <path d="M24 100L40 53 53 101M55 113L70 66 81 113M29 264h17V218H29ZM52 262h12V209H52ZM66 267h12V230H66" stroke="#c2ab81" stroke-width="10" fill="none" opacity=".74"/>
+ <rect x="1503" y="0" width="95" height="630" fill="#130e0b" stroke="#b98247" stroke-width="8"/>
+ <rect x="1514" y="8" width="72" height="585" fill="#263b31" stroke="#c08c4e" stroke-width="3"/>
+ <path d="M1514 55h72m-72 135h72m-72 125h72m-72 126h72" stroke="#d5ae71" stroke-opacity=".75" stroke-width="5"/>
+ <path d="M1524 126V86h14v40m7 0V76h13v50m6 0V96h15v30M1529 300v-69h17v69m13 0v-62h17v62" stroke="#ba9c69" stroke-width="7"/>
+</g>
+<rect x="87" y="4" width="1428" height="12" fill="url(#gold)" opacity=".8"/>
+<path d="M140 10h1320" stroke="#ffe9b3" stroke-opacity=".4" stroke-width="2"/>
+<ellipse cx="800" cy="190" rx="680" ry="310" fill="url(#lampGlow)" opacity=".17"/>
+<!-- La mesa de nogal, con tablero de cuero y borde en perspectiva -->
+<path d="M157 156Q125 163 112 191L49 814Q37 834 56 843H1540Q1562 837 1550 810L1488 188Q1483 158 1452 154Z" fill="#0f0907" stroke="#9d6936" stroke-width="12" filter="url(#shadow)"/>
+<path d="M170 166H1441Q1455 166 1462 184L1522 804H77L143 184Q147 167 170 166Z" fill="url(#wood)" stroke="#2d190e" stroke-width="10"/>
+<path d="M170 166H1441Q1455 166 1462 184L1522 804H77L143 184Q147 167 170 166Z" fill="url(#grain)" opacity=".75"/>
+<path d="M193 197H1412L1467 777H132Z" fill="url(#leather)" stroke="#bd8546" stroke-width="12"/>
+<path d="M193 197H1412L1467 777H132Z" fill="url(#leatherGrain)" opacity=".88"/>
+<path d="M208 219H1400L1452 760H148Z" fill="none" stroke="#7d4b27" stroke-width="4"/>
+<path d="M187 203H1413M154 774H1449" stroke="#ffd698" stroke-opacity=".59" stroke-width="3"/>
+<path d="M62 818H1540L1570 896H30Z" fill="url(#wood)" stroke="#1c0b08" stroke-width="11"/>
+<path d="M68 827H1533" stroke="#f2bd6c" stroke-width="4"/>
+<path d="M71 851H1528M77 869H1522" stroke="#100b09" stroke-width="5" opacity=".6"/>
+<path d="M175 880H1430" stroke="#b47940" stroke-width="3" opacity=".66"/>
+<g fill="#edb05d" stroke="#6e3b15" stroke-width="3">
+ <circle cx="174" cy="180" r="8"/><circle cx="1440" cy="180" r="8"/>
+ <circle cx="104" cy="792" r="9"/><circle cx="1498" cy="792" r="9"/>
+ <circle cx="87" cy="849" r="7"/><circle cx="1513" cy="849" r="7"/>
+</g>
+<!-- luz ambiental, no pistas -->
+<ellipse cx="435" cy="360" rx="370" ry="250" fill="url(#lampGlow)" opacity=".43" filter="url(#blurLarge)"/>
+<!-- Lámpara verde de oficina en primer plano, a la izquierda -->
+<g filter="url(#shadow)">
+ <ellipse cx="89" cy="489" rx="101" ry="20" fill="#110b07" opacity=".82"/>
+ <ellipse cx="92" cy="480" rx="73" ry="13" fill="url(#gold)" stroke="#2b170d" stroke-width="5"/>
+ <path d="M92 478V252Q85 185 122 142Q165 111 221 148L231 165" stroke="url(#gold)" stroke-width="18" fill="none" stroke-linecap="round"/>
+ <path d="M94 476V250Q88 193 119 158Q156 126 204 154" stroke="#ffde92" stroke-opacity=".65" stroke-width="4" fill="none"/>
+ <path d="M205 159Q170 172 140 204Q106 238 78 303L261 303Q249 212 205 159Z" fill="url(#shade)" stroke="#b78742" stroke-width="8"/>
+ <path d="M78 301Q170 344 262 302" fill="none" stroke="#f4cd7b" stroke-width="10"/>
+ <ellipse cx="171" cy="304" rx="91" ry="14" fill="#ffecab" opacity=".46" filter="url(#glow)"/>
+ <path d="M168 164v-23q0-19 15-19h29q19 0 19 19v14" fill="url(#gold)" stroke="#322013" stroke-width="5"/>
+ <circle cx="191" cy="142" r="10" fill="#f4cf83" stroke="#6b3d17" stroke-width="4"/>
+</g>
+<path d="M91 313Q170 316 263 313L435 718H12Z" fill="url(#lampGlow)" opacity=".72" filter="url(#blurLarge)"/>
+<!-- Viejos libros de cuero, tinta y pluma -->
+<g filter="url(#shadow)" transform="translate(0 70)">
+ <path d="M0 534L179 518 188 557 0 577Z" fill="#68371f" stroke="#c49b55" stroke-width="6"/>
+ <path d="M0 577L172 560 176 596 0 614Z" fill="#391f18" stroke="#aa7943" stroke-width="5"/>
+ <path d="M0 613L153 607 164 647 0 654Z" fill="#6a3d26" stroke="#c99e5b" stroke-width="5"/>
+ <path d="M19 548L160 533M13 587L159 573M10 626L145 616" stroke="#e5c589" stroke-width="3" opacity=".8"/>
+ <path d="M85 561v27M133 529v28M100 602v31" stroke="#b99157" stroke-width="8" opacity=".65"/>
+</g>
+<g filter="url(#shadow)" transform="translate(57 730)">
+ <path d="M0 13h90l9 60H8Z" fill="#362518" stroke="#ae8246" stroke-width="6"/>
+ <path d="M22 10h47V0H22Z" fill="url(#gold)" stroke="#38240f" stroke-width="4"/>
+ <path d="M16 18Q53 30 83 18" stroke="#f5d293" stroke-width="3" fill="none"/>
+ <path d="M43 2Q118-65 178-21" stroke="#d1ac6b" stroke-width="5" fill="none"/>
+</g>
+<!-- Globo terráqueo con mapa, aro y pie de latón -->
+<g filter="url(#shadow)" transform="translate(1408 186)">
+ <ellipse cx="85" cy="474" rx="105" ry="16" fill="#0c0907" opacity=".71"/>
+ <path d="M73 304l-12 149h50l-14-151" fill="url(#gold)" stroke="#59330f" stroke-width="5"/>
+ <path d="M12 464h142v16H12Z" fill="url(#gold)" stroke="#452710" stroke-width="4"/>
+ <ellipse cx="83" cy="470" rx="76" ry="11" fill="url(#gold)" stroke="#45270f" stroke-width="5"/>
+ <circle cx="85" cy="172" r="131" fill="url(#globe)" stroke="#714c22" stroke-width="7"/>
+ <g stroke="#8a6c43" stroke-width="2.4" fill="none" opacity=".8">
+  <ellipse cx="85" cy="172" rx="43" ry="131"/><ellipse cx="85" cy="172" rx="91" ry="131"/>
+  <path d="M-45 172H216M-30 111Q85 157 199 111M-26 230Q85 184 196 230"/>
+  <path d="M-8 77Q86 117 172 74M-8 272Q85 236 170 272"/>
+ </g>
+ <g fill="#978550" stroke="#6b5634" stroke-width="1.5" opacity=".9">
+  <path d="M4 131L39 87 72 85 88 103 73 122 85 148 55 163 26 153Z"/>
+  <path d="M65 169l37 18 24 26-8 55-23 21-27-19-11-54Z"/>
+  <path d="M109 80l34-35 39 13 22 34-24 27-26-11-17 13-29-20Z"/>
+  <path d="M126 139l39 6 18 28-18 53-24 16-18-30Z"/>
+  <path d="M159 242l40 7-8 33-33-18Z"/>
+ </g>
+ <path d="M85 26C1 29-48 92-50 175C-53 264 4 318 85 319" fill="none" stroke="url(#gold)" stroke-width="10"/>
+ <path d="M85 26C169 29 220 92 220 175C222 264 167 318 85 319" fill="none" stroke="#e5c37d" stroke-opacity=".81" stroke-width="4"/>
+ <path d="M85 31v-13" stroke="#f4dba2" stroke-width="8"/>
+ <circle cx="85" cy="15" r="9" fill="#dbaf66" stroke="#60421d" stroke-width="3"/>
+</g>
+<!-- Lupa cerca del borde derecho, sin tocar tarjetas -->
+<g filter="url(#shadow)" transform="translate(1392 721) rotate(-16 40 38)">
+ <circle cx="29" cy="32" r="47" fill="#d8e5d9" fill-opacity=".24" stroke="url(#gold)" stroke-width="13"/>
+ <circle cx="29" cy="32" r="36" fill="url(#glass)" stroke="#fff1ba" stroke-opacity=".65" stroke-width="2"/>
+ <path d="M62 61l69 70" stroke="#56321a" stroke-width="21" stroke-linecap="round"/>
+ <path d="M64 62l68 68" stroke="#f1c57c" stroke-width="5" stroke-linecap="round"/>
+</g>
+<!-- Veta y brillo de los márgenes -->
+<path d="M155 170L108 808M1448 170l45 637" stroke="#fff4be" stroke-opacity=".19" stroke-width="4" fill="none"/>
+</svg>
