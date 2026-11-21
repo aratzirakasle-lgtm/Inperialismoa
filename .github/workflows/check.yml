@@ -47,5 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mision2-cinco-ejercicios-vista-previa
-          path: test-output/m2-*.png
+          path: |
+            test-output/m1-*.png
+            test-output/m2-*.png
           if-no-files-found: ignore
