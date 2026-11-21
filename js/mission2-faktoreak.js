@@ -375,14 +375,34 @@ function renderPopulation(){
   '<div class="m2-atlas-final-controls">'+controls()+'</div>'+
  '</section>';
 }
+function archiveEngraving(type){
+ const groups={
+  chart:'<path d="M16 70q34-42 80-9m-86 42q50-39 107-9M10 21h104M27 11v110M63 8v115M101 9v106" fill="none" stroke="#987c53" stroke-width="1.2"/><path d="M30 73l32-15 42 15-7 7H39Z" fill="#987442"/><path d="M63 58V22l27 26H63Z" fill="#d4b17b" stroke="#735432"/><path d="M59 60V39l-21 19Z" fill="#e6cca0" stroke="#775432"/><path d="M21 94q9-5 18 0t18 0t18 0t18 0" stroke="#765c38" fill="none" stroke-width="2"/>',
+  newspaper:'<path d="M20 13h84v101H20Z" fill="#e4d1a7" stroke="#7d5c34" stroke-width="2"/><path d="M27 27h70M27 32h70M27 38h42M27 44h69" stroke="#715436" stroke-width="2"/><path d="M28 52h27v42H28Z" fill="#bea078" stroke="#69502d"/><path d="M62 55h33M62 61h33M62 67h33M62 73h33M62 81h28M62 87h28M28 101h67" stroke="#8b704d" stroke-width="1.5"/>',
+  portrait:'<path d="M17 112v-13q5-25 27-30M79 69q27 12 29 30v14Z" fill="#ad8d61" stroke="#755431" stroke-width="2"/><path d="M38 50q-4-31 21-35q27 3 23 34l-6 17q-17 18-31-1Z" fill="#d6ba8e" stroke="#775534" stroke-width="2"/><path d="M37 40q9-33 31-25q14 5 17 29q-7-5-13-20q-12 9-34 16Z" fill="#765a3b"/><path d="M43 70q14 17 31 0l-8 15H53Z" fill="#efe0b8"/><path d="M24 99q17-21 29-14l6 23 9-22q18-7 35 13" fill="#796044" stroke="#59402b" stroke-width="2"/>',
+  science:'<path d="M24 15h74v94H24Z" fill="#e9d2a8" stroke="#84633b" stroke-width="2"/><path d="M38 26q25-17 48 0M35 35h47M35 41h47M35 88h47M35 95h47" fill="none" stroke="#9a8159"/><circle cx="58" cy="64" r="17" fill="none" stroke="#6e5839" stroke-width="2"/><path d="M58 49v30M43 64h30M49 52l18 24M68 53L48 75" stroke="#84623c" stroke-width="1.3"/>',
+  manuscript:'<path d="M28 11h64v98H28Z" fill="#e8d3aa" stroke="#79603b" stroke-width="2"/><path d="M38 25h44M38 33h40M38 41h44M38 49h31M38 57h42M38 65h44M38 73h37" stroke="#927c59" stroke-width="1.8"/><path d="M48 97q3-23 22-11q-12-2-9 13" fill="none" stroke="#73522b" stroke-width="2"/><circle cx="83" cy="93" r="12" fill="#a45337" stroke="#713b2a" stroke-width="2"/><path d="M80 87l3 4 4-3-3 7" fill="none" stroke="#e7bd83" stroke-width="1.5"/>'
+ };
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 124 126" focusable="false" aria-hidden="true">'+(groups[type]||groups.manuscript)+'</svg>';
+}
 function renderArchive(){
  const state=taskState(4);
  const cards=archives.map((a,i)=>{
-  return '<article class="m2-source"><span class="m2-eyebrow">AGIRIA '+String(i+1).padStart(2,'0')+'</span><h3>'+esc(a.title)+'</h3>'+
-  '<p>'+esc(a.body)+'</p><fieldset><legend>'+esc(a.question)+'</legend>'+
-  a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+a.id+'" value="'+key+'" data-archive="'+a.id+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset></article>';
+  return '<article class="m2-source m2-source-file m2-source-'+a.art+'" data-source="'+esc(a.id)+'">'+
+    '<header class="m2-source-heading"><span class="m2-source-index">AGIRIA '+String(i+1).padStart(2,'0')+'</span>'+
+      '<span class="m2-source-kind">'+esc(a.type)+'</span></header>'+
+    '<div class="m2-source-top"><div class="m2-source-engraving" aria-hidden="true">'+archiveEngraving(a.art)+'</div>'+
+      '<div class="m2-source-titling"><h3>'+esc(a.title)+'</h3><span class="m2-source-ref">'+esc(a.ref)+'</span></div></div>'+
+    '<p class="m2-source-text">'+esc(a.body)+'</p>'+
+    '<fieldset><legend>'+esc(a.question)+'</legend>'+
+    a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+a.id+'" value="'+key+'" data-archive="'+a.id+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+
+    '</fieldset><span class="m2-source-seal" aria-hidden="true">XIX</span></article>';
  }).join('');
- return '<div class="m2-source-grid">'+cards+'</div><aside class="m2-evidence">Kontuan izan: arrazismo zientifikoa deritzona ideologia arrazista historikoa da, ez giza taldeen arteko desberdintasun biologikoak frogatzen dituen zientzia. Aztertu dokumentuak ikuspegi kritikoarekin.</aside>';
+ return '<section class="m2-archive-intro" aria-label="Iturrien analisi kritikoa"><div class="m2-archive-emblem" aria-hidden="true">❧</div>'+
+  '<div><span class="m2-archive-eyebrow">IKERKETA HISTORIKOA · 04 / 05</span><h3>Boterearen artxiboko bost agiri</h3>'+
+  '<p>Aztertu dokumentuak eta hautatu azalpen bakoitzari dagokion interpretazioa. Iturrien egileak, interesak eta testuingurua kontuan hartu.</p></div></section>'+
+  '<div class="m2-source-grid m2-source-grid-museum">'+cards+'</div>'+
+  '<aside class="m2-evidence m2-archive-warning"><strong>Iturrien irakurketa kritikoa:</strong> arrazismo zientifikoa deritzona ez zen giza taldeen desberdintasunak frogatzen zituen zientzia, baizik eta kolonialismoa justifikatzeko erabilitako ideologia arrazista. Erantzun okerrek ez dute pistarik emango.</aside>';
 }
 function multiButtons(group,options,selectedIds){
  const ids=new Set(selectedIds||[]);
