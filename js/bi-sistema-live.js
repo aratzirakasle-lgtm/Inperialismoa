@@ -167,8 +167,8 @@ async function submit(answers,kind){
       announce(wrong.length?"Berrikusi azken egoerak eta saiatu berriro.":"Zazpi kontzeptuak zuzen! Orain azken erronka.",wrong.length>0);
     } else {
       announce(wrong.length?
-        locked.size+" / 7 zuzen. "+wrong.length+" kontzeptu berrikusi eta berriz kokatu. Saiakera: "+data.attempt_count+".":
-        locked.size+" / 7 zuzen. Jarri gainerako kontzeptuak.",wrong.length>0);
+        "Ez da zuzena. Berrikusi sailkapena eta saiatu berriro.":
+        "Erantzunak gorde dira. Osatu gainerako kontzeptuak.",wrong.length>0);
     }
     await fetchState().catch(()=>{});
   }catch(err){
