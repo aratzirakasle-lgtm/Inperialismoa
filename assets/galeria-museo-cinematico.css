@@ -221,8 +221,9 @@
  width:83%;height:48px;border-radius:50% 50% 10% 10% / 70% 70% 10% 10%;
  border:3px ridge #ba792d;
  background:
-   radial-gradient(ellipse 53% 65% at 50% 0,#fff0ae,#d5a353 47%,#78451f 68%,#3f2517 95%);
- box-shadow:0 -4px 0 -2px #f8d997,0 -5px 11px #ecaa5072;
+   radial-gradient(ellipse 48% 29% at 47% 4%,#fff9d7dd,transparent 95%),
+   radial-gradient(ellipse 86% 90% at 49% -27%,#fff4cc 0,#eac174 37%,#a66828 71%,#49250f 96%);
+ box-shadow:inset 0 3px 2px #fff9cf,0 -4px 0 -2px #f8d997,0 -5px 11px #ecaa5072;
  pointer-events:none;z-index:3;
 }
 #app-shell.gallery-active .gal-vitrine::after{
@@ -332,12 +333,12 @@
  color:#ffecc5;
 }
 #app-shell.gallery-active .gal-tray::before{
- content:'';position:absolute;z-index:-1;left:-47px;right:-47px;top:-22px;bottom:-26px;
- border:6px ridge #aa7042;border-radius:11px;
- background:
-  linear-gradient(90deg,#a7763e66 0,transparent 12% 88%,#a7763e66),
-  repeating-linear-gradient(93deg,#4c2618 0 15px,#6c3923 16px 29px,#422118 30px 45px);
- box-shadow:0 9px 12px #000a,inset 0 0 0 3px #d5a25e5c;
+ content:'';position:absolute;z-index:-1;
+ left:-21px;right:-21px;top:-21px;bottom:-21px;
+ border:6px ridge #a56a31;border-radius:11px;
+ background:transparent;
+ box-shadow:0 0 0 8px #512819,0 11px 17px #000c,
+   inset 0 0 0 2px #f1bf7368;
  pointer-events:none;
 }
 #app-shell.gallery-active .gal-tray h2{
@@ -423,7 +424,7 @@
  #app-shell.gallery-active .gal-vitrine-eu{min-height:340px}
  #app-shell.gallery-active .gal-tray{margin-top:11px;width:97%;border-width:9px;padding:13px}
  #app-shell.gallery-active .gal-tray::before{left:-15px;right:-15px}
- #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-tray .gal-tile-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
  #app-shell.gallery-active .gal-masthead{min-height:175px}
  #app-shell.gallery-active .gal-titlebar{width:min(630px,calc(100% - 280px))}
  #app-shell.gallery-active .gal-titlebar h1{font-size:22px}
@@ -470,7 +471,7 @@
  #app-shell.gallery-active .gal-tile.gal-tile-placed{font-size:10px}
  #app-shell.gallery-active .gal-tray{padding:12px;border-width:7px}
  #app-shell.gallery-active .gal-tray h2{font-size:14px}
- #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-tray .gal-tile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  #app-shell.gallery-active .gal-tile:not(.gal-tile-placed){font-size:11px}
  #app-shell.gallery-active .gal-bottom-bar{width:100%}
 }
