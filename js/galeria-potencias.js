@@ -77,7 +77,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const flagSvg=(key)=>{
    const names={ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
    const clipId="gal-flag-cloth-"+key;
-   if(key==="eu")return '<svg class="gal-europe-medallion" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 46" role="img" aria-label="XIX. mendeko iparrorratza, Europaren ikurra" focusable="false">'+
+   if(key==="eu")return '<svg class="gal-europe-medallion" xmlns="http://www.w3.org/2000/svg" width="56" height="42" viewBox="0 0 62 46" role="img" aria-label="XIX. mendeko iparrorratza, Europaren ikurra" focusable="false">'+
     '<ellipse cx="31" cy="23" rx="23" ry="20" fill="#e6c98b" stroke="#94652f" stroke-width="2.5"/>'+
     '<ellipse cx="31" cy="23" rx="19.5" ry="16.5" fill="#f8eac8" stroke="#a77a39" stroke-width="1"/>'+
     '<path d="M31 8v30M14 23h34M20 12l22 22M42 12L20 34" stroke="#9a753f" stroke-width=".9"/>'+
