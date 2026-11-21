@@ -489,7 +489,7 @@
   background:linear-gradient(110deg,#fff4dc20,transparent 38% 76%,#1509071d);
 }
 #app-shell.gallery-active .gal-side-art-right::before{height:27%}
-#app-shell.gallery-active .gal-side-art-right::after{top:27%}
+#app-shell.gallery-active .gal-side-art.gal-side-art-right::after{top:27%}
 #app-shell.gallery-active .gal-side-art::after{
   content:'';position:absolute;pointer-events:none;
   left:3%;top:36%;width:94%;height:8px;
