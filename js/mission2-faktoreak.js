@@ -238,14 +238,14 @@ const atlasStatements=[
  ['statement_5','Erlijioa ez zen inoiz kolonizazioa justifikatzeko erabili.']
 ];
 const atlasSuitcase=[
- ['growth','Europako biztanleria-hazkundea','m2-card-settlement.svg'],
- ['conditions','Langileen bizi-baldintza neketsuak','m2-card-working_conditions.svg'],
- ['better','Bizi-aukera hobeak bilatzeko nahia','m2-card-settlement.svg'],
- ['conversion','Tokiko herriak kristautzeko nahia','m2-card-conversion.svg'],
- ['settlement','Europarrak lurralde berrietan finkatzea','m2-card-exploration.svg'],
- ['missions','Misio katoliko eta protestanteak sortzea','m2-card-missions.svg'],
- ['oceania','Misioak Ozeanian zabaltzea','m2-card-missions.svg'],
- ['faith','Tokiko erlijioen desagerpena Afrikan','m2-card-racist_theories.svg']
+ ['growth','Europako biztanleria-hazkundea','m2-atlas-art-growth.webp'],
+ ['conditions','Langileen bizi-baldintza neketsuak','m2-atlas-art-conditions.svg'],
+ ['better','Bizi-aukera hobeak bilatzeko nahia','m2-atlas-art-better.svg'],
+ ['conversion','Tokiko herriak kristautzeko nahia','m2-atlas-art-conversion.svg'],
+ ['settlement','Europarrak lurralde berrietan finkatzea','m2-atlas-art-settlement.svg'],
+ ['missions','Misio katoliko eta protestanteak sortzea','m2-atlas-art-missions.svg'],
+ ['oceania','Misioak Ozeanian zabaltzea','m2-atlas-art-oceania.svg'],
+ ['faith','Tokiko erlijioen desagerpena Afrikan','m2-atlas-art-faith.svg']
 ];
 const atlasKeys=['1850','1870','1900','migration','missionaries',
  'route_africa','route_asia','route_oceania',
@@ -299,14 +299,14 @@ function renderPopulation(){
   '</select></span></label>').join('');
  const cards=atlasSuitcase.filter(c=>!state['bag_'+c[0]]).map(c=>
   '<button type="button" draggable="true" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" class="m2-atlas-luggage-card">'+
-  '<img src="./assets/'+c[2]+'" alt="" draggable="false"><span class="m2-atlas-ref-icon" aria-hidden="true"></span><span>'+esc(c[1])+'</span></button>').join('');
+  '<img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="112" height="76" alt="" loading="eager" decoding="async" draggable="false"><span>'+esc(c[1])+'</span></button>').join('');
  const cases=[['cause','Emigrazioaren kausak','ZERGATIK?'],['effect','Emigrazioaren ondorioak','ZER ERAGIN?']].map(([key,title,subtitle])=>{
   const inside=atlasSuitcase.filter(c=>state['bag_'+c[0]]===key);
   return '<section class="m2-atlas-suitcase m2-atlas-suitcase-'+key+'" data-atlas-bag-zone="'+key+'">'+
    '<header><strong>'+esc(title)+'</strong><small>'+subtitle+'</small></header>'+
    '<button type="button" class="m2-atlas-luggage-drop" data-atlas-bag-zone="'+key+'" aria-label="'+esc(title)+' maletan kokatu">+ KOKATU HEMEN</button>'+
    '<div class="m2-atlas-suitcase-items">'+inside.map(c=>
-     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img src="./assets/'+c[2]+'" alt=""><span class="m2-atlas-ref-icon" aria-hidden="true"></span>'+esc(c[1])+'</button>').join('')+
+     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" decoding="async" draggable="false">'+esc(c[1])+'</button>').join('')+
    '</div></section>';
  }).join('');
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
