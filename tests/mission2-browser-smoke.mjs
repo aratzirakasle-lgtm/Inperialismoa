@@ -8,6 +8,14 @@ import {mkdir} from 'node:fs/promises';
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
 const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE_CHROME==='1'?'chrome':undefined,args:['--no-sandbox']});
 let count=0;
+async function ensureAtlasPicturesDecoded(page){
+ await page.locator('.m2-atlas-screen img.m2-atlas-card-illustration').evaluateAll(async imgs=>{
+  await Promise.all(imgs.map(async img=>{
+   if(img.decode)await img.decode();
+   if(!img.complete||img.naturalWidth<680)throw Error('Falta la imagen ilustrada '+img.src);
+  }));
+ });
+}
 async function open(role='student',size={width:1365,height:900},badge=true){
  const context=await browser.newContext({viewport:size,reducedMotion:'reduce'});
  await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/,r=>r.fulfill({status:200,contentType:r.request().url().endsWith('.css')?'text/css':'application/javascript',body:''}));
@@ -323,6 +331,8 @@ try{
       url:new URL(img.src).pathname,
       loaded:img.complete&&img.naturalWidth>=680&&img.naturalHeight>=500,
       transparent:ctx.getImageData(0,0,1,1).data[3]<10,
+      illustrated:[[.28,.43],[.50,.52],[.70,.53],[.5,.78]].some(([fx,fy])=>
+        ctx.getImageData(Math.floor(img.naturalWidth*fx),Math.floor(img.naturalHeight*fy),1,1).data[3]>90),
       visible:getComputedStyle(img).display!=='none'&&img.getBoundingClientRect().height>=52
      };
    }));
@@ -333,7 +343,7 @@ try{
     expectedBagArt.map(name=>'m2-suitcase-'+name+'-restored.webp'),
     'Las ocho imágenes de las maletas deben ser las escenas pictóricas restauradas, no iconos SVG'
    );
-   assert.ok(art.every(img=>img.loaded&&img.visible&&img.transparent),JSON.stringify(art));
+   assert.ok(art.every(img=>img.loaded&&img.visible&&img.transparent&&img.illustrated),JSON.stringify(art));
    assert.equal(await page.locator('[data-atlas-bag-zone].m2-atlas-suitcase').count(),2);
    assert.equal(await page.locator('.m2-atlas-check[data-atlas-stage="4"]').isDisabled(),true);
    const imgs=await page.locator('.m2-atlas-screen img').evaluateAll(els=>els.map(i=>({name:i.src,loaded:i.complete&&i.naturalWidth>0})));
@@ -373,6 +383,7 @@ try{
     red:'m2-reference-red-suitcase.webp',
     blue:'m2-reference-blue-suitcase.webp'
    }))assert.ok(cssArt[part].includes(file),part+' debería conservar la ilustración original');
+   await ensureAtlasPicturesDecoded(page);
    await page.screenshot({path:'test-output/m2-e3-atlas-initial-1672x941.png',fullPage:true,animations:'disabled'});
    // Incorrect entries are allowed; no truth coloring or hints.
    await page.locator('select[data-field="1850"]').selectOption('450');
@@ -392,6 +403,7 @@ try{
    await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').click();
    await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="effect"]').click();
    assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
+   await ensureAtlasPicturesDecoded(page);
    await page.screenshot({path:'test-output/m2-e3-atlas-partial-1672x941.png',fullPage:true,animations:'disabled'});
    await page.locator('[data-open="4"]').click();
    await page.locator('[data-open="3"]').click();
@@ -440,6 +452,7 @@ try{
     });
     assert.deepEqual(metrics,{num:8,clipped:false,missing:false,overlapping:false},JSON.stringify({size,metrics}));
     assert.ok(await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').isVisible());
+    await ensureAtlasPicturesDecoded(page);
     await page.screenshot({path:'test-output/m2-e3-filled-suitcase-'+size.width+'.png',fullPage:true,animations:'disabled'});
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
@@ -487,6 +500,7 @@ try{
     assert.ok(metrics.scrollWidth<=metrics.viewport+1,JSON.stringify({size,metrics}));
     assert.ok(metrics.rects.every(r=>r.w>100&&r.x>=-2&&r.right<=size.width+2),JSON.stringify({size,metrics}));
     if([1672,390,320].includes(size.width))
+     await ensureAtlasPicturesDecoded(page);
      await page.screenshot({path:'test-output/m2-e3-atlas-'+size.width+'.png',fullPage:true,animations:'disabled'});
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
