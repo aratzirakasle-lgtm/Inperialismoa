@@ -382,9 +382,12 @@ try{
    }finally{await context.close()}
  });
  await scenario('Profesor: segundo ejercicio, navegación y fases sin guardar',async()=>{
-   const {page,context,errors}=await open('teacher','bi-sistema.html?preview=1');
+   const {page,context,errors}=await open('teacher','bi-sistema.html?preview=1',{width:1672,height:941});
    try{
      await waitVisible(page,'.m1-nav');
+     await waitVisible(page,'#bi-stage');
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/m1-ejercicio2-bi-sistema-actual.png',fullPage:true,animations:'disabled'});
      await page.getByRole('button',{name:'Amaierako pantaila'}).click();
      assert.equal(await page.locator('#bi-stage').getAttribute('data-phase'),'complete');
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
