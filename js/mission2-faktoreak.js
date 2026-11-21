@@ -35,11 +35,26 @@ const infrastructure=[
  ['suez','Suezko kanala'],['hijaz','Hijazko trenbidea'],['panama','Panamako kanala']
 ].map(([id,label])=>({id,label}));
 const archives=[
- {id:'sea',title:'Itsasbideen kontrola',body:'Potentziek itsasoko eta lurreko ibilbide komertzial eta militarrak kontrolatu nahi zituzten; aurkarien hedapena ere oztopatu nahi zuten.',question:'Zer da hemen agertzen den faktore nagusia?',options:[['a','Eskakizun geoestrategikoak'],['b','Biztanleria europarraren hazkundea'],['c','Erlijio-misioak']]},
- {id:'press',title:'Prentsa eta prestigioa',body:'Politikariek, prentsaren laguntzaz, eremu kolonial zabalak eratzea bultzatu zuten herritarren babesa eta prestigioa lortzeko.',question:'Zein kontzepturekin lotzen da iturri hau?',options:[['a','Kapitalen inbertsioarekin'],['b','Abertzalekeriarekin (chauvinismoa)'],['c','Emigrazioarekin']]},
- {id:'missions',title:'Eliza eta kolonizazioa',body:'Eliza katolikoaren eta protestantearen misiolariek Asian, Afrikan eta Ozeanian misioak sortu zituzten.',question:'Nola erabiltzen zen ideia hau hedapena justifikatzeko?',options:[['a','Itsas armadak murriztuz'],['b','Meatzeak eraikiz'],['c','Herrien kristautzea helburu gisa aurkeztuz']]},
- {id:'racism',title:'Arrazismo zientifikoa',body:'XIX. mendean teoria arrazistak biologiaren itxurarekin aurkezten ziren, menderakuntza koloniala zuritzeko. Ez dira azalpen zientifiko baliozkoak.',question:'Zer funtzio zuten teoria horiek kolonialismoan?',options:[['a','Menderakuntza arrazista justifikatzea'],['b','Herrien arteko eskubide-berdintasuna defendatzea'],['c','Merkataritza-hesiak desagerraraztea']]},
- {id:'source1863',title:'1863ko iturri historikoa',body:'Londresko Elkarte Antropologikoko saio bateko testu batek pertsona beltzak gutxiesten zituen eta europarren nagusitasuna defendatzen zuen.',question:'Zer moduz aztertu behar dugu lekukotasun hori?',options:[['a','Giza taldeen gaitasunen froga objektibo gisa'],['b','Garai hartako arrazakeriaren adibide kritiko gisa'],['c','Biztanleriaren zentsu zehatz gisa']]}
+ {id:'sea',title:'Ibilbide estrategikoak',type:'Geografia politikoa',ref:'13. diapositiba',art:'chart',
+  body:'Itsasoko eta lurreko ibilbideak kontrolatzeko lehian, potentziek merkataritzaren eta armadaren joan-etorriak zaindu eta aurkarien hedapena oztopatu nahi zuten.',
+  question:'Zein interes politiko ageri da dokumentu honetan?',
+  options:[['a','Ibilbideen kontrol geoestrategikoa'],['b','Europako biztanleriaren hazkundea'],['c','Erlijio-misioak zabaltzea']]},
+ {id:'press',title:'Prentsa eta prestigioa',type:'Propaganda',ref:'14. diapositiba',art:'newspaper',
+  body:'Politikariek, egunkarien eta beste hedabideen laguntzarekin, kolonien hedapena sustatu zuten herritarren babesa eskuratu eta nazioaren prestigioa handitzeko.',
+  question:'Zein ideologia politiko erabiltzen da justifikazio horretan?',
+  options:[['a','Kapitalen inbertsioa'],['b','Abertzalekeria (chauvinismoa)'],['c','Emigrazioa']]},
+ {id:'missions',title:'Agintarien interesa',type:'Erretratuen bilduma',ref:'14. diapositiba',art:'portrait',
+  body:'Bismarck, Cecil Rhodes, Jules Ferry, Leopoldo II.a eta Joseph Chamberlain garaiko hedapen kolonialarekin lotutako agintari edo politikariak izan ziren. Beren interesak eta jardunak ez ziren berdinak.',
+  question:'Zer bultzatu nahi zuten hedapen koloniala defendatzen zuten agintariek?',
+  options:[['a','Herrialde guztien independentzia bermatzea'],['b','Kolonien gaineko kontrola amaitzea'],['c','Estatuaren indarra eta nazioarteko prestigioa handitzea']]},
+ {id:'racism',title:'Biologiaren itxurako argudioak',type:'Ideologia',ref:'15. diapositiba',art:'science',
+  body:'Kolonialismoaren defendatzaile batzuek teoria arrazistak zientziaren itxurapean aurkezten zituzten, pertsonen arteko hierarkiak eta lurraldeen menderakuntza justifikatzeko. Teoria horiek ez dute balio zientifikorik.',
+  question:'Zertarako erabiltzen ziren teoria horiek?',
+  options:[['a','Menderakuntza eta diskriminazioa justifikatzeko'],['b','Herrien eskubide-berdintasuna defendatzeko'],['c','Merkataritza-hesiak kentzeko']]},
+ {id:'source1863',title:'1863ko lekukotasuna',type:'Iturriaren azterketa kritikoa',ref:'16. diapositiba',art:'manuscript',
+  body:'Londresko Elkarte Antropologikoaren 1863ko saio bati lotutako testu batek pertsona beltzak gutxiesten zituen eta europarren nagusitasuna aldarrikatzen zuen. Giza duintasunaren aurkako ikuspegi arrazista da.',
+  question:'Nola aztertu behar da lekukotasun historiko hori?',
+  options:[['a','Giza taldeen gaitasunen froga objektibo gisa'],['b','Garai hartako ideologia arrazistaren adibide kritiko gisa'],['c','Biztanleria-zentsu zehatz gisa']]}
 ];
 const riverOptions=[['nile','Nilo'],['niger','Niger'],['congo','Kongo'],['zambezi','Zambeze'],['suez','Suez'],['panama','Panama']];
 const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','Australiako basamortua'],['nile','Nilo'],['suez','Suez']];
