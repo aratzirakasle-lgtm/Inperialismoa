@@ -207,8 +207,18 @@ try{
     })));
     assert.ok(galleryMaterials.every(d=>d.paper.includes('gradient')&&!d.paper.includes('pergamino-papel-artesanal.svg')),
       'Los cinco expedientes deben utilizar papel antiguo sin textura SVG que oscurezca el texto');
-    assert.ok(galleryMaterials.every(d=>d.illustration.includes('data:image/webp;base64,')),
-      'Los cinco expedientes deben mostrar los cinco grabados originales de la referencia');
+    assert.ok(galleryMaterials.every(d=>d.illustration.includes('m2-e4-archivos-color-hd.avif')),
+      'Los cinco expedientes deben mostrar las ilustraciones coloreadas de alta resolución de la referencia');
+    const colorSheet=page.locator('link[href*="m2-e4-color-hd-20261121.css"]');
+    assert.equal(await colorSheet.count(),1,'La versión restaurada y coloreada debe estar enlazada');
+    const hdArt=await page.evaluate(async()=>{
+      const image=await fetch('./assets/m2-e4-archivos-color-hd.avif');
+      if(!image.ok)throw Error('No carga la lámina en color');
+      const bitmap=await createImageBitmap(await image.blob());
+      const result={width:bitmap.width,height:bitmap.height};
+      bitmap.close();return result;
+    });
+    assert.deepEqual(hdArt,{width:1100,height:340},'La lámina coloreada debe conservar la resolución mayor');
     const referenceSheet=page.locator('link[href*="m2-e4-referencia-fotos-20261121.css"]');
     assert.equal(await referenceSheet.count(),1,'Debe estar enlazada la composición de referencia del ejercicio 4');
     const crops=await page.locator('.m2-archive-dossier .m2-source-engraving').evaluateAll(items=>items.map(el=>getComputedStyle(el).backgroundPosition.split(' ')[0]));

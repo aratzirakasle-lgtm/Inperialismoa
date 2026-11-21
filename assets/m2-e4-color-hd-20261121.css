@@ -1,0 +1,34 @@
+/* MISIOA 02 · 4. ARIKETA — Kolore eta xehetasun handiagoko irudiak.
+ * Erreferentziako bost eszena berak, jatorrizko ordenan: x = 0,25,50,75,100%.
+ * Modern browsers load AVIF; older browsers retain the existing WebP engravings.
+ * This layer deliberately does not change questions, answers or Supabase.
+ */
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving {
+  background-image:image-set(url("./m2-e4-archivos-color-hd.avif") type("image/avif") 1x)!important;
+  background-color:#dcc39c;
+  filter:saturate(1.10) contrast(1.07) brightness(1.025)!important;
+  border:4px ridge #a77b42;
+  border-radius:2px;
+  box-shadow:inset 0 0 0 1px #ffedc8,
+             inset 0 0 10px #2817084b,
+             0 3px 6px #2714088a,
+             0 0 0 1px #68442066;
+}
+/* Rejilla de 5 imágenes: una ilustración distinta para cada expediente.
+ * Respeta los porcentajes de fondo definidos en la hoja de referencia.
+ */
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving::before {
+  opacity:.32;
+  background:linear-gradient(140deg,#fff5dd40 0%,transparent 28%,transparent 72%,#301b0b2b 100%);
+  mix-blend-mode:soft-light;
+}
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving::after {
+  background:radial-gradient(ellipse at 50% 42%,transparent 48%,#33200f35 100%);
+  box-shadow:inset 0 0 0 1px #fbe6bd66,inset 0 0 13px #311b0c44;
+}
+@media(max-width:760px) {
+ #m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving {
+  border-width:3px;
+  box-shadow:inset 0 0 0 1px #fff2d5,inset 0 0 7px #2817084d,0 3px 5px #1f11086d;
+ }
+}
