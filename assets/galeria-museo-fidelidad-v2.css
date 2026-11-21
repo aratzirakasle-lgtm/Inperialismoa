@@ -425,3 +425,41 @@
    pointer-events:none;
  }
 }
+
+/* Tercera observación de la captura: el cristal inferior no debe parecer
+   un gran recuadro blanco. Se transparenta un 8-12 % del mismo grabado
+   histórico ya presente en la vitrina; no es una pista de clasificación. */
+@media(min-width:1101px){
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-zone{
+   background-image:
+     radial-gradient(ellipse at 45% -9%,#fff2cee8,transparent 76%),
+     linear-gradient(170deg,#f4e2bde4 0%,#e3c99fe7 46%,#c6a270dc 100%),
+     var(--gal-photos);
+   background-size:100% 100%,100% 100%,400% 100%;
+   background-position:center;
+   box-shadow:inset 0 0 0 1px #f8e7b7,inset 0 12px 23px #ffecc650,
+     inset 0 -13px 21px #85552f33,0 2px 3px #26120548;
+ }
+ #app-shell.gallery-active .gal-vitrine-ru .gal-zone{background-position:center,center,33.333333% center}
+ #app-shell.gallery-active .gal-vitrine-us .gal-zone{background-position:center,center,66.666667% center}
+ #app-shell.gallery-active .gal-vitrine-jp .gal-zone{background-position:center,center,100% center}
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-zone:not(:has(.gal-tile-placed))::after{
+    content:'❧';
+    display:block;align-self:center;margin:auto 0 1px;
+    font:italic 54px/1 Georgia,serif;
+    color:#936b3a;opacity:.30;
+    filter:drop-shadow(0 1px #fce9c4);
+    pointer-events:none;
+ }
+}
+/* Iluminación museística suave, sin parpadeos ni animaciones continuas. */
+#app-shell.gallery-active .gal-vitrine .gal-case-column{
+  background:
+    linear-gradient(90deg,#22140b,#7e421c 9%,#e7b360 24%,#fff0ba 37%,
+      #9b5a1e 61%,#503019 78%,#d9a355 93%,#1f1108);
+}
+#app-shell.gallery-active .gal-vitrine-velvet{
+  background:
+    radial-gradient(ellipse at 50% -85%,#d8667870,transparent 75%),
+    linear-gradient(0deg,#20020a,#670b21 36%,#8c1b35 61%,#25030b);
+}
