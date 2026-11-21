@@ -415,6 +415,28 @@ try{
   }finally{await context.close()}
  });
 
+ await scenario('Atlas 3: encuadre de la captura original 1536×691 con márgenes 16:9',async()=>{
+  const {page,context,errors}=await open('teacher',{width:1536,height:691});
+  try{
+   await page.locator('[data-open="3"]').click();
+   await page.locator('.m2-atlas-screen').waitFor({state:'visible'});
+   await ensureAtlasPicturesDecoded(page);
+   const bounds=await page.locator('.m2-atlas-screen').evaluate(el=>{
+    const r=el.getBoundingClientRect();
+    const cards=[...el.querySelectorAll('.m2-atlas-luggage-card')];
+    const inside=cards.every(c=>{const q=c.getBoundingClientRect();return q.width>40&&q.height>55});
+    return {left:r.left,width:r.width,height:r.height,visibleCards:cards.length,
+      cardsReadable:inside,viewport:innerWidth};
+   });
+   assert.ok(Math.abs(bounds.left-154)<4&&Math.abs(bounds.width-1228)<4,
+     'La sala debe centrarse en 16:9 como la captura antigua: '+JSON.stringify(bounds));
+   assert.equal(bounds.visibleCards,8);
+   assert.equal(bounds.cardsReadable,true);
+   await page.screenshot({path:'test-output/m2-e3-reference-1536x691.png',fullPage:true,animations:'disabled'});
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+
  await scenario('Atlas 3: cinco desplegables reales y ocho cartelas visibles en una sola maleta',async()=>{
   for(const size of [{width:1672,height:941},{width:390,height:844}]){
    const {page,context,errors}=await open('teacher',size);
