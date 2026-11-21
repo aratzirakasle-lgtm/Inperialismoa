@@ -170,7 +170,8 @@ try{
      assert.equal(await page.locator('.gal-case-finial').count(),4,'Las cuatro vitrinas deben tener remates de latón');
      assert.equal(await page.locator('.gal-case-column').count(),8,'Cada vitrina debe conservar sus dos columnas');
      assert.equal(await page.locator('.gal-vitrine-velvet').count(),4,'Cada vitrina debe tener base de terciopelo');
-     assert.equal(await page.locator('.gal-case-spotlight').count(),4,'Cada vitrina debe tener su luz interior');
+     assert.equal(await page.locator('.gal-case-amber-light').count(),4,'Cada vitrina mantiene luz cálida en la base');
+     assert.equal(await page.locator('.gal-case-spotlight').count(),0,'No deben superponerse focos físicos sobre las banderas');
      assert.equal(await page.locator('.gal-case-glass').count(),4,'Las capas de cristal no pueden desaparecer');
      assert.equal(await page.locator('.gal-museum-tablefront').count(),1,'La mesa debe mostrar su canto de nogal');
      assert.equal(await page.locator('.gal-museum-tablefront').evaluate(el=>getComputedStyle(el).pointerEvents),'none',
