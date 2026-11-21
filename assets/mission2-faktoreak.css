@@ -5182,3 +5182,47 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
 @media(prefers-reduced-motion:reduce){
  .m2-atlas-screen .m2-atlas-luggage-card{transition:none!important}
 }
+
+
+/* M2·3 / Maletas: restauración de las ocho fotografías de época recortadas,
+   una por concepto. WebP con transparencia alfa, sin fondos rectangulares. */
+.m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+ width:min(100%,112px)!important;
+ max-width:112px!important;
+ height:65px!important;
+ max-height:65px!important;
+ object-fit:contain!important;
+ object-position:center bottom!important;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ mix-blend-mode:normal;
+ image-rendering:auto;
+ filter:drop-shadow(0 2px 2px #23150878);
+}
+.m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ flex:0 0 47px!important;
+ width:47px!important;
+ height:38px!important;
+ max-width:47px!important;
+ max-height:38px!important;
+ object-fit:contain!important;
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 1px 1px #2315088b);
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration{
+  width:min(100%,94px)!important;
+  height:59px!important;
+  max-height:59px!important;
+ }
+ .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+  flex-basis:37px!important;
+  width:37px!important;
+  height:30px!important;
+  max-width:37px!important;
+  max-height:30px!important;
+ }
+}
