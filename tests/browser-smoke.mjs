@@ -6,6 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
 
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
 const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE_CHROME==='1'?'chrome':undefined,args:['--no-sandbox']});
