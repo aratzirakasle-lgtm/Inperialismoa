@@ -179,6 +179,38 @@ try{
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
+ await scenario('Misión 2 · Cronógrafo interactivo: tres obras, dos preguntas y maquetas adaptables',async()=>{
+  for(const [size,label] of [[{width:1672,height:941},'escritorio'],[{width:390,height:844},'movil']]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    await page.locator('[data-open="2"]').click();
+    assert.equal(await page.locator('.m2-e2-chronograph').count(),1);
+    assert.equal(await page.locator('.m2-e2-piece').count(),3);
+    assert.equal(await page.locator('.m2-e2-slot').count(),3);
+    assert.equal(await page.locator('.m2-e2-ledger-page').count(),2);
+    assert.equal(await page.locator('.m2-e2-option input[type="radio"]').count(),6);
+    const bg=await page.locator('.m2-e2-picture').first().evaluate(el=>getComputedStyle(el).backgroundImage);
+    assert.match(bg,/m2-e2-reference-art\.svg/,'Las ilustraciones de transporte deben cargar');
+    await mkdir('test-output',{recursive:true});
+    await page.screenshot({path:'test-output/m2-e2-'+label+'-nuevo.png',fullPage:true,animations:'disabled'});
+    for(const [id,year] of [['suez','1914'],['hijaz','1869'],['panama','1908']]){
+     await page.locator('[data-event="'+id+'"]').click();
+     await page.locator('[data-year="'+year+'"]').click();
+    }
+    assert.equal(await page.locator('.m2-e2-slot.m2-selected-year').count(),3);
+    assert.match(await page.locator('.m2-e2-dial-progress').innerText(),/3\s*\/\s*3/);
+    await page.locator('input[data-field="funding"][value="credits"]').check();
+    await page.locator('input[data-field="works"][value="rail_ports_canals"]').check();
+    assert.equal(await page.locator('.m2-e2-option input:checked').count(),2);
+    await page.locator('[data-reset]').click();
+    assert.equal(await page.locator('.m2-e2-slot.m2-selected-year').count(),0);
+    assert.equal(await page.locator('.m2-e2-option input:checked').count(),0);
+    const horizontalOverflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+    assert.ok(horizontalOverflow<5,'No debe existir desbordamiento horizontal ('+label+'): '+horizontalOverflow);
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
  await scenario('Misión 2 · Archivo 4 y atlas 5: fuentes, preguntas, interacción y vistas reales',async()=>{
   for(const [size,label] of [[{width:1672,height:941},'escritorio'],[{width:390,height:844},'movil']]){
    const {page,context,errors}=await open('teacher',size);
