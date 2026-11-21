@@ -226,6 +226,24 @@ try{
      }finally{await context.close()}
    }
  });
+ await scenario('Cuatro grabados coloniales: WebP intactos y descargables en el navegador',async()=>{
+   const {page,context,errors}=await open('teacher','inperioen-aztarnak.html?preview=1');
+   try{
+     await waitVisible(page,'.m1-nav');
+     const photos=await page.evaluate(async()=>{
+       return await Promise.all(['aljeria','angola','india','indonesia'].map(async name=>{
+         const response=await fetch('./assets/inperioen-art-'+name+'-v5.webp');
+         const bytes=new Uint8Array(await response.arrayBuffer());
+         return {name,ok:response.ok,bytes:bytes.length,
+           riff:String.fromCharCode(...bytes.subarray(0,4))==='RIFF',
+           webp:String.fromCharCode(...bytes.subarray(8,12))==='WEBP'};
+       }));
+     });
+     assert.ok(photos.every(p=>p.ok&&p.bytes>600000&&p.riff&&p.webp),
+      'Algún expediente perdió su imagen original: '+JSON.stringify(photos));
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Profesor: quinto ejercicio, final simulado sin guardar',async()=>{
    const {page,context,errors}=await open('teacher','esaldiak-osatu.html?preview=1');
    try{
