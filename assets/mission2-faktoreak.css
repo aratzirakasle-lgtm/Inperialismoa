@@ -4774,3 +4774,17 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   box-shadow:0 2px 5px #6c4d2b70;
  }
 }
+
+
+/* Atlas 03d · sin parche rectangular: la ilustración del equipaje conserva
+   el sombrero y las maletas originales y oculta únicamente la frase impresa
+   que ya está expresada mediante texto HTML accesible. */
+@media(min-width:1101px){
+ .m2-atlas-luggage-activity:before{
+  background:url('./m2-atlas-original-luggage-clean.svg') left bottom /auto 190px no-repeat;
+  -webkit-clip-path:none;
+  clip-path:none;
+  -webkit-mask-image:none;
+  mask-image:none;
+ }
+}
