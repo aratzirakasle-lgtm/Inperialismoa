@@ -29,11 +29,6 @@
  text-shadow:0 1px #fff6df,0 2px 3px #4e321e24;
  letter-spacing:.025em;
 }
-#app-shell.gallery-active .gal-europe-medallion{
- display:block;flex:none;
- width:clamp(39px,3.5vw,62px);height:clamp(31px,2.65vw,45px);
- overflow:visible;filter:drop-shadow(0 1px 1px #49301f70);
-}
 #app-shell.gallery-active .gal-vitrine-image{
  position:relative;
  border-bottom:4px ridge #b18a53;
@@ -201,4 +196,71 @@
  #app-shell.gallery-active .gal-vitrine,
  #app-shell.gallery-active .gal-vitrine-image::before,
  #app-shell.gallery-active .gal-tile{transition:none!important}
+}
+/* La bandera original queda en su clase SVG habitual, sin iconografía extra. */
+#app-shell.gallery-active .gal-vitrine-eu .gal-flag-illustration{
+ display:block;
+ filter:none!important;
+}
+/* Cada destino se ilumina por igual: nunca se insinúa una solución. */
+#app-shell.gallery-active .gal-hall:has(.gal-tile.gal-selected) .gal-zone{
+ border-color:#a07842;
+ box-shadow:inset 0 0 0 1px #fff4d7,0 0 10px #ecba6852,0 2px 4px #39291a2e;
+}
+#app-shell.gallery-active .gal-zone.gal-touch-target,
+#app-shell.gallery-active .gal-tray.gal-touch-target{
+ border-color:#f1c983!important;
+ outline:2px solid #e5b56d;
+ outline-offset:2px;
+ box-shadow:inset 0 0 0 2px #fff5d1,0 0 18px #ffdb928e!important;
+}
+#app-shell.gallery-active .gal-tile:focus-visible{
+ outline:3px solid #f9d28b!important;
+ outline-offset:3px;
+ box-shadow:0 0 0 2px #644524,0 0 12px #f6d596!important;
+}
+#app-shell.gallery-active .gal-tile.gal-touch-source{
+ opacity:.48;
+}
+#app-shell.gallery-active .gal-touch-ghost{
+ position:fixed!important;
+ z-index:10000!important;
+ margin:0!important;
+ pointer-events:none!important;
+ touch-action:none!important;
+ transform:translate(-50%,-65%) rotate(-1.5deg);
+ box-shadow:0 10px 30px #0009,0 0 0 2px #ffe3a9!important;
+ background:linear-gradient(145deg,#fff9e7,#efce97)!important;
+ min-height:48px!important;
+ opacity:.98;
+ cursor:grabbing;
+}
+#app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-vitrine-contents{
+ overflow:visible; /* no microdesplazamientos internos dentro del cristal */
+}
+@media (pointer:coarse){
+ #app-shell.gallery-active .gal-tile:not(:disabled){touch-action:none}
+ #app-shell.gallery-active .gal-zone{min-height:80px}
+ #app-shell.gallery-active .gal-tile:not(.gal-tile-placed){min-height:49px}
+}
+@media (max-width:480px){
+ #app-shell.gallery-active .gal-display{
+  grid-template-columns:minmax(0,1fr);
+  gap:15px;
+ }
+ #app-shell.gallery-active .gal-vitrine,
+ #app-shell.gallery-active .gal-vitrine-eu{
+  min-height:0;height:auto;
+ }
+ #app-shell.gallery-active .gal-vitrine-contents{overflow:visible}
+ #app-shell.gallery-active .gal-vitrine-image{height:142px}
+ #app-shell.gallery-active .gal-vitrine-top{min-height:60px}
+ #app-shell.gallery-active .gal-vitrine-top h2{font-size:24px}
+ #app-shell.gallery-active .gal-flag-illustration{width:47px;max-height:38px}
+ #app-shell.gallery-active .gal-tile.gal-tile-placed{font-size:12px;min-height:40px}
+ #app-shell.gallery-active .gal-tile-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #app-shell.gallery-active .gal-hall{padding-left:14px;padding-right:14px}
+}
+@media(prefers-reduced-motion:reduce){
+ #app-shell.gallery-active .gal-touch-ghost{transition:none!important}
 }
