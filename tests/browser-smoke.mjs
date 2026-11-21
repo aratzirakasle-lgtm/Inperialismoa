@@ -106,6 +106,33 @@ try{
    try{
      await waitVisible(page,'.gal-hall');
      await mkdir('test-output',{recursive:true});
+     const detailSheet=page.locator('link[href*="galeria-mapa-cartelas-20261121.css"]');
+     assert.equal(await detailSheet.count(),1,'El CSS de mapa y cartelas debe estar cargado en la web oficial');
+     // Comparación real: misma vista sin recolocar ninguna cartela.
+     await detailSheet.evaluate(el=>{el.disabled=true});
+     await page.screenshot({path:'test-output/m1-mapa-cartelas-antes-20261121.png',fullPage:true,animations:'disabled'});
+     await detailSheet.evaluate(el=>{el.disabled=false});
+     await page.screenshot({path:'test-output/m1-mapa-cartelas-despues-20261121.png',fullPage:true,animations:'disabled'});
+     const mapInfo=await page.locator('.gal-side-art-left').evaluate(el=>{
+       const before=getComputedStyle(el,'::before');
+       const after=getComputedStyle(el,'::after');
+       return {background:getComputedStyle(el).backgroundImage,
+         tilted:before.transform,upperImage:before.backgroundImage,
+         lowerImage:after.backgroundImage,upperClip:before.clipPath,lowerClip:after.clipPath};
+     });
+     assert.equal(mapInfo.background,'none','La fotografía lateral debe dividirse para inclinar solo el mapa');
+     assert.notEqual(mapInfo.tilted,'none','El mapa debe quedar ladeado');
+     assert.ok(mapInfo.upperImage.includes('m2-museo-izquierdo.svg')&&mapInfo.lowerImage.includes('m2-museo-izquierdo.svg'),
+       'Mapa y globo deben conservar la misma ilustración original');
+     assert.match(mapInfo.upperClip,/inset/);
+     const paper=await page.locator('.gal-tray .gal-tile').first().evaluate(el=>{
+       const css=getComputedStyle(el);
+       const icon=getComputedStyle(el.querySelector('.gal-tile-icon'));
+       return {shadow:css.boxShadow,background:css.backgroundImage,iconRadius:icon.borderRadius};
+     });
+     assert.ok(paper.background.includes('gradient')&&paper.iconRadius==='50%',
+       'Las nuevas cartelas deben tener pergamino y sellos de latón');
+     assert.equal(await page.locator('.gal-tray .gal-tile').count(),20);
      await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
      const cabinets=await page.locator('.gal-vitrine').evaluateAll(nodes=>nodes.map(el=>el.getBoundingClientRect().bottom));
      assert.ok(Math.max(...cabinets)-Math.min(...cabinets)<5,
