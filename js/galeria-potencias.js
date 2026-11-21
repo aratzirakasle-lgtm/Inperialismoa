@@ -75,19 +75,17 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    return '<polygon points="'+points.join(" ")+'"/>';
  };
  const flagSvg=(key)=>{
-   const names={ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
+   const names={eu:"Europar Batasuneko bandera (gaur egungo ikurra)",ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
    const clipId="gal-flag-cloth-"+key;
-   if(key==="eu")return '<svg class="gal-europe-medallion" xmlns="http://www.w3.org/2000/svg" width="56" height="42" viewBox="0 0 62 46" role="img" aria-label="XIX. mendeko iparrorratza, Europaren ikurra" focusable="false">'+
-    '<ellipse cx="31" cy="23" rx="23" ry="20" fill="#e6c98b" stroke="#94652f" stroke-width="2.5"/>'+
-    '<ellipse cx="31" cy="23" rx="19.5" ry="16.5" fill="#f8eac8" stroke="#a77a39" stroke-width="1"/>'+
-    '<path d="M31 8v30M14 23h34M20 12l22 22M42 12L20 34" stroke="#9a753f" stroke-width=".9"/>'+
-    '<path d="M31 10l3.5 13L31 36l-3.5-13z" fill="#9b5335" stroke="#5d422b" stroke-width="1"/>'+
-    '<path d="M18 23l13-3.5L44 23l-13 3.5z" fill="#b18b4e" stroke="#6d532e" stroke-width="1"/>'+
-    '<circle cx="31" cy="23" r="2.2" fill="#fff3cf" stroke="#80542a"/>'+
-    '<circle cx="31" cy="23" r="22" fill="none" stroke="#fff4cd" stroke-width=".9"/>'+
-    '<text x="31" y="42" font-family="Georgia,serif" font-size="6.5" fill="#70502d" text-anchor="middle">XIX</text></svg>';
-      const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
+   const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
    let graphic="";
+   if(key==="eu"){
+     graphic='<rect x="5" y="4" width="52" height="32" fill="#003399"/>';
+     graphic+='<g fill="#ffcc00">'+Array.from({length:12},(_,i)=>{
+       const angle=-Math.PI/2+i*Math.PI/6;
+       return flagStars(31+10.5*Math.cos(angle),19.6+10.5*Math.sin(angle),2.45,1.05);
+     }).join("")+'</g>';
+   }
    if(key==="ru"){
      graphic='<rect x="5" y="4" width="52" height="11" fill="#fff"/><rect x="5" y="15" width="52" height="10" fill="#1345a7"/><rect x="5" y="25" width="52" height="11" fill="#c73542"/>';
    }
@@ -111,7 +109,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    showcase('ru','ERRUSIA','🇷🇺','Errusiako tsarraren garaiko irudia',target('ru','Errusiaren ezaugarriak',4))+
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
    showcase('jp','JAPONIA','🇯🇵','Japoniako eraikin historikoa',target('jp','Japoniaren ezaugarriak',3))+
-   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+(tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':state.feedback||'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.')+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||Object.keys(state.placements).length===state.locked.size?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Iparrorratza Europako erakusleihoaren ikurra da, ez XIX. mendeko bandera bat. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
+   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+(tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':state.feedback||'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.')+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||Object.keys(state.placements).length===state.locked.size?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako banderak adibideak dira, ez XIX. mendeko Europa osoaren bandera. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
  }
  async function check(){
    if(state.busy||state.completed)return;
@@ -151,7 +149,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      e.preventDefault();delete state.placements[moving.dataset.galleryCard];state.selected=null;saveDraft();draw();
      refocus('[data-gallery-tray]');return;
    }
-   const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}},{signal:controller.signal});
+   const zone=e.target.matches('[data-gallery-zone]')?e.target:null;if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}},{signal:controller.signal});
  root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
  root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
  root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
