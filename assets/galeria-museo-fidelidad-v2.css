@@ -460,3 +460,258 @@
     radial-gradient(ellipse at 50% -85%,#d8667870,transparent 75%),
     linear-gradient(0deg,#20020a,#670b21 36%,#8c1b35 61%,#25030b);
 }
+
+/* === Fase III · Escenografía fina, contrastada contra el concepto original ===
+   Respeta, sin reemplazarlos, los cuatro fondos --gal-photos de
+   galeria-potencias-fotos.css, los cuatro estandartes y los 20 botones.
+   Decoración no interactiva: todos los destinos reaccionan igual.
+*/
+/* Mayor profundidad en la sala: arquitectura oscura, madera y haces de luz. */
+#app-shell.gallery-active .gal-hall{
+  background:
+    radial-gradient(ellipse 15% 34% at 27% 21%,#e5a34f22,transparent 92%),
+    radial-gradient(ellipse 15% 34% at 73% 21%,#f6b9681c,transparent 92%),
+    radial-gradient(ellipse 45% 23% at 50% -7%,#9d754936,transparent 89%),
+    repeating-linear-gradient(90deg,transparent 0 16%,#a5783a14 16.12%,#120e0a65 16.25%,transparent 16.55% 33%),
+    repeating-linear-gradient(0deg,transparent 0 7px,#d7b46e05 8px 9px,transparent 10px 19px),
+    linear-gradient(90deg,#10120e,#19231b 13%,#111c17 36%,#16221b 69%,#182118 88%,#0c110e)!important;
+}
+#app-shell.gallery-active .gal-room-cornice{
+  box-shadow:0 8px 21px #000e,0 2px 7px #eebc746e;
+}
+#app-shell.gallery-active .gal-side-art{
+  filter:drop-shadow(0 9px 17px #000e) contrast(1.06) saturate(1.04);
+}
+#app-shell.gallery-active .gal-side-art::before{
+  content:'';position:absolute;top:1%;left:3%;width:94%;height:36%;
+  border:5px ridge #bd8742;border-radius:2px;
+  box-shadow:inset 0 0 0 2px #fff0be69,inset 0 0 15px #160b07a8,0 5px 10px #0009;
+  background:linear-gradient(110deg,#fff4dc20,transparent 38% 76%,#1509071d);
+}
+#app-shell.gallery-active .gal-side-art-right::before{height:36%}
+#app-shell.gallery-active .gal-side-art::after{
+  content:'';position:absolute;pointer-events:none;
+  left:3%;top:36%;width:94%;height:8px;
+  border-top:3px ridge #edba6a;
+  background:linear-gradient(90deg,#462611,#f5d393 30%,#9a652e 65%,#4d2c19);
+  box-shadow:0 4px 8px #0009;
+}
+
+/* Cúpula transparente de verdad: recurso vectorial reutilizable con brillos,
+   arista dorada y cristal ahumado. No dibuja ni cambia fotografías. */
+#app-shell.gallery-active .gal-vitrine::before,
+#app-shell.gallery-active .gal-vitrine-eu::before{
+  top:-54px;left:50%;width:107%;height:97px;
+  border:0;border-radius:0;
+  background:url('./galeria-cupula-cristal-laton.svg') center / 100% 100% no-repeat;
+  box-shadow:none;
+  filter:drop-shadow(0 4px 6px #000d) drop-shadow(0 -1px 7px #f5bc666e);
+  z-index:4;
+  transform:translateX(-50%);
+}
+#app-shell.gallery-active .gal-case-finial{
+  top:-70px;z-index:8;
+  border-radius:50% 50% 23% 23%;
+  background:radial-gradient(ellipse at 33% 22%,#fffbe7,#f2ce7b 30%,#a36925 60%,#3a1b0b 94%);
+  box-shadow:inset 1px 1px #fff8cd,0 2px 4px #000b,0 0 11px #f7c67787;
+}
+#app-shell.gallery-active .gal-case-finial::before{box-shadow:0 0 8px #fed58173}
+#app-shell.gallery-active .gal-vitrine{
+  box-shadow:
+    inset 0 0 0 1px #fff2cf,
+    inset 0 0 0 5px #311706,
+    inset 0 0 0 7px #dca34d,
+    inset 8px 0 17px #fff6da57,
+    inset -8px 0 17px #0e0805ad,
+    0 5px 0 #4b260d,0 13px 21px #000e,0 0 16px #ffcd7566;
+}
+#app-shell.gallery-active .gal-case-column{
+  z-index:5;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 34px,#f5b95a78 35px 36px,
+      #2b160864 37px 39px,transparent 40px 66px),
+    linear-gradient(90deg,#271307,#a76923 12%,#f9d18c 25%,#fff6c7 34%,
+      #b07529 48%,#4c230d 73%,#f1bf6a 90%,#211206);
+  box-shadow:inset 0 0 0 1px #c28f46,2px 0 8px #0009,-2px 0 7px #ffc36a65;
+}
+#app-shell.gallery-active .gal-vitrine-top{
+  border:4px ridge #bc8641;
+  background:
+    radial-gradient(ellipse at 50% -12%,#fff8df,transparent 75%),
+    linear-gradient(90deg,#955b28,#fce1ab 16%,#f8e2b6 49%,#dab16d 78%,#905723);
+  box-shadow:inset 0 0 0 1px #fff8de,0 5px 7px #0009,0 0 10px #ffd88d60;
+}
+#app-shell.gallery-active .gal-vitrine-top::before,
+#app-shell.gallery-active .gal-vitrine-top::after{
+  content:'❧';position:absolute;top:50%;transform:translateY(-50%);
+  color:#ab6b2d;font:700 clamp(12px,1vw,17px)/1 Georgia,serif;
+  text-shadow:0 1px #fff8d7;
+  pointer-events:none;
+}
+#app-shell.gallery-active .gal-vitrine-top::before{left:5px}
+#app-shell.gallery-active .gal-vitrine-top::after{right:5px;transform:translateY(-50%) scaleX(-1)}
+/* Ocultar los motivos antes que estrechar el nombre de cada vitrina. */
+@media(max-width:1330px){
+ #app-shell.gallery-active .gal-vitrine-top::before,
+ #app-shell.gallery-active .gal-vitrine-top::after{display:none}
+}
+#app-shell.gallery-active .gal-flag-shelf{
+  position:relative;
+  background:
+    radial-gradient(ellipse 65% 80% at 50% -25%,#fff1b2a6,transparent 81%),
+    linear-gradient(90deg,#2a1c13 0%,#956a3d 9%,#60452e 47%,#3a271a 91%,#26160d);
+  box-shadow:inset 0 6px 16px #140906aa,inset 5px 0 8px #d6a75c88,
+    inset -5px 0 9px #0a0706b0,0 4px 5px #140a057d;
+}
+#app-shell.gallery-active .gal-flag-shelf::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(112deg,#fff4d82f 0 11%,transparent 24% 76%,#fff1c321 91%);
+}
+#app-shell.gallery-active .gal-case-spotlight{
+  position:absolute;left:50%;top:74px;transform:translateX(-50%);
+  width:31px;height:10px;border-radius:0 0 50% 50%;
+  background:radial-gradient(ellipse at 50% 99%,#fff9d4,#f4cb79 39%,#8f561f 79%,#281509);
+  border:2px ridge #e3b36a;
+  box-shadow:0 1px 0 #fff0b8,0 2px 11px #ffd385a8,0 0 14px #e0a94a66;
+  z-index:6;pointer-events:none;
+}
+#app-shell.gallery-active .gal-case-spotlight::after{
+  content:'';position:absolute;left:50%;top:5px;transform:translateX(-50%);
+  width:clamp(130px,12vw,180px);height:160px;z-index:-1;
+  clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);
+  background:linear-gradient(180deg,#fff7c250 0,#ffde8644 44%,transparent 99%);
+  filter:blur(8px);
+  opacity:.50;pointer-events:none;
+}
+#app-shell.gallery-active .gal-vitrine-image{
+  /* Mismos cuatro fotogramas WebP; se modifica solo el marco. */
+  filter:sepia(.12) contrast(1.10) saturate(1.03);
+  border-color:#ce974b;
+  box-shadow:inset 0 5px 14px #ffe6a857,inset 0 -16px 22px #160a06a3,
+    0 0 0 2px #f4ce81,0 3px 7px #130a0799;
+}
+#app-shell.gallery-active .gal-case-glass{
+  position:absolute;left:10px;right:10px;top:102px;bottom:19px;
+  z-index:4;pointer-events:none;opacity:.42;
+  background:
+    linear-gradient(107deg,#fff8df69 0 3%,transparent 12% 80%,#fff7d847 93%,transparent 97%),
+    linear-gradient(97deg,transparent 30%,#fffbd81c 33%,transparent 38%);
+  -webkit-mask-image:linear-gradient(#000 0,#0008 52%,transparent 88%);
+  mask-image:linear-gradient(#000 0,#0008 52%,transparent 88%);
+}
+#app-shell.gallery-active .gal-case-amber-light{
+  position:absolute;left:50%;top:-5px;transform:translateX(-50%);
+  width:87%;height:20px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse,#fff9d5 0,#ffe3a7 17%,#f6aa4ab4 43%,transparent 73%);
+  filter:blur(3px);box-shadow:0 0 10px #ffc371aa;
+}
+#app-shell.gallery-active .gal-vitrine-velvet{
+  overflow:visible;
+  box-shadow:inset 0 0 0 2px #4c0715,inset 0 -4px 7px #090204a9,
+    0 3px 3px #160805ab;
+}
+/* Mayor contraste del pergamino sobre el interior dorado, sin pista de acierto. */
+#app-shell.gallery-active .gal-zone{
+  border-color:#98703f;
+  box-shadow:inset 0 0 0 1px #fff6e2,inset 0 8px 15px #fff8e529,
+    0 2px 4px #0003;
+}
+
+/* La mesa se convierte en mobiliario real, con canto biselado en perspectiva.
+   No transformamos los botones para preservar su hitbox y legibilidad. */
+#app-shell.gallery-active .gal-tray{
+  margin-top:-3px;
+  border:12px ridge #bd8a47;
+  background:
+    radial-gradient(ellipse 78% 48% at 51% 4%,#be536065,transparent 91%),
+    repeating-linear-gradient(1deg,#f7c2940b 0 1px,transparent 2px 9px),
+    linear-gradient(150deg,#340610,#741328 41%,#5a0a1c 78%,#32040d)!important;
+  box-shadow:inset 0 0 0 2px #fbd69f,inset 0 0 0 6px #3d1a12,
+    inset 0 0 0 8px #af7a3f,inset 0 7px 17px #230510b8,
+    0 5px 0 #572e18,0 13px 23px #000d;
+}
+#app-shell.gallery-active .gal-museum-tablefront{
+  position:relative;z-index:3;pointer-events:none;
+  width:min(1435px,97%);height:36px;
+  margin:-8px auto -16px;
+  border-top:3px solid #ffd893;
+  border-bottom:9px ridge #a66c35;
+  clip-path:polygon(5% 0,95% 0,100% 100%,0 100%);
+  background:
+    radial-gradient(ellipse 40% 75% at 47% -10%,#e6a45d8c,transparent 90%),
+    repeating-linear-gradient(88deg,#29150a16 0 20px,#f7d59b17 22px 23px,#1e100c33 25px 42px),
+    linear-gradient(180deg,#3c1b12,#995e2c 23%,#4b2514 52%,#1c0d08 81%,#6c3c20);
+  box-shadow:inset 0 4px 0 #f1bf78,inset 0 10px 8px #3e1a0d9e,0 7px 10px #000d;
+}
+#app-shell.gallery-active .gal-museum-tablefront::before{
+  content:'';position:absolute;inset:3px 32px 11px;
+  border-top:1px solid #e4ac63;border-bottom:1px solid #ca8b3b;
+  background:linear-gradient(90deg,#30180b55,transparent 5% 95%,#30180b55);
+}
+#app-shell.gallery-active .gal-museum-tablefront>span{
+  position:absolute;top:6px;bottom:8px;left:50%;width:48px;
+  transform:translateX(-50%);
+  border-left:2px solid #e7b76a;border-right:2px solid #e7b76a;
+  background:radial-gradient(ellipse at 50% 30%,#dda75a,#56321c 75%);
+  box-shadow:inset 0 0 0 2px #412315;
+}
+#app-shell.gallery-active .gal-museum-tablefront>span::before{
+  content:'✦';position:absolute;inset:0;
+  display:grid;place-items:center;color:#fff0bb;
+  font:20px/1 Georgia,serif;text-shadow:0 0 7px #f2c36e;
+}
+#app-shell.gallery-active .gal-tile:not(.gal-tile-placed){
+  border:3px ridge #b78545;
+  border-radius:5px;
+  box-shadow:inset 0 0 0 1px #fff6dc,inset 0 0 0 3px #cfa46b5c,
+    0 2px 0 #8b4b23,0 5px 7px #09040275;
+}
+#app-shell.gallery-active .gal-tile:not(.gal-tile-placed)::before{
+  content:'';position:absolute;pointer-events:none;inset:3px;
+  border:1px solid #bf84468c;
+  background:
+    linear-gradient(135deg,#9d6a3a9e 0 4px,transparent 4px) top left / 14px 14px no-repeat,
+    linear-gradient(225deg,#9d6a3a9e 0 4px,transparent 4px) top right / 14px 14px no-repeat,
+    linear-gradient(45deg,#9d6a3a9e 0 4px,transparent 4px) bottom left / 14px 14px no-repeat,
+    linear-gradient(315deg,#9d6a3a9e 0 4px,transparent 4px) bottom right / 14px 14px no-repeat;
+}
+#app-shell.gallery-active .gal-tray h2{
+  letter-spacing:.02em;
+  text-shadow:0 1px #38100d,0 0 12px #ffdda43a;
+}
+@media(min-width:1450px){
+ #app-shell.gallery-active .gal-display{
+  width:calc(100% - clamp(440px,30vw,520px));
+ }
+ #app-shell.gallery-active .gal-side-art{width:clamp(200px,15vw,263px)}
+}
+/* Tablet and mobile: no extra width, no clipping and no decorative targets. */
+@media(max-width:1100px){
+ #app-shell.gallery-active .gal-case-glass{top:95px;bottom:15px}
+ #app-shell.gallery-active .gal-museum-tablefront{height:23px;margin:-6px auto -9px;width:98%}
+ #app-shell.gallery-active .gal-case-spotlight{top:70px}
+}
+@media(max-width:680px){
+ #app-shell.gallery-active .gal-vitrine::before,
+ #app-shell.gallery-active .gal-vitrine-eu::before{
+  top:-37px;height:63px;width:106%;background-size:100% 100%;
+ }
+ #app-shell.gallery-active .gal-case-finial{top:-52px}
+ #app-shell.gallery-active .gal-case-spotlight{top:56px;width:21px;height:8px}
+ #app-shell.gallery-active .gal-case-spotlight::after{height:100px;width:95px;opacity:.20}
+ #app-shell.gallery-active .gal-case-glass{left:7px;right:7px;top:90px;bottom:12px;opacity:.2}
+ #app-shell.gallery-active .gal-museum-tablefront{display:none}
+ #app-shell.gallery-active .gal-side-art::before,
+ #app-shell.gallery-active .gal-side-art::after{display:none}
+ #app-shell.gallery-active .gal-tray{border-width:8px;padding:12px}
+}
+@media(max-width:480px){
+ #app-shell.gallery-active .gal-vitrine::before,
+ #app-shell.gallery-active .gal-vitrine-eu::before{top:-39px;height:73px}
+ #app-shell.gallery-active .gal-case-spotlight{top:77px}
+}
+@media(prefers-reduced-motion:reduce){
+ #app-shell.gallery-active .gal-case-glass,
+ #app-shell.gallery-active .gal-case-spotlight,
+ #app-shell.gallery-active .gal-museum-tablefront{animation:none!important;transition:none!important}
+}
