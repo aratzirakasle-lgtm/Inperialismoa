@@ -207,9 +207,15 @@ try{
     })));
     assert.ok(galleryMaterials.every(d=>d.paper.includes('m2-e4-pergamino-papel-artesanal.svg')),
       'Los cinco expedientes deben utilizar papel antiguo realista');
-    assert.ok(['m2-reference-port-photo.webp','m2-reference-right-steamer.webp',
-      'm2-reference-harbor.webp'].every((src,i)=>galleryMaterials[i].illustration.includes(src)),
-      'Las tres ilustraciones iniciales deben conservar fotos históricas del propio proyecto');
+    assert.ok(['m2-reference-port-photo.webp','m2-reference-right-steamer.webp'].every((src,i)=>galleryMaterials[i].illustration.includes(src)),
+      'Los primeros expedientes deben conservar fotografías históricas del propio proyecto');
+    assert.ok(galleryMaterials.slice(2).every(d=>!d.illustration.includes('.webp')),
+      'Los otros tres expedientes deben mostrar grabados nítidos, no fotografías ampliadas y borrosas');
+    const noteColor=await page.locator('.m2-archive-warning').evaluate(el=>{
+      const s=getComputedStyle(el);return {background:s.backgroundImage,text:s.color}
+    });
+    assert.ok(noteColor.background.includes('gradient')&&!noteColor.background.includes('pergamino-papel-artesanal'),
+      'La nota crítica debe conservar contraste y un papel claro sin filtros fotográficos');
     assert.ok(galleryMaterials.every(d=>d.pointer!=='none'),
       'El realismo gráfico nunca debe bloquear las respuestas');
     const backdrop=await page.locator('.m2-archive-room-props').evaluate(el=>({
