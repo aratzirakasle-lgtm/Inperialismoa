@@ -4798,3 +4798,210 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
   clip-path:polygon(0 0,55% 0,55% 31%,100% 31%,100% 100%,0 100%);
  }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+  M2 E3 · Etapa 04: ocho grabados originales de la lámina elegida.
+  Recortes visuales de m2-reference-open-leather.webp:
+  nada de medallones modernos ni textos incrustados en las respuestas.
+  Las fichas siguen siendo botones HTML arrastrables.
+  ═══════════════════════════════════════════════════════════════ */
+.m2-atlas-screen [data-atlas-bag-card]{
+ --atlas-crop-x:-62px;
+ --atlas-crop-y:-33px;
+ --atlas-crop-mini-x:-31px;
+ --atlas-crop-mini-y:-16.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="growth"]{
+ --atlas-crop-x:-274px;--atlas-crop-y:-31px;
+ --atlas-crop-mini-x:-137px;--atlas-crop-mini-y:-15.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="conditions"]{
+ --atlas-crop-x:-169px;--atlas-crop-y:-34px;
+ --atlas-crop-mini-x:-84.5px;--atlas-crop-mini-y:-17px;
+}
+.m2-atlas-screen [data-atlas-bag-card="better"]{
+ --atlas-crop-x:-63px;--atlas-crop-y:-35px;
+ --atlas-crop-mini-x:-31.5px;--atlas-crop-mini-y:-17.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="conversion"]{
+ --atlas-crop-x:-174px;--atlas-crop-y:-140px;
+ --atlas-crop-mini-x:-87px;--atlas-crop-mini-y:-70px;
+}
+.m2-atlas-screen [data-atlas-bag-card="settlement"]{
+ --atlas-crop-x:-368px;--atlas-crop-y:-35px;
+ --atlas-crop-mini-x:-184px;--atlas-crop-mini-y:-17.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="oceania"]{
+ --atlas-crop-x:-376px;--atlas-crop-y:-143px;
+ --atlas-crop-mini-x:-188px;--atlas-crop-mini-y:-71.5px;
+}
+.m2-atlas-screen [data-atlas-bag-card="faith"]{
+ --atlas-crop-x:-277px;--atlas-crop-y:-141px;
+ --atlas-crop-mini-x:-138.5px;--atlas-crop-mini-y:-70.5px;
+}
+.m2-atlas-screen .m2-atlas-luggage-card img,
+.m2-atlas-screen .m2-atlas-packed img{
+ display:none;
+}
+.m2-atlas-screen .m2-atlas-ref-icon{
+ flex:0 0 auto;
+ display:block;
+ box-sizing:border-box;
+ width:80px;
+ max-width:100%;
+ height:45px;
+ margin:0 auto 2px;
+ background-image:url('./m2-reference-open-leather.webp');
+ background-repeat:no-repeat;
+ background-size:512px 282px;
+ background-position:var(--atlas-crop-x) var(--atlas-crop-y);
+ -webkit-mask-image:radial-gradient(ellipse 75% 78% at 50% 51%,#000 60%,transparent 100%);
+ mask-image:radial-gradient(ellipse 75% 78% at 50% 51%,#000 60%,transparent 100%);
+ pointer-events:none;
+ filter:contrast(1.08) saturate(1.07) drop-shadow(0 1px 1px #4a2f1b5e);
+}
+.m2-atlas-screen [data-atlas-bag-card="missions"] .m2-atlas-ref-icon{
+ background-image:url('./m2-atlas-original-mission.webp');
+ background-position:50% 38%;
+ background-size:cover;
+ border-radius:3px;
+}
+.m2-atlas-screen .m2-atlas-packed .m2-atlas-ref-icon{
+ flex:0 0 40px;
+ width:40px;
+ height:27px;
+ margin:0 2px 0 0;
+ background-size:256px 141px;
+ background-position:var(--atlas-crop-mini-x) var(--atlas-crop-mini-y);
+ filter:contrast(1.08);
+}
+.m2-atlas-screen .m2-atlas-packed[data-atlas-bag-card="missions"] .m2-atlas-ref-icon{
+ background-size:cover;
+ background-position:50% 40%;
+}
+.m2-atlas-screen .m2-atlas-luggage-card{
+ cursor:grab;
+}
+.m2-atlas-screen .m2-atlas-luggage-card:focus-visible,
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"]{
+ border-color:#fff0be!important;
+ box-shadow:0 0 0 3px #ffce5b,0 0 12px #ffe4a4,0 3px 5px #281404b5!important;
+}
+@media(min-width:1101px){
+ .m2-atlas-main{
+  grid-template-rows:213px 54px;
+  height:273px;
+  min-height:273px;
+ }
+ .m2-atlas-row-two{margin-top:6px}
+ .m2-atlas-facts-activity .m2-atlas-statements{
+  position:relative;
+  margin:4px 219px 2px 12px;
+  padding:5px 8px 8px;
+  min-height:179px;
+  border:4px double #b98a4b;
+  border-radius:7px 5px 9px 6px;
+  background:
+   radial-gradient(ellipse at 31% -15%,#fffaf0 0%,transparent 65%),
+   repeating-linear-gradient(2deg,#ab895514 0 1px,transparent 2px 12px),
+   linear-gradient(175deg,#f9e7c5,#efce9c 72%,#e3bc87);
+  box-shadow:0 0 0 1px #efc687,0 5px 9px #32201065,inset 0 0 0 1px #fff6de;
+ }
+ .m2-atlas-facts-activity .m2-atlas-fact-head{
+  margin:5px 219px 2px 13px;
+ }
+ .m2-atlas-facts-activity .m2-atlas-statement{
+  padding:2px 3px;
+  min-height:31px;
+  border-bottom:1px solid #ba915f97;
+  background:transparent;
+ }
+ .m2-atlas-luggage-activity{
+  min-height:286px;
+ }
+ .m2-atlas-luggage-available{
+  padding-top:11px;
+  padding-bottom:13px;
+ }
+ .m2-atlas-luggage-available:before{
+  background:
+   url('./m2-atlas-empty-tray-compartments.svg') center/100% 100% no-repeat,
+   linear-gradient(145deg,#6a3a1d,#3e2315);
+ }
+ .m2-atlas-luggage-cards{
+  gap:4px;
+  align-items:stretch;
+ }
+ .m2-atlas-luggage-card{
+  justify-content:flex-start;
+  min-height:96px;
+  padding:8px 2px 5px;
+  border:4px ridge #cfa16b;
+  border-radius:9px 11px 8px 12px;
+  color:#352217;
+  background:
+   radial-gradient(ellipse at 50% -5%,#fffdf2 0%,transparent 71%),
+   repeating-linear-gradient(15deg,#d3ad7540 0 1px,transparent 2px 13px),
+   linear-gradient(#ffeed0,#e5c18c)!important;
+  box-shadow:0 0 0 1px #7a4d30,0 3px 5px #2111058f,
+   inset 0 0 0 2px #fff4d9,inset 0 8px 11px #f5e2bd!important;
+  font:700 clamp(10px,.72vw,13px)/1.11 Georgia,serif;
+  text-shadow:0 1px #fff7e8;
+ }
+ .m2-atlas-luggage-card>span:last-child{
+  display:block;
+  flex:1 1 auto;
+  width:100%;
+  min-width:0;
+  padding:1px 0 0;
+  text-align:center;
+  overflow-wrap:break-word;
+ }
+ .m2-atlas-final-controls .m2-controls{
+  margin-top:2px;
+  min-height:30px;
+  padding:3px 8px;
+  border-width:2px;
+  border-radius:3px;
+ }
+ .m2-atlas-final-controls .m2-feedback{
+  font-size:10px;
+  line-height:1.2;
+ }
+ .m2-atlas-final-controls .m2-button{
+  min-height:26px;
+  padding:2px 8px;
+  border-width:2px;
+  border-radius:5px;
+  font-size:10px;
+ }
+}
+@media(min-width:1101px) and (max-width:1350px){
+ .m2-atlas-facts-activity .m2-atlas-statements{margin-right:174px}
+ .m2-atlas-facts-activity .m2-atlas-fact-head{margin-right:174px}
+ .m2-atlas-luggage-card{min-height:91px}
+ .m2-atlas-ref-icon{width:70px;max-width:95%;height:42px}
+}
+@media(max-width:1100px){
+ .m2-atlas-screen .m2-atlas-luggage-card .m2-atlas-ref-icon{
+  width:75px;
+  height:43px;
+ }
+}
+@media(max-width:680px){
+ .m2-atlas-screen .m2-atlas-luggage-card .m2-atlas-ref-icon{
+  width:69px;
+  height:42px;
+ }
+ .m2-atlas-screen .m2-atlas-packed .m2-atlas-ref-icon{
+  flex-basis:36px;
+  width:36px;
+  height:25px;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .m2-atlas-screen .m2-atlas-luggage-card{
+  transition:none!important;
+ }
+}
