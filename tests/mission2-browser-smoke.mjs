@@ -197,6 +197,21 @@ try{
     assert.equal(await page.locator('[data-archive-progress]').innerText(),'0 / 5');
     const archiveSheet=page.locator('link[href*="m2-e4-archivo-fidelidad-concepto1.css"]');
     assert.equal(await archiveSheet.count(),1,'El diseño elegido debe estar enlazado');
+    const realismSheet=page.locator('link[href*="m2-e4-fotorrealismo-20261121.css"]');
+    assert.equal(await realismSheet.count(),1,'Debe estar enlazado el pulido fotográfico');
+    const galleryMaterials=await page.locator('.m2-archive-dossier').evaluateAll(items=>items.map((el,i)=>({
+      paper:getComputedStyle(el).backgroundImage,
+      illustration:getComputedStyle(el.querySelector('.m2-source-engraving')).backgroundImage,
+      pointer:getComputedStyle(el.querySelector('.m2-choice')).pointerEvents,
+      index:i
+    })));
+    assert.ok(galleryMaterials.every(d=>d.paper.includes('m2-e4-pergamino-papel-artesanal.svg')),
+      'Los cinco expedientes deben utilizar papel antiguo realista');
+    assert.ok(['m2-reference-port-photo.webp','m2-reference-right-steamer.webp',
+      'm2-reference-harbor.webp'].every((src,i)=>galleryMaterials[i].illustration.includes(src)),
+      'Las tres ilustraciones iniciales deben conservar fotos históricas del propio proyecto');
+    assert.ok(galleryMaterials.every(d=>d.pointer!=='none'),
+      'El realismo gráfico nunca debe bloquear las respuestas');
     const backdrop=await page.locator('.m2-archive-room-props').evaluate(el=>({
       background:getComputedStyle(el).backgroundImage,pointer:getComputedStyle(el).pointerEvents
     }));
