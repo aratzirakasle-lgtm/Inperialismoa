@@ -4690,3 +4690,52 @@ button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(
  .m2-atlas-facts-activity:after{opacity:.68}
  .m2-atlas-route-activity:before{opacity:.72}
 }
+
+
+/* Atlas, etapa 03b — solapar con precisión los controles sobre los huecos
+   de las maletas pintadas y no mostrar rótulos estáticos fuera de contexto. */
+@media (min-width:1101px){
+ .m2-atlas-luggage-activity:before{
+  /* El fragmento artístico incluye una pequeña frase impresa en la esquina
+     superior derecha: se elimina esa esquina, manteniendo sombrero y maletas. */
+  -webkit-clip-path:polygon(0 0,56% 0,56% 24%,100% 24%,100% 100%,0 100%);
+  clip-path:polygon(0 0,56% 0,56% 24%,100% 24%,100% 100%,0 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000,#000);
+  mask-image:linear-gradient(to bottom,#000,#000);
+ }
+ .m2-atlas-luggage-board{
+  grid-template-columns:minmax(0,1.12fr) minmax(0,1.05fr);
+  margin:0 9.5% 0 23.7%;
+  gap:7px;
+ }
+ .m2-atlas-luggage-available{
+  background-position:50% 50%;
+  background-size:110% 100%;
+ }
+ .m2-atlas-suitcase,
+ .m2-atlas-suitcase-effect{
+  padding-top:77px;
+  background-size:100% 100%;
+ }
+ .m2-atlas-luggage-drop{
+  height:16px;
+  min-height:16px;
+  padding:0 2px;
+  margin:0 4px 3px;
+  border-color:#edd5a796;
+  background:#3d231994;
+  font-size:7px;
+  line-height:1;
+ }
+ .m2-atlas-suitcase-items{
+  grid-auto-rows:minmax(43px,auto);
+ }
+ .m2-atlas-luggage-activity>footer{
+  width:9.3%;
+  background:#5c382a43;
+ }
+ .m2-atlas-luggage-activity>footer .m2-atlas-check{
+  font-size:clamp(11px,.72vw,14px);
+  padding:4px 2px;
+ }
+}
