@@ -113,8 +113,50 @@ try{
      assert.doesNotMatch(help,/pista:|tsarrak|meiji|monarkaren/i);
      await setCard(page,'eu_auth_head','eu_liberal');
      await page.locator('[data-gallery-action="check"]').click();
-     await page.waitForFunction(()=>document.querySelector('.gal-status')?.textContent?.includes('birkokatu'));
+     await page.waitForFunction(()=>document.querySelector('.gal-status')?.textContent?.includes('Ez da zuzena'));
+     assert.equal(await page.locator('.gal-wrong').count(),0,'Un error no debe destacar respuestas incorrectas');
+     assert.doesNotMatch(await page.locator('.gal-status').innerText(),/\d+.*birkokatu|\d+.*kontzeptu.*zuzendu/i);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Galería: mejora visual antes/después, foco de teclado y controles sin pistas',async()=>{
+   const {page,context,errors}=await open('teacher','index.html#teacherpreviewgallery',{width:1672,height:941});
+   try{
+     await waitVisible(page,'.gal-hall');
+     const sheet=page.locator('link[href*="galeria-mision1-pulido-20261121.css"]');
+     assert.equal(await sheet.count(),1,'El pulido gráfico debe estar enlazado');
+     assert.equal(await page.locator('.gal-europe-medallion').count(),1,'El símbolo de Europa no debe ser una bandera contemporánea');
+     for(const [id,zone] of [['eu_auth_head','eu_auth'],['eu_liberal_head','eu_liberal'],['ru_tsar','ru'],['us_west','us'],['jp_meiji','jp']])
+       await setCard(page,id,zone);
+     assert.equal(await page.locator('.gal-tile').count(),20);
+     await page.locator('[data-gallery-card="eu_army"]').focus();
+     await page.keyboard.press('Enter');
+     assert.equal(await page.locator('[data-gallery-card="eu_army"]').getAttribute('aria-pressed'),'true');
+     assert.equal(await page.locator('[data-gallery-card="eu_army"]').evaluate(el=>document.activeElement===el),true,
+       'La tarjeta debe recuperar el foco después de actualizar la sala');
+
+     await page.evaluate(()=>{document.activeElement?.blur();scrollTo(0,0)});
+     await page.mouse.move(5,5);
+     await mkdir('test-output',{recursive:true});
+     await sheet.evaluate(el=>el.disabled=true);
+     await page.screenshot({path:'test-output/m1-galeria-antes-ordenador.png',fullPage:true,animations:'disabled'});
+     await sheet.evaluate(el=>el.disabled=false);
+     await page.screenshot({path:'test-output/m1-galeria-despues-ordenador.png',fullPage:true,animations:'disabled'});
+     assert.equal(await page.locator('.gal-tile.gal-selected').count(),1);
+     assert.equal(await page.locator('.gal-vitrine').count(),4);
+     assert.equal(await page.locator('.gal-tile').count(),20);
+     await page.locator('[data-gallery-card="eu_army"]').focus();
+     await page.keyboard.press('Escape');
+     assert.equal(await page.locator('.gal-tile.gal-selected').count(),0,
+       'Escape debe cancelar la selección sin mover ninguna cartela');
+
+     await page.locator('[data-gallery-zone="eu_auth"] [data-gallery-card="eu_auth_head"]').focus();
+     await page.keyboard.press('Delete');
+     assert.equal(await page.locator('.gal-tray [data-gallery-card="eu_auth_head"]').count(),1,
+       'Suprimir debe devolver una cartela no confirmada a la mesa');
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+       'La vista docente no puede registrar respuestas');
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
