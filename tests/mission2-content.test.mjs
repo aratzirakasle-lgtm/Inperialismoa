@@ -41,3 +41,22 @@ test('La primera misión no cambia sus juegos ni pantallas',()=>{
  for(const screen of ['bi-sistema.html','inperialismoaren-definizioa.html','inperioen-aztarnak.html','esaldiak-osatu.html'])
   assert.ok(js.includes(screen),screen);
 });
+
+
+test('El ejercicio de la maleta usa los ocho dibujos antiguos, transparentes y ampliados',()=>{
+ const script=read('js/mission2-faktoreak.js');
+ for(const id of ['growth','conditions','better','conversion','settlement','missions','oceania','faith']){
+  const filename='m2-vintage-'+id+'-transparent.webp';
+  assert.ok(script.includes(filename),filename);
+  const data=readFileSync(new URL('../assets/'+filename,import.meta.url));
+  assert.ok(data.length>10000,filename+' demasiado pequeño');
+  assert.equal(data.toString('ascii',0,4),'RIFF',filename);
+  assert.equal(data.toString('ascii',8,12),'WEBP',filename);
+  assert.equal(data.toString('ascii',12,16),'VP8X',filename);
+  assert.ok((data[20]&0x10)!==0,filename+' sin canal alfa');
+  const width=data[24]+(data[25]<<8)+(data[26]<<16)+1;
+  const height=data[27]+(data[28]<<8)+(data[29]<<16)+1;
+  assert.deepEqual([width,height],[720,540],filename);
+ }
+ assert.doesNotMatch(script,/m2-suitcase-[a-z]+-restored\.webp/);
+});
