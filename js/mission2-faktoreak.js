@@ -408,25 +408,69 @@ function multiButtons(group,options,selectedIds){
  const ids=new Set(selectedIds||[]);
  return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div>';
 }
+function expeditionMap(){
+ return '<svg class="m2-expedition-svg" viewBox="0 0 540 620" role="img" aria-label="Afrikako eskema historikoan ibai nagusiak, meridianoak eta iparrorratza agertzen dira. Mapa orientagarria da, ez eskala zehatzekoa." xmlns="http://www.w3.org/2000/svg">'+
+ '<defs><radialGradient id="m2-land" cx=".39" cy=".34" r=".79"><stop stop-color="#e3d4a9"/><stop offset=".68" stop-color="#cbbb87"/><stop offset="1" stop-color="#aa9b6c"/></radialGradient>'+
+ '<pattern id="m2-paper-lines" patternUnits="userSpaceOnUse" width="28" height="28"><path d="M28 0H0V28" fill="none" stroke="#988e6b" stroke-opacity=".17" stroke-width="1"/></pattern></defs>'+
+ '<rect width="540" height="620" fill="#d6d6b8"/><rect width="540" height="620" fill="url(#m2-paper-lines)"/>'+
+ '<g stroke="#9aa393" stroke-opacity=".7" stroke-width="1" fill="none"><path d="M0 150H540M0 260H540M0 370H540M0 480H540"/><path d="M95 0V620M195 0V620M295 0V620M395 0V620M495 0V620"/></g>'+
+ '<g font-family="Georgia,serif" font-size="15" fill="#647e78" opacity=".82"><text x="18" y="318" transform="rotate(-90 18 318)">OZEANO ATLANTIKOA</text><text x="513" y="280" transform="rotate(90 513 280)">INDIAKO OZEANOA</text><text x="263" y="53" font-size="14" text-anchor="middle">MEDITERRANEO ITSASOA</text></g>'+
+ '<path class="m2-expedition-land" d="M107 98C129 81 166 70 204 72L240 75 259 66 291 81 320 96 349 104 371 117 387 138 405 146 421 168 445 191 431 202 410 199 397 213 415 239 434 252 461 254 470 281 451 300 426 311 418 340 407 365 391 384 385 410 366 434 351 460 337 486 314 521 282 550 260 573 236 550 225 526 203 508 194 480 177 467 165 432 143 418 130 390 112 362 112 339 88 317 72 290 69 266 58 245 77 213 65 190 74 163 91 144 87 125Z"/>'+
+ '<path class="m2-expedition-land" d="M455 413L475 420 486 448 480 475 464 498 450 484 444 451Z"/>'+
+ '<path class="m2-expedition-land-shade" d="M164 129Q253 89 325 151T385 335Q350 410 305 449T225 498Q143 399 132 260Z"/>'+
+ '<path d="M75 332Q246 333 436 332" stroke="#947246" stroke-width="1.5" stroke-dasharray="5 6" fill="none"/>'+
+ '<text x="75" y="327" font-family="Georgia,serif" font-size="10" fill="#715738">EKUATOREA</text>'+
+ '<g class="m2-historic-rivers" fill="none" stroke="#688b90" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".90">'+
+ '<path d="M333 151Q322 185 324 217T340 263Q334 297 314 313Q296 332 297 353"/>'+
+ '<path d="M99 218Q137 223 151 253Q177 262 191 249T220 265Q199 295 160 293T118 285"/>'+
+ '<path d="M305 346Q263 313 224 339T189 371Q161 368 137 386"/>'+
+ '<path d="M312 412Q335 401 342 417T361 434Q389 426 412 415"/>'+
+ '</g>'+
+ '<g fill="#8ba6a1" stroke="#537978" stroke-width="1.8"><circle cx="333" cy="151" r="5"/><circle cx="118" cy="285" r="5"/><circle cx="137" cy="386" r="5"/><circle cx="412" cy="415" r="5"/></g>'+
+ '<path d="M69 193Q117 155 162 140M352 160Q381 181 411 203" fill="none" stroke="#8c654a" stroke-width="1.6" stroke-dasharray="4 6"/>'+
+ '<g transform="translate(459 90)" fill="none" stroke="#81673d"><circle r="31" stroke-width="2"/><circle r="23" stroke-width="1"/><path d="M-37 0H37M0-37V37M-17-17L17 17M17-17L-17 17" stroke-width="1.2"/><path d="M0-22L6 0 0 22-6 0Z" fill="#956845"/><circle r="4" fill="#c5aa78"/></g>'+
+ '<text x="458" y="46" text-anchor="middle" font="700 13px Georgia,serif" fill="#675639">I</text>'+
+ '<g font-family="Georgia,serif" fill="#755b3d" opacity=".79"><text x="193" y="234" font-size="21" letter-spacing="7">AFRIKA</text><text x="161" y="592" font-size="12" letter-spacing="3">XIX. MENDEKO ATLASA</text></g>'+
+ '<path d="M20 20H520V600H20Z" fill="none" stroke="#a89462" stroke-width="2"/><path d="M29 29H511V591H29Z" fill="none" stroke="#ad9b6b" stroke-width="1"/>'+
+ '</svg>';
+}
 function renderExpedition(){
  const state=taskState(5),data=state.multi||{};
- return '<div class="m2-expedition"><aside class="m2-atlas" role="img" aria-label="Atlas eskematikoa: Afrika, Asia, kontinentea eta esplorazioak">'+
- '<span class="m2-atlas-title">ESPLORAZIOEN ATLASA · XIX. MENDEA</span><span class="m2-atlas-label a">AFRIKA</span>'+
- '<span class="m2-atlas-label b">ASIA</span><span class="m2-atlas-label c">IBAI HANDIAK</span>'+
- '<span class="m2-atlas-label d">BIDE BERRIAK</span><span class="m2-compass" aria-hidden="true">✥</span></aside>'+
- '<div class="m2-atlas-notes"><section class="m2-panel"><h3>1 · Afrikako ibaiak</h3><p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+
- multiButtons('africa',riverOptions,data.africa)+'</section>'+
- '<section class="m2-panel"><h3>2 · Asia eta Ozeaniako esplorazioak</h3><p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
- multiButtons('asia',asiaOptions,data.asia)+'</section>'+
- '<section class="m2-panel"><h3>3 · Poloak</h3><div class="m2-mini-grid"><label class="m2-field">Ipar Poloa<select data-field="north"><option value="">Aukeratu</option>'+
- option('peary','Peary',state.north)+option('amundsen','Amundsen',state.north)+'</select></label><label class="m2-field">Hego Poloa<select data-field="south"><option value="">Aukeratu</option>'+
- option('peary','Peary',state.south)+option('amundsen','Amundsen',state.south)+'</select></label></div></section>'+
- '<section class="m2-panel"><h3>4 · Stanley eta Livingstone</h3>'+
- '<label class="m2-field">Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?<select data-field="meeting"><option value="">Aukeratu</option>'+
- option('1869','1869',state.meeting)+option('1871','1871',state.meeting)+option('1908','1908',state.meeting)+'</select></label></section>'+
- '<section class="m2-panel"><h3>5 · Kongoko azken lekukotasuna</h3><p class="m2-caption">Stanleyk Leopoldo II.arekin izan zuen lotura aztertzen da azken diapositiban.</p>'+
- '<label class="m2-field">Zein da espedienteak azaltzen duen lotura?<select data-field="congo"><option value="">Aukeratu</option>'+
- option('research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe',state.congo)+option('exploitation','Kongoko ustiapenean eta haren ankerkerietan izandako parte-hartzea',state.congo)+option('independence','Kongoko independentzia demokratikoa antolatzea',state.congo)+'</select></label></section></div></div>';
+ const chosen=[...(data.africa||[])];
+ const chosenLabels=chosen.map(id=>riverOptions.find(x=>x[0]===id)?.[1]||id);
+ return '<div class="m2-expedition m2-expedition-research">'+
+  '<aside class="m2-atlas m2-historical-map">'+
+   '<div class="m2-atlas-museum-title"><span>ESPLORAZIOEN ATLASA</span><small>XIX. MENDEA · AGIRIA 05</small></div>'+
+   expeditionMap()+
+   '<div class="m2-atlas-route-ledger"><strong>Aukeratutako izenak · '+chosen.length+' / 4</strong>'+
+    '<div class="m2-atlas-route-tags" aria-live="polite">'+(chosenLabels.length?chosenLabels.map(label=>'<span>'+esc(label)+'</span>').join(''):'<em>Oraindik ez da izenik aukeratu.</em>')+'</div></div>'+
+   '<p class="m2-atlas-footnote">Atlas eskematikoa. Ibaien ibilbideek esplorazioaren eta kolonizazioaren historia ulertzen laguntzen dute.</p>'+
+  '</aside>'+
+  '<div class="m2-atlas-notes m2-expedition-files">'+
+   '<div class="m2-expedition-intro"><span class="m2-archive-eyebrow">IKERKETA GEOGRAFIKOA · 05 / 05</span><h3>Esploratzaileen espedientea</h3>'+
+    '<p>Lotu mapa, espedizioak eta Kongoko ustiapen kolonialaren testuingurua. Aztertu bost agiriak; erantzun guztiak osatu arte ezingo dituzue egiaztatu.</p></div>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3></header>'+
+    '<p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+
+    multiButtons('africa',riverOptions,data.africa)+'</section>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3></header>'+
+    '<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
+    multiButtons('asia',asiaOptions,data.asia)+'</section>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3></header>'+
+    '<div class="m2-mini-grid"><label class="m2-field">Ipar Poloa<select data-field="north"><option value="">Aukeratu</option>'+
+     option('peary','Peary',state.north)+option('amundsen','Amundsen',state.north)+'</select></label>'+
+    '<label class="m2-field">Hego Poloa<select data-field="south"><option value="">Aukeratu</option>'+
+     option('peary','Peary',state.south)+option('amundsen','Amundsen',state.south)+'</select></label></div></section>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-meeting"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3></header>'+
+    '<p class="m2-caption">Prentsak ospetsu egin zuen bi esploratzaileen topaketa. Aztertu 18. diapositibako gertakaria.</p>'+
+    '<label class="m2-field">Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?<select data-field="meeting"><option value="">Aukeratu</option>'+
+     option('1869','1869',state.meeting)+option('1871','1871',state.meeting)+option('1908','1908',state.meeting)+'</select></label></section>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-congo"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3></header>'+
+    '<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura. Esplorazioa eta ustiapena ez dira gauza bera, baina lotuta egon ziren.</p>'+
+    '<label class="m2-field">Zer lotura nabarmentzen du azken diapositibak?<select data-field="congo"><option value="">Aukeratu</option>'+
+     option('research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe',state.congo)+
+     option('exploitation','Kongoko ustiapen kolonialarekin izandako lotura',state.congo)+
+     option('independence','Kongoko independentzia demokratikoa antolatzea',state.congo)+'</select></label></section>'+
+  '</div></div>';
 }
 function renderExercise(){
  switch(active){
