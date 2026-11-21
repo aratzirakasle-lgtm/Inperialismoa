@@ -320,8 +320,8 @@ try{
    for(const [event,year] of [['suez','1869'],['hijaz','1908'],['panama','1914']]){
     await page.locator('[data-event="'+event+'"]').click();await page.locator('[data-year="'+year+'"]').click();
    }
-   await page.locator('[data-field="funding"]').selectOption('credits');
-   await page.locator('[data-field="works"]').selectOption('rail_ports_canals');
+   await page.locator('input[data-field="funding"][value="credits"]').check();
+   await page.locator('input[data-field="works"][value="rail_ports_canals"]').check();
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
    await page.locator('[data-next]').click();
