@@ -1,0 +1,547 @@
+/*
+ * Historia DBH 4 · Inperialismoa · 2. misioa, 4. eta 5. ariketak.
+ * Cinco fuentes / cinco dossiers. Museo de papel antiguo y latón;
+ * funciona con el DOM nativo de js/mission2-faktoreak.js.
+ * No revela respuestas correctas ni modifica Supabase.
+ */
+#m2-app.m2-archive-active,
+#m2-app.m2-expedition-active{
+  --m2-museum-dark:#203e34;
+  --m2-museum-ink:#342820;
+  --m2-museum-gold:#c49a62;
+  --m2-museum-aged:#f4e5c8;
+}
+#m2-app.m2-archive-active .m2-work,
+#m2-app.m2-expedition-active .m2-work{
+  padding:clamp(12px,1.8vw,27px);
+  background:
+    radial-gradient(ellipse at 46% -15%,#fff6d9b5,transparent 77%),
+    repeating-linear-gradient(12deg,transparent 0 15px,#97724d09 16px 17px,transparent 18px 31px),
+    linear-gradient(135deg,#f3e6ce,#ead8b7);
+  border:4px double #b08b56;
+  box-shadow:inset 0 0 0 2px #fff8e5,inset 0 0 28px #af855436,0 3px 11px #39251426;
+}
+#m2-app.m2-archive-active .m2-section-head,
+#m2-app.m2-expedition-active .m2-section-head{
+  border-bottom:2px solid #c0a070;
+  padding-bottom:13px;
+}
+#m2-app .m2-archive-eyebrow{
+  display:inline-block;
+  margin-bottom:8px;
+  font:700 10px/1.2 "DM Sans",sans-serif;
+  color:#755435;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+}
+#m2-app .m2-archive-intro,
+#m2-app .m2-expedition-intro{
+  display:flex;
+  align-items:center;
+  gap:17px;
+  position:relative;
+  margin-bottom:19px;
+  padding:15px 19px;
+  border:2px ridge #b59462;
+  border-radius:2px;
+  background:
+    radial-gradient(ellipse at 50% 0,#fff9e6,transparent 90%),
+    linear-gradient(128deg,#e9d2ad,#f5e5c8 55%,#dbc29c);
+  box-shadow:inset 0 0 0 2px #fffaeaa2,0 3px 10px #3a291b2e;
+}
+#m2-app .m2-archive-intro::before{
+  content:'';position:absolute;inset:5px;
+  border:1px solid #ba986b8c;
+  pointer-events:none;
+}
+#m2-app .m2-archive-emblem{
+  flex:0 0 62px;
+  width:62px;height:62px;
+  display:grid;place-items:center;
+  border:4px ridge #b78d56;
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 20%,#ffeed0,#c99653 67%,#946332);
+  color:#5e3b20;
+  font:42px/1 Georgia,serif;
+  text-shadow:0 1px #ffe8b4;
+  box-shadow:0 2px 6px #49331c61;
+}
+#m2-app .m2-archive-intro h3,
+#m2-app .m2-expedition-intro h3{
+  font:700 clamp(18px,1.7vw,24px)/1.2 "Libre Baskerville",Georgia,serif;
+  margin:0 0 5px;
+  color:#342719;
+}
+#m2-app .m2-archive-intro p,
+#m2-app .m2-expedition-intro p{
+  margin:0;color:#604a33;font-size:clamp(12px,.85vw,14px);line-height:1.6;
+}
+#m2-app .m2-source-grid-museum{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(13px,1.45vw,21px);
+  align-items:stretch;
+}
+#m2-app .m2-source-file{
+  position:relative;isolation:isolate;
+  min-width:0;
+  padding:0 17px 19px;
+  border:4px double #b58d56;
+  background:
+    radial-gradient(ellipse 72% 48% at 50% 4%,#fff9df,transparent 85%),
+    repeating-linear-gradient(16deg,transparent 0 11px,#a57a4011 12px,transparent 13px 22px),
+    linear-gradient(150deg,#f8ebd2 0%,#f5e5c5 56%,#e4c9a1 100%);
+  box-shadow:
+    inset 0 0 0 1px #fff9e6,
+    inset 0 0 21px #aa7b4380,
+    0 4px 0 #765234,
+    0 8px 13px #24160947;
+}
+#m2-app .m2-source-file::before,
+#m2-app .m2-source-file::after{
+  content:none;
+}
+#m2-app .m2-source-file:last-child{
+  grid-column:1 / -1;
+}
+#m2-app .m2-source-file .m2-source-heading{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin:0 -17px 15px;
+  padding:8px 13px;
+  background:linear-gradient(95deg,#244036,#335547 60%,#20382f);
+  color:#f4dfbd;
+  border-bottom:3px ridge #b89760;
+  box-shadow:0 3px 6px #3623193d;
+}
+#m2-app .m2-source-index{
+  font:700 10px/1.2 "DM Sans",sans-serif;letter-spacing:.19em;
+  white-space:nowrap;
+}
+#m2-app .m2-source-kind{
+  font-size:10px;line-height:1.2;
+  letter-spacing:.04em;opacity:.90;text-align:right;
+}
+#m2-app .m2-source-top{
+  display:grid;grid-template-columns:93px minmax(0,1fr);
+  align-items:center;gap:14px;
+  margin-bottom:13px;
+}
+#m2-app .m2-source-engraving{
+  height:104px;
+  padding:5px;
+  border:6px ridge #aa7948;
+  box-shadow:inset 0 0 0 2px #fbeac9,0 4px 7px #4c301b51;
+  background:
+    repeating-linear-gradient(0deg,#90785609 0 1px,transparent 1px 5px),
+    #f4dfbc;
+}
+#m2-app .m2-source-engraving svg{
+  width:100%;height:100%;
+  filter:sepia(.18) contrast(1.08);
+}
+#m2-app .m2-source-titling{
+  min-width:0;
+}
+#m2-app .m2-source-titling h3{
+  color:#312319;
+  margin:0 0 12px;
+  font:700 clamp(16px,1.2vw,21px)/1.25 "Libre Baskerville",Georgia,serif;
+  overflow-wrap:break-word;
+}
+#m2-app .m2-source-ref{
+  display:inline-flex;align-items:center;
+  gap:6px;
+  font:700 10px/1.2 "DM Sans",sans-serif;
+  letter-spacing:.05em;
+  color:#765737;
+}
+#m2-app .m2-source-ref::before{
+  content:'';height:1px;width:24px;background:#ab8456;
+}
+#m2-app .m2-source-text{
+  margin:0 0 15px;
+  padding:11px 12px;
+  color:#453526;
+  font-size:clamp(12px,.85vw,14px);
+  line-height:1.6;
+  background:linear-gradient(130deg,#f6ead1c4,#f2e0bf8a);
+  border-left:3px solid #ac804f;
+  min-height:0;
+}
+#m2-app .m2-source-file fieldset{
+  border:0;
+  border-top:1px solid #bc9b70;
+  margin:0;
+  padding:13px 0 0;
+  display:grid;
+  gap:7px;
+  min-width:0;
+}
+#m2-app .m2-source-file legend{
+  padding:0 8px 0 0;
+  margin:0 0 9px;
+  color:#35291e;
+  font-weight:700;
+  font-size:13px;line-height:1.4;
+}
+#m2-app .m2-source-file .m2-choice{
+  position:relative;min-width:0;
+  display:flex;align-items:flex-start;gap:9px;
+  padding:10px 11px;
+  color:#37291d;
+  border:1px solid #baa076;
+  border-radius:2px;
+  background:linear-gradient(135deg,#fffaea,#f1e3c8);
+  font-size:12px;line-height:1.42;
+  box-shadow:inset 0 1px 0 #fffef2;
+  cursor:pointer;
+  transition:background .12s,border-color .12s;
+}
+#m2-app .m2-source-file .m2-choice input{
+  accent-color:#466c59;
+  margin-top:2px;
+  flex:0 0 auto;
+}
+#m2-app .m2-source-file .m2-choice:has(input:checked){
+  border-color:#42634f;
+  background:linear-gradient(130deg,#e2ebda,#ceddc8);
+  box-shadow:inset 0 0 0 1px #f2fbe5,0 0 0 1px #68846e73;
+}
+#m2-app .m2-source-file .m2-choice:focus-within{
+  outline:2px solid #2d6351;
+  outline-offset:1px;
+}
+#m2-app .m2-source-seal{
+  position:absolute;top:50px;right:8px;
+  width:44px;height:44px;
+  display:grid;place-items:center;
+  border:3px double #ae674e;
+  border-radius:50%;
+  color:#9e583e;
+  transform:rotate(-19deg);
+  opacity:.38;
+  font:700 13px Georgia,serif;
+  pointer-events:none;
+}
+#m2-app .m2-archive-warning{
+  margin:18px 0 0;
+  padding:13px 16px;
+  border:1px solid #bb9362;
+  border-left:5px solid #345849;
+  background:linear-gradient(110deg,#eee1c7,#f8ebcd);
+  color:#4b3b2a;
+  font-size:12px;line-height:1.62;
+}
+#m2-app .m2-archive-warning strong{color:#2f473b}
+
+/* 05 — Atlas físico, con rutas fluviales dibujadas y cinco expedientes.
+   El plano es deliberadamente esquemático y no se usa para puntuar. */
+#m2-app .m2-expedition-research{
+  display:grid;
+  grid-template-columns:minmax(280px,.92fr) minmax(0,1.13fr);
+  gap:clamp(14px,2vw,25px);
+  align-items:start;
+}
+#m2-app .m2-historical-map{
+  position:sticky;top:12px;
+  display:flex;flex-direction:column;
+  height:auto;
+  min-height:0;
+  overflow:hidden;
+  padding:0;
+  background:#d6d6b8;
+  border:9px ridge #b59462;
+  box-shadow:inset 0 0 0 3px #f6e5bc,0 8px 18px #3e322273;
+}
+#m2-app .m2-historical-map::before{
+  content:none;
+}
+#m2-app .m2-atlas-museum-title{
+  padding:12px 14px 10px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-bottom:3px ridge #9c7b4a;
+  background:linear-gradient(110deg,#1d4138,#39564a 55%,#1a3730);
+  color:#f8e7c6;
+  font:700 clamp(12px,1.1vw,16px)/1.2 "Libre Baskerville",Georgia,serif;
+  letter-spacing:.03em;
+}
+#m2-app .m2-atlas-museum-title small{
+  font:700 10px/1.2 "DM Sans",sans-serif;
+  letter-spacing:.12em;
+  opacity:.87;
+  text-align:right;
+}
+#m2-app .m2-expedition-svg{
+  display:block;
+  width:100%;height:auto;
+  max-height:580px;
+  margin:0 auto;
+  object-fit:contain;
+  background:radial-gradient(ellipse at 48% 36%,#e7e6d5,#c9cbb1);
+}
+#m2-app .m2-expedition-land{
+  fill:url(#m2-land);
+  stroke:#89764b;
+  stroke-width:2.5;
+  stroke-linejoin:round;
+  filter:drop-shadow(3px 4px 2px #685a3b4d);
+}
+#m2-app .m2-expedition-land-shade{
+  fill:#9cac84;
+  opacity:.10;
+}
+#m2-app .m2-atlas-route-ledger{
+  padding:12px 15px;
+  background:linear-gradient(#f8ebcc,#e1d1ae);
+  border-top:4px ridge #b09161;
+  box-shadow:inset 0 4px 12px #94764e25;
+}
+#m2-app .m2-atlas-route-ledger strong{
+  display:block;
+  color:#533f2b;
+  font-size:12px;
+  margin:0 0 9px;
+}
+#m2-app .m2-atlas-route-tags{
+  display:flex;flex-wrap:wrap;gap:6px;
+  min-height:31px;
+}
+#m2-app .m2-atlas-route-tags span{
+  display:inline-flex;align-items:center;
+  background:#f7efda;
+  border:1px solid #ad8753;
+  padding:5px 8px;
+  font:700 11px/1.2 "DM Sans",sans-serif;
+  color:#533f29;
+}
+#m2-app .m2-atlas-route-tags em{
+  font:italic 12px Georgia,serif;
+  color:#80694a;
+}
+#m2-app .m2-atlas-footnote{
+  margin:0;
+  padding:8px 15px;
+  background:#e4d9bc;
+  color:#6a553b;
+  font-size:10px;line-height:1.55;
+}
+#m2-app .m2-expedition-files{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:11px;
+  align-content:start;
+  min-width:0;
+}
+#m2-app .m2-expedition-intro{
+  display:block;
+  margin:0 0 3px;
+  padding:15px 17px;
+}
+#m2-app .m2-expedition-panel{
+  position:relative;
+  min-width:0;
+  padding:0 14px 15px;
+  border:3px double #b18c59;
+  border-radius:2px;
+  background:
+    radial-gradient(ellipse at 50% -10%,#fff8df,transparent 78%),
+    repeating-linear-gradient(17deg,transparent 0 13px,#ae8b5310 14px,transparent 16px 28px),
+    linear-gradient(145deg,#f9edda,#f1dfbc);
+  box-shadow:inset 0 0 0 1px #fff8e9,0 3px 8px #503b274f;
+}
+#m2-app .m2-expedition-panel header{
+  margin:0 -14px 11px;
+  padding:9px 14px;
+  display:flex;align-items:center;gap:14px;
+  border-bottom:2px solid #c8a77c;
+  background:linear-gradient(110deg,#e3c6a0,#f3dfbc 72%,#dec29d);
+}
+#m2-app .m2-expedition-panel header span{
+  display:inline-block;
+  color:#7a5530;
+  font:700 10px "DM Sans",sans-serif;
+  letter-spacing:.10em;
+  flex-shrink:0;
+}
+#m2-app .m2-expedition-panel h3{
+  margin:0;
+  font:700 clamp(14px,1.08vw,18px)/1.25 "Libre Baskerville",Georgia,serif;
+  color:#31291f;
+}
+#m2-app .m2-expedition-panel .m2-caption{
+  margin:0 0 8px;
+  font-size:12px;line-height:1.5;color:#6a5135;
+}
+#m2-app .m2-expedition-panel .m2-multi{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+}
+#m2-app .m2-expedition-panel .m2-multi .m2-tile{
+  min-width:0;
+  font-size:clamp(10px,.77vw,12px);
+  min-height:42px;
+  border:2px ridge #bb955f;
+  border-radius:2px;
+  padding:8px 6px;
+  background:linear-gradient(145deg,#fef5df,#e8d0a7);
+  color:#433321;
+  box-shadow:inset 0 0 0 1px #fff9e8,0 2px 3px #37261645;
+  white-space:normal;
+  overflow-wrap:break-word;
+  text-align:center;
+}
+#m2-app .m2-expedition-panel .m2-multi .m2-tile[aria-pressed="true"]{
+  border-color:#365e4e;
+  background:linear-gradient(140deg,#2d5646,#1b4034);
+  color:#fff1d0;
+  box-shadow:inset 0 0 0 1px #91b29b,0 0 0 1px #234536,0 2px 6px #1b2b2259;
+}
+#m2-app .m2-expedition-panel .m2-multi .m2-tile:focus-visible{
+  outline:3px solid #a47431;
+  outline-offset:2px;
+}
+#m2-app .m2-expedition-panel .m2-mini-grid{
+  gap:10px;
+}
+#m2-app .m2-expedition-panel select{
+  width:100%;
+  min-height:45px;
+  max-width:100%;
+  border:2px ridge #b68f5c;
+  border-radius:2px;
+  padding:8px 10px;
+  font:600 clamp(11px,.9vw,14px)/1.35 "DM Sans",sans-serif;
+  color:#433321;
+  background:#fff6e6;
+}
+#m2-app .m2-expedition-panel .m2-field{
+  min-width:0;
+  font-size:12px;
+  color:#4f3b29;
+}
+#m2-app .m2-expedition-panel select:focus-visible{
+  outline:3px solid #426c58;
+  outline-offset:2px;
+}
+#m2-app .m2-expedition-meeting{
+  border-color:#a27f53;
+}
+#m2-app .m2-expedition-congo{
+  border-color:#886a49;
+  background:linear-gradient(135deg,#f4e4c7,#ebd2ae);
+}
+
+/* Accesibilidad: no recortar ni convertir los documentos en imágenes planas. */
+@media(max-width:1190px){
+ #m2-app .m2-expedition-research{
+  grid-template-columns:minmax(0,1fr);
+ }
+ #m2-app .m2-historical-map{
+  position:relative;
+  top:auto;
+  width:min(100%,670px);
+  margin-inline:auto;
+ }
+ #m2-app .m2-expedition-files{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+ }
+ #m2-app .m2-expedition-intro{
+  grid-column:1 / -1;
+ }
+ #m2-app .m2-expedition-panel:last-child{
+  grid-column:1 / -1;
+ }
+}
+@media(max-width:850px){
+ #m2-app .m2-source-grid-museum{
+  grid-template-columns:1fr;
+ }
+ #m2-app .m2-source-file:last-child{
+  grid-column:auto;
+ }
+ #m2-app .m2-expedition-files{
+  grid-template-columns:minmax(0,1fr);
+ }
+ #m2-app .m2-expedition-intro,
+ #m2-app .m2-expedition-panel:last-child{
+  grid-column:auto;
+ }
+}
+@media(max-width:580px){
+ #m2-app.m2-archive-active .m2-work,
+ #m2-app.m2-expedition-active .m2-work{
+  padding:10px;
+  border-width:3px;
+ }
+ #m2-app .m2-archive-intro{
+  display:block;
+  padding:13px;
+ }
+ #m2-app .m2-archive-emblem{
+  float:left;
+  margin:0 11px 8px 0;
+  width:46px;height:46px;font-size:28px;
+ }
+ #m2-app .m2-source-file{
+  padding:0 11px 14px;
+  border-width:3px;
+ }
+ #m2-app .m2-source-file .m2-source-heading{
+  margin:0 -11px 12px;
+  padding:8px;
+ }
+ #m2-app .m2-source-top{
+  grid-template-columns:68px minmax(0,1fr);
+  gap:10px;
+ }
+ #m2-app .m2-source-engraving{
+  height:83px;
+  padding:3px;
+  border-width:4px;
+ }
+ #m2-app .m2-source-titling h3{
+  font-size:15px;
+  margin:0 0 8px;
+ }
+ #m2-app .m2-source-file .m2-choice{
+  font-size:12px;
+  padding:9px;
+ }
+ #m2-app .m2-source-text{
+  padding:10px;
+  font-size:12px;
+ }
+ #m2-app .m2-expedition-panel{
+  padding:0 10px 12px;
+ }
+ #m2-app .m2-expedition-panel header{
+  margin:0 -10px 10px;
+  padding:10px;
+ }
+ #m2-app .m2-expedition-panel .m2-multi{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+ }
+ #m2-app .m2-atlas-museum-title{
+  padding:9px 10px;
+  font-size:11px;
+ }
+ #m2-app .m2-atlas-museum-title small{
+  font-size:8px;
+ }
+ #m2-app .m2-historical-map{
+  border-width:5px;
+ }
+ #m2-app .m2-expedition-panel select{
+  font-size:12px;
+ }
+}
+@media(max-width:350px){
+ #m2-app .m2-source-titling h3{font-size:14px}
+ #m2-app .m2-source-kind{font-size:9px}
+ #m2-app .m2-expedition-panel header span{font-size:9px}
+ #m2-app .m2-expedition-panel .m2-multi{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app .m2-source-file .m2-choice,
+ #m2-app .m2-expedition-panel .m2-multi .m2-tile{transition:none!important}
+}
