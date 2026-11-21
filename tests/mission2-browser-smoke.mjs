@@ -207,10 +207,13 @@ try{
     })));
     assert.ok(galleryMaterials.every(d=>d.paper.includes('gradient')&&!d.paper.includes('pergamino-papel-artesanal.svg')),
       'Los cinco expedientes deben utilizar papel antiguo sin textura SVG que oscurezca el texto');
-    assert.ok(['m2-reference-port-photo.webp','m2-reference-right-steamer.webp'].every((src,i)=>galleryMaterials[i].illustration.includes(src)),
-      'Los primeros expedientes deben conservar fotografías históricas del propio proyecto');
-    assert.ok(galleryMaterials.slice(2).every(d=>!d.illustration.includes('.webp')),
-      'Los otros tres expedientes deben mostrar grabados nítidos, no fotografías ampliadas y borrosas');
+    assert.ok(galleryMaterials.every(d=>d.illustration.includes('data:image/webp;base64,')),
+      'Los cinco expedientes deben mostrar los cinco grabados originales de la referencia');
+    const referenceSheet=page.locator('link[href*="m2-e4-referencia-fotos-20261121.css"]');
+    assert.equal(await referenceSheet.count(),1,'Debe estar enlazada la composición de referencia del ejercicio 4');
+    const crops=await page.locator('.m2-archive-dossier .m2-source-engraving').evaluateAll(items=>items.map(el=>getComputedStyle(el).backgroundPosition.split(' ')[0]));
+    assert.deepEqual(crops,['0%','25%','50%','75%','100%'],
+      'Las cinco fichas deben mostrar grabados distintos, en orden y sin duplicados');
     const noteColor=await page.locator('.m2-archive-warning').evaluate(el=>{
       const s=getComputedStyle(el);return {background:s.backgroundImage,text:s.color}
     });
