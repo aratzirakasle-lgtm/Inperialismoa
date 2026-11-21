@@ -52,6 +52,43 @@ async function scenario(name,callback){
  catch(error){console.error('✗ '+name);throw error}
 }
 try{
+ await scenario('Vitrinas: comparación real antes/después y luz uniforme sin pistas',async()=>{
+  const {page,context,errors}=await open('teacher',{width:1672,height:941});
+  try{
+   const sheet=page.locator('link[href*="m2-vitrinas-iluminacion.css"]');
+   assert.equal(await sheet.count(),1,'La iluminación nueva debe estar cargada');
+   const count=await page.locator('.m2-museum-case').count();
+   assert.equal(count,5);
+   await page.locator('[data-card="new_markets"]').click();
+   assert.equal(await page.locator('[data-card="new_markets"]').getAttribute('aria-pressed'),'true');
+   await page.evaluate(()=>{document.activeElement?.blur();window.scrollTo(0,0)});
+   await page.mouse.move(4,4);
+   // La selección activa por igual todas las vitrinas: sin insinuar soluciones.
+   const lights=await page.locator('.m2-museum-case').evaluateAll(cases=>cases.map(el=>getComputedStyle(el).boxShadow));
+   assert.equal(new Set(lights).size,1,'La selección no puede iluminar una respuesta por encima de otra');
+
+   // Antes/después: misma pantalla, misma cartela seleccionada y mismo hover.
+   await sheet.evaluate(el=>{el.disabled=true});
+   await page.locator('[data-zone="political"]').hover();
+   const before=await page.locator('.m2-museum-case').evaluateAll(cases=>cases.map(el=>{
+    const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};
+   }));
+   const beforeShadow=await page.locator('[data-zone="political"]').evaluate(el=>getComputedStyle(el).boxShadow);
+   await mkdir('test-output',{recursive:true});
+   await page.screenshot({path:'test-output/m2-vitrinas-antes-ordenador.png',fullPage:true,animations:'disabled'});
+   await sheet.evaluate(el=>{el.disabled=false});
+   await page.locator('[data-zone="political"]').hover();
+   const after=await page.locator('.m2-museum-case').evaluateAll(cases=>cases.map(el=>{
+    const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};
+   }));
+   const afterShadow=await page.locator('[data-zone="political"]').evaluate(el=>getComputedStyle(el).boxShadow);
+   assert.notEqual(beforeShadow,afterShadow,'El nuevo foco debe ser visualmente distinto');
+   before.forEach((r,i)=>['x','y','w','h'].forEach(k=>assert.ok(Math.abs(r[k]-after[i][k])<.5,'La iluminación no debe desplazar vitrinas')));
+   await page.screenshot({path:'test-output/m2-vitrinas-despues-ordenador.png',fullPage:true,animations:'disabled'});
+   assert.equal(await page.locator('.m2-archive-card').count(),11);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
  await scenario('Profesor: cinco pantallas y final navegables, sin escrituras',async()=>{
   const {page,context,errors}=await open('teacher');
   try{
