@@ -383,3 +383,22 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app.m2-capital-active .m2-e2-piece,#m2-app.m2-capital-active .m2-e2-option{transition:none!important}
 }
+
+/* Opciones ilustradas: pequeñas piezas vectoriales del museo, no emojis. */
+#m2-app.m2-capital-active .m2-e2-option-icon{
+ background-image:url('./m2-e2-opciones-ilustradas.svg');
+ background-repeat:no-repeat;
+ background-size:600% 100%;
+ width:clamp(24px,2.65vw,42px);
+ height:42px;align-self:center;filter:sepia(.14) contrast(1.05);
+}
+#m2-app.m2-capital-active .m2-e2-option-icon:before{content:none!important}
+#m2-app.m2-capital-active .m2-e2-icon-coins{background-position:0% 50%}
+#m2-app.m2-capital-active .m2-e2-icon-bag{background-position:20% 50%}
+#m2-app.m2-capital-active .m2-e2-icon-gift{background-position:40% 50%}
+#m2-app.m2-capital-active .m2-e2-icon-train{background-position:60% 50%}
+#m2-app.m2-capital-active .m2-e2-icon-palace{background-position:80% 50%}
+#m2-app.m2-capital-active .m2-e2-icon-school{background-position:100% 50%}
+@media(max-width:620px){
+ #m2-app.m2-capital-active .m2-e2-option-icon{display:none}
+}
