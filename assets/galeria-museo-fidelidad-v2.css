@@ -390,3 +390,38 @@
  #app-shell.gallery-active .gal-case-finial,
  #app-shell.gallery-active .gal-vitrine-velvet{transition:none!important;animation:none!important}
 }
+
+/* Ajustes realizados a partir de la primera captura real del museo. */
+/* La madera queda EN EL MARCO, no sobre el terciopelo central. */
+#app-shell.gallery-active .gal-tray::before{
+  background:transparent!important;
+  box-shadow:0 0 0 3px #2c190f,0 0 0 8px #6b3a20,
+    0 11px 22px #000d,inset 0 0 0 3px #f2c780!important;
+}
+#app-shell.gallery-active .gal-tray{
+  background:
+    radial-gradient(ellipse 65% 46% at 50% 0,#bf516374,transparent 90%),
+    repeating-linear-gradient(1.4deg,#fce3b009 0 1px,transparent 2px 7px),
+    linear-gradient(127deg,#4d071c 0%,#791329 35%,#641020 72%,#380511 100%)!important;
+}
+/* Las cuatro vitrinas tocan el mismo zócalo visual, como en la referencia.
+   Las columnas del grid y las zonas crecen sin altura máxima: Europa nunca se recorta. */
+@media(min-width:1101px){
+ #app-shell.gallery-active .gal-display{align-items:stretch}
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu){
+   height:auto;min-height:100%;
+ }
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-vitrine-contents{
+   flex:1;display:flex;flex-direction:column;
+ }
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-zone{
+   flex:1;min-height:112px;
+ }
+ #app-shell.gallery-active .gal-vitrine:not(.gal-vitrine-eu) .gal-zone:not(:has(.gal-tile-placed))::after{
+   content:'❧';
+   align-self:center;margin:auto 0 1px;
+   color:#aa7c45;opacity:.32;
+   font:italic 31px/1 Georgia,serif;
+   pointer-events:none;
+ }
+}
