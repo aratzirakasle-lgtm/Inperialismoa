@@ -121,8 +121,7 @@ async function check(){
   if(!window.m1FifthProgress){announce('Saioa egiaztatzen… Berritu orria behar izanez gero.');return}
   const wrong=Object.keys(answer).filter(k=>slots.get(k)!==answer[k]);
   if(wrong.length){
-    for(const k of wrong)$('[data-slot="'+k+'"]').classList.add('error');
-    announce('Aztertu berriro! '+wrong.length+' hutsune zuzendu behar dituzu.');
+    announce('Ez da zuzena. Berrikusi erantzunak eta saiatu berriro.');
     return;
   }
   window.m1FifthSaving=true;$('#verify').disabled=true;
