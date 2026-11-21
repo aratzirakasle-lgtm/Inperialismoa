@@ -23,6 +23,15 @@ test('Un error de corrección nunca activa una pista histórica',()=>{
   assert.doesNotMatch(fourth,/Berrikusi pistak eta saiatu berriro/);
   assert.doesNotMatch(gallery,/if\(action==='check'\).*state\.help=true/);
   assert.doesNotMatch(bi,/hintLevel\s*\+\+/);
+  assert.doesNotMatch(bi,/wrong\.length\s*\+\s*["'] kontzeptu/);
+  const third=read('inperialismoaren-definizioa.html');
+  const fifth=read('esaldiak-osatu.html');
+  assert.doesNotMatch(third,/wrong\.length\s*\+\s*["'] lotura/);
+  assert.doesNotMatch(fifth,/wrong\.length\s*\+\s*["'] hutsune/);
+  assert.doesNotMatch(fifth,/for\(const k of wrong\).*classList\.add\(['"]error['"]\)/);
+  for(const text of [gallery,bi,third,fifth]){
+    assert.match(text,/Ez da zuzena\./);
+  }
 });
 
 test('Se conservan las fuentes primarias de los expedientes como parte del juego',()=>{
