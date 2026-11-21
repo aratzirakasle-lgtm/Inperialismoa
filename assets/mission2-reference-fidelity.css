@@ -817,3 +817,21 @@
     font-size:.53cqw;
   }
 }
+
+/* Último contraste visual: el recorte de viajeros debe terminar justo
+   antes del título 2, no taparlo en pantallas de 16:9. */
+@media(min-width:1101px){
+ .m2-atlas-main:before{
+   left:12.95%;
+   top:6.52cqw;
+   width:13.3%;
+   height:8.7cqw;
+   aspect-ratio:auto;
+   background-size:100% 100%;
+   background-position:center bottom;
+ }
+ .m2-atlas-check:disabled{
+   /* Mantener el esmeralda de la referencia sin habilitar el botón. */
+   opacity:.88;
+ }
+}
