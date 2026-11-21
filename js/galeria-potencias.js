@@ -52,12 +52,13 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    }catch(error){console.warn('No se pudo recuperar el borrador local',error)}
  }else if(draftKey)saveDraft();
  const count=()=>state.locked.size;
+ const refocus=selector=>root.querySelector(selector)?.focus({preventScroll:true});
  const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy;
- const place=(id,zone)=>{if(!canMove(id)||!ZONES.has(zone))return;state.placements[id]=zone;state.selected=null;state.wrong.delete(id);state.feedback="";saveDraft();draw()};
- const reset=()=>{if(state.busy)return;for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];state.selected=null;state.wrong.clear();state.feedback="";saveDraft();draw()};
+ const place=(id,zone)=>{if(!canMove(id)||!ZONES.has(zone))return;state.placements[id]=zone;state.selected=null;state.wrong.delete(id);state.feedback="";saveDraft();draw();refocus('[data-gallery-zone="'+zone+'"]')};
+ const reset=()=>{if(state.busy)return;for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];state.selected=null;state.wrong.clear();state.feedback="";saveDraft();draw();refocus('[data-gallery-action="reset"]')};
  const tile=(item,placed=false)=>{
    const locked=state.locked.has(item.id),selected=state.selected===item.id;
-   return '<button type="button" class="gal-tile '+(placed?'gal-tile-placed ':'')+(locked?'gal-locked ':'')+(selected?'gal-selected ':'')+(state.wrong.has(item.id)?'gal-wrong':'')+'" data-gallery-card="'+item.id+'" draggable="'+(!locked&&!state.busy)+'" '+(locked?'disabled':'')+' aria-pressed="'+selected+'" title="'+(locked?'Zuzena':'Sakatu edo arrastatu')+'"><span class="gal-tile-icon" aria-hidden="true">'+(galleryIllustration(item.id)||esc(item.icon))+'</span><span class="gal-tile-name">'+esc(item.label)+'</span>'+(locked?'<span class="gal-tile-check" aria-label="Zuzena">✓</span>':placed?'<span class="gal-tile-move">↗</span>':'')+'</button>';
+   return '<button type="button" class="gal-tile '+(placed?'gal-tile-placed ':'')+(locked?'gal-locked ':'')+(selected?'gal-selected ':'')+'" data-gallery-card="'+item.id+'" draggable="'+(!locked&&!state.busy)+'" '+(locked?'disabled':'')+' aria-pressed="'+selected+'" title="'+(locked?'Zuzena':'Sakatu edo arrastatu')+'"><span class="gal-tile-icon" aria-hidden="true">'+(galleryIllustration(item.id)||esc(item.icon))+'</span><span class="gal-tile-name">'+esc(item.label)+'</span>'+(locked?'<span class="gal-tile-check" aria-label="Zuzena">✓</span>':placed?'<span class="gal-tile-move">↗</span>':'')+'</button>';
  };
  const target=(zone,label,cap)=>{
   const items=ITEMS.filter(x=>state.placements[x.id]===zone);
@@ -74,17 +75,19 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    return '<polygon points="'+points.join(" ")+'"/>';
  };
  const flagSvg=(key)=>{
-   const names={eu:"Europar Batasuneko bandera (gaur egungo ikurra)",ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
+   const names={ru:"Errusiako bandera",us:"Estatu Batuetako bandera",jp:"Japoniako bandera"};
    const clipId="gal-flag-cloth-"+key;
-   const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
+   if(key==="eu")return '<svg class="gal-europe-medallion" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 46" role="img" aria-label="XIX. mendeko iparrorratza, Europaren ikurra" focusable="false">'+
+    '<ellipse cx="31" cy="23" rx="23" ry="20" fill="#e6c98b" stroke="#94652f" stroke-width="2.5"/>'+
+    '<ellipse cx="31" cy="23" rx="19.5" ry="16.5" fill="#f8eac8" stroke="#a77a39" stroke-width="1"/>'+
+    '<path d="M31 8v30M14 23h34M20 12l22 22M42 12L20 34" stroke="#9a753f" stroke-width=".9"/>'+
+    '<path d="M31 10l3.5 13L31 36l-3.5-13z" fill="#9b5335" stroke="#5d422b" stroke-width="1"/>'+
+    '<path d="M18 23l13-3.5L44 23l-13 3.5z" fill="#b18b4e" stroke="#6d532e" stroke-width="1"/>'+
+    '<circle cx="31" cy="23" r="2.2" fill="#fff3cf" stroke="#80542a"/>'+
+    '<circle cx="31" cy="23" r="22" fill="none" stroke="#fff4cd" stroke-width=".9"/>'+
+    '<text x="31" y="42" font-family="Georgia,serif" font-size="6.5" fill="#70502d" text-anchor="middle">XIX</text></svg>';
+      const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
    let graphic="";
-   if(key==="eu"){
-     graphic='<rect x="5" y="4" width="52" height="32" fill="#003399"/>';
-     graphic+='<g fill="#ffcc00">'+Array.from({length:12},(_,i)=>{
-       const angle=-Math.PI/2+i*Math.PI/6;
-       return flagStars(31+10.5*Math.cos(angle),19.6+10.5*Math.sin(angle),2.45,1.05);
-     }).join("")+'</g>';
-   }
    if(key==="ru"){
      graphic='<rect x="5" y="4" width="52" height="11" fill="#fff"/><rect x="5" y="15" width="52" height="10" fill="#1345a7"/><rect x="5" y="25" width="52" height="11" fill="#c73542"/>';
    }
@@ -122,10 +125,10 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      state.locked=new Set(result.locked.filter(id=>LOOKUP.has(id)));
      for(const [id,zone] of Object.entries(result.locked_positions||{}))if(state.locked.has(id)&&ZONES.has(zone))state.placements[id]=zone;
      const wrong=Array.isArray(result.incorrect)?result.incorrect:[];
-     state.wrong=new Set(wrong);
+     state.wrong=new Set(); // Sin marcar tarjetas incorrectas tras comprobar
      for(const id of wrong)if(!state.locked.has(id))delete state.placements[id];
      state.completed=!!result.completed;state.attempts=Number(result.attempt_count||0);
-     state.feedback=state.completed?'Bikain! 20/20. Hurrengo atala prest dago.':state.locked.size+' kontzeptu zuzen. '+wrong.length+' birkokatu behar dira. Saiakerak: '+state.attempts+'.';
+     state.feedback=state.completed?'Bikain! 20/20. Hurrengo atala prest dago.':'Ez da zuzena. Berrikusi sailkapena eta saiatu berriro.';
      saveDraft();
    }catch(err){state.feedback='Ezin izan dira erantzunak bidali. Egiaztatu konexioa eta saiatu berriro.'}
    finally{state.busy=false;draw()}
@@ -134,11 +137,21 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const action=e.target.closest('[data-gallery-action]')?.dataset.galleryAction;
    if(action){if(action==='preview-start'&&navigationPreview){state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-complete'&&navigationPreview){state.completed=true;state.feedback='Irakaslearen simulazioa: amaierako egoera.';draw();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
    const card=e.target.closest('[data-gallery-card]');
-   if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw()}return}
+   if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw();refocus('[data-gallery-card="'+id+'"]')}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected){place(state.selected,zone.dataset.galleryZone);return;}
-   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){delete state.placements[state.selected];state.selected=null;saveDraft();draw();}
+   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}
  },{signal:controller.signal});
- root.addEventListener('keydown',e=>{const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();}},{signal:controller.signal});
+ root.addEventListener('keydown',e=>{
+   if(e.key==='Escape'&&state.selected){
+     const previous=state.selected;state.selected=null;state.feedback='';draw();
+     refocus('[data-gallery-card="'+previous+'"]');return;
+   }
+   const moving=e.target.closest('[data-gallery-card]');
+   if(moving&&(e.key==='Delete'||e.key==='Backspace')&&canMove(moving.dataset.galleryCard)&&state.placements[moving.dataset.galleryCard]){
+     e.preventDefault();delete state.placements[moving.dataset.galleryCard];state.selected=null;saveDraft();draw();
+     refocus('[data-gallery-tray]');return;
+   }
+   const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}},{signal:controller.signal});
  root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
  root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
  root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
