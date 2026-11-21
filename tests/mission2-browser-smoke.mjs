@@ -190,7 +190,32 @@ try{
     assert.equal(await page.locator('.m2-source-file').count(),5);
     assert.equal(await page.locator('.m2-source-engraving svg').count(),5);
     assert.equal(await page.locator('input[data-archive]').count(),15);
-    assert.equal(await page.locator('.m2-source-file .m2-source-ref').count(),5);
+    assert.equal(await page.locator('.m2-source-file .m2-archive-image-caption').count(),5);
+    assert.equal(await page.locator('.m2-archive-dossier').count(),5);
+    assert.equal(await page.locator('.m2-archive-desk-front').count(),1);
+    assert.equal(await page.locator('.m2-archive-warning').count(),1);
+    assert.equal(await page.locator('[data-archive-progress]').innerText(),'0 / 5');
+    const archiveSheet=page.locator('link[href*="m2-e4-archivo-fidelidad-concepto1.css"]');
+    assert.equal(await archiveSheet.count(),1,'El diseño elegido debe estar enlazado');
+    const backdrop=await page.locator('.m2-archive-room-props').evaluate(el=>({
+      background:getComputedStyle(el).backgroundImage,pointer:getComputedStyle(el).pointerEvents
+    }));
+    assert.ok(backdrop.background.includes('m2-e4-mesa-archivo-museo.svg'),'Deben existir mesa, lámpara, globo y objetos del archivo');
+    assert.equal(backdrop.pointer,'none','La escenografía no debe impedir responder');
+    const propResource=await page.evaluate(async()=>{
+      const r=await fetch('./assets/m2-e4-mesa-archivo-museo.svg');
+      return r.ok&&(await r.text()).includes('<svg');
+    });
+    assert.equal(propResource,true,'La escenografía museística debe descargarse correctamente');
+    if(label==='escritorio'){
+      const cards=await page.locator('.m2-archive-dossier').evaluateAll(els=>els.map(el=>{
+        const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width};
+      }));
+      assert.ok(Math.abs(cards[0].y-cards[1].y)<8,'Dos expedientes arriba');
+      assert.ok(cards[2].y>cards[0].y+80&&Math.abs(cards[2].y-cards[3].y)<8&&Math.abs(cards[3].y-cards[4].y)<8,
+       'Tres expedientes abajo');
+      assert.ok(cards[0].width>cards[2].width,'Las dos fichas superiores deben ser más anchas');
+    }
     const documentLayout=await page.locator('.m2-source-file').evaluateAll(items=>items.map(el=>{
      const b=el.getBoundingClientRect();
      return {width:b.width,inside:b.left>=-1&&b.right<=innerWidth+1};
@@ -201,6 +226,12 @@ try{
     await page.screenshot({path:'test-output/m2-e4-boterearen-artxiboa-'+label+'.png',fullPage:true,animations:'disabled'});
     // Una selección no debe aportar pistas ni navegar fuera del ejercicio.
     await page.locator('input[data-archive="press"][value="a"]').check();
+    assert.equal(await page.locator('.m2-archive-dossier[data-source="press"]').getAttribute('data-answered'),'true');
+    assert.equal(await page.locator('[data-archive-progress]').innerText(),'1 / 5');
+    assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
+    await page.locator('[data-reset]').click();
+    assert.equal(await page.locator('[data-archive-progress]').innerText(),'0 / 5');
+    assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),false);
     assert.equal(await page.locator('.m2-source-file').count(),5);
     assert.equal(await page.locator('[data-open="4"]').getAttribute('aria-current'),'step');
 
