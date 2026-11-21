@@ -143,3 +143,12 @@ En el tercer ejercicio, los cuatro retos se mantienen como HTML real y conservan
 - Se ha añadido una prueba Chromium que coloca las **ocho cartelas en una sola maleta** en escritorio y móvil para impedir solapamientos o recortes.
 
 No se han cambiado las respuestas ni Supabase; la rama sigue sin publicar. No se afirma identidad píxel a píxel: quedan por refinar las ilustraciones del puerto y del vapor para aproximarlas más a la riqueza pictórica de la referencia.
+
+
+### 21/11/2026 · Cartelas de la maleta con fondo transparente (tercer ejercicio)
+
+El problema anterior se debía a que las ocho miniaturas no eran imágenes propias: el CSS recortaba trozos de una pintura de 512×282 píxeles, generando bordes rectangulares, pixelación y piezas de apariencia poco integrada. Ahora cada cartela utiliza su propio recurso en `assets/m2-atlas-art-*`: la escena de crecimiento urbano usa una imagen WebP de **720×540** con canal alfa, y las otras siete usan grabados **SVG escalables con fondo transparente**, derivados de elementos históricos ya existentes en el proyecto. No hay medallones de fondo ni recortes de un mosaico.
+
+Tanto los botones de la mesa como las cartelas colocadas dentro de las maletas renderizan un elemento `img` auténtico: se conserva la misma ilustración al arrastrar, colocar y recolocar. Los rótulos siguen siendo texto HTML y se mantienen todas las claves de corrección, el orden de los conceptos, la selección dorada y el criterio pedagógico de **no dar pistas por error**.
+
+La estética añade sombras naturales a las figuras, reflejos de pergamino y molduras más discretas. La rejilla sigue expandiéndose cuando una maleta recibe todas las cartelas. La rama es de desarrollo, sin publicación ni modificaciones de producción.
