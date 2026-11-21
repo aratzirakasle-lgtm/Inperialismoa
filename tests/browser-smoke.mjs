@@ -107,6 +107,7 @@ try{
      await waitVisible(page,'.gal-hall');
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
+     await page.screenshot({path:'test-output/m1-museo-fidelidad-v2-alumno-escritorio.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
      assert.equal(await page.locator('.m1-nav').count(),0);
@@ -162,6 +163,14 @@ try{
      assert.equal(await page.locator('.gal-vitrine').count(),4);
      assert.equal(await page.locator('.gal-museum-set').count(),1,'La escenografía debe estar montada');
      assert.equal(await page.locator('.gal-side-art').count(),2,'El museo debe incluir sus objetos laterales');
+     assert.equal(await page.locator('.gal-case-finial').count(),4,'Las cuatro vitrinas deben tener remates de latón');
+     assert.equal(await page.locator('.gal-case-column').count(),8,'Cada vitrina debe conservar sus dos columnas');
+     assert.equal(await page.locator('.gal-vitrine-velvet').count(),4,'Cada vitrina debe tener base de terciopelo');
+     assert.equal(await page.locator('.gal-tray-corner').count(),4,'La mesa debe llevar cuatro filigranas');
+     const stylesV2=page.locator('link[href*="galeria-museo-fidelidad-v2.css"]');
+     assert.equal(await stylesV2.count(),1,'Debe estar enlazado el CSS de fidelidad');
+     assert.equal(await page.locator('.gal-case-column').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none',
+       'Los adornos no deben bloquear las zonas de respuesta');
      const sideArt=await page.locator('.gal-side-art').evaluateAll(nodes=>nodes.map(el=>getComputedStyle(el).backgroundImage));
      assert.ok(sideArt[0].includes('m2-museo-izquierdo.svg')&&sideArt[1].includes('m2-museo-derecho.svg'),
        'Deben reutilizarse los dos fondos históricos laterales del museo');
