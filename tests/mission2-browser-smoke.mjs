@@ -319,7 +319,8 @@ try{
      'm2-reference-harbor.webp','m2-reference-port-photo.webp',
      'm2-reference-old-luggage.webp','m2-reference-right-steamer.webp',
      'm2-reference-red-suitcase.webp','m2-reference-blue-suitcase.webp',
-     'm2-reference-open-leather.webp'
+     'm2-reference-open-leather.webp',
+     'm2-atlas-original-luggage-clean.svg'
     ];
     return Promise.all(files.map(file=>new Promise(resolve=>{
      const im=new Image();
@@ -328,11 +329,12 @@ try{
      im.src='./assets/'+file;
     })));
    });
-   assert.ok(artAssets.every(item=>item.loaded),'Las siete piezas de la ilustración aprobada deben cargar: '+JSON.stringify(artAssets));
+   assert.ok(artAssets.every(item=>item.loaded),'Las piezas de la ilustración aprobada deben cargar: '+JSON.stringify(artAssets));
    const cssArt=await page.locator('.m2-atlas-screen').evaluate(root=>{
     const get=(selector,pseudo)=>getComputedStyle(root.querySelector(selector),pseudo).backgroundImage;
     return {
      harbour:get('.m2-atlas-route-activity','::before'),
+     luggage:get('.m2-atlas-luggage-activity','::before'),
      photograph:get('.m2-atlas-facts-activity','::after'),
      tray:get('.m2-atlas-luggage-available'),
      red:get('.m2-atlas-suitcase-cause'),
@@ -341,6 +343,7 @@ try{
    });
    for(const [part,file] of Object.entries({
     harbour:'m2-reference-harbor.webp',
+    luggage:'m2-atlas-original-luggage-clean.svg',
     photograph:'m2-reference-port-photo.webp',
     tray:'m2-reference-open-leather.webp',
     red:'m2-reference-red-suitcase.webp',
