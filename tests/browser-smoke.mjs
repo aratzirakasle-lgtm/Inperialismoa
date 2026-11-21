@@ -170,6 +170,9 @@ try{
      assert.equal(await page.locator('.gal-case-column').count(),8,'Cada vitrina debe conservar sus dos columnas');
      assert.equal(await page.locator('.gal-vitrine-velvet').count(),4,'Cada vitrina debe tener base de terciopelo');
      assert.equal(await page.locator('.gal-tray-corner').count(),4,'La mesa debe llevar cuatro filigranas');
+     const glassBackdrop=await page.locator('.gal-vitrine-ru .gal-zone').evaluate(el=>getComputedStyle(el).backgroundImage);
+     assert.ok(glassBackdrop.includes('data:image')||glassBackdrop.includes('url('),
+       'El cristal de la vitrina debe mostrar el grabado tenue original');
      const stylesV2=page.locator('link[href*="galeria-museo-fidelidad-v2.css"]');
      assert.equal(await stylesV2.count(),1,'Debe estar enlazado el CSS de fidelidad');
      assert.equal(await page.locator('.gal-case-column').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none',
