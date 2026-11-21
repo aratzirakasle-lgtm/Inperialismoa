@@ -419,39 +419,9 @@ function controls(){
  '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+(active===1?'✓ EGIAZTATU':'Erantzunak egiaztatu →')+'</button>')+
  '</div></div>';
 }
-/* Pasaporte: muestra exclusivamente ejercicios completados por el servidor.
- * En vista docente se muestran cinco sellos de muestra sin marcar. */
-function renderPassport(){
- const topbar=document.querySelector('.m2-topbar');
- if(!topbar)return;
- let book=topbar.querySelector('.m2-passport');
- if(!book){
-  book=document.createElement('details');
-  book.className='m2-passport';
-  book.innerHTML='<summary aria-label="Espedizioaren pasaportea ireki edo itxi"><span class="m2-passport-icon" aria-hidden="true">✦</span><span class="m2-passport-summary-title">PASAPORTEA</span><strong class="m2-passport-count"></strong></summary>'+
-   '<div class="m2-passport-sheet"><h2 class="m2-passport-heading">Espedizioaren pasaportea</h2><p class="m2-passport-subtitle">Inperialismoaren faktoreak · 5 areto</p><ol class="m2-passport-stamps"></ol><p class="m2-passport-foot"></p></div>';
-  topbar.insertBefore(book,topbar.querySelector('.m2-top-number'));
- }
- const number=teacher?'AURREBISTA':String(completions.size)+' / 5';
- const count=book.querySelector('.m2-passport-count');
- if(count.textContent!==number)count.textContent=number;
- const stampList=book.querySelector('.m2-passport-stamps');
- const markup=activities.map(item=>{
-  const done=!teacher&&completions.has(item.id);
-  const current=item.id===active&&!teacherEnding;
-  const status=teacher?'Aurrebista · ez da gordetzen':done?'Zigilua lortuta':current?'Uneko aretoa':'Zain';
-  return '<li class="'+(done?'is-stamped ':'')+(current?'is-current':'')+'">'+
-   '<span class="m2-passport-seal" aria-hidden="true">'+(done?'✓':String(item.id).padStart(2,'0'))+'</span>'+
-   '<span><span class="m2-passport-label">'+esc(item.title)+'</span><span class="m2-passport-state">'+status+'</span></span></li>';
- }).join('');
- if(stampList.innerHTML!==markup)stampList.innerHTML=markup;
- const foot=book.querySelector('.m2-passport-foot');
- foot.textContent=teacher?'Irakaslearen aurrebista. Bisitak ez du ikasleen aurrerapena aldatzen.':
-  'Zigiluak erantzunak zerbitzarian zuzen egiaztatu eta gorde ondoren soilik agertzen dira.';
-}
 function animateRoomArrival(room){
- if(app.dataset.passportRoom===room)return;
- app.dataset.passportRoom=room;
+ if(app.dataset.museumRoom===room)return;
+ app.dataset.museumRoom=room;
  if(typeof app.animate!=='function'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  app.animate([{opacity:.82,filter:'brightness(1.06)'},{opacity:1,filter:'brightness(1)'}],
   {duration:320,easing:'ease-out'});
@@ -465,7 +435,6 @@ function renderEnd(){
  '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'#mission3')+'">Museora itzuli →</a></section>';
 }
 function render(){
- renderPassport();
  animateRoomArrival(teacherEnding?'amaiera':String(active));
  const firstRoom=active===1&&!teacherEnding;
  const atlasRoom=active===3&&!teacherEnding;
