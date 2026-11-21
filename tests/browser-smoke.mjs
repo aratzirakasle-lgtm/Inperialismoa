@@ -127,7 +127,8 @@ try{
      await waitVisible(page,'.gal-hall');
      const sheet=page.locator('link[href*="galeria-mision1-pulido-20261121.css"]');
      assert.equal(await sheet.count(),1,'El pulido gráfico debe estar enlazado');
-     assert.equal(await page.locator('.gal-europe-medallion').count(),1,'El símbolo de Europa no debe ser una bandera contemporánea');
+     assert.equal(await page.locator('.gal-vitrine-eu .gal-flag-illustration').count(),1,'Debe conservarse la bandera europea original');
+     assert.match(await page.locator('.gal-vitrine-eu .gal-flag-illustration').getAttribute('aria-label'),/Europar Batasuneko bandera/);
      for(const [id,zone] of [['eu_auth_head','eu_auth'],['eu_liberal_head','eu_liberal'],['ru_tsar','ru'],['us_west','us'],['jp_meiji','jp']])
        await setCard(page,id,zone);
      assert.equal(await page.locator('.gal-tile').count(),20);
@@ -140,30 +141,9 @@ try{
      await page.evaluate(()=>{document.activeElement?.blur();scrollTo(0,0)});
      await page.mouse.move(5,5);
      await mkdir('test-output',{recursive:true});
-     // Reconstruir en la captura "antes" el símbolo europeo original,
-     // no fotografiar el nuevo medallón sin sus propios estilos.
-     const medallion=await page.locator('.gal-europe-medallion').evaluate(el=>el.outerHTML);
+     // Misma bandera europea y mismas cinco colocaciones en ambos estados.
      await sheet.evaluate(el=>el.disabled=true);
-     await page.evaluate(()=>{
-       const cloth="M5 5 C14 2 22 7 31 4 C39 2 47 3 56 5 L56 35 C47 33 39 31 31 35 C21 38 13 32 5 35 Z";
-       const star=(cx,cy)=>'<polygon points="'+Array.from({length:10},(_,i)=>{
-         const a=-Math.PI/2+i*Math.PI/5,r=i%2?1.05:2.45;
-         return (cx+Math.cos(a)*r).toFixed(2)+','+(cy+Math.sin(a)*r).toFixed(2);
-       }).join(' ')+'"/>';
-       const stars=Array.from({length:12},(_,i)=>{
-         const a=-Math.PI/2+i*Math.PI/6;
-         return star(31+10.5*Math.cos(a),19.6+10.5*Math.sin(a));
-       }).join('');
-       document.querySelector('.gal-europe-medallion').outerHTML=
-         '<svg class="gal-flag-illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 42" role="img" aria-label="Antiguo símbolo europeo" focusable="false">'+
-         '<defs><clipPath id="gal-flag-cloth-eu"><path d="'+cloth+'"/></clipPath></defs>'+
-         '<g clip-path="url(#gal-flag-cloth-eu)"><rect x="5" y="4" width="52" height="32" fill="#003399"/>'+
-         '<g fill="#ffcc00">'+stars+'</g></g></svg>';
-     });
      await page.screenshot({path:'test-output/m1-galeria-antes-ordenador.png',fullPage:true,animations:'disabled'});
-     await page.evaluate(original=>{
-       document.querySelector('.gal-flag-illustration').outerHTML=original;
-     },medallion);
      await sheet.evaluate(el=>el.disabled=false);
      await page.screenshot({path:'test-output/m1-galeria-despues-ordenador.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile.gal-selected').count(),1);
@@ -174,12 +154,46 @@ try{
      assert.equal(await page.locator('.gal-tile.gal-selected').count(),0,
        'Escape debe cancelar la selección sin mover ninguna cartela');
 
+     // Un botón dentro de una vitrina no debe interpretarse como el destino
+     // al pulsar Enter: primero se selecciona, luego se coloca.
      await page.locator('[data-gallery-zone="eu_auth"] [data-gallery-card="eu_auth_head"]').focus();
+     await page.keyboard.press('Enter');
+     assert.equal(await page.locator('[data-gallery-card="eu_auth_head"]').getAttribute('aria-pressed'),'true',
+       'Enter en una tarjeta colocada debe seleccionarla');
+     assert.equal(await page.locator('[data-gallery-zone="eu_auth"] [data-gallery-card="eu_auth_head"]').count(),1,
+       'No debe moverse al seleccionarla');
+     await page.locator('[data-gallery-zone="eu_liberal"]').focus();
+     await page.keyboard.press('Enter');
+     assert.equal(await page.locator('[data-gallery-zone="eu_liberal"] [data-gallery-card="eu_auth_head"]').count(),1,
+       'Enter en otro destino debe recolocar la tarjeta');
+
+     await page.locator('[data-gallery-zone="eu_liberal"] [data-gallery-card="eu_auth_head"]').focus();
      await page.keyboard.press('Delete');
      assert.equal(await page.locator('.gal-tray [data-gallery-card="eu_auth_head"]').count(),1,
        'Suprimir debe devolver una cartela no confirmada a la mesa');
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
        'La vista docente no puede registrar respuestas');
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Galería móvil: bandera original y cuatro vitrinas accesibles sin desbordes',async()=>{
+   const {page,context,errors}=await open('student','index.html#mission1gallery',{width:390,height:844});
+   try{
+     await waitVisible(page,'.gal-hall');
+     assert.equal(await page.locator('.gal-vitrine').count(),4);
+     assert.equal(await page.locator('.gal-vitrine-eu .gal-flag-illustration').count(),1);
+     assert.equal(await page.locator('.gal-tile').count(),20);
+     const metrics=await page.evaluate(()=>{
+       const cabinets=[...document.querySelectorAll('.gal-vitrine')].map(el=>{
+         const r=el.getBoundingClientRect();
+         return {left:r.left,right:r.right,width:r.width};
+       });
+       return {viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,cabinets};
+     });
+     assert.ok(metrics.scrollWidth<=metrics.viewport+2,JSON.stringify(metrics));
+     assert.ok(metrics.cabinets.every(c=>c.left>=-2&&c.right<=metrics.viewport+2&&c.width>270),JSON.stringify(metrics));
+     await setCard(page,'ru_tsar','ru');
+     assert.equal(await page.locator('[data-gallery-zone="ru"] [data-gallery-card="ru_tsar"]').count(),1);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
