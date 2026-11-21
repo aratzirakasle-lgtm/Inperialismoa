@@ -7,7 +7,8 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const files=[
  'index.html','bi-sistema.html','inperialismoaren-definizioa.html',
- 'inperioen-aztarnak.html','esaldiak-osatu.html','preview-bi-sistema.html'
+ 'inperioen-aztarnak.html','esaldiak-osatu.html',
+ 'inperialismoaren-faktoreak.html','preview-bi-sistema.html'
 ];
 const read=file=>readFileSync(resolve(root,file),'utf8');
 const local=(owner,ref)=>{
@@ -23,7 +24,8 @@ test('Se conservan todas las pantallas publicadas y cada juego conserva su eleme
   'bi-sistema.html':'id="bi-stage"',
   'inperialismoaren-definizioa.html':'id="scene"',
   'inperioen-aztarnak.html':'class="history-file',
-  'esaldiak-osatu.html':'data-slot="1"'
+  'esaldiak-osatu.html':'data-slot="1"',
+  'inperialismoaren-faktoreak.html':'id="m2-app"'
  };
  for(const [file,marker] of Object.entries(expected)){
   assert.ok(existsSync(resolve(root,file)),file);
@@ -46,7 +48,8 @@ test('Todos los scripts, estilos y enlaces HTML locales apuntan a archivos reale
 test('Los imports JavaScript y los imports de los módulos incrustados son válidos',()=>{
  const sources=['js/app.js','js/bi-sistema-live.js','js/bi-sistema-iconos.js',
  'js/galeria-potencias.js','js/galeria-iconos-color.js','js/mission1-navigation.js',
- 'js/mission1-third-auth.js','js/mission1-fifth-auth.js'];
+ 'js/mission1-third-auth.js','js/mission1-fifth-auth.js',
+ 'js/mission2-faktoreak.js'];
  for(const path of sources.concat(['inperioen-aztarnak.html'])){
   const content=read(path);
   for(const match of content.matchAll(/\bimport\s+(?:[^;\n]*?from\s*)?['"]([^'"]+)['"]/gm)){
@@ -98,6 +101,13 @@ test('El foco visible y la preferencia de movimiento se comparten entre los cinc
   const css=read('assets/accesibilidad-juegos.css');
   assert.match(css,/:focus-visible/);
   assert.match(css,/prefers-reduced-motion:reduce/);
-  for(const file of files.filter(x=>x!=='preview-bi-sistema.html'))
+  for(const file of files.filter(x=>x!=='preview-bi-sistema.html'&&x!=='inperialismoaren-faktoreak.html'))
     assert.match(read(file),/assets\/accesibilidad-juegos\.css/,file);
+});
+
+test('La segunda misión conserva sus protecciones de foco y movimiento',()=>{
+ const css=read('assets/mission2-faktoreak.css');
+ assert.match(css,/:focus-visible/);
+ assert.match(css,/prefers-reduced-motion/);
+ assert.match(read('inperialismoaren-faktoreak.html'),/id="m2-app"/);
 });
