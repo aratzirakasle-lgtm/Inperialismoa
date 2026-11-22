@@ -501,6 +501,37 @@ try{
      }finally{await context.close()}
    }
  });
+ await scenario('Cuarto ejercicio: círculo naranja al elegir y tic verde solo al comprobar',async()=>{
+   const {page,context,errors}=await open('teacher','inperioen-aztarnak.html?preview=1',{width:1365,height:900});
+   try{
+     await waitVisible(page,'.m1-nav');
+     await page.locator('.history-file[data-file="india"] button').click();
+     await waitVisible(page,'.dossier-sheet--case');
+     const opened=page.locator('details[data-clue]');
+     assert.equal(await opened.count(),3);
+     await opened.evaluateAll(elements=>elements.forEach(item=>{item.open=true}));
+     await page.waitForFunction(()=>[...document.querySelectorAll('input[name="choice"]')].every(el=>!el.disabled),{timeout:10000});
+     const selected=page.locator('.dossier-choice').first();
+     await selected.click();
+     assert.equal(await selected.locator('input').isChecked(),true);
+     assert.equal(await selected.evaluate(el=>el.classList.contains('is-verified')),false);
+     const orange=await selected.evaluate(el=>{
+       const style=getComputedStyle(el,'::after');
+       return {content:style.content,background:style.backgroundImage};
+     });
+     assert.equal(orange.content,'""','La opción elegida no muestra ningún tic');
+     assert.match(orange.background,/246, 165, 62/,'El círculo de selección es naranja');
+     await selected.evaluate(el=>el.classList.add('is-verified'));
+     const confirmed=await selected.evaluate(el=>{
+       const style=getComputedStyle(el,'::after');
+       return {content:style.content,background:style.backgroundImage};
+     });
+     assert.match(confirmed.content,/✓/,'La marca verde aparece al confirmar respuesta correcta');
+     assert.match(confirmed.background,/214, 241, 221/,'Se mantiene el acabado verde anterior');
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],'La comprobación visual no escribe en Supabase');
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Cuatro grabados coloniales: WebP intactos y descargables en el navegador',async()=>{
    const {page,context,errors}=await open('teacher','inperioen-aztarnak.html?preview=1');
    try{
