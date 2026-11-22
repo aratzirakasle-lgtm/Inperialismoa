@@ -176,3 +176,56 @@
   padding:0 0 0 .16%;
   font:700 italic 1.79cqw/1.08 Georgia,'Times New Roman',serif;
 }
+
+/* Auditoria 2026-11-22 · aretoaren egoerak eta mugikorren irakurgarritasuna */
+.c-museo-second-dim{
+  position:absolute;left:28.9%;top:50.2%;width:11.1%;height:9.2%;
+  border-radius:14% 14% 42% 42%;
+  background:radial-gradient(ellipse at 50% 35%,#26352fb5,#13231ede 70%,#0b1b17bf);
+  box-shadow:inset 0 0 12px #10211a,0 0 7px #090d0966;
+}
+.c-museo-mobile-guide{display:none}
+@media(max-width:740px){
+  .c-museo-mobile-guide{
+    display:block;max-width:740px;margin:0 auto;
+    padding:12px 13px 10px;color:#f1e0be;
+  }
+  .c-museo-mobile-guide h2{
+    font:700 21px/1.25 Georgia,'Times New Roman',serif;
+    color:#f3d89f;margin:12px 2px 11px;
+  }
+  .c-museo-mobile-summary{
+    padding:15px;border:3px ridge #b78b4b;border-radius:9px;
+    background:radial-gradient(ellipse at 50% 5%,#f7e7c9,#e5c49a);
+    color:#332113;box-shadow:inset 0 0 0 2px #fff1d4,0 5px 13px #06140cb0;
+  }
+  .c-museo-mobile-summary h2{color:#432913;margin:0 0 6px;font-size:21px}
+  .c-museo-mobile-summary>strong{font:700 18px/1.35 Georgia,serif;overflow-wrap:anywhere}
+  .c-museo-mobile-summary p{margin:7px 0 5px;line-height:1.4;font-size:15px}
+  .c-museo-mobile-progress{
+    height:16px;margin:9px 0 12px;border:2px solid #9f713b;
+    border-radius:999px;background:linear-gradient(#ead8ba,#c69e75);overflow:hidden;
+  }
+  .c-museo-mobile-progress>span{
+    display:block;height:100%;background:linear-gradient(#87e49b,#087d35);
+    border-radius:999px;
+  }
+  .c-museo-mobile-missions{display:grid;grid-template-columns:1fr;gap:10px}
+  .c-museo-mobile-mission{
+    display:flex;align-items:center;gap:12px;
+    width:100%;min-height:68px;padding:9px 12px;
+    border:3px ridge #bc924d;border-radius:8px;
+    background:linear-gradient(115deg,#f5e4c3,#e3bf8c);
+    color:#281a0d;box-shadow:inset 0 1px #fff1d7,0 3px 6px #07150ba1;
+    font-family:Georgia,'Times New Roman',serif;text-align:left;cursor:pointer;
+  }
+  .c-museo-mobile-mission:disabled{cursor:not-allowed;background:linear-gradient(110deg,#cab898,#aa9578);color:#534434}
+  .c-museo-mobile-mission:not(:disabled):hover{filter:brightness(1.06)}
+  .c-museo-mobile-mission:focus-visible{outline:3px solid #ffce65;outline-offset:3px}
+  .c-museo-mobile-index{flex:0 0 43px;font:700 26px/1 Georgia,serif;color:#8a5c22;text-align:center}
+  .c-museo-mobile-info{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+  .c-museo-mobile-info strong{font-size:16px;line-height:1.18}
+  .c-museo-mobile-info small{font-size:13px}
+  .c-museo-mobile-mark{font-size:21px}
+  .c-museo-footer{padding:8px 14px 12px;font-size:13px;line-height:1.4}
+}
