@@ -42,8 +42,9 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  ].join("");
  // Egoerak oihaleko argiarekin eta txanpon txikiekin adierazi:
  // ez dago 'HASI', 'OSATUTA' edo 'BLOKEATUTA' kartel handirik irudian.
- const m1Pin='<span class="c-museo-flag-pin c-museo-pin-1 '+(complete1?'is-complete':'is-available')+'" aria-hidden="true">'+(complete1?'✓':'')+'</span>';
- const m2Pin='<span class="c-museo-flag-pin c-museo-pin-2 '+(complete2?'is-complete':complete1?'is-available':'is-locked')+'" aria-hidden="true">'+(complete2?'✓':complete1?'':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>')+'</span>';
+ const m1Pin=complete1?'<span class="c-museo-flag-pin c-museo-pin-1 is-complete" aria-hidden="true">✓</span>':'';
+ const m2Pin=complete2?'<span class="c-museo-flag-pin c-museo-pin-2 is-complete" aria-hidden="true">✓</span>':
+  complete1?'':'<span class="c-museo-flag-pin c-museo-pin-2 is-locked" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
