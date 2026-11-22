@@ -15,15 +15,16 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  const complete1=done.has(1),complete2=done.has(2);
  const count=done.size,pct=count*25;
  const nextId=complete1?(complete2?0:2):1;
- const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title:"3. eta 4. misioak\nprestatzen ari gara";
+ const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title:"3. Misioa:\nInperioen banaketa\n(Prestatzen)";
  const rawName=String(teamName||"Taldea").trim().slice(0,80)||"Taldea";
  const safeName=esc(rawName);
- const shortName=esc(rawName.slice(0,12));
+ const shortName=esc(rawName.length>9?rawName.slice(0,8)+'…':rawName);
  const nameSize=rawName.length>18?"smaller":rawName.length>12?"small":"";
  // Jatorrizko irudian "Atlas · 1 / 4 · 25 %" ageri da.
  // Egoera berdina denean, ez dugu papera alferrik estaltzen.
  const sameName=rawName==="Atlas";
- const originalProgress=complete1&&!complete2;
+ // Inpimatutako izen, aurrerapen eta hurrengo misioaren gaineko letrak beti kentzen dira.
+ // Pergaminoa gardentasuneko geruza txiki batekin leheneratzen da.
  const zones=[
   hotspot("c-museo-portal c-museo-m1","1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-mission="1"'),
   hotspot("c-museo-portal c-museo-m2","2. misioa: "+display[2].title+". "+(complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),complete1?'data-mission="2"':'disabled'),
@@ -52,11 +53,11 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
  '<div class="c-museo-real-data">'+
  (sameName?'':'<span class="c-museo-top-team">'+shortName+'</span>')+
- (sameName?'':'<span class="c-museo-book-name '+nameSize+'">'+safeName+'</span>')+
- (originalProgress?'':'<span class="c-museo-book-progress">'+count+' / 4</span>')+
- (originalProgress?'':'<span class="c-museo-book-percent">'+pct+' %</span>')+
- (originalProgress?'':'<span class="c-museo-book-bar"><i style="width:'+pct+'%"></i></span>')+
- (originalProgress?'':'<span class="c-museo-book-next">'+esc(nextLabel)+'</span>')+
+ '<span class="c-museo-book-name '+nameSize+'">'+safeName+'</span>'+ 
+ '<span class="c-museo-book-progress">'+count+' / 4</span>'+ 
+ '<span class="c-museo-book-percent">'+pct+' %</span>'+ 
+ '<span class="c-museo-book-bar"><i style="width:'+pct+'%"></i></span>'+ 
+ '<span class="c-museo-book-next">'+esc(nextLabel)+'</span>'+ 
  (complete1?"":'<span class="c-museo-banner-dim"></span><span class="c-museo-second-dim"></span>')+
  m1Plate+m2Plate+'</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
