@@ -17,9 +17,9 @@ test('Egoera 0/4: lehen misioa erabilgarri, bigarrena itxita',()=>{
 test('Egoera 1/4: argazkiaren jatorrizko %25 dago; ez dago tinta bikoiztuta',()=>{
  const html=renderVestibuloC({teamName:'Atlas',completedIds:[1]});
  assert.match(html,/1 \/ 4 misio osatuta · 25 %/);
- assert.doesNotMatch(html,/class="c-museo-book-progress"/);
- assert.doesNotMatch(html,/class="c-museo-book-bar"/);
- assert.doesNotMatch(html,/class="c-museo-book-next"/);
+ assert.match(html,/class="c-museo-book-progress">1 \/ 4/);
+ assert.match(html,/class="c-museo-book-bar"><i style="width:25%"/);
+ assert.match(html,/class="c-museo-book-next"/);
  assert.match(html,/c-museo-m2[^>]*data-mission="2"/);
  assert.match(html,/Inperialismoaren faktoreak/);
 });
@@ -28,7 +28,7 @@ test('Egoera 2/4: hurrengo misioak oraindik argitaratu gabe',()=>{
  const html=renderVestibuloC({teamName:'Nilo',completedIds:[1,2]});
  assert.match(html,/2 \/ 4 misio osatuta · 50 %/);
  assert.match(html,/class="c-museo-book-bar"><i style="width:50%"/);
- assert.match(html,/3\. eta 4\. misioak/);
+ assert.match(html,/3\. Misioa:/);
  assert.match(html,/c-museo-m3[^>]*disabled/);
  assert.match(html,/c-museo-m4[^>]*disabled/);
  assert.match(html,/c-museo-mobile-missions/);
