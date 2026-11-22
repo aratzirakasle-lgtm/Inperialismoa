@@ -1,0 +1,72 @@
+/* Kontzeptu C · ikaslearen atari autentifikatua.
+   Eskulturak, hormak, banderolak eta liburuak erreferentziako irudi originaletik
+   hartzen dira. Ikasle bakoitzaren datuak tinta-geruza independientean ageri dira. */
+#app-shell.museo-c-enabled .layout{display:block!important;width:100%!important;max-width:none!important;padding:0!important;margin:0!important}
+#app-shell.museo-c-enabled .sidebar{display:none!important}
+#app-shell.museo-c-enabled .museum-exhibition-banner{display:none!important}
+#app-shell.museo-c-enabled .main-content{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;min-height:0!important;background:linear-gradient(#092e22,#061910)!important;border:0!important;box-shadow:none!important}
+#app-shell.museo-c-enabled .museum-cornice{display:none!important}
+#app-shell.museo-c-enabled #view{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+#app-shell.museo-c-enabled .topbar{position:relative;z-index:20}
+.c-museo-home{background:radial-gradient(ellipse at top,#295239 0,#102a20 44%,#041910 100%);min-height:80vh;color:#f4dfb3;padding-bottom:13px;font-family:Georgia,'Times New Roman',serif}
+.c-museo-toolbar{max-width:1730px;min-height:54px;margin:0 auto;padding:9px clamp(10px,2vw,27px);display:flex;align-items:center;justify-content:space-between;gap:14px;color:#e8ca8e;letter-spacing:.045em;font-weight:bold;font-size:clamp(11px,1vw,15px)}
+.c-museo-toolbar>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:9px}
+.c-museo-toolbar button{background:linear-gradient(#1b583e,#063020);color:#ffedc8;font:700 12px/1.2 Georgia,serif;border:2px ridge #c6a267;border-radius:7px;padding:8px 13px;cursor:pointer}
+.c-museo-toolbar button:hover{filter:brightness(1.16)}
+.c-museo-toolbar button:focus-visible,.c-museo-hotspot:focus-visible{outline:3px solid #f4c568;outline-offset:3px}
+.c-museo-toolbar .c-museo-return{background:linear-gradient(#ecd0a4,#c5a06d);color:#352114}
+.c-museo-preview-tag{font:700 11px Georgia,serif;color:#ffe2ae}
+.c-museo-stage{position:relative;width:min(100%,1672px);aspect-ratio:1672/941;margin:0 auto;isolation:isolate;overflow:hidden;border:2px solid #a77732;background:#15382a;box-shadow:0 17px 40px #000a;container-type:inline-size}
+.c-museo-picture{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;border:0;display:block;overflow:hidden}
+.c-museo-real-data,.c-museo-hotspots{position:absolute;inset:0}
+.c-museo-real-data{pointer-events:none;z-index:2}
+.c-museo-hotspots{z-index:4;pointer-events:none}
+.c-museo-real-data>span{position:absolute}
+.c-museo-real-data .c-museo-book-name,.c-museo-real-data .c-museo-book-progress,.c-museo-real-data .c-museo-book-percent,.c-museo-real-data .c-museo-book-next{
+ background:
+ repeating-linear-gradient(15deg,#996a3008 0 1px,transparent 1px 14px),
+ radial-gradient(ellipse at 40% 20%,#fff1d7,#f7dbaf 85%,#e5be8e);
+ color:#201810;text-shadow:0 1px 0 #ffe8bc;
+ font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:bold;
+ box-shadow:none;
+ mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+}
+.c-museo-top-team{left:89%;top:.67%;width:5.3%;height:2.67%;display:flex;align-items:center;font:bold 1.55cqw/1 Georgia,serif;white-space:nowrap;color:#ffeed1;text-shadow:0 1px 2px #000;background:linear-gradient(90deg,#08271c,#08271c 90%,transparent);overflow:hidden}
+.c-museo-book-name{left:23.6%;top:75.7%;width:15.9%;height:3.05%;display:flex;align-items:center;white-space:nowrap;overflow:hidden;font-size:2.05cqw;text-overflow:ellipsis;padding-left:.2%}
+.c-museo-book-name.small{font-size:1.65cqw}
+.c-museo-book-name.smaller{font-size:1.35cqw}
+.c-museo-book-progress{left:26.1%;top:80.1%;width:6.5%;height:3%;display:flex;align-items:center;justify-content:center;font-size:2.1cqw}
+.c-museo-book-percent{left:36.05%;top:87.0%;width:4.35%;height:3.5%;display:flex;align-items:center;justify-content:center;font-style:normal!important;font-size:1.95cqw}
+.c-museo-book-bar{left:18.7%;top:87.8%;width:16.38%;height:2.32%;border:1px solid #947040;border-radius:99px;background:linear-gradient(#e6c5a1,#eecfa8 33%,#bc966c);box-shadow:inset 0 1px 3px #644026a0;overflow:hidden}
+.c-museo-book-bar i{height:100%;display:block;border-radius:99px;background:linear-gradient(#7fe890,#18bd4f 37%,#008332 85%);box-shadow:inset 0 1px #d0f9b1,1px 0 4px #45984a}
+.c-museo-book-next{left:57.1%;top:77.15%;width:15.7%;height:11%;display:flex;align-items:center;white-space:pre-line;font-size:2.0cqw;line-height:1.09;padding:0 0.5%;overflow:hidden}
+.c-museo-banner-dim{left:16.9%;top:44.8%;width:9.5%;height:12.3%;background:linear-gradient(150deg,#1d2420d0,#0b1716e8 87%);border-radius:17% 17% 44% 44%;box-shadow:inset 0 0 11px #0c0f0c}
+.c-museo-brass{z-index:3;display:flex;align-items:center;justify-content:center;white-space:nowrap;
+ position:absolute;clip-path:polygon(8% 0%,92% 0%,100% 12%,98% 76%,87% 92%,50% 100%,13% 92%,2% 76%,0 12%);
+ background:linear-gradient(90deg,#a8762d 0%,#ffe4aa 17%,#f2c57f 59%,#ad772d 100%);
+ border-radius:8px;box-shadow:0 2px 8px #000a;outline:2px solid #ce9748;
+ color:#3a250c;text-shadow:0 1px #fff1cd;font:700 1.25cqw/1 Georgia,serif}
+.c-museo-status1{left:17.4%;top:52%;width:9.2%;height:6%}
+.c-museo-status2{left:29%;top:52%;width:11%;height:6%}
+.c-museo-locked{background:linear-gradient(#7d6248,#483b30);color:#f9ddac;font-size:1.07cqw;text-shadow:0 1px #15100b}
+.c-museo-hotspot{position:absolute;padding:0;margin:0;border:2px solid transparent;background:transparent;cursor:pointer;pointer-events:auto;border-radius:9px;color:transparent;transition:box-shadow .15s,background .15s}
+.c-museo-hotspot:enabled:hover{box-shadow:inset 0 0 16px #fbd88973,0 0 18px #f6ce6499;background:#e0ba5914;border-color:#f1d1877d}
+.c-museo-hotspot:disabled{cursor:not-allowed}
+.c-museo-portal.c-museo-m1{left:15.9%;top:20.6%;width:11.5%;height:37.6%}
+.c-museo-portal.c-museo-m2{left:28.6%;top:20.5%;width:11.6%;height:38.6%}
+.c-museo-portal.c-museo-m3{left:61.5%;top:20.5%;width:11.0%;height:38.6%}
+.c-museo-portal.c-museo-m4{left:74.1%;top:20.5%;width:11.4%;height:38.6%}
+.c-museo-globe{left:39.6%;top:21%;width:20.7%;height:41.2%;border-radius:50%}
+.c-museo-book1{left:13%;top:70.9%;width:32%;height:25.1%}
+.c-museo-book2{left:51%;top:70.9%;width:39%;height:25.1%}
+.c-museo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.c-museo-footer{margin:9px auto 0;max-width:1200px;text-align:center;padding:2px 14px;color:#ddc29b;font-size:12px;font-style:italic}
+@media(max-width:740px){
+ .c-museo-toolbar{align-items:flex-start;flex-wrap:wrap}
+ .c-museo-toolbar>div{justify-content:flex-start}
+ .c-museo-top-team{font-size:1.55cqw}
+ .c-museo-brass{font-size:1.25cqw}
+ .c-museo-book-next{font-size:2cqw}
+ .c-museo-home{min-height:auto}
+}
+@media(prefers-reduced-motion:reduce){.c-museo-hotspot{transition:none!important}}
