@@ -40,15 +40,6 @@
 .c-museo-book-bar{left:18.7%;top:87.8%;width:16.38%;height:2.32%;border:1px solid #947040;border-radius:99px;background:linear-gradient(#e6c5a1,#eecfa8 33%,#bc966c);box-shadow:inset 0 1px 3px #644026a0;overflow:hidden}
 .c-museo-book-bar i{height:100%;display:block;border-radius:99px;background:linear-gradient(#7fe890,#18bd4f 37%,#008332 85%);box-shadow:inset 0 1px #d0f9b1,1px 0 4px #45984a}
 .c-museo-book-next{left:57.1%;top:77.15%;width:15.7%;height:11%;display:flex;align-items:center;white-space:pre-line;font-size:2.0cqw;line-height:1.09;padding:0 0.5%;overflow:hidden}
-.c-museo-banner-dim{left:16.9%;top:44.8%;width:9.5%;height:12.3%;background:linear-gradient(150deg,#1d2420d0,#0b1716e8 87%);border-radius:17% 17% 44% 44%;box-shadow:inset 0 0 11px #0c0f0c}
-.c-museo-brass{z-index:3;display:flex;align-items:center;justify-content:center;white-space:nowrap;
- position:absolute;clip-path:polygon(8% 0%,92% 0%,100% 12%,98% 76%,87% 92%,50% 100%,13% 92%,2% 76%,0 12%);
- background:linear-gradient(90deg,#a8762d 0%,#ffe4aa 17%,#f2c57f 59%,#ad772d 100%);
- border-radius:8px;box-shadow:0 2px 8px #000a;outline:2px solid #ce9748;
- color:#3a250c;text-shadow:0 1px #fff1cd;font:700 1.25cqw/1 Georgia,serif}
-.c-museo-status1{left:17.4%;top:52%;width:9.2%;height:6%}
-.c-museo-status2{left:29%;top:52%;width:11%;height:6%}
-.c-museo-locked{background:linear-gradient(#7d6248,#483b30);color:#f9ddac;font-size:1.07cqw;text-shadow:0 1px #15100b}
 .c-museo-hotspot{position:absolute;padding:0;margin:0;border:2px solid transparent;background:transparent;cursor:pointer;pointer-events:auto;border-radius:9px;color:transparent;transition:box-shadow .15s,background .15s}
 .c-museo-hotspot:enabled:hover{box-shadow:inset 0 0 16px #fbd88973,0 0 18px #f6ce6499;background:#e0ba5914;border-color:#f1d1877d}
 .c-museo-hotspot:disabled{cursor:not-allowed}
@@ -178,12 +169,6 @@
 }
 
 /* Auditoria 2026-11-22 · aretoaren egoerak eta mugikorren irakurgarritasuna */
-.c-museo-second-dim{
-  position:absolute;left:28.9%;top:50.2%;width:11.1%;height:9.2%;
-  border-radius:14% 14% 42% 42%;
-  background:radial-gradient(ellipse at 50% 35%,#26352fb5,#13231ede 70%,#0b1b17bf);
-  box-shadow:inset 0 0 12px #10211a,0 0 7px #090d0966;
-}
 .c-museo-mobile-guide{display:none}
 @media(max-width:740px){
   .c-museo-mobile-guide{
@@ -360,59 +345,33 @@
 @media(prefers-reduced-motion:reduce){.c-museo-power{transition:none}}
 
 
-/* 2026-11-22 · ESZENA GARBIKO EGOERAK
- * Ez dago botoi, etiketarik edo kartel handirik banderolen gainean.
- * Jatorrizko urre eta oihalen barruan argia, zigilu txikiak eta giltzarrapo sotila.
- * Idatzizko egoera zehatzak ikasleen menu irisgarrian daude (euskaraz).
- */
-.c-museo-banner-retouch{
- position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
- z-index:1;pointer-events:none;user-select:none;
+
+/* JATORRIZKO MARGOLANA: estado visual integrado, ninguna pegatina añadida.
+   La fotografía original se conserva literalmente con la misión completada.
+   Solo se reconstruyen los píxeles de letras que contradigan el progreso real. */
+.c-museo-banner-repair{
+ position:absolute;inset:0;width:100%;height:100%;
+ display:block;object-fit:fill;pointer-events:none;user-select:none;z-index:1;
 }
-.c-museo-flag-pin{
- position:absolute;z-index:3;width:1.78%;aspect-ratio:1;
- display:flex;align-items:center;justify-content:center;
- padding:0;margin:0;border-radius:50%;
- font:900 1.16cqw/1 Georgia,'Times New Roman',serif;
- transform:rotate(-8deg);pointer-events:none;
- box-shadow:inset 0 .08cqw .13cqw #fff2c26b,
-   inset 0 -.12cqw .14cqw #2b190c88,
-   0 .14cqw .34cqw #120b075c;
+.c-museo-hotspots .c-museo-portal:enabled:is(:hover,:focus-visible)::before{
+ opacity:.72;transition:opacity .18s ease-out;
 }
-.c-museo-pin-1{left:20.38%;top:49.0%}
-.c-museo-pin-2{left:37.22%;top:52.25%}
-.c-museo-flag-pin.is-complete{
- color:#eedca4;text-shadow:0 1px 1px #203a25;
- border:1.3px solid #b6985e;
- background:
- radial-gradient(circle at 30% 21%,#517a50 0%,#305d3d 40%,#1c4031 73%,#132d24 100%);
+.c-museo-hotspots .c-museo-portal.is-available:enabled::before{
+ background:linear-gradient(180deg,#ffe4a004 0%,#ffdf9c0d 55%,#f3c97310);
+ box-shadow:inset 0 0 .65cqw #f8d99521,0 0 .44cqw #f1bd6160;
+ border-color:#ffe9b447;opacity:.14;
 }
-.c-museo-flag-pin.is-locked{
- border:1.2px solid #aa8345;color:#dec68b;
- background:radial-gradient(circle at 30% 22%,#8c6a39,#594327 58%,#3c2c1c 100%);
+.c-museo-hotspots .c-museo-portal.is-available:enabled:is(:hover,:focus-visible)::before{
+ opacity:.76;
 }
-.c-museo-flag-pin svg{width:57%;height:57%;stroke:#e7c78d}
-.c-museo-portal.is-available:enabled::before{
- opacity:.18;
- background:linear-gradient(180deg,#f9d67205,#ffd57b12 42%,#e7b05008 100%);
- box-shadow:inset 0 0 .7cqw #ffe1a63f,0 0 .47cqw #f1ba6960;
+.c-museo-hotspots .c-museo-portal.is-complete:enabled::before{opacity:0}
+.c-museo-hotspots .c-museo-portal.is-complete:enabled:is(:hover,:focus-visible)::before{
+ opacity:.35;
 }
-.c-museo-portal.is-available:enabled:is(:hover,:focus-visible)::before{
- opacity:.82;
-}
-.c-museo-portal.is-complete:enabled::before{
- background:linear-gradient(180deg,transparent 50%,#6790690a);
-}
-.c-museo-portal.is-locked:disabled::before{
- content:"";position:absolute;inset:1% 2% 3%;pointer-events:none;
- opacity:.42;border:0;border-radius:6px 6px 36% 36%;
- clip-path:polygon(1% 0,99% 0,99% 87%,50% 100%,1% 87%);
- background:linear-gradient(180deg,#17251b16,#181b1640 62%,#151b145c);
- box-shadow:inset 0 0 .34cqw #261d1436;
-}
-.c-museo-hotspots .c-museo-portal:focus-visible{
- outline:2px solid #eed099;outline-offset:-2px;
+.c-museo-hotspots .c-museo-portal.is-locked:disabled::before{
+ opacity:.15;border:0;background:linear-gradient(180deg,#11191105,#1d281b19 65%,#1d251a24);
+ box-shadow:none;
 }
 @media(prefers-reduced-motion:reduce){
- .c-museo-flag-pin,.c-museo-portal::before{transition:none!important}
+ .c-museo-hotspots .c-museo-portal::before{transition:none!important}
 }
