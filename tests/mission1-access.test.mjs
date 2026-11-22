@@ -5,12 +5,12 @@ const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
 const has=(path,pattern)=>assert.match(read(path),pattern,'Regla esperada en '+path);
 
 test('Los alumnos no saltan de ejercicio en ejercicio',()=>{
- has('js/app.js',/const canSkip=teacherPreview\|\|completed\(team,1\)/);
+ has('js/app.js',/const canSkip=teacherPreview\|\|!!current\.completed_at/);
  has('js/app.js',/navigationEnabled:teacherPreview/);
- has('js/bi-sistema-live.js',/if\(!first\?\.completed_at&&!legacy\?\.length\)/);
- has('js/mission1-third-auth.js',/if\(!second\?\.completed_at&&!legacy\?\.length\)/);
- has('inperioen-aztarnak.html',/if\(!third\?\.exercise&&!legacy\?\.length\)/);
- has('js/mission1-fifth-auth.js',/if\(\(!third\|\|!fourth\?\.completed_at\)&&!legacy\?\.length\)/);
+ has('js/bi-sistema-live.js',/if\(!first\?\.completed_at\)/);
+ has('js/mission1-third-auth.js',/if\(!second\?\.completed_at\)/);
+ has('inperioen-aztarnak.html',/if\(!third\?\.exercise\)/);
+ has('js/mission1-fifth-auth.js',/if\(!third\|\|!fourth\?\.completed_at\)/);
 });
 test('La navegación libre exige un perfil de profesor',()=>{
  has('js/app.js',/accountIsTeacher\(\)&&hash==="#teacherpreviewgallery"/);
@@ -35,4 +35,14 @@ test('Continúan disponibles las pantallas de victoria y el acceso al segundo ej
  has('js/bi-sistema-live.js',/addTeacherStageControls/);
  has('esaldiak-osatu.html',/response\.mission_completed/);
  has('esaldiak-osatu.html',/index\.html#mission2/);
+});
+
+test('Ezin da lehengo misio-zigiluarekin bost jolasetako aurreko ariketarik saltatu',()=>{
+ for(const path of ['js/bi-sistema-live.js','js/mission1-third-auth.js','js/mission1-fifth-auth.js','inperioen-aztarnak.html']){
+   const source=read(path);
+   assert.doesNotMatch(source,/legacy\?\.length/,'Ezarri benetako ariketaren emaitza: '+path);
+   assert.doesNotMatch(source,/from\(['"]mission_badges['"]\)/,'Ez hartu misio-zigilua ariketa bukatutzat: '+path);
+ }
+ assert.match(read('js/app.js'),/mission_badges/,'Lehengo misio-zigiluak erakusten dira, ez dira ezabatzen');
+ assert.match(read('js/app.js'),/const canSkip=teacherPreview\|\|!!current.completed_at/);
 });
