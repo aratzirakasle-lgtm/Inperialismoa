@@ -495,6 +495,30 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
+ await scenario('Cuenta heredada: el sello OSATUTA no permite saltarse los cinco ejercicios nuevos',async()=>{
+   for(const path of [
+     'bi-sistema.html?smoke_badges=1',
+     'inperialismoaren-definizioa.html?smoke_badges=1',
+     'inperioen-aztarnak.html?smoke_badges=1',
+     'esaldiak-osatu.html?smoke_badges=1'
+   ]){
+     const {page,context,errors}=await open('student',path);
+     try{
+       await waitVisible(page,'.gal-hall');
+       assert.ok(page.url().includes('index.html'),path+' debe volver al primer juego');
+       assert.equal(await page.locator('.m1-nav').count(),0);
+       assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+       assert.deepEqual(errors,[]);
+     }finally{await context.close()}
+   }
+   const {page,context,errors}=await open('student','index.html?smoke_badges=1#mission1gallery');
+   try{
+     await waitVisible(page,'.gal-hall');
+     assert.equal(await page.locator('.gal-action-next').count(),0,
+       'Un sello antiguo no debe activar el paso al segundo juego');
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Alumno: la segunda pantalla no se abre si la primera está pendiente',async()=>{
    const {page,context,errors}=await open('student','bi-sistema.html');
    try{
