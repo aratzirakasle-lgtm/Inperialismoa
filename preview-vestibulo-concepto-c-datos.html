@@ -77,6 +77,71 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
 .preview-legend{font-size:12px;color:#d7be91;padding:1px 10px;font-style:italic}
 @media(max-width:780px){.field select{min-width:120px}}
 
+
+/* Fase de fidelidad C. Intervenciones mínimas sobre la fotografía aprobada. */
+.stage{overflow:hidden}
+.patch{
+ background:
+ repeating-linear-gradient(17deg,transparent 0 7px,#9f6e3f0b 7px 8px,transparent 8px 18px),
+ radial-gradient(ellipse at 46% 28%,#fff2d8 0,#fce5c4 66%,#f5d6a8 100%);
+ color:#1d1511;box-shadow:none;mask-image:linear-gradient(90deg,transparent 0%,#000 5%,#000 95%,transparent 100%);
+ white-space:normal;font:bold italic 2.0cqw/1.04 Georgia,'Times New Roman',serif;letter-spacing:-.05em;
+ padding:0 0.25%;
+}
+.patch-team{left:23.95%;top:75.56%;width:9.5%;height:3.12%;padding-left:.2%;align-items:center;justify-content:flex-start}
+.patch-count{left:23.15%;top:79.93%;width:9.2%;height:3.18%;padding-left:.4%;align-items:center;justify-content:flex-start}
+.patch-percentage{left:36.12%;top:87.13%;width:4.35%;height:3.46%;font-style:normal;justify-content:center;padding:0;font-size:1.83cqw}
+.patch-track{
+ left:18.85%;top:87.82%;width:16.25%;height:2.38%;border:2px solid #99754c;
+ border-radius:999px;background:linear-gradient(#d6b594,#e8c8a5 26%,#c29b70 80%,#ead0a8);
+ box-shadow:inset 0 1px 4px #81532b,0 1px 2px #9c7244!important;overflow:hidden;
+}
+.patch-track>span{
+ background:linear-gradient(#72e786 0%,#20bc4e 24%,#03863c 65%,#006429 100%);
+ box-shadow:inset 0 1px 2px #ddffb9,1px 0 3px #2e9c37;
+}
+.patch-next{
+ left:57.12%;top:77.15%;width:15.4%;height:11.38%;padding:0;
+ font:bold italic 2.0cqw/1.09 Georgia,'Times New Roman',serif;
+ white-space:pre-line;align-items:center;justify-content:center;
+ background:
+  repeating-linear-gradient(12deg,transparent 0 14px,#b47e4408 14px 15px,transparent 15px 31px),
+  radial-gradient(ellipse at 46% 40%,#fff2d9,#fbe3bc 75%,#f2d09d);
+ box-shadow:none;text-shadow:0 1px #fff3d9;
+}
+.patch-top-team{
+ left:87.68%;top:.59%;height:3.0%;width:5.0%;display:flex;justify-content:flex-start;
+ padding:0 .15%;background:linear-gradient(95deg,#00271c,#00251d 70%,#002b20);
+ font:bold 1.65cqw/1 Georgia,'Times New Roman',serif;color:#fff1d4;
+ text-shadow:0 1px 2px #000;letter-spacing:-.025em;
+ mask-image:linear-gradient(90deg,transparent,#000 8%,#000 90%,transparent);
+}
+.mission-tint{left:28.85%;top:25.25%;width:10.8%;height:29%;border-radius:11px 11px 33% 33%;
+ background:linear-gradient(180deg,#0c1a174b,#10211a9b);box-shadow:inset 0 -9px 22px #080b08b8;mix-blend-mode:multiply}
+.mission-status{
+ border:0;border-radius:4px;z-index:6;
+ clip-path:polygon(8% 0%,92% 0%,100% 12%,98% 73%,88% 92%,51% 100%,12% 92%,2% 73%,0 12%);
+ background:
+  linear-gradient(90deg,#b37726 0%,#ffe3a1 10%,#f8d08a 50%,#c28936 92%,#9d641d 100%);
+ box-shadow:inset 0 0 0 2px #76501e,0 0 10px #cba452b3;
+ font:700 1.24cqw/1 Georgia,'Times New Roman',serif;
+ color:#28190a;text-shadow:0 1px 1px #ffedc5;
+ padding:0 7% 1.1% 7%;white-space:nowrap;
+}
+.mission-status::before{content:'✦';position:absolute;left:4%;font-size:.9cqw;color:#81551a}
+.mission-status::after{content:'✦';position:absolute;right:4%;font-size:.9cqw;color:#81551a}
+.mission-status.first{left:17.75%;top:51.2%;width:8.6%;height:6.2%}
+.mission-status.second{left:29.8%;top:51.2%;width:9.4%;height:6.2%}
+.mission-status.locked{background:linear-gradient(90deg,#4a3321,#8b6a44,#38261b);color:#f7dfb1;font-size:1.03cqw;text-shadow:0 2px 2px #160c07}
+.mission-status.complete{background:linear-gradient(90deg,#b9812e,#ffe5a5,#c18e41)}
+@media(max-width:780px){
+ .patch,.patch-next{font-size:2cqw}
+ .patch-percentage{font-size:1.83cqw}
+ .patch-top-team{font-size:1.65cqw}
+ .mission-status{font-size:1.24cqw}
+ .mission-status.locked{font-size:1.03cqw}
+}
+
 </style>
 </head>
 <body>
@@ -93,12 +158,12 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
   <div class="stage">
    <iframe id="original-frame" src="./preview-vestibulo-concepto-c.html" title="Vista original del museo. Sus misiones son interactivas en modo demostración." loading="eager"></iframe>
    <div id="data-areas" class="data-areas" hidden aria-hidden="true">
-    <div class="patch-top-team">♟ &nbsp; Taldea: <span id="top-team"></span></div>
+    <div class="patch-top-team"><span id="top-team"></span></div>
     <div id="mission-two-tint" class="mission-tint" hidden></div>
     <div id="mission-one-status" class="mission-status first" hidden></div>
     <div id="mission-two-status" class="mission-status second" hidden></div>
-    <div class="patch patch-team">Taldea: <span id="book-team"></span></div>
-    <div class="patch patch-count">Misioak: <span id="book-count">1 / 4</span></div>
+    <div class="patch patch-team"><span id="book-team"></span></div>
+    <div class="patch patch-count"><span id="book-count">1 / 4</span></div>
     <div class="patch-track"><span id="book-bar" style="width:25%"></span></div>
     <div class="patch patch-percentage" id="book-percent">25 %</div>
     <div class="patch patch-next" id="book-next">2. Misioa:<br>Inperialismoaren<br>faktoreak</div>
@@ -144,9 +209,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
  const MAX_LENGTH = 24;
  function normalize(s){return String(s||'').replace(/\s+/g,' ').trim().slice(0,MAX_LENGTH)}
  const nextTitles={
-  0:'1. Misioa: Aurrekariak eta oinarriak',
-  1:'2. Misioa: Inperialismoaren faktoreak',
-  2:'3. eta 4. misioak prestatzen'
+  0:'1. Misioa:\nAurrekarriak\neta oinarriak',
+  1:'2. Misioa:\nInperialismoaren\nfaktoreak',
+  2:'3. eta 4. misioak\nprestatzen'
  };
  function setOriginal(){
   data.hidden=true;input.value='Atlas';progressInput.value='1';
