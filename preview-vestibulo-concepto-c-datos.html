@@ -126,7 +126,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
  box-shadow:inset 0 0 0 2px #76501e,0 0 10px #cba452b3;
  font:700 1.24cqw/1 Georgia,'Times New Roman',serif;
  color:#28190a;text-shadow:0 1px 1px #ffedc5;
- padding:0 7% 1.1% 7%;white-space:nowrap;
+ padding:0 .4em .13em;white-space:nowrap;
 }
 .mission-status::before{content:'✦';position:absolute;left:4%;font-size:.9cqw;color:#81551a}
 .mission-status::after{content:'✦';position:absolute;right:4%;font-size:.9cqw;color:#81551a}
@@ -215,6 +215,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
  };
  function setOriginal(){
   data.hidden=true;input.value='Atlas';progressInput.value='1';
+  teamText.parentElement.style.removeProperty('width');teamText.parentElement.style.removeProperty('font-size');
   marker1.hidden=true;marker2.hidden=true;tint2.hidden=true;
   status.textContent='Erreferentzia originala: ez da irudirik aldatzen.';
  }
@@ -227,7 +228,11 @@ body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30
   }
   // Visual-only sample. Never inject user text as HTML.
   teamText.textContent=team;
-  topTeam.textContent=team;
+  // The field grows along the parchment rule; a long name remains inside the book.
+  teamText.parentElement.style.width=Math.min(19,Math.max(9.5,7.2+team.length*.68))+'%';
+  teamText.parentElement.style.fontSize=team.length>17?'1.47cqw':team.length>12?'1.7cqw':'2cqw';
+  topTeam.textContent=team.length>12?team.slice(0,11)+'…':team;
+  topTeam.parentElement.title=team;
   count.textContent=completed+' / 4';
   pct.textContent=(completed*25)+' %';
   bar.style.width=(completed*25)+'%';
