@@ -169,11 +169,14 @@ try{
      assert.equal(await page.locator('.c-museo-second-dim').count(),0);
      assert.equal(await page.locator('.c-museo-brass').count(),0,
        'Ez dago estandarteak estaltzen dituen botoi handirik');
-     assert.equal(await page.locator('.c-museo-flag-pin.is-locked').count(),1,
-       'Bigarren misioa blokeatuta dagoenean giltzarrapo txikia ageri da');
-     assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),0);
-     assert.equal(await page.locator('.c-museo-banner-retouch').count(),1);
-     await page.locator('.c-museo-banner-retouch').evaluate(img=>img.decode());
+     assert.equal(await page.locator('.c-museo-flag-pin').count(),0,
+       'La pintura original no debe tener medallones superpuestos');
+     assert.equal(await page.locator('.c-museo-banner-retouch').count(),0,
+       'No se utiliza el parche panorámico que se veía postizo');
+     assert.equal(await page.locator('.c-museo-banner-repair').count(),2,
+       'Se restauran solo el escudo y la cartela con texto incompatible');
+     await page.locator('.c-museo-banner-repair').evaluateAll(
+       imgs=>Promise.all(imgs.map(img=>img.decode())));
      await page.locator('.c-museo-m1').hover();
      await page.waitForFunction(()=>Number(getComputedStyle(
        document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
@@ -202,12 +205,13 @@ try{
      assert.match(summary,new RegExp((expected/25)+' / 4 misio osatuta'));
      assert.match(summary,new RegExp(expected+' %'));
      if(expected===25){
-       assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),1);
-       assert.equal(await page.locator('.c-museo-flag-pin.is-locked').count(),0);
+       assert.equal(await page.locator('.c-museo-banner-repair').count(),0,
+        '1/4 muestra la pintura original intacta, con su OSATUTA integrado');
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'1 / 4',
         'El dato real se imprime una sola vez en el pergamino restaurado');
      }else{
-       assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),2);
+       assert.equal(await page.locator('.c-museo-banner-repair').count(),1,
+        '2/4 conserva el estandarte original primero y restaura solo el segundo');
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
        assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
      }
