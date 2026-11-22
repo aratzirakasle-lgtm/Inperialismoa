@@ -31,14 +31,13 @@ async function initialize(){
     }
     if(!profile.team_id){location.replace('./index.html');return}
     const id=profile.team_id;
-    const [{data:third,error:thirdError},{data:fourth,error:fourthError},{data:legacy,error:legacyError},{data:prior,error:priorError}]=await Promise.all([
+    const [{data:third,error:thirdError},{data:fourth,error:fourthError},{data:prior,error:priorError}]=await Promise.all([
       client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',3).maybeSingle(),
       client.from('empire_dossier_team_state').select('completed_at').eq('team_id',id).maybeSingle(),
-      client.from('mission_badges').select('mission_id').eq('team_id',id).eq('mission_id',1).limit(1),
       client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',5).maybeSingle()
     ]);
-    if(thirdError||fourthError||legacyError||priorError)throw thirdError||fourthError||legacyError||priorError;
-    if((!third||!fourth?.completed_at)&&!legacy?.length){
+    if(thirdError||fourthError||priorError)throw thirdError||fourthError||priorError;
+    if(!third||!fourth?.completed_at){
       location.replace('./inperioen-aztarnak.html');return;
     }
     window.m1FifthProgress=async answers=>{
