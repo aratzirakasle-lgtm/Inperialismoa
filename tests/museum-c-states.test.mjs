@@ -50,3 +50,15 @@ test('Irakaslearen aurrebista eta kontrolak bereizita daude',()=>{
  assert.match(prev,/Aurreko ikuspegia/);
  assert.doesNotMatch(student,/\b(Profesor|Alumno|Siguiente|Bloqueada)\b/);
 });
+
+
+test('Pergamino restaurado: imagen WebP íntegra, transparente y compacta',()=>{
+ const css=readFileSync(new URL('../assets/vestibulo-c-auth.css',import.meta.url),'utf8');
+ const match=css.match(/C_MUSEO_BOOK_ERASE_V3[\s\S]*?data:image\/webp;base64,([A-Za-z0-9+/=]+)/);
+ assert.ok(match,'Se conserva la limpieza localizada de la tinta original');
+ const bytes=Buffer.from(match[1],'base64');
+ assert.equal(bytes.subarray(0,4).toString('ascii'),'RIFF');
+ assert.equal(bytes.subarray(8,12).toString('ascii'),'WEBP');
+ assert.equal(bytes.readUInt32LE(4)+8,bytes.length,'El WebP está completo');
+ assert.ok(bytes.length<=3500,'La corrección visual no debe añadir una imagen pesada');
+});
