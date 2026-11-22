@@ -50,4 +50,5 @@ jobs:
           path: |
             test-output/m1-*.png
             test-output/m2-*.png
+            test-output/c-museo-*.png
           if-no-files-found: ignore
