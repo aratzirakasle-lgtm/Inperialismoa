@@ -215,6 +215,16 @@ try{
        const image=page.locator('.c-museo-banner-repair');
        assert.match(await image.getAttribute('src'),/museo-c-osatuta-mision2\.svg/);
        await image.evaluate(img=>img.decode());
+       const imageTransparency=await image.evaluate(img=>{
+         const canvas=document.createElement('canvas');
+         canvas.width=1672;canvas.height=941;
+         const ctx=canvas.getContext('2d',{willReadFrequently:true});
+         ctx.drawImage(img,0,0,1672,941);
+         return [ctx.getImageData(635,513,1,1).data[3],
+                 ctx.getImageData(516,499,1,1).data[3]];
+       });
+       assert.deepEqual(imageTransparency,[0,0],
+        'La flecha y los bordes de la cartela original deben permanecer completamente intactos');
        assert.equal(await page.locator('.c-museo-flag-pin,.c-museo-brass').count(),0);
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
        assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
