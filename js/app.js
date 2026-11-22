@@ -136,7 +136,7 @@ function renderHome(){
 function renderGallery(){
  const team=viewTeamId();
  const current=galleryStates.find(x=>x.team_id===team)||{};
- const canSkip=teacherPreview||completed(team,1);
+ const canSkip=teacherPreview||!!current.completed_at;
  mountGallery($("#view"),{
    initial:teacherPreview?{}:current,preview:demo||teacherPreview,
    draftKey:(!demo&&!teacherPreview&&user?.id)?'inperialismoa:gallery:draft:'+user.id+':'+team:null,
