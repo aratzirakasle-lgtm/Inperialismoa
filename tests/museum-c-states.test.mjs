@@ -11,8 +11,10 @@ test('Egoera 0/4: lehen misioa erabilgarri, bigarrena itxita',()=>{
  assert.match(html,/c-museo-m2[^>]*disabled/);
  assert.match(html,/c-museo-m3[^>]*disabled/);
  assert.match(html,/c-museo-m4[^>]*disabled/);
- assert.match(html,/c-museo-status1 c-museo-available/);
- assert.match(html,/c-museo-status2 c-museo-locked/);
+ assert.doesNotMatch(html,/HASI|c-museo-brass|c-museo-status1|c-museo-status2/);
+ assert.match(html,/c-museo-flag-pin c-museo-pin-2 is-locked/);
+ assert.doesNotMatch(html,/c-museo-pin-1/);
+ assert.match(html,/museo-c-estandartes-sin-texto\.svg/);
  assert.doesNotMatch(html,/c-museo-banner-dim|c-museo-second-dim/);
  assert.match(html,/Hurrengo erronka:.*1\. Misioa:/s);
 });
@@ -24,8 +26,9 @@ test('Egoera 1/4: argazkiaren jatorrizko %25 dago; ez dago tinta bikoiztuta',()=
  assert.match(html,/class="c-museo-book-bar"><i style="width:25%"/);
  assert.match(html,/class="c-museo-book-next"/);
  assert.match(html,/c-museo-m2[^>]*data-mission="2"/);
- assert.doesNotMatch(html,/c-museo-status1 c-museo-available/);
- assert.doesNotMatch(html,/c-museo-status2 c-museo-locked/);
+ assert.match(html,/c-museo-flag-pin c-museo-pin-1 is-complete/);
+ assert.doesNotMatch(html,/c-museo-pin-2/);
+ assert.doesNotMatch(html,/>OSATUTA<|>HASI/);
  assert.match(html,/Inperialismoaren faktoreak/);
 });
 
@@ -33,7 +36,8 @@ test('Egoera 2/4: hurrengo misioak oraindik argitaratu gabe',()=>{
  const html=renderVestibuloC({teamName:'Nilo',completedIds:[1,2]});
  assert.match(html,/2 \/ 4 misio osatuta · 50 %/);
  assert.match(html,/class="c-museo-book-bar"><i style="width:50%"/);
- assert.match(html,/c-museo-status2 c-museo-done/);
+ assert.match(html,/c-museo-flag-pin c-museo-pin-1 is-complete/);
+ assert.match(html,/c-museo-flag-pin c-museo-pin-2 is-complete/);
  assert.match(html,/3\. Misioa:/);
  assert.match(html,/c-museo-m3[^>]*disabled/);
  assert.match(html,/c-museo-m4[^>]*disabled/);
@@ -77,13 +81,27 @@ test('Lau estandarteen argiztapena egiaztatutako egoeraren araberakoa da',()=>{
  const module=readFileSync(new URL('../js/vestibulo-c-auth.js',import.meta.url),'utf8');
  const app=readFileSync(new URL('../js/app.js',import.meta.url),'utf8');
  assert.match(css,/\.c-museo-portal:enabled:is\(:hover,:focus-visible\)::before/);
- assert.match(css,/\.c-museo-status1\.c-museo-available/);
- assert.match(css,/\.c-museo-status2\.c-museo-done/);
- assert.match(css,/\.c-museo-status2\.c-museo-locked/);
+ assert.match(css,/\.c-museo-flag-pin\.is-complete/);
+ assert.match(css,/\.c-museo-flag-pin\.is-locked/);
+ assert.match(css,/\.c-museo-portal\.is-available:enabled::before/);
+ assert.match(css,/\.c-museo-banner-retouch/);
+ assert.doesNotMatch(module,/>HASI|>OSATUTA|c-museo-brass/);
  assert.match(css,/prefers-reduced-motion:reduce/);
  assert.match(module,/data-state="/);
  assert.match(module,/data-c-logout="1"/);
  assert.match(app,/if\(b\.hasAttribute\("data-c-logout"\)\)/);
  assert.match(app,/\$\("#logout-btn"\)\.click\(\)/);
  assert.match(css,/#app-shell\.museo-c-enabled \.topbar\{display:none!important\}/);
+});
+
+
+test('Estatuko testu finkoak desagertzen dira estandarteen geruza apaingarritik',()=>{
+ const svg=readFileSync(new URL('../assets/museo-c-estandartes-sin-texto.svg',import.meta.url),'utf8');
+ assert.match(svg,/<svg[\s\S]*viewBox="0 0 1672 941"/);
+ assert.match(svg,/cartela/);
+ assert.match(svg,/medallón original|medall[oó]n original/i);
+ assert.doesNotMatch(svg,/<text[\s>]/i);
+ const html=renderVestibuloC({teamName:'Taldea',completedIds:[1,2]});
+ assert.match(html,/c-museo-banner-retouch/);
+ assert.doesNotMatch(html,/BLOKEATUTA<\/span>|OSATUTA<\/span>/);
 });
