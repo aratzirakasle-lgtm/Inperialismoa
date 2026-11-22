@@ -211,7 +211,11 @@ try{
         'El dato real se imprime una sola vez en el pergamino restaurado');
      }else{
        assert.equal(await page.locator('.c-museo-banner-repair').count(),1,
-        '2/4 conserva el estandarte original primero y restaura solo el segundo');
+        '2/4 conserva el estandarte original primero y adapta solo la inscripción del segundo');
+       const image=page.locator('.c-museo-banner-repair');
+       assert.match(await image.getAttribute('src'),/museo-c-osatuta-mision2\.svg/);
+       await image.evaluate(img=>img.decode());
+       assert.equal(await page.locator('.c-museo-flag-pin,.c-museo-brass').count(),0);
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
        assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
      }
