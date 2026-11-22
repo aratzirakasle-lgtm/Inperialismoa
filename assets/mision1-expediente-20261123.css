@@ -1,0 +1,21 @@
+/* Espediente de la primera misión: aislado de los ejercicios y del panel docente. */
+.m1-archive-open{position:relative;z-index:10;display:flex;justify-content:center;padding:12px 12px 4px}
+.m1-archive-open button,.m1-ledger-open{cursor:pointer;border:1px solid #ab874c;border-radius:30px;padding:10px 22px;background:linear-gradient(115deg,#392d23,#5a452a);color:#fff2d2;font:600 13px Georgia,serif;letter-spacing:.035em;box-shadow:0 3px 18px #0003}
+.m1-archive-open button span{display:inline-block;margin-left:12px;border-left:1px solid #bfa269;padding-left:12px;color:#efce8c}
+.m1-archive,.m1-certificate{font-family:Georgia,"Times New Roman",serif;color:#3e3020;background:radial-gradient(ellipse at 50% 5%,#fff8e9,#ead7b0);padding:clamp(18px,4vw,36px);border:2px double #a8864d;border-radius:9px;box-shadow:inset 0 0 0 6px #fff7e9,0 15px 38px #0002}
+.m1-archive h2,.m1-certificate h2{font-family:Georgia,serif;color:#49341d;font-size:clamp(25px,4vw,38px);line-height:1.1;margin:9px 0}
+.m1-overline,.m1-certificate>p:first-child{letter-spacing:.15em;font-size:11px;font-weight:700;color:#805e30}
+.m1-team{font-style:italic;font-size:18px;color:#79572e}
+.m1-archive ol{list-style:none;padding:0;margin:20px 0;display:grid;gap:9px}
+.m1-archive li{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;padding:10px;border:1px solid #c9b58e;background:#fff9ec9c;opacity:.78}
+.m1-archive li.m1-sealed{opacity:1;background:#f6e6c4;border-color:#ac8447}
+.m1-medal{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:2px solid #ad8b55;color:#6c4e29;font-weight:700}
+.m1-sealed .m1-medal{background:#765128;color:#fff4d9}
+.m1-archive li small{font-family:system-ui,sans-serif;font-size:10px;font-weight:700;letter-spacing:.09em;color:#8c6835}
+.m1-note{border-top:1px solid #bfaa81;padding-top:16px;font-weight:700}
+.m1-certificate{text-align:center}
+.m1-certificate .m1-bigseal{margin:24px auto;width:154px;height:154px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:7px double #94703a;border-radius:50%;color:#775322;font-size:54px;background:#e5cb9259;transform:rotate(-7deg)}
+.m1-bigseal small{font-size:11px;line-height:1.3;font-weight:700;max-width:110px;letter-spacing:.06em}
+.m1-certificate button,.m1-archive button{margin-top:12px}
+@media(max-width:560px){.m1-archive li{grid-template-columns:34px 1fr;gap:7px}.m1-archive li small{grid-column:2}.m1-medal{width:30px;height:30px}.m1-archive-open button{max-width:100%;font-size:12px}}
+@media(prefers-reduced-motion:reduce){.m1-archive-open *, .m1-certificate *{animation:none!important;transition:none!important}}
