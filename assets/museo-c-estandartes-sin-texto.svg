@@ -18,4 +18,16 @@
   <rect x="320" y="506" width="92" height="26" rx="5" fill="url(#cinta)" filter="url(#suavizar)"/>
   <!-- Cartela del segundo estandarte: se retira JARRAITU sin eliminar el marco. -->
   <rect x="515" y="492" width="125" height="32" rx="3" fill="url(#cartela)" filter="url(#suavizar)"/>
+  <!-- Grabados discretos: no son botones ni respuestas, solo filigrana de época. -->
+  <g fill="none" stroke="#9a7a40" stroke-width=".75" opacity=".38">
+    <circle cx="356" cy="477" r="13.5"/>
+    <path d="M356 461v32m-16-16h32m-27-11 22 22m0-22-22 22"/>
+    <path d="M356 467l3.5 10-3.5 10-3.5-10z" fill="#947647" stroke="none" opacity=".5"/>
+  </g>
+  <g fill="none" stroke="#a87935" stroke-width=".9" opacity=".47">
+    <path d="M531 509h27m39 0h28"/>
+    <path d="M571 509l7-9 7 9-7 9z"/>
+    <path d="M578 500v18m-8-9h16"/>
+    <path d="M533 506q4 3 0 6m90-6q-4 3 0 6"/>
+  </g>
 </svg>
