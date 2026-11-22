@@ -448,12 +448,11 @@ async function init(){
   if(profile.role==='teacher'&&!teacherPreview||profile.role!=='student'&&!teacherPreview){location.replace('./index.html');return}
   if(!teacherPreview){
    teamId=profile.team_id;if(!teamId){location.replace('./index.html');return}
-   const [{data:third,error:thirdError},{data:legacy,error:legacyError}]=await Promise.all([
-    client.from('mission1_exercise_completions').select('exercise').eq('team_id',teamId).eq('exercise',3).maybeSingle(),
-    client.from('mission_badges').select('mission_id').eq('team_id',teamId).eq('mission_id',1).limit(1)
-   ]);
-   if(thirdError||legacyError)throw thirdError||legacyError;
-   if(!third?.exercise&&!legacy?.length){location.replace('./inperialismoaren-definizioa.html');return}
+   const {data:third,error:thirdError}=await client.from('mission1_exercise_completions')
+    .select('exercise').eq('team_id',teamId).eq('exercise',3).maybeSingle();
+   if(thirdError)throw thirdError;
+   // Ez da onartzen lehengo misio-zigiluaz hirugarren jolasa saltatzea.
+   if(!third?.exercise){location.replace('./inperialismoaren-definizioa.html');return}
    await loadState();
    await loadClueReads();
    client.channel('empire-dossier-'+teamId).on('postgres_changes',{
