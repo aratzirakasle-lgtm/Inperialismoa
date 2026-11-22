@@ -388,3 +388,15 @@
 @media(prefers-reduced-motion:reduce){
  .c-museo-portal:enabled::before{transition:none}
 }
+
+/* Irudiko pizteko/irteteko ikono historikoa ere benetako botoi da. */
+.c-museo-power{
+ left:95.5%;top:.24%;width:3.0%;height:3.9%;
+ border-radius:50%;transition:box-shadow .16s ease-out
+}
+.c-museo-power:is(:hover,:focus-visible){
+ background:#f5cc581a!important;border-color:#ffd98285!important;
+ box-shadow:0 0 .7cqw #f9d369ad,inset 0 0 .6cqw #ffedb266!important;
+}
+.c-museo-power:focus-visible{outline:3px solid #ffdc8f;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.c-museo-power{transition:none}}
