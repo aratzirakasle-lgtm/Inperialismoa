@@ -23,7 +23,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  // Jatorrizko irudian "Atlas · 1 / 4 · 25 %" ageri da.
  // Egoera berdina denean, ez dugu papera alferrik estaltzen.
  const sameName=rawName==="Atlas";
- const originalProgress=count===1;
+ const originalProgress=complete1&&!complete2;
  const zones=[
   hotspot("c-museo-portal c-museo-m1","1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-mission="1"'),
   hotspot("c-museo-portal c-museo-m2","2. misioa: "+display[2].title+". "+(complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),complete1?'data-mission="2"':'disabled'),
@@ -35,6 +35,13 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  ].join("");
  const m1Plate=complete1?"":'<span class="c-museo-brass c-museo-status1">HASI →</span>';
  const m2Plate=complete1?(complete2?'<span class="c-museo-brass c-museo-status2">✓ OSATUTA</span>':''):'<span class="c-museo-brass c-museo-status2 c-museo-locked">🔒 BLOKEATUTA</span>';
+ const mobileMissions=[1,2,3,4].map(id=>{
+  const doneMission=done.has(id);
+  const published=id===1||id===2;
+  const unlocked=id===1||id===2&&complete1;
+  const state=!published?'Prestatzen':doneMission?'Osatuta':unlocked?'Eskuragarri':'Blokeatuta';
+  return '<button type="button" class="c-museo-mobile-mission" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(doneMission?'✓':!published||!unlocked?'🔒':'→')+'</span></button>';
+ }).join('');
  return '<div class="c-museo-home" lang="eu">'+
  '<div class="c-museo-toolbar"><span>🏛 &nbsp; IKASLEEN MUSEOA · 4 MISIO</span><div>'+
  (preview?'<span class="c-museo-preview-tag">IRAKASLEAREN AURREBISTA · EZ DA GORDETZEN</span>':'')+
@@ -50,9 +57,10 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  (originalProgress?'':'<span class="c-museo-book-percent">'+pct+' %</span>')+
  (originalProgress?'':'<span class="c-museo-book-bar"><i style="width:'+pct+'%"></i></span>')+
  (originalProgress?'':'<span class="c-museo-book-next">'+esc(nextLabel)+'</span>')+
- (complete1?"":'<span class="c-museo-banner-dim"></span>')+
+ (complete1?"":'<span class="c-museo-banner-dim"></span><span class="c-museo-second-dim"></span>')+
  m1Plate+m2Plate+'</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
+ '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
  '<p class="c-museo-footer">Zuen taldearen benetako aurrerapena azaltzen da. 3. eta 4. misioetako aretoak prestatzen ari gara.</p>'+
  '</div>';
 }
