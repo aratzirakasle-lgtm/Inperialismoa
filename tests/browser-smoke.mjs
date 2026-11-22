@@ -101,6 +101,56 @@ function verifyCardsInsideZones(page){
 }
 
 try{
+ await scenario('Vestíbulo C: alumno autenticado ve progreso real sin escrituras y puede volver al modo anterior',async()=>{
+   const {page,context,errors}=await open('student','index.html?museo=c',{width:1672,height:941});
+   try{
+     await waitVisible(page,'.c-museo-stage');
+     assert.equal(await page.locator('.c-museo-home').count(),1);
+     assert.equal(await page.locator('.c-museo-portal').count(),4);
+     assert.equal(await page.locator('.c-museo-book-progress').innerText(),'0 / 4');
+     assert.equal(await page.locator('.c-museo-book-percent').innerText(),'0 %');
+     assert.equal(await page.locator('.c-museo-m2').isDisabled(),true,'La misión 2 requiere completar la primera');
+     assert.equal(await page.locator('.c-museo-m3').isDisabled(),true,'Misión 3 aún no publicada');
+     assert.equal(await page.locator('.c-museo-m4').isDisabled(),true,'Misión 4 aún no publicada');
+     await page.locator('[data-c-globe]').click();
+     assert.match(await page.locator('#modal-title').innerText(),/Esplorazioen atlasa/);
+     await page.locator('#modal-close').click();
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-alumno-autenticado-escritorio.png',fullPage:true,animations:'disabled'});
+     await page.locator('[data-c-toggle]').click();
+     await waitVisible(page,'.museum-gallery-home');
+     assert.equal(await page.locator('.c-museo-home').count(),0);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Vestíbulo C: el profesor conserva el panel y puede entrar y salir de la vista del alumno',async()=>{
+   const {page,context,errors}=await open('teacher','index.html?museo=c',{width:1365,height:900});
+   try{
+     await waitVisible(page,'#view');
+     assert.equal(await page.locator('.c-museo-home').count(),0,'El panel docente permanece por defecto');
+     await page.locator('[data-view="preview"]').click();
+     await waitVisible(page,'.c-museo-home');
+     assert.equal(await page.locator('.c-museo-preview-tag').count(),1);
+     assert.equal(await page.locator('.c-museo-book-progress').innerText(),'0 / 4');
+     await page.locator('.c-museo-return').click();
+     assert.equal(await page.locator('.c-museo-home').count(),0);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Vestíbulo C: el escenario conserva proporción de referencia en móvil',async()=>{
+   const {page,context,errors}=await open('student','index.html?museo=c',{width:390,height:844});
+   try{
+     await waitVisible(page,'.c-museo-stage');
+     const geom=await page.locator('.c-museo-stage').evaluate(el=>{const r=el.getBoundingClientRect();return {w:r.width,h:r.height}});
+     assert.ok(Math.abs(geom.w/geom.h-1672/941)<.025,'El museo no debe deformarse en pantallas pequeñas');
+     assert.equal(await page.locator('.c-museo-portal').count(),4);
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-alumno-movil.png',fullPage:true,animations:'disabled'});
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Alumno: el primer ejercicio tiene 20 tarjetas y no permite saltar al segundo',async()=>{
    const {page,context,errors}=await open('student','index.html#mission1gallery',{width:1672,height:941});
    try{
