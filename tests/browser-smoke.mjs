@@ -14,12 +14,14 @@ let passed=0,failed=0;
 async function open(role,path,viewport={width:1365,height:900}){
  const context=await browser.newContext({viewport,reducedMotion:'reduce'});
  // Aislado del servidor: se inyectan insignias de prueba, nunca datos reales.
- const badges=(new URL(path,BASE).searchParams.get('smoke_badges')||'').split(',').map(Number).filter(id=>id===1||id===2);
+ const params=new URL(path,BASE).searchParams;
+ const badges=(params.get('smoke_badges')||'').split(',').map(Number).filter(id=>id===1||id===2);
+ const completedSteps=Math.min(5,Math.max(0,Number(params.get('smoke_m1_steps'))||0));
  await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/,async route=>{
    const url=route.request().url();
    await route.fulfill({status:200,contentType:url.includes('.css')?'text/css':'application/javascript',body:''});
  });
- await context.addInitScript(({role,badges})=>{
+ await context.addInitScript(({role,badges,completedSteps})=>{
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
@@ -31,9 +33,12 @@ async function open(role,path,viewport={width:1365,height:900}){
      missions:[1,2,3,4,5,6].map(id=>({id,title:'Misioa '+id,subtitle:'Historia',intro:'Inperialismoa'})),
      classes:[{id:'class1',name:'Clase de pruebas',school_year:'2026-2027'}],
      public_questions:[],
-     gallery_team_state:[],bi_sistema_team_state:[],empire_dossier_team_state:[],
+     gallery_team_state:completedSteps>=1?[{team_id:'team1',locked_ids:[],locked_positions:{},completed_at:'2026-11-22T11:00:00Z'}]:[],
+     bi_sistema_team_state:completedSteps>=2?[{team_id:'team1',locked_ids:[],locked_positions:{},challenge_locked:[],completed_at:'2026-11-22T11:10:00Z'}]:[],
+     empire_dossier_team_state:completedSteps>=4?[{team_id:'team1',solved_ids:['india','aljeria','indonesia','angola'],completed_at:'2026-11-22T11:40:00Z'}]:[],
      mission_badges:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
-     mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),mission1_exercise_completions:[],
+     mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
+     mission1_exercise_completions:[...(completedSteps>=3?[{team_id:'team1',exercise:3}]:[]),...(completedSteps>=5?[{team_id:'team1',exercise:5}]:[])],
      territory_claims:[],territory_markers:[],submissions:[],submission_assessments:[],
      mission_attempts:[],attempt_answers:[],empire_dossier_attempts:[],
      bi_sistema_attempts:[],gallery_attempts:[],empire_dossier_clue_reads:[]
@@ -75,7 +80,7 @@ async function open(role,path,viewport={width:1365,height:900}){
    };
    window.__smokeRpcCalls=[];
    window.supabase={createClient:()=>client};
- },{role,badges});
+ },{role,badges,completedSteps});
  const page=await context.newPage();
  const errors=[];
  page.on('pageerror',err=>errors.push(err.message));
@@ -545,6 +550,23 @@ try{
      assert.equal(await page.locator('.m1-nav').count(),0);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Alumno: cada ejercicio se abre cuando el anterior consta completado en Supabase',async()=>{
+   for(const [file,steps,selector] of [
+     ['bi-sistema.html',1,'#bi-stage'],
+     ['inperialismoaren-definizioa.html',2,'#check'],
+     ['inperioen-aztarnak.html',3,'.history-file'],
+     ['esaldiak-osatu.html',4,'#verify']
+   ]){
+     const {page,context,errors}=await open('student',file+'?smoke_m1_steps='+steps);
+     try{
+       await waitVisible(page,selector);
+       await page.waitForTimeout(550);
+       assert.ok(page.url().includes(file),file+' no debe redirigir cuando el estado real anterior existe');
+       assert.deepEqual(errors,[]);
+       assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     }finally{await context.close()}
+   }
  });
  await scenario('Profesor: puede abrir la galería y su pantalla final sin guardar',async()=>{
    const {page,context,errors}=await open('teacher','index.html#teacherpreviewgallery');
