@@ -173,7 +173,9 @@ try{
      await page.waitForFunction(()=>getComputedStyle(
        document.querySelector('.c-museo-m1'),'::before').opacity==='1');
      assert.match(await page.locator('.c-museo-m1').getAttribute('aria-label'),/Eskuragarri/);
-     await page.locator('[data-c-logout]').click();
+     assert.equal(await page.locator('.c-museo-toolbar [data-c-logout]').count(),1);
+     assert.equal(await page.locator('.c-museo-power[data-c-logout]').count(),1);
+     await page.locator('.c-museo-power[data-c-logout]').click();
      await waitVisible(page,'#login-screen');
      assert.equal(await page.locator('#app-shell').isVisible(),false);
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
