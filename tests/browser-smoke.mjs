@@ -13,11 +13,13 @@ const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE
 let passed=0,failed=0;
 async function open(role,path,viewport={width:1365,height:900}){
  const context=await browser.newContext({viewport,reducedMotion:'reduce'});
+ // Aislado del servidor: se inyectan insignias de prueba, nunca datos reales.
+ const badges=(new URL(path,BASE).searchParams.get('smoke_badges')||'').split(',').map(Number).filter(id=>id===1||id===2);
  await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/,async route=>{
    const url=route.request().url();
    await route.fulfill({status:200,contentType:url.includes('.css')?'text/css':'application/javascript',body:''});
  });
- await context.addInitScript(({role})=>{
+ await context.addInitScript(({role,badges})=>{
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
@@ -30,7 +32,8 @@ async function open(role,path,viewport={width:1365,height:900}){
      classes:[{id:'class1',name:'Clase de pruebas',school_year:'2026-2027'}],
      public_questions:[],
      gallery_team_state:[],bi_sistema_team_state:[],empire_dossier_team_state:[],
-     mission_badges:[],mission_completions:[],mission1_exercise_completions:[],
+     mission_badges:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
+     mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),mission1_exercise_completions:[],
      territory_claims:[],territory_markers:[],submissions:[],submission_assessments:[],
      mission_attempts:[],attempt_answers:[],empire_dossier_attempts:[],
      bi_sistema_attempts:[],gallery_attempts:[],empire_dossier_clue_reads:[]
@@ -70,7 +73,7 @@ async function open(role,path,viewport={width:1365,height:900}){
    };
    window.__smokeRpcCalls=[];
    window.supabase={createClient:()=>client};
- },{role});
+ },{role,badges});
  const page=await context.newPage();
  const errors=[];
  page.on('pageerror',err=>errors.push(err.message));
@@ -148,6 +151,50 @@ try{
      assert.equal(await page.locator('.c-museo-portal').count(),4);
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/c-museo-alumno-movil.png',fullPage:true,animations:'disabled'});
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+
+ await scenario('Vestíbulo C: las insignias reales simuladas producen 1/4 y 2/4, sin revelar otras misiones',async()=>{
+  for(const [badges,expected] of [['1',25],['1,2',50]]){
+   const {page,context,errors}=await open('student','index.html?museo=c&smoke_badges='+badges,{width:1672,height:941});
+   try{
+     await waitVisible(page,'.c-museo-stage');
+     assert.equal(await page.locator('.c-museo-mobile-mission').count(),4);
+     assert.equal(await page.locator('.c-museo-m2').isDisabled(),false);
+     assert.equal(await page.locator('.c-museo-m3').isDisabled(),true);
+     assert.equal(await page.locator('.c-museo-m4').isDisabled(),true);
+     const summary=await page.locator('.c-museo-mobile-summary').textContent();
+     assert.match(summary,new RegExp((expected/25)+' / 4 misio osatuta'));
+     assert.match(summary,new RegExp(expected+' %'));
+     if(expected===25){
+       assert.equal(await page.locator('.c-museo-book-progress').count(),0,
+        'No hay doble tinta encima de la foto original 1/4');
+     }else{
+       assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
+       assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
+     }
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-progreso-'+expected+'.png',animations:'disabled',fullPage:true});
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
+ await scenario('Vestíbulo C: la navegación móvil es legible y no desbloquea misiones futuras',async()=>{
+   const {page,context,errors}=await open('student','index.html?museo=c&smoke_badges=1',{width:390,height:844});
+   try{
+     await waitVisible(page,'.c-museo-mobile-guide');
+     assert.equal(await page.locator('.c-museo-mobile-mission').count(),4);
+     for(const [index,enabled] of [[0,true],[1,true],[2,false],[3,false]]){
+       const button=page.locator('.c-museo-mobile-mission').nth(index);
+       assert.equal(await button.isDisabled(),!enabled);
+       const box=await button.boundingBox();
+       assert.ok(box&&box.height>=60&&box.width>=300,'Botón accesible de tamaño suficiente');
+     }
+     await page.locator('.c-museo-mobile-mission').nth(1).click();
+     assert.equal(await page.locator('.c-museo-home').count(),0);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
