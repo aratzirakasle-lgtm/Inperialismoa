@@ -90,9 +90,15 @@ async function initialize(){
   if(!teacher){
    if(profile.role!=='student'||!profile.team_id){cardMessage('Sarrera mugatua','Talde bateko ikasle gisa sartu behar duzu.');return}
    teamId=profile.team_id;
-   const badge=await client.from('mission_badges').select('mission_id').eq('team_id',teamId).eq('mission_id',1).limit(1);
-   if(badge.error)throw badge.error;
-   if(!badge.data?.length){cardMessage('Bigarren misioa blokeatuta','Lehen misioa osatu behar duzue bigarren misioan sartzeko.');return}
+   // Lehen misioaren lehenagoko lorpena datu-basean mantentzen da,
+   // baina bost joko berriak amaitu arte ez du bigarren misioa irekitzen.
+   const fifth=await client.from('mission1_exercise_completions')
+     .select('exercise').eq('team_id',teamId).eq('exercise',5).limit(1);
+   if(fifth.error)throw fifth.error;
+   if(!fifth.data?.length){
+     cardMessage('Bigarren misioa blokeatuta','Lehen misioaren bost ariketak osatu behar dituzue bigarren misioan sartzeko.');
+     return;
+   }
    const saved=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);
    if(saved.error){
     console.warn('2. misioaren egitura ez dago oraindik aktibatuta:',saved.error.message);
