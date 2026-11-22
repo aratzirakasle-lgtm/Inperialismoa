@@ -174,9 +174,11 @@ try{
      assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),0);
      assert.equal(await page.locator('.c-museo-banner-retouch').count(),1);
      await page.locator('.c-museo-banner-retouch').evaluate(img=>img.decode());
+     await page.locator('.c-museo-m1').hover();
+     await page.waitForFunction(()=>Number(getComputedStyle(
+       document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
      await page.locator('.c-museo-m1').focus();
-     await page.waitForFunction(()=>getComputedStyle(
-       document.querySelector('.c-museo-m1'),'::before').opacity==='1');
+     assert.equal(await page.locator('.c-museo-m1').evaluate(el=>document.activeElement===el),true);
      assert.match(await page.locator('.c-museo-m1').getAttribute('aria-label'),/Eskuragarri/);
      assert.equal(await page.locator('.c-museo-toolbar [data-c-logout]').count(),1);
      assert.equal(await page.locator('.c-museo-power[data-c-logout]').count(),1);
