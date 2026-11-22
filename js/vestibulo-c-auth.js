@@ -9,7 +9,7 @@ const display = {
   4:{title:"Inperioen itzalak"}
 };
 const hotspot=(css,label,attrs="") =>
- '<button type="button" class="c-museo-hotspot '+css+'" aria-label="'+esc(label)+'" '+attrs+'><span class="c-museo-sr">'+esc(label)+'</span></button>';
+ '<button type="button" class="c-museo-hotspot '+css+'" aria-label="'+esc(label)+'" title="'+esc(label)+'" '+attrs+'><span class="c-museo-sr">'+esc(label)+'</span></button>';
 export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  const done=new Set(completedIds.filter(id=>id===1||id===2));
  const complete1=done.has(1),complete2=done.has(2);
@@ -44,7 +44,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  const m1Plate=complete1?"":'<span class="c-museo-brass c-museo-status1 c-museo-available" aria-hidden="true"><span>HASI →</span></span>';
  const m2Plate=complete1?(complete2?
   '<span class="c-museo-brass c-museo-status2 c-museo-done" aria-hidden="true">✓ OSATUTA</span>':''):
-  '<span class="c-museo-brass c-museo-status2 c-museo-locked" aria-hidden="true">BLOKEATUTA</span>';
+  '<span class="c-museo-brass c-museo-status2 c-museo-locked" aria-hidden="true"><svg class="c-museo-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>BLOKEATUTA</span>';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
@@ -65,7 +65,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
  '<div class="c-museo-real-data">'+
  '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
- '<span class="c-museo-book-name '+nameSize+'">'+safeName+'</span>'+ 
+ '<span class="c-museo-book-name '+nameSize+'" title="'+safeName+'">'+safeName+'</span>'+ 
  '<span class="c-museo-book-progress">'+count+' / 4</span>'+ 
  '<span class="c-museo-book-percent">'+pct+' %</span>'+ 
  '<span class="c-museo-book-bar"><i style="width:'+pct+'%"></i></span>'+ 
