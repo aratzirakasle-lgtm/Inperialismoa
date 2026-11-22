@@ -138,6 +138,18 @@ function renderHome(){
   <p class="footer-note">Ariketa historiko kritikoa: kolonialismoaren eraginak, ustiapena eta erresistentziak ere aztertuko ditugu.</p>
  </div>`;
 }
+const M1_ARTXIBOA=["Europako mapa","Sistema politikoen fitxa","Inperioen dokumentua","Iturri historikoen akta","Azken zigilua"];
+function m1Pieces(team){return new Set(mission1FifthStates.filter(r=>String(r.team_id)===String(team)).map(r=>Number(r.exercise)).filter(n=>n>=1&&n<=5))}
+function m1Dossier(){
+ const team=viewTeamId();if(!team)return;
+ const pieces=m1Pieces(team),done=completed(team,1);
+ const rows=M1_ARTXIBOA.map((name,i)=>'<li class="'+(pieces.has(i+1)?'m1-sealed':'')+'"><span class="m1-medal">'+(pieces.has(i+1)?'✓':String(i+1).padStart(2,'0'))+'</span><span>'+name+'</span><small>'+(pieces.has(i+1)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
+ modal('<div class="m1-archive"><p class="m1-overline">MUSEOKO ARTXIBOA · I. MISIOA</p><h2 id="modal-title">Ikerketa-espedientea</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p><p>Ariketak gainditu ahala, bost dokumentuak zigilatuko dira.</p><ol>'+rows+'</ol><p class="m1-note">'+pieces.size+' / 5 · '+(done?'Lehen misioa osatuta.':'Bosgarren ariketa gainditzean, bigarren misioa desblokeatuko da.')+'</p>'+(done?'<button type="button" class="btn" data-m1-ceremony="1">Ikusi amaierako ziurtagiria ✧</button>':'')+'</div>');
+}
+function m1Ceremony(){
+ if(!completed(viewTeamId(),1))return;
+ modal('<div class="m1-certificate"><p>MUSEOKO ARTXIBOA · XIX. MENDEA</p><h2 id="modal-title">LEHEN MISIOA OSATUTA</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p><div class="m1-bigseal">✓<small>ESPEDIENTEA ZIGILATUTA</small></div><p>Bost ariketako ikerketa amaitu duzue. Bigarren misioa desblokeatuta dago.</p><button type="button" class="btn" data-m1-next="2">Joan bigarren misiora →</button></div>');
+}
 function renderGallery(){
  const team=viewTeamId();
  const current=galleryStates.find(x=>x.team_id===team)||{};
@@ -156,6 +168,12 @@ function renderGallery(){
      return data;
    }
  });
+ const root=$("#view");
+ if(root&&!root.querySelector(".m1-archive-open")){
+  const entry=document.createElement("div");entry.className="m1-archive-open";
+  entry.innerHTML='<button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+m1Pieces(team).size+' / 5</span></button>';
+  root.prepend(entry);
+ }
 }
 function renderMission(){if(currentMission===2&&!demo){location.assign('./inperialismoaren-faktoreak.html'+(accountIsTeacher()?'?preview=1':''));return;}if(currentMission===1&&(!galleryQuestionsOpen||!demo)&&!isTeacher())return renderGallery();const m=missionById(currentMission);if(!m)return;const done=!isTeacher()&&completed(viewTeamId(),m.id);const qs=m.questions||[];const answered=qs.filter(q=>responses[q.id]!==undefined).length;$("#view").innerHTML='<div class="content-width">'+pageHeading("MISIOA "+String(m.id).padStart(2,"0")+" · INPERIALISMOAREN HISTORIA",m.title,m.intro,done?'✓ OSATUTA':'AURRERA EGITEKO % 100')+'<div class="card"><div class="eyebrow">HASI AURRETIK</div><h3>'+esc(m.subtitle)+'</h3><p class="card-sub">Irakurri arretaz. '+qs.length+' galdera daude. Guztiak asmatu behar dituzu; ondo erantzundakoak gordeko dira, eta berriro saia zaitezke.</p><div class="progressbar"><span style="width:'+(qs.length?100*qs.filter(q=>checkFeedback?.correct?.includes(q.id)).length/qs.length:0)+'%"></span></div><div class="card-sub">'+answered+' / '+qs.length+' erantzunda</div></div>'+qs.map((q,i)=>'<section class="card question-card"><div class="eyebrow">GALDERA '+String(i+1).padStart(2,"0")+'</div><div class="question-title">'+esc(q.text)+'</div><div class="question-options">'+q.options.map((opt,j)=>'<label class="option '+(checkFeedback?.correct?.includes(q.id)&&responses[q.id]===j?'locked-correct':'')+'"><input type="radio" name="question-'+esc(q.id)+'" value="'+j+'" data-question="'+esc(q.id)+'" '+(responses[q.id]===j?'checked':'')+' '+(checkFeedback?.correct?.includes(q.id)||done||isTeacher()?'disabled':'')+'><span>'+esc(opt)+'</span></label>').join("")+'</div>'+(checkFeedback?.correct?.includes(q.id)?'<div class="question-feedback ok">✓ Erantzun zuzena</div>':checkFeedback?.incorrect?.includes(q.id)?'<div class="question-feedback bad">Berrikusi erantzuna eta saiatu berriro.</div>':'')+'</section>').join("")+(done?'<div class="complete-banner"><h3>✓ Misioa gaindituta!</h3><p>Zuen taldeak erantzun guztiak asmatu ditu. Hurrengo misioa desblokeatu da.</p><button class="btn primary" data-mission="'+Math.min(m.id+1,6)+'">Espedizioarekin jarraitu →</button></div>':isTeacher()?'<div class="notice">Irakaslearen aurrebista. Erantzunak ez dira pantaila honetatik bidaltzen.</div>':'<div class="mission-actions"><button class="btn primary" id="check-mission" '+(answered!==qs.length?'disabled':'')+'>Egiaztatu '+qs.length+' erantzunak →</button><span class="card-sub">Saiakera mugagabeak · Aurrerapena gordeta</span></div>')+'</div>';
 }
@@ -215,7 +233,7 @@ async function refreshData(){if(demo)return;
    teacher?db.from("empire_dossier_attempts").select("id,team_id,submitted_by,case_id,is_correct,created_at").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
-   db.from("mission1_exercise_completions").select("team_id,exercise").eq("exercise",5)
+   db.from("mission1_exercise_completions").select("team_id,exercise")
  ]);
  for(const result of [gs,bs,es,ea,ba,ga,m1f])if(result.error)throw result.error;
  galleryStates=gs.data||[];
@@ -268,9 +286,12 @@ if(b.hasAttribute("data-c-toggle")){
 if(b.hasAttribute("data-c-globe")){
  modal('<h2 id="modal-title">Esplorazioen atlasa</h2><p>Inperialismoaren garaiko mundua aztertzeko museoko pieza. Ez du ariketen erantzunik erakusten.</p>');return;
 }
-if(b.hasAttribute("data-c-ledger")){
+if(b.hasAttribute("data-m1-dossier")){m1Dossier();return}
+ if(b.hasAttribute("data-m1-ceremony")){m1Ceremony();return}
+ if(b.hasAttribute("data-m1-next")){closeModal();changeMission(2);return}
+ if(b.hasAttribute("data-c-ledger")){
  const team=viewTeamId();const total=[1,2].filter(id=>completed(team,id)).length;
- modal('<h2 id="modal-title">Taldearen espedientea</h2><p>'+esc(mine()?.name||"Taldea")+': '+total+' / 4 misio osatuta. 3. eta 4. misioak prestatzen ari gara.</p>');return;
+ modal('<h2 id="modal-title">Taldearen espedientea</h2><p>'+esc(mine()?.name||"Taldea")+': '+total+' / 4 misio osatuta. 3. eta 4. misioak prestatzen ari gara.</p><button type="button" class="m1-ledger-open" data-m1-dossier="1">✧ Lehen misioaren espedientea</button>');return;
 }
 if(b.id==="teacher-preview-bi"&&accountIsTeacher()){location.assign("./bi-sistema.html?preview=1");return}if(b.id==="student-preview"&&accountIsTeacher()){const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=0;responses={};checkFeedback=null;render();return}if(b.id==="return-to-teacher"&&accountIsTeacher()){teacherPreview=false;teacherPreviewTeamId=null;currentMission=0;responses={};checkFeedback=null;render();return}if(b.dataset.demo)await signInDemo(b.dataset.demo);if(b.dataset.mission)changeMission(Number(b.dataset.mission));if(b.dataset.view){
  if(b.dataset.view==="preview"&&accountIsTeacher()){
