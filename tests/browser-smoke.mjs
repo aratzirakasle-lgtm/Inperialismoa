@@ -51,11 +51,13 @@ async function open(role,path,viewport={width:1365,height:900}){
        then(ok,fail){return Promise.resolve({data:rows,error:null}).then(ok,fail)}
      };return obj
    };
+   let authSubscriber=null;
    const client={
      auth:{
        getSession:async()=>({data:{session:{user:{id:userId}}},error:null}),
        getUser:async()=>({data:{user:{id:userId}},error:null}),
-       onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}})
+       onAuthStateChange:fn=>{authSubscriber=fn;return {data:{subscription:{unsubscribe(){authSubscriber=null}}}};},
+       signOut:async()=>{authSubscriber?.('SIGNED_OUT');return {error:null}}
      },
      from:table=>builder(table),
      rpc:async(name,args)=>{
@@ -155,6 +157,29 @@ try{
    }finally{await context.close()}
  });
 
+ await scenario('Vestíbulo C: cabecera limpia, enfoque accesible y cierre de sesión conservado',async()=>{
+   const {page,context,errors}=await open('student','index.html?museo=c',{width:1440,height:900});
+   try{
+     await waitVisible(page,'.c-museo-stage');
+     assert.equal(await page.locator('#app-shell .topbar').isVisible(),false,
+       'No se repiten dos cabeceras en la pantalla inmersiva');
+     assert.equal(await page.locator('.c-museo-toolbar-team').isVisible(),true);
+     assert.equal(await page.locator('.c-museo-banner-dim').count(),0,
+       'No deben usarse parches rectangulares sobre el estandarte');
+     assert.equal(await page.locator('.c-museo-second-dim').count(),0);
+     assert.equal(await page.locator('.c-museo-status1.c-museo-available').count(),1);
+     assert.equal(await page.locator('.c-museo-status2.c-museo-locked').count(),1);
+     await page.locator('.c-museo-m1').focus();
+     await page.waitForFunction(()=>getComputedStyle(
+       document.querySelector('.c-museo-m1'),'::before').opacity==='1');
+     assert.match(await page.locator('.c-museo-m1').getAttribute('aria-label'),/Eskuragarri/);
+     await page.locator('[data-c-logout]').click();
+     await waitVisible(page,'#login-screen');
+     assert.equal(await page.locator('#app-shell').isVisible(),false);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Vestíbulo C: las insignias reales simuladas producen 1/4 y 2/4, sin revelar otras misiones',async()=>{
   for(const [badges,expected] of [['1',25],['1,2',50]]){
    const {page,context,errors}=await open('student','index.html?museo=c&smoke_badges='+badges,{width:1672,height:941});
