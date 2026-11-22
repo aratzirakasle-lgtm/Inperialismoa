@@ -168,8 +168,8 @@ try{
      assert.match(summary,new RegExp((expected/25)+' / 4 misio osatuta'));
      assert.match(summary,new RegExp(expected+' %'));
      if(expected===25){
-       assert.equal(await page.locator('.c-museo-book-progress').count(),0,
-        'No hay doble tinta encima de la foto original 1/4');
+       assert.equal(await page.locator('.c-museo-book-progress').innerText(),'1 / 4',
+        'El dato real se imprime una sola vez en el pergamino restaurado');
      }else{
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
        assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
