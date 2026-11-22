@@ -76,7 +76,18 @@
     clip-path:none!important;
   }
   .dossier-sheet--case .dossier-choice:has(input:checked)::before {display:none!important}
-  .dossier-sheet--case .dossier-choice:has(input:checked)::after {
+  /* Aukeraketa = laranja. Zerbitzariak zuzena dela berretsi arte ez dago ✓ ikurrik. */
+  .dossier-sheet--case .dossier-choice:has(input:checked):not(.is-verified)::after {
+    content:''!important;display:block!important;
+    position:absolute!important;right:4.8%!important;top:24%!important;
+    width:2.75cqw!important;height:2.75cqw!important;padding:0!important;
+    border:.17cqw solid #b9631e!important;border-radius:50%!important;
+    background:radial-gradient(circle at 32% 25%,#ffdb9c 0%,#f6a53e 42%,#e17f22 78%,#bb5919 100%)!important;
+    box-shadow:0 .1cqw .19cqw #9c4f2459,inset 0 .07cqw .17cqw #fff1d6!important;
+    transform:rotate(-12deg)!important;opacity:1!important;pointer-events:none!important;
+    animation:archivalSeal .25s ease-out both;
+  }
+  .dossier-sheet--case .dossier-choice.is-verified:has(input:checked)::after {
     content:'✓'!important;display:grid!important;place-items:center!important;
     right:4.8%!important;top:24%!important;
     width:2.75cqw!important;height:2.75cqw!important;padding:0!important;
@@ -93,7 +104,7 @@
   .dossier-sheet--case .dossier-choice:has(input:focus-visible) {
     outline:2px dotted #80572c!important;outline-offset:-.28cqw!important;
   }
-  .dossier-sheet--case:has(.dossier-feedback.good) .dossier-choice:has(input:checked)::after {
+  .dossier-sheet--case:has(.dossier-feedback.good) .dossier-choice.is-verified:has(input:checked)::after {
     border-color:#67a780!important;color:#28774e!important;
     background:radial-gradient(circle at 35% 26%,#f1fff4,#d6f1dd 52%,#b9dfc8)!important;
     opacity:1!important;
@@ -207,7 +218,17 @@
     background:linear-gradient(98deg,#dab689b0,#edd5a9af)!important;
     box-shadow:inset 0 0 0 1px #54735478!important;
   }
-  .dossier-sheet--case .dossier-choice:has(input:checked)::after {
+  /* Mugikorrean ere laranja, soilik egiaztatutako erantzun zuzena berde. */
+  .dossier-sheet--case .dossier-choice:has(input:checked):not(.is-verified)::after {
+    content:''!important;display:block!important;
+    position:absolute!important;right:12px!important;top:10px!important;
+    width:32px!important;height:32px!important;padding:0!important;
+    border:2px solid #b9631e!important;border-radius:50%!important;
+    background:radial-gradient(circle at 32% 25%,#ffdb9c 0%,#f6a53e 42%,#e17f22 78%,#bb5919 100%)!important;
+    box-shadow:0 1px 4px #9c4f2459,inset 0 1px 3px #fff1d6!important;
+    transform:rotate(-12deg)!important;opacity:1!important;pointer-events:none!important;
+  }
+  .dossier-sheet--case .dossier-choice.is-verified:has(input:checked)::after {
     content:'✓'!important;display:grid!important;place-items:center!important;
     position:absolute!important;right:12px!important;top:10px!important;
     width:32px!important;height:32px!important;padding:0!important;
