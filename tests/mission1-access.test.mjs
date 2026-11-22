@@ -46,3 +46,16 @@ test('Ezin da lehengo misio-zigiluarekin bost jolasetako aurreko ariketarik salt
  assert.match(read('js/app.js'),/mission_badges/,'Lehengo misio-zigiluak erakusten dira, ez dira ezabatzen');
  assert.match(read('js/app.js'),/const canSkip=teacherPreview\|\|!!current.completed_at/);
 });
+
+test('El menú del alumno exige el quinto juego; el profesor conserva los logros históricos',()=>{
+ const app=read('js/app.js');
+ const second=read('js/mission2-faktoreak.js');
+ has('js/app.js',/mission1FifthStates=m1f\.data\|\|\[\]/);
+ has('js/app.js',/db\.from\("mission1_exercise_completions"\)\.select\("team_id,exercise"\)\.eq\("exercise",5\)/);
+ assert.match(app,/Number\(id\)===1&&!demo&&\(user\?\.role==="student"\|\|teacherPreview\)/);
+ assert.match(app,/mission1FifthStates\.some\(e=>String\(e\.team_id\)===String\(team\)&&Number\(e\.exercise\)===5\)/);
+ assert.match(app,/:progress\.some\(p=>String\(p\.team_id\)/,'El panel docente y las demás misiones conservan sus logros');
+ assert.match(second,/from\('mission1_exercise_completions'\)/);
+ assert.match(second,/eq\('exercise',5\)/);
+ assert.doesNotMatch(second,/from\('mission_badges'\)/,'La misión 2 no puede abrirse con un sello antiguo');
+});
