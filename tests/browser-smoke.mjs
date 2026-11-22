@@ -199,7 +199,7 @@ try{
  });
  await scenario('Vestíbulo C: las insignias reales simuladas producen 1/4 y 2/4, sin revelar otras misiones',async()=>{
   for(const [badges,expected] of [['1',25],['1,2',50]]){
-   const {page,context,errors}=await open('student','index.html?museo=c&smoke_badges='+badges,{width:1672,height:941});
+   const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges='+badges,{width:1672,height:941});
    try{
      await waitVisible(page,'.c-museo-stage');
      assert.equal(await page.locator('.c-museo-mobile-mission').count(),4);
@@ -242,7 +242,7 @@ try{
   }
  });
  await scenario('Vestíbulo C: la navegación móvil es legible y no desbloquea misiones futuras',async()=>{
-   const {page,context,errors}=await open('student','index.html?museo=c&smoke_badges=1',{width:390,height:844});
+   const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges=1',{width:390,height:844});
    try{
      await waitVisible(page,'.c-museo-mobile-guide');
      assert.equal(await page.locator('.c-museo-mobile-mission').count(),4);
