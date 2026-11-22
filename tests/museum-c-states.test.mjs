@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {renderVestibuloC} from '../js/vestibulo-c-auth.js';
 
 test('Egoera 0/4: lehen misioa erabilgarri, bigarrena itxita',()=>{
