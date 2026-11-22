@@ -164,7 +164,7 @@
 <link rel="stylesheet" href="./assets/inperioen-arte-angola-v5.css?v=20261118-1">
 <link rel="stylesheet" href="./assets/inperioen-fidelidad-real-v5.css?v=20261118-3">
 <!-- Tinta, papel y sellos integrados en los expedientes; retirar este enlace para revertir. -->
-<link rel="stylesheet" href="./assets/inperioen-integracion-v6.css?v=20261119-4">
+<link rel="stylesheet" href="./assets/inperioen-integracion-v6.css?v=20261122-seleccion-naranja1">
 <link rel="stylesheet" href="./assets/inperioen-globo-reparado-v1.css?v=20261119-1">
   <link rel="stylesheet" href="./assets/accesibilidad-juegos.css?v=20261120-1">
 </head>
@@ -352,7 +352,7 @@ function openCase(id){
  <h3 class="dossier-question" aria-label="${escapeHtml(c.question)}">${escapeHtml(shortQuestion)}</h3>
  <div class="dossier-clues">${c.clues.map((clue,i)=>`<details data-clue="${i}" data-read="${clueSet(id).has(i)}"><summary data-ico="${types[i]}"><span>${escapeHtml(clue.title)}</span><span class="clue-seen">${clueSet(id).has(i)?'✓ Irakurrita':'Ireki'}</span></summary><p>${escapeHtml(clue.text)}</p></details>`).join('')}</div>
  <div class="dossier-clue-status" aria-live="polite"><span id="clue-progress-label">${count}/3</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
- <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice ${!ready||solvedIt?'is-locked':''}"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${!ready||solvedIt||saving?'disabled':''}><span class="choice-flag">${powerFlagSvg(choice.id)}</span><span class="choice-name">${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
+ <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice ${!ready||solvedIt?'is-locked':''} ${solvedIt&&selected[id]===choice.id?'is-verified':''}"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${!ready||solvedIt||saving?'disabled':''}><span class="choice-flag">${powerFlagSvg(choice.id)}</span><span class="choice-name">${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
  <div class="dossier-actionrow"><button type="button" id="dossier-verify" class="dossier-action" ${!ready||solvedIt||!selected[id]||saving?'disabled':''}>${solvedIt?'✓ Egiaztatuta':'Erantzuna egiaztatu'}</button></div>
  <p id="choice-locked-note" class="dossier-locked-note">${ready?'Erantzuna aukeratu eta egiaztatu.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`}</p>
  <div id="case-feedback">${feedbackMessage(lastResult[id])}</div></div></div>
