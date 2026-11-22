@@ -28,7 +28,7 @@ test('La réplica se alimenta de los datos existentes y nunca escribe ni solicit
  assert.match(module,/sandbox=""/);
  assert.match(module,/data-mission="1"/);
  assert.match(module,/data-mission="2"/);
- assert.match(module,/3\. eta 4\. misioak/);
+ assert.match(module,/3\. Misioa/);
  assert.doesNotMatch(module,/createClient\s*\(|\.rpc\s*\(|localStorage|fetch\s*\(/);
  assert.doesNotMatch(module,/data-mission="3"/);
  assert.doesNotMatch(module,/data-mission="4"/);
