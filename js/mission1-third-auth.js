@@ -35,13 +35,13 @@ async function initialize(){
     }
     if(!profile.team_id){location.replace('./index.html');return}
     const team=profile.team_id;
-    const [{data:second,error:secondError},{data:prior,error:priorError},{data:legacy,error:legacyError}]=await Promise.all([
+    const [{data:second,error:secondError},{data:prior,error:priorError}]=await Promise.all([
       client.from('bi_sistema_team_state').select('completed_at').eq('team_id',team).maybeSingle(),
-      client.from('mission1_exercise_completions').select('exercise').eq('team_id',team).eq('exercise',3).maybeSingle(),
-      client.from('mission_badges').select('mission_id').eq('team_id',team).eq('mission_id',1).limit(1)
+      client.from('mission1_exercise_completions').select('exercise').eq('team_id',team).eq('exercise',3).maybeSingle()
     ]);
-    if(secondError||priorError||legacyError)throw secondError||priorError||legacyError;
-    if(!second?.completed_at&&!legacy?.length){location.replace('./bi-sistema.html');return;}
+    if(secondError||priorError)throw secondError||priorError;
+    // Baimena bigarren ariketaren benetako amaierak soilik ematen du.
+    if(!second?.completed_at){location.replace('./bi-sistema.html');return;}
     window.m1ThirdProgress=async answers=>{
       const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:3,p_answers:answers});
       if(error)throw error;
