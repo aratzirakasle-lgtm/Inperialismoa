@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-libros6";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-zigiluak8";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261121-mapa-cartelas2";
 const $ = s => document.querySelector(s);
@@ -247,6 +247,10 @@ async function setSession(){const {data:{user:authUser}}=await db.auth.getUser()
  switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).subscribe()}
 async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;realtimeDirty=false;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
+if(b.hasAttribute("data-c-logout")){
+  // C museoak lehendik dagoen saio-irteera segurua erabiltzen du.
+  $("#logout-btn").click();return;
+}
 if(b.hasAttribute("data-c-toggle")){
   conceptCHome=!conceptCHome;
   const url=new URL(location.href);
