@@ -63,7 +63,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  '</div></div>'+
  '<div class="c-museo-stage" aria-label="Inperialismoaren garaia. Lau misioko museoa">'+
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
- '<img class="c-museo-banner-retouch" src="./assets/museo-c-estandartes-sin-texto.svg?v=2" alt="" aria-hidden="true" draggable="false">'+
+ '<img class="c-museo-banner-retouch" src="./assets/museo-c-estandartes-sin-texto.svg?v=3" alt="" aria-hidden="true" draggable="false">'+
  '<div class="c-museo-real-data">'+
  '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
  '<span class="c-museo-book-name '+nameSize+'" title="'+safeName+'">'+safeName+'</span>'+ 
