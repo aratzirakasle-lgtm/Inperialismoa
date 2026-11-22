@@ -22,14 +22,19 @@ const territories=TERRITORIES.map(([code,name,continent])=>({code,name,continent
 const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join(""):"🌐";
 const key = "inperialismoa-demo-v1";
 let conceptCHome=new URLSearchParams(location.search).get("museo")==="c";
-let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
+let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
 function initDemo(){demoData=storage.read()||{progress:[{team_id:"nilo",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:1},{team_id:"atlas",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:2},{team_id:"nilo",mission_id:2,completed_at:time(),completed_by:"demo",attempt_count:1}],claims:[{country_code:"EG",team_id:"nilo",claimed_at:time()}],submissions:[],attempts:[]};teams=DEMO_TEAMS;missions=DEMO_MISSIONS.map(euskaratuMisioa);progress=demoData.progress;claims=demoData.claims;submissions=demoData.submissions;attempts=demoData.attempts}
 const accountIsTeacher=()=>user?.role==="teacher";
 const isTeacher=()=>accountIsTeacher()&&!teacherPreview;
 const viewTeamId=()=>teacherPreview?teacherPreviewTeamId:user?.team_id;
 const mine=()=>teams.find(t=>t.id===viewTeamId());
-const completed=(team,id)=>progress.some(p=>String(p.team_id)===String(team)&&Number(p.mission_id)===Number(id));
+// La insignia antigua se conserva en progress y en el panel docente.
+// En el recorrido actual del alumno, el quinto juego confirmado por Supabase
+// es el único que concede OSATUTA a la misión 1 y abre la misión 2.
+const completed=(team,id)=>Number(id)===1&&!demo&&(user?.role==="student"||teacherPreview)
+ ?mission1FifthStates.some(e=>String(e.team_id)===String(team)&&Number(e.exercise)===5)
+ :progress.some(p=>String(p.team_id)===String(team)&&Number(p.mission_id)===Number(id));
 const countDone=team=>missions.filter(m=>completed(team,m.id)).length;
 const available=id=>accountIsTeacher()||(id===1||id===2&&completed(viewTeamId(),1));
 const displayName=()=>teacherPreview?"Ikaslearen aurrebista":isTeacher()?"Irakaslea":(user?.name||"Ikaslea");
@@ -203,21 +208,23 @@ async function refreshData(){if(demo)return;
  // Las consultas son independientes: resolverlas juntas evita esperas sucesivas.
  const teacher=accountIsTeacher();
  const empty=()=>Promise.resolve({data:[],error:null});
- const [gs,bs,es,ea,ba,ga]=await Promise.all([
+ const [gs,bs,es,ea,ba,ga,m1f]=await Promise.all([
    db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at"),
    db.from("bi_sistema_team_state").select("team_id,locked_ids,challenge_locked,completed_at"),
    db.from("empire_dossier_team_state").select("team_id,solved_ids,completed_at"),
    teacher?db.from("empire_dossier_attempts").select("id,team_id,submitted_by,case_id,is_correct,created_at").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
-   teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty()
+   teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
+   db.from("mission1_exercise_completions").select("team_id,exercise").eq("exercise",5)
  ]);
- for(const result of [gs,bs,es,ea,ba,ga])if(result.error)throw result.error;
+ for(const result of [gs,bs,es,ea,ba,ga,m1f])if(result.error)throw result.error;
  galleryStates=gs.data||[];
  biSistemaStates=bs.data||[];
  empireDossierStates=es.data||[];
  empireDossierAttempts=ea.data||[];
  biSistemaAttempts=ba.data||[];
  galleryHistory=ga.data||[];
+ mission1FifthStates=m1f.data||[];
 
 }
 async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-demo",name:"Docente (demo)",role:"teacher"}:{id:"student-demo",name:"Ane (demo)",role:"student",team_id:"atlas"};currentMission=0;teacherTab="overview";responses={};checkFeedback=null;switchScreen(true)}
