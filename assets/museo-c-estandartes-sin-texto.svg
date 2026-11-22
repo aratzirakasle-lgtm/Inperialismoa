@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1672 941" preserveAspectRatio="none" aria-hidden="true">
+  <!-- Restaura solo los símbolos fijos de los dos estandartes. La escena histórica no cambia. -->
+  <defs>
+    <radialGradient id="bronze" cx="44%" cy="32%" r="72%">
+      <stop stop-color="#392b1b"/><stop offset=".61" stop-color="#221a11"/><stop offset="1" stop-color="#15110d"/>
+    </radialGradient>
+    <linearGradient id="cinta" x1="0" y1="0" x2=".09" y2="1">
+      <stop stop-color="#f3b83b"/><stop offset=".34" stop-color="#f4ae29"/><stop offset=".7" stop-color="#f0a320"/><stop offset="1" stop-color="#d58b1e"/>
+    </linearGradient>
+    <linearGradient id="cartela" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fbe4b5"/><stop offset=".2" stop-color="#fce0a6"/><stop offset=".58" stop-color="#fbd28c"/><stop offset=".87" stop-color="#f3bc67"/><stop offset="1" stop-color="#e5a750"/>
+    </linearGradient>
+    <filter id="suavizar" x="-15%" y="-25%" width="130%" height="150%"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+  <!-- Círculo de metal del primer estandarte: se retira el ✓ preimpreso. -->
+  <ellipse cx="356" cy="477" rx="26" ry="29" fill="url(#bronze)" filter="url(#suavizar)"/>
+  <!-- Cinta de época: se retira solo la palabra preimpresa. -->
+  <rect x="320" y="506" width="92" height="26" rx="5" fill="url(#cinta)" filter="url(#suavizar)"/>
+  <!-- Cartela del segundo estandarte: se retira JARRAITU sin eliminar el marco. -->
+  <rect x="515" y="492" width="125" height="32" rx="3" fill="url(#cartela)" filter="url(#suavizar)"/>
+</svg>
