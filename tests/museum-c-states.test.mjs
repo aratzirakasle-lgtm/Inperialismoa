@@ -99,7 +99,7 @@ test('Estatuko testu finkoak desagertzen dira estandarteen geruza apaingarritik'
  const svg=readFileSync(new URL('../assets/museo-c-estandartes-sin-texto.svg',import.meta.url),'utf8');
  assert.match(svg,/<svg[\s\S]*viewBox="0 0 1672 941"/);
  assert.match(svg,/cartela/);
- assert.match(svg,/medallón original|medall[oó]n original/i);
+ assert.match(svg,/Círculo de metal del primer estandarte/);
  assert.doesNotMatch(svg,/<text[\s>]/i);
  const html=renderVestibuloC({teamName:'Taldea',completedIds:[1,2]});
  assert.match(html,/c-museo-banner-retouch/);
