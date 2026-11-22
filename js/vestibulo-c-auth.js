@@ -35,6 +35,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
   hotspot("c-museo-portal c-museo-m4 is-upcoming","4. misioa: "+display[4].title+". Prestatzen",
    'data-state="upcoming" disabled'),
   hotspot("c-museo-globe","Esplorazioen atlasa: informazioa ikusi",'data-c-globe="1"'),
+  hotspot("c-museo-power","Irten museotik",'data-c-logout="1"'),
   hotspot("c-museo-book1","Taldearen espedientea: "+rawName+", "+count+"/4 misio",'data-c-ledger="1"'),
   hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",
    nextId?'data-mission="'+nextId+'"':'disabled')
