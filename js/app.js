@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
+import { renderVestibuloC } from "./vestibulo-c-auth.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261121-mapa-cartelas2";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -19,6 +20,7 @@ const TERRITORIES=[
 const territories=TERRITORIES.map(([code,name,continent])=>({code,name,continent}));
 const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join(""):"🌐";
 const key = "inperialismoa-demo-v1";
+let conceptCHome=new URLSearchParams(location.search).get("museo")==="c";
 let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
 function initDemo(){demoData=storage.read()||{progress:[{team_id:"nilo",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:1},{team_id:"atlas",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:2},{team_id:"nilo",mission_id:2,completed_at:time(),completed_by:"demo",attempt_count:1}],claims:[{country_code:"EG",team_id:"nilo",claimed_at:time()}],submissions:[],attempts:[]};teams=DEMO_TEAMS;missions=DEMO_MISSIONS;progress=demoData.progress;claims=demoData.claims;submissions=demoData.submissions;attempts=demoData.attempts}
@@ -29,15 +31,15 @@ const mine=()=>teams.find(t=>t.id===viewTeamId());
 const completed=(team,id)=>progress.some(p=>String(p.team_id)===String(team)&&Number(p.mission_id)===Number(id));
 const countDone=team=>missions.filter(m=>completed(team,m.id)).length;
 const available=id=>accountIsTeacher()||id===1||completed(viewTeamId(),id-1);
-const displayName=()=>teacherPreview?"Alumno/a · vista previa":isTeacher()?"Profesor/a":(user?.name||"Alumno/a");
+const displayName=()=>teacherPreview?"Ikaslearen aurrebista":isTeacher()?"Irakaslea":(user?.name||"Ikaslea");
 const missionById=id=>missions.find(m=>Number(m.id)===Number(id));
 const cleanHtml = s=>esc(s).replace(/\n/g,"<br>");
 function toast(message){const el=$("#toast");el.textContent=message;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,3600)}
 function modal(html){$("#modal-body").innerHTML=html;$("#modal").hidden=false}
 function closeModal(){$("#modal").hidden=true}
 function switchScreen(logged){if(!logged){teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
-function render(){if(!user)return;const showGallery=currentMission===1&&!galleryQuestionsOpen&&!isTeacher();if(!showGallery&&$("#view").__galleryCleanup)$("#view").__galleryCleanup();$("#app-shell").classList.toggle("gallery-active",showGallery);$("#app-shell").classList.toggle("museum-replica-home",!isTeacher()&&currentMission===0);$("#topbar-user").textContent=displayName();$("#team-summary").innerHTML=isTeacher()?'<div class="team-name">Vista docente</div><p class="team-members">Administración y seguimiento privado</p>':('<div class="team-name">'+esc(mine()?.name||"Equipo")+'</div><div class="team-members">'+(mine()?.members||[]).map(esc).join(" · ")+'</div><div class="team-progress"><span style="width:'+Math.round(100*countDone(viewTeamId())/Math.max(1,missions.length))+'%"></span></div><div class="team-members">'+countDone(viewTeamId())+' de '+missions.length+' misiones completadas</div>');$("#mission-count").textContent=missions.length;
-$("#mission-nav").innerHTML=(accountIsTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Panel del profesor</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Vista del alumno</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Mi expedición</span></button>')+missions.map(m=>{const locked=!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?'Bloqueada':done?'Completada':'Disponible')+'</span></span></button>'}).join("");
+function render(){if(!user)return;const showGallery=currentMission===1&&!galleryQuestionsOpen&&!isTeacher();if(!showGallery&&$("#view").__galleryCleanup)$("#view").__galleryCleanup();$("#app-shell").classList.toggle("gallery-active",showGallery);$("#app-shell").classList.toggle("museum-replica-home",!isTeacher()&&currentMission===0&&!conceptCHome);$("#app-shell").classList.toggle("museo-c-enabled",!isTeacher()&&currentMission===0&&conceptCHome&&!!viewTeamId());$("#topbar-user").textContent=displayName();$("#team-summary").innerHTML=isTeacher()?'<div class="team-name">Vista docente</div><p class="team-members">Administración y seguimiento privado</p>':('<div class="team-name">'+esc(mine()?.name||"Equipo")+'</div><div class="team-members">'+(mine()?.members||[]).map(esc).join(" · ")+'</div><div class="team-progress"><span style="width:'+Math.round(100*countDone(viewTeamId())/Math.max(1,missions.length))+'%"></span></div><div class="team-members">'+countDone(viewTeamId())+' de '+missions.length+' misiones completadas</div>');$("#mission-count").textContent=missions.length;
+$("#mission-nav").innerHTML=(accountIsTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Irakaslearen panela</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Ikaslearen ikuspegia</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Nire espedizioa</span></button>')+missions.map(m=>{const locked=!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?'Bloqueada':done?'Completada':'Disponible')+'</span></span></button>'}).join("");
 $("#scoreboard").innerHTML=(teacherPreview?teams.filter(t=>t.class_id===mine()?.class_id):teams).map(t=>'<div class="score-row"><span>'+esc(t.name)+'</span><span aria-label="'+(completed(t.id,currentMission)?'Completado':'Pendiente')+'" class="'+(completed(t.id,currentMission)?'score-check':'score-pending')+'">'+(completed(t.id,currentMission)?'✓':'○')+'</span></div>').join("");
 if(isTeacher()&&currentMission===0)renderTeacher();else if(currentMission===0)renderHome();else if(currentMission===6)renderFinal();else renderMission();
 $("#view").dataset.museumPage=isTeacher()?"teacher":currentMission===0?"home":currentMission===6?"final":"mission";
@@ -45,6 +47,12 @@ if(teacherPreview)$("#view").insertAdjacentHTML("afterbegin",'<div class="notice
 }
 function pageHeading(eyebrow,title,desc,pill){return '<div class="page-top"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h1>'+esc(title)+'</h1><p class="page-desc">'+esc(desc)+'</p></div>'+(pill?'<span class="step-pill">'+esc(pill)+'</span>':'')+'</div>'}
 function renderHome(){
+ if(conceptCHome && viewTeamId()){
+  const id=viewTeamId();
+  const completedIds=[1,2].filter(missionId=>completed(id,missionId));
+  $("#view").innerHTML=renderVestibuloC({teamName:mine()?.name||"Taldea",completedIds,preview:teacherPreview});
+  return;
+ }
  const total=missions.length;
  const n=countDone(viewTeamId());
  const pct=total?Math.round(100*n/total):0;
@@ -88,6 +96,7 @@ function renderHome(){
  `:`<p class="museum-next-completed">${n===total?"✓ Ibilbide osoa gainditu duzue.":"Misioaren hurrengo urratsa prestatzen ari da."}</p>`;
  $("#view").innerHTML=`
  <div class="content-width museum-gallery-home">
+  <div class="notice amber" style="margin:0 0 13px"><strong>Ikasleen museo berria:</strong> C kontzeptuaren ataria, benetako taldearen aurrerapenarekin. <button class="btn primary" type="button" data-c-toggle="1">Museo berria ikusi →</button></div>
   ${heading}
   ${featured}
   <section class="museum-gallery-lower" aria-label="Aurrerapena eta testuingurua">
@@ -235,7 +244,22 @@ async function setSession(){const {data:{user:authUser}}=await db.auth.getUser()
  if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
  switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).subscribe()}
 async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;realtimeDirty=false;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
-document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;if(b.id==="teacher-preview-bi"&&accountIsTeacher()){location.assign("./bi-sistema.html?preview=1");return}if(b.id==="student-preview"&&accountIsTeacher()){const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=0;responses={};checkFeedback=null;render();return}if(b.id==="return-to-teacher"&&accountIsTeacher()){teacherPreview=false;teacherPreviewTeamId=null;currentMission=0;responses={};checkFeedback=null;render();return}if(b.dataset.demo)await signInDemo(b.dataset.demo);if(b.dataset.mission)changeMission(Number(b.dataset.mission));if(b.dataset.view){
+document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
+if(b.hasAttribute("data-c-toggle")){
+  conceptCHome=!conceptCHome;
+  const url=new URL(location.href);
+  if(conceptCHome)url.searchParams.set("museo","c");else url.searchParams.delete("museo");
+  history.replaceState(null,"",url.pathname+url.search+url.hash);
+  currentMission=0;render();return;
+}
+if(b.hasAttribute("data-c-globe")){
+ modal('<h2 id="modal-title">Esplorazioen atlasa</h2><p>Inperialismoaren garaiko mundua aztertzeko museoko pieza. Ez du ariketen erantzunik erakusten.</p>');return;
+}
+if(b.hasAttribute("data-c-ledger")){
+ const team=viewTeamId();const total=[1,2].filter(id=>completed(team,id)).length;
+ modal('<h2 id="modal-title">Taldearen espedientea</h2><p>'+esc(mine()?.name||"Taldea")+': '+total+' / 4 misio osatuta. 3. eta 4. misioak prestatzen ari gara.</p>');return;
+}
+if(b.id==="teacher-preview-bi"&&accountIsTeacher()){location.assign("./bi-sistema.html?preview=1");return}if(b.id==="student-preview"&&accountIsTeacher()){const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=0;responses={};checkFeedback=null;render();return}if(b.id==="return-to-teacher"&&accountIsTeacher()){teacherPreview=false;teacherPreviewTeamId=null;currentMission=0;responses={};checkFeedback=null;render();return}if(b.dataset.demo)await signInDemo(b.dataset.demo);if(b.dataset.mission)changeMission(Number(b.dataset.mission));if(b.dataset.view){
  if(b.dataset.view==="preview"&&accountIsTeacher()){
    const selected=teams.find(t=>t.name==="Exploradores"&&(!teacherClassId||t.class_id===teacherClassId))||teams.find(t=>!teacherClassId||t.class_id===teacherClassId);
    teacherPreviewTeamId=selected?.id||null;teacherPreview=true;
