@@ -253,3 +253,138 @@
 /* Doitasunaren azken xehetasunak: izenaren tartea eta goiko izen laburtua. */
 .c-museo-real-data .c-museo-book-name{left:24.83%!important;padding-left:0!important}
 .c-museo-real-data .c-museo-top-team{width:7%!important;font-size:1.4cqw!important}
+
+/* 2026-11-22 · C MUSEOA / LEHEN FASEA
+   Benetako museoaren eszena babestu: liburuen tinta, armarrien egoerak eta
+   nabigazio-soila baino ez. Ez dago Supabaseko edo ariketetako aldaketarik. */
+#app-shell.museo-c-enabled .topbar{display:none!important}
+.c-museo-toolbar{
+ display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+ max-width:1672px;min-height:43px;margin:0 auto;gap:clamp(8px,1.5vw,22px);
+ padding:6px clamp(12px,1.8vw,24px);
+ background:linear-gradient(180deg,#0d3227 0%,#0a291f 65%,#07241b 100%);
+ border-bottom:1px solid #937342;letter-spacing:.02em;
+}
+.c-museo-toolbar-brand{
+ color:#dfbf85;font:700 clamp(12px,1.03vw,15px)/1.2 Georgia,serif;
+ white-space:nowrap;text-shadow:0 1px 1px #000;
+}
+.c-museo-toolbar-brand>span{color:#c8aa7b;font-size:.84em}
+.c-museo-toolbar-team{
+ min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ text-align:center;font:italic clamp(12px,1vw,15px)/1.35 Georgia,serif;
+ color:#ead6ae;
+}
+.c-museo-toolbar-team strong{font-style:normal;color:#ffebc1}
+.c-museo-toolbar-actions{
+ display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px
+}
+.c-museo-toolbar-actions button{
+ padding:7px 11px;border:1px solid #9b783e;border-radius:5px;
+ background:linear-gradient(#214332,#112e23);
+ box-shadow:inset 0 1px #ffffff0d;
+ color:#eed3a3;font:700 12px/1.15 Georgia,serif;
+ white-space:nowrap;cursor:pointer;
+}
+.c-museo-toolbar-actions button:hover{background:linear-gradient(#31543e,#183d2a)}
+.c-museo-toolbar-actions .c-museo-return{
+ background:linear-gradient(#e1c69c,#bd9869);color:#352515
+}
+.c-museo-toolbar-actions .c-museo-exit{border-color:#80643e;color:#e9c7a0}
+.c-museo-toolbar-actions button:focus-visible{
+ outline:3px solid #ffda83;outline-offset:3px
+}
+.c-museo-preview-tag{font-size:11px;color:#e6d1aa}
+
+/* Irudiko 'Taldea: Atlas' faltsuaren ordez benetako taldearen laburdura.
+   Izen osoa eskuineko atarian eta espedientearen liburuan ageri da. */
+.c-museo-real-data .c-museo-top-team{
+ left:84.35%!important;top:.27%!important;width:11.22%!important;height:3.5%!important;
+ display:flex;align-items:center;justify-content:flex-start;z-index:2;
+ padding:0 .26%;white-space:nowrap;overflow:hidden;
+ background:linear-gradient(90deg,#08291f 0%,#082a20 92%,#0a2c2190 100%)!important;
+ color:#ffedce!important;text-shadow:0 1px 2px #070b07;
+ font:700 1.28cqw/1.05 Georgia,serif!important;
+ mask-image:linear-gradient(90deg,#000 0%,#000 96%,transparent 100%);
+}
+.c-museo-real-data .c-museo-book-name{
+ left:25.28%!important;width:14.4%!important;padding-left:0!important;
+ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.c-museo-real-data .c-museo-book-name.small{font-size:1.78cqw!important}
+.c-museo-real-data .c-museo-book-name.smaller{font-size:1.43cqw!important}
+
+/* Lehenengo bandera: jatorrizko ✓-a estaltzeko zigilua bakarrik,
+   laukizuzen ilunik gabe. Gainerako armarriak bere horretan. */
+.c-museo-real-data .c-museo-brass{z-index:3}
+.c-museo-real-data .c-museo-status1.c-museo-available{
+ left:17.15%;top:43.65%;width:10.05%;height:15.2%;
+ padding:0 .1% 0;background:
+ radial-gradient(ellipse at 33% 22%,#ffe4a3 0%,#e7b35f 31%,#ba7930 65%,#71421a 92%,#4f2c11 100%);
+ border:.3cqw double #e4bc70;outline:1px solid #563419;
+ border-radius:48% 48% 44% 44%;clip-path:none;
+ box-shadow:inset 0 0 0 .35cqw #6e461d,inset 0 0 0 .52cqw #edd69a,
+  inset 0 0 1.3cqw #392411,0 .32cqw .8cqw #1d1105ac,0 0 .65cqw #ffe0a73b;
+ color:#2c1a0d;text-shadow:0 1px #ffefc0;
+ display:flex;align-items:center;justify-content:center;flex-direction:column;
+ font:700 1.24cqw/1.15 Georgia,serif;
+}
+.c-museo-status1.c-museo-available::before{
+ content:"✧";display:block;margin-top:-.5em;
+ font:700 3.25cqw/1 Georgia,serif;color:#70521c;
+ text-shadow:0 1px #fff0b6,0 -1px #54350d;
+}
+.c-museo-status1.c-museo-available span{display:block;margin-top:.25em}
+
+/* Bigarren bandera: blokeo- eta amaiera-zigiluak erremate historikoekin.
+   'JARRAITU' jatorrizkoa bistan uzten da bigarren misioa irekita dagoenean. */
+.c-museo-real-data .c-museo-status2{
+ left:28.76%;top:50.42%;width:11.32%;height:7.85%;
+ padding:.3em .55em .5em;clip-path:polygon(6% 0,94% 0,100% 17%,98% 84%,50% 100%,2% 84%,0 17%);
+ border:0;outline:0;border-radius:8px;
+ box-shadow:inset 0 .13cqw .1cqw #fff1c28a,0 .26cqw .8cqw #1a0f07b8;
+ display:flex;align-items:center;justify-content:center;gap:.35em;
+ white-space:nowrap;font:700 1.12cqw/1 Georgia,serif;
+}
+.c-museo-real-data .c-museo-status2.c-museo-locked{
+ background:linear-gradient(115deg,#423021,#83643d 22%,#6a4a2c 54%,#352318 90%);
+ color:#f5dfac;text-shadow:0 1px #160e07;
+}
+.c-museo-lock-icon{width:1.05em;height:1.05em;flex-shrink:0;stroke:#e9cb84}
+.c-museo-real-data .c-museo-status2.c-museo-done{
+ background:linear-gradient(110deg,#9b6c2d 0%,#eed092 18%,#c49c4c 52%,#8c642d 100%);
+ color:#285538;text-shadow:0 1px #fff2bb;font-size:1.17cqw
+}
+
+/* Ingurune historikoaren barruko argiztapen sotila: ez kutxa modernorik. */
+.c-museo-hotspots .c-museo-portal:enabled:hover,
+.c-museo-hotspots .c-museo-portal:enabled:focus-visible{
+ background:transparent!important;border-color:transparent!important;
+ box-shadow:none!important;
+}
+.c-museo-portal:enabled::before{
+ content:"";position:absolute;inset:1% 3% 3%;
+ border:2px solid #ffe0a9b5;border-radius:8px 8px 42% 42%;
+ background:linear-gradient(180deg,#ffdb7204 0%,#ffdc771c 100%);
+ box-shadow:inset 0 0 1.1cqw #f9c66b40,0 0 .9cqw #efc45c77;
+ clip-path:polygon(1% 0,99% 0,99% 87%,50% 100%,1% 87%);
+ pointer-events:none;opacity:0;transition:opacity .2s ease-out;
+}
+.c-museo-portal:enabled:is(:hover,:focus-visible)::before{opacity:1}
+.c-museo-hotspots .c-museo-portal:focus-visible{
+ outline:3px solid #ffe1a0;outline-offset:-2px
+}
+.c-museo-globe:enabled:is(:hover,:focus-visible){
+ border-color:#f9d78e7c;background:#f6cc5a0a;
+ box-shadow:inset 0 0 1.3cqw #ffe3ab22,0 0 .6cqw #f2c87a6b
+}
+@media(max-width:800px){
+ .c-museo-toolbar{display:flex;flex-wrap:wrap;padding:9px 12px;gap:8px 10px}
+ .c-museo-toolbar-brand{font-size:13px}
+ .c-museo-toolbar-team{flex:1;text-align:right;min-width:115px;font-size:13px}
+ .c-museo-toolbar-actions{width:100%;justify-content:flex-end;gap:7px}
+ .c-museo-toolbar-actions button{font-size:12px;padding:8px 11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .c-museo-portal:enabled::before{transition:none}
+}
