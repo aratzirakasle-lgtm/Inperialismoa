@@ -40,12 +40,10 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
   hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",
    nextId?'data-mission="'+nextId+'"':'disabled')
  ].join("");
- // Jatorrizko irudiak 1. misioan garaipen-zigilua eta 2.ean 'JARRAITU'
- // daramatza. Aldatu behar diren egoeretan soilik estaltzen dira, ez marrazkia.
- const m1Plate=complete1?"":'<span class="c-museo-brass c-museo-status1 c-museo-available" aria-hidden="true"><span>HASI →</span></span>';
- const m2Plate=complete1?(complete2?
-  '<span class="c-museo-brass c-museo-status2 c-museo-done" aria-hidden="true">✓ OSATUTA</span>':''):
-  '<span class="c-museo-brass c-museo-status2 c-museo-locked" aria-hidden="true"><svg class="c-museo-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>BLOKEATUTA</span>';
+ // Egoerak oihaleko argiarekin eta txanpon txikiekin adierazi:
+ // ez dago 'HASI', 'OSATUTA' edo 'BLOKEATUTA' kartel handirik irudian.
+ const m1Pin='<span class="c-museo-flag-pin c-museo-pin-1 '+(complete1?'is-complete':'is-available')+'" aria-hidden="true">'+(complete1?'✓':'')+'</span>';
+ const m2Pin='<span class="c-museo-flag-pin c-museo-pin-2 '+(complete2?'is-complete':complete1?'is-available':'is-locked')+'" aria-hidden="true">'+(complete2?'✓':complete1?'':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>')+'</span>';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
@@ -64,6 +62,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  '</div></div>'+
  '<div class="c-museo-stage" aria-label="Inperialismoaren garaia. Lau misioko museoa">'+
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
+ '<img class="c-museo-banner-retouch" src="./assets/museo-c-estandartes-sin-texto.svg?v=1" alt="" aria-hidden="true" draggable="false">'+
  '<div class="c-museo-real-data">'+
  '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
  '<span class="c-museo-book-name '+nameSize+'" title="'+safeName+'">'+safeName+'</span>'+ 
@@ -73,7 +72,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  '<span class="c-museo-book-next">'+esc(nextLabel)+'</span>'+ 
  // Zigilu organikoak berak estaltzen ditu erreferentziako markak.
 
- m1Plate+m2Plate+'</div>'+
+ m1Pin+m2Pin+'</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
  '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
  '<p class="c-museo-footer">Zuen taldearen benetako aurrerapena azaltzen da. 3. eta 4. misioetako aretoak prestatzen ari gara.</p>'+
