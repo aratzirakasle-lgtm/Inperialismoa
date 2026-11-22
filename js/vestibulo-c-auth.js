@@ -45,7 +45,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  // fotogramak berreskuratuz. Ez da gaineko beste zigilu edo txartelik gehitzen.
  const restoration1=complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision1.svg?v=1" alt="" aria-hidden="true" draggable="false">';
  const restoration2=complete2
-  ?'<img class="c-museo-banner-repair" src="./assets/museo-c-osatuta-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">'
+  ?'<img class="c-museo-banner-repair" src="./assets/museo-c-osatuta-mision2.svg?v=2" alt="" aria-hidden="true" draggable="false">'
   :complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
