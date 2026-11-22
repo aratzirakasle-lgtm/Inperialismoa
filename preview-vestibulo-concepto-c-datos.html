@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="eu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inperialismoa · C kontzeptua · taldeen espedientea</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Concepto C: laboratorio visual de la vista del alumno, sin conexión a cuentas ni datos privados.">
+<style>
+:root{font-family:Georgia,'Times New Roman',serif;color-scheme:dark}
+*{box-sizing:border-box}
+html{background:#071d18}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#163f30,#061a15 63%);color:#f4e5c5}
+.skip{position:absolute;top:-60px;left:8px;background:#e7ca8a;color:#112c25;padding:9px 13px;z-index:10}
+.skip:focus{top:8px}
+.toolbar{min-height:56px;display:flex;gap:11px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:9px clamp(14px,2vw,36px);background:#082a21;border-bottom:2px solid #aa8749}
+.toolbar h1{font-size:clamp(14px,1.45vw,20px);line-height:1.3;margin:0;color:#efd9aa;letter-spacing:.04em}
+.toolbar .note{font-size:12px;color:#ead6b6;line-height:1.3}
+.toolbar-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.toolbar button,.toolbar a{font:700 13px Georgia,serif;cursor:pointer;color:#f7e8c6;background:#14523d;border:2px solid #c09b59;border-radius:5px;padding:8px 13px;text-decoration:none}
+.toolbar button:focus-visible,.toolbar a:focus-visible,.field input:focus-visible{outline:3px solid #ffdb72;outline-offset:3px}
+.toolbar button:disabled{opacity:.6;cursor:not-allowed}
+.scene-zone{display:grid;justify-items:center;padding:clamp(5px,1.5vw,14px) 4px}
+.stage{width:min(100%,calc((100vh - 120px) * 1672 / 941),1672px);aspect-ratio:1672 / 941;container-type:inline-size;position:relative;isolation:isolate;background:#12382a;border:1px solid #bf9552;box-shadow:0 14px 40px #000c}
+.stage iframe{position:absolute;inset:0;border:0;width:100%;height:100%;display:block}
+.stage .data-areas{position:absolute;inset:0;pointer-events:none}
+.data-areas[hidden]{display:none}
+.patch{position:absolute;display:flex;align-items:center;z-index:2;color:#2a1c12;background:radial-gradient(ellipse at 48% 55%,#fff3ddba,transparent 87%),linear-gradient(100deg,#f5dbb9,#fbeacc 52%,#f3d4a8);box-shadow:inset 0 0 6px #f6dfb4a1;mask-image:linear-gradient(90deg,transparent 0%,#000 4%,#000 95%,transparent 100%);font-family:Georgia,'Times New Roman',serif;font-size:1.34cqw;font-style:italic;font-weight:700;white-space:nowrap;text-shadow:0 1px #ffeccc}
+.patch-team{left:18.35%;top:76.22%;width:25.25%;height:3.85%;padding-left:1.1%}
+.patch-count{left:18.35%;top:80.55%;width:24.5%;height:3.45%;padding-left:1.1%}
+.patch-percentage{left:35.35%;top:87.25%;width:5.8%;height:3.9%;justify-content:center;font-style:normal;padding:0}
+.patch-track{position:absolute;left:18.65%;top:87.90%;width:16.75%;height:2.45%;z-index:3;border-radius:999px;background:linear-gradient(#edce99,#e6ba7a);border:1px solid #926e3a;box-shadow:inset 1px 2px 4px #724e2b}
+.patch-track>span{display:block;height:100%;border-radius:999px;background:linear-gradient(#58cc72,#008a3a 73%,#005e1f);box-shadow:inset 0 1px #b9ffd0;transition:width .2s}
+.patch-next{left:56.9%;top:77.2%;width:16.0%;height:11.1%;padding-left:0.7%;align-items:center;line-height:1.2;font-size:1.42cqw}
+.sample-controls{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:13px;padding:10px 14px 8px}
+.sample-controls label{font-size:14px;font-weight:bold}
+.field{display:flex;align-items:center;gap:9px}
+.field input{max-width:215px;width:28vw;min-width:115px;background:#f6e9d1;color:#23160b;border:2px solid #caa365;padding:9px 10px;font:600 14px Georgia,serif;border-radius:6px}
+.sample-controls button{font:700 13px Georgia,serif;background:#dcb777;color:#27160b;border:2px solid #c89b4e;border-radius:6px;padding:9px 13px;cursor:pointer}
+.sample-controls button:focus-visible{outline:3px solid #ffdf87;outline-offset:2px}
+.status-note{max-width:1050px;margin:0 auto;padding:1px 20px 15px;color:#d4c3a3;text-align:center;font-size:13px;line-height:1.4}
+.status-note strong{color:#ffe6af}
+.status-note output{display:block;min-height:20px;color:#eed5a2}
+.status-note a{color:#f9dba0}
+@media(max-width:780px){
+ .toolbar{align-items:flex-start}
+ .stage{width:100%;height:auto}
+ .patch{font-size:1.34cqw}
+ .patch-next{font-size:1.42cqw}
+ .field input{min-width:120px;width:40vw}
+}
+@media(prefers-reduced-motion:reduce){.patch-track>span{transition:none}}
+</style>
+</head>
+<body>
+<a href="#controls" class="skip">Ir a los controles de prueba</a>
+<header class="toolbar">
+ <div><h1>MUSEO DIGITALA · C KONTZEPTUA</h1><div class="note">Irudi originala + taldearen datu aldakorren proba · Vista de pruebas, sin conexión a Supabase</div></div>
+ <div class="toolbar-actions">
+  <a href="./preview-vestibulo-concepto-c.html">Erreferentzia originala</a>
+  <a href="./index.html">Web ofiziala</a>
+ </div>
+</header>
+<main>
+ <section class="scene-zone" aria-label="Vestíbulo del museo: composición visual original">
+  <div class="stage">
+   <iframe id="original-frame" src="./preview-vestibulo-concepto-c.html" title="Vista original del museo. Sus misiones son interactivas en modo demostración." loading="eager"></iframe>
+   <div id="data-areas" class="data-areas" hidden aria-hidden="true">
+    <div class="patch patch-team">Taldea: <span id="book-team"></span></div>
+    <div class="patch patch-count">Misioak: <span id="book-count">1 / 4</span></div>
+    <div class="patch-track"><span id="book-bar" style="width:25%"></span></div>
+    <div class="patch patch-percentage" id="book-percent">25 %</div>
+    <div class="patch patch-next" id="book-next">2. Misioa:<br>Inperialismoaren<br>faktoreak</div>
+   </div>
+  </div>
+ </section>
+ <section id="controls" class="sample-controls" aria-label="Controles de ejemplo sin datos reales">
+  <label class="field">Adibideko taldea / Equipo de ejemplo <input id="sample-team" type="text" maxlength="24" value="Atlas" autocomplete="off" spellcheck="false"></label>
+  <button id="apply-team" type="button">Erakutsi HTMLn · Aplicar</button>
+  <button id="restore-original" type="button">Jatorrizko irudia · Restaurar referencia</button>
+ </section>
+ <div class="status-note">
+   <strong>Prueba visual independiente.</strong> El libro original permanece íntegro hasta que se aplica un nombre de ejemplo. La etapa actual solo modifica la presentación del expediente, no los progresos, desbloqueos, usuarios, sesiones ni el panel de profesor.
+   <output id="preview-status" role="status" aria-live="polite">Irudi originala · Erreferentzia finkoa.</output>
+ </div>
+</main>
+<script>
+(()=>{
+ const stage = document.querySelector('.stage');
+ const data = document.getElementById('data-areas');
+ const teamText = document.getElementById('book-team');
+ const input = document.getElementById('sample-team');
+ const status = document.getElementById('preview-status');
+ const apply = document.getElementById('apply-team');
+ const restore = document.getElementById('restore-original');
+ const frame = document.getElementById('original-frame');
+ const MAX_LENGTH = 24;
+ function normalize(s){return String(s||'').replace(/\s+/g,' ').trim().slice(0,MAX_LENGTH)}
+ function setOriginal(){data.hidden=true;input.value='Atlas';status.textContent='Erreferentzia originala: ez da irudirik aldatzen.'}
+ function setSample(){
+  const team=normalize(input.value);
+  if(!team){status.textContent='Idatzi taldearen izena lehenik.';input.focus();return;}
+  // Avoid innerHTML: the name must always be treated as plain text.
+  teamText.textContent=team;
+  data.hidden=false;
+  status.textContent='Adibidea erakutsita: '+team+' · Misioak 1 / 4 · Aurrerapena 25 %. Ez dira benetako ikasle-datuak.';
+ }
+ apply.addEventListener('click',setSample);
+ restore.addEventListener('click',setOriginal);
+ input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();setSample();}});
+ // Keep the original interactive hotspots functioning; only the sample fields
+ // appear above the book, and the rest of the original preview stays unchanged.
+ frame.addEventListener('load',()=>{frame.title='Museo del concepto C, con sus cuatro misiones y expedientes de demostración.'});
+ setOriginal();
+})();
+</script>
+</body>
+</html>
