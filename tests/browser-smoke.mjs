@@ -167,8 +167,13 @@ try{
      assert.equal(await page.locator('.c-museo-banner-dim').count(),0,
        'No deben usarse parches rectangulares sobre el estandarte');
      assert.equal(await page.locator('.c-museo-second-dim').count(),0);
-     assert.equal(await page.locator('.c-museo-status1.c-museo-available').count(),1);
-     assert.equal(await page.locator('.c-museo-status2.c-museo-locked').count(),1);
+     assert.equal(await page.locator('.c-museo-brass').count(),0,
+       'Ez dago estandarteak estaltzen dituen botoi handirik');
+     assert.equal(await page.locator('.c-museo-flag-pin.is-locked').count(),1,
+       'Bigarren misioa blokeatuta dagoenean giltzarrapo txikia ageri da');
+     assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),0);
+     assert.equal(await page.locator('.c-museo-banner-retouch').count(),1);
+     await page.locator('.c-museo-banner-retouch').evaluate(img=>img.decode());
      await page.locator('.c-museo-m1').focus();
      await page.waitForFunction(()=>getComputedStyle(
        document.querySelector('.c-museo-m1'),'::before').opacity==='1');
@@ -195,9 +200,12 @@ try{
      assert.match(summary,new RegExp((expected/25)+' / 4 misio osatuta'));
      assert.match(summary,new RegExp(expected+' %'));
      if(expected===25){
+       assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),1);
+       assert.equal(await page.locator('.c-museo-flag-pin.is-locked').count(),0);
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'1 / 4',
         'El dato real se imprime una sola vez en el pergamino restaurado');
      }else{
+       assert.equal(await page.locator('.c-museo-flag-pin.is-complete').count(),2);
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'2 / 4');
        assert.equal(await page.locator('.c-museo-book-percent').innerText(),'50 %');
      }
