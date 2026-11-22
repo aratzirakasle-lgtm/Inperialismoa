@@ -38,7 +38,7 @@ test('15 galdera historiko eta 6 titulu aurkezteko mapak datuak ez ditu ezabatze
 test('Argazki originalean inprimatutako datuak ez dira bigarrenez idazten',()=>{
  const c=read('js/vestibulo-c-auth.js');
  const css=read('assets/vestibulo-c-auth.css');
- assert.match(c,/const originalProgress=count===1/);
+ assert.match(c,/const originalProgress=complete1\&\&!complete2/);
  assert.match(c,/originalProgress\?'':'<span class="c-museo-book-progress"/);
  assert.match(c,/sameName\?'':'<span class="c-museo-book-name/);
  assert.match(css,/data:image\/webp;base64/);
