@@ -24,7 +24,8 @@ async function open(role='student',size={width:1365,height:900},badge=true){
   window.__m2RpcCalls=[];
   const table=key=>{
    const rows=key==='profiles'?[{id:myId,role,team_id:role==='student'?'qa-team':null}]:
-    key==='mission_badges'?(badge?[{mission_id:1,team_id:'qa-team'}]:[]):
+    key==='mission_badges'?[{mission_id:1,team_id:'qa-team'}]:
+    key==='mission1_exercise_completions'?(badge?[{exercise:5,team_id:'qa-team'}]:[]):
     key==='mission2_exercise_completions'?[]:[];
    const q={
     select(){return this},eq(){return this},limit(){return this},
