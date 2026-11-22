@@ -70,3 +70,68 @@
  .c-museo-home{min-height:auto}
 }
 @media(prefers-reduced-motion:reduce){.c-museo-hotspot{transition:none!important}}
+
+/* 2026-11-22 — Tinta dinamikoa integratuta, erreferentziako liburuaren
+   inprimatutako izenak eta kopuruak bakarrik estaltzen dira. Jatorrizko
+   argazkiko liburuaren marrazkia, dekorazioak eta lerroak ukitu gabe. */
+.c-museo-real-data .c-museo-book-name,
+.c-museo-real-data .c-museo-book-progress,
+.c-museo-real-data .c-museo-book-percent,
+.c-museo-real-data .c-museo-book-next{
+  background:
+    linear-gradient(90deg,#fbeac215,#f5d4a510,#eabb7915),
+    url('data:image/webp;base64,UklGRuAAAABXRUJQVlA4INQAAAAQBwCdASrWABwAPtVmqlGoJSQjpJv5AQAaiWcAyCAJbdui6tKN/kQ6aP8nQ3RecX42Y3HiBSkYKCHCZO6Uag0gAAD+7/dgRDD/r1S25aNq0mkXP4iiz3awRef4aKlXDkanahI9gMcuUOwSV6kyEKH5YXLmKSji1ptZIiWTCXdVmwu7U8kI5bM7PHwgjsAnmICXzURJJjzvx8xZHDh7/u6klcJkSnaEeReVFxaUwAy6ttrrQ7TyfuIA6Ld/4ODj8WKsyQltiNgKho2lZDB6fOuPE/3wAA==') center / 100% 100% no-repeat;
+  color:#16120d;
+  text-shadow:0 1px 0 #ffe9ba55;
+  mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);
+  box-shadow:none;
+  overflow:hidden;
+}
+.c-museo-real-data .c-museo-book-name{
+  left:24.33%;top:76.08%;width:15.65%;height:3.15%;
+  padding:0 0 0 .25%;justify-content:flex-start;
+  font:700 italic 2.06cqw/1.07 Georgia,'Times New Roman',serif;
+  white-space:nowrap;
+}
+.c-museo-real-data .c-museo-book-name.small{font-size:1.78cqw}
+.c-museo-real-data .c-museo-book-name.smaller{font-size:1.43cqw}
+.c-museo-real-data .c-museo-book-progress{
+  left:25.16%;top:80.55%;width:6.72%;height:3.08%;
+  display:flex;align-items:center;justify-content:center;
+  font:700 italic 2.14cqw/1 Georgia,'Times New Roman',serif;
+}
+.c-museo-real-data .c-museo-book-percent{
+  left:35.65%;top:87.07%;width:5.25%;height:3.9%;
+  display:flex;align-items:center;justify-content:center;
+  font:700 1.99cqw/1 Georgia,'Times New Roman',serif;
+  font-style:normal;
+}
+.c-museo-real-data .c-museo-book-next{
+  left:56.04%;top:77.08%;width:15.35%;height:10.95%;
+  padding:0 0 0 .55%;
+  display:flex;justify-content:flex-start;align-items:center;
+  white-space:pre-line;overflow-wrap:normal;
+  font:700 italic 1.82cqw/1.075 Georgia,'Times New Roman',serif;
+}
+.c-museo-real-data .c-museo-book-bar{
+  left:18.78%;top:88.86%;width:16.46%;height:2.15%;
+  background:linear-gradient(180deg,#ebc79c 0%,#d5aa7c 30%,#d5a472 80%,#d0a474);
+  border:1px solid #875b2e;border-radius:999px;
+  box-shadow:inset 0 1px 2px #82512996,0 1px 2px #ffe0b17d;overflow:hidden;
+}
+.c-museo-real-data .c-museo-book-bar i{
+  background:linear-gradient(180deg,#a4f39e 0%,#1bc95b 20%,#008b35 75%,#006425 100%);
+  box-shadow:inset 0 1px 2px #d5ffb0;
+}
+.c-museo-real-data .c-museo-top-team{
+  left:89.05%;top:.76%;width:5.8%;height:2.5%;
+  background:linear-gradient(90deg,#00291f,#002a20 96%,transparent);
+  color:#ffe9bc;font:700 1.67cqw/1 Georgia,serif;
+  letter-spacing:-.03em;
+}
+@media(max-width:720px){
+  .c-museo-real-data .c-museo-book-next{font-size:1.82cqw}
+  .c-museo-real-data .c-museo-book-name{font-size:2.06cqw}
+  .c-museo-real-data .c-museo-book-name.small{font-size:1.78cqw}
+  .c-museo-real-data .c-museo-book-name.smaller{font-size:1.43cqw}
+}
