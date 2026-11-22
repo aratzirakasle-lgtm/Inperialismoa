@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-liburuak4";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261121-mapa-cartelas2";
 const $ = s => document.querySelector(s);
