@@ -363,12 +363,12 @@ async function boot(){
     }
     teamId=profile.team_id;
     if(!teamId){location.replace("./index.html");return}
-    const [{data:first,error:firstError},{data:legacy,error:legacyError}]=await Promise.all([
-      client.from("gallery_team_state").select("completed_at").eq("team_id",teamId).maybeSingle(),
-      client.from("mission_badges").select("mission_id").eq("team_id",teamId).eq("mission_id",1).limit(1)
-    ]);
-    if(firstError||legacyError)throw firstError||legacyError;
-    if(!first?.completed_at&&!legacy?.length){
+    // Lehen ariketa benetan osatu behar da: lehengo misio-zigiluak
+    // ez du bost joko berrien arteko urratsik saltatzeko baimenik ematen.
+    const {data:first,error:firstError}=await client.from("gallery_team_state")
+      .select("completed_at").eq("team_id",teamId).maybeSingle();
+    if(firstError)throw firstError;
+    if(!first?.completed_at){
       location.replace("./index.html#mission1gallery");return;
     }
     await fetchState();busy=false;paint();
