@@ -22,20 +22,29 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  const nameSize=rawName.length>18?"smaller":rawName.length>12?"small":"";
  // Jatorrizko irudian "Atlas · 1 / 4 · 25 %" ageri da.
  // Egoera berdina denean, ez dugu papera alferrik estaltzen.
- const sameName=rawName==="Atlas";
  // Inpimatutako izen, aurrerapen eta hurrengo misioaren gaineko letrak beti kentzen dira.
  // Pergaminoa gardentasuneko geruza txiki batekin leheneratzen da.
  const zones=[
-  hotspot("c-museo-portal c-museo-m1","1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-mission="1"'),
-  hotspot("c-museo-portal c-museo-m2","2. misioa: "+display[2].title+". "+(complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),complete1?'data-mission="2"':'disabled'),
-  hotspot("c-museo-portal c-museo-m3","3. misioa: "+display[3].title+". Prestatzen","disabled"),
-  hotspot("c-museo-portal c-museo-m4","4. misioa: "+display[4].title+". Prestatzen","disabled"),
+  hotspot("c-museo-portal c-museo-m1 "+(complete1?"is-complete":"is-available"),
+   "1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-state="'+(complete1?"complete":"available")+'" data-mission="1"'),
+  hotspot("c-museo-portal c-museo-m2 "+(complete2?"is-complete":complete1?"is-available":"is-locked"),
+   "2. misioa: "+display[2].title+". "+(complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),
+   'data-state="'+(complete2?"complete":complete1?"available":"locked")+'" '+(complete1?'data-mission="2"':'disabled')),
+  hotspot("c-museo-portal c-museo-m3 is-upcoming","3. misioa: "+display[3].title+". Prestatzen",
+   'data-state="upcoming" title="3. misioa prestatzen ari gara" disabled'),
+  hotspot("c-museo-portal c-museo-m4 is-upcoming","4. misioa: "+display[4].title+". Prestatzen",
+   'data-state="upcoming" title="4. misioa prestatzen ari gara" disabled'),
   hotspot("c-museo-globe","Esplorazioen atlasa: informazioa ikusi",'data-c-globe="1"'),
-  hotspot("c-museo-book1","Taldearen espedientea: "+String(teamName||"Taldea")+", "+count+"/4 misio",'data-c-ledger="1"'),
-  hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",nextId?'data-mission="'+nextId+'"':'disabled')
+  hotspot("c-museo-book1","Taldearen espedientea: "+rawName+", "+count+"/4 misio",'data-c-ledger="1"'),
+  hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",
+   nextId?'data-mission="'+nextId+'"':'disabled')
  ].join("");
- const m1Plate=complete1?"":'<span class="c-museo-brass c-museo-status1">HASI →</span>';
- const m2Plate=complete1?(complete2?'<span class="c-museo-brass c-museo-status2">✓ OSATUTA</span>':''):'<span class="c-museo-brass c-museo-status2 c-museo-locked">🔒 BLOKEATUTA</span>';
+ // Jatorrizko irudiak 1. misioan garaipen-zigilua eta 2.ean 'JARRAITU'
+ // daramatza. Aldatu behar diren egoeretan soilik estaltzen dira, ez marrazkia.
+ const m1Plate=complete1?"":'<span class="c-museo-brass c-museo-status1 c-museo-available" aria-hidden="true"><span>HASI →</span></span>';
+ const m2Plate=complete1?(complete2?
+  '<span class="c-museo-brass c-museo-status2 c-museo-done" aria-hidden="true">✓ OSATUTA</span>':''):
+  '<span class="c-museo-brass c-museo-status2 c-museo-locked" aria-hidden="true">BLOKEATUTA</span>';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
@@ -44,21 +53,25 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
   return '<button type="button" class="c-museo-mobile-mission" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(doneMission?'✓':!published||!unlocked?'🔒':'→')+'</span></button>';
  }).join('');
  return '<div class="c-museo-home" lang="eu">'+
- '<div class="c-museo-toolbar"><span>🏛 &nbsp; IKASLEEN MUSEOA · 4 MISIO</span><div>'+
+ '<div class="c-museo-toolbar"><span class="c-museo-toolbar-brand">✦ MUSEO DIGITALA <span>· 4 MISIO</span></span>'+
+ '<span class="c-museo-toolbar-team" title="'+safeName+'">Taldea: <strong>'+safeName+'</strong></span>'+
+ '<div class="c-museo-toolbar-actions">'+
  (preview?'<span class="c-museo-preview-tag">IRAKASLEAREN AURREBISTA · EZ DA GORDETZEN</span>':'')+
  '<button type="button" data-c-toggle="1" class="c-museo-alternative">Aurreko ikuspegia</button>'+
  (preview?'<button type="button" data-view="teacher" class="c-museo-return">← Irakaslearen panela</button>':'')+
+ '<button type="button" data-c-logout="1" class="c-museo-exit">Irten ↗</button>'+
  '</div></div>'+
  '<div class="c-museo-stage" aria-label="Inperialismoaren garaia. Lau misioko museoa">'+
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
  '<div class="c-museo-real-data">'+
- (sameName?'':'<span class="c-museo-top-team">'+shortName+'</span>')+
+ '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
  '<span class="c-museo-book-name '+nameSize+'">'+safeName+'</span>'+ 
  '<span class="c-museo-book-progress">'+count+' / 4</span>'+ 
  '<span class="c-museo-book-percent">'+pct+' %</span>'+ 
  '<span class="c-museo-book-bar"><i style="width:'+pct+'%"></i></span>'+ 
  '<span class="c-museo-book-next">'+esc(nextLabel)+'</span>'+ 
- (complete1?"":'<span class="c-museo-banner-dim"></span><span class="c-museo-second-dim"></span>')+
+ // Zigilu organikoak berak estaltzen ditu erreferentziako markak.
+
  m1Plate+m2Plate+'</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
  '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
