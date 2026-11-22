@@ -37,7 +37,8 @@ test('Egoera 2/4: hurrengo misioak oraindik argitaratu gabe',()=>{
  assert.match(html,/2 \/ 4 misio osatuta · 50 %/);
  assert.match(html,/class="c-museo-book-bar"><i style="width:50%"/);
  assert.doesNotMatch(html,/museo-c-restauracion-mision1\.svg/);
- assert.match(html,/museo-c-restauracion-mision2\.svg/);
+ assert.match(html,/museo-c-osatuta-mision2\.svg/);
+ assert.doesNotMatch(html,/museo-c-restauracion-mision2\.svg/);
  assert.doesNotMatch(html,/c-museo-flag-pin/);
  assert.match(html,/3\. Misioa:/);
  assert.match(html,/c-museo-m3[^>]*disabled/);
@@ -118,4 +119,26 @@ test('Estandarteak: jatorrizko irudiaren materiala bakarrik zaharberritu, inoiz 
  const completed=renderVestibuloC({teamName:'Nilo',completedIds:[1,2]});
  assert.equal((completed.match(/c-museo-banner-repair/g)||[]).length,1);
  assert.doesNotMatch(completed,/c-museo-flag-pin|HASI →|✓ OSATUTA/);
+});
+
+
+test('Bi misioak OSATUTA: bigarrenean jatorrizko tipografiaren tinta fotografikoa, ez HTML testua',()=>{
+ const completed=renderVestibuloC({teamName:'Nilo',completedIds:[1,2]});
+ const available=renderVestibuloC({teamName:'Nilo',completedIds:[1]});
+ const blocked=renderVestibuloC({teamName:'Nilo',completedIds:[]});
+ assert.match(completed,/museo-c-osatuta-mision2\.svg/);
+ assert.doesNotMatch(available,/museo-c-osatuta-mision2\.svg/);
+ assert.doesNotMatch(blocked,/museo-c-osatuta-mision2\.svg/);
+ assert.doesNotMatch(completed,/c-museo-brass|c-museo-flag-pin|>OSATUTA<\/span>/);
+ const asset=readFileSync(new URL('../assets/museo-c-osatuta-mision2.svg',import.meta.url),'utf8');
+ assert.match(asset,/viewBox="0 0 1672 941"/);
+ assert.match(asset,/data:image\/webp;base64,/);
+ assert.doesNotMatch(asset,/<text(?:\s|>)/i,'El texto se debe integrar en la pintura, no imprimir con CSS');
+ const b64=asset.match(/data:image\/webp;base64,([A-Za-z0-9+/=]+)/)?.[1];
+ assert.ok(b64);
+ const bytes=Buffer.from(b64,'base64');
+ assert.equal(bytes.subarray(0,4).toString('ascii'),'RIFF');
+ assert.equal(bytes.subarray(8,12).toString('ascii'),'WEBP');
+ assert.equal(bytes.readUInt32LE(4)+8,bytes.length);
+ assert.ok(bytes.length<4000,'La inscripción debe ser una capa fotográfica mínima');
 });
