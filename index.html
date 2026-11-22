@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="eu">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102738">
-  <meta name="description" content="Inperialismoa: aventura histórica colaborativa sobre el imperialismo del siglo XIX.">
+  <meta name="description" content="Inperialismoa: XIX. mendeko inperialismoari buruzko historia-museo digitala eta taldeko ikerketa.">
   <title>Inperialismoaren garaia · Museo digitala</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,9 +27,10 @@
   <link rel="stylesheet" href="./assets/galeria-museo-cinematico.css?v=4">
   <link rel="stylesheet" href="./assets/galeria-museo-fidelidad-v2.css?v=6">
   <link rel="stylesheet" href="./assets/galeria-mapa-cartelas-20261121.css?v=2">
+  <link rel="stylesheet" href="./assets/vestibulo-c-auth.css?v=20261122-1">
 </head>
 <body>
-  <div id="loading" class="loading-screen" role="status">Preparando la expedición…</div>
+  <div id="loading" class="loading-screen" role="status">Espedizioa prestatzen…</div>
   <div id="login-screen" class="login-screen museo-login-screen" hidden>
     <main class="museo-stage" lang="eu" aria-labelledby="museo-title">
       <h1 id="museo-title" class="sr-only">Inperialismoaren garaia</h1>
@@ -70,7 +71,7 @@
   <div id="app-shell" class="app-shell" hidden>
     <header class="topbar">
       <a class="logo" href="./"><span class="logo-mark">✳</span> Inperialismoaren garaia <span class="topbar-sub">/ MUSEO DIGITALA · XIX. MENDEA</span></a>
-      <div class="topbar-right"><span id="mode-badge" class="mode-badge" hidden>DEMO</span><span id="topbar-user" class="user-chip"></span><button class="btn tiny outline" id="logout-btn" type="button">Salir ↗</button></div>
+      <div class="topbar-right"><span id="mode-badge" class="mode-badge" hidden>DEMO</span><span id="topbar-user" class="user-chip"></span><button class="btn tiny outline" id="logout-btn" type="button">Irten ↗</button></div>
     </header>
     <section class="museum-exhibition-banner" aria-label="Título de la exposición">
       <div class="museum-banner-inner" lang="eu">
@@ -81,15 +82,15 @@
     </section>
     <div class="layout">
       <aside class="sidebar">
-        <div class="aside-label">TU EXPEDICIÓN</div>
+        <div class="aside-label">ZURE ESPEDIZIOA</div>
         <div class="team-summary" id="team-summary"></div>
-        <div class="sidebar-section-title">LAS MISIONES <span id="mission-count"></span></div>
+        <div class="sidebar-section-title">MISIOAK <span id="mission-count"></span></div>
         <nav aria-label="Navegación de las misiones" id="mission-nav" class="mission-nav"></nav>
         <div class="sidebar-divider"></div>
-        <div class="sidebar-section-title"><span>EQUIPOS EN ESTA MISIÓN</span><span class="live-pulse" title="Se actualiza automáticamente"></span></div>
-        <p class="aside-explainer">✓ indica que el equipo ha conseguido el 100 % de aciertos en la misión seleccionada.</p>
+        <div class="sidebar-section-title"><span>MISIOA HONETAKO TALDEAK</span><span class="live-pulse" title="Se actualiza automáticamente"></span></div>
+        <p class="aside-explainer">✓ ikurrak hautatutako misioa osorik gainditu duen taldea adierazten du.</p>
         <div id="scoreboard" class="scoreboard" aria-live="polite"></div>
-        <div class="sidebar-foot">«Conocer el pasado es también aprender a hacer preguntas.»</div>
+        <div class="sidebar-foot">«Iragana ezagutzea galderak egiten ikastea ere bada.»</div>
       </aside>
       <main class="main-content" id="main-content" tabindex="-1">
         <div class="museum-cornice" aria-hidden="true"><span>INPERIALISMOAREN GARAIA</span><span>ERAKUSKETA · XIX. MENDEA</span></div>
@@ -98,7 +99,7 @@
     </div>
   </div>
 
-  <div id="modal" class="modal-backdrop" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="modal-close" id="modal-close" aria-label="Cerrar">×</button><div id="modal-body"></div></div></div>
+  <div id="modal" class="modal-backdrop" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="modal-close" id="modal-close" aria-label="Itxi">×</button><div id="modal-body"></div></div></div>
   <div id="toast" class="toast" role="status" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
   <script type="module" src="./js/app.js?v=20261121-mapa-cartelas2"></script>
