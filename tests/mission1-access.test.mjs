@@ -14,7 +14,7 @@ test('Los alumnos no saltan de ejercicio en ejercicio',()=>{
 });
 test('La navegación libre exige un perfil de profesor',()=>{
  has('js/app.js',/accountIsTeacher\(\)&&hash==="#teacherpreviewgallery"/);
- has('js/app.js',/const available=id=>accountIsTeacher\(\)\|\|id===1\|\|completed/);
+ has('js/app.js',/const available=id=>accountIsTeacher\(\)\|\|\(id===1\|\|id===2&&completed\(viewTeamId\(\),1\)\)/);
  has('js/bi-sistema-live.js',/teacherPreview=profile\.role==="teacher"&&url\.get\("preview"\)==="1"/);
  has('js/mission1-third-auth.js',/const preview=profile\.role==='teacher'&&previewRequested/);
  has('js/mission1-fifth-auth.js',/const preview=profile\.role==='teacher'&&previewRequested/);
