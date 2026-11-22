@@ -10,7 +10,7 @@ const read=file=>readFileSync(resolve(root,file),'utf8');
 test('El museo C está disponible solo en una vista optativa del alumno autenticado',()=>{
  const app=read('js/app.js');
  const page=read('index.html');
- assert.match(app,/import \{ renderVestibuloC \} from "\.\/vestibulo-c-auth\.js\?v=20261122-clase17"/);
+ assert.match(app,/import \{ renderVestibuloC \} from "\.\/vestibulo-c-auth\.js\?v=20261122-osatuta16"/);
  assert.match(app,/new URLSearchParams\(location\.search\)\.get\("museo"\)==="c"/);
  assert.match(app,/if\(conceptCHome && viewTeamId\(\)\)/);
  assert.match(app,/completedIds=\[1,2\]\.filter\(missionId=>completed\(id,missionId\)\)/);
