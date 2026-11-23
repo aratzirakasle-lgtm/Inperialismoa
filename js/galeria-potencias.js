@@ -1,4 +1,4 @@
-import { exerciseNavMarkup } from './mission1-navigation.js?v=20261123-medallones1';
+import { exerciseNavMarkup } from './mission1-navigation.js?v=20261123-medallones2';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-visibles2';
 import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-realtime3';
 import { createGalleryIncremental } from './galeria-dom-incremental.js?v=20261123-fluidez2';
