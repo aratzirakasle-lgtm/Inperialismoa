@@ -1,7 +1,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-validacion3";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-medallones1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -170,7 +170,8 @@ function renderGallery(){
  mountGallery($("#view"),{
    initial:teacherPreview?{}:current,preview:demo||teacherPreview,
    draftKey:(!demo&&!teacherPreview&&user?.id)?'inperialismoa:gallery:draft:'+user.id+':'+team:null,
-   canSkip,navigationEnabled:teacherPreview,navigationPreview:teacherPreview,
+   canSkip,navigationEnabled:true,navigationPreview:teacherPreview,
+    navigationCompleted:()=>m1Pieces(team),
    dossierProgress:()=>m1Pieces(team).size,
    sharedDraft,onTeamCompleted:()=>refreshFromRealtime(),
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
