@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft1';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-trinko1';
 
 const status=document.querySelector('#online-state');
@@ -20,6 +21,7 @@ async function initialize(){
     if(!preview&&profile.role!=='student'){location.replace('./index.html');return}
     if(preview){
       document.querySelector('.mini-toolbar a').href='./inperioen-aztarnak.html?preview=1';
+      window.m1FifthLocalMode='teacher';
       mountExerciseNav(5);
       addTeacherStageControls([
         ['Hasierako pantaila',()=>window.m1FifthPreviewSetStage?.('start')],
@@ -40,18 +42,32 @@ async function initialize(){
     if(!third||!fourth?.completed_at){
       location.replace('./inperioen-aztarnak.html');return;
     }
-    window.m1FifthProgress=async answers=>{
-      const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:5,p_answers:answers});
-      if(error)throw error;
-      if(data?.completed)markMission1NavCompleted(5);
-      return data;
-    };
     if(prior){
+      window.m1FifthLocalMode='practice';
+      window.m1FifthProgress=async()=>({completed:true,already_completed:true,practice:true,mission_completed:true});
       say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. Bigarren misiora joan zaitezkete.');
       // 5/5 gaindituta badago, ez behartu ikaslea berriro jokatzera.
       window.m1FifthRestoreCompletion?.();
     }else{
-      say('Bost esaldiak osatu eta egiaztatu. Erantzun zuzenak taldearentzat gordeko dira.');
+      let sync;
+      const retry=document.createElement('button');
+      retry.type='button';retry.textContent='↻ Berriro konektatu';
+      retry.style.cssText='display:none;margin-left:9px;padding:3px 8px;border:1px solid #bc955a;background:#223a2f;color:#f5dda7;cursor:pointer';
+      retry.addEventListener('click',()=>void sync?.load());
+      status?.after(retry);
+      sync=createMission1DraftSync({
+        client,teamId:id,exercise:5,
+        onDraft:places=>window.m1FifthDraftApply?.(places),
+        onStatus:(msg,kind)=>{
+          say(msg);retry.style.display=kind==='error'?'inline-block':'none';
+          window.m1FifthDraftStatus?.(msg,kind);
+        },
+        onCompleted:()=>markMission1NavCompleted(5)
+      });
+      window.m1FifthDraftSync=sync;
+      window.m1FifthProgress=async()=>sync.submit();
+      window.addEventListener('pagehide',()=>sync.stop(),{once:true});
+      await sync.start();
     }
     await mountStudentExerciseNav(5,client,id);
   }catch(e){
