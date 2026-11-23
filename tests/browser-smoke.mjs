@@ -1070,6 +1070,55 @@ try{
      }finally{await context.close()}
    }
  });
+ await scenario('Tercer juego: borrador compartido sobrevive a recarga y corrección sin pistas',async()=>{
+   const {page,context,errors}=await open('student','inperialismoaren-definizioa.html?smoke_m1_steps=2');
+   try{
+     await page.waitForFunction(()=>window.m1ThirdDraftSync?.ready===true);
+     assert.equal(await page.locator('#check').isDisabled(),true);
+     await page.evaluate(async()=>window.m1ThirdDraftSync.move('capital','resources',null));
+     await page.waitForFunction(()=>document.querySelector('[data-piece="capital"]')?.classList.contains('placed'));
+     await page.reload({waitUntil:'domcontentloaded'});
+     await page.waitForFunction(()=>window.m1ThirdDraftSync?.ready===true);
+     assert.equal(await page.locator('[data-piece="capital"]').evaluate(el=>el.classList.contains('placed')),true);
+     await page.evaluate(async()=>{
+       const draft=window.m1ThirdDraftSync;
+       for(const [id,slot] of [['exploit','purpose'],['dominion','outcome'],['conqueror','metropole'],['conquered','colony']])
+         await draft.move(id,slot,null);
+     });
+     await page.waitForFunction(()=>!document.querySelector('#check')?.disabled);
+     await page.locator('#check').click();
+     await page.waitForFunction(()=>document.querySelector('#message')?.textContent?.includes('Ez da zuzena'));
+     assert.equal(await page.locator('.scene.solved').count(),0);
+     assert.ok((await page.evaluate(()=>window.__smokeRpcCalls)).includes('mission1_draft_submit'));
+     assert.ok(!(await page.evaluate(()=>window.__smokeRpcCalls)).includes('submit_mission1_exercise'),
+       'La corrección debe consultar el borrador confirmado en el servidor');
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Quinto juego: palabras compartidas, recarga y error global sin pistas',async()=>{
+   const {page,context,errors}=await open('student','esaldiak-osatu.html?smoke_m1_steps=4');
+   try{
+     await page.waitForFunction(()=>window.m1FifthDraftSync?.ready===true);
+     await page.evaluate(async()=>window.m1FifthDraftSync.move('koloniak','1',null));
+     await page.waitForFunction(()=>document.querySelector('.hole[data-slot="1"]')?.textContent==='koloniak');
+     await page.reload({waitUntil:'domcontentloaded'});
+     await page.waitForFunction(()=>window.m1FifthDraftSync?.ready===true);
+     assert.equal(await page.locator('.hole[data-slot="1"]').textContent(),'koloniak');
+     await page.evaluate(async()=>{
+       const draft=window.m1FifthDraftSync;
+       for(const [word,slot] of [['inperialismoa','2'],['metropoliak','3'],['ustiapena','4'],['nagusitasuna','5']])
+         await draft.move(word,slot,null);
+     });
+     await page.waitForFunction(()=>!document.querySelector('#verify')?.disabled);
+     await page.locator('#verify').click();
+     await page.waitForFunction(()=>document.querySelector('#toast')?.textContent?.includes('Ez da zuzena'));
+     assert.equal(await page.locator('#success').isVisible(),false);
+     const calls=await page.evaluate(()=>window.__smokeRpcCalls);
+     assert.ok(calls.includes('mission1_draft_submit'));
+     assert.ok(!calls.includes('submit_mission1_exercise'));
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Alumno: al volver al tercer ejercicio superado puede continuar sin repetirlo',async()=>{
    const {page,context,errors}=await open('student','inperialismoaren-definizioa.html?smoke_m1_steps=3');
    try{
