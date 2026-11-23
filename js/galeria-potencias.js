@@ -1,6 +1,7 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-visibles2';
 import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-talde1';
+import { createGalleryIncremental } from './galeria-dom-incremental.js?v=20261123-fluidez1';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
@@ -106,6 +107,10 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const locked=state.locked.has(item.id),selected=state.selected===item.id;
    return '<button type="button" class="gal-tile '+(placed?'gal-tile-placed ':'')+(locked?'gal-locked ':'')+(selected?'gal-selected ':'')+'" data-gallery-card="'+item.id+'" draggable="'+(!locked&&!state.busy)+'" '+(locked?'disabled':'')+' aria-pressed="'+selected+'" title="'+(locked?'Zuzena':'Sakatu edo arrastatu')+'"><span class="gal-tile-icon" aria-hidden="true">'+(galleryIllustration(item.id)||esc(item.icon))+'</span><span class="gal-tile-name">'+esc(item.label)+'</span>'+(locked?'<span class="gal-tile-check" aria-label="Zuzena">✓</span>':placed?'<span class="gal-tile-move">↗</span>':'')+'</button>';
  };
+ const incremental=createGalleryIncremental(root,{
+   items:ITEMS,state,tile,count,shared:()=>sharedSync,
+   allow:()=>!preview&&!navigationPreview,canSkip
+ });
  /* Reparto exclusivamente visual: permutación independiente de las soluciones.
     Las 20 cartelas e ilustraciones son las originales; las posiciones NO son respuestas. */
  const PREVIEW_ORDER=ITEMS.map((_,i)=>ITEMS[(i*7+11)%ITEMS.length]);
@@ -171,6 +176,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    <aside class="gal-side-art gal-side-art-right"></aside>
  </div>`;
  function draw(){
+   if(incremental.tryUpdate())return;
    const tray=state.previewFull||state.previewPartial?[]:ITEMS.filter(x=>!state.placements[x.id]);
    const sharedBanner=sharedSync?'<div class="gal-shared-banner" role="status" aria-live="polite"><span aria-hidden="true" class="gal-shared-dot"></span><strong>TALDEAREN MAHAI PARTEKATUA</strong><span>'+(state.busy?'Aldaketa gordetzen…':sharedSync.ready?'Sinkronizatuta · '+count()+' / 20 kartela':'Konexioa eten da. Tokiko kopia gordeta dago.')+'</span>'+(!sharedSync.ready&&!state.busy?'<button type="button" class="gal-shared-retry" data-gallery-action="sync-retry">↻ Berriro konektatu</button>':'')+'</div>':'';
    const archiveButton=typeof dossierProgress==='function'?'<div class="m1-archive-open"><button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+Math.max(0,Math.min(5,Number(dossierProgress())||0))+' / 5</span></button></div>':'';
@@ -183,6 +189,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
    showcase('jp','JAPONIA','🇯🇵','Japoniako eraikin historikoa',target('jp','Japoniaren ezaugarriak',3))+
    '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><span class="gal-tray-corner gal-tray-corner-tl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-tr" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-bl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-br" aria-hidden="true">❧</span><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+((state.previewFull||state.previewPartial)?'<span class="gal-all-placed">Diseinu-simulazioa: jatorrizko irudiak eta testuak, ausaz antolatuta. EZ DA EBAZPENA.</span>':tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-museum-tablefront" aria-hidden="true"><span></span></div><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':previewNotice||state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready)||Object.keys(state.placements).length!==ITEMS.length?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako bandera urdina gaur egungo Europar Batasunaren ikurra da, ez XIX. mendeko bandera. Gainerako banderak herrialdeak identifikatzeko erabiltzen dira. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
+   incremental.rememberFull();
  }
  async function check(){
    if(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready))return;
