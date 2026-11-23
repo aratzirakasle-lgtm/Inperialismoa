@@ -30,9 +30,11 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,draftKey=null,dossierProgress=null,sharedDraft=null,onTeamCompleted=null}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
- let touchDrag=null,suppressTouchClick=false,sharedSync=null;
+ let touchDrag=null,suppressTouchClick=false,sharedSync=null,nativeDragSource=null;
  root.__galleryCleanup=()=>{
+   touchDrag?.card?.classList.remove('gal-touch-source');
    touchDrag?.ghost?.remove();
+   nativeDragSource?.classList.remove('gal-native-drag-source');
    controller.abort();
    sharedSync?.stop();
  };
@@ -234,6 +236,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  // No calcula respuestas correctas ni modifica la comprobación de Supabase.
  const touchTargets=()=>root.querySelectorAll('.gal-touch-target');
  const cleanTouch=()=>{
+   touchDrag?.card?.classList.remove('gal-touch-source');
    touchDrag?.ghost?.remove();
    touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
    touchDrag=null;
@@ -290,10 +293,50 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  root.addEventListener('pointercancel',e=>{
    if(touchDrag?.pid===e.pointerId)cleanTouch();
  },{signal:controller.signal});
- root.addEventListener('dragstart',e=>{const card=e.target.closest('[data-gallery-card]');if(!card||!canMove(card.dataset.galleryCard)){e.preventDefault();return}e.dataTransfer.setData('text/plain',card.dataset.galleryCard);e.dataTransfer.effectAllowed='move'},{signal:controller.signal});
- root.addEventListener('dragover',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone){e.preventDefault();e.dataTransfer.dropEffect='move';zone.classList.add('gal-dragover')}},{signal:controller.signal});
- root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
- root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');const id=e.dataTransfer.getData('text/plain');if(zone.hasAttribute('data-gallery-tray')){if(canMove(id)){delete state.placements[id];state.selected=null;saveDraft();draw()}}else place(id,zone.dataset.galleryZone)},{signal:controller.signal});
+ // Arrastre con ratón: la cartela original se eleva y genera una copia de
+ // arrastre centrada. No se modifican los destinos ni la corrección.
+ const cleanNativeDrag=()=>{
+   nativeDragSource?.classList.remove('gal-native-drag-source');
+   nativeDragSource=null;
+   root.querySelectorAll('.gal-dragover').forEach(el=>el.classList.remove('gal-dragover'));
+ };
+ root.addEventListener('dragstart',e=>{
+   const card=e.target.closest('[data-gallery-card]');
+   if(!card||!canMove(card.dataset.galleryCard)||!e.dataTransfer){
+     e.preventDefault();return;
+   }
+   nativeDragSource=card;
+   card.classList.add('gal-native-drag-source');
+   e.dataTransfer.setData('text/plain',card.dataset.galleryCard);
+   e.dataTransfer.effectAllowed='move';
+   if(typeof e.dataTransfer.setDragImage==='function'){
+     const rect=card.getBoundingClientRect();
+     // Elemento real, ya estilizado; sin duplicados flotando en el DOM.
+     e.dataTransfer.setDragImage(card,Math.round(rect.width/2),Math.round(rect.height/2));
+   }
+ },{signal:controller.signal});
+ root.addEventListener('dragend',cleanNativeDrag,{signal:controller.signal});
+ root.addEventListener('dragover',e=>{
+   const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');
+   if(zone&&e.dataTransfer){
+     e.preventDefault();e.dataTransfer.dropEffect='move';
+     zone.classList.add('gal-dragover');
+   }
+ },{signal:controller.signal});
+ root.addEventListener('dragleave',e=>{
+   const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');
+   if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover');
+ },{signal:controller.signal});
+ root.addEventListener('drop',e=>{
+   const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');
+   if(!zone||!e.dataTransfer)return;
+   e.preventDefault();
+   const id=e.dataTransfer.getData('text/plain');
+   cleanNativeDrag();
+   if(zone.hasAttribute('data-gallery-tray')){
+     if(canMove(id))unplace(id); // Respetar también el borrador compartido.
+   }else place(id,zone.dataset.galleryZone);
+ },{signal:controller.signal});
  draw();
  if(sharedSync)sharedSync.start();
 }
