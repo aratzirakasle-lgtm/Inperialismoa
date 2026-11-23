@@ -1299,6 +1299,89 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
+ await scenario('Intervención 2: deshacer cartela sin escrituras en la galería del profesor',async()=>{
+  const {page,context,errors}=await open('teacher','index.html?teacherpanel=1#teacherpreviewgallery');
+  try{
+   await waitVisible(page,'[data-gallery-card]');
+   const card=page.locator('[data-gallery-card]').first(),id=await card.getAttribute('data-gallery-card');
+   await card.click();
+   await page.locator('[data-gallery-zone]').first().click({force:true});
+   await page.waitForFunction(id=>!!document.querySelector('[data-gallery-card="'+id+'"].gal-tile-placed'),id);
+   await page.waitForFunction(()=>!document.querySelector('[data-gallery-action="undo"]')?.disabled);
+   await page.locator('[data-gallery-action="undo"]').click();
+   await page.waitForFunction(id=>!document.querySelector('[data-gallery-card="'+id+'"].gal-tile-placed'),id);
+   assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+ await scenario('Intervención 2: profesor prueba las dos elecciones finales sin enviar respuestas',async()=>{
+  const {page,context,errors}=await open('teacher','bi-sistema.html?preview=1');
+  try{
+   await waitVisible(page,'#bi-stage');
+   await page.getByRole('button',{name:'Azken erronka'}).click();
+   await waitVisible(page,'#bi-check-cases');
+   assert.equal(await page.locator('#bi-check-cases').isDisabled(),true);
+   await page.locator('[data-case="case_monarch"][data-choice="auth"]').click();
+   await page.locator('[data-case="case_rights"][data-choice="lib"]').click();
+   assert.equal(await page.locator('#bi-check-cases').isEnabled(),true);
+   await page.locator('#bi-check-cases').click();
+   await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='complete');
+   assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
+ await scenario('Intervención 2: deshacer y reiniciar en los ejercicios compartidos 3 y 5',async()=>{
+  const third=await open('student','inperialismoaren-definizioa.html?smoke_m1_steps=2');
+  try{
+   await third.page.waitForFunction(()=>window.m1ThirdDraftSync?.ready===true);
+   await third.page.locator('[data-piece="capital"]').click();
+   await third.page.locator('[data-slot="purpose"]').click({force:true});
+   await third.page.waitForFunction(()=>!document.querySelector('#undo-last')?.disabled);
+   await third.page.locator('#undo-last').click();
+   await third.page.waitForFunction(()=>!document.querySelector('[data-piece="capital"]')?.classList.contains('placed'));
+   assert.deepEqual(third.errors,[]);
+  }finally{await third.context.close()}
+  const fifth=await open('student','esaldiak-osatu.html?smoke_m1_steps=4');
+  try{
+   await fifth.page.waitForFunction(()=>window.m1FifthDraftSync?.ready===true);
+   await fifth.page.locator('.word[data-word="koloniak"]').click({force:true});
+   await fifth.page.locator('.hole[data-slot="1"]').click({force:true});
+   await fifth.page.waitForFunction(()=>!document.querySelector('#undo-last')?.disabled);
+   await fifth.page.locator('#undo-last').click();
+   await fifth.page.waitForFunction(()=>document.querySelector('.hole[data-slot="1"]')?.textContent==='');
+   assert.equal(await fifth.page.locator('#reset-draft').isDisabled(),true);
+   await fifth.page.locator('.word[data-word="koloniak"]').click({force:true});
+   await fifth.page.locator('.hole[data-slot="1"]').click({force:true});
+   await fifth.page.waitForFunction(()=>!document.querySelector('#reset-draft')?.disabled);
+   fifth.page.once('dialog',d=>d.accept());
+   await fifth.page.locator('#reset-draft').click();
+   await fifth.page.waitForFunction(()=>document.querySelector('.hole[data-slot="1"]')?.textContent==='');
+   assert.deepEqual(fifth.errors,[]);
+  }finally{await fifth.context.close()}
+ });
+ await scenario('Intervención 2: siguiente expediente y regreso a la pantalla final',async()=>{
+  const fourth=await open('teacher','inperioen-aztarnak.html?preview=1');
+  try{
+   await waitVisible(fourth.page,'.m1-nav');
+   await fourth.page.locator('#next-pending-dossier').click();
+   await waitVisible(fourth.page,'.dossier-sheet--case');
+   assert.match(await fourth.page.locator('#dossier-heading').textContent(),/India/i);
+   assert.deepEqual(await fourth.page.evaluate(()=>window.__smokeRpcCalls),[]);
+   assert.deepEqual(fourth.errors,[]);
+  }finally{await fourth.context.close()}
+  const fifth=await open('teacher','esaldiak-osatu.html?preview=1');
+  try{
+   await waitVisible(fifth.page,'.m1-nav');
+   await fifth.page.getByRole('button',{name:'Amaierako pantaila'}).click();
+   await waitVisible(fifth.page,'#success');
+   await fifth.page.locator('#review').click();
+   assert.equal(await fifth.page.locator('#success').isVisible(),false);
+   await fifth.page.locator('#reopen-success').click();
+   assert.equal(await fifth.page.locator('#success').isVisible(),true);
+   assert.deepEqual(await fifth.page.evaluate(()=>window.__smokeRpcCalls),[]);
+   assert.deepEqual(fifth.errors,[]);
+  }finally{await fifth.context.close()}
+ });
  await scenario('Salas 3 y 5: panorámica móvil centrada, accesible, reversible y sin envíos',async()=>{
    for(const [n,path,step] of [
      [3,'inperialismoaren-definizioa.html',2],
