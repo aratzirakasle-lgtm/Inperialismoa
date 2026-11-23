@@ -161,6 +161,8 @@ function paint(){
     TRAITS.some(t=>!locked.has(t.id)&&!pending[t.id]);
   controls.reset.disabled=busy||(teamSync&&!teamSync.ready)||(!Object.keys(pending).length&&!Object.keys(challengePending).length);
   if(controls.undo)controls.undo.disabled=!canUndo();
+  // La acción principal cambia de fase, no se acumulan botones desactivados.
+  controls.check.hidden=phase!=='classify';
   if(controls.continue)controls.continue.hidden=phase!=='challenge';
   controls.help.disabled=false;
   controls.check.querySelector("span").textContent=busy?"Egiaztatzen…":"Erantzunak egiaztatu";
