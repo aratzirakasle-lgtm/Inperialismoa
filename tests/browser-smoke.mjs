@@ -84,6 +84,34 @@ async function open(role,path,viewport={width:1365,height:900}){
      rpc:async(name,args)=>{
        window.__smokeRpcCalls.push(name);
        if(role==='teacher')throw Error('No se permiten RPC en una simulación docente');
+       // Modelo de servidor: dos fases enteras, sin pistas por tarjeta.
+       if(name==='submit_bi_sistema'){
+         let row=tables.bi_sistema_team_state[0];
+         if(!row){
+           row={team_id:'team1',locked_ids:[],locked_positions:{},
+             challenge_locked:[],completed_at:null};
+           tables.bi_sistema_team_state.push(row);
+         }
+         const phase=args?.p_phase,answers=args?.p_answers||{};
+         const expected=phase==='classify'?
+           {army:'auth',monarch:'auth',parliament:'auth',separation:'lib',
+             rights:'lib',suffrage:'lib',socialist:'lib'}:
+           {case_monarch:'auth',case_rights:'lib'};
+         const ids=Object.keys(expected);
+         const previous=phase==='classify'?row.locked_ids:row.challenge_locked;
+         const required=ids.filter(id=>!previous.includes(id));
+         if(Object.keys(answers).length!==required.length)
+           return {data:null,error:{message:'Osatu fase honetako erantzun guztiak'}};
+         const good=required.every(id=>answers[id]===expected[id]);
+         if(good){
+           if(phase==='classify'){row.locked_ids=ids;row.locked_positions=expected;}
+           else{row.challenge_locked=ids;row.completed_at=new Date().toISOString();}
+         }
+         return {data:{status:'checked',phase_complete:good,
+           completed:!!row.completed_at,locked:row.locked_ids,
+           positions:row.locked_positions,challenge_locked:row.challenge_locked,
+           correct:[],incorrect:[],attempt_count:1},error:null};
+       }
        if(name==='gallery_draft_import'){
          const prior=tables.gallery_team_drafts[0];
          if(prior)return {data:{status:'exists',...mockDraftState()},error:null};
