@@ -56,7 +56,7 @@ async function initialize(){
       retry.addEventListener('click',()=>void sync?.load());
       status?.after(retry);
       sync=createMission1DraftSync({
-        client,teamId:id,exercise:5,
+        client,teamId:id,exercise:5,userId:user.id,
         onDraft:places=>window.m1FifthDraftApply?.(places),
         onStatus:(msg,kind)=>{
           say(msg);retry.style.display=kind==='error'?'inline-block':'none';
