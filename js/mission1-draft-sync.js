@@ -53,13 +53,22 @@ export function createMission1DraftSync({client,teamId,exercise,userId,onDraft,o
        if((current[pending.item]??null)===pending.to){
          savePending(null);
          tell('✓ Aurreko mugimendua taldean gordeta dago.','saved');
-       }else if(pending.revision!==revision){
-         savePending(null);
-         tell('Taldekide batek ariketa aldatu du. Berrikusi kokapenak.','conflict');
        }else{
-         retry={p_item:pending.item,p_to_slot:pending.to,
-           p_expected_slot:pending.expected,p_expected_revision:pending.revision};
-         tell('Gordetzeko falta zen mugimendua berreskuratzen…','saving');
+         // Un compañero puede haber guardado otra tarjeta mientras estábamos
+         // sin conexión. Reintentar solo cuando origen y destino siguen libres.
+         const originMatches=(current[pending.item]??null)===pending.expected;
+         const destinationFree=pending.to===null||
+           !Object.entries(current).some(([id,slot])=>
+             id!==pending.item&&slot===pending.to);
+         if(!originMatches||!destinationFree){
+           savePending(null);
+           tell('Taldekide batek kokapen bera aldatu du. Berrikusi kokapenak.','conflict');
+         }else{
+           retry={p_item:pending.item,p_to_slot:pending.to,
+             p_expected_slot:pending.expected,p_expected_revision:revision};
+           if(pending.revision!==revision)savePending({...pending,revision});
+           tell('Gordetzeko falta zen mugimendua berreskuratzen…','saving');
+         }
        }
      }else{
        tell('✓ Taldearen zirriborroa prest dago.','ready');
