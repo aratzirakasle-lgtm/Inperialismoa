@@ -111,8 +111,13 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
      let data=await adapter.load();
      if(!alive)return;
      if(!data.exists&&!data.completed){
-       data=await adapter.importLocal(normalize(state.placements));
-       if(!alive)return;
+       const localDraft=normalize(state.placements);
+       // No escribir un borrador vacío al entrar: el primer movimiento
+       // crea la fila de forma atómica; solo se importan borradores reales.
+       if(Object.keys(localDraft).length){
+         data=await adapter.importLocal(localDraft);
+         if(!alive)return;
+       }
      }
      if(data.completed){
        const becameDone=!state.completed;
