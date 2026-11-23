@@ -27,6 +27,26 @@ let note=null,hintBox=null,challengeBox=null;
 const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check")};
 const labels={auth:"Sistema autoritarioak",lib:"Erregimen liberalak"};
 const roomOf=id=>positions[id]||pending[id]||null;
+const localDraftKey=()=>teamId&&!teacherPreview?'inperialismoa:bi-sistema:borrador:'+teamId:null;
+function saveLocalDraft(){
+ const key=localDraftKey();if(!key)return;
+ try{
+  const valid=Object.fromEntries(Object.entries(pending).filter(([id,z])=>BY_ID.has(id)&&!locked.has(id)&&(z==='auth'||z==='lib')));
+  const cases=Object.fromEntries(Object.entries(challengePending).filter(([id,z])=>['case_monarch','case_rights'].includes(id)&&!challengeLocked.has(id)&&(z==='auth'||z==='lib')));
+  if(Object.keys(valid).length||Object.keys(cases).length)
+    localStorage.setItem(key,JSON.stringify({v:1,places:valid,cases}));
+  else localStorage.removeItem(key);
+ }catch(e){console.warn('Bigarren ariketako tokiko borradorra',e)}
+}
+function restoreLocalDraft(){
+ const key=localDraftKey();if(!key)return;
+ try{
+  const stored=JSON.parse(localStorage.getItem(key)||'null');
+  if(!stored||stored.v!==1)return;
+  pending=Object.fromEntries(Object.entries(stored.places||{}).filter(([id,z])=>BY_ID.has(id)&&(z==='auth'||z==='lib')));
+  challengePending=Object.fromEntries(Object.entries(stored.cases||{}).filter(([id,z])=>['case_monarch','case_rights'].includes(id)&&(z==='auth'||z==='lib')));
+ }catch(e){console.warn('Tokiko borradorra ezin izan da berreskuratu',e)}
+}
 const count=()=>locked.size;
 function safeButton(label,attrs=""){return '<button type="button" '+attrs+'>'+esc(label)+'</button>';}
 function card(id,placed){
@@ -107,6 +127,7 @@ function paint(){
   }
   illuminate();
   renderChallenge();
+  saveLocalDraft();
 }
 function move(id,target){
   if(!BY_ID.has(id)||locked.has(id)||busy)return;
@@ -250,7 +271,7 @@ function initInteractions(){
     if(zone&&selected){move(selected,zone.dataset.biTarget);return}
     const answer=e.target.closest("[data-case][data-choice]");
     if(answer&&!teacherPreview&&!busy){
-      challengePending[answer.dataset.case]=answer.dataset.choice;renderChallenge();return;
+      challengePending[answer.dataset.case]=answer.dataset.choice;saveLocalDraft();renderChallenge();return;
     }
     if(e.target.closest("#bi-check-cases"))void checkCases();
   });
@@ -383,6 +404,7 @@ async function boot(){
     if(!first?.completed_at){
       location.replace("./index.html#mission1gallery");return;
     }
+    restoreLocalDraft();
     await fetchState();busy=false;paint();
     window.addEventListener("focus",()=>void fetchState().catch(()=>{}));
     document.addEventListener("visibilitychange",()=>{if(!document.hidden)void fetchState().catch(()=>{})});
