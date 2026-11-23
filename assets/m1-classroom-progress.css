@@ -1,0 +1,20 @@
+/* Inperialismoa: marcador discreto de cinco ejercicios y misión completa.
+ * Limitado a la barra lateral; no modifica las vitrinas ni el vestíbulo. */
+#scoreboard.scoreboard-m1{display:block;min-width:0}
+.m1-class-progress{display:grid;gap:6px;min-width:0}
+.m1-class-grid{display:grid;grid-template-columns:minmax(65px,1fr) repeat(5,19px) 25px;gap:2px;align-items:center;min-width:0}
+.m1-class-head{font-size:9px;color:#647d7c;font-weight:800;text-align:center;letter-spacing:.02em;margin-bottom:1px}
+.m1-class-head>span:first-child{text-align:left;font-size:9px}
+.m1-class-head>span:last-child{color:#8b632b}
+.m1-class-team{padding:5px 3px;border-bottom:1px solid #e8eeea;border-radius:5px}
+.m1-class-team.is-own{background:#f1f8f1;box-shadow:inset 2px 0 #47886b}
+.m1-class-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#26443e;font-weight:700;font-size:11px;line-height:1.25}
+.m1-class-name small{display:block;font-size:9px;font-weight:600;color:#697f79;margin-top:1px}
+.m1-class-you{display:block;font-size:8px;color:#3a7966;font-weight:800;letter-spacing:.02em}
+.m1-class-mark{display:grid;place-items:center;width:18px;height:19px;line-height:1;color:#b4c4bc;font-weight:700;border-radius:50%;font-size:14px;margin:auto}
+.m1-class-mark.is-done{background:#dcefe3;color:#246c4a}
+.m1-class-mark.is-mission{width:23px;height:23px;border-radius:7px;border:1px solid #d7c0a0;color:#947347;background:#f6efe2;font-size:13px}
+.m1-class-mark.is-mission.is-done{background:#e8d19a;border-color:#bf9b50;color:#513a1b}
+.m1-class-info,.m1-class-empty{font-size:10px;color:#607c77;line-height:1.5;margin:4px 0 0}
+.m1-class-info.is-error{color:#925527}
+@media(max-width:720px){.m1-class-grid{grid-template-columns:minmax(70px,1fr) repeat(5,19px) 25px}}
