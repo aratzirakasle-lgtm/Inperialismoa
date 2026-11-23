@@ -45,7 +45,13 @@ async function initialize(){
       if(error)throw error;
       return data;
     };
-    say(prior?'Taldeak lehen misioa jada osatuta dauka. Berriz jolastu edo bigarren misiora joan zaitezkete.':'Bost esaldiak osatu eta egiaztatu. Erantzun zuzenak taldearentzat gordeko dira.');
+    if(prior){
+      say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. Bigarren misiora joan zaitezkete.');
+      // 5/5 gaindituta badago, ez behartu ikaslea berriro jokatzera.
+      window.m1FifthRestoreCompletion?.();
+    }else{
+      say('Bost esaldiak osatu eta egiaztatu. Erantzun zuzenak taldearentzat gordeko dira.');
+    }
   }catch(e){
     console.error('Bosgarren ariketaren saioa',e);
     halt('Ezin izan da taldearen egoera kargatu. Berritu orria edo itzuli hasierara.');
