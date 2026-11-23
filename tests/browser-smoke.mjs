@@ -147,7 +147,7 @@ async function open(role,path,viewport={width:1365,height:900}){
            positions:row.locked_positions,challenge_locked:row.challenge_locked,
            correct:[],incorrect:[],attempt_count:1},error:null};
        }
-       if(name==='mission1_draft_move'){
+       if(name==='mission1_draft_move_checked'){
          const exercise=Number(args?.p_exercise),row=m1Row(exercise);
          if(tables.mission1_exercise_completions.some(x=>x.exercise===exercise))
            return {data:{status:'completed',...m1Snapshot(exercise)},error:null};
