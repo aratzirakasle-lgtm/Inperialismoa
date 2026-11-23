@@ -1,5 +1,6 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261119-miniaturas2';
+import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-talde1';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
@@ -26,13 +27,14 @@ export const ITEMS=[
 const LOOKUP=new Map(ITEMS.map(x=>[x.id,x]));
 const ZONES=new Set(["eu_auth","eu_liberal","ru","us","jp"]);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,draftKey=null,dossierProgress=null}={}){
+export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,draftKey=null,dossierProgress=null,sharedDraft=null,onTeamCompleted=null}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
- let touchDrag=null,suppressTouchClick=false;
+ let touchDrag=null,suppressTouchClick=false,sharedSync=null;
  root.__galleryCleanup=()=>{
    touchDrag?.ghost?.remove();
    controller.abort();
+   sharedSync?.stop();
  };
  // El alumnado no recibe validaciones parciales: solo se sellan las 20 cartas cuando la misión está completa.
  const finished=!!initial.completed_at;
@@ -61,11 +63,32 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      saveDraft(); // Promover borradores de la versión anterior sin perderlos.
    }catch(error){console.warn('No se pudo recuperar el borrador local',error)}
  }else if(draftKey)saveDraft();
+ if(sharedDraft)sharedSync=createGallerySyncController({
+   adapter:sharedDraft,state,items:ITEMS,zones:ZONES,draftKey,
+   draw:()=>draw(),saveLocal:saveDraft,onCompleted:onTeamCompleted
+ });
  const count=()=>Object.keys(state.placements).length;
  const refocus=selector=>root.querySelector(selector)?.focus({preventScroll:true});
- const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy;
- const place=(id,zone)=>{if(!canMove(id)||!ZONES.has(zone))return;state.placements[id]=zone;state.selected=null;state.wrong.delete(id);state.feedback="";saveDraft();draw();refocus('[data-gallery-zone="'+zone+'"]')};
- const reset=()=>{if(state.busy)return;for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];state.selected=null;state.wrong.clear();state.feedback="";state.previewFull=false;state.previewPartial=false;saveDraft();draw();refocus('[data-gallery-action="reset"]')};
+ const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy&&(!sharedSync||sharedSync.ready);
+ const place=(id,zone)=>{
+   if(!canMove(id)||!ZONES.has(zone))return;
+   if(sharedSync){sharedSync.move(id,zone);return}
+   state.placements[id]=zone;state.selected=null;state.wrong.delete(id);
+   state.feedback="";saveDraft();draw();refocus('[data-gallery-zone="'+zone+'"]');
+ };
+ const unplace=id=>{
+   if(!canMove(id))return;
+   if(sharedSync){sharedSync.move(id,null);return}
+   delete state.placements[id];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');
+ };
+ const reset=()=>{
+   if(state.busy)return;
+   if(sharedSync){void sharedSync.reset();return}
+   for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];
+   state.selected=null;state.wrong.clear();state.feedback="";
+   state.previewFull=false;state.previewPartial=false;saveDraft();draw();
+   refocus('[data-gallery-action="reset"]');
+ };
  const tile=(item,placed=false)=>{
    const locked=state.locked.has(item.id),selected=state.selected===item.id;
    return '<button type="button" class="gal-tile '+(placed?'gal-tile-placed ':'')+(locked?'gal-locked ':'')+(selected?'gal-selected ':'')+'" data-gallery-card="'+item.id+'" draggable="'+(!locked&&!state.busy)+'" '+(locked?'disabled':'')+' aria-pressed="'+selected+'" title="'+(locked?'Zuzena':'Sakatu edo arrastatu')+'"><span class="gal-tile-icon" aria-hidden="true">'+(galleryIllustration(item.id)||esc(item.icon))+'</span><span class="gal-tile-name">'+esc(item.label)+'</span>'+(locked?'<span class="gal-tile-check" aria-label="Zuzena">✓</span>':placed?'<span class="gal-tile-move">↗</span>':'')+'</button>';
@@ -135,19 +158,20 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  </div>`;
  function draw(){
    const tray=state.previewFull||state.previewPartial?[]:ITEMS.filter(x=>!state.placements[x.id]);
+   const sharedBanner=sharedSync?'<div class="gal-shared-banner" role="status" aria-live="polite"><span aria-hidden="true" class="gal-shared-dot"></span><strong>TALDEAREN MAHAI PARTEKATUA</strong><span>'+(state.busy?'Aldaketa gordetzen…':sharedSync.ready?'Sinkronizatuta · '+count()+' / 20 kartela':'Konexioa eten da. Tokiko kopia gordeta dago.')+'</span>'+(!sharedSync.ready&&!state.busy?'<button type="button" class="gal-shared-retry" data-gallery-action="sync-retry">↻ Berriro konektatu</button>':'')+'</div>':'';
    const archiveButton=typeof dossierProgress==='function'?'<div class="m1-archive-open"><button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+Math.max(0,Math.min(5,Number(dossierProgress())||0))+' / 5</span></button></div>':'';
    const previewNotice=(state.previewFull||state.previewPartial)?'IRAKASLEAREN MAKETA: jatorrizko kartelak ausaz banatuta. EZ DA EBAZPENA. Ez da ezer gordetzen.':'';
    const previewRibbon=(state.previewFull||state.previewPartial)?'<p class="gal-preview-ribbon" role="note"><strong>IRAKASLEAREN DISEINU-PROBA</strong><span>Benetako 20 kontzeptuak eta irudiak; ausaz banatuta. <b>EZ DA EBAZPENA.</b> Ez da ezer gordetzen.</span></p>':'';
 
-   root.innerHTML=(navigationEnabled?exerciseNavMarkup(1):'')+(navigationPreview?'<div class="m1-stage-tools"><span class="m1-teacher-label">Pantailak ikusi (ez da gordetzen):</span><button type="button" data-gallery-action="preview-start" aria-pressed="'+(!state.previewPartial&&!state.previewFull)+'">Hasierako pantaila</button><button type="button" data-gallery-action="preview-partial" aria-pressed="'+state.previewPartial+'">Erdi beteta</button><button type="button" data-gallery-action="preview-complete" aria-pressed="'+state.previewFull+'">20 kartela · simulazioa</button></div>':'')+archiveButton+'<div class="gal-hall">'+museumDecor+'<header class="gal-masthead"><div class="gal-museum-brand"><strong>INPERIALISMOA</strong><small>MUSEO HISTORIKOA</small></div><div class="gal-museum-chapter"><span>1 / 5</span><span class="gal-chapter-dots"><i></i><i></i><i></i><i></i><i></i></span></div><button type="button" class="gal-return" data-gallery-action="back">← Misiora itzuli</button><div class="gal-topline"><span>INPERIALISMOAREN GARAIA</span><span>1. MISIOA · 1. ARIKETA</span></div><div class="gal-titlebar"><span class="gal-wreath" aria-hidden="true">❧</span><div><span class="gal-title-small">Misioa 1 · 1. ariketa</span><h1><span class="gal-title-prefix">1. MISIOA · </span>Potentzia handien galeria</h1><p>Arrastatu ezaugarriak dagokien erakusleihoetara. Europan, bereizi bi sistema politikoak.</p></div><span class="gal-wreath" aria-hidden="true">❧</span></div><div class="gal-progress-chips"><span>'+((state.previewFull||state.previewPartial)?(state.previewFull?20:10)+' / '+ITEMS.length+' · simulazioa':count()+' / '+ITEMS.length+' kokatuta')+'</span><span>✦ '+(state.completed?'Osatua':'Ariketa martxan')+'</span></div></header>'+previewRibbon+'<section class="gal-display" aria-label="Lau potentzien erakusleihoak">'+
+   root.innerHTML=(navigationEnabled?exerciseNavMarkup(1):'')+(navigationPreview?'<div class="m1-stage-tools"><span class="m1-teacher-label">Pantailak ikusi (ez da gordetzen):</span><button type="button" data-gallery-action="preview-start" aria-pressed="'+(!state.previewPartial&&!state.previewFull)+'">Hasierako pantaila</button><button type="button" data-gallery-action="preview-partial" aria-pressed="'+state.previewPartial+'">Erdi beteta</button><button type="button" data-gallery-action="preview-complete" aria-pressed="'+state.previewFull+'">20 kartela · simulazioa</button></div>':'')+archiveButton+sharedBanner+'<div class="gal-hall">'+museumDecor+'<header class="gal-masthead"><div class="gal-museum-brand"><strong>INPERIALISMOA</strong><small>MUSEO HISTORIKOA</small></div><div class="gal-museum-chapter"><span>1 / 5</span><span class="gal-chapter-dots"><i></i><i></i><i></i><i></i><i></i></span></div><button type="button" class="gal-return" data-gallery-action="back">← Misiora itzuli</button><div class="gal-topline"><span>INPERIALISMOAREN GARAIA</span><span>1. MISIOA · 1. ARIKETA</span></div><div class="gal-titlebar"><span class="gal-wreath" aria-hidden="true">❧</span><div><span class="gal-title-small">Misioa 1 · 1. ariketa</span><h1><span class="gal-title-prefix">1. MISIOA · </span>Potentzia handien galeria</h1><p>Arrastatu ezaugarriak dagokien erakusleihoetara. Europan, bereizi bi sistema politikoak.</p></div><span class="gal-wreath" aria-hidden="true">❧</span></div><div class="gal-progress-chips"><span>'+((state.previewFull||state.previewPartial)?(state.previewFull?20:10)+' / '+ITEMS.length+' · simulazioa':count()+' / '+ITEMS.length+' kokatuta')+'</span><span>✦ '+(state.completed?'Osatua':'Ariketa martxan')+'</span></div></header>'+previewRibbon+'<section class="gal-display" aria-label="Lau potentzien erakusleihoak">'+
    showcase('eu','EUROPA','🇩🇪 🇫🇷','Europako parlamentua eta industria',target('eu_auth','Sistema autoritarioak',4)+target('eu_liberal','Erregimen liberalak',5))+
    showcase('ru','ERRUSIA','🇷🇺','Errusiako tsarraren garaiko irudia',target('ru','Errusiaren ezaugarriak',4))+
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
    showcase('jp','JAPONIA','🇯🇵','Japoniako eraikin historikoa',target('jp','Japoniaren ezaugarriak',3))+
-   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><span class="gal-tray-corner gal-tray-corner-tl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-tr" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-bl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-br" aria-hidden="true">❧</span><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+((state.previewFull||state.previewPartial)?'<span class="gal-all-placed">Diseinu-simulazioa: jatorrizko irudiak eta testuak, ausaz antolatuta. EZ DA EBAZPENA.</span>':tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-museum-tablefront" aria-hidden="true"><span></span></div><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':previewNotice||state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||state.previewFull||state.previewPartial||Object.keys(state.placements).length!==ITEMS.length?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako domina museoko ikurra da, ez bandera ofiziala. Beste banderak herrialdeak identifikatzeko erabiltzen dira. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
+   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><span class="gal-tray-corner gal-tray-corner-tl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-tr" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-bl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-br" aria-hidden="true">❧</span><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+((state.previewFull||state.previewPartial)?'<span class="gal-all-placed">Diseinu-simulazioa: jatorrizko irudiak eta testuak, ausaz antolatuta. EZ DA EBAZPENA.</span>':tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-museum-tablefront" aria-hidden="true"><span></span></div><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':previewNotice||state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready)||Object.keys(state.placements).length!==ITEMS.length?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako domina museoko ikurra da, ez bandera ofiziala. Beste banderak herrialdeak identifikatzeko erabiltzen dira. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
  }
  async function check(){
-   if(state.busy||state.completed||state.previewFull||state.previewPartial)return;
+   if(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready))return;
    const answers=Object.fromEntries(Object.entries(state.placements).filter(([id,zone])=>LOOKUP.has(id)&&ZONES.has(zone)));
    if(Object.keys(answers).length!==ITEMS.length){
      state.feedback='Kokatu 20 kontzeptuak egiaztatu aurretik.';draw();return;
@@ -155,8 +179,23 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(preview){state.feedback='Irakaslearen aurrebista: ezin da benetako saiakerarik bidali.';draw();return}
    state.busy=true;draw();
    try{
-     const result=await onSubmit(answers);
+     const result=sharedSync?await sharedSync.submit():await onSubmit(answers);
+     if(sharedSync&&result?.status==='conflict'){
+       sharedSync.apply(result);
+       state.feedback='Taldekide batek aldaketa egin du. Azken bertsioa kargatu da; berrikusi.';
+       return;
+     }
+     if(sharedSync&&result?.status==='incomplete'){
+       sharedSync.apply(result);
+       state.feedback='20 kartelak kokatu behar dira egiaztatu aurretik.';
+       return;
+     }
+     if(sharedSync&&result?.status==='completed'){
+       await sharedSync.handleResult(result);
+       return;
+     }
      if(!result||typeof result.completed!=='boolean')throw Error('Erantzun baliogabea');
+     if(sharedSync&&result.status!=='checked')throw Error('Erantzun baliogabea');
      state.completed=result.completed;
      // El servidor solo comunica el resultado global. Nunca revelar ni fijar subconjuntos.
      state.locked=state.completed?new Set(ITEMS.map(x=>x.id)):new Set();
@@ -166,6 +205,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
       ?'Bikain! Ariketa osoa gainditu duzue. Hurrengo atala prest dago.'
       :'Ariketa ez dago gaindituta. Berrikusi erantzunak eta saiatu berriro.';
      saveDraft();
+     if(sharedSync&&state.completed&&typeof onTeamCompleted==='function')void onTeamCompleted();
    }catch(err){
      console.error('Galeria: ezin izan dira erantzunak egiaztatu',err);
      state.feedback='Ezin izan dira erantzunak egiaztatu. Egiaztatu konexioa eta saiatu berriro.';
@@ -174,7 +214,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  root.addEventListener('click',e=>{
    if(suppressTouchClick){suppressTouchClick=false;return}
    const action=e.target.closest('[data-gallery-action]')?.dataset.galleryAction;
-   if(action){if(action==='preview-start'&&navigationPreview){state.previewFull=false;state.previewPartial=false;state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-partial'&&navigationPreview){state.previewPartial=true;state.previewFull=false;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='preview-complete'&&navigationPreview){state.previewPartial=false;state.previewFull=true;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
+   if(action){if(action==='preview-start'&&navigationPreview){state.previewFull=false;state.previewPartial=false;state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-partial'&&navigationPreview){state.previewPartial=true;state.previewFull=false;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='preview-complete'&&navigationPreview){state.previewPartial=false;state.previewFull=true;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='sync-retry'&&sharedSync){void sharedSync.connect();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
    const card=e.target.closest('[data-gallery-card]');
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw();refocus('[data-gallery-card="'+id+'"]')}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected){place(state.selected,zone.dataset.galleryZone);return;}
