@@ -6,11 +6,29 @@ const has=(path,pattern)=>assert.match(read(path),pattern,'Regla esperada en '+p
 
 test('Los alumnos no saltan de ejercicio en ejercicio',()=>{
  has('js/app.js',/const canSkip=teacherPreview\|\|!!current\.completed_at/);
- has('js/app.js',/navigationEnabled:teacherPreview/);
+ has('js/app.js',/navigationEnabled:true,navigationPreview:teacherPreview/);
  has('js/bi-sistema-live.js',/if\(!first\?\.completed_at\)/);
  has('js/mission1-third-auth.js',/if\(!second\?\.completed_at\)/);
  has('inperioen-aztarnak.html',/if\(!third\?\.exercise\)/);
  has('js/mission1-fifth-auth.js',/if\(!third\|\|!fourth\?\.completed_at\)/);
+});
+test('Los medallones del museo comparten estética, no permisos',()=>{
+ const src=read('js/mission1-navigation.js');
+ has('js/galeria-potencias.js',/exerciseNavMarkup\(1,\{/);
+ has('js/app.js',/navigationEnabled:true,navigationPreview:teacherPreview/);
+ assert.match(src,/m1-route-stop/);
+ assert.match(src,/m1-nav-num/);
+ assert.match(src,/m1-nav-links::before/);
+ assert.match(src,/loadMission1Completed/);
+ assert.match(src,/mountStudentExerciseNav/);
+ assert.match(src,/mission1_exercise_completions/);
+ assert.doesNotMatch(src,/\.from\(['"]mission_completions['"]\)/,
+   'La barra de alumnos no debe consultar la tabla histórica privada');
+ for(const path of ['js/bi-sistema-live.js','js/mission1-third-auth.js','js/mission1-fifth-auth.js','inperioen-aztarnak.html']){
+  assert.match(read(path),/mountStudentExerciseNav\(/,
+    'Cada ejercicio debe mostrar su etapa real: '+path);
+ }
+ assert.match(src,/teacher\?teacherHref:studentHref/);
 });
 test('La navegación libre exige un perfil de profesor',()=>{
  has('js/app.js',/accountIsTeacher\(\)&&hash==="#teacherpreviewgallery"/);
