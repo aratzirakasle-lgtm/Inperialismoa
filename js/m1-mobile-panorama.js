@@ -36,7 +36,7 @@ if(viewport){
     if(!visible)return;
     left.disabled=viewport.scrollLeft<=2;
     right.disabled=viewport.scrollLeft>=max-2;
-    middle.disabled=Math.abs(viewport.scrollLeft-max/2)<2;
+    // La vuelta al centro siempre está disponible, aunque ya estemos cerca.
   };
   const schedule=()=>{
     if(!scheduled){scheduled=true;requestAnimationFrame(update)}
