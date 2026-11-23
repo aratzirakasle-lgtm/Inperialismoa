@@ -189,6 +189,50 @@ try{
     assert.deepEqual(a.errors,[]);assert.deepEqual(b.errors,[]);
    }finally{await a.context.close();await b.context.close()}
   });
+
+  await caseRun('Recuperar movimiento sin conexión tras cambio distinto del compañero · ejercicio '+exercise,async()=>{
+   const server=serverFor(exercise),pathname=exercise===3?'inperialismoaren-definizioa.html':'esaldiak-osatu.html';
+   const a=await open('student-a',pathname,server);
+   const b=await open('student-b',pathname,server);
+   try{
+    await Promise.all([loadReady(a.page,exercise),loadReady(b.page,exercise)]);
+    const [firstId,firstSlot,secondId,secondSlot]=exercise===3
+     ?['capital','purpose','exploit','resources']
+     :['koloniak','1','metropoliak','2'];
+    await a.page.evaluate(()=>window.__classroomOffline=true);
+    assert.equal(await move(a.page,exercise,firstId,firstSlot),false);
+    assert.equal(await move(b.page,exercise,secondId,secondSlot),true);
+    await a.page.reload({waitUntil:'domcontentloaded'});
+    await loadReady(a.page,exercise);
+    await reloadDraft(b.page,exercise);
+    const expected={[firstId]:firstSlot,[secondId]:secondSlot};
+    assert.deepEqual(await draft(a.page,exercise),expected);
+    assert.deepEqual(await draft(b.page,exercise),expected);
+    assert.equal(server.snapshot(exercise).revision,2,
+      'Ambos movimientos deben guardarse una sola vez');
+    assert.deepEqual(a.errors,[]);assert.deepEqual(b.errors,[]);
+   }finally{await a.context.close();await b.context.close()}
+  });
+  await caseRun('No sobrescribir al compañero al recuperar una misma posición · ejercicio '+exercise,async()=>{
+   const server=serverFor(exercise),pathname=exercise===3?'inperialismoaren-definizioa.html':'esaldiak-osatu.html';
+   const a=await open('student-a',pathname,server);
+   const b=await open('student-b',pathname,server);
+   try{
+    await Promise.all([loadReady(a.page,exercise),loadReady(b.page,exercise)]);
+    const [firstId,secondId,slot]=exercise===3
+      ?['capital','exploit','purpose']:['koloniak','metropoliak','1'];
+    await a.page.evaluate(()=>window.__classroomOffline=true);
+    assert.equal(await move(a.page,exercise,firstId,slot),false);
+    assert.equal(await move(b.page,exercise,secondId,slot),true);
+    await a.page.reload({waitUntil:'domcontentloaded'});
+    await loadReady(a.page,exercise);
+    assert.deepEqual(await draft(a.page,exercise),{[secondId]:slot});
+    assert.deepEqual(server.snapshot(exercise).placements,{[secondId]:slot});
+    assert.equal(server.snapshot(exercise).revision,1,
+      'La restauración no debe desplazar lo que guardó otro alumno');
+    assert.deepEqual(a.errors,[]);assert.deepEqual(b.errors,[]);
+   }finally{await a.context.close();await b.context.close()}
+  });
  }
  await caseRun('Profesor ve los cinco medallones y no escribe en Supabase',async()=>{
   const server=serverFor(3),a=await open('teacher','inperialismoaren-definizioa.html?preview=1',server);
