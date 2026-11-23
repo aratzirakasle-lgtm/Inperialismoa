@@ -79,7 +79,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const unplace=id=>{
    if(!canMove(id))return;
    if(sharedSync){sharedSync.move(id,null);return}
-   delete state.placements[id];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');
+   unplace(id);refocus('[data-gallery-tray]');
  };
  const reset=()=>{
    if(state.busy)return;
@@ -218,7 +218,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const card=e.target.closest('[data-gallery-card]');
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw();refocus('[data-gallery-card="'+id+'"]')}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected){place(state.selected,zone.dataset.galleryZone);return;}
-   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}
+   if(e.target.closest('[data-gallery-tray]')&&state.selected&&canMove(state.selected)){unplace(state.selected);}
  },{signal:controller.signal});
  root.addEventListener('keydown',e=>{
    if(e.key==='Escape'&&state.selected){
@@ -227,10 +227,9 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    }
    const moving=e.target.closest('[data-gallery-card]');
    if(moving&&(e.key==='Delete'||e.key==='Backspace')&&canMove(moving.dataset.galleryCard)&&state.placements[moving.dataset.galleryCard]){
-     e.preventDefault();delete state.placements[moving.dataset.galleryCard];state.selected=null;saveDraft();draw();
-     refocus('[data-gallery-tray]');return;
+     e.preventDefault();unplace(moving.dataset.galleryCard);return;
    }
-   const zone=e.target.matches('[data-gallery-zone]')?e.target:null;if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();delete state.placements[state.selected];state.selected=null;saveDraft();draw();refocus('[data-gallery-tray]');}},{signal:controller.signal});
+   const zone=e.target.matches('[data-gallery-zone]')?e.target:null;if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();unplace(state.selected);}},{signal:controller.signal});
  // Arrastre táctil real: se mantiene además el método de pulsar cartela y vitrina.
  // No calcula respuestas correctas ni modifica la comprobación de Supabase.
  const touchTargets=()=>root.querySelectorAll('.gal-touch-target');
@@ -284,7 +283,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(!hit||!root.contains(hit))return; // Dejar la tarjeta donde estaba.
    if(hit.hasAttribute('data-gallery-tray')){
      if(canMove(d.id)){
-       delete state.placements[d.id];state.selected=null;saveDraft();draw();
+       unplace(d.id);
      }
    }else place(d.id,hit.dataset.galleryZone);
  },{signal:controller.signal});
@@ -296,4 +295,5 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  root.addEventListener('dragleave',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(zone&&!zone.contains(e.relatedTarget))zone.classList.remove('gal-dragover')},{signal:controller.signal});
  root.addEventListener('drop',e=>{const zone=e.target.closest('[data-gallery-zone], [data-gallery-tray]');if(!zone)return;e.preventDefault();zone.classList.remove('gal-dragover');const id=e.dataTransfer.getData('text/plain');if(zone.hasAttribute('data-gallery-tray')){if(canMove(id)){delete state.placements[id];state.selected=null;saveDraft();draw()}}else place(id,zone.dataset.galleryZone)},{signal:controller.signal});
  draw();
+ if(sharedSync)sharedSync.start();
 }
