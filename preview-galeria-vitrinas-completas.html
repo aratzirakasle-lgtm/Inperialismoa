@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="eu">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="robots" content="noindex,nofollow">
+ <title>Potentzien galeria · 20 kartelako aurrebista bisuala</title>
+ <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="./assets/museo-portada.css?v=20261117-2">
+ <link rel="stylesheet" href="./css/styles.css?v=museo1">
+ <link rel="stylesheet" href="./assets/museo-login-integrado.css?v=20261117-1">
+ <link rel="stylesheet" href="./assets/museo-rotulos-reales.css?v=20261117-3">
+ <link rel="stylesheet" href="./assets/museo-salas.css?v=20261117-1">
+ <link rel="stylesheet" href="./assets/museo-fotografias.css?v=20261117-1">
+ <link rel="stylesheet" href="./assets/museo-galeria-v2.css?v=20261117-1">
+ <link rel="stylesheet" href="./assets/galeria-potencias-fotos.css?v=20261118-1">
+ <link rel="stylesheet" href="./assets/galeria-potencias.css?v=20261119-europa-9-tarjetas">
+ <link rel="stylesheet" href="./assets/accesibilidad-juegos.css?v=20261120-1">
+ <link rel="stylesheet" href="./assets/museo-pulido-inmersivo-20261121.css?v=3">
+ <link rel="stylesheet" href="./assets/galeria-mision1-pulido-20261121.css?v=2">
+ <link rel="stylesheet" href="./assets/galeria-museo-cinematico.css?v=4">
+ <link rel="stylesheet" href="./assets/galeria-museo-fidelidad-v2.css?v=6">
+ <link rel="stylesheet" href="./assets/galeria-mapa-cartelas-20261121.css?v=2">
+ <link rel="stylesheet" href="./assets/mision1-expediente-20261123.css?v=1">
+ <link rel="stylesheet" href="./assets/galeria-mision1-ajustes-20261123.css?v=1">
+ <style>
+  #preview-health{position:fixed;z-index:9999;right:12px;bottom:12px;max-width:min(92vw,420px);padding:9px 14px;color:#f5e3bf;background:#0a281fef;border:1px solid #cfaa69;box-shadow:0 6px 24px #0008;border-radius:5px;font:600 12px/1.4 system-ui,sans-serif;pointer-events:none}
+  #preview-health span{color:#d9b56d}
+  @media print{#preview-health{display:none}}
+ </style>
+</head>
+<body>
+<div id="app-shell" class="app-shell gallery-active">
+ <div class="layout"><main class="main-content" id="main-content"><div id="view"></div></main></div>
+</div>
+<footer id="preview-health" aria-live="polite" lang="eu">Egiaztatzen…</footer>
+<script type="module">
+import { mountGallery } from './js/galeria-potencias.js?v=20261123-sinpistas3';
+const root=document.getElementById('view');
+mountGallery(root,{initial:{},preview:true,navigationEnabled:false,navigationPreview:true,
+  canSkip:false,draftKey:null,dossierProgress:()=>0,
+  onBack:()=>{},onContinue:()=>{},onSubmit:async()=>{throw Error('Aurrebista: ez dira datuak bidaltzen')}});
+const status=document.getElementById('preview-health');
+function inspect(){
+ const zones=[...root.querySelectorAll('.gal-zone')];
+ const cards=[...root.querySelectorAll('.gal-preview-sample')];
+ const overflow=zones.filter(zone=>{
+   const rect=zone.getBoundingClientRect();
+   return [...zone.querySelectorAll('.gal-tile-placed')].some(card=>{
+     const r=card.getBoundingClientRect();
+     return r.bottom>rect.bottom+3||r.right>rect.right+3||r.left<rect.left-3;
+   });
+ });
+ status.textContent='IKUSKAPEN BISUALA · '+cards.length+' kartela simulatu · '+zones.length+' eremu · '+overflow.length+' eremu gainezka';
+ status.dataset.overflow=String(overflow.length);
+}
+let pending=false;
+new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;inspect()})})
+  .observe(root,{childList:true,subtree:true});
+window.addEventListener('resize',inspect);
+requestAnimationFrame(inspect);
+if(new URLSearchParams(location.search).get('full')==='1')
+ root.querySelector('[data-gallery-action="preview-complete"]')?.click();
+</script>
+</body>
+</html>
