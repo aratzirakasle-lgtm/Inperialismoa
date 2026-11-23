@@ -73,7 +73,8 @@ test('El modo alumno sigue registrando; el profesor sigue previsualizando',()=>{
  const third=read('js/mission1-third-auth.js');
  const fifth=read('js/mission1-fifth-auth.js');
  const fourth=read('inperioen-aztarnak.html');
- assert.match(gallery,/const result=await onSubmit\(answers\)/);
+ assert.match(gallery,/sharedSync\?await sharedSync\.submit\(\):await onSubmit\(answers\)/);
+ assert.match(gallery,/if\(preview\)/);
  assert.match(third,/rpc\('submit_mission1_exercise'/);
  assert.match(fifth,/rpc\('submit_mission1_exercise'/);
  assert.match(fourth,/rpc\('check_empire_dossier_with_reading'/);
