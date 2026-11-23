@@ -1101,6 +1101,47 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
+ await scenario('Salas 3 y 5: panorámica móvil centrada, accesible, reversible y sin envíos',async()=>{
+   for(const [n,path,step] of [
+     [3,'inperialismoaren-definizioa.html',2],
+     [5,'esaldiak-osatu.html',4]
+   ]){
+     for(const role of ['student','teacher']){
+       const url=path+(role==='teacher'?'?preview=1':'?smoke_m1_steps='+step);
+       const {page,context,errors}=await open(role,url,{width:390,height:844});
+       try{
+         await waitVisible(page,'.m1-mobile-panorama');
+         await page.waitForFunction(()=>{
+           const el=document.querySelector('.stage-wrap, .viewport');
+           return el&&el.scrollLeft>40;
+         });
+         const start=await page.locator('.stage-wrap, .viewport').evaluate(el=>({
+           left:el.scrollLeft,max:el.scrollWidth-el.clientWidth
+         }));
+         assert.ok(start.max>300&&Math.abs(start.left-start.max/2)<5,
+           'La escena debe iniciar centrada, con sus espacios de juego a la vista');
+         const bar=page.locator('.m1-mobile-panorama');
+         assert.equal(await bar.getByRole('button').count(),3);
+         await bar.getByRole('button',{name:'Panoramaren ezkerraldea ikusi'}).click();
+         await page.waitForFunction(()=>document.querySelector('.stage-wrap, .viewport').scrollLeft<30);
+         await bar.getByRole('button',{name:'Panoramaren eskuinaldea ikusi'}).click();
+         await page.waitForFunction(()=>document.querySelector('.stage-wrap, .viewport').scrollLeft>30);
+         await bar.getByRole('button',{name:'Panoramaren erdialdea ikusi'}).click();
+         await page.waitForFunction(()=>{
+           const el=document.querySelector('.stage-wrap, .viewport');
+           return Math.abs(el.scrollLeft-(el.scrollWidth-el.clientWidth)/2)<5;
+         });
+         await page.screenshot({
+           path:'test-output/m1-auditoria-ejercicio'+n+'-movil-panorama-corregida-'+role+'.png',
+           fullPage:true,animations:'disabled'
+         });
+         assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+           'La navegación panorámica no puede registrar respuestas ni saltar ejercicios');
+         assert.deepEqual(errors,[]);
+       }finally{await context.close()}
+     }
+   }
+ });
  await scenario('Auditoría visual: salas 3–5 y transición, móvil/escritorio, sin escribir datos',async()=>{
    const rooms=[
      {n:3,path:'inperialismoaren-definizioa.html?preview=1'},
