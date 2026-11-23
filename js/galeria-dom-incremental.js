@@ -28,13 +28,45 @@ export function createGalleryIncremental(root,{items,state,tile,count,shared,all
    if(zones.some(z=>!z||!z.querySelector('.gal-zone-list')||!z.querySelector('.gal-zone-heading small'))
      ||!trayGrid||!remaining||!progress||!status||!check||!reset||(team&&!banner))return false;
 
+   // Reutilizar el mismo nodo y su <img>: no volver a descargar ni decodificar
+   // las otras diecinueve ilustraciones cuando cambia una sola cartela.
+   const existingCards=new Map(Array.from(root.querySelectorAll('[data-gallery-card]'))
+     .map(node=>[node.dataset.galleryCard,node]));
+   function reuseCard(item,placed){
+     let card=existingCards.get(item.id);
+     if(!card){
+       const template=document.createElement('template');
+       template.innerHTML=tile(item,placed);
+       card=template.content.firstElementChild;
+       existingCards.set(item.id,card);
+     }else{
+       card.classList.toggle('gal-tile-placed',placed);
+       let arrow=card.querySelector('.gal-tile-move');
+       if(placed&&!arrow){
+         arrow=document.createElement('span');
+         arrow.className='gal-tile-move';arrow.textContent='↗';
+         card.append(arrow);
+       }else if(!placed&&arrow)arrow.remove();
+     }
+     return card;
+   }
+   function reconcile(container,desired,placed,emptyHtml){
+     if(!desired.length){container.innerHTML=emptyHtml;return}
+     for(const node of Array.from(container.children))
+       if(!node.hasAttribute('data-gallery-card'))node.remove();
+     for(let i=0;i<desired.length;i++){
+       const child=reuseCard(desired[i],placed);
+       if(container.children[i]!==child)
+         container.insertBefore(child,container.children[i]||null);
+     }
+     for(const extra of Array.from(container.children).slice(desired.length))extra.remove();
+   }
    for(let i=0;i<regions.length;i++){
      const [key,capacity]=regions[i],zone=zones[i],members=cardsIn(key);
      const signature=members.map(x=>x.id).join('|');
      if(signatures.get(key)!==signature){
-       zone.querySelector('.gal-zone-list').innerHTML=members.length
-         ?members.map(item=>tile(item,true)).join('')
-         :'<span class="gal-zone-placeholder">↓ Arrastatu hona</span>';
+       reconcile(zone.querySelector('.gal-zone-list'),members,true,
+         '<span class="gal-zone-placeholder">↓ Arrastatu hona</span>');
        zone.querySelector('.gal-zone-heading small').textContent=members.length+' / '+capacity;
        signatures.set(key,signature);
      }
@@ -43,8 +75,8 @@ export function createGalleryIncremental(root,{items,state,tile,count,shared,all
    const missing=items.filter(x=>!state.placements[x.id]);
    const nextSignature=missing.map(x=>x.id).join('|');
    if(traySignature!==nextSignature){
-     trayGrid.innerHTML=missing.length?missing.map(item=>tile(item)).join('')
-       :'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>';
+     reconcile(trayGrid,missing,false,
+       '<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>');
      traySignature=nextSignature;
      remaining.textContent=missing.length+' falta dira';
    }
