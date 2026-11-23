@@ -505,7 +505,9 @@ try{
      await page.screenshot({path:'test-output/m1-museo-cupulas-v3-alumno-escritorio.png',fullPage:true,animations:'disabled'});
      assert.equal(await page.locator('.gal-tile').count(),20);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
-     assert.equal(await page.locator('.m1-nav').count(),0);
+     assert.equal(await page.locator('.m1-nav[data-m1-role="student"]').count(),1);
+     assert.equal(await page.locator('.m1-nav-links a').count(),1,
+       'El primer ejercicio es el único acceso sin logros confirmados');
      await page.locator('[data-gallery-action="hint"]').click();
      const help=await page.locator('.gal-hint').innerText();
      assert.match(help,/aukeratu txartel bat|arrastatu txartela/i);
@@ -800,7 +802,9 @@ try{
      try{
        await waitVisible(page,'.gal-hall');
        assert.ok(page.url().includes('index.html'),path+' debe volver al primer juego');
-       assert.equal(await page.locator('.m1-nav').count(),0);
+       assert.equal(await page.locator('.m1-nav[data-m1-role="student"]').count(),1);
+     assert.equal(await page.locator('.m1-nav-links a').count(),1,
+       'El primer ejercicio es el único acceso sin logros confirmados');
        assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
        assert.deepEqual(errors,[]);
      }finally{await context.close()}
@@ -818,7 +822,9 @@ try{
    try{
      await waitVisible(page,'.gal-hall');
      assert.ok(page.url().includes('index.html'));
-     assert.equal(await page.locator('.m1-nav').count(),0);
+     assert.equal(await page.locator('.m1-nav[data-m1-role="student"]').count(),1);
+     assert.equal(await page.locator('.m1-nav-links a').count(),1,
+       'El primer ejercicio es el único acceso sin logros confirmados');
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
@@ -902,9 +908,53 @@ try{
    const {page,context,errors}=await open('student','esaldiak-osatu.html');
    try{
      await waitVisible(page,'.gal-hall');
-     assert.equal(await page.locator('.m1-nav').count(),0);
+     assert.equal(await page.locator('.m1-nav[data-m1-role="student"]').count(),1);
+     assert.equal(await page.locator('.m1-nav-links a').count(),1,
+       'El primer ejercicio es el único acceso sin logros confirmados');
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Medallones: acceso libre para profesor y recorrido por logros para alumno',async()=>{
+   const teacher=await open('teacher','bi-sistema.html?preview=1',{width:1365,height:900});
+   try{
+     await waitVisible(teacher.page,'.m1-nav[data-m1-role="teacher"]');
+     assert.equal(await teacher.page.locator('.m1-route-stop').count(),5);
+     assert.equal(await teacher.page.locator('.m1-nav-links a').count(),5);
+     assert.equal(await teacher.page.locator('.m1-route-stop.is-current').count(),1);
+     assert.equal(await teacher.page.locator('.m1-route-stop.is-locked').count(),0);
+     assert.equal(await teacher.page.locator('.m1-nav-num').count(),5);
+     const wood=await teacher.page.locator('.m1-nav').evaluate(el=>getComputedStyle(el).backgroundImage);
+     assert.match(wood,/gradient/);
+     await teacher.page.locator('.m1-route-stop[data-m1-step="4"]').click();
+     await teacher.page.waitForURL(/inperioen-aztarnak\.html\?preview=1/);
+     await waitVisible(teacher.page,'.m1-nav[data-m1-role="teacher"]');
+     assert.equal(await teacher.page.locator('.m1-route-stop[aria-current="page"]').getAttribute('data-m1-step'),'4');
+     assert.deepEqual(await teacher.page.evaluate(()=>window.__smokeRpcCalls),[]);
+     assert.deepEqual(teacher.errors,[]);
+   }finally{await teacher.context.close()}
+   for(const [steps,pageName,current] of [
+     [0,'index.html',1],
+     [1,'bi-sistema.html',2],
+     [2,'inperialismoaren-definizioa.html',3],
+     [3,'inperioen-aztarnak.html',4],
+     [4,'esaldiak-osatu.html',5]
+   ]){
+     const route=pageName==='index.html'
+       ?'index.html?smoke_m1_steps='+steps+'#mission1gallery'
+       :pageName+'?smoke_m1_steps='+steps;
+     const {page,context,errors}=await open('student',route,{width:1365,height:900});
+     try{
+       await waitVisible(page,'.m1-nav[data-m1-role="student"]');
+       assert.equal(await page.locator('.m1-route-stop').count(),5);
+       assert.equal(await page.locator('.m1-nav-links a').count(),steps+1,
+         'Alumno desbloquea exclusivamente '+(steps+1)+' salas');
+       assert.equal(await page.locator('.m1-route-stop.is-locked').count(),4-steps);
+       assert.equal(await page.locator('.m1-route-stop[aria-current="page"]').getAttribute('data-m1-step'),String(current));
+       assert.equal(await page.locator('.m1-route-stop.is-done').count(),steps);
+       assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+       assert.deepEqual(errors,[]);
+     }finally{await context.close()}
+   }
  });
  await scenario('Alumno: cada ejercicio se abre cuando el anterior consta completado en Supabase',async()=>{
    for(const [file,steps,selector] of [
