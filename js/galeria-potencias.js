@@ -39,23 +39,26 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const state={placements:{},locked:new Set(finished?ITEMS.map(x=>x.id):[]),completed:finished,selected:null,busy:false,attempts:0,feedback:"",wrong:new Set(),help:false,previewFull:false};
  // Los antiguos avances parciales se respetan como borrador editable, sin indicadores de acierto.
  for(const [id,zone] of Object.entries(initial.locked_positions||{})){if(LOOKUP.has(id)&&ZONES.has(zone))state.placements[id]=zone}
- // Guardado local solo de las colocaciones provisionales de esta pestaña.
- // No conserva aciertos como si fueran válidos ni escribe nada en Supabase.
+ // Borrador local editable por usuario/equipo; no certifica respuestas ni escribe en Supabase.
+ // Conserva los datos antiguos de sessionStorage al migrar a localStorage.
  const saveDraft=()=>{
    if(!draftKey)return;
    try{
      const pending=Object.fromEntries(Object.entries(state.placements).filter(([id])=>!state.locked.has(id)));
-     if(Object.keys(pending).length)sessionStorage.setItem(draftKey,JSON.stringify(pending));
-     else sessionStorage.removeItem(draftKey);
+     if(Object.keys(pending).length)localStorage.setItem(draftKey,JSON.stringify(pending));
+     else localStorage.removeItem(draftKey);
+     sessionStorage.removeItem(draftKey);
    }catch(error){console.warn('Borrador local no disponible',error)}
  };
  if(draftKey&&!state.completed){
    try{
-     const pending=JSON.parse(sessionStorage.getItem(draftKey)||'{}');
+     const pending=JSON.parse(sessionStorage.getItem(draftKey)||localStorage.getItem(draftKey)||'{}');
      if(pending&&typeof pending==='object'&&!Array.isArray(pending)){
-       for(const [id,zone] of Object.entries(pending))
+       for(const [id,zone] of Object.entries(pending)){
          if(LOOKUP.has(id)&&ZONES.has(zone)&&!state.locked.has(id))state.placements[id]=zone;
+       }
      }
+     saveDraft(); // Promover borradores de la versión anterior sin perderlos.
    }catch(error){console.warn('No se pudo recuperar el borrador local',error)}
  }else if(draftKey)saveDraft();
  const count=()=>Object.keys(state.placements).length;
