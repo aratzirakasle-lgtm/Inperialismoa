@@ -195,8 +195,7 @@ begin
     'mission_completed',p_exercise=5 and exists(
        select 1 from public.mission_completions where team_id=v_team and mission_id=1),
     'next_mission_id',case when p_exercise=5 then 2 else null end);
-end $function$
-
+end $function$;
 
 REVOKE ALL ON FUNCTION public.submit_bi_sistema(text,jsonb) FROM PUBLIC,anon;
 GRANT EXECUTE ON FUNCTION public.submit_bi_sistema(text,jsonb) TO authenticated,service_role;
