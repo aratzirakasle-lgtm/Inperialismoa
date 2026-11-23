@@ -87,7 +87,7 @@ function paint(){
   const bank=TRAITS.filter(x=>!roomOf(x.id));
   stage.dataset.trayCount=String(bank.length);
   tray.innerHTML=bank.length?bank.map(x=>card(x.id,false)).join(""):'<p class="bi-desk-complete">Kontzeptu guztiak kokatuta daude.</p>';
-  $("#bi-progress").textContent=locked.size+" / 7 zuzen";
+  $("#bi-progress").textContent=TRAITS.filter(t=>!!roomOf(t.id)).length+" / 7 kokatuta";
   note.textContent=feedback||"";
   note.classList.toggle("bi-error",warning);
   if(hintBox){
@@ -95,7 +95,7 @@ function paint(){
     hintBox.textContent="Erabilera: hautatu txartel bat eta sakatu aretoa, edo arrastatu txartela. Egin klik «Erantzunak egiaztatu» botoian kokapena egiaztatzeko.";
   }
   controls.check.disabled=busy||completed||phase!=="classify"||
-    !TRAITS.some(t=>pending[t.id]);
+    TRAITS.some(t=>!locked.has(t.id)&&!pending[t.id]);
   controls.reset.disabled=busy||!Object.keys(pending).length;
   controls.help.disabled=false;
   controls.check.querySelector("span").textContent=busy?"Egiaztatzen…":"Erantzunak egiaztatu";
@@ -124,7 +124,15 @@ function move(id,target){
   selected=null;warning=false;feedback="";
   paint();
 }
-function reset(){if(busy)return;pending={};selected=null;warning=false;feedback="Gorde gabeko txartelak mahaira itzuli dira. Zuzenak mantendu dira.";paint()}
+function reset(){
+  if(busy||!Object.keys(pending).length)return;
+  if(!teacherPreview&&!window.confirm(
+    "Mahai honetako kokatu gabeko erantzunak ezabatuko dira; taldearen aurreko aurrerapena gordeta dago. Ziur zaudete?"
+  ))return;
+  pending={};selected=null;warning=false;
+  feedback="Mahai honetako behin-behineko kartelak itzuli dira. Taldearen aurrerapena mantendu da.";
+  paint();
+}
 function toggleHelp(){helpOpen=!helpOpen;paint()}
 async function fetchState(){
   if(!teamId||teacherPreview)return;
@@ -149,26 +157,26 @@ async function submit(answers,kind){
   try{
     const {data,error}=await client.rpc("submit_bi_sistema",{p_phase:kind,p_answers:answers});
     if(error)throw error;
-    if(!data||!Array.isArray(data.locked))throw new Error("Erantzun baliogabea");
+    if(!data||!Array.isArray(data.locked)||typeof data.phase_complete!=="boolean")
+      throw new Error("Erantzun baliogabea");
     locked=new Set(data.locked.filter(id=>BY_ID.has(id)));
     positions={};
     for(const [id,z] of Object.entries(data.positions||{}))if(locked.has(id))positions[id]=z;
     for(const id of locked)delete pending[id];
     challengeLocked=new Set(data.challenge_locked||[]);
-    const wrong=data.incorrect||[];
-    for(const id of wrong)if(kind==="classify")delete pending[id];
-    if(kind==="interpret")for(const id of wrong)delete challengePending[id];
+    // Erantzun globala: errorean ez da ezer ezabatzen edo finkatzen.
+    // Fase osoa ondo dagoenean bakarrik gordetzen da multzo osoa.
     completed=!!data.completed;
     if(completed){
       phase="complete";
       announce("Bikain! Bi sistema politikoak ulertu dituzue. Hurrengo aretoa prest dago.");
-    } else if(locked.size===7){
+    } else if(data.phase_complete&&locked.size===7){
       phase="challenge";
-      announce(wrong.length?"Berrikusi azken egoerak eta saiatu berriro.":"Zazpi kontzeptuak zuzen! Orain azken erronka.",wrong.length>0);
+      announce("Zazpi kontzeptuak kokatu dituzue! Orain bi egoerak aztertu.");
+    } else if(!data.phase_complete){
+      announce("Ez da zuzena. Berrikusi fase osoko erantzunak eta saiatu berriro.",true);
     } else {
-      announce(wrong.length?
-        "Ez da zuzena. Berrikusi sailkapena eta saiatu berriro.":
-        "Erantzunak gorde dira. Osatu gainerako kontzeptuak.",wrong.length>0);
+      announce("Fasea gordeta dago. Jarraitu hurrengo erronkarekin.");
     }
     await fetchState().catch(()=>{});
   }catch(err){
@@ -187,7 +195,9 @@ async function checkCards(){
     return;
   }
   const answers=Object.fromEntries(Object.entries(pending).filter(([id,zone])=>!locked.has(id)&&BY_ID.has(id)&&["auth","lib"].includes(zone)));
-  if(!Object.keys(answers).length){announce("Kokatu txartel bat gutxienez lehenik.",true);return}
+  if(TRAITS.some(t=>!locked.has(t.id)&&!pending[t.id])){
+    announce("Kokatu zazpi kontzeptuak egiaztatu aurretik.",true);return;
+  }
   await submit(answers,"classify");
 }
 const CASES=[
@@ -220,13 +230,15 @@ function renderChallenge(){
           'aria-pressed="'+(challengePending[c.id]===zone)+'" class="'+(challengePending[c.id]===zone?'bi-chosen':'')+'">'+labels[zone]+'</button>').join("")+
           '</div>'+(fixed?'<span class="bi-case-locked">✓ Egiaztatuta</span>':'')+'</section>';
     }).join("")+
-    '<div class="bi-challenge-actions"><button type="button" id="bi-check-cases" '+(busy||teacherPreview||!CASES.some(c=>challengePending[c.id]&&!challengeLocked.has(c.id))?'disabled':'')+'>✓ Egoerak egiaztatu</button></div>'+
+    '<div class="bi-challenge-actions"><button type="button" id="bi-check-cases" '+(busy||teacherPreview||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id])?'disabled':'')+'>✓ Egoerak egiaztatu</button></div>'+
     '</div>';
 }
 async function checkCases(){
   const answers=Object.fromEntries(Object.entries(challengePending)
     .filter(([id,zone])=>CASES.some(c=>c.id===id)&&!challengeLocked.has(id)&&["auth","lib"].includes(zone)));
-  if(!Object.keys(answers).length)return;
+  if(CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id])){
+    announce("Erantzun bi egoerak egiaztatu aurretik.",true);return;
+  }
   await submit(answers,"interpret");
 }
 function initInteractions(){
