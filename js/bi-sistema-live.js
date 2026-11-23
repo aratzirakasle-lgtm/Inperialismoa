@@ -129,6 +129,27 @@ function paint(){
   renderChallenge();
   saveLocalDraft();
 }
+// La selección no altera el contenido de las vitrinas ni desmonta botones.
+function paintSelection(){
+ for(const el of stage.querySelectorAll('[data-bi-card]')){
+   const active=el.dataset.biCard===selected;
+   el.classList.toggle('bi-selected',active);
+   el.setAttribute('aria-pressed',String(active));
+ }
+ for(const target of [auth,lib,tray])target.classList.toggle('bi-select-target',!!selected);
+}
+function paintChallengeChoice(caseId){
+ if(!challengeBox)return;
+ for(const el of challengeBox.querySelectorAll('[data-case]')){
+   if(el.dataset.case!==caseId)continue;
+   const active=challengePending[caseId]===el.dataset.choice;
+   el.classList.toggle('bi-chosen',active);
+   el.setAttribute('aria-pressed',String(active));
+ }
+ const check=challengeBox.querySelector('#bi-check-cases');
+ if(check)check.disabled=busy||teacherPreview
+   ||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id]);
+}
 function move(id,target){
   if(!BY_ID.has(id)||locked.has(id)||busy)return;
   if(target==="tray")delete pending[id];
@@ -266,12 +287,12 @@ function initInteractions(){
   stage.addEventListener("click",e=>{
     if(suppressClick){suppressClick=false;return}
     const c=e.target.closest("[data-bi-card]");
-    if(c){const id=c.dataset.biCard;if(!locked.has(id)&&!busy){selected=selected===id?null:id;paint()}return}
+    if(c){const id=c.dataset.biCard;if(!locked.has(id)&&!busy){selected=selected===id?null:id;paintSelection()}return}
     const zone=e.target.closest("[data-bi-target]");
     if(zone&&selected){move(selected,zone.dataset.biTarget);return}
     const answer=e.target.closest("[data-case][data-choice]");
     if(answer&&!teacherPreview&&!busy){
-      challengePending[answer.dataset.case]=answer.dataset.choice;saveLocalDraft();renderChallenge();return;
+      challengePending[answer.dataset.case]=answer.dataset.choice;saveLocalDraft();paintChallengeChoice(answer.dataset.case);return;
     }
     if(e.target.closest("#bi-check-cases"))void checkCases();
   });
