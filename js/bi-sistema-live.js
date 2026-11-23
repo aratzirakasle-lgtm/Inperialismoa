@@ -2,6 +2,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { mountExerciseNav, addTeacherStageControls } from "./mission1-navigation.js?v=20261119-teacher-2";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
+import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-e2equipo1";
 
 const TRAITS=[
   ["army","Armadak pisu handia",""],
@@ -16,7 +17,7 @@ const BY_ID=new Map(TRAITS.map(x=>[x.id,x]));
 const $=sel=>document.querySelector(sel);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const url=new URLSearchParams(location.search);
-let client,teamId=null,teacherPreview=false;
+let client,teamId=null,teacherPreview=false,teamSync=null,stopTeamSync=null,syncBanner=null;
 let locked=new Set(),positions={},challengeLocked=new Set(),pending={},selected=null;
 let challengePending={},busy=true,feedback="Taldearen datuak kargatzen…",warning=false,helpOpen=false;
 let phase="classify",completed=false,dragging=null,suppressClick=false;
@@ -27,6 +28,22 @@ let note=null,hintBox=null,challengeBox=null;
 const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check")};
 const labels={auth:"Sistema autoritarioak",lib:"Erregimen liberalak"};
 const roomOf=id=>positions[id]||pending[id]||null;
+function syncStatus(message,problem=false){
+  if(syncBanner){
+    syncBanner.querySelector('.bi-sync-message').textContent=message;
+    syncBanner.classList.toggle('bi-sync-error',problem);
+    syncBanner.querySelector('.bi-sync-retry').hidden=!!teamSync?.ready&&!problem;
+  }
+  if(problem)announce(message,true);
+}
+function applySharedDraft(data){
+  pending=Object.fromEntries(Object.entries(data.placements||{})
+    .filter(([id,zone])=>BY_ID.has(id)&&!locked.has(id)&&(zone==='auth'||zone==='lib')));
+  challengePending=Object.fromEntries(Object.entries(data.cases||{})
+    .filter(([id,zone])=>['case_monarch','case_rights'].includes(id)
+      &&!challengeLocked.has(id)&&(zone==='auth'||zone==='lib')));
+  paint();
+}
 const localDraftKey=()=>teamId&&!teacherPreview?'inperialismoa:bi-sistema:borrador:'+teamId:null;
 function saveLocalDraft(){
  const key=localDraftKey();if(!key)return;
@@ -114,9 +131,9 @@ function paint(){
     hintBox.hidden=!helpOpen;
     hintBox.textContent="Erabilera: hautatu txartel bat eta sakatu aretoa, edo arrastatu txartela. Egin klik «Erantzunak egiaztatu» botoian kokapena egiaztatzeko.";
   }
-  controls.check.disabled=busy||completed||phase!=="classify"||
+  controls.check.disabled=busy||completed||(teamSync&&!teamSync.ready)||phase!=="classify"||
     TRAITS.some(t=>!locked.has(t.id)&&!pending[t.id]);
-  controls.reset.disabled=busy||!Object.keys(pending).length;
+  controls.reset.disabled=busy||(teamSync&&!teamSync.ready)||(!Object.keys(pending).length&&!Object.keys(challengePending).length);
   controls.help.disabled=false;
   controls.check.querySelector("span").textContent=busy?"Egiaztatzen…":"Erantzunak egiaztatu";
   const selectedFlag=!!selected;
@@ -147,11 +164,12 @@ function paintChallengeChoice(caseId){
    el.setAttribute('aria-pressed',String(active));
  }
  const check=challengeBox.querySelector('#bi-check-cases');
- if(check)check.disabled=busy||teacherPreview
+ if(check)check.disabled=busy||teacherPreview||(teamSync&&!teamSync.ready)
    ||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id]);
 }
 function move(id,target){
-  if(!BY_ID.has(id)||locked.has(id)||busy)return;
+  if(!BY_ID.has(id)||locked.has(id)||busy||(teamSync&&!teamSync.ready))return;
+  const expected=pending[id]??null;
   if(target==="tray")delete pending[id];
   else if(target==="auth"||target==="lib"){
     if(roomOf(id)===target){selected=null;paint();return;}
@@ -164,13 +182,23 @@ function move(id,target){
     pending[id]=target;
   } else return;
   selected=null;warning=false;feedback="";
-  paint();
+  if(teamSync){
+    busy=true;paint();
+    void teamSync.move(id,target==="tray"?null:target,expected).finally(()=>{
+      busy=false;paint();
+    });
+  }else paint();
 }
 function reset(){
-  if(busy||!Object.keys(pending).length)return;
+  if(busy||(teamSync&&!teamSync.ready)||(!Object.keys(pending).length&&!Object.keys(challengePending).length))return;
   if(!teacherPreview&&!window.confirm(
     "Mahai honetako kokatu gabeko erantzunak ezabatuko dira; taldearen aurreko aurrerapena gordeta dago. Ziur zaudete?"
   ))return;
+  if(teamSync){
+    busy=true;paint();
+    void teamSync.reset().finally(()=>{busy=false;paint()});
+    return;
+  }
   pending={};selected=null;warning=false;
   feedback="Mahai honetako behin-behineko kartelak itzuli dira. Taldearen aurrerapena mantendu da.";
   paint();
@@ -197,8 +225,18 @@ async function submit(answers,kind){
   if(busy||teacherPreview||completed)return;
   busy=true;warning=false;feedback="Erantzunak egiaztatzen…";paint();
   try{
-    const {data,error}=await client.rpc("submit_bi_sistema",{p_phase:kind,p_answers:answers});
-    if(error)throw error;
+    let data;
+    if(teamSync){
+      data=await teamSync.submit(kind);
+      if(data.status==='conflict'){
+        announce("Taldekide batek kokapen bat aldatu du. Berrikusi erantzunak.",true);
+        await teamSync.load();return;
+      }
+    }else{
+      const response=await client.rpc("submit_bi_sistema",{p_phase:kind,p_answers:answers});
+      if(response.error)throw response.error;
+      data=response.data;
+    }
     if(!data||!Array.isArray(data.locked)||typeof data.phase_complete!=="boolean")
       throw new Error("Erantzun baliogabea");
     locked=new Set(data.locked.filter(id=>BY_ID.has(id)));
@@ -291,8 +329,15 @@ function initInteractions(){
     const zone=e.target.closest("[data-bi-target]");
     if(zone&&selected){move(selected,zone.dataset.biTarget);return}
     const answer=e.target.closest("[data-case][data-choice]");
-    if(answer&&!teacherPreview&&!busy){
-      challengePending[answer.dataset.case]=answer.dataset.choice;saveLocalDraft();paintChallengeChoice(answer.dataset.case);return;
+    if(answer&&!teacherPreview&&!busy&&(!teamSync||teamSync.ready)){
+      const id=answer.dataset.case,zone=answer.dataset.choice;
+      const expected=challengePending[id]??null;
+      challengePending[id]=zone;saveLocalDraft();
+      if(teamSync){
+        busy=true;paint();
+        void teamSync.move(id,zone,expected).finally(()=>{busy=false;paint()});
+      }else paintChallengeChoice(id);
+      return;
     }
     if(e.target.closest("#bi-check-cases"))void checkCases();
   });
@@ -427,11 +472,24 @@ async function boot(){
     }
     restoreLocalDraft();
     await fetchState();busy=false;paint();
-    window.addEventListener("focus",()=>void fetchState().catch(()=>{}));
-    document.addEventListener("visibilitychange",()=>{if(!document.hidden)void fetchState().catch(()=>{})});
-    client.channel("bi-sistema-team-"+teamId)
-      .on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_state",filter:"team_id=eq."+teamId},
-        ()=>void fetchState().catch(()=>{})).subscribe();
+    syncBanner=document.createElement("div");
+    syncBanner.className="bi-shared-banner";syncBanner.setAttribute("role","status");
+    syncBanner.setAttribute("aria-live","polite");
+    const message=document.createElement("span");message.className="bi-sync-message";
+    message.textContent="Taldearen mahaia kargatzen…";
+    const retry=document.createElement("button");retry.type="button";
+    retry.className="bi-sync-retry";retry.textContent="↻ Berriro konektatu";
+    retry.addEventListener("click",()=>void teamSync?.load());
+    syncBanner.append(message,retry);stage.before(syncBanner);
+    teamSync=createBiSistemaShared({
+      client,teamId,userId:user.id,
+      localDraft:{places:{...pending},cases:{...challengePending}},
+      onDraft:applySharedDraft,
+      onStatus:syncStatus,
+      onRemote:()=>{if(!busy)void fetchState().catch(console.error)}
+    });
+    stopTeamSync=teamSync.start();
+    window.addEventListener("pagehide",()=>stopTeamSync?.(),{once:true});
   }catch(err){
     console.error("Bi sistema:",err);
     announce("Ezin izan dira taldearen datuak kargatu. Berritu orria edo itzuli misiora.",true);
