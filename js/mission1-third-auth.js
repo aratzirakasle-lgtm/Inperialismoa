@@ -47,8 +47,27 @@ async function initialize(){
       if(error)throw error;
       return data;
     };
-    if(prior)status('Hirugarren ariketa jada gaindituta dago. Berriz egin edo laugarren ariketara joan zaitezke.');
-    else if(message)message.hidden=true;
+    if(prior){
+      status('Hirugarren ariketa jada gaindituta dago. Berriz egin edo laugarren ariketara joan zaitezke.');
+      // Emaitza berriro egitea ez da derrigorrezkoa: lotura ikusgai utzi,
+      // aurreko erantzunik edo zuzenketaren xehetasunik erakutsi gabe.
+      if(!document.querySelector('#m1-third-resume')){
+        const bar=document.createElement('div');
+        bar.id='m1-third-resume';
+        bar.className='accessibility-note';
+        bar.setAttribute('role','status');
+        const label=document.createElement('strong');
+        label.textContent='✓ 3. ariketa gaindituta · taldearen aurrerapena gordeta';
+        const link=document.createElement('a');
+        link.href='./inperioen-aztarnak.html';
+        link.textContent='4. ariketa · Inperioen aztarnak →';
+        link.style.color='#f6d49c';
+        link.style.fontWeight='700';
+        link.style.textUnderlineOffset='3px';
+        bar.append(label,link);
+        document.querySelector('.accessibility-note')?.after(bar);
+      }
+    }else if(message)message.hidden=true;
   }catch(e){
     console.error('Hirugarren ariketaren saioa',e);
     fail('Ezin izan da taldearen egoera egiaztatu. Berritu orria edo itzuli hasierara.');
