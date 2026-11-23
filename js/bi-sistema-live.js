@@ -1,6 +1,6 @@
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { mountExerciseNav, addTeacherStageControls } from "./mission1-navigation.js?v=20261119-teacher-2";
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261123-medallones1";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-e2equipo2";
 
@@ -221,7 +221,8 @@ async function fetchState(){
   for(const id of locked)delete pending[id];
   challengeLocked=new Set((data.challenge_locked||[]).filter(id=>["case_monarch","case_rights"].includes(id)));
   completed=!!data.completed_at;
-  if(completed)phase="complete";else if(locked.size===7)phase="challenge";
+  if(completed){phase="complete";markMission1NavCompleted(2);}
+  else if(locked.size===7)phase="challenge";
   paint();
 }
 async function submit(answers,kind){
@@ -251,6 +252,7 @@ async function submit(answers,kind){
     // Fase osoa ondo dagoenean bakarrik gordetzen da multzo osoa.
     completed=!!data.completed;
     if(completed){
+      markMission1NavCompleted(2);
       phase="complete";
       announce("Bikain! Bi sistema politikoak ulertu dituzue. Hurrengo aretoa prest dago.");
     } else if(data.phase_complete&&locked.size===7){
@@ -475,6 +477,7 @@ async function boot(){
     }
     restoreLocalDraft();
     await fetchState();busy=false;paint();
+    await mountStudentExerciseNav(2,client,teamId);
     syncBanner=document.createElement("div");
     syncBanner.className="bi-shared-banner";syncBanner.setAttribute("role","status");
     syncBanner.setAttribute("aria-live","polite");
