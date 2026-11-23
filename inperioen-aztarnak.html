@@ -306,7 +306,7 @@ function updateClueUnlock(id){
   if(mark)mark.textContent=seen?'✓ Irakurrita':'Ireki';
  }
  const help=$('#choice-locked-note');
- if(help)help.textContent=ready?'Erantzuna aukeratu eta egiaztatu. Ez da zuzenketarik agertuko lehenago.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`;
+ if(help)help.textContent=locked?'✓ Taldeak espediente hau argitu du. Zure agiri-irakurketak bereiz gordetzen dira.':ready?'Erantzuna aukeratu eta egiaztatu. Ez da zuzenketarik agertuko lehenago.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`;
  for(const input of modal.querySelectorAll('input[name="choice"]')){
   input.disabled=!ready||locked||saving;
   input.closest('.dossier-choice')?.classList.toggle('is-locked',!ready||locked||saving);
@@ -435,6 +435,7 @@ async function loadState(){
  if(error)throw error;
  solved=new Set((data?.solved_ids||[]).filter(id=>byId[id]));finalComplete=!!data?.completed_at;
  updateScene();
+ if(currentCase&&modalMode==='case')updateClueUnlock(currentCase);
 }
 async function init(){
  for(const file of document.querySelectorAll('.history-file')){
