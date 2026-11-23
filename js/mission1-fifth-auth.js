@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones2';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones3';
 
 const status=document.querySelector('#online-state');
 const url=new URLSearchParams(location.search);
