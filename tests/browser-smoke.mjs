@@ -361,10 +361,23 @@ try{
      const paper=await page.locator('.gal-tray .gal-tile').first().evaluate(el=>{
        const css=getComputedStyle(el);
        const icon=getComputedStyle(el.querySelector('.gal-tile-icon'));
-       return {shadow:css.boxShadow,background:css.backgroundImage,iconRadius:icon.borderRadius};
+       const artwork=el.querySelector('.gal-tile-artwork');
+       return {background:css.backgroundImage,iconBackground:icon.backgroundImage,
+         iconRadius:icon.borderRadius,artworkSrc:artwork?.getAttribute('src')||''};
      });
-     assert.ok(paper.background.includes('gradient')&&paper.iconRadius==='50%',
-       'Las nuevas cartelas deben tener pergamino y sellos de latón');
+     assert.ok(paper.background.includes('gradient')&&
+       paper.iconBackground==='none'&&paper.iconRadius==='0px'&&
+       paper.artworkSrc.startsWith('data:image/svg+xml'),
+       'El pergamino debe incluir imágenes pintadas transparentes, sin el antiguo medallón circular');
+     const paintings=await page.locator('.gal-tray .gal-tile-artwork').evaluateAll(async imgs=>{
+       await Promise.all(imgs.map(img=>img.decode().catch(()=>{})));
+       return imgs.map(img=>({loaded:img.complete&&img.naturalWidth>0,
+         src:img.getAttribute('src')}))
+     });
+     assert.equal(paintings.length,20,'Las 20 cartelas muestran miniaturas históricas');
+     assert.ok(paintings.every(p=>p.loaded),'Las 20 ilustraciones SVG deben renderizarse');
+     assert.equal(new Set(paintings.map(p=>p.src)).size,20,
+       'Cada concepto lleva una imagen distinta, no un icono repetido');
      assert.equal(await page.locator('.gal-tray .gal-tile').count(),20);
      await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
      const cabinets=await page.locator('.gal-vitrine').evaluateAll(nodes=>nodes.map(el=>el.getBoundingClientRect().bottom));
