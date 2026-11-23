@@ -50,6 +50,24 @@ test('La navegación histórica conserva madera tallada, medallas ornamentadas y
  assert.match(source,/prefers-reduced-motion:reduce/);
 });
 
+test('Los cinco medallones usan títulos de exposición y mantienen Bi sistema, bi Europa',()=>{
+ const source=read('js/mission1-navigation.js');
+ for(const [step,label] of [
+   [1,'Boterearen mapa'],
+   [2,'Bi sistema, bi Europa'],
+   [3,'Inperioaren giltzak'],
+   [4,'Kolonien espedienteak'],
+   [5,'Azken zigilua']
+ ]){
+   assert.ok(source.includes('['+step+',"'+label+'"'),
+     'El título del medallón '+step+' debe mantenerse en euskera: '+label);
+ }
+ for(const label of ['Potentzien galeria','Inperialismoaren definizioa','Inperioen aztarnak','Esaldiak osatu']){
+   assert.ok(!source.includes('"'+label+'"'),
+     'El título original del juego ya no debe ocupar el medallón: '+label);
+ }
+});
+
 test('La navegación libre exige un perfil de profesor',()=>{
  has('js/app.js',/accountIsTeacher\(\)&&hash==="#teacherpreviewgallery"/);
  has('js/app.js',/const available=id=>accountIsTeacher\(\)\|\|\(id===1\|\|id===2&&completed\(viewTeamId\(\),1\)\)/);
