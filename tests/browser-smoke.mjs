@@ -117,6 +117,20 @@ async function open(role,path,viewport={width:1365,height:900}){
      },
      from:table=>builder(table),
      rpc:async(name,args)=>{
+       // Marcador de aula: lectura autorizada, nunca escritura ni intento.
+       // No incluir esta consulta en el registro de mutaciones simulado.
+       if(name==='mission1_class_progress'){
+         const gs=tables.gallery_team_state?.[0];
+         const bs=tables.bi_sistema_team_state?.[0];
+         const ds=tables.empire_dossier_team_state?.[0];
+         const steps=tables.mission1_exercise_completions||[];
+         const e3=steps.some(x=>Number(x.exercise)===3);
+         const e5=steps.some(x=>Number(x.exercise)===5);
+         return {data:[{team_id:'team1',class_id:'class1',team_name:'Exploradores',
+           exercise_1:!!gs?.completed_at,exercise_2:!!bs?.completed_at,
+           exercise_3:e3,exercise_4:!!ds?.completed_at,
+           exercise_5:e5,mission_completed:e5}],error:null};
+       }
        window.__smokeRpcCalls.push(name);
        if(role==='teacher')throw Error('No se permiten RPC en una simulación docente');
        // Modelo de servidor: dos fases enteras, sin pistas por tarjeta.
