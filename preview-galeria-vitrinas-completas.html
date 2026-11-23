@@ -42,25 +42,67 @@ mountGallery(root,{initial:{},preview:true,navigationEnabled:false,navigationPre
   onBack:()=>{},onContinue:()=>{},onSubmit:async()=>{throw Error('Aurrebista: ez dira datuak bidaltzen')}});
 const status=document.getElementById('preview-health');
 function inspect(){
- const zones=[...root.querySelectorAll('.gal-zone')];
- const cards=[...root.querySelectorAll('.gal-preview-sample')];
- const overflow=zones.filter(zone=>{
-   const rect=zone.getBoundingClientRect();
-   return [...zone.querySelectorAll('.gal-tile-placed')].some(card=>{
-     const r=card.getBoundingClientRect();
-     return r.bottom>rect.bottom+3||r.right>rect.right+3||r.left<rect.left-3;
-   });
+ const areas=[...root.querySelectorAll('.gal-zone')];
+ const cards=[...root.querySelectorAll('.gal-zone .gal-tile-placed')];
+ const glass=[...root.querySelectorAll('.gal-vitrine')];
+ const expected=[4,5,4,4,3];
+ const full=root.querySelector('[data-gallery-action="preview-complete"][aria-pressed="true"]')!==null;
+ const partial=root.querySelector('[data-gallery-action="preview-partial"][aria-pressed="true"]')!==null;
+ const expectedCounts=full?expected:partial?[2,2,2,2,2]:null;
+ const problems=[];
+ const tolerance=2.5;
+ const intersects=(a,b)=>Math.min(a.right,b.right)>Math.max(a.left,b.left)+tolerance&&Math.min(a.bottom,b.bottom)>Math.max(a.top,b.top)+tolerance;
+ if(areas.length!==5||glass.length!==4)problems.push('Ez dira ageri 4 beirateak / 5 eremuak');
+ if(expectedCounts&&cards.length!==expectedCounts.reduce((a,b)=>a+b,0))problems.push('Kartela kopurua desegokia');
+ areas.forEach((zone,i)=>{
+  const zoneCards=[...zone.querySelectorAll('.gal-tile-placed')];
+  if(expectedCounts&&zoneCards.length!==expectedCounts[i])problems.push('Eremua '+(i+1)+': '+zoneCards.length+'/'+expectedCounts[i]);
+  const z=zone.getBoundingClientRect();
+  zoneCards.forEach((card,j)=>{
+    const r=card.getBoundingClientRect();
+    if(r.top<z.top-tolerance||r.left<z.left-tolerance||r.bottom>z.bottom+tolerance||r.right>z.right+tolerance)
+      problems.push('Kartela eremutik kanpo: '+(i+1)+'-'+(j+1));
+    const label=card.querySelector('.gal-tile-name');
+    if(label&&(label.scrollHeight>label.clientHeight+3||label.scrollWidth>label.clientWidth+3)
+      &&getComputedStyle(label).overflow!=='visible')
+      problems.push('Testua moztuta: '+(i+1)+'-'+(j+1));
+    for(let k=j+1;k<zoneCards.length;k++)
+      if(intersects(r,zoneCards[k].getBoundingClientRect()))problems.push('Gainjarritako kartelak: '+(i+1));
+  });
  });
- status.textContent='IKUSKAPEN BISUALA · '+cards.length+' kartela simulatu · '+zones.length+' eremu · '+overflow.length+' eremu gainezka';
- status.dataset.overflow=String(overflow.length);
+ glass.forEach((caseEl,i)=>{
+  const vitr=caseEl.getBoundingClientRect();
+  for(const card of caseEl.querySelectorAll('.gal-tile-placed')){
+   const r=card.getBoundingClientRect();
+   if(r.bottom>vitr.bottom+tolerance||r.left<vitr.left-tolerance||r.right>vitr.right+tolerance)
+     problems.push('Kartela beiratearen mugetatik kanpo: '+(i+1));
+  }
+ });
+ if(document.documentElement.scrollWidth>window.innerWidth+8)
+   problems.push('Pantailak desplazamendu horizontala dauka');
+ const unique=[...new Set(problems)];
+ status.textContent=(unique.length?'⚠ EGIAZTATU':'✓ ONDO')+
+ ' · '+cards.length+' kartela · 4 beirate · '+areas.length+' eremu · '+
+ window.innerWidth+' px · '+unique.length+' arazo'+(unique.length?' · '+unique.slice(0,2).join(' / '):'');
+ status.dataset.overflow=String(unique.length);
+ status.dataset.cardCount=String(cards.length);
+ status.title=unique.join(' | ');
+ status.style.borderColor=unique.length?'#f0b15e':'#b7a66c';
 }
 let pending=false;
-new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;inspect()})})
-  .observe(root,{childList:true,subtree:true});
+new MutationObserver(()=>{
+ if(pending)return;
+ pending=true;
+ requestAnimationFrame(()=>{pending=false;inspect()});
+}).observe(root,{childList:true,subtree:true});
 window.addEventListener('resize',inspect);
 requestAnimationFrame(inspect);
-if(new URLSearchParams(location.search).get('full')==='1')
+const params=new URLSearchParams(location.search);
+if(params.get('full')==='1')
  root.querySelector('[data-gallery-action="preview-complete"]')?.click();
+else if(params.get('partial')==='1')
+ root.querySelector('[data-gallery-action="preview-partial"]')?.click();
+
 </script>
 </body>
 </html>
