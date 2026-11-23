@@ -1,0 +1,52 @@
+/* Navegación de escenas anchas en móvil, integrada en el museo.
+   No modifica las imágenes ni la posición de ninguna pieza interactiva. */
+.m1-mobile-panorama[hidden]{display:none!important}
+.m1-mobile-panorama{
+  width:min(100%,1672px);
+  margin:auto;
+  box-sizing:border-box;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:8px 14px;
+  padding:8px 12px;
+  color:#f5dbab;
+  background:linear-gradient(110deg,#102c24,#16372c 55%,#102c24);
+  border:1px solid #a2824e;
+  border-bottom:0;
+  font-family:Georgia,'Times New Roman',serif;
+}
+.m1-mobile-panorama-info{
+  font-size:12px;
+  line-height:1.35;
+  text-align:center;
+}
+.m1-mobile-panorama-actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.m1-mobile-panorama button{
+  box-sizing:border-box;
+  min-height:44px;
+  min-width:77px;
+  padding:8px 11px;
+  border:1px solid #d4af70;
+  border-radius:6px;
+  color:#f5ddb2;
+  background:#244536;
+  font:bold 13px/1.2 Georgia,'Times New Roman',serif;
+  cursor:pointer;
+}
+.m1-mobile-panorama button:focus-visible{
+  outline:2px solid #f8dc9c;
+  outline-offset:2px;
+}
+.m1-mobile-panorama button:disabled{
+  opacity:.43;
+  cursor:default;
+}
+@media(min-width:1101px){.m1-mobile-panorama{display:none!important}}
