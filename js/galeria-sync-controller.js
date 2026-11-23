@@ -176,6 +176,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
    unsub=adapter.subscribe(()=>void refresh());
    interval=window.setInterval(focus,12000);
    window.addEventListener('focus',focus);
+   window.addEventListener('online',focus);
    void connect();
  }
  function stop(){
@@ -183,6 +184,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
    if(unsub)unsub();
    if(interval!==null)window.clearInterval(interval);
    window.removeEventListener('focus',focus);
+   window.removeEventListener('online',focus);
  }
  return {start,stop,move,reset,refresh,connect,apply,handleResult,
    submit:()=>adapter.submit(revision),
