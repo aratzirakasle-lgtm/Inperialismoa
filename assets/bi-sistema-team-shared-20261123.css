@@ -1,0 +1,32 @@
+/* Segundo ejercicio · documento de mesa compartida, estilo del museo.
+   Solo se activa para estudiantes autenticados; el profesor previsualiza sin escribir. */
+.bi-shared-banner {
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:min(92%,980px);margin:10px auto 14px;padding:9px 17px;
+  background:linear-gradient(110deg,rgba(45,60,57,.93),rgba(31,48,49,.94));
+  border:1px solid rgba(225,195,124,.75);border-radius:12px;
+  box-shadow:0 4px 15px rgba(18,13,8,.24),inset 0 1px rgba(255,233,189,.13);
+  font-family:inherit;color:#f8edcf;font-size:clamp(12px,1.1vw,15px);
+  font-weight:650;line-height:1.4;letter-spacing:.012em;
+}
+.bi-shared-banner:before {
+  content:"✦";color:#e4c477;font-size:20px;
+}
+.bi-shared-banner.bi-sync-error {
+  border-color:#d0a279;background:linear-gradient(115deg,#543a37,#47352f);
+}
+.bi-sync-message {flex:1;min-width:0;text-align:center;}
+.bi-sync-retry {
+  flex:none;border:1px solid #e3c889;border-radius:8px;
+  background:#f1dfb5;color:#3c2c21;font-family:inherit;
+  font-size:13px;font-weight:800;padding:7px 11px;cursor:pointer;
+}
+.bi-sync-retry[hidden] {display:none!important;}
+.bi-sync-retry:focus-visible {outline:3px solid #eec95d;outline-offset:3px;}
+@media(max-width:620px) {
+  .bi-shared-banner{flex-wrap:wrap;padding:8px 10px;gap:8px;}
+  .bi-sync-message{flex:1 1 76%;text-align:left;}
+}
+@media(prefers-reduced-motion:reduce){
+  .bi-shared-banner,.bi-sync-retry{transition:none!important;}
+}
