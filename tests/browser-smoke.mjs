@@ -824,6 +824,44 @@ try{
      }finally{await context.close()}
    }
  });
+ await scenario('Alumno: al volver al tercer ejercicio superado puede continuar sin repetirlo',async()=>{
+   const {page,context,errors}=await open('student','inperialismoaren-definizioa.html?smoke_m1_steps=3');
+   try{
+     await waitVisible(page,'#m1-third-resume a');
+     assert.equal(await page.locator('#result').isVisible(),false,
+       'No se deben mostrar las respuestas de una partida anterior');
+     const next=page.locator('#m1-third-resume a');
+     assert.match(await next.innerText(),/4\. ariketa/);
+     assert.equal(await next.getAttribute('href'),'./inperioen-aztarnak.html');
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+     await next.click();
+     await page.waitForURL(/inperioen-aztarnak\.html/);
+     await waitVisible(page,'.history-file');
+     assert.deepEqual(errors,[]);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+   }finally{await context.close()}
+ });
+ await scenario('Alumno: al regresar al quinto ejercicio ve el sello, accede a misión 2 y puede repetir opcionalmente',async()=>{
+   const {page,context,errors}=await open('student','esaldiak-osatu.html?smoke_m1_steps=5');
+   try{
+     await waitVisible(page,'#success');
+     assert.match(await page.locator('#completion-title').innerText(),/Lehen misioa osatuta/);
+     assert.equal(await page.locator('#mission2-link').getAttribute('href'),'./index.html#mission2');
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+       'Recuperar el sello no vuelve a registrar intentos');
+     await page.locator('#review').click();
+     assert.equal(await page.locator('#success').isVisible(),false);
+     assert.equal(await page.locator('#verify').isDisabled(),true);
+     assert.equal(await page.locator('.word.selected').count(),0);
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+       'Repetir las frases sin guardar debe ser una acción local');
+     await page.reload({waitUntil:'domcontentloaded'});
+     await waitVisible(page,'#success');
+     await page.locator('#mission2-link').click();
+     await page.waitForURL(/inperialismoaren-faktoreak\.html/);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Profesor: puede abrir la galería y su pantalla final sin guardar',async()=>{
    const {page,context,errors}=await open('teacher','index.html#teacherpreviewgallery');
    try{
