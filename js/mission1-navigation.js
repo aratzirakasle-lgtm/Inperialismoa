@@ -305,6 +305,74 @@ function style(){
    .m1-museum-route .m1-route-lock{transform:scale(.7);transform-origin:bottom right}
    .m1-museum-route .m1-route-return{position:relative;top:auto;right:auto;margin-top:9px;font-size:11px}
  }
+
+ /* Compactación exclusiva de escritorio: menos friso, más ejercicio a la vista. */
+ @media(min-width:751px){
+  .m1-museum-route{
+    min-height:0;padding:7px clamp(18px,3vw,46px) 9px;border-width:5px;
+    box-shadow:inset 0 0 0 1px #edc5809f,inset 0 3px 0 #140a05,
+      inset 0 6px 1px #a57a45b7,inset 0 -3px 0 #100904,
+      inset 0 -6px 0 #ad7f3c,inset 0 0 34px 7px #0009,
+      0 3px 0 #241208,0 6px 13px #0009;
+  }
+  .m1-museum-route::before,.m1-museum-route::after{
+    width:63px;height:83px;top:46px;opacity:.76;
+  }
+  .m1-museum-route::before{left:4px}
+  .m1-museum-route::after{right:4px}
+  .m1-museum-route .m1-nav-title{
+    margin:0 auto 6px;padding:2px 21px 3px;border-width:2px;
+    font-size:11px;line-height:1.3;letter-spacing:.1em;
+  }
+  .m1-museum-route .m1-nav-title::before,.m1-museum-route .m1-nav-title::after{font-size:12px}
+  .m1-museum-route .m1-nav-title::before{left:6px}
+  .m1-museum-route .m1-nav-title::after{right:6px}
+  .m1-museum-route .m1-nav-links{gap:10px}
+  .m1-museum-route .m1-nav-links::before{top:27px;height:6px;border-radius:4px}
+  .m1-museum-route .m1-route-stop{gap:8px;padding:0 2px 1px}
+  .m1-museum-route .m1-route-stop::before{top:49px;height:22px;width:4px}
+  .m1-museum-route .m1-nav-num{
+    width:58px;height:58px;border-width:5px;font-size:31px;
+    box-shadow:0 0 0 1px #37220f,0 0 0 3px #b68137,0 0 0 4px #35200e,
+      0 3px 6px #000c,inset 0 2px 3px #fff2bd36,inset 0 -3px 7px #000b;
+  }
+  .m1-museum-route .m1-nav-num::before{inset:2px;border-width:1px}
+  .m1-museum-route .m1-nav-label{
+    min-height:43px;max-width:235px;padding:5px 8px;border-width:3px;
+    border-radius:5px;font-size:clamp(11px,1.05vw,14px);line-height:1.12;
+    box-shadow:inset 0 1px #fff9da9e,inset 0 -1px 2px #93642a7d,
+      0 1px 0 #4b2910,0 3px 6px #000b;
+  }
+  .m1-museum-route .m1-nav-label::before{inset:3px}
+  .m1-museum-route .m1-nav-label::after{
+    background:
+      radial-gradient(circle at 6px 6px,#5d3317 0 1.2px,#eec57e 1.7px 3px,transparent 3.2px),
+      radial-gradient(circle at calc(100% - 6px) 6px,#5d3317 0 1.2px,#eec57e 1.7px 3px,transparent 3.2px),
+      radial-gradient(circle at 6px calc(100% - 6px),#5d3317 0 1.2px,#eec57e 1.7px 3px,transparent 3.2px),
+      radial-gradient(circle at calc(100% - 6px) calc(100% - 6px),#5d3317 0 1.2px,#eec57e 1.7px 3px,transparent 3.2px);
+  }
+  .m1-museum-route .m1-route-stop.is-current .m1-nav-num{
+    box-shadow:0 0 0 1px #50311c,0 0 0 3px #e1b55d,
+      0 0 0 4px #ffe19c8c,0 0 13px 3px #e9aa476b,
+      0 3px 7px #000b,inset 0 2px 6px #ffd3a364,inset 0 -4px 8px #250908a1;
+  }
+  .m1-museum-route .m1-route-stop.is-current .m1-nav-label{
+    box-shadow:inset 0 1px #fff9dc,inset 0 -1px 2px #99642e9c,
+      0 2px 0 #5b3016,0 3px 7px #000c,0 0 8px 2px #eac37786;
+  }
+  .m1-museum-route .m1-route-seal{
+    width:20px;height:20px;bottom:-7px;border-width:2px;
+    font-size:13px;box-shadow:0 0 0 1px #38200f,0 2px 4px #000b;
+  }
+  .m1-museum-route .m1-route-lock{
+    transform:scale(.72);transform-origin:bottom right;bottom:-7px;right:-4px;
+  }
+  .m1-museum-route .m1-route-return{
+    right:10px;top:8px;padding:3px 7px 4px;
+    border-width:2px;font-size:10px;line-height:1.15;
+  }
+ }
+
  @media(prefers-reduced-motion:reduce){.m1-museum-route *{transition:none!important}}
 
  `;
