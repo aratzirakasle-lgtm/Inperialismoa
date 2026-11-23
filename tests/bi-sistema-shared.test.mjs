@@ -74,12 +74,13 @@ test('Dos alumnos reutilizan el mismo tablero sin perder movimientos ni indicar 
    assert.equal(await a.move('army','lib',null),false,
      'El servidor rechaza un cambio sobre una colocación que ya cambió');
    assert.equal(first.placements.army,'auth');
+   assert.equal(await a.move('parliament','auth',null),true);
    assert.equal(await b.reset(),false,
      'Un reinicio con revisión desactualizada no borra el tablero');
    await b.load();
    assert.equal(await b.reset(),true);
    await a.load();
    assert.deepEqual(first.placements,{});
-   assert.equal(calls.filter(x=>x==='bi_sistema_draft_move').length,3);
+   assert.equal(calls.filter(x=>x==='bi_sistema_draft_move').length,4);
  }finally{stopA();stopB()}
 });
