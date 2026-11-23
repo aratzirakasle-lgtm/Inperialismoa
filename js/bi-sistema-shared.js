@@ -47,16 +47,18 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
        });
      }
      if(!active)return;
-     apply(snapshot||{});
+     const next=draft(snapshot||{});
+     const changed=!ready||next.revision!==revision;
+     if(changed)apply(next);
      ready=true;
-     onStatus('Sinkronizatuta · taldearen mahai partekatua',false);
+     if(changed)onStatus('Sinkronizatuta · taldearen mahai partekatua',false);
      if(pending){
        const saved=pending;
        // Reintentar exactamente la última acción no confirmada; si otro
        // compañero movió la cartela, el servidor devuelve un conflicto.
        queueMicrotask(()=>{if(active)void move(saved.id,saved.zone,saved.expected)});
      }
-     onRemote?.();
+     if(changed)onRemote?.();
    }catch(e){
      ready=false;
      console.error('Bi sistema · karga',e);
@@ -137,7 +139,10 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
      .on('postgres_changes',{event:'*',schema:'public',table:'bi_sistema_team_drafts',
        filter:'team_id=eq.'+teamId},()=>{if(busy||loading)dirty=true;else void load()})
      .on('postgres_changes',{event:'*',schema:'public',table:'bi_sistema_team_state',
-       filter:'team_id=eq.'+teamId},()=>{if(busy||loading)dirty=true;else void load()})
+       filter:'team_id=eq.'+teamId},()=>{
+         onRemote?.();
+         if(busy||loading)dirty=true;else void load();
+       })
      .subscribe();
    const focus=()=>{if(active&&!document.hidden)void load()};
    window.addEventListener('focus',focus);
