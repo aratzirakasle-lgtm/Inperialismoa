@@ -338,14 +338,22 @@ function renderChallenge(){
       return '<section class="bi-case"><p><span aria-hidden="true">'+c.icon+'</span> '+esc(c.text)+'</p>'+
         '<div class="bi-case-choices">'+["auth","lib"].map(zone=>
           '<button type="button" data-case="'+c.id+'" data-choice="'+zone+'" '+
-          (fixed||busy||teacherPreview?'disabled ':'')+
+          (fixed||busy?'disabled ':'')+
           'aria-pressed="'+(challengePending[c.id]===zone)+'" class="'+(challengePending[c.id]===zone?'bi-chosen':'')+'">'+labels[zone]+'</button>').join("")+
           '</div>'+(fixed?'<span class="bi-case-locked">✓ Egiaztatuta</span>':'')+'</section>';
     }).join("")+
-    '<div class="bi-challenge-actions"><button type="button" id="bi-check-cases" '+(busy||teacherPreview||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id])?'disabled':'')+'>✓ Egoerak egiaztatu</button></div>'+
+    '<div class="bi-challenge-actions"><button type="button" id="bi-check-cases" '+(busy||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id])?'disabled':'')+'>✓ Egoerak egiaztatu</button></div>'+
     '</div>';
 }
 async function checkCases(){
+  if(teacherPreview){
+    if(CASES.some(c=>!challengePending[c.id])){
+      announce('Aukeratu bi erantzunak aurrebistan.',true);return;
+    }
+    // No comprobar soluciones ni enviar respuestas: simulación totalmente local.
+    completed=true;phase='complete';lastMove=null;
+    feedback='Irakaslearen simulazioa: ez da ezer gordetzen.';paint();return;
+  }
   const answers=Object.fromEntries(Object.entries(challengePending)
     .filter(([id,zone])=>CASES.some(c=>c.id===id)&&!challengeLocked.has(id)&&["auth","lib"].includes(zone)));
   if(CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id])){
@@ -361,14 +369,16 @@ function initInteractions(){
     const zone=e.target.closest("[data-bi-target]");
     if(zone&&selected){move(selected,zone.dataset.biTarget);return}
     const answer=e.target.closest("[data-case][data-choice]");
-    if(answer&&!teacherPreview&&!busy&&(!teamSync||teamSync.ready)){
+    if(answer&&!busy&&(!teamSync||teamSync.ready)){
       const id=answer.dataset.case,zone=answer.dataset.choice;
       const expected=challengePending[id]??null;
       challengePending[id]=zone;saveLocalDraft();
       if(teamSync){
         busy=true;paint();
-        void teamSync.move(id,zone,expected).finally(()=>{busy=false;paint()});
-      }else paintChallengeChoice(id);
+        void teamSync.move(id,zone,expected).then(ok=>{
+          if(ok)remember('case',id,expected,zone);else lastMove=null;
+        }).finally(()=>{busy=false;paint()});
+      }else{remember('case',id,expected,zone);paintChallengeChoice(id)}
       return;
     }
     if(e.target.closest("#bi-check-cases"))void checkCases();
@@ -453,6 +463,23 @@ function setupStage(){
   [controls.help,controls.reset,controls.check]=actions;
   actions.forEach(b=>{b.disabled=false;b.removeAttribute("title")});
   actions[0].id="bi-help";actions[1].id="bi-reset";actions[2].id="bi-check";
+  const undo=document.createElement('button');
+  undo.type='button';undo.id='bi-undo';undo.textContent='↶ Desegin';
+  undo.className=controls.reset.className;undo.title='Desegin azken mugimendua';
+  undo.addEventListener('click',undoLast);
+  controls.reset.before(undo);controls.undo=undo;
+  const next=document.createElement('button');
+  next.type='button';next.id='bi-continue-phase';
+  next.textContent='2. fasea · Egoerak aztertu →';
+  next.className=controls.check.className;next.hidden=true;
+  next.addEventListener('click',()=>{
+    if(phase!=='challenge')return;
+    challengeBox?.scrollIntoView({
+      block:'center',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'
+    });
+    challengeBox?.querySelector('h2')?.focus({preventScroll:true});
+  });
+  controls.check.after(next);controls.continue=next;
   initInteractions();
   paint();
 }
