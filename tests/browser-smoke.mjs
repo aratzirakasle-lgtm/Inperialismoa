@@ -428,7 +428,30 @@ try{
      const help=await page.locator('.gal-hint').innerText();
      assert.match(help,/aukeratu txartel bat|arrastatu txartela/i);
      assert.doesNotMatch(help,/pista:|tsarrak|meiji|monarkaren/i);
+     await page.waitForFunction(()=>
+       document.querySelector('.gal-shared-banner')?.textContent?.includes('Sinkronizatuta'));
+     await page.evaluate(()=>{
+       window.__stableMuseumNodes={
+         hall:document.querySelector('.gal-hall'),
+         display:document.querySelector('.gal-display'),
+         europeanFlag:document.querySelector('.gal-vitrine-eu .gal-flag-illustration'),
+         untouchedCard:document.querySelector('[data-gallery-card="jp_trade"]'),
+         untouchedArtwork:document.querySelector('[data-gallery-card="jp_trade"] img')
+       };
+     });
      await setCard(page,'eu_auth_head','eu_liberal');
+     const stable=await page.evaluate(()=>{
+       const prev=window.__stableMuseumNodes;
+       return {
+         hall:prev.hall===document.querySelector('.gal-hall'),
+         display:prev.display===document.querySelector('.gal-display'),
+         europeanFlag:prev.europeanFlag===document.querySelector('.gal-vitrine-eu .gal-flag-illustration'),
+         untouchedCard:prev.untouchedCard===document.querySelector('[data-gallery-card="jp_trade"]'),
+         untouchedArtwork:prev.untouchedArtwork===document.querySelector('[data-gallery-card="jp_trade"] img')
+       };
+     });
+     assert.ok(Object.values(stable).every(Boolean),
+       'Mover una cartela no debe reconstruir vitrinas, banderas ni imágenes ajenas');
      assert.equal(await page.locator('[data-gallery-action="check"]').isDisabled(),true,
        'La corrección exige colocar las veinte cartelas');
      const rest=await page.locator('.gal-tray [data-gallery-card]').evaluateAll(cards=>
@@ -682,6 +705,17 @@ try{
     try{
       await waitVisible(page,'#bi-stage');
       await page.waitForTimeout(300);
+      // Seleccionar una cartela no debe destruir el botón enfocado.
+      await page.locator('[data-bi-card="army"]').focus();
+      await page.evaluate(()=>{
+        window.__biStableCard=document.querySelector('[data-bi-card="army"]');
+      });
+      await page.keyboard.press('Enter');
+      assert.equal(await page.locator('[data-bi-card="army"]').getAttribute('aria-pressed'),'true');
+      assert.equal(await page.evaluate(()=>
+        window.__biStableCard===document.querySelector('[data-bi-card="army"]')),true,
+        'La selección en el segundo ejercicio mantiene el botón montado');
+      await page.keyboard.press('Enter');
       const put=async(id,zone)=>{
         await page.locator('[data-bi-card="'+id+'"]').click();
         await page.evaluate(z=>document.querySelector('[data-bi-target="'+z+'"]')
