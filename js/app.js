@@ -1,7 +1,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261121-mapa-cartelas2";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-vitrinas2";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = s => s ? new Date(s).toLocaleString("eu-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Madrid"}) : "Pendiente";
@@ -138,7 +138,7 @@ function renderHome(){
   <p class="footer-note">Ariketa historiko kritikoa: kolonialismoaren eraginak, ustiapena eta erresistentziak ere aztertuko ditugu.</p>
  </div>`;
 }
-const M1_ARTXIBOA=["Europako mapa","Sistema politikoen fitxa","Inperioen dokumentua","Iturri historikoen akta","Azken zigilua"];
+const M1_ARTXIBOA=["Potentzien galeriaren inbentarioa","Bi sistemen txostena","Inperialismoaren kontzeptu-fitxa","Inperioen espedienteak","Azken sintesiaren zigilua"];
 function m1Pieces(team){return new Set(mission1FifthStates.filter(r=>String(r.team_id)===String(team)).map(r=>Number(r.exercise)).filter(n=>n>=1&&n<=5))}
 function m1Dossier(){
  const team=viewTeamId();if(!team)return;
