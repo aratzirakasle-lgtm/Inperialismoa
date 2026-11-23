@@ -871,6 +871,23 @@ try{
       assert.deepEqual(errors,[]);
     }finally{await context.close()}
   });
+  await scenario('Profesor: abre directamente el primer ejercicio y todos los controles de vista previa sin guardar',async()=>{
+    const {page,context,errors}=await open('teacher','index.html');
+    try{
+      await waitVisible(page,'#teacher-preview-gallery');
+      await page.locator('#teacher-preview-gallery').click();
+      await waitVisible(page,'.gal-hall');
+      assert.equal(await page.locator('.m1-stage-tools').count(),1);
+      assert.equal(await page.locator('.gal-flag-illustration').count(),4);
+      assert.equal(await page.locator('[data-gallery-action="next"]').count(),1);
+      assert.equal(await page.locator('.m1-teacher-label').count(),1);
+      await page.locator('[data-gallery-action="preview-complete"]').click();
+      assert.equal(await page.locator('.gal-preview-ribbon').count(),1);
+      assert.equal(await page.locator('[data-gallery-action="check"]').isDisabled(),true);
+      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+      assert.deepEqual(errors,[]);
+    }finally{await context.close()}
+  });
   await scenario('Alumno: no puede abrir directamente los ejercicios tercero y cuarto',async()=>{
    for(const path of ['inperialismoaren-definizioa.html','inperioen-aztarnak.html']){
      const {page,context,errors}=await open('student',path);
