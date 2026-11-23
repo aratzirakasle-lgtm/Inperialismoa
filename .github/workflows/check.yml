@@ -49,6 +49,7 @@ jobs:
           name: mision2-cinco-ejercicios-vista-previa
           path: |
             test-output/m1-*.png
+            test-output/m1-auditoria-*.json
             test-output/m2-*.png
             test-output/c-museo-*.png
           if-no-files-found: ignore
