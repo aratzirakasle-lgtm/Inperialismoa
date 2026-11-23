@@ -28,8 +28,10 @@ async function open(role,path,viewport={width:1365,height:900}){
      {id:'student1',display_name:'Alumno de pruebas',role:'student',team_id:'team1',class_id:'class1'}
    ];
    // Servidor simulado por contexto; persiste en recargas sin contactar con Supabase.
-   let previousDraft=null;
+   let previousDraft=null,previousBiDraft=null,previousBiState=null;
    try{previousDraft=JSON.parse(localStorage.getItem('__smokeGalleryTeamDraft')||'null')}catch{}
+   try{previousBiDraft=JSON.parse(localStorage.getItem('__smokeBiTeamDraft')||'null')}catch{}
+   try{previousBiState=JSON.parse(localStorage.getItem('__smokeBiTeamState')||'null')}catch{}
    const tables={
      profiles:people,
      teams:[{id:'team1',name:'Exploradores',class_id:'class1'}],
@@ -37,7 +39,8 @@ async function open(role,path,viewport={width:1365,height:900}){
      classes:[{id:'class1',name:'Clase de pruebas',school_year:'2026-2027'}],
      public_questions:[],
      gallery_team_state:completedSteps>=1?[{team_id:'team1',locked_ids:[],locked_positions:{},completed_at:'2026-11-22T11:00:00Z'}]:[],
-     bi_sistema_team_state:completedSteps>=2?[{team_id:'team1',locked_ids:[],locked_positions:{},challenge_locked:[],completed_at:'2026-11-22T11:10:00Z'}]:[],
+     bi_sistema_team_state:previousBiState?[previousBiState]:(completedSteps>=2?[{team_id:'team1',locked_ids:[],locked_positions:{},challenge_locked:[],completed_at:'2026-11-22T11:10:00Z'}]:[]),
+     bi_sistema_team_drafts:previousBiDraft?[previousBiDraft]:[],
      empire_dossier_team_state:completedSteps>=4?[{team_id:'team1',solved_ids:['india','aljeria','indonesia','angola'],completed_at:'2026-11-22T11:40:00Z'}]:[],
      mission_badges:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
      mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
@@ -58,6 +61,26 @@ async function open(role,path,viewport={width:1365,height:900}){
      const row=tables.gallery_team_drafts[0];
      return row?{placements:{...row.placements},revision:row.revision}
        :{placements:{},revision:0};
+   };
+   const biDraft=()=>{
+     let row=tables.bi_sistema_team_drafts[0];
+     if(!row){row={team_id:'team1',placements:{},cases:{},revision:0};tables.bi_sistema_team_drafts.push(row)}
+     return row;
+   };
+   const biState=()=>{
+     let row=tables.bi_sistema_team_state[0];
+     if(!row){row={team_id:'team1',locked_ids:[],locked_positions:{},challenge_locked:[],completed_at:null};tables.bi_sistema_team_state.push(row)}
+     return row;
+   };
+   const saveMockBi=()=>{
+     try{
+       localStorage.setItem('__smokeBiTeamDraft',JSON.stringify(biDraft()));
+       localStorage.setItem('__smokeBiTeamState',JSON.stringify(biState()));
+     }catch{}
+   };
+   const biSnapshot=()=>{
+     const row=biDraft();
+     return {revision:row.revision,placements:{...row.placements},cases:{...row.cases}};
    };
    const builder=table=>{
      let rows=(tables[table]||[]).slice();
@@ -111,6 +134,65 @@ async function open(role,path,viewport={width:1365,height:900}){
            completed:!!row.completed_at,locked:row.locked_ids,
            positions:row.locked_positions,challenge_locked:row.challenge_locked,
            correct:[],incorrect:[],attempt_count:1},error:null};
+       }
+       if(name==='bi_sistema_draft_import'){
+         const prior=tables.bi_sistema_team_drafts[0];
+         if(prior)return {data:{status:'exists',...biSnapshot()},error:null};
+         const row=biDraft();
+         row.placements={...(args?.p_placements||{})};
+         row.cases={...(args?.p_cases||{})};row.revision=1;
+         saveMockBi();
+         return {data:{status:'imported',...biSnapshot()},error:null};
+       }
+       if(name==='bi_sistema_draft_move'){
+         const row=biDraft(),state=biState();
+         const id=args.p_card_id,isCase=id.startsWith('case_');
+         const board=isCase?row.cases:row.placements;
+         const before=board[id]??null,next=args.p_to_zone??null;
+         if(isCase&&state.locked_ids.length!==7)
+           return {data:{status:'locked',...biSnapshot()},error:null};
+         if(!isCase&&state.locked_ids.includes(id))
+           return {data:{status:'locked',...biSnapshot()},error:null};
+         if(before!==(args.p_expected_zone??null))
+           return {data:{status:'conflict',...biSnapshot()},error:null};
+         const limit=next==='auth'?3:next==='lib'?4:7;
+         if(!isCase&&next&&Object.entries(board).filter(([key,value])=>key!==id&&value===next).length>=limit)
+           return {data:{status:'full',...biSnapshot()},error:null};
+         if(next===null)delete board[id];else board[id]=next;
+         if(next!==before)row.revision++;
+         saveMockBi();
+         return {data:{status:'saved',...biSnapshot()},error:null};
+       }
+       if(name==='bi_sistema_draft_reset'){
+         const row=biDraft();
+         if(Number(args?.p_revision)!==row.revision)
+           return {data:{status:'conflict',...biSnapshot()},error:null};
+         row.placements={};row.cases={};row.revision++;
+         saveMockBi();
+         return {data:{status:'saved',...biSnapshot()},error:null};
+       }
+       if(name==='bi_sistema_draft_submit'){
+         const row=biDraft(),state=biState();
+         if(Number(args?.p_revision)!==row.revision)
+           return {data:{status:'conflict',...biSnapshot()},error:null};
+         const isClass=args?.p_phase==='classify';
+         const expected=isClass?
+           {army:'auth',monarch:'auth',parliament:'auth',separation:'lib',rights:'lib',suffrage:'lib',socialist:'lib'}:
+           {case_monarch:'auth',case_rights:'lib'};
+         const answers=isClass?row.placements:row.cases;
+         if(Object.keys(answers).length!==Object.keys(expected).length)
+           return {data:null,error:{message:'Osatu fase honetako erantzun guztiak'}};
+         const correct=Object.keys(expected).every(id=>answers[id]===expected[id]);
+         if(correct){
+           if(isClass){state.locked_ids=Object.keys(expected);state.locked_positions=expected;row.placements={};}
+           else{state.challenge_locked=Object.keys(expected);state.completed_at=new Date().toISOString();row.cases={};}
+           row.revision++;
+         }
+         saveMockBi();
+         return {data:{status:'checked',phase_complete:correct,
+           completed:!!state.completed_at,locked:state.locked_ids,
+           positions:state.locked_positions,challenge_locked:state.challenge_locked,
+           correct:[],incorrect:[],...biSnapshot()},error:null};
        }
        if(name==='gallery_draft_import'){
          const prior=tables.gallery_team_drafts[0];
@@ -784,7 +866,7 @@ try{
       await page.locator('#bi-check-cases').click();
       await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='complete');
       assert.equal(await page.locator('.bi-challenge-next').count(),1);
-      const calls=await page.evaluate(()=>window.__smokeRpcCalls.filter(n=>n==='submit_bi_sistema'));
+      const calls=await page.evaluate(()=>window.__smokeRpcCalls.filter(n=>n==='bi_sistema_draft_submit'));
       assert.equal(calls.length,2);
       assert.deepEqual(errors,[]);
     }finally{await context.close()}
