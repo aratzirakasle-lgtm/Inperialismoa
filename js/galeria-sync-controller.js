@@ -115,7 +115,9 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
        if(!alive)return;
      }
      if(data.completed){
-       apply(data);clearPending();notifyDone();
+       const becameDone=!state.completed;
+       apply(data);clearPending();
+       if(becameDone)notifyDone();
      }else if(pending){
        state.busy=true;
        try{
