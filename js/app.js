@@ -1,5 +1,6 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
+import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261123-aula1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-interv3a";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
@@ -24,6 +25,7 @@ const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoi
 const key = "inperialismoa-demo-v1";
 let conceptCHome=new URLSearchParams(location.search).get("museo")==="c";
 let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
+let classProgressRows=[],classProgressError=false,classProgressTicker=null;
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
 function initDemo(){demoData=storage.read()||{progress:[{team_id:"nilo",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:1},{team_id:"atlas",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:2},{team_id:"nilo",mission_id:2,completed_at:time(),completed_by:"demo",attempt_count:1}],claims:[{country_code:"EG",team_id:"nilo",claimed_at:time()}],submissions:[],attempts:[]};teams=DEMO_TEAMS;missions=DEMO_MISSIONS.map(euskaratuMisioa);progress=demoData.progress;claims=demoData.claims;submissions=demoData.submissions;attempts=demoData.attempts}
 const accountIsTeacher=()=>user?.role==="teacher";
@@ -49,11 +51,72 @@ function closeModal(){$("#modal").hidden=true}
 function switchScreen(logged){if(!logged){$("#view")?.__galleryCleanup?.();teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
 function render(){if(!user)return;const showGallery=currentMission===1&&!galleryQuestionsOpen&&!isTeacher();if(!showGallery&&$("#view").__galleryCleanup)$("#view").__galleryCleanup();$("#app-shell").classList.toggle("gallery-active",showGallery);$("#app-shell").classList.toggle("museum-replica-home",!isTeacher()&&currentMission===0&&!conceptCHome);$("#app-shell").classList.toggle("museo-c-enabled",!isTeacher()&&currentMission===0&&conceptCHome&&!!viewTeamId());$("#topbar-user").textContent=displayName();$("#team-summary").innerHTML=isTeacher()?'<div class="team-name">Irakaslearen ikuspegia</div><p class="team-members">Kudeaketa eta jarraipen pribatua</p>':('<div class="team-name">'+esc(mine()?.name||"Taldea")+'</div><div class="team-members">'+(mine()?.members||[]).map(esc).join(" · ")+'</div><div class="team-progress"><span style="width:'+Math.round(100*[1,2].filter(id=>completed(viewTeamId(),id)).length/4)+'%"></span></div><div class="team-members">'+[1,2].filter(id=>completed(viewTeamId(),id)).length+' / 4 misio osatuta</div>');$("#mission-count").textContent=isTeacher()?missions.length:4;
 $("#mission-nav").innerHTML=(isTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Irakaslearen panela</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Ikaslearen ikuspegia</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Nire espedizioa</span></button>')+(isTeacher()?missions:missions.filter(m=>m.id>=1&&m.id<=4)).map(m=>{const locked=(!isTeacher()&&m.id>=3)||!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?(m.id>=3?'Prestatzen':'Blokeatuta'):done?'Osatuta':'Eskuragarri')+'</span></span></button>'}).join("");
-$("#scoreboard").innerHTML=(teacherPreview?teams.filter(t=>t.class_id===mine()?.class_id):teams).map(t=>'<div class="score-row"><span>'+esc(t.name)+'</span><span aria-label="'+(completed(t.id,currentMission)?'Osatuta':'Zain')+'" class="'+(completed(t.id,currentMission)?'score-check':'score-pending')+'">'+(completed(t.id,currentMission)?'✓':'○')+'</span></div>').join("");
+paintScoreboard();
 if(isTeacher()&&currentMission===0)renderTeacher();else if(currentMission===0)renderHome();else if(currentMission===6)renderFinal();else renderMission();
 $("#view").dataset.museumPage=isTeacher()?"teacher":currentMission===0?"home":currentMission===6?"final":"mission";
 if(teacherPreview)$("#view").insertAdjacentHTML("afterbegin",'<div class="notice amber" style="margin:12px auto;max-width:1100px"><strong>Ikaslearen aurrebista · '+esc(mine()?.name||"probako taldea")+'</strong> — Ikaslearen interfazea ikusten ari zara. Ezingo duzu erantzunik, PDF-rik edo lurralderik gorde. <button type="button" class="btn outline" id="return-to-teacher" style="margin-left:10px">← Irakaslearen panelera</button></div>');
 }
+// El marcador se pinta aparte: una actualización no desmonta ni reinicia los juegos.
+function paintScoreboard(){
+ const board=$("#scoreboard");
+ if(!board||!user)return;
+ const first=currentMission===0||currentMission===1;
+ const title=document.querySelector(".sidebar-section-title .live-pulse")?.parentElement?.querySelector("span:first-child");
+ const hint=document.querySelector(".sidebar .aside-explainer");
+ if(title)title.textContent=first?'1. MISIOA · TALDEEN AURRERAPENA':'MISIOA HONETAKO TALDEAK';
+ if(hint)hint.textContent=first?'1–5: ariketa gaindituta · M: misio osoa. Ikusten dena taldearen aurrerapen baieztatua da.':
+   '✓ ikurrak hautatutako misioa osorik gainditu duen taldea adierazten du.';
+ let html;
+ if(first&&!demo){
+   const selectedClass=teacherPreview?mine()?.class_id:
+     accountIsTeacher()?(teacherClassId||null):mine()?.class_id;
+   html=renderMission1ClassProgress(classProgressRows,{
+     ownTeamId:viewTeamId(),classId:selectedClass??null,error:classProgressError
+   });
+ }else{
+   const visibleTeams=teacherPreview?teams.filter(t=>t.class_id===mine()?.class_id):
+     !accountIsTeacher()?teams.filter(t=>!mine()?.class_id||t.class_id===mine()?.class_id):
+     (teacherClassId?teams.filter(t=>String(t.class_id)===String(teacherClassId)):teams);
+   html=visibleTeams.map(t=>'<div class="score-row"><span>'+esc(t.name)+'</span><span aria-label="'+
+     (completed(t.id,currentMission)?'Osatuta':'Zain')+'" class="'+
+     (completed(t.id,currentMission)?'score-check':'score-pending')+'">'+
+     (completed(t.id,currentMission)?'✓':'○')+'</span></div>').join('');
+ }
+ board.classList.toggle('scoreboard-m1',first&&!demo);
+ if(board.innerHTML!==html)board.innerHTML=html;
+}
+// Consulta mínima y periódica: incluye también los equipos de clase que RLS
+// no permite consultar directamente en las tablas privadas de cada juego.
+async function syncClassProgress(){
+ if(!db||!user||demo)return;
+ try{
+   const {data,error}=await db.rpc('mission1_class_progress');
+   if(error)throw error;
+   classProgressRows=Array.isArray(data)?data:[];
+   classProgressError=false;
+ }catch(error){
+   console.warn('Taldeen aurrerapena ezin da eguneratu',error);
+   classProgressError=true; // Sin datos: nunca se inventan sellos.
+ }
+ paintScoreboard();
+}
+function stopClassProgressPolling(){
+ if(classProgressTicker!==null)clearInterval(classProgressTicker);
+ classProgressTicker=null;
+}
+function startClassProgressPolling(){
+ stopClassProgressPolling();
+ if(demo)return;
+ classProgressTicker=setInterval(()=>{
+   if(user&&!document.hidden)void syncClassProgress();
+ },15000);
+}
+function refreshClassProgressWhenVisible(){
+ if(user&&!document.hidden&&!demo)void syncClassProgress();
+}
+window.addEventListener('focus',refreshClassProgressWhenVisible);
+window.addEventListener('online',refreshClassProgressWhenVisible);
+document.addEventListener('visibilitychange',refreshClassProgressWhenVisible);
 function pageHeading(eyebrow,title,desc,pill){return '<div class="page-top"><div><div class="eyebrow">'+esc(eyebrow)+'</div><h1>'+esc(title)+'</h1><p class="page-desc">'+esc(desc)+'</p></div>'+(pill?'<span class="step-pill">'+esc(pill)+'</span>':'')+'</div>'}
 function renderHome(){
  if(conceptCHome && viewTeamId()){
@@ -239,7 +302,7 @@ async function refreshData(){if(demo)return;
  // Las consultas son independientes: resolverlas juntas evita esperas sucesivas.
  const teacher=accountIsTeacher();
  const empty=()=>Promise.resolve({data:[],error:null});
- const [gs,gd,bs,bd,es,ea,ba,ga,m1f]=await Promise.all([
+ const [gs,gd,bs,bd,es,ea,ba,ga,m1f,cp]=await Promise.all([
    db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at"),
    teacher?db.from("gallery_team_drafts").select("team_id,placements,revision,updated_at"):empty(),
    db.from("bi_sistema_team_state").select("team_id,locked_ids,challenge_locked,completed_at"),
@@ -248,7 +311,8 @@ async function refreshData(){if(demo)return;
    teacher?db.from("empire_dossier_attempts").select("id,team_id,submitted_by,case_id,is_correct,created_at").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
-   db.from("mission1_exercise_completions").select("team_id,exercise")
+   db.from("mission1_exercise_completions").select("team_id,exercise"),
+   db.rpc("mission1_class_progress")
  ]);
  for(const result of [gs,gd,bs,bd,es,ea,ba,ga,m1f])if(result.error)throw result.error;
  galleryStates=gs.data||[];
@@ -260,6 +324,13 @@ async function refreshData(){if(demo)return;
  biSistemaAttempts=ba.data||[];
  galleryHistory=ga.data||[];
  mission1FifthStates=m1f.data||[];
+ if(cp.error){
+   classProgressError=true;
+   console.warn('Taldeen aurrerapena',cp.error);
+ }else{
+   classProgressError=false;
+   classProgressRows=Array.isArray(cp.data)?cp.data:[];
+ }
 
 }
 async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-demo",name:"Docente (demo)",role:"teacher"}:{id:"student-demo",name:"Ane (demo)",role:"student",team_id:"atlas"};currentMission=0;teacherTab="overview";responses={};checkFeedback=null;switchScreen(true)}
@@ -286,8 +357,8 @@ async function setSession(){const {data:{user:authUser}}=await db.auth.getUser()
  else if(!accountIsTeacher()&&hash==="#mission1gallery"){currentMission=1;galleryQuestionsOpen=false}
  else{currentMission=0;galleryQuestionsOpen=false}
  if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
- switchScreen(true);if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
-async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;realtimeDirty=false;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
+ switchScreen(true);startClassProgressPolling();if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
+async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;stopClassProgressPolling();classProgressRows=[];classProgressError=false;realtimeDirty=false;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
 if(b.hasAttribute("data-c-logout")){
   // C museoak lehendik dagoen saio-irteera segurua erabiltzen du.
@@ -326,7 +397,7 @@ if(b.id==="teacher-preview-gallery"&&accountIsTeacher()){
  }
  currentMission=0;responses={};checkFeedback=null;render();return;
 }if(b.dataset.next){closeModal();changeMission(Number(b.dataset.next))}if(b.dataset.continent){continent=b.dataset.continent;selectedCountry=null;renderFinal()}if(b.dataset.country)chooseCountry(b.dataset.country);if(b.dataset.confirmCountry)await confirmClaim(b.dataset.confirmCountry);if(b.dataset.teacherTab){teacherTab=b.dataset.teacherTab;renderTeacher()}if(b.dataset.releaseCountry)modal('<h2 id="modal-title">¿Liberar territorio?</h2><p>El país volverá a estar disponible para otros equipos.</p><button class="btn warn full" data-yes-release="'+b.dataset.releaseCountry+'">Confirmar liberación</button>');if(b.dataset.yesRelease){closeModal();await releaseCountry(b.dataset.yesRelease)}if(b.dataset.download)await downloadSubmission(b.dataset.download);if(b.dataset.assess)openAssessment(b.dataset.assess)});
-document.addEventListener("change",e=>{if(e.target.id==="teacher-class-select"&&isTeacher()){teacherClassId=e.target.value;renderTeacher();return}if(e.target.matches("[data-question]")){responses[e.target.dataset.question]=Number(e.target.value);const q=e.target.dataset.question;if(checkFeedback?.incorrect?.includes(q))checkFeedback.incorrect=checkFeedback.incorrect.filter(id=>id!==q);const btn=$("#check-mission");if(btn){const m=missionById(currentMission);btn.disabled=m.questions.some(x=>responses[x.id]===undefined)}}});
+document.addEventListener("change",e=>{if(e.target.id==="teacher-class-select"&&isTeacher()){teacherClassId=e.target.value;paintScoreboard();renderTeacher();return}if(e.target.matches("[data-question]")){responses[e.target.dataset.question]=Number(e.target.value);const q=e.target.dataset.question;if(checkFeedback?.incorrect?.includes(q))checkFeedback.incorrect=checkFeedback.incorrect.filter(id=>id!==q);const btn=$("#check-mission");if(btn){const m=missionById(currentMission);btn.disabled=m.questions.some(x=>responses[x.id]===undefined)}}});
 document.addEventListener("submit",async e=>{if(e.target.id==="login-form"){e.preventDefault();if(demo){$("#login-error").textContent="Aukeratu beheko erakustaldi-kontuetako bat.";return}await signInReal(e)}if(e.target.id==="upload-form")await uploadPdf(e);if(e.target.id==="assessment-form"){e.preventDefault();await saveAssessment(e.target)}if(e.target.id==="create-class-form"){e.preventDefault();await createClass(e.target)}if(e.target.id==="create-team-form"){e.preventDefault();await createTeam(e.target)}});
 document.addEventListener("click",async e=>{if(e.target.closest("#check-mission"))await submitMission();if(e.target.closest("#claim-button")&&selectedCountry)await claimCountry(selectedCountry);if(e.target.closest("#create-test-students"))await createTestStudents();if(e.target.closest("#copy-test-credentials")){const c=window.__testCredentials||[];if(c.length){await navigator.clipboard.writeText(c.map(a=>a.name+"\nUsuario: "+a.email+"\nContraseña: "+a.password).join("\n\n"));toast("Credenciales copiadas.");}}if(e.target.closest("#export-progress"))downloadCSV();if(e.target.closest("#export-errors"))exportErrors();if(e.target.closest("#reset-demo")){localStorage.removeItem(key);initDemo();render();toast("Demostración reiniciada")}if(e.target.closest("#modal-close")||e.target.id==="modal")closeModal();if(e.target.closest("#toggle-password")){const i=$("#login-password");i.type=i.type==="password"?"text":"password"}if(e.target.closest("#logout-btn")){if(demo){user=null;currentMission=0;switchScreen(false)}else await db.auth.signOut()}});
 start();
