@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js?v=20261119-teacher-2';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones1';
 
 const status=document.querySelector('#online-state');
 const url=new URLSearchParams(location.search);
@@ -43,6 +43,7 @@ async function initialize(){
     window.m1FifthProgress=async answers=>{
       const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:5,p_answers:answers});
       if(error)throw error;
+      if(data?.completed)markMission1NavCompleted(5);
       return data;
     };
     if(prior){
@@ -52,6 +53,7 @@ async function initialize(){
     }else{
       say('Bost esaldiak osatu eta egiaztatu. Erantzun zuzenak taldearentzat gordeko dira.');
     }
+    await mountStudentExerciseNav(5,client,id);
   }catch(e){
     console.error('Bosgarren ariketaren saioa',e);
     halt('Ezin izan da taldearen egoera kargatu. Berritu orria edo itzuli hasierara.');
