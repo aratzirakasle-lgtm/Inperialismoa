@@ -139,7 +139,15 @@ function renderHome(){
  </div>`;
 }
 const M1_ARTXIBOA=["Potentzien galeriaren inbentarioa","Bi sistemen txostena","Inperialismoaren kontzeptu-fitxa","Inperioen espedienteak","Azken sintesiaren zigilua"];
-function m1Pieces(team){return new Set(mission1FifthStates.filter(r=>String(r.team_id)===String(team)).map(r=>Number(r.exercise)).filter(n=>n>=1&&n<=5))}
+function m1Pieces(team){
+ const same=r=>String(r.team_id)===String(team);
+ const earned=new Set(mission1FifthStates.filter(same).map(r=>Number(r.exercise)).filter(n=>n===3||n===5));
+ // Ejercicios 1, 2 y 4 registran su finalización en tablas específicas.
+ if(galleryStates.some(r=>same(r)&&!!r.completed_at))earned.add(1);
+ if(biSistemaStates.some(r=>same(r)&&!!r.completed_at))earned.add(2);
+ if(empireDossierStates.some(r=>same(r)&&!!r.completed_at))earned.add(4);
+ return earned;
+}
 function m1Dossier(){
  const team=viewTeamId();if(!team)return;
  const pieces=m1Pieces(team),done=completed(team,1);
@@ -166,9 +174,6 @@ function renderGallery(){
      if(error)throw error;
      const {data:rows,error:stateError}=await db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at").eq("team_id",team);
      if(!stateError&&rows?.length)galleryStates=[...galleryStates.filter(x=>x.team_id!==team),rows[0]];
-     // Leer sellos registrados por Supabase tras la corrección; no inferirlos de la interfaz.
-     const {data:stamps,error:stampError}=await db.from("mission1_exercise_completions").select("team_id,exercise").eq("team_id",team);
-     if(!stampError)mission1FifthStates=[...mission1FifthStates.filter(x=>String(x.team_id)!==String(team)),...(stamps||[])];
      return data;
    }
  });
