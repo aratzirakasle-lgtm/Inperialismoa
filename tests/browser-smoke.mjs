@@ -677,7 +677,45 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
- await scenario('Alumno: no puede abrir directamente los ejercicios tercero y cuarto',async()=>{
+ await scenario('Alumno: segundo ejercicio sin pistas, borrador recuperable y dos fases completas',async()=>{
+    const {page,context,errors}=await open('student','bi-sistema.html?smoke_m1_steps=1');
+    try{
+      await waitVisible(page,'#bi-stage');
+      await page.waitForTimeout(300);
+      const put=async(id,zone)=>{
+        await page.locator('[data-bi-card="'+id+'"]').click();
+        await page.evaluate(z=>document.querySelector('[data-bi-target="'+z+'"]')
+          .dispatchEvent(new MouseEvent('click',{bubbles:true})),zone);
+        await page.waitForFunction(card=>!!document.querySelector('[data-bi-target] .bi-card-placed[data-bi-card="'+card+'"]'),id);
+      };
+      await put('army','auth');await put('monarch','auth');
+      assert.equal(await page.locator('#bi-check').isDisabled(),true,
+        'No corregir antes de que estén todas las cartelas');
+      await page.reload({waitUntil:'domcontentloaded'});
+      await waitVisible(page,'#bi-stage');
+      await page.waitForFunction(()=>document.querySelectorAll('.bi-card-placed').length===2);
+      assert.equal(await page.locator('#bi-check').isDisabled(),true,
+        'El borrador se restaura sin revelar aciertos');
+      for(const [id,zone] of [
+        ['parliament','auth'],['separation','lib'],['rights','lib'],
+        ['suffrage','lib'],['socialist','lib']])await put(id,zone);
+      assert.equal(await page.locator('#bi-check').isEnabled(),true);
+      await page.locator('#bi-check').click();
+      await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='challenge');
+      assert.equal(await page.locator('.bi-card.bi-locked').count(),7);
+      assert.equal(await page.locator('#bi-check-cases').isDisabled(),true);
+      await page.locator('[data-case="case_monarch"][data-choice="auth"]').click();
+      await page.locator('[data-case="case_rights"][data-choice="lib"]').click();
+      assert.equal(await page.locator('#bi-check-cases').isEnabled(),true);
+      await page.locator('#bi-check-cases').click();
+      await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='complete');
+      assert.equal(await page.locator('.bi-challenge-next').count(),1);
+      const calls=await page.evaluate(()=>window.__smokeRpcCalls.filter(n=>n==='submit_bi_sistema'));
+      assert.equal(calls.length,2);
+      assert.deepEqual(errors,[]);
+    }finally{await context.close()}
+  });
+  await scenario('Alumno: no puede abrir directamente los ejercicios tercero y cuarto',async()=>{
    for(const path of ['inperialismoaren-definizioa.html','inperioen-aztarnak.html']){
      const {page,context,errors}=await open('student',path);
      try{
