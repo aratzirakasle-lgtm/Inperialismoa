@@ -1,0 +1,63 @@
+/* Segunda misión · Kausen kabinetea.
+   Reparación localizada del rótulo Ideologikoak / zientifikoak.
+   Las cinco vitrinas mantienen sus textos y dimensiones originales. */
+.m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title{
+  box-sizing:border-box;
+  height:auto!important;
+  min-height:60px!important;
+  max-height:none!important;
+  padding:5px 10px 7px!important;
+  overflow:visible!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title-action{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  max-width:100%;
+  height:auto!important;
+  min-height:48px;
+  padding:2px 1px!important;
+  margin:0!important;
+  white-space:normal!important;
+  font:700 clamp(11px,1.03vw,15.5px)/1.2 Georgia,"Times New Roman",serif!important;
+  letter-spacing:-.012em;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  text-align:center;
+  text-wrap:balance;
+  overflow:visible;
+}
+@media(min-width:901px) and (max-width:1190px){
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title{
+  min-height:65px!important;
+  padding:5px 7px!important;
+ }
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title-action{
+  font-size:clamp(10.5px,1.07vw,13px)!important;
+  line-height:1.24;
+ }
+}
+@media(max-width:900px){
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title{
+  min-height:57px!important;
+  padding:5px 8px!important;
+ }
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title-action{
+  font-size:clamp(12px,2.1vw,15px)!important;
+  min-height:44px;
+ }
+}
+@media(max-width:570px){
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title{
+  min-height:57px!important;
+  padding:5px 4px!important;
+ }
+ .m2-first-room .m2-museum-case.m2-case-ideological .m2-case-title-action{
+  font-size:clamp(11px,3.3vw,14px)!important;
+  min-height:45px;
+ }
+}
