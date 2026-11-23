@@ -95,7 +95,11 @@ test('El refresco de paneles en tiempo real no repite cuatro consultas completas
  const app=read('js/app.js');
  assert.match(app,/async function refreshFromRealtime\(\)/);
  assert.match(app,/Promise\.all\(\[\s*db\.from\("gallery_team_state"\)/);
- assert.equal((app.match(/\(\)=>void refreshFromRealtime\(\)/g)||[]).length,4);
+ const callbacks=(app.match(/\(\)=>void refreshFromRealtime\(\)/g)||[]).length;
+  assert.ok(callbacks>=4&&callbacks<=8,
+    'Los eventos de progreso y borradores comparten la misma cola de actualización');
+  assert.match(app,/table:"bi_sistema_team_drafts"/);
+  assert.match(app,/table:"mission1_exercise_completions"/);
 });
 
 test('El foco visible y la preferencia de movimiento se comparten entre los cinco ejercicios',()=>{
