@@ -1,7 +1,7 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-visibles2';
 import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-talde1';
-import { createGalleryIncremental } from './galeria-dom-incremental.js?v=20261123-fluidez1';
+import { createGalleryIncremental } from './galeria-dom-incremental.js?v=20261123-fluidez2';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
 ["eu_auth_head","Sistema autoritarioak","♜"],
