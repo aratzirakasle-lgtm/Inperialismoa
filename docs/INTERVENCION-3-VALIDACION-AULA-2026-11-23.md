@@ -50,3 +50,27 @@ Los tests nuevos están incorporados al flujo CI existente en `.github/workflows
 6. Verificar la ejecución completa y verde de las acciones CI tras la corrección.
 
 **Estado:** comprobación funcional del servidor real completada en transacciones reversibles; corrección de recuperación publicada en GitHub. **Validación end-to-end con dos sesiones de navegador realmente autenticadas: pendiente**. No se han usado contraseñas de alumnos, ni se han modificado los datos de clase.
+
+## Actualización: marcador de ejercicios y misión completa (23-11-2026)
+
+**Funcionalidad incorporada a la web:**
+
+- Muestra por equipo cinco marcas independientes para los ejercicios de la primera misión y una sexta marca diferenciada para la misión completa (`M`). Las marcas proceden de finalizaciones confirmadas en PostgreSQL, no de borradores ni intentos.
+- Mantiene el marcador antiguo de **misión completa** en los recorridos posteriores.
+- Disponible en la barra lateral de la entrada habitual y de la primera sala. En el **vestíbulo del concepto C** (donde la barra lateral se oculta para conservar la fotografía original) y en las salas independientes 2–5, se ofrece el botón discreto y desplegable `TALDEEN AURRERAPENA`, sin modificar el juego ni su escenografía.
+- El marcador principal se actualiza automáticamente cada 15 segundos mientras la página está visible, y al recuperar foco o conexión. El marcador desplegable se refresca al abrirlo y periódicamente mientras está abierto.
+- Solo divulga identificador de equipo, clase, nombre del equipo y seis booleanos. Nunca publica respuestas, pistas, calificaciones, errores ni nombres de alumnos.
+
+**Seguridad:** migración `mission1_same_class_exercise_progress` aplicada al proyecto Supabase real. La función `public.mission1_class_progress()` no recibe parámetros de clase/equipo, restringe los resultados a clases autorizadas comprobando `auth.uid()` y roles reales en `profiles`, exige autenticación y bloquea invocación por `anon`. Se usó un `SECURITY DEFINER` estrictamente acotado porque RLS protege los detalles privados del progreso por equipo; el aviso habitual del asesor de seguridad para funciones de ese tipo se ha identificado y revisado. Su SQL reproducible está en `supabase/mission1_class_progress.sql`.
+
+**Validación ejecutada en Supabase real, sin cambios de datos permanentes:**
+
+- Verificado el acceso de alumno, docente y sesión sin usuario.
+- Verificada la visibilidad de solo la misma clase, incluso al crear temporalmente otra clase con su equipo.
+- Verificada la distinta finalización de ejercicio de dos equipos de la misma clase.
+- Verificadas las seis marcas al registrar temporalmente los cinco ejercicios completados.
+- Todas esas inserciones fueron ejecutadas dentro de transacciones terminadas en `ROLLBACK`. Se ha reconfirmado que el proyecto conserva sus dos perfiles de alumno, un docente y un equipo, sin finalizaciones ni borradores añadidos.
+
+**Pruebas del código:** se ha creado `tests/classroom-progress.test.mjs` con comprobaciones de seis marcas, aislamiento por clase, escapes HTML y ausencia de datos privados. La salida de marcado también se verificó con una evaluación local de funciones puras. Se comprobaron sintácticamente los módulos JS modificados. El simulador de navegador se ajustó para que la nueva consulta de solo lectura no cuente como escritura.
+
+**Pendiente:** consultar el estado final de GitHub Actions y revisar visualmente el despliegue en dispositivos reales; este registro no afirma haber completado una prueba E2E con varios equipos autenticados en navegadores reales. Al verificarse el proyecto había **un único equipo existente**, por lo que el ensayo con varios equipos se realizó con filas temporales que fueron revertidas.
