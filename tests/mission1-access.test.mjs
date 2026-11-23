@@ -51,7 +51,8 @@ test('El menú del alumno exige el quinto juego; el profesor conserva los logros
  const app=read('js/app.js');
  const second=read('js/mission2-faktoreak.js');
  has('js/app.js',/mission1FifthStates=m1f\.data\|\|\[\]/);
- has('js/app.js',/db\.from\("mission1_exercise_completions"\)\.select\("team_id,exercise"\)\.eq\("exercise",5\)/);
+ has('js/app.js',/db\.from\("mission1_exercise_completions"\)\.select\("team_id,exercise"\)/);
+ assert.match(app,/\.filter\(n=>n===3\|\|n===5\)/,'El expediente recoge los ejercicios tercero y quinto');
  assert.match(app,/Number\(id\)===1&&!demo&&\(user\?\.role==="student"\|\|teacherPreview\)/);
  assert.match(app,/mission1FifthStates\.some\(e=>String\(e\.team_id\)===String\(team\)&&Number\(e\.exercise\)===5\)/);
  assert.match(app,/:progress\.some\(p=>String\(p\.team_id\)/,'El panel docente y las demás misiones conservan sus logros');
