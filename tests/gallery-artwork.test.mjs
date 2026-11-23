@@ -11,18 +11,17 @@ test('Cada una de las veinte tarjetas conserva su concepto y tiene una ilustraci
   assert.equal(ids.length,20,'La galería debe seguir teniendo veinte conceptos');
   assert.equal(new Set(ids).size,20,'Ningún concepto duplicado');
   for (const id of ids) {
-    const svg=galleryIllustration(id);
-    assert.match(svg,/^<img class="gal-tile-artwork"/,id);
-    assert.match(svg,/src="data:image\/svg\+xml;charset=utf-8,/,id);
-    assert.match(svg,/aria-hidden="true"/,id);
-    const encoded=svg.match(/src="(data:image\/svg\+xml;charset=utf-8,[^"]+)"/)?.[1];
-    assert.ok(encoded,id+' debe contener un recurso de imagen');
-    const drawing=decodeURIComponent(encoded.split(',')[1]);
-    assert.match(drawing,/viewBox="0 0 36 36"/,id);
-    assert.match(drawing,/fill="#[a-fA-F0-9]{6}"/,id+' debe tener colores');
-    assert.doesNotMatch(drawing,/<rect[^>]*fill="#(?:fff|ffffff)"/i,id+' sin fondo opaco');
-    assert.doesNotMatch(svg,/<(?:script|iframe|foreignObject|use)\b/i,id);
-    assert.equal((svg.match(/<img\b/g)||[]).length,1,id);
+    const image=galleryIllustration(id);
+    assert.match(image,/^<img class="gal-tile-artwork"/,id);
+    assert.match(image,new RegExp('src="\\./assets/galeria-miniaturas/'+id+'\\.svg\\?v='),id);
+    assert.match(image,/aria-hidden="true"/,id);
+    assert.match(image,/draggable="false"/,id);
+    assert.equal((image.match(/<img\\b/g)||[]).length,1,id);
+    const svg=readFileSync(new URL('../assets/galeria-miniaturas/'+id+'.svg',import.meta.url),'utf8');
+    assert.match(svg,/viewBox="0 0 96 96"/,id);
+    assert.match(svg,/fill="#[a-fA-F0-9]{6}"/,id+' debe mantener color');
+    assert.doesNotMatch(svg,/<rect[^>]*fill="#(?:fff|ffffff)"/i,id+' sin fondo opaco');
+    assert.doesNotMatch(svg,/<(?:script|iframe|foreignObject|use)\\b/i,id);
   }
 });
 
