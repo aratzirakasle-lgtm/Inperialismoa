@@ -81,7 +81,10 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const unplace=id=>{
    if(!canMove(id))return;
    if(sharedSync){sharedSync.move(id,null);return}
-   unplace(id);refocus('[data-gallery-tray]');
+   delete state.placements[id];
+   state.selected=null;
+   state.feedback="";
+   saveDraft();draw();refocus('[data-gallery-tray]');
  };
  const reset=()=>{
    if(state.busy)return;
