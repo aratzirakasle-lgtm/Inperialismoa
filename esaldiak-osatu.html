@@ -109,7 +109,7 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
 'use strict';
 const words=[['koloniak','koloniak'],['kapitalismoa','kapitalismoa'],['nagusitasuna','nagusitasuna'],['inperialismoa','inperialismoa'],['ustiapena','ustiapena'],['metropoliak','metropoliak'],['merkataritza','merkataritza'],['dominazioa','dominazioa']];
 const slotIds=['1','2','3','4','5'];
-const slots=new Map(slotIds.map(x=>[x,null]));let chosen=null,drag=null,done=false;const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
+const slots=new Map(slotIds.map(x=>[x,null]));let chosen=null,drag=null,done=false;const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const localMode=()=>window.m1FifthLocalMode==='teacher'||window.m1FifthLocalMode==='practice';
 const draft=()=>window.m1FifthDraftSync;
 function canChange(){if(localMode())return true;if(draft()?.ready)return true;announce('Taldearen zirriborroa kargatu behar da.');return false}
