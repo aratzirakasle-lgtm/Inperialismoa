@@ -173,7 +173,7 @@ BEGIN
  THEN RETURN jsonb_build_object('status','completed','completed',true,
       'mission_completed',p_exercise=5,'revision',coalesce(v_rev,0));
  END IF;
- IF NOT FOUND THEN
+ IF v_rev IS NULL THEN
    RETURN jsonb_build_object('status','incomplete','completed',false,'revision',0);
  END IF;
  IF v_rev IS DISTINCT FROM p_revision
