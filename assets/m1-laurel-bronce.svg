@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 108" fill="none">
+<defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0b0"/><stop offset=".28" stop-color="#c99643"/><stop offset=".55" stop-color="#70421c"/><stop offset=".78" stop-color="#ebc77e"/><stop offset="1" stop-color="#98601e"/></linearGradient><filter id="s" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="1"/><feOffset dy="1"/><feComponentTransfer><feFuncA type="linear" slope=".65"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g stroke="url(#b)" fill="url(#b)" stroke-linejoin="round" filter="url(#s)">
+<path d="M70 103C42 96 22 80 18 61c-3-16 1-27 11-40M70 103c28-7 48-23 52-42 3-16-1-27-11-40" stroke-width="2.7" fill="none"/>
+<path d="M28 26q-18-11-9-27 12 11 9 27ZM25 41Q7 29 13 16q15 8 12 25ZM21 55Q4 45 7 31q17 6 14 24ZM23 69Q4 62 5 51q17 2 18 18ZM30 83Q11 81 10 68q17-3 20 15ZM42 93Q24 97 19 85q14-8 23 8ZM55 100Q40 110 30 100q10-12 25 0Z" stroke-width=".65"/>
+<path d="M29 26Q44 13 37 2q-16 5-8 24ZM25 41Q42 32 42 20q-19 2-17 21ZM21 55Q39 49 43 36q-19-2-22 19ZM23 69Q44 67 49 54q-20-6-26 15ZM30 83Q52 83 58 70q-19-8-28 13ZM42 93Q62 89 68 80q-17-10-26 13Z" stroke-width=".7"/>
+<g transform="translate(140 0) scale(-1 1)"><path d="M28 26q-18-11-9-27 12 11 9 27ZM25 41Q7 29 13 16q15 8 12 25ZM21 55Q4 45 7 31q17 6 14 24ZM23 69Q4 62 5 51q17 2 18 18ZM30 83Q11 81 10 68q17-3 20 15ZM42 93Q24 97 19 85q14-8 23 8ZM55 100Q40 110 30 100q10-12 25 0Z" stroke-width=".65"/><path d="M29 26Q44 13 37 2q-16 5-8 24ZM25 41Q42 32 42 20q-19 2-17 21ZM21 55Q39 49 43 36q-19-2-22 19ZM23 69Q44 67 49 54q-20-6-26 15ZM30 83Q52 83 58 70q-19-8-28 13ZM42 93Q62 89 68 80q-17-10-26 13Z" stroke-width=".7"/></g>
+</g><path d="M70 99l-5-7 5-6 5 6z" fill="#f2d995" stroke="#6e431d" stroke-width=".8"/>
+</svg>
