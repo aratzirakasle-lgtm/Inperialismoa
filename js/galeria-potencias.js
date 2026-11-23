@@ -154,9 +154,10 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    }
    return '<svg class="gal-flag-illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 42" role="img" aria-label="'+names[key]+'" focusable="false"><title>'+names[key]+'</title><defs><clipPath id="'+clipId+'"><path d="'+cloth+'"/></clipPath></defs><g clip-path="url(#'+clipId+')">'+graphic+'</g></svg>';
  };
- /* El XIX europeo no tiene bandera común: medallón museográfico, sin confundirlo con la UE actual. */
- const europeSeal='<svg class="gal-flag-illustration gal-europe-emblem" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 42" role="img" aria-label="Europa, XIX. mendea: museoko domina, ez bandera" focusable="false"><title>Europa XIX. mendea</title><ellipse cx="31" cy="21" rx="27" ry="18" fill="#72512d" stroke="#e1c282" stroke-width="2"/><ellipse cx="31" cy="21" rx="23.5" ry="14.5" fill="#ad8145" stroke="#f3ddb0" stroke-width="0.9"/><text x="31" y="26.6" text-anchor="middle" font-family="Georgia,serif" font-size="17" font-weight="bold" fill="#fff3d7">XIX</text></svg>';
- const flagHtml={eu:europeSeal,ru:flagSvg("ru"),us:flagSvg("us"),jp:flagSvg("jp")};
+ // REQUISITO VISUAL FIJO: no sustituir la bandera de Europa por medallones.
+ // La bandera azul con doce estrellas es un símbolo gráfico ACTUAL,
+ // y se identifica como tal para evitar confusiones cronológicas.
+ const flagHtml={eu:flagSvg("eu"),ru:flagSvg("ru"),us:flagSvg("us"),jp:flagSvg("jp")};
  const showcase=(key,name,flags,desc,content)=>'<article class="gal-vitrine gal-vitrine-'+key+'"><span class="gal-case-finial" aria-hidden="true"></span><span class="gal-case-column gal-case-column-left" aria-hidden="true"></span><span class="gal-case-column gal-case-column-right" aria-hidden="true"></span><header class="gal-vitrine-top"><h2>'+name+'</h2></header><div class="gal-flag-shelf">'+flagHtml[key]+'</div><div class="gal-vitrine-image gal-photo-'+key+'" role="img" aria-label="'+esc(desc)+'"></div><div class="gal-vitrine-velvet" aria-hidden="true"><span class="gal-case-amber-light"></span></div><span class="gal-case-glass" aria-hidden="true"></span><div class="gal-vitrine-contents">'+content+'</div></article>';
 
  const museumDecor=`<div class="gal-museum-set" aria-hidden="true">
