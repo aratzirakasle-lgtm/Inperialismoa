@@ -17,7 +17,9 @@ test('Un error de corrección nunca activa una pista histórica',()=>{
   const gallery=read('js/galeria-potencias.js');
   const bi=read('js/bi-sistema-live.js');
   const fourth=read('inperioen-aztarnak.html');
-  assert.match(gallery,/state\.feedback=state\.completed\?/);
+  assert.match(gallery,/state\.feedback=state\.completed\s*\?/);
+  assert.match(gallery,/Object\.keys\(answers\)\.length!==ITEMS\.length/);
+  assert.doesNotMatch(gallery,/result\.incorrect|result\.correct|result\.locked_positions/);
   assert.match(bi,/const wrong=data\.incorrect\|\|\[\]/);
   assert.match(fourth,/if\(result\.wrong\)\{return .*Erantzuna ez da zuzena\. Saiatu berriro/);
   assert.doesNotMatch(fourth,/Berrikusi pistak eta saiatu berriro/);
@@ -29,7 +31,8 @@ test('Un error de corrección nunca activa una pista histórica',()=>{
   assert.doesNotMatch(third,/wrong\.length\s*\+\s*["'] lotura/);
   assert.doesNotMatch(fifth,/wrong\.length\s*\+\s*["'] hutsune/);
   assert.doesNotMatch(fifth,/for\(const k of wrong\).*classList\.add\(['"]error['"]\)/);
-  for(const text of [gallery,bi,third,fifth]){
+  assert.match(gallery,/Ariketa ez dago gaindituta\./);
+  for(const text of [bi,third,fifth]){
     assert.match(text,/Ez da zuzena\./);
   }
 });
