@@ -925,6 +925,41 @@ try{
      assert.equal(await teacher.page.locator('.m1-nav-num').count(),5);
      const wood=await teacher.page.locator('.m1-nav').evaluate(el=>getComputedStyle(el).backgroundImage);
      assert.match(wood,/gradient/);
+     // El concepto 2 debe reproducirse como un elemento museístico material,
+     // no como cinco botones verdes planos.
+     const relief=await teacher.page.locator('.m1-museum-route').evaluate(nav=>{
+       const num=nav.querySelector('.m1-nav-num');
+       const plaque=nav.querySelector('.m1-nav-label');
+       const current=nav.querySelector('.m1-route-stop.is-current .m1-nav-num');
+       const outer=getComputedStyle(nav);
+       return {
+         frame:outer.backgroundImage,
+         border:outer.borderTopWidth,
+         ornament:getComputedStyle(nav,'::before').backgroundImage,
+         coinWidth:num.getBoundingClientRect().width,
+         wreath:getComputedStyle(num,'::after').backgroundImage,
+         plaqueHeight:plaque.getBoundingClientRect().height,
+         activeBackground:getComputedStyle(current).backgroundImage,
+         rail:getComputedStyle(nav.querySelector('.m1-nav-links'),'::before').backgroundImage
+       };
+     });
+     assert.ok(relief.coinWidth>=85&&relief.plaqueHeight>=60,
+       'Los medallones y las placas deben tener suficiente presencia en ordenador');
+     assert.match(relief.ornament,/m1-roleau-esquina\.svg/);
+     assert.match(relief.wreath,/m1-laurel-bronce\.svg/);
+     assert.match(relief.frame,/m1-textura-madera\.svg/);
+     assert.match(relief.rail,/gradient/);
+     assert.match(relief.activeBackground,/conic-gradient/);
+     const assets=await teacher.page.evaluate(async()=>Promise.all(
+       ['m1-laurel-bronce.svg','m1-roleau-esquina.svg','m1-textura-madera.svg']
+         .map(async name=>({name,status:(await fetch('./assets/'+name)).status}))));
+     assert.ok(assets.every(x=>x.status===200),
+       'Deben publicarse los grabados, laureles y vetas usados en la barra');
+     await mkdir('test-output',{recursive:true});
+     await teacher.page.screenshot({
+       path:'test-output/m1-medallones-relieve-docente-escritorio.png',
+       fullPage:false,animations:'disabled'
+     });
      await teacher.page.locator('.m1-route-stop[data-m1-step="4"]').click();
      await teacher.page.waitForURL(/inperioen-aztarnak\.html\?preview=1/);
      await waitVisible(teacher.page,'.m1-nav[data-m1-role="teacher"]');
@@ -951,6 +986,10 @@ try{
        assert.equal(await page.locator('.m1-route-stop.is-locked').count(),4-steps);
        assert.equal(await page.locator('.m1-route-stop[aria-current="page"]').getAttribute('data-m1-step'),String(current));
        assert.equal(await page.locator('.m1-route-stop.is-done').count(),steps);
+       if(steps===2)await page.screenshot({
+         path:'test-output/m1-medallones-relieve-alumno-tercer-ejercicio.png',
+         fullPage:false,animations:'disabled'
+       });
        assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
        assert.deepEqual(errors,[]);
      }finally{await context.close()}
