@@ -82,7 +82,7 @@ async function initialize(){
       retry.addEventListener('click',()=>void sync?.load());
       document.querySelector('.accessibility-note')?.append(retry);
       sync=createMission1DraftSync({
-        client,teamId:team,exercise:3,
+        client,teamId:team,exercise:3,userId:user.id,
         onDraft:places=>window.m1ThirdDraftApply?.(places),
         onStatus:(msg,kind)=>{
           signal.textContent=' · '+msg;
