@@ -108,28 +108,53 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
 <script>
 'use strict';
 const words=[['koloniak','koloniak'],['kapitalismoa','kapitalismoa'],['nagusitasuna','nagusitasuna'],['inperialismoa','inperialismoa'],['ustiapena','ustiapena'],['metropoliak','metropoliak'],['merkataritza','merkataritza'],['dominazioa','dominazioa']];
-const answer={'1':'inperialismoa','2':'koloniak','3':'metropoliak','4':'ustiapena','5':'nagusitasuna'};
-const slots=new Map(Object.keys(answer).map(x=>[x,null]));let chosen=null,drag=null,done=false;const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const slotIds=['1','2','3','4','5'];
+const slots=new Map(slotIds.map(x=>[x,null]));let chosen=null,drag=null,done=false;const $=s=>document.querySelector(s),$=s=>[...document.querySelectorAll(s)];
+const localMode=()=>window.m1FifthLocalMode==='teacher'||window.m1FifthLocalMode==='practice';
+const draft=()=>window.m1FifthDraftSync;
+function canChange(){if(localMode())return true;if(draft()?.ready)return true;announce('Taldearen zirriborroa kargatu behar da.');return false}
 function occupied(id){for(const [slot,word] of slots)if(word===id)return slot;return null}
 function announce(msg){const el=$('#toast');el.textContent=msg;el.hidden=false;clearTimeout(announce.timer);announce.timer=setTimeout(()=>el.hidden=true,3000)}
-function place(word,slot){if(done||!answer[slot]||!words.some(x=>x[0]===word))return;const prior=occupied(word);if(prior)slots.set(prior,null);slots.set(slot,word);chosen=null;render()}
-function render(){for(const el of $$('.hole')){const v=slots.get(el.dataset.slot);el.textContent=v||'';el.classList.remove('error','highlight');el.setAttribute('aria-label',(el.dataset.slot)+'. hutsunea'+(v?': '+v:''))}for(const el of $$('.word')){const used=!!occupied(el.dataset.word);el.classList.toggle('used',used);el.classList.toggle('selected',chosen===el.dataset.word);el.setAttribute('aria-pressed',String(chosen===el.dataset.word));el.setAttribute('aria-disabled',String(used));el.textContent=used?'':el.dataset.word}const n=[...slots.values()].filter(Boolean).length;$('#hud').textContent=n+' / 5';$('#verify').disabled=done||n!==5;}
-function select(word){if(done)return;const old=occupied(word);if(old){slots.set(old,null);chosen=word;render();return}chosen=chosen===word?null:word;render();}
-function clickSlot(slot){if(done)return;if(chosen){place(chosen,slot);return}if(slots.get(slot)){chosen=slots.get(slot);slots.set(slot,null);render();}}
+function place(word,slot){if(done||!slots.has(slot)||!words.some(x=>x[0]===word)||!canChange())return;
+  const prior=occupied(word);
+  if(!localMode()){chosen=null;void draft().move(word,slot,prior);return}
+  if(prior)slots.set(prior,null);slots.set(slot,word);chosen=null;render()
+}
+function render(){for(const el of $$('.hole')){const v=slots.get(el.dataset.slot);el.textContent=v||'';el.classList.remove('error','highlight');el.setAttribute('aria-label',(el.dataset.slot)+'. hutsunea'+(v?': '+v:''))}for(const el of $$('.word')){const used=!!occupied(el.dataset.word);el.classList.toggle('used',used);el.classList.toggle('selected',chosen===el.dataset.word);el.setAttribute('aria-pressed',String(chosen===el.dataset.word));el.setAttribute('aria-disabled',String(used));el.textContent=used?'':el.dataset.word}const n=[...slots.values()].filter(Boolean).length;$('#hud').textContent=n+' / 5';$('#verify').disabled=done||n!==5||window.m1FifthSaving||(!localMode()&&!draft()?.ready);}
+function select(word){if(done||!canChange())return;const old=occupied(word);
+  if(old){
+    if(!localMode()){
+      void draft().move(word,null,old).then(ok=>{if(ok){chosen=word;render()}});
+      return;
+    }
+    slots.set(old,null);chosen=word;render();return;
+  }
+  chosen=chosen===word?null:word;render();
+}
+function clickSlot(slot){if(done||!canChange())return;if(chosen){place(chosen,slot);return}
+  if(slots.get(slot)){
+    const word=slots.get(slot);
+    if(!localMode()){
+      void draft().move(word,null,slot).then(ok=>{if(ok){chosen=word;render()}});
+      return;
+    }
+    chosen=word;slots.set(slot,null);render();
+  }
+}
 async function check(){
   if(done){$('#success').hidden=false;$('#verify').disabled=true;return}
   if(window.m1FifthSaving||[...slots.values()].some(x=>!x))return;
-  if(!window.m1FifthProgress){announce('Saioa egiaztatzen… Berritu orria behar izanez gero.');return}
-  const wrong=Object.keys(answer).filter(k=>slots.get(k)!==answer[k]);
-  if(wrong.length){
-    announce('Ez da zuzena. Berrikusi erantzunak eta saiatu berriro.');
+  if(!window.m1FifthProgress||(!localMode()&&!draft()?.ready)){announce('Saioa kargatzen… Egiaztatu konexioa.');return}
+  if(window.m1FifthLocalMode==='practice'){
+    announce('Ariketa jada gaindituta dago. Berrikusketa librean ez da berriro zuzentzen.');
     return;
   }
   window.m1FifthSaving=true;$('#verify').disabled=true;
   try{
     const answers=Object.fromEntries(slots.entries());
     const response=await window.m1FifthProgress(answers);
-    if(!response?.completed){announce('Begiratu berriro hutsuneak. Saiatu berriro.');return}
+    if(response?.status==='conflict'){announce('Taldekide batek kokapenak aldatu ditu. Berrikusi.');return}
+    if(!response?.completed){announce('Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.');return}
     done=true;
     if(response.preview){
       $('#completion-title').textContent='✦ Ariketa osatuta (aurrebista)';
@@ -156,7 +181,7 @@ function init(){const tray=$('#choices');for(const [id] of words){const b=docume
   if(window.m1FifthSavedReplay){
     // Repetir el ejercicio es opcional y local: no borra el sello del equipo.
     window.m1FifthSavedReplay=false;done=false;chosen=null;
-    for(const key of Object.keys(answer))slots.set(key,null);
+    for(const key of slotIds)slots.set(key,null);
     $('#review').textContent='Erantzunak ikusi';
     $('#success').hidden=true;
     render();return;
@@ -178,7 +203,9 @@ window.m1FifthRestoreCompletion=()=>{
 // Simulación exclusivamente visual; solo se expone desde la previsualización docente autenticada.
 window.m1FifthPreviewSetStage=stage=>{
  if(stage==='complete'){
-   for(const [key,value] of Object.entries(answer))slots.set(key,value);
+   // Simulación visual de montaje, no se presentan soluciones reales.
+   const displayWords=words.slice(0,5).map(([id])=>id);
+   slotIds.forEach((key,index)=>slots.set(key,displayWords[index]));
    done=true;chosen=null;render();
    $('#completion-title').textContent='✦ Ariketa osatuta (irakaslearen aurrebista)';
    $('#completion-copy').textContent='Amaierako pantailaren simulazioa. Ez da taldearen aurrerapena aldatu.';
@@ -187,9 +214,21 @@ window.m1FifthPreviewSetStage=stage=>{
    $('#success').hidden=false;
  }else{
    done=false;chosen=null;
-   for(const key of Object.keys(answer))slots.set(key,null);
+   for(const key of slotIds)slots.set(key,null);
    $('#success').hidden=true;render();
  }
+};
+window.m1FifthDraftApply=places=>{
+  if(done)return;
+  chosen=null;
+  for(const key of slotIds)slots.set(key,null);
+  for(const [word,slot] of Object.entries(places||{})){
+    if(slots.has(slot)&&words.some(([id])=>id===word))slots.set(slot,word);
+  }
+  render();
+};
+window.m1FifthDraftStatus=(text,kind)=>{
+  if(kind==='error'||kind==='conflict')announce(text);
 };
 init();
 </script>
