@@ -20,21 +20,21 @@ test('Las veinte cartelas tienen pinturas históricas individuales y sin fondo',
   assert.ok(all.every(id=>gallery.includes('["'+id+'","')),
     'Todos los temas del ejercicio deben mantener su escena');
   const images=all.map(id=>{
-    const html=galleryIllustration(id);
-    assert.match(html,/^<img class="gal-tile-artwork" src="data:image\/svg\+xml/);
-    const uri=html.match(/src="([^"]+)"/)?.[1];
-    assert.ok(uri,'No falta una ilustración: '+id);
-    const svg=decodeURIComponent(uri.split(',')[1]);
-    assert.match(svg,/viewBox="0 0 36 36"/);
+    const markup=galleryIllustration(id);
+    assert.match(markup,/^<img class="gal-tile-artwork" src="\.\/assets\/galeria-miniaturas\//);
+    assert.match(markup,/width="64" height="64"/);
+    assert.match(markup,/draggable="false"/);
+    const svg=readFileSync(new URL('../assets/galeria-miniaturas/'+id+'.svg',import.meta.url),'utf8');
+    assert.match(svg,/viewBox="0 0 96 96"/);
     assert.match(svg,/filter="url\(#paint\)"/);
     assert.doesNotMatch(svg,/<(?:rect|path)[^>]*fill="#(?:fff|ffffff)"[^>]*>/i,
-      'Sin rectángulos blancos que oculten el pergamino');
+      'El pergamino sigue visible detrás de la imagen');
     assert.ok((svg.match(/<(?:path|ellipse|circle|rect)\b/g)||[]).length>9,
-      'La miniatura debe ser una escena detallada, no un icono esquemático: '+id);
+      'La miniatura es una escena detallada, no un glifo: '+id);
     return svg;
   });
-  assert.equal(new Set(images).size,20,'Ninguna escena se repite');
-  assert.match(source,/MUSEUM_IMAGES\[id\]\|\|IMAGES\[id\]/,'Conservar el respaldo anterior');
+  assert.equal(new Set(images).size,20,'Ninguna pintura se repite');
+  assert.match(source,/PAINTED_PATH\+id\+'\.svg\?v='/,'Cada ilustración se solicita como archivo SVG real');
 });
 
 test('Las imágenes se muestran realmente en la web, no como muestras externas',()=>{
