@@ -1,7 +1,8 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-originales5";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-talde2";
+import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = s => s ? new Date(s).toLocaleString("eu-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Madrid"}) : "Pendiente";
@@ -162,11 +163,14 @@ function renderGallery(){
  const team=viewTeamId();
  const current=galleryStates.find(x=>x.team_id===team)||{};
  const canSkip=teacherPreview||!!current.completed_at;
+ const sharedDraft=(!demo&&!teacherPreview&&team&&user?.id)
+   ?createGallerySharedDraft(db,team):null;
  mountGallery($("#view"),{
    initial:teacherPreview?{}:current,preview:demo||teacherPreview,
    draftKey:(!demo&&!teacherPreview&&user?.id)?'inperialismoa:gallery:draft:'+user.id+':'+team:null,
    canSkip,navigationEnabled:teacherPreview,navigationPreview:teacherPreview,
    dossierProgress:()=>m1Pieces(team).size,
+   sharedDraft,onTeamCompleted:()=>refreshFromRealtime(),
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},
    onSubmit:async answers=>{
