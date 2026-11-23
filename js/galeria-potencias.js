@@ -1,5 +1,5 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261119-teacher-2';
-import { galleryIllustration } from './galeria-iconos-color.js?v=20261119-miniaturas2';
+import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-pinturas20';
 import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-talde1';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
