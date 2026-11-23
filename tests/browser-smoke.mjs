@@ -552,13 +552,14 @@ try{
      await page.locator('[data-gallery-action="reset"]').click();
      await page.waitForFunction(()=>document.querySelector('.gal-shared-banner')?.textContent?.includes('Sinkronizatuta')
        &&document.querySelectorAll('.gal-zone .gal-tile-placed').length===0);
+     assert.ok((await page.evaluate(()=>window.__smokeRpcCalls)).includes('gallery_draft_reset'),
+       'El reinicio se registra en el borrador compartido antes de recargar');
      await page.reload({waitUntil:'domcontentloaded'});
      await page.locator('[data-mission="1"]').first().click();
      await waitVisible(page,'.gal-hall');
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),0);
-     const serverCalls=await page.evaluate(()=>window.__smokeRpcCalls);
-     assert.ok(serverCalls.includes('gallery_draft_reset'),
-       'El reinicio tiene que guardarse para todo el equipo');
+     assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+       'La recarga del borrador vacío no debe escribir en Supabase');
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
