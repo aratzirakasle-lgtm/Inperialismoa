@@ -31,10 +31,15 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
  let touchDrag=null,suppressTouchClick=false,sharedSync=null,nativeDragSource=null;
+ // Misma luz ambiental para las cuatro vitrinas y las cinco zonas: sin pistas.
+ const setMuseumDragMode=active=>{
+   root.querySelector('.gal-hall')?.classList.toggle('gal-drag-mode',!!active);
+ };
  root.__galleryCleanup=()=>{
    touchDrag?.card?.classList.remove('gal-touch-source');
    touchDrag?.ghost?.remove();
    nativeDragSource?.classList.remove('gal-native-drag-source');
+   setMuseumDragMode(false);
    controller.abort();
    sharedSync?.stop();
  };
@@ -239,6 +244,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  // No calcula respuestas correctas ni modifica la comprobación de Supabase.
  const touchTargets=()=>root.querySelectorAll('.gal-touch-target');
  const cleanTouch=()=>{
+   setMuseumDragMode(false);
    touchDrag?.card?.classList.remove('gal-touch-source');
    touchDrag?.ghost?.remove();
    touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
@@ -258,6 +264,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(!d.moving&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<12)return;
    if(!d.moving){
      d.moving=true;
+     setMuseumDragMode(true);
      const ghost=d.card.cloneNode(true);
      ghost.removeAttribute('data-gallery-card');
      ghost.removeAttribute('draggable');
@@ -299,6 +306,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  // Arrastre con ratón: la cartela original se eleva y genera una copia de
  // arrastre centrada. No se modifican los destinos ni la corrección.
  const cleanNativeDrag=()=>{
+   setMuseumDragMode(false);
    nativeDragSource?.classList.remove('gal-native-drag-source');
    nativeDragSource=null;
    root.querySelectorAll('.gal-dragover').forEach(el=>el.classList.remove('gal-dragover'));
@@ -309,6 +317,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
      e.preventDefault();return;
    }
    nativeDragSource=card;
+   setMuseumDragMode(true);
    card.classList.add('gal-native-drag-source');
    e.dataTransfer.setData('text/plain',card.dataset.galleryCard);
    e.dataTransfer.effectAllowed='move';
