@@ -936,15 +936,26 @@ try{
          frame:outer.backgroundImage,
          border:outer.borderTopWidth,
          ornament:getComputedStyle(nav,'::before').backgroundImage,
+         navHeight:nav.getBoundingClientRect().height,
          coinWidth:num.getBoundingClientRect().width,
          wreath:getComputedStyle(num,'::after').backgroundImage,
          plaqueHeight:plaque.getBoundingClientRect().height,
+         navLinkCount:nav.querySelectorAll('.m1-nav-links a').length,
+         labelsVisible:[...nav.querySelectorAll('.m1-nav-label')].every(el=>{
+           const rect=el.getBoundingClientRect();
+           return rect.height>35&&el.scrollHeight<=el.clientHeight+2;
+         }),
          activeBackground:getComputedStyle(current).backgroundImage,
          rail:getComputedStyle(nav.querySelector('.m1-nav-links'),'::before').backgroundImage
        };
      });
-     assert.ok(relief.coinWidth>=85&&relief.plaqueHeight>=60,
-       'Los medallones y las placas deben tener suficiente presencia en ordenador');
+     assert.ok(relief.coinWidth>=54&&relief.coinWidth<=65&&
+       relief.plaqueHeight>=39&&relief.plaqueHeight<=57,
+       'Los medallones de escritorio deben ser compactos y las cartelas legibles');
+     assert.ok(relief.navHeight<=185&&relief.navHeight>=125,
+       'El friso debe dejar más pantalla al juego: altura '+relief.navHeight+'px');
+     assert.equal(relief.labelsVisible,true,'Ningún título museístico debe quedar cortado');
+     assert.equal(relief.navLinkCount,5);
      assert.match(relief.ornament,/m1-roleau-esquina\.svg/);
      assert.match(relief.wreath,/m1-laurel-bronce\.svg/);
      assert.match(relief.frame,/m1-textura-madera\.svg/);
@@ -957,7 +968,7 @@ try{
        'Deben publicarse los grabados, laureles y vetas usados en la barra');
      await mkdir('test-output',{recursive:true});
      await teacher.page.screenshot({
-       path:'test-output/m1-medallones-relieve-docente-escritorio.png',
+       path:'test-output/m1-medallones-compactos-docente-escritorio.png',
        fullPage:false,animations:'disabled'
      });
      await teacher.page.locator('.m1-route-stop[data-m1-step="4"]').click();
@@ -987,7 +998,7 @@ try{
        assert.equal(await page.locator('.m1-route-stop[aria-current="page"]').getAttribute('data-m1-step'),String(current));
        assert.equal(await page.locator('.m1-route-stop.is-done').count(),steps);
        if(steps===2)await page.screenshot({
-         path:'test-output/m1-medallones-relieve-alumno-tercer-ejercicio.png',
+         path:'test-output/m1-medallones-compactos-alumno-tercer-ejercicio.png',
          fullPage:false,animations:'disabled'
        });
        assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
