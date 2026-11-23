@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones2';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones3';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');
