@@ -149,6 +149,8 @@ async function open(role,path,viewport={width:1365,height:900}){
        }
        if(name==='mission1_draft_move_checked'){
          const exercise=Number(args?.p_exercise),row=m1Row(exercise);
+         if(row.revision!==Number(args?.p_expected_revision))
+           return {data:{status:'conflict',...m1Snapshot(exercise)},error:null};
          if(tables.mission1_exercise_completions.some(x=>x.exercise===exercise))
            return {data:{status:'completed',...m1Snapshot(exercise)},error:null};
          const old=row.placements[args.p_item]??null,to=args.p_to_slot??null;
