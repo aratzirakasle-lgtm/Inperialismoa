@@ -27,6 +27,9 @@ async function open(role,path,viewport={width:1365,height:900}){
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
      {id:'student1',display_name:'Alumno de pruebas',role:'student',team_id:'team1',class_id:'class1'}
    ];
+   // Servidor simulado por contexto; persiste en recargas sin contactar con Supabase.
+   let previousDraft=null;
+   try{previousDraft=JSON.parse(localStorage.getItem('__smokeGalleryTeamDraft')||'null')}catch{}
    const tables={
      profiles:people,
      teams:[{id:'team1',name:'Exploradores',class_id:'class1'}],
@@ -41,7 +44,20 @@ async function open(role,path,viewport={width:1365,height:900}){
      mission1_exercise_completions:[...(completedSteps>=3?[{team_id:'team1',exercise:3}]:[]),...(completedSteps>=5?[{team_id:'team1',exercise:5}]:[])],
      territory_claims:[],territory_markers:[],submissions:[],submission_assessments:[],
      mission_attempts:[],attempt_answers:[],empire_dossier_attempts:[],
-     bi_sistema_attempts:[],gallery_attempts:[],empire_dossier_clue_reads:[]
+     bi_sistema_attempts:[],gallery_attempts:[],empire_dossier_clue_reads:[],
+     gallery_team_drafts:previousDraft?[previousDraft]:[]
+   };
+   const saveMockDraft=()=>{
+     const row=tables.gallery_team_drafts[0]||null;
+     try{
+       if(row)localStorage.setItem('__smokeGalleryTeamDraft',JSON.stringify(row));
+       else localStorage.removeItem('__smokeGalleryTeamDraft');
+     }catch{}
+   };
+   const mockDraftState=()=>{
+     const row=tables.gallery_team_drafts[0];
+     return row?{placements:{...row.placements},revision:row.revision}
+       :{placements:{},revision:0};
    };
    const builder=table=>{
      let rows=(tables[table]||[]).slice();
@@ -68,8 +84,61 @@ async function open(role,path,viewport={width:1365,height:900}){
      rpc:async(name,args)=>{
        window.__smokeRpcCalls.push(name);
        if(role==='teacher')throw Error('No se permiten RPC en una simulación docente');
+       if(name==='gallery_draft_import'){
+         const prior=tables.gallery_team_drafts[0];
+         if(prior)return {data:{status:'exists',...mockDraftState()},error:null};
+         const placements={...(args?.p_placements||{})};
+         tables.gallery_team_drafts.push({
+           team_id:'team1',placements,revision:Object.keys(placements).length?1:0,
+           updated_at:new Date().toISOString()
+         });
+         saveMockDraft();
+         return {data:{status:'imported',...mockDraftState()},error:null};
+       }
+       if(name==='gallery_draft_move'){
+         let draft=tables.gallery_team_drafts[0];
+         if(!draft){
+           draft={team_id:'team1',placements:{},revision:0,updated_at:new Date().toISOString()};
+           tables.gallery_team_drafts.push(draft);
+         }
+         const id=args?.p_card_id;
+         const next=args?.p_to_zone??null;
+         const before=draft.placements[id]??null;
+         const expected=args?.p_expected_zone??null;
+         if(before===next)return {data:{status:'saved',...mockDraftState()},error:null};
+         if(before!==expected)return {data:{status:'conflict',...mockDraftState()},error:null};
+         if(next===null)delete draft.placements[id];else draft.placements[id]=next;
+         draft.revision++;
+         draft.updated_at=new Date().toISOString();
+         saveMockDraft();
+         return {data:{status:'saved',...mockDraftState()},error:null};
+       }
+       if(name==='gallery_draft_reset'){
+         let draft=tables.gallery_team_drafts[0];
+         if(!draft){
+           draft={team_id:'team1',placements:{},revision:0,updated_at:new Date().toISOString()};
+           tables.gallery_team_drafts.push(draft);
+         }
+         if(Number(args?.p_expected_revision)!==draft.revision)
+           return {data:{status:'conflict',...mockDraftState()},error:null};
+         draft.placements={};
+         draft.revision++;
+         draft.updated_at=new Date().toISOString();
+         saveMockDraft();
+         return {data:{status:'saved',...mockDraftState()},error:null};
+       }
+       if(name==='submit_shared_gallery_attempt'){
+         const draft=mockDraftState();
+         if(Number(args?.p_expected_revision)!==draft.revision)
+           return {data:{status:'conflict',completed:false,...draft},error:null};
+         if(Object.keys(draft.placements).length!==20)
+           return {data:{status:'incomplete',completed:false,...draft},error:null};
+         return {data:{status:'checked',completed:false,
+           correct:[],incorrect:[],locked:[],locked_positions:{},
+           attempt_count:1,revision:draft.revision},error:null};
+       }
        if(name==='submit_gallery_attempt')return {
-         data:{locked:[],locked_positions:{},incorrect:Object.keys(args?.p_answers||{}),completed:false,attempt_count:1},
+         data:{locked:[],locked_positions:{},correct:[],incorrect:[],completed:false,attempt_count:1},
          error:null
        };
        return {data:{completed:false},error:null}
@@ -95,6 +164,10 @@ async function waitVisible(page,selector){await page.locator(selector).first().w
 async function setCard(page,id,zone){
  await page.locator('[data-gallery-card="'+id+'"]').click();
  await page.locator('[data-gallery-zone="'+zone+'"] .gal-zone-heading').click();
+ await page.locator('[data-gallery-zone="'+zone+'"] [data-gallery-card="'+id+'"]')
+   .waitFor({state:'visible',timeout:20000});
+ await page.waitForFunction(()=>!document.querySelector('.gal-shared-banner')
+   ||document.querySelector('.gal-shared-banner').textContent.includes('Sinkronizatuta'));
 }
 function verifyCardsInsideZones(page){
  return page.evaluate(()=>{
