@@ -28,10 +28,11 @@ async function open(role,path,viewport={width:1365,height:900}){
      {id:'student1',display_name:'Alumno de pruebas',role:'student',team_id:'team1',class_id:'class1'}
    ];
    // Servidor simulado por contexto; persiste en recargas sin contactar con Supabase.
-   let previousDraft=null,previousBiDraft=null,previousBiState=null;
+   let previousDraft=null,previousBiDraft=null,previousBiState=null,previousM1Drafts=null;
    try{previousDraft=JSON.parse(localStorage.getItem('__smokeGalleryTeamDraft')||'null')}catch{}
    try{previousBiDraft=JSON.parse(localStorage.getItem('__smokeBiTeamDraft')||'null')}catch{}
    try{previousBiState=JSON.parse(localStorage.getItem('__smokeBiTeamState')||'null')}catch{}
+   try{previousM1Drafts=JSON.parse(localStorage.getItem('__smokeM1Drafts')||'null')}catch{}
    const tables={
      profiles:people,
      teams:[{id:'team1',name:'Exploradores',class_id:'class1'}],
@@ -45,6 +46,7 @@ async function open(role,path,viewport={width:1365,height:900}){
      mission_badges:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
      mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
      mission1_exercise_completions:[...(completedSteps>=3?[{team_id:'team1',exercise:3}]:[]),...(completedSteps>=5?[{team_id:'team1',exercise:5}]:[])],
+     mission1_team_drafts:Array.isArray(previousM1Drafts)?previousM1Drafts:[],
      territory_claims:[],territory_markers:[],submissions:[],submission_assessments:[],
      mission_attempts:[],attempt_answers:[],empire_dossier_attempts:[],
      bi_sistema_attempts:[],gallery_attempts:[],empire_dossier_clue_reads:[],
@@ -61,6 +63,16 @@ async function open(role,path,viewport={width:1365,height:900}){
      const row=tables.gallery_team_drafts[0];
      return row?{placements:{...row.placements},revision:row.revision}
        :{placements:{},revision:0};
+   };
+   const m1Row=exercise=>{
+     let row=tables.mission1_team_drafts.find(x=>x.exercise===exercise);
+     if(!row){row={team_id:'team1',exercise,placements:{},revision:0};tables.mission1_team_drafts.push(row)}
+     return row;
+   };
+   const saveM1=()=>localStorage.setItem('__smokeM1Drafts',JSON.stringify(tables.mission1_team_drafts));
+   const m1Snapshot=exercise=>{
+     const row=m1Row(exercise);
+     return {placements:{...row.placements},revision:row.revision};
    };
    const biDraft=()=>{
      let row=tables.bi_sistema_team_drafts[0];
@@ -134,6 +146,41 @@ async function open(role,path,viewport={width:1365,height:900}){
            completed:!!row.completed_at,locked:row.locked_ids,
            positions:row.locked_positions,challenge_locked:row.challenge_locked,
            correct:[],incorrect:[],attempt_count:1},error:null};
+       }
+       if(name==='mission1_draft_move'){
+         const exercise=Number(args?.p_exercise),row=m1Row(exercise);
+         if(tables.mission1_exercise_completions.some(x=>x.exercise===exercise))
+           return {data:{status:'completed',...m1Snapshot(exercise)},error:null};
+         const old=row.placements[args.p_item]??null,to=args.p_to_slot??null;
+         if(old!==(args.p_expected_slot??null))
+           return {data:{status:'conflict',...m1Snapshot(exercise)},error:null};
+         if(old!==to){
+           for(const [item,slot] of Object.entries(row.placements))if(slot===to&&item!==args.p_item)delete row.placements[item];
+           if(to===null)delete row.placements[args.p_item];
+           else row.placements[args.p_item]=to;
+           row.revision++;saveM1();
+         }
+         return {data:{status:'saved',...m1Snapshot(exercise)},error:null};
+       }
+       if(name==='mission1_draft_reset'){
+         const exercise=Number(args?.p_exercise),row=m1Row(exercise);
+         if(row.revision!==Number(args?.p_revision))
+           return {data:{status:'conflict',...m1Snapshot(exercise)},error:null};
+         if(Object.keys(row.placements).length){row.placements={};row.revision++;saveM1()}
+         return {data:{status:'saved',...m1Snapshot(exercise)},error:null};
+       }
+       if(name==='mission1_draft_submit'){
+         const exercise=Number(args?.p_exercise),row=m1Row(exercise);
+         if(row.revision!==Number(args?.p_revision))
+           return {data:{status:'conflict',...m1Snapshot(exercise)},error:null};
+         if(Object.keys(row.placements).length!==5)
+           return {data:{status:'incomplete',revision:row.revision},error:null};
+         const expected=exercise===3?{capital:'purpose',exploit:'resources',dominion:'outcome',conqueror:'metropole',conquered:'colony'}:
+           {inperialismoa:'1',koloniak:'2',metropoliak:'3',ustiapena:'4',nagusitasuna:'5'};
+         const correct=Object.keys(expected).every(key=>row.placements[key]===expected[key]);
+         if(correct&&!tables.mission1_exercise_completions.some(x=>x.exercise===exercise))
+           tables.mission1_exercise_completions.push({team_id:'team1',exercise});
+         return {data:{status:'checked',completed:correct,mission_completed:correct&&exercise===5,revision:row.revision},error:null};
        }
        if(name==='bi_sistema_draft_import'){
          const prior=tables.bi_sistema_team_drafts[0];
