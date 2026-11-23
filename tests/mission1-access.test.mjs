@@ -30,6 +30,25 @@ test('Los medallones del museo comparten estética, no permisos',()=>{
  }
  assert.match(src,/teacher\?teacherHref:studentHref/);
 });
+test('La navegación histórica conserva madera tallada, medallas ornamentadas y placas físicas',()=>{
+ const source=read('js/mission1-navigation.js');
+ for(const asset of [
+   'assets/m1-laurel-bronce.svg',
+   'assets/m1-roleau-esquina.svg',
+   'assets/m1-textura-madera.svg'
+ ]){
+   assert.match(read(asset),/<svg[^>]+xmlns=/,'El ornamento debe existir como recurso SVG: '+asset);
+   assert.ok(source.includes(asset.split('/').at(-1)),
+     'El recorrido debe utilizar el ornamento: '+asset);
+ }
+ assert.match(source,/m1-museum-route\\.m1-route-stop\\.is-current|m1-museum-route \\.m1-route-stop\\.is-current/);
+ assert.match(source,/\.m1-museum-route \.m1-route-stop\.is-locked\{opacity:1;/,
+   'Los medallones cerrados no deben transparentar la guía dorada');
+ assert.match(source,/m1-nav-links::before/,'Los cinco medallones se unen mediante un riel de latón');
+ assert.match(source,/conic-gradient/,'El aro reproduce bronce trabajado, no un fondo plano');
+ assert.match(source,/prefers-reduced-motion:reduce/);
+});
+
 test('La navegación libre exige un perfil de profesor',()=>{
  has('js/app.js',/accountIsTeacher\(\)&&hash==="#teacherpreviewgallery"/);
  has('js/app.js',/const available=id=>accountIsTeacher\(\)\|\|\(id===1\|\|id===2&&completed\(viewTeamId\(\),1\)\)/);
