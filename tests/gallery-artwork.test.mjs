@@ -32,7 +32,8 @@ test('No cambia la lógica del arrastre, selección y comprobación', () => {
   assert.match(gallery,/data-gallery-zone/);
   assert.match(gallery,/addEventListener\('dragstart'/);
   assert.match(gallery,/addEventListener\('drop'/);
-  assert.match(gallery,/const result=await onSubmit\(answers\)/);
+  assert.match(gallery,/sharedSync\?await sharedSync\.submit\(\):await onSubmit\(answers\)/);
+  assert.match(gallery,/Object\.keys\(answers\)\.length!==ITEMS\.length/);
 });
 
 test('Las ilustraciones transparentes son pequeñas y no reciben eventos de ratón', () => {
