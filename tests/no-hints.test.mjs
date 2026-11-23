@@ -20,7 +20,9 @@ test('Un error de corrección nunca activa una pista histórica',()=>{
   assert.match(gallery,/state\.feedback=state\.completed\s*\?/);
   assert.match(gallery,/Object\.keys\(answers\)\.length!==ITEMS\.length/);
   assert.doesNotMatch(gallery,/result\.incorrect|result\.correct|result\.locked_positions/);
-  assert.match(bi,/const wrong=data\.incorrect\|\|\[\]/);
+  assert.match(bi,/data\.phase_complete/);
+  assert.doesNotMatch(bi,/data\.incorrect|wrong=data\.incorrect|delete challengePending\[id\]/,
+    'El segundo ejercicio no expone pistas individuales al fallar');
   assert.match(fourth,/if\(result\.wrong\)\{return .*Erantzuna ez da zuzena\. Saiatu berriro/);
   assert.doesNotMatch(fourth,/Berrikusi pistak eta saiatu berriro/);
   assert.doesNotMatch(gallery,/if\(action==='check'\).*state\.help=true/);
@@ -35,6 +37,18 @@ test('Un error de corrección nunca activa una pista histórica',()=>{
   for(const text of [bi,third,fifth]){
     assert.match(text,/Ez da zuzena\./);
   }
+});
+
+test('La base de datos evalúa el bloque completo sin devolver errores por tarjeta',()=>{
+  const migration=read('supabase/migrations/20261123_mission1_safe_atomic_grading.sql');
+  assert.match(migration,/v_phase_complete := jsonb_array_length\(v_wrong\)=0/);
+  assert.match(migration,/v_remaining := CASE WHEN p_phase='classify'/);
+  assert.match(migration,/p_answers\)\)<>v_remaining/);
+  assert.match(migration,/'correct','\[\]'::jsonb,'incorrect','\[\]'::jsonb/);
+  assert.match(migration,/'completed',false,'incorrect','\[\]'::jsonb/);
+  const bi=read('js/bi-sistema-live.js');
+  assert.match(bi,/TRAITS.some\(t=>!locked.has\(t.id\)&&!pending\[t.id\]\)/);
+  assert.match(bi,/CASES.some\(c=>!challengeLocked.has\(c.id\)&&!challengePending\[c.id\]\)/);
 });
 
 test('Se conservan las fuentes primarias de los expedientes como parte del juego',()=>{
