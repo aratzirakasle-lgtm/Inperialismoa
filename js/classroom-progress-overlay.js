@@ -2,9 +2,14 @@
  * Lee solo una RPC autorizada por clase. No interfiere con los juegos.
  */
 import { renderMission1ClassProgress } from './classroom-progress.js?v=20261123-aula1';
+export function unmountClassroomProgressPanel(){
+ const old=document.querySelector('.m1-class-widget');
+ if(old?.__classProgressCleanup)old.__classProgressCleanup();
+ else old?.remove();
+}
 export function mountClassroomProgressPanel(client,teamId){
  if(!client||!teamId)return;
- document.querySelector('.m1-class-widget')?.remove();
+ unmountClassroomProgressPanel();
  if(!document.querySelector('link[href*="m1-classroom-progress.css"]')){
    const style=document.createElement('link');
    style.rel='stylesheet';
@@ -62,11 +67,15 @@ export function mountClassroomProgressPanel(client,teamId){
  window.addEventListener('m1:progress-changed',whenCompleted);
  document.addEventListener('visibilitychange',whenVisible);
  const timer=setInterval(()=>{if(!document.hidden)void refresh()},15000);
- window.addEventListener('pagehide',()=>{
+ function cleanup(){
+   if(!alive)return;
    alive=false;clearInterval(timer);
    window.removeEventListener('focus',whenVisible);
    window.removeEventListener('online',whenVisible);
    window.removeEventListener('m1:progress-changed',whenCompleted);
    document.removeEventListener('visibilitychange',whenVisible);
- },{once:true});
+   root.remove();
+ }
+ root.__classProgressCleanup=cleanup;
+ window.addEventListener('pagehide',cleanup,{once:true});
 }
