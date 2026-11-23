@@ -2,7 +2,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261123-trinko1";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
-import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-e2equipo2";
+import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-interv3a";
 
 const TRAITS=[
   ["army","Armadak pisu handia",""],
