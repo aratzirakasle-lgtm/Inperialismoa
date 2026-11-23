@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft1';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-trinko1';
 
 const message=document.querySelector('#message');
@@ -21,6 +22,7 @@ async function initialize(){
     const preview=profile.role==='teacher'&&previewRequested;
     if(!preview&&profile.role!=='student'){location.replace('./index.html');return}
     if(preview){
+      window.m1ThirdLocalMode='teacher';
       mountExerciseNav(3);
       addTeacherStageControls([
         ['Hasierako pantaila',()=>window.m1ThirdPreviewSetStage?.('start')],
@@ -42,13 +44,10 @@ async function initialize(){
     if(secondError||priorError)throw secondError||priorError;
     // Baimena bigarren ariketaren benetako amaierak soilik ematen du.
     if(!second?.completed_at){location.replace('./bi-sistema.html');return;}
-    window.m1ThirdProgress=async answers=>{
-      const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:3,p_answers:answers});
-      if(error)throw error;
-      if(data?.completed)markMission1NavCompleted(3);
-      return data;
-    };
     if(prior){
+      // Revisión opcional, local y sin alterar el historial del equipo.
+      window.m1ThirdLocalMode='practice';
+      window.m1ThirdProgress=async()=>({completed:true,already_completed:true,practice:true});
       status('Hirugarren ariketa jada gaindituta dago. Berriz egin edo laugarren ariketara joan zaitezke.');
       // Emaitza berriro egitea ez da derrigorrezkoa: lotura ikusgai utzi,
       // aurreko erantzunik edo zuzenketaren xehetasunik erakutsi gabe.
@@ -68,7 +67,35 @@ async function initialize(){
         bar.append(label,link);
         document.querySelector('.accessibility-note')?.after(bar);
       }
-    }else if(message)message.hidden=true;
+    }else{
+      if(message)message.hidden=true;
+      let sync;
+      const signal=document.createElement('span');
+      signal.className='m1-draft-state';
+      signal.setAttribute('role','status');
+      signal.setAttribute('aria-live','polite');
+      signal.style.cssText='margin-left:10px;color:#f3da9c;font-size:12px';
+      document.querySelector('.accessibility-note > div')?.append(signal);
+      const retry=document.createElement('button');
+      retry.type='button';retry.textContent='↻ Berriro konektatu';
+      retry.style.cssText='margin-left:8px;display:none';
+      retry.addEventListener('click',()=>void sync?.load());
+      document.querySelector('.accessibility-note')?.append(retry);
+      sync=createMission1DraftSync({
+        client,teamId:team,exercise:3,
+        onDraft:places=>window.m1ThirdDraftApply?.(places),
+        onStatus:(msg,kind)=>{
+          signal.textContent=' · '+msg;
+          retry.style.display=kind==='error'?'inline-block':'none';
+          window.m1ThirdDraftStatus?.(msg,kind);
+        },
+        onCompleted:()=>markMission1NavCompleted(3)
+      });
+      window.m1ThirdDraftSync=sync;
+      window.m1ThirdProgress=async()=>sync.submit();
+      window.addEventListener('pagehide',()=>sync.stop(),{once:true});
+      await sync.start();
+    }
     await mountStudentExerciseNav(3,client,team);
   }catch(e){
     console.error('Hirugarren ariketaren saioa',e);
