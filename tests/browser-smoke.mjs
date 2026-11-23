@@ -367,18 +367,26 @@ try{
      });
      assert.ok(paper.background.includes('gradient')&&
        paper.iconBackground==='none'&&paper.iconRadius==='0px'&&
-       paper.artworkSrc.startsWith('data:image/svg+xml'),
+       paper.artworkSrc.includes('/assets/galeria-miniaturas/')&&paper.artworkSrc.includes('.svg?v='),
        'El pergamino debe incluir imágenes pintadas transparentes, sin el antiguo medallón circular');
      const paintings=await page.locator('.gal-tray .gal-tile-artwork').evaluateAll(async imgs=>{
        await Promise.all(imgs.map(img=>img.decode().catch(()=>{})));
-       return imgs.map(img=>({loaded:img.complete&&img.naturalWidth>0,
-         src:img.getAttribute('src')}))
+       return imgs.map(img=>{
+         const rect=img.getBoundingClientRect();
+         return {loaded:img.complete&&img.naturalWidth>0,
+           width:rect.width,height:rect.height,
+           src:img.getAttribute('src')};
+       })
      });
-     assert.equal(paintings.length,20,'Las 20 cartelas muestran miniaturas históricas');
-     assert.ok(paintings.every(p=>p.loaded),'Las 20 ilustraciones SVG deben renderizarse');
+     assert.equal(paintings.length,20,'Las 20 cartelas deben mostrar una ilustración');
+     assert.ok(paintings.every(p=>p.loaded),'Las 20 imágenes SVG cargan desde assets');
+     assert.ok(paintings.every(p=>p.src.includes('/assets/galeria-miniaturas/')),
+       'Las ilustraciones no dependen de imágenes incrustadas en el JavaScript');
+     assert.ok(paintings.every(p=>p.width>=43&&p.height>=43),
+       'Las ilustraciones son suficientemente grandes para distinguirse');
      assert.equal(new Set(paintings.map(p=>p.src)).size,20,
-       'Cada concepto lleva una imagen distinta, no un icono repetido');
-     assert.equal(await page.locator('.gal-tray .gal-tile').count(),20);
+       'Cada concepto tiene una imagen diferente');
+          assert.equal(await page.locator('.gal-tray .gal-tile').count(),20);
      await page.screenshot({path:'test-output/m1-museo-cinematico-alumno-ordenador.png',fullPage:true,animations:'disabled'});
      const cabinets=await page.locator('.gal-vitrine').evaluateAll(nodes=>nodes.map(el=>el.getBoundingClientRect().bottom));
      assert.ok(Math.max(...cabinets)-Math.min(...cabinets)<5,
