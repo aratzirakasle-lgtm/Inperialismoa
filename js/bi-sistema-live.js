@@ -25,7 +25,30 @@ let phase="classify",completed=false,dragging=null,suppressClick=false;
 const slotAssignments=new Map();
 const stage=$("#bi-stage"),auth=$("#bi-auth-slots"),lib=$("#bi-lib-slots"),tray=$("#bi-concept-chips");
 let note=null,hintBox=null,challengeBox=null;
-const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check")};
+const controls={help:$("#bi-help"),reset:$("#bi-reset"),check:$("#bi-check"),undo:null,continue:null};
+let lastMove=null;
+const canUndo=()=>!!lastMove&&!busy&&!completed&&(!teamSync||teamSync.ready)&&
+  (!teamSync||teamSync.revision===lastMove.revision)&&
+  (lastMove.kind==='card'?(!locked.has(lastMove.id)&&(roomOf(lastMove.id)??null)===lastMove.to):
+    (!challengeLocked.has(lastMove.id)&&(challengePending[lastMove.id]??null)===lastMove.to));
+function remember(kind,id,from,to){
+ if(from!==to)lastMove={kind,id,from,to,revision:teamSync?.revision??null};
+}
+function undoLast(){
+ if(!canUndo()){
+   lastMove=null;announce('Taldearen egoera aldatu da. Azken aldaketa ezin da desegin.',true);paint();return;
+ }
+ const entry=lastMove;lastMove=null;
+ if(entry.kind==='card'){move(entry.id,entry.from??'tray');return}
+ if(teamSync){
+   busy=true;paint();
+   void teamSync.move(entry.id,entry.from,entry.to).finally(()=>{busy=false;paint()});
+ }else{
+   if(entry.from===null)delete challengePending[entry.id];
+   else challengePending[entry.id]=entry.from;
+   feedback='Azken hautaketa desegin da.';paint();
+ }
+}
 const labels={auth:"Sistema autoritarioak",lib:"Erregimen liberalak"};
 const roomOf=id=>positions[id]||pending[id]||null;
 function syncStatus(message,problem=false){
@@ -137,6 +160,8 @@ function paint(){
   controls.check.disabled=busy||completed||(teamSync&&!teamSync.ready)||phase!=="classify"||
     TRAITS.some(t=>!locked.has(t.id)&&!pending[t.id]);
   controls.reset.disabled=busy||(teamSync&&!teamSync.ready)||(!Object.keys(pending).length&&!Object.keys(challengePending).length);
+  if(controls.undo)controls.undo.disabled=!canUndo();
+  if(controls.continue)controls.continue.hidden=phase!=='challenge';
   controls.help.disabled=false;
   controls.check.querySelector("span").textContent=busy?"Egiaztatzen…":"Erantzunak egiaztatu";
   const selectedFlag=!!selected;
@@ -187,16 +212,18 @@ function move(id,target){
   selected=null;warning=false;feedback="";
   if(teamSync){
     busy=true;paint();
-    void teamSync.move(id,target==="tray"?null:target,expected).finally(()=>{
-      busy=false;paint();
-    });
-  }else paint();
+    void teamSync.move(id,target==="tray"?null:target,expected).then(ok=>{
+      if(ok)remember('card',id,expected,target==='tray'?null:target);
+      else lastMove=null;
+    }).finally(()=>{busy=false;paint()});
+  }else{remember('card',id,expected,target==='tray'?null:target);paint()}
 }
 function reset(){
   if(busy||(teamSync&&!teamSync.ready)||(!Object.keys(pending).length&&!Object.keys(challengePending).length))return;
   if(!teacherPreview&&!window.confirm(
     "Mahai honetako kokatu gabeko erantzunak ezabatuko dira; taldearen aurreko aurrerapena gordeta dago. Ziur zaudete?"
   ))return;
+  lastMove=null;
   if(teamSync){
     busy=true;paint();
     void teamSync.reset().finally(()=>{busy=false;paint()});
@@ -252,11 +279,11 @@ async function submit(answers,kind){
     // Fase osoa ondo dagoenean bakarrik gordetzen da multzo osoa.
     completed=!!data.completed;
     if(completed){
-      markMission1NavCompleted(2);
+      lastMove=null;markMission1NavCompleted(2);
       phase="complete";
       announce("Bikain! Bi sistema politikoak ulertu dituzue. Hurrengo aretoa prest dago.");
     } else if(data.phase_complete&&locked.size===7){
-      phase="challenge";
+      lastMove=null;phase="challenge";
       announce("Zazpi kontzeptuak kokatu dituzue! Orain bi egoerak aztertu.");
     } else if(!data.phase_complete){
       announce("Ez da zuzena. Berrikusi fase osoko erantzunak eta saiatu berriro.",true);
