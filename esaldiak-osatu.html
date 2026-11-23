@@ -151,7 +151,29 @@ async function check(){
     window.m1FifthSaving=false;if(!done)render();
   }
 }
-function init(){const tray=$('#choices');for(const [id] of words){const b=document.createElement('button');b.className='word';b.type='button';b.dataset.word=id;b.textContent=id;b.setAttribute('aria-pressed','false');b.addEventListener('click',e=>{if(b.dataset.suppress){e.preventDefault();return}select(id)});b.addEventListener('pointerdown',e=>{if(e.button!==0||done||occupied(id))return;drag={id,p:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId)});b.addEventListener('pointermove',e=>{if(!drag||drag.p!==e.pointerId)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8){drag.moved=true;b.classList.add('dragging')}});b.addEventListener('pointerup',e=>{if(!drag||drag.p!==e.pointerId)return;const moved=drag.moved;drag=null;b.classList.remove('dragging');if(moved){const target=$$('.hole').find(h=>{const r=h.getBoundingClientRect();return e.clientX>=r.left-20&&e.clientX<=r.right+20&&e.clientY>=r.top-20&&e.clientY<=r.bottom+20});if(target){place(id,target.dataset.slot);b.dataset.suppress='1'}else announce('Eraman hitza hutsunera.');setTimeout(()=>delete b.dataset.suppress,0)}});tray.append(b)}for(const el of $$('.hole')){el.addEventListener('click',()=>clickSlot(el.dataset.slot));el.addEventListener('dragover',e=>e.preventDefault());}$('#verify').addEventListener('click',check);$('#review').addEventListener('click',()=>{$('#success').hidden=true;$('#verify').disabled=false;$('#verify').setAttribute('aria-label','Ireki misioaren amaierako mezua');});render()}
+function init(){const tray=$('#choices');for(const [id] of words){const b=document.createElement('button');b.className='word';b.type='button';b.dataset.word=id;b.textContent=id;b.setAttribute('aria-pressed','false');b.addEventListener('click',e=>{if(b.dataset.suppress){e.preventDefault();return}select(id)});b.addEventListener('pointerdown',e=>{if(e.button!==0||done||occupied(id))return;drag={id,p:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId)});b.addEventListener('pointermove',e=>{if(!drag||drag.p!==e.pointerId)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8){drag.moved=true;b.classList.add('dragging')}});b.addEventListener('pointerup',e=>{if(!drag||drag.p!==e.pointerId)return;const moved=drag.moved;drag=null;b.classList.remove('dragging');if(moved){const target=$$('.hole').find(h=>{const r=h.getBoundingClientRect();return e.clientX>=r.left-20&&e.clientX<=r.right+20&&e.clientY>=r.top-20&&e.clientY<=r.bottom+20});if(target){place(id,target.dataset.slot);b.dataset.suppress='1'}else announce('Eraman hitza hutsunera.');setTimeout(()=>delete b.dataset.suppress,0)}});tray.append(b)}for(const el of $$('.hole')){el.addEventListener('click',()=>clickSlot(el.dataset.slot));el.addEventListener('dragover',e=>e.preventDefault());}$('#verify').addEventListener('click',check);$('#review').addEventListener('click',()=>{
+  if(window.m1FifthSavedReplay){
+    // Repetir el ejercicio es opcional y local: no borra el sello del equipo.
+    window.m1FifthSavedReplay=false;done=false;chosen=null;
+    for(const key of Object.keys(answer))slots.set(key,null);
+    $('#review').textContent='Erantzunak ikusi';
+    $('#success').hidden=true;
+    render();return;
+  }
+  $('#success').hidden=true;$('#verify').disabled=false;
+  $('#verify').setAttribute('aria-label','Ireki misioaren amaierako mezua');
+});render()}
+// Berriro sartzean, azken egiaztatutako amaiera agertu, 5 esaldiak
+// berriro betetzea eskatu gabe. Botoiak nahi izanez gero berriro jokatzeko balio du.
+window.m1FifthRestoreCompletion=()=>{
+  done=true;chosen=null;window.m1FifthSavedReplay=true;
+  $('#completion-title').textContent='✦ Lehen misioa osatuta!';
+  $('#completion-copy').textContent='Zorionak! Zuen taldeak bost ariketak gainditu ditu. Bigarren misioa desblokeatuta dago.';
+  $('#mission2-link').href='./index.html#mission2';
+  $('#mission2-link').textContent='2. misiora joan →';
+  $('#review').textContent='Ariketa berriz egin';
+  render();$('#success').hidden=false;
+};
 // Simulación exclusivamente visual; solo se expone desde la previsualización docente autenticada.
 window.m1FifthPreviewSetStage=stage=>{
  if(stage==='complete'){
