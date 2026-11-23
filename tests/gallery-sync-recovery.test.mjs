@@ -136,7 +136,7 @@ test('Una caída de red deja el movimiento pendiente y lo recupera al reconectar
     subscribe:()=>()=>{},
     move:async(id,to,expected)=>{
       if(failOnce){failOnce=false;throw Error('Red temporalmente desconectada')}
-      if(server.placements[id]??null!==expected)throw Error('CAS inconsistente');
+      if((server.placements[id]??null)!==expected)throw Error('CAS inconsistente');
       server.placements[id]=to;server.revision++;
       return {status:'saved',...snapshot()};
     }
