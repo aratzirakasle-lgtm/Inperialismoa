@@ -48,9 +48,11 @@
   min-width:0;
   flex:1 1 auto;
   text-align:left!important;
-  font-size:clamp(11px,.86vw,13.5px)!important;
+  /* Solo tarjetas todavía en la mesa: tipografía más legible.
+     Las ya colocadas en vitrinas conservan sus medidas anteriores. */
+  font-size:clamp(16px,1.18vw,19px)!important;
   font-weight:700;
-  line-height:1.24!important;
+  line-height:1.26!important;
   overflow-wrap:anywhere;
   text-wrap:pretty;
 }
@@ -116,13 +118,20 @@
    width:44px!important;height:44px!important;
  }
  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name{
-   font-size:11px!important;
+   font-size:15px!important;
+   line-height:1.28!important;
  }
  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon{
    flex-basis:32px!important;width:32px!important;height:32px!important;
  }
  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork{
    width:32px!important;height:32px!important;
+ }
+}
+@media(max-width:420px){
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name{
+   font-size:14px!important;
+   line-height:1.3!important;
  }
 }
 @media(prefers-reduced-motion:reduce){
