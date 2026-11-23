@@ -1,0 +1,33 @@
+/* Primer ejercicio, misión 1 — iluminación igual para TODOS los destinos.
+   Nunca depende de la respuesta ni de la zona correcta. */
+#app-shell.gallery-active .gal-hall.gal-drag-mode .gal-vitrine{
+  outline:1px solid #deb77465;
+  outline-offset:-2px;
+  box-shadow:0 0 0 1px #d4a96d77,0 0 12px #e5bb7652,
+    inset 0 0 11px #ffdda819,0 8px 11px #10080679!important;
+  transition:box-shadow .16s ease,outline-color .16s ease;
+}
+#app-shell.gallery-active .gal-hall.gal-drag-mode .gal-zone,
+#app-shell.gallery-active .gal-hall.gal-drag-mode .gal-zone.gal-dragover,
+#app-shell.gallery-active .gal-hall.gal-drag-mode .gal-zone.gal-touch-target{
+  border-color:#c59c60!important;
+  outline:1px solid #d2b07780!important;
+  outline-offset:0!important;
+  box-shadow:inset 0 0 0 1px #f6d6a64d,0 0 10px #edc78a37!important;
+  filter:none!important;
+  background-color:rgba(245,205,139,.035);
+  transition:box-shadow .16s ease,border-color .16s ease;
+}
+/* La bandeja conserva su interacción; tampoco señala aciertos. */
+#app-shell.gallery-active .gal-hall.gal-drag-mode .gal-tray.gal-touch-target{
+  outline:1px solid #d2b07780!important;
+  outline-offset:0!important;
+  border-color:#c59c60!important;
+  box-shadow:inset 0 0 0 1px #f6d6a64d,0 0 10px #edc78a37!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #app-shell.gallery-active .gal-hall.gal-drag-mode .gal-vitrine,
+ #app-shell.gallery-active .gal-hall.gal-drag-mode .gal-zone{
+   transition:none!important;
+ }
+}
