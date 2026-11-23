@@ -1,5 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { mountExerciseNav, addTeacherStageControls } from './mission1-navigation.js?v=20261119-teacher-2';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261123-medallones1';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');
@@ -45,6 +45,7 @@ async function initialize(){
     window.m1ThirdProgress=async answers=>{
       const {data,error}=await client.rpc('submit_mission1_exercise',{p_exercise:3,p_answers:answers});
       if(error)throw error;
+      if(data?.completed)markMission1NavCompleted(3);
       return data;
     };
     if(prior){
@@ -68,6 +69,7 @@ async function initialize(){
         document.querySelector('.accessibility-note')?.after(bar);
       }
     }else if(message)message.hidden=true;
+    await mountStudentExerciseNav(3,client,team);
   }catch(e){
     console.error('Hirugarren ariketaren saioa',e);
     fail('Ezin izan da taldearen egoera egiaztatu. Berritu orria edo itzuli hasierara.');
