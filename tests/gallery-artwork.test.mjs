@@ -16,12 +16,12 @@ test('Cada una de las veinte tarjetas conserva su concepto y tiene una ilustraci
     assert.match(image,new RegExp('src="\\./assets/galeria-miniaturas/'+id+'\\.svg\\?v='),id);
     assert.match(image,/aria-hidden="true"/,id);
     assert.match(image,/draggable="false"/,id);
-    assert.equal((image.match(/<img\\b/g)||[]).length,1,id);
+    assert.equal((image.match(/<img\b/g)||[]).length,1,id);
     const svg=readFileSync(new URL('../assets/galeria-miniaturas/'+id+'.svg',import.meta.url),'utf8');
     assert.match(svg,/viewBox="0 0 96 96"/,id);
     assert.match(svg,/fill="#[a-fA-F0-9]{6}"/,id+' debe mantener color');
     assert.doesNotMatch(svg,/<rect[^>]*fill="#(?:fff|ffffff)"/i,id+' sin fondo opaco');
-    assert.doesNotMatch(svg,/<(?:script|iframe|foreignObject|use)\\b/i,id);
+    assert.doesNotMatch(svg,/<(?:script|iframe|foreignObject|use)\b/i,id);
   }
 });
 
