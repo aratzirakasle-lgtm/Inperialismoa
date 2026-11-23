@@ -89,12 +89,15 @@ function paintScoreboard(){
 // no permite consultar directamente en las tablas privadas de cada juego.
 async function syncClassProgress(){
  if(!db||!user||demo)return;
+ const forUser=user.id;
  try{
    const {data,error}=await db.rpc('mission1_class_progress');
+   if(!user||user.id!==forUser)return; // Evitar mezclar datos de dos sesiones.
    if(error)throw error;
    classProgressRows=Array.isArray(data)?data:[];
    classProgressError=false;
  }catch(error){
+   if(!user||user.id!==forUser)return;
    console.warn('Taldeen aurrerapena ezin da eguneratu',error);
    classProgressError=true; // Sin datos: nunca se inventan sellos.
  }
@@ -350,7 +353,8 @@ async function refreshFromRealtime(){
  }catch(error){console.error("Actualización en tiempo real",error)}
  finally{realtimeRefreshing=false}
 }
-async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};await refreshData();
+async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");if(user?.id!==p.id){classProgressRows=[];classProgressError=false;}
+ user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};await refreshData();
  const hash=location.hash;
  if(accountIsTeacher()&&hash==="#teacherpreviewgallery"){const selected=teams.find(t=>t.name==="Exploradores")||teams[0];teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=1;galleryQuestionsOpen=false}
  else if(!accountIsTeacher()&&hash==="#mission2"&&available(2)){currentMission=2;galleryQuestionsOpen=false}
