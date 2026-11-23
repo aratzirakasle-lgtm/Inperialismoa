@@ -1,3 +1,4 @@
+import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261123-aula2';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[
@@ -436,12 +437,15 @@ export async function mountStudentExerciseNav(active,client,team){
  try{
    const complete=await loadMission1Completed(client,team);
    const nav=mountExerciseNav(active,{teacher:false,completedSteps:complete});
+   mountClassroomProgressPanel(client,team);
    return nav;
  }catch(err){
    console.warn('Misioko ibilbidea ezin izan da kargatu',err);
    // Falla cerrado: solo queda disponible la sala actual; los demás enlaces
    // no se inventan a partir de una marca histórica.
-   return mountExerciseNav(active,{teacher:false,completedSteps:Array.from({length:active-1},(_,i)=>i+1)});
+   const nav=mountExerciseNav(active,{teacher:false,completedSteps:Array.from({length:active-1},(_,i)=>i+1)});
+   mountClassroomProgressPanel(client,team);
+   return nav;
  }
 }
 export function markMission1NavCompleted(step){
@@ -452,6 +456,7 @@ export function markMission1NavCompleted(step){
  const holder=document.createElement('div');
  holder.innerHTML=exerciseNavMarkup(step,{teacher:false,completedSteps:done});
  nav.replaceWith(holder.firstElementChild);
+ window.dispatchEvent(new Event('m1:progress-changed'));
 }
 export function addTeacherStageControls(stages){
  const nav=document.querySelector('.m1-nav[data-m1-role="teacher"]');if(!nav)return;
