@@ -158,6 +158,7 @@ function renderGallery(){
    initial:teacherPreview?{}:current,preview:demo||teacherPreview,
    draftKey:(!demo&&!teacherPreview&&user?.id)?'inperialismoa:gallery:draft:'+user.id+':'+team:null,
    canSkip,navigationEnabled:teacherPreview,navigationPreview:teacherPreview,
+   dossierProgress:()=>m1Pieces(team).size,
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},
    onSubmit:async answers=>{
@@ -165,15 +166,12 @@ function renderGallery(){
      if(error)throw error;
      const {data:rows,error:stateError}=await db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at").eq("team_id",team);
      if(!stateError&&rows?.length)galleryStates=[...galleryStates.filter(x=>x.team_id!==team),rows[0]];
+     // Leer sellos registrados por Supabase tras la corrección; no inferirlos de la interfaz.
+     const {data:stamps,error:stampError}=await db.from("mission1_exercise_completions").select("team_id,exercise").eq("team_id",team);
+     if(!stampError)mission1FifthStates=[...mission1FifthStates.filter(x=>String(x.team_id)!==String(team)),...(stamps||[])];
      return data;
    }
  });
- const root=$("#view");
- if(root&&!root.querySelector(".m1-archive-open")){
-  const entry=document.createElement("div");entry.className="m1-archive-open";
-  entry.innerHTML='<button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+m1Pieces(team).size+' / 5</span></button>';
-  root.prepend(entry);
- }
 }
 function renderMission(){if(currentMission===2&&!demo){location.assign('./inperialismoaren-faktoreak.html'+(accountIsTeacher()?'?preview=1':''));return;}if(currentMission===1&&(!galleryQuestionsOpen||!demo)&&!isTeacher())return renderGallery();const m=missionById(currentMission);if(!m)return;const done=!isTeacher()&&completed(viewTeamId(),m.id);const qs=m.questions||[];const answered=qs.filter(q=>responses[q.id]!==undefined).length;$("#view").innerHTML='<div class="content-width">'+pageHeading("MISIOA "+String(m.id).padStart(2,"0")+" · INPERIALISMOAREN HISTORIA",m.title,m.intro,done?'✓ OSATUTA':'AURRERA EGITEKO % 100')+'<div class="card"><div class="eyebrow">HASI AURRETIK</div><h3>'+esc(m.subtitle)+'</h3><p class="card-sub">Irakurri arretaz. '+qs.length+' galdera daude. Guztiak asmatu behar dituzu; ondo erantzundakoak gordeko dira, eta berriro saia zaitezke.</p><div class="progressbar"><span style="width:'+(qs.length?100*qs.filter(q=>checkFeedback?.correct?.includes(q.id)).length/qs.length:0)+'%"></span></div><div class="card-sub">'+answered+' / '+qs.length+' erantzunda</div></div>'+qs.map((q,i)=>'<section class="card question-card"><div class="eyebrow">GALDERA '+String(i+1).padStart(2,"0")+'</div><div class="question-title">'+esc(q.text)+'</div><div class="question-options">'+q.options.map((opt,j)=>'<label class="option '+(checkFeedback?.correct?.includes(q.id)&&responses[q.id]===j?'locked-correct':'')+'"><input type="radio" name="question-'+esc(q.id)+'" value="'+j+'" data-question="'+esc(q.id)+'" '+(responses[q.id]===j?'checked':'')+' '+(checkFeedback?.correct?.includes(q.id)||done||isTeacher()?'disabled':'')+'><span>'+esc(opt)+'</span></label>').join("")+'</div>'+(checkFeedback?.correct?.includes(q.id)?'<div class="question-feedback ok">✓ Erantzun zuzena</div>':checkFeedback?.incorrect?.includes(q.id)?'<div class="question-feedback bad">Berrikusi erantzuna eta saiatu berriro.</div>':'')+'</section>').join("")+(done?'<div class="complete-banner"><h3>✓ Misioa gaindituta!</h3><p>Zuen taldeak erantzun guztiak asmatu ditu. Hurrengo misioa desblokeatu da.</p><button class="btn primary" data-mission="'+Math.min(m.id+1,6)+'">Espedizioarekin jarraitu →</button></div>':isTeacher()?'<div class="notice">Irakaslearen aurrebista. Erantzunak ez dira pantaila honetatik bidaltzen.</div>':'<div class="mission-actions"><button class="btn primary" id="check-mission" '+(answered!==qs.length?'disabled':'')+'>Egiaztatu '+qs.length+' erantzunak →</button><span class="card-sub">Saiakera mugagabeak · Aurrerapena gordeta</span></div>')+'</div>';
 }
