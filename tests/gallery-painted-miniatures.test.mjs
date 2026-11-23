@@ -46,6 +46,18 @@ test('Las imágenes se muestran realmente en la web, no como muestras externas',
   assert.match(css,/prefers-reduced-motion:reduce/);
 });
 
+test('Las letras grandes solo se aplican a cartelas sin emparejar',()=>{
+  assert.match(css,/\.gal-tray \.gal-tile:not\(\.gal-tile-placed\) \.gal-tile-name\{/);
+  assert.match(css,/font-size:clamp\(16px,1\.18vw,19px\)!important/);
+  assert.match(css,/font-size:15px!important/);
+  assert.match(css,/font-size:14px!important/);
+  const rules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter(([,selectors,body])=>/font-size\s*:/.test(body));
+  assert.ok(rules.filter(([,selectors])=>selectors.includes('.gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name')).length>=3);
+  assert.ok(!rules.some(([,selectors,body])=>selectors.includes('.gal-vitrine')&&/font-size\s*:/.test(body)),
+    'Las cartelas colocadas en las vitrinas no deben recibir el nuevo tamaño de letra');
+});
+
 test('El nuevo diseño mantiene intacta la bandera de Europa',()=>{
   assert.match(gallery,/eu:flagSvg\("eu"\)/);
   assert.doesNotMatch(gallery,/eu:europeSeal|gal-europe-emblem/);
