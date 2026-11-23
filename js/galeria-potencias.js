@@ -77,17 +77,47 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  });
  const count=()=>Object.keys(state.placements).length;
  const refocus=selector=>root.querySelector(selector)?.focus({preventScroll:true});
+ let lastPlacement=null;
+ const remember=(id,from,to)=>{if(from!==to)lastPlacement={id,from,to,revision:sharedSync?.revision??null}};
+ const canUndo=()=>!!lastPlacement&&!state.completed&&!state.busy&&
+  (!sharedSync||sharedSync.ready)&&
+  (state.placements[lastPlacement.id]??null)===lastPlacement.to&&
+  (!sharedSync||sharedSync.revision===lastPlacement.revision);
+ const undo=()=>{
+  if(!canUndo()){
+    lastPlacement=null;state.feedback='Azken mugimendua ezin da desegin: taldearen egoera aldatu da.';draw();return;
+  }
+  const item=lastPlacement;lastPlacement=null;
+  if(sharedSync){void sharedSync.move(item.id,item.from);return}
+  if(item.from===null)delete state.placements[item.id];else state.placements[item.id]=item.from;
+  state.selected=null;state.feedback='Azken mugimendua desegin da.';saveDraft();draw();
+ };
  const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy&&(!sharedSync||sharedSync.ready);
  const place=(id,zone)=>{
    if(!canMove(id)||!ZONES.has(zone))return;
-   if(sharedSync){sharedSync.move(id,zone);refocus('[data-gallery-zone="'+zone+'"]');return}
+   const from=state.placements[id]??null;
+   if(sharedSync){
+    void Promise.resolve(sharedSync.move(id,zone)).then(ok=>{
+      if(ok)remember(id,from,zone);else lastPlacement=null;
+      if(!state.busy)draw();
+    });
+    refocus('[data-gallery-zone="'+zone+'"]');return;
+   }
+   remember(id,from,zone);
    state.placements[id]=zone;state.selected=null;state.wrong.delete(id);
    state.feedback="";saveDraft();draw();refocus('[data-gallery-zone="'+zone+'"]');
  };
  const unplace=id=>{
    if(!canMove(id))return;
-   if(sharedSync){sharedSync.move(id,null);refocus('[data-gallery-tray]');return}
-   delete state.placements[id];
+   const from=state.placements[id]??null;
+   if(sharedSync){
+    void Promise.resolve(sharedSync.move(id,null)).then(ok=>{
+      if(ok)remember(id,from,null);else lastPlacement=null;
+      if(!state.busy)draw();
+    });
+    refocus('[data-gallery-tray]');return;
+   }
+   remember(id,from,null);delete state.placements[id];
    state.selected=null;
    state.feedback="";
    saveDraft();draw();refocus('[data-gallery-tray]');
@@ -97,6 +127,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(!preview&&count()>0&&!window.confirm(
      'Zuen taldearen mahai honetako kokapen guztiak ezabatuko dira. Beste taldekideen lana ere ukituko du. Ziur zaudete?'
    ))return;
+   lastPlacement=null;
    if(sharedSync){void sharedSync.reset();return}
    for(const id of Object.keys(state.placements))if(!state.locked.has(id))delete state.placements[id];
    state.selected=null;state.wrong.clear();state.feedback="";
@@ -191,7 +222,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    showcase('ru','ERRUSIA','🇷🇺','Errusiako tsarraren garaiko irudia',target('ru','Errusiaren ezaugarriak',4))+
    showcase('us','EEBB','🇺🇸','Estatu Batuetako irudi historikoa',target('us','EEBBko ezaugarriak',4))+
    showcase('jp','JAPONIA','🇯🇵','Japoniako eraikin historikoa',target('jp','Japoniaren ezaugarriak',3))+
-   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><span class="gal-tray-corner gal-tray-corner-tl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-tr" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-bl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-br" aria-hidden="true">❧</span><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+((state.previewFull||state.previewPartial)?'<span class="gal-all-placed">Diseinu-simulazioa: jatorrizko irudiak eta testuak, ausaz antolatuta. EZ DA EBAZPENA.</span>':tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-museum-tablefront" aria-hidden="true"><span></span></div><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':previewNotice||state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready)||Object.keys(state.placements).length!==ITEMS.length?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako bandera urdina gaur egungo Europar Batasunaren ikurra da, ez XIX. mendeko bandera. Gainerako banderak herrialdeak identifikatzeko erabiltzen dira. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
+   '</section><section class="gal-tray" data-gallery-tray tabindex="0" aria-label="Kontzeptuen erretilua: hautatutako txartela itzultzeko sakatu"><span class="gal-tray-corner gal-tray-corner-tl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-tr" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-bl" aria-hidden="true">❧</span><span class="gal-tray-corner gal-tray-corner-br" aria-hidden="true">❧</span><h2><span aria-hidden="true">▣</span> Lotu beharreko kontzeptuak <small>'+tray.length+' falta dira</small></h2><div class="gal-tile-grid">'+((state.previewFull||state.previewPartial)?'<span class="gal-all-placed">Diseinu-simulazioa: jatorrizko irudiak eta testuak, ausaz antolatuta. EZ DA EBAZPENA.</span>':tray.length?tray.map(x=>tile(x)).join(''):'<span class="gal-all-placed">Kontzeptu guztiak kokatu dituzue. Egiaztatu!</span>')+'</div></section><div class="gal-museum-tablefront" aria-hidden="true"><span></span></div><div class="gal-bottom-bar"><button type="button" class="gal-action gal-action-outline" data-gallery-action="hint">◉ Laguntza</button><span class="gal-status" role="status" aria-live="polite">'+esc(state.completed?'Zorionak! Kontzeptu guztiak zuzen kokatu dituzue.':previewNotice||state.feedback||(state.selected?'Txartela hautatuta. Aukeratu erakusleihoa edo itzuli mahaira. Esc: ezeztatu.':'Sakatu kontzeptu bat eta dagokion erakusleihoa, edo arrastatu txartela.'))+'</span><button type="button" class="gal-action gal-action-outline" data-gallery-action="undo" title="Desegin azken mugimendua" '+(!canUndo()?'disabled':'')+'>↶ Desegin</button><button type="button" class="gal-action gal-action-outline" data-gallery-action="reset" '+(state.busy?'disabled':'')+'>↻ Berrabiarazi</button><button type="button" class="gal-action gal-action-primary" data-gallery-action="check" '+(state.busy||state.completed||state.previewFull||state.previewPartial||(sharedSync&&!sharedSync.ready)||Object.keys(state.placements).length!==ITEMS.length?'disabled':'')+'>'+(state.busy?'Egiaztatzen…':'✓ Erantzunak egiaztatu')+'</button>'+(state.completed||canSkip?'<button type="button" class="gal-action gal-action-next" data-gallery-action="next">2. ariketa · Bi sistema, bi Europa →</button>':'')+'</div>'+(state.help?'<p class="gal-hint" role="note">Erabilera: aukeratu txartel bat eta sakatu kokatu nahi duzun eremua, edo arrastatu txartela bertara. Erantzunak «Egiaztatu» botoiarekin egiaztatzen dira.</p>':'')+'<p class="gal-critical">Ohar historikoa: Europako bandera urdina gaur egungo Europar Batasunaren ikurra da, ez XIX. mendeko bandera. Gainerako banderak herrialdeak identifikatzeko erabiltzen dira. Inperialismoak menderatzea eta ustiapena ekarri zituen.</p></div>';
    incremental.rememberFull();
  }
  async function check(){
@@ -238,7 +269,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  root.addEventListener('click',e=>{
    if(suppressTouchClick){suppressTouchClick=false;return}
    const action=e.target.closest('[data-gallery-action]')?.dataset.galleryAction;
-   if(action){if(action==='preview-start'&&navigationPreview){state.previewFull=false;state.previewPartial=false;state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-partial'&&navigationPreview){state.previewPartial=true;state.previewFull=false;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='preview-complete'&&navigationPreview){state.previewPartial=false;state.previewFull=true;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='sync-retry'&&sharedSync){void sharedSync.connect();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
+   if(action){if(action==='preview-start'&&navigationPreview){state.previewFull=false;state.previewPartial=false;state.completed=false;state.feedback='Irakaslearen simulazioa: hasierako pantaila.';state.locked=new Set();state.placements={};draw();return}if(action==='preview-partial'&&navigationPreview){state.previewPartial=true;state.previewFull=false;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='preview-complete'&&navigationPreview){state.previewPartial=false;state.previewFull=true;state.completed=false;state.locked=new Set();state.placements={};state.selected=null;state.feedback='';draw();return}if(action==='sync-retry'&&sharedSync){void sharedSync.connect();return}if(action==='back')onBack?.();if(action==='reset')reset();if(action==='undo')undo();if(action==='hint'){state.help=!state.help;draw()}if(action==='check')void check();if(action==='next'&&(state.completed||canSkip))onContinue?.();return}
    const card=e.target.closest('[data-gallery-card]');
    if(card){const id=card.dataset.galleryCard;if(canMove(id)){state.selected=state.selected===id?null:id;state.feedback='';draw();refocus('[data-gallery-card="'+id+'"]')}return}
    const zone=e.target.closest('[data-gallery-zone]');if(zone&&state.selected){place(state.selected,zone.dataset.galleryZone);return;}
