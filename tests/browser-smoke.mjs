@@ -1126,6 +1126,8 @@ try{
          await page.waitForFunction(()=>document.querySelector('.stage-wrap, .viewport').scrollLeft<30);
          await bar.getByRole('button',{name:'Panoramaren eskuinaldea ikusi'}).click();
          await page.waitForFunction(()=>document.querySelector('.stage-wrap, .viewport').scrollLeft>30);
+         assert.equal(await bar.getByRole('button',{name:'Panoramaren erdialdea ikusi'}).isEnabled(),true,
+           'Volver al centro debe ser posible incluso si el scroll ya está cerca del centro');
          await bar.getByRole('button',{name:'Panoramaren erdialdea ikusi'}).click();
          await page.waitForFunction(()=>{
            const el=document.querySelector('.stage-wrap, .viewport');
