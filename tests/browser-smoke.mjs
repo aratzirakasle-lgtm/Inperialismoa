@@ -570,6 +570,14 @@ try{
      await waitVisible(page,'.gal-hall');
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
+     // Cancelar no debe borrar el trabajo de todo el equipo.
+     page.once('dialog',d=>d.dismiss());
+     await page.locator('[data-gallery-action="reset"]').click();
+     assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
+     assert.equal((await page.evaluate(()=>window.__smokeRpcCalls))
+       .filter(name=>name==='gallery_draft_reset').length,0,
+       'La cancelación no debe escribir nada en Supabase');
+     page.once('dialog',d=>d.accept());
      await page.locator('[data-gallery-action="reset"]').click();
      await page.waitForFunction(()=>document.querySelector('.gal-shared-banner')?.textContent?.includes('Sinkronizatuta')
        &&document.querySelectorAll('.gal-zone .gal-tile-placed').length===0);
