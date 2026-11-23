@@ -1,3 +1,5 @@
+import { MUSEUM_SCENES_A } from './galeria-miniaturas-pintadas-a.js?v=1';
+import { MUSEUM_SCENES_B } from './galeria-miniaturas-pintadas-b.js?v=1';
 /* Ilustraciones SVG originales (20 conceptos de la galería).
  * Sin fondo, sin dependencias externas y sin elementos interactivos propios.
  * La única funcionalidad de cada tarjeta permanece en su botón contenedor. */
@@ -158,8 +160,19 @@ const IMAGES = Object.freeze(Object.fromEntries(Object.entries(ART).map(([id,dra
     '</filter></defs><g filter="url(#painted)">'+drawing+'</g></svg>';
   return [id,'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg).replace(/'/g,'%27')];
 })));
+/* Colección museográfica: 20 escenas ilustradas, distintas y con fondo transparente.
+ * Se conservan los SVG anteriores como respaldo. No cambia el juego. */
+const MUSEUM_SCENES=Object.freeze({...MUSEUM_SCENES_A,...MUSEUM_SCENES_B});
+const MUSEUM_DEFS="<defs>\n <linearGradient id=\"gilt\" x1=\"0%\" y1=\"0%\" x2=\"85%\" y2=\"95%\"><stop stop-color=\"#fff3bd\"/><stop offset=\".28\" stop-color=\"#e6bd6d\"/><stop offset=\".53\" stop-color=\"#a36e35\"/><stop offset=\".75\" stop-color=\"#e5ba69\"/><stop offset=\"1\" stop-color=\"#f7e3a2\"/></linearGradient>\n <linearGradient id=\"stone\" x1=\"4%\" y1=\"5%\" x2=\"95%\" y2=\"100%\"><stop stop-color=\"#fff1d3\"/><stop offset=\".43\" stop-color=\"#cbb494\"/><stop offset=\"1\" stop-color=\"#9b7e68\"/></linearGradient>\n <linearGradient id=\"velvet\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#d26e65\"/><stop offset=\".52\" stop-color=\"#983e4d\"/><stop offset=\"1\" stop-color=\"#522b3f\"/></linearGradient>\n <radialGradient id=\"ruby\" cx=\"35%\" cy=\"25%\" r=\"85%\"><stop stop-color=\"#f8a89a\"/><stop offset=\".35\" stop-color=\"#cc4859\"/><stop offset=\"1\" stop-color=\"#702e49\"/></radialGradient>\n <linearGradient id=\"navy\" x1=\"10%\" y1=\"3%\" x2=\"100%\" y2=\"100%\"><stop stop-color=\"#617f83\"/><stop offset=\".38\" stop-color=\"#384f62\"/><stop offset=\"1\" stop-color=\"#1e2f42\"/></linearGradient>\n <linearGradient id=\"skin\" x1=\"10%\" y1=\"5%\" x2=\"95%\" y2=\"100%\"><stop stop-color=\"#fff0d2\"/><stop offset=\".45\" stop-color=\"#d4a17a\"/><stop offset=\"1\" stop-color=\"#a26757\"/></linearGradient>\n <linearGradient id=\"sea\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"#bfd9cd\"/><stop offset=\".48\" stop-color=\"#75a5a6\"/><stop offset=\"1\" stop-color=\"#446d84\"/></linearGradient>\n <linearGradient id=\"paper\" x1=\"0\" y1=\"0\" x2=\"80%\" y2=\"100%\"><stop stop-color=\"#ffefc6\"/><stop offset=\".54\" stop-color=\"#efd5a7\"/><stop offset=\"1\" stop-color=\"#c79e6c\"/></linearGradient>\n <filter id=\"paint\" x=\"-25%\" y=\"-25%\" width=\"160%\" height=\"180%\"><feDropShadow dx=\"1.3\" dy=\"2.2\" stdDeviation=\"1.7\" flood-color=\"#241711\" flood-opacity=\".31\"/></filter>\n</defs>";
+const MUSEUM_IMAGES=Object.freeze(Object.fromEntries(Object.entries(MUSEUM_SCENES).map(([id,drawing])=>{
+  // Escena detallada 96 x 96 en lienzo SVG transparente; el encuadre de 36
+  // mantiene compatibilidad con las 20 cartelas y sus pruebas históricas.
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="96" height="96" fill="none" stroke-linecap="round" stroke-linejoin="round">'+
+    MUSEUM_DEFS+'<g transform="scale(.375)">'+drawing+'</g></svg>';
+  return [id,'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg).replace(/'/g,'%27')];
+})));
 export function galleryIllustration(id){
-  const src=IMAGES[id];
+  const src=MUSEUM_IMAGES[id]||IMAGES[id];
   if(!src)return '';
   return '<img class="gal-tile-artwork" src="'+src+'" alt="" width="24" height="24" draggable="false" decoding="async" aria-hidden="true">';
 }
