@@ -146,12 +146,14 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
      .subscribe();
    const focus=()=>{if(active&&!document.hidden)void load()};
    window.addEventListener('focus',focus);
+   window.addEventListener('online',focus);
    document.addEventListener('visibilitychange',focus);
    ticker=window.setInterval(()=>{if(active&&!document.hidden)void load()},12000);
    void load({importLegacy:true});
    return ()=>{
      active=false;if(ticker!==null)window.clearInterval(ticker);
      window.removeEventListener('focus',focus);
+     window.removeEventListener('online',focus);
      document.removeEventListener('visibilitychange',focus);
      if(channel)void client.removeChannel(channel);
    };
