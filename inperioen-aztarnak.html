@@ -268,6 +268,21 @@ function updateScene(){
   if(!d||!pin)return '';
   return `<path d="${d}" class="route-glow"/><path d="${d}" class="route-lit"/><circle cx="${pin[0]}" cy="${pin[1]}" r="7" class="route-dot"/>`;
  }).join('');
+ const nextCase=CASES.find(c=>!solved.has(c.id));
+ const nextBtn=$('#next-pending-dossier');
+ if(nextCase&&authenticated){
+   if(!nextBtn){
+     const button=document.createElement('button');
+     button.id='next-pending-dossier';button.type='button';button.className='conclusion-button';
+     button.textContent='Hurrengo espedientea →';
+     button.title='Ireki oraindik argitu gabeko hurrengo espedientea';
+     button.addEventListener('click',()=>{
+       const next=CASES.find(c=>!solved.has(c.id));
+       if(next)openCase(next.id);
+     });
+     $('.progress-plate').append(button);
+   }
+ }else nextBtn?.remove();
  const existing=$('#review-conclusion');
  if(solved.size===4&&!existing){
   const b=document.createElement('button');b.id='review-conclusion';b.type='button';b.className='conclusion-button';b.textContent=finalComplete?'✓ Ondorioa berrikusi':'Azken ondorioa ireki →';
@@ -364,12 +379,20 @@ function openCase(id){
  <p id="choice-locked-note" class="dossier-locked-note">${ready?'Erantzuna aukeratu eta egiaztatu.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`}</p>
  <div id="case-feedback">${feedbackMessage(lastResult[id])}</div></div></div>
  <div class="dossier-footer"><button type="button" class="dossier-exit" data-close-dossier>← Globora itzuli</button><div class="dossier-progress">Taldearen aurrerapena: ${solved.size} / 4 <span class="dots">${CASES.map(c=>`<span class="dot ${solved.has(c.id)?'done':''}"></span>`).join('')}</span></div></div>
- <div class="dossier-nav"><button type="button" id="dossier-prev" ${num===0?'disabled':''}>← Aurrekoa</button><span>${num+1} / ${CASES.length} espediente</span><button type="button" id="dossier-next" ${num===CASES.length-1?'disabled':''}>Hurrengoa →</button></div>
+ <div class="dossier-nav"><button type="button" id="dossier-prev" ${num===0?'disabled':''}>← Aurrekoa</button><span>${num+1} / ${CASES.length} espediente</span><button type="button" id="dossier-next" ${num===CASES.length-1?'disabled':''}>Hurrengoa →</button><button type="button" id="dossier-next-pending">Hurrengo argitu gabea →</button></div>
  </section>`;
  for(const close of modal.querySelectorAll('[data-close-dossier]'))close.addEventListener('click',closeModal);
  const prev=modal.querySelector('#dossier-prev'),next=modal.querySelector('#dossier-next');
  if(prev)prev.addEventListener('click',()=>openCase(CASES[num-1]?.id));
  if(next)next.addEventListener('click',()=>openCase(CASES[num+1]?.id));
+ const pendingNext=modal.querySelector('#dossier-next-pending');
+ if(pendingNext){
+   pendingNext.hidden=!solvedIt||!CASES.some(c=>!solved.has(c.id));
+   pendingNext.addEventListener('click',()=>{
+     const nextUnsolved=CASES.find(c=>!solved.has(c.id));
+     if(nextUnsolved)openCase(nextUnsolved.id);
+   });
+ }
  for(const input of modal.querySelectorAll('input[name="choice"]'))input.addEventListener('change',()=>{
   if(clueCount(id)!==3||solved.has(id)||saving){input.checked=false;return;}
   selected[id]=input.value;lastResult[id]=null;
@@ -413,7 +436,7 @@ function showFinal(){
  <p>${escapeHtml(f.question)}</p>
  ${finalComplete?'<p>Lau metropoliak eta koloniak lotu dituzue. Hausnarketa historikoa ere ongi osatu duzue.</p>':`<fieldset class="dossier-choices" style="border:0;padding:0">${f.options.map(op=>`<label class="dossier-choice"><input name="reflection" type="radio" value="${escapeHtml(op.id)}" ${selected.final===op.id?'checked':''}><span>${escapeHtml(op.label)}</span></label>`).join('')}</fieldset><div class="dossier-actionrow" style="justify-content:center"><button id="reflection-verify" class="dossier-action" type="button" ${selected.final?'':'disabled'}>Erantzuna egiaztatu</button></div>`}
  <div id="final-feedback">${feedbackMessage(lastResult.final)}</div>
- ${finalComplete?'<a href="./esaldiak-osatu.html'+(teacherPreview?'?preview=1':'')+'">5. ariketa · Esaldiak osatu →</a>':''}
+ ${finalComplete?'<a href="./esaldiak-osatu.html'+(teacherPreview?'?preview=1':'')+'">5. ariketa · Azken zigilua →</a>':''}
  </div></section>`;
  $('#dossier-close').addEventListener('click',closeModal);
  for(const inp of modal.querySelectorAll('input[name="reflection"]'))inp.addEventListener('change',()=>{selected.final=inp.value;lastResult.final=null;$('#reflection-verify').disabled=false;$('#final-feedback').innerHTML=''});
