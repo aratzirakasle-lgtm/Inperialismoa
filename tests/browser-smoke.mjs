@@ -467,7 +467,47 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
- await scenario('Galería: mejora visual antes/después, foco de teclado y controles sin pistas',async()=>{
+ await scenario('Galería: arrastre táctil ilumina los destinos y limpia al soltar',async()=>{
+    const {page,context,errors}=await open('student','index.html#mission1gallery',{width:390,height:844});
+    try{
+      await waitVisible(page,'.gal-hall');
+      await page.waitForFunction(()=>
+        document.querySelector('.gal-shared-banner')?.textContent?.includes('Sinkronizatuta'));
+      const sample=await page.evaluate(()=>{
+        const card=document.querySelector('[data-gallery-card="eu_army"]');
+        const zone=document.querySelector('[data-gallery-zone="eu_auth"]');
+        const hall=document.querySelector('.gal-hall');
+        const original=document.elementFromPoint;
+        card.setPointerCapture=()=>{};
+        card.hasPointerCapture=()=>false;
+        document.elementFromPoint=()=>zone;
+        const fire=(type,x,y)=>card.dispatchEvent(new PointerEvent(type,{
+          bubbles:true,cancelable:true,pointerType:'touch',pointerId:61,
+          clientX:x,clientY:y,isPrimary:true
+        }));
+        let active=false,hover=false;
+        try{
+          fire('pointerdown',20,20);
+          fire('pointermove',85,100);
+          active=hall.classList.contains('gal-drag-mode');
+          hover=zone.classList.contains('gal-touch-target');
+          fire('pointerup',85,100);
+        }finally{
+          document.elementFromPoint=original;
+        }
+        return {active,hover,cleared:!hall.classList.contains('gal-drag-mode'),
+          ghostGone:!document.querySelector('.gal-touch-ghost'),
+          hoverGone:!zone.classList.contains('gal-touch-target')};
+      });
+      assert.ok(Object.values(sample).every(Boolean),
+        'Iluminación uniforme durante el arrastre y limpieza al soltar');
+      await page.locator('[data-gallery-zone="eu_auth"] [data-gallery-card="eu_army"]')
+        .waitFor({state:'visible',timeout:15000});
+      assert.equal(await page.locator('.gal-wrong').count(),0);
+      assert.deepEqual(errors,[]);
+    }finally{await context.close()}
+  });
+  await scenario('Galería: mejora visual antes/después, foco de teclado y controles sin pistas',async()=>{
    const {page,context,errors}=await open('teacher','index.html#teacherpreviewgallery',{width:1672,height:941});
    try{
      await waitVisible(page,'.gal-hall');
