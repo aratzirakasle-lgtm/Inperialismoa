@@ -75,8 +75,11 @@ test('El modo alumno sigue registrando; el profesor sigue previsualizando',()=>{
  const fourth=read('inperioen-aztarnak.html');
  assert.match(gallery,/sharedSync\?await sharedSync\.submit\(\):await onSubmit\(answers\)/);
  assert.match(gallery,/if\(preview\)/);
- assert.match(third,/rpc\('submit_mission1_exercise'/);
- assert.match(fifth,/rpc\('submit_mission1_exercise'/);
+ assert.match(third,/createMission1DraftSync/);
+ assert.match(third,/window\.m1ThirdProgress=async\(\)=>sync\.submit\(\)/);
+ assert.match(fifth,/createMission1DraftSync/);
+ assert.match(fifth,/window\.m1FifthProgress=async\(\)=>sync\.submit\(\)/);
+ assert.match(read('js/mission1-draft-sync.js'),/mission1_draft_submit/);
  assert.match(fourth,/rpc\('check_empire_dossier_with_reading'/);
  assert.match(third,/role==='teacher'&&previewRequested/);
  assert.match(fifth,/role==='teacher'&&previewRequested/);
