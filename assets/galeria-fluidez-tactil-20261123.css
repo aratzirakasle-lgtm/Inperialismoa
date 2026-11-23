@@ -1,0 +1,28 @@
+/* Fase 2 · puntero táctil sin interferencias con el desplazamiento del navegador.
+   Solo las cartelas son arrastrables; el fondo mantiene el scroll vertical.
+   Sin información de aciertos ni luz diferente entre vitrinas. */
+@media (pointer:coarse){
+  #app-shell.gallery-active .gal-hall .gal-tile:not(.gal-touch-ghost){
+    touch-action:none!important;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  #app-shell.gallery-active .gal-zone,
+  #app-shell.gallery-active .gal-tray{
+    touch-action:pan-y;
+  }
+}
+#app-shell.gallery-active .gal-tile.gal-touch-ghost{
+  will-change:left,top;
+  pointer-events:none!important;
+}
+#app-shell.gallery-active [data-gallery-card]:focus-visible,
+#app-shell.gallery-active [data-gallery-zone]:focus-visible{
+  scroll-margin-block:12px;
+}
+@media (prefers-reduced-motion:reduce){
+  #app-shell.gallery-active .gal-hall .gal-tile{
+    scroll-behavior:auto!important;
+  }
+}
