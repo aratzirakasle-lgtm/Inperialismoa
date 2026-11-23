@@ -1,6 +1,6 @@
 import { exerciseNavMarkup } from './mission1-navigation.js?v=20261123-trinko1';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-visibles2';
-import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-interv2a';
+import { createGallerySyncController } from './galeria-sync-controller.js?v=20261123-interv3a';
 import { createGalleryIncremental } from './galeria-dom-incremental.js?v=20261123-fluidez2';
 /* Museo · Potentzia handien galeria. Las claves de respuestas residen solo en Supabase. */
 export const ITEMS=[
