@@ -193,10 +193,10 @@ function style(){
  .m1-museum-route .m1-route-stop.is-current .m1-nav-num{
    background:
      radial-gradient(ellipse at 35% 18%,#b45d44 0%,#7c3027 30%,#521d1b 76%,#280c10 100%) padding-box,
-     conic-gradient(from 0deg,#e8b25e,#fff6c4 40deg,#af742f 88deg,#f5d98d 150deg,#8f4f18 238deg,#ffe8a3 290deg,#e8b25e) border-box;
+     conic-gradient(from 0deg,#b87532,#f3cf7e 40deg,#956025 88deg,#e0ad58 150deg,#854819 238deg,#f2cb75 290deg,#b87532) border-box;
    color:#fff1c3;
    box-shadow:0 0 0 2px #50311c,0 0 0 5px #e1b55d,
-     0 0 0 7px #ffe19c8c,0 0 22px 7px #f4b24c87,
+     0 0 0 7px #dfa74e8c,0 0 17px 5px #e9aa476b,
      0 5px 12px #000b,inset 0 2px 9px #ffd3a364,inset 0 -6px 10px #250908a1;
  }
  .m1-museum-route .m1-route-stop.is-current .m1-nav-label{
@@ -219,7 +219,7 @@ function style(){
      inset 0 1px 3px #b4e8a65d;
    font:bold 20px/1 Georgia,serif;color:#f9ebc0;
  }
- .m1-museum-route .m1-route-stop.is-locked{opacity:.72;filter:saturate(.6);cursor:not-allowed}
+ .m1-museum-route .m1-route-stop.is-locked{opacity:1;filter:saturate(.55) brightness(.75);cursor:not-allowed}
  .m1-museum-route .m1-route-stop.is-locked .m1-nav-num{
    background:radial-gradient(circle at 25% 13%,#625a4e,#39332d 57%,#25231e) padding-box,
      conic-gradient(#9c896e,#c0aa82,#554434,#98866a,#554434,#9c896e) border-box;
