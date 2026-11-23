@@ -6,7 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,writeFile} from 'node:fs/promises';
 
 const BASE=process.env.SMOKE_BASE_URL||'http://127.0.0.1:8765/';
 const browser=await chromium.launch({headless:true,channel:process.env.SMOKE_USE_CHROME==='1'?'chrome':undefined,args:['--no-sandbox']});
@@ -1100,6 +1100,68 @@ try{
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Auditoría visual: salas 3–5 y transición, móvil/escritorio, sin escribir datos',async()=>{
+   const rooms=[
+     {n:3,path:'inperialismoaren-definizioa.html?preview=1'},
+     {n:4,path:'inperioen-aztarnak.html?preview=1'},
+     {n:5,path:'esaldiak-osatu.html?preview=1'}
+   ];
+   const audited=[];
+   await mkdir('test-output',{recursive:true});
+   for(const room of rooms){
+     for(const layout of [
+       {name:'escritorio',width:1365,height:900},
+       {name:'movil',width:390,height:844}
+     ]){
+       const {page,context,errors}=await open('teacher',room.path,{width:layout.width,height:layout.height});
+       try{
+         await waitVisible(page,'.m1-nav');
+         await page.evaluate(()=>document.fonts.ready);
+         await page.waitForTimeout(250);
+         const slug='m1-auditoria-ejercicio'+room.n+'-'+layout.name;
+         await page.screenshot({path:'test-output/'+slug+'-inicio.png',fullPage:true,animations:'disabled'});
+         async function inspect(stage){
+           const m=await page.evaluate(()=>{
+             const d=document.documentElement;
+             const width=d.clientWidth;
+             const picture=[...document.images].filter(im=>im.getBoundingClientRect().width>5);
+             const interactive=[...document.querySelectorAll('button,a,input,select')].filter(el=>{
+               const r=el.getBoundingClientRect();const c=getComputedStyle(el);
+               return r.width>0&&r.height>0&&c.visibility!=='hidden'&&c.display!=='none';
+             });
+             return {
+               viewport:width,documentWidth:d.scrollWidth,
+               overflowPx:Math.max(0,d.scrollWidth-width),
+               visibleImages:picture.length,
+               unloadedImages:picture.filter(im=>!im.complete||im.naturalWidth===0).map(im=>im.getAttribute('src')),
+               controls:interactive.length,
+               tinyControls:interactive.filter(el=>{
+                 const r=el.getBoundingClientRect();return r.width<28||r.height<28;
+               }).slice(0,12).map(el=>({name:(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,40),
+                 w:Math.round(el.getBoundingClientRect().width),h:Math.round(el.getBoundingClientRect().height)})),
+               teacherNav:document.querySelectorAll('.m1-nav-links a').length,
+               teacherPreview:!!document.querySelector('.m1-teacher-label')
+             };
+           });
+           audited.push({exercise:room.n,device:layout.name,stage,...m});
+         }
+         await inspect('inicio');
+         const finish=page.getByRole('button',{name:'Amaierako pantaila'});
+         if(await finish.count()){
+           await finish.click();
+           await page.waitForTimeout(120);
+           await page.screenshot({path:'test-output/'+slug+'-final.png',fullPage:true,animations:'disabled'});
+           await inspect('final');
+         }
+         assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
+           'Las capturas docentes no deben enviar respuestas reales');
+         assert.deepEqual(errors,[]);
+       }finally{await context.close()}
+     }
+   }
+   await writeFile('test-output/m1-auditoria-mediciones.json',JSON.stringify(audited,null,2));
+   console.log('AUDITORÍA M1: '+JSON.stringify(audited));
  });
 }finally{await browser.close()}
 console.log('Resultado: '+passed+' pruebas superadas; '+failed+' fallidas');
