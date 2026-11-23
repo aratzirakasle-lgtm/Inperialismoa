@@ -258,7 +258,10 @@ function updateScene(){
   btn.disabled=!authenticated;
  }
  $('#progress-locks').innerHTML=CASES.map(c=>`<span class="${solved.has(c.id)?'solved':''}" title="${escapeHtml(c.country)}">${solved.has(c.id)?'✓':'♙'}</span>`).join('');
- $('#progress-count').textContent=`${solved.size} / 4 espediente`;
+ $('#progress-count').textContent=`Taldeak argitutakoak: ${solved.size} / 4`;
+ const readTotal=CASES.reduce((n,c)=>n+clueCount(c.id),0);
+ const readLabel=$('#personal-reading-count');
+ if(readLabel)readLabel.textContent=`Zuk irakurritako agiriak: ${readTotal} / 12`;
  $('#scene-message').textContent=loading?'Saioa egiaztatzen…':finalComplete?'Ikerketa gaindituta! Lau loturak identifikatu dituzue.':solved.size===4?'Lau lotura historikoak aurkitu dituzue. Orain azken hausnarketa.':solved.size?`${solved.size}/4 lotura egiaztatuta. Jarraitu ikertzen.`:'Aukeratu herrialde bat eta kontsultatu artxiboko pistak.';
  $('#verified-routes').innerHTML=[...solved].map(id=>{
   const d=LINES[id],pin=PINS[id];
@@ -321,6 +324,7 @@ async function markClueRead(id,index){
   }
   clueSet(id).add(index);
   updateClueUnlock(id);
+  updateScene();
  }catch(error){
   console.error('Pista gordetzeko errorea:',error);
   if(currentCase===id){
@@ -330,9 +334,12 @@ async function markClueRead(id,index){
 }
 async function loadClueReads(){
  if(teacherPreview||!studentId)return;
- const {data,error}=await client.from('empire_dossier_clue_reads').select('case_id,clue_no').eq('student_id',studentId);
+ const {data,error}=await client.from('empire_dossier_clue_reads').select('case_id,clue_no')
+  .eq('student_id',studentId).eq('team_id',teamId);
  if(error)throw error;
  for(const item of data||[])if(byId[item.case_id]&&item.clue_no>=1&&item.clue_no<=3)clueSet(item.case_id).add(item.clue_no-1);
+ updateScene();
+ if(currentCase)updateClueUnlock(currentCase);
 }
 function openCase(id){
  const c=byId[id];if(!c||!authenticated)return;
@@ -351,12 +358,12 @@ function openCase(id){
  <div class="dossier-detail"><p class="dossier-guide" id="dossier-description">Ireki hiru agiriak metropolia aukeratu aurretik.</p>
  <h3 class="dossier-question" aria-label="${escapeHtml(c.question)}">${escapeHtml(shortQuestion)}</h3>
  <div class="dossier-clues">${c.clues.map((clue,i)=>`<details data-clue="${i}" data-read="${clueSet(id).has(i)}"><summary data-ico="${types[i]}"><span>${escapeHtml(clue.title)}</span><span class="clue-seen">${clueSet(id).has(i)?'✓ Irakurrita':'Ireki'}</span></summary><p>${escapeHtml(clue.text)}</p></details>`).join('')}</div>
- <div class="dossier-clue-status" aria-live="polite"><span id="clue-progress-label">${count}/3</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
+ <div class="dossier-clue-status" aria-live="polite"><span style="font-size:.85em;margin-right:8px">Zuk irakurritakoak</span><span id="clue-progress-label">${count}/3</span><div class="reading-dots" aria-hidden="true">${c.clues.map((_,i)=>`<span class="reading-dot ${clueSet(id).has(i)?'done':''}"></span>`).join('')}</div></div>
  <fieldset class="dossier-choices" aria-label="Metropolia aukeratu" style="border:0;margin:0;padding:0">${c.choices.map(choice=>`<label class="dossier-choice ${!ready||solvedIt?'is-locked':''} ${solvedIt&&selected[id]===choice.id?'is-verified':''}"><input type="radio" name="choice" value="${escapeHtml(choice.id)}" ${selected[id]===choice.id?'checked':''} ${!ready||solvedIt||saving?'disabled':''}><span class="choice-flag">${powerFlagSvg(choice.id)}</span><span class="choice-name">${escapeHtml(choice.name)}</span></label>`).join('')}</fieldset>
  <div class="dossier-actionrow"><button type="button" id="dossier-verify" class="dossier-action" ${!ready||solvedIt||!selected[id]||saving?'disabled':''}>${solvedIt?'✓ Egiaztatuta':'Erantzuna egiaztatu'}</button></div>
  <p id="choice-locked-note" class="dossier-locked-note">${ready?'Erantzuna aukeratu eta egiaztatu.':`Lehenik hiru agiriak ireki behar dituzu (${count}/3).`}</p>
  <div id="case-feedback">${feedbackMessage(lastResult[id])}</div></div></div>
- <div class="dossier-footer"><button type="button" class="dossier-exit" data-close-dossier>← Globora itzuli</button><div class="dossier-progress">Ikerketaren aurrerapena: ${solved.size} / 4 <span class="dots">${CASES.map(c=>`<span class="dot ${solved.has(c.id)?'done':''}"></span>`).join('')}</span></div></div>
+ <div class="dossier-footer"><button type="button" class="dossier-exit" data-close-dossier>← Globora itzuli</button><div class="dossier-progress">Taldearen aurrerapena: ${solved.size} / 4 <span class="dots">${CASES.map(c=>`<span class="dot ${solved.has(c.id)?'done':''}"></span>`).join('')}</span></div></div>
  <div class="dossier-nav"><button type="button" id="dossier-prev" ${num===0?'disabled':''}>← Aurrekoa</button><span>${num+1} / ${CASES.length} espediente</span><button type="button" id="dossier-next" ${num===CASES.length-1?'disabled':''}>Hurrengoa →</button></div>
  </section>`;
  for(const close of modal.querySelectorAll('[data-close-dossier]'))close.addEventListener('click',closeModal);
@@ -458,9 +465,18 @@ async function init(){
    client.channel('empire-dossier-'+teamId).on('postgres_changes',{
     event:'*',schema:'public',table:'empire_dossier_team_state',filter:'team_id=eq.'+teamId
    },()=>void loadState().catch(()=>{})).subscribe();
-   window.addEventListener('focus',()=>void loadState().catch(()=>{}));
+   window.addEventListener('focus',()=>{
+    void loadState().catch(console.error);
+    void loadClueReads().catch(console.error);
+   });
   }
   authenticated=true;loading=false;updateScene();
+  if(!$('#personal-reading-count')){
+   const personal=document.createElement('small');personal.id='personal-reading-count';
+   personal.style.cssText='display:block;margin-top:4px;color:#ead1a5;font:600 11px/1.3 Georgia,serif';
+   $('.progress-plate')?.append(personal);
+  }
+  updateScene();
   if(teacherPreview){
    mountExerciseNav(4);
    addTeacherStageControls([
