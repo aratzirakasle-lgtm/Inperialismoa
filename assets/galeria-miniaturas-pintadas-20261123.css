@@ -1,102 +1,130 @@
-/* Primera misión · 20 miniaturas figurativas en SVG transparente.
-   Arte de museo (no insignias genéricas), con tamaño legible en vitrina y mesa.
-   No afecta a los destinos ni a la evaluación del ejercicio. */
-#app-shell.gallery-active .gal-tile .gal-tile-icon {
+/* Misión 1 · Galería de potencias · láminas figurativas transparentes.
+   Revisión: las imágenes pasan de 39 px a 60 px sobre la mesa, sin medallón
+   circular, conservando el pergamino y las 20 cartelas originales. */
+#app-shell.gallery-active .gal-tile .gal-tile-icon{
   flex-shrink:0;
   box-sizing:border-box;
-  padding:0!important;
   border:0!important;
   border-radius:0!important;
   background:transparent!important;
   box-shadow:none!important;
-  overflow:visible!important;
-  display:grid;
+  padding:0!important;
+  display:grid!important;
   place-items:center;
+  overflow:visible!important;
   pointer-events:none!important;
 }
-#app-shell.gallery-active .gal-tile .gal-tile-icon .gal-tile-artwork {
-  display:block;
+#app-shell.gallery-active .gal-tile .gal-tile-icon .gal-tile-artwork{
+  display:block!important;
   object-fit:contain;
   object-position:center;
-  overflow:visible;
-  max-width:100%;
-  max-height:100%;
+  overflow:visible!important;
+  max-width:100%!important;
+  max-height:100%!important;
   pointer-events:none!important;
-  transform-origin:center bottom;
-  filter:drop-shadow(0 1px 1px #29160e6c)
-         drop-shadow(0 2px 2px #36271a35);
   image-rendering:auto;
+  filter:drop-shadow(0 2px 1.5px rgba(36,19,9,.40))
+         drop-shadow(0 4px 3px rgba(47,27,11,.22));
 }
-#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) {
-  min-height:57px;
-  padding:6px 8px;
-  gap:5px;
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){
+  min-height:83px!important;
+  padding:8px 10px!important;
+  gap:8px!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
 }
-#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
-  flex:0 0 39px!important;
-  width:39px!important;
-  height:39px!important;
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+  flex:0 0 60px!important;
+  width:60px!important;
+  height:60px!important;
 }
-#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon .gal-tile-artwork {
-  width:39px!important;
-  height:39px!important;
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon .gal-tile-artwork{
+  width:60px!important;
+  height:60px!important;
 }
-#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed {
-  min-height:42px;
-  gap:5px;
-}
-#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
-  flex:0 0 28px!important;
-  width:28px!important;
-  height:28px!important;
-}
-#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon .gal-tile-artwork {
-  width:28px!important;
-  height:28px!important;
-}
-#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name,
-#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-name {
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name{
+  position:relative;
+  z-index:1;
   min-width:0;
-  overflow-wrap:break-word;
+  flex:1 1 auto;
+  text-align:left!important;
+  font-size:clamp(11px,.86vw,13.5px)!important;
+  font-weight:700;
+  line-height:1.24!important;
+  overflow-wrap:anywhere;
+  text-wrap:pretty;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed{
+  min-height:49px!important;
+  padding:5px 7px!important;
+  gap:7px!important;
+  align-items:center;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon{
+  flex:0 0 38px!important;
+  width:38px!important;
+  height:38px!important;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon .gal-tile-artwork{
+  width:38px!important;
+  height:38px!important;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-name{
+  min-width:0;
+  white-space:normal!important;
+  line-height:1.22;
+  overflow-wrap:anywhere;
 }
 #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed):hover:not(:disabled) .gal-tile-artwork,
-#app-shell.gallery-active .gal-tile.gal-selected .gal-tile-artwork {
-  filter:drop-shadow(0 1px 1px #24190d66)
-         drop-shadow(0 2px 4px #be8b3b73)
+#app-shell.gallery-active .gal-tile.gal-selected .gal-tile-artwork{
+  filter:drop-shadow(0 2px 2px rgba(38,25,12,.40))
+         drop-shadow(0 4px 4px rgba(184,133,49,.38))
          brightness(1.05);
 }
-@media(max-width:1320px) {
-  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
-    flex-basis:33px!important;width:33px!important;height:33px!important;
-  }
-  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork {
-    width:33px!important;height:33px!important;
-  }
+@media(max-width:1320px){
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){min-height:76px!important}
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+   flex-basis:52px!important;width:52px!important;height:52px!important;
+ }
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork{
+   width:52px!important;height:52px!important;
+ }
 }
-@media(max-width:900px) {
-  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
-    flex-basis:25px!important;width:25px!important;height:25px!important;
-  }
-  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork {
-    width:25px!important;height:25px!important;
-  }
+@media(max-width:1000px){
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){min-height:72px!important}
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+   flex-basis:46px!important;width:46px!important;height:46px!important;
+ }
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork{
+   width:46px!important;height:46px!important;
+ }
+ #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon{
+   flex-basis:34px!important;width:34px!important;height:34px!important;
+ }
+ #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork{
+   width:34px!important;height:34px!important;
+ }
 }
-@media(max-width:680px) {
-  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
-    flex-basis:36px!important;width:36px!important;height:36px!important;
-  }
-  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork {
-    width:36px!important;height:36px!important;
-  }
+@media(max-width:680px){
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed){
+   min-height:74px!important;padding:7px!important;gap:6px!important;
+ }
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon{
+   flex-basis:44px!important;width:44px!important;height:44px!important;
+ }
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork{
+   width:44px!important;height:44px!important;
+ }
+ #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name{
+   font-size:11px!important;
+ }
+ #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon{
+   flex-basis:32px!important;width:32px!important;height:32px!important;
+ }
+ #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork{
+   width:32px!important;height:32px!important;
+ }
 }
-@media(max-width:480px) {
-  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
-    flex-basis:29px!important;width:29px!important;height:29px!important;
-  }
-  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork {
-    width:29px!important;height:29px!important;
-  }
-}
-@media(prefers-reduced-motion:reduce) {
-  #app-shell.gallery-active .gal-tile .gal-tile-artwork {transition:none!important}
+@media(prefers-reduced-motion:reduce){
+ #app-shell.gallery-active .gal-tile .gal-tile-artwork{transition:none!important}
 }
