@@ -13,7 +13,7 @@ export function mountClassroomProgressPanel(client,teamId){
  if(!document.querySelector('link[href*="m1-classroom-progress.css"]')){
    const style=document.createElement('link');
    style.rel='stylesheet';
-   style.href='./assets/m1-classroom-progress.css?v=20261123-aula2';
+   style.href='./assets/m1-classroom-progress.css?v=20261123-aula3';
    document.head.append(style);
  }
  const root=document.createElement('aside');
