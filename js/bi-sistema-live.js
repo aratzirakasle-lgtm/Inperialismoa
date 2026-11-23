@@ -35,6 +35,9 @@ function syncStatus(message,problem=false){
     syncBanner.querySelector('.bi-sync-retry').hidden=!!teamSync?.ready&&!problem;
   }
   if(problem)announce(message,true);
+  // Tras conectar o reconectar, volver a habilitar los botones cuando
+  // el borrador de equipo está disponible (no solo al mover una tarjeta).
+  if(teamSync&&!busy)paint();
 }
 function applySharedDraft(data){
   pending=Object.fromEntries(Object.entries(data.placements||{})
