@@ -194,7 +194,7 @@ function paintChallengeChoice(caseId){
    el.setAttribute('aria-pressed',String(active));
  }
  const check=challengeBox.querySelector('#bi-check-cases');
- if(check)check.disabled=busy||teacherPreview||(teamSync&&!teamSync.ready)
+ if(check)check.disabled=busy||(teamSync&&!teamSync.ready)
    ||CASES.some(c=>!challengeLocked.has(c.id)&&!challengePending[c.id]);
 }
 function move(id,target){
