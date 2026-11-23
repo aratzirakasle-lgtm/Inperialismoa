@@ -73,6 +73,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
      if(!alive)return;
      await handleResult(result);
      ready=true;
+     return result?.status==='saved';
    }catch(e){
      if(alive)fail(e,'Konexio-arazoa. Azken aldaketa gailuan gordeta dago. Sakatu «Berriro konektatu».');
    }finally{
@@ -89,7 +90,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
    state.feedback='';
    const op={id,zone,expected};
    setPending(op);saveLocal();
-   void commitOperation(op);
+   return commitOperation(op);
  }
  async function reset(){
    if(!alive||!ready||state.busy||state.completed)return;
