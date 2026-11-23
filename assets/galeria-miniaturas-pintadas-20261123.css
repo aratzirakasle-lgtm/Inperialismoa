@@ -1,0 +1,102 @@
+/* Primera misión · 20 miniaturas figurativas en SVG transparente.
+   Arte de museo (no insignias genéricas), con tamaño legible en vitrina y mesa.
+   No afecta a los destinos ni a la evaluación del ejercicio. */
+#app-shell.gallery-active .gal-tile .gal-tile-icon {
+  flex-shrink:0;
+  box-sizing:border-box;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  display:grid;
+  place-items:center;
+  pointer-events:none!important;
+}
+#app-shell.gallery-active .gal-tile .gal-tile-icon .gal-tile-artwork {
+  display:block;
+  object-fit:contain;
+  object-position:center;
+  overflow:visible;
+  max-width:100%;
+  max-height:100%;
+  pointer-events:none!important;
+  transform-origin:center bottom;
+  filter:drop-shadow(0 1px 1px #29160e6c)
+         drop-shadow(0 2px 2px #36271a35);
+  image-rendering:auto;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) {
+  min-height:57px;
+  padding:6px 8px;
+  gap:5px;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
+  flex:0 0 39px!important;
+  width:39px!important;
+  height:39px!important;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon .gal-tile-artwork {
+  width:39px!important;
+  height:39px!important;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed {
+  min-height:42px;
+  gap:5px;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
+  flex:0 0 28px!important;
+  width:28px!important;
+  height:28px!important;
+}
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon .gal-tile-artwork {
+  width:28px!important;
+  height:28px!important;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-name,
+#app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-name {
+  min-width:0;
+  overflow-wrap:break-word;
+}
+#app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed):hover:not(:disabled) .gal-tile-artwork,
+#app-shell.gallery-active .gal-tile.gal-selected .gal-tile-artwork {
+  filter:drop-shadow(0 1px 1px #24190d66)
+         drop-shadow(0 2px 4px #be8b3b73)
+         brightness(1.05);
+}
+@media(max-width:1320px) {
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
+    flex-basis:33px!important;width:33px!important;height:33px!important;
+  }
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork {
+    width:33px!important;height:33px!important;
+  }
+}
+@media(max-width:900px) {
+  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
+    flex-basis:25px!important;width:25px!important;height:25px!important;
+  }
+  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork {
+    width:25px!important;height:25px!important;
+  }
+}
+@media(max-width:680px) {
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-icon {
+    flex-basis:36px!important;width:36px!important;height:36px!important;
+  }
+  #app-shell.gallery-active .gal-tray .gal-tile:not(.gal-tile-placed) .gal-tile-artwork {
+    width:36px!important;height:36px!important;
+  }
+}
+@media(max-width:480px) {
+  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-icon {
+    flex-basis:29px!important;width:29px!important;height:29px!important;
+  }
+  #app-shell.gallery-active .gal-vitrine .gal-tile.gal-tile-placed .gal-tile-artwork {
+    width:29px!important;height:29px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  #app-shell.gallery-active .gal-tile .gal-tile-artwork {transition:none!important}
+}
