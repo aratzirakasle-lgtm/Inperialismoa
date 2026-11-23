@@ -41,7 +41,8 @@ test('La navegación histórica conserva madera tallada, medallas ornamentadas y
    assert.ok(source.includes(asset.split('/').at(-1)),
      'El recorrido debe utilizar el ornamento: '+asset);
  }
- assert.match(source,/m1-museum-route\\.m1-route-stop\\.is-current|m1-museum-route \\.m1-route-stop\\.is-current/);
+ assert.ok(source.includes('.m1-museum-route .m1-route-stop.is-current .m1-nav-num'),
+   'La sala activa debe conservar el medallón rojo con aro dorado');
  assert.match(source,/\.m1-museum-route \.m1-route-stop\.is-locked\{opacity:1;/,
    'Los medallones cerrados no deben transparentar la guía dorada');
  assert.match(source,/m1-nav-links::before/,'Los cinco medallones se unen mediante un riel de latón');
