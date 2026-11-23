@@ -79,7 +79,7 @@ function serverFor(exercise){
 }
 async function open(role,path,server){
  const context=await browser.newContext({viewport:{width:1365,height:900},reducedMotion:'reduce'});
- await context.route(/^https?:\\/\\/(?!127\\.0\\.0\\.1|localhost)/,route=>{
+ await context.route(url=>url.protocol.startsWith('http')&&!['127.0.0.1','localhost'].includes(url.hostname),route=>{
   const url=route.request().url();
   return route.fulfill({status:200,contentType:url.includes('.css')?'text/css':'application/javascript',body:''});
  });
