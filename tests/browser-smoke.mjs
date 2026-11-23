@@ -162,6 +162,8 @@ async function scenario(name,fn){
 }
 async function waitVisible(page,selector){await page.locator(selector).first().waitFor({state:'visible',timeout:20000})}
 async function setCard(page,id,zone){
+ await page.waitForFunction(()=>!document.querySelector('.gal-shared-banner')
+   ||document.querySelector('.gal-shared-banner').textContent.includes('Sinkronizatuta'));
  await page.locator('[data-gallery-card="'+id+'"]').click();
  await page.locator('[data-gallery-zone="'+zone+'"] .gal-zone-heading').click();
  await page.locator('[data-gallery-zone="'+zone+'"] [data-gallery-card="'+id+'"]')
@@ -378,8 +380,15 @@ try{
      assert.match(help,/aukeratu txartel bat|arrastatu txartela/i);
      assert.doesNotMatch(help,/pista:|tsarrak|meiji|monarkaren/i);
      await setCard(page,'eu_auth_head','eu_liberal');
+     assert.equal(await page.locator('[data-gallery-action="check"]').isDisabled(),true,
+       'La corrección exige colocar las veinte cartelas');
+     const rest=await page.locator('.gal-tray [data-gallery-card]').evaluateAll(cards=>
+       cards.map(card=>card.dataset.galleryCard));
+     const zones=['eu_auth','eu_liberal','ru','us','jp'];
+     for(let i=0;i<rest.length;i++)await setCard(page,rest[i],zones[i%zones.length]);
+     assert.equal(await page.locator('[data-gallery-action="check"]').isEnabled(),true);
      await page.locator('[data-gallery-action="check"]').click();
-     await page.waitForFunction(()=>document.querySelector('.gal-status')?.textContent?.includes('Ez da zuzena'));
+     await page.waitForFunction(()=>document.querySelector('.gal-status')?.textContent?.includes('Ariketa ez dago gaindituta'));
      assert.equal(await page.locator('.gal-wrong').count(),0,'Un error no debe destacar respuestas incorrectas');
      assert.doesNotMatch(await page.locator('.gal-status').innerText(),/\d+.*birkokatu|\d+.*kontzeptu.*zuzendu/i);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
@@ -541,6 +550,8 @@ try{
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
      await page.locator('[data-gallery-action="reset"]').click();
+     await page.waitForFunction(()=>document.querySelector('.gal-shared-banner')?.textContent?.includes('Sinkronizatuta')
+       &&document.querySelectorAll('.gal-zone .gal-tile-placed').length===0);
      await page.reload({waitUntil:'domcontentloaded'});
      await page.locator('[data-mission="1"]').first().click();
      await waitVisible(page,'.gal-hall');
