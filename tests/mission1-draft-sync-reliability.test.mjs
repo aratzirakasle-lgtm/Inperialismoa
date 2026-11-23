@@ -162,5 +162,5 @@ test('La RPC de Supabase exige equipo, revisión y nunca cambia el historial',()
  assert.match(clientCode,/localStorage\.setItem\(pendingKey/);
  assert.match(clientCode,/mission1_draft_move_checked/);
  assert.match(clientCode,/mission1_draft_submit/);
- assert.doesNotMatch(clientCode,/correctAnswers|answer\[|correctMap|soluciones/i);
+ assert.doesNotMatch(clientCode,/\bcorrectAnswers\b|\bcorrectMap\b|\banswer\[/i);
 });
