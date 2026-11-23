@@ -1,0 +1,41 @@
+name: Captura visual de misión 1 completada
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/capture-mission-complete.mjs'
+      - '.github/workflows/capture-mission-complete.yml'
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar Chromium
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Capturar vista completada (Supabase simulado)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mision1-capture.log 2>&1 &
+          node tests/capture-mission-complete.mjs
+      - name: Guardar imagen como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: captura-mision1-completada
+          path: docs/capturas/mision-1-osatuta-ikasle-aurrebista.png
+          if-no-files-found: ignore
+      - name: Publicar captura en el repositorio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/capturas/mision-1-osatuta-ikasle-aurrebista.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Capture first mission completion from real rendered museum UI"
+            git push
+          fi
