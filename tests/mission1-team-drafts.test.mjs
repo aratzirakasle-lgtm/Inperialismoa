@@ -11,7 +11,14 @@ function environment(){
    listeners.get(event).add(listener);
  };
  const remove=(event,listener)=>listeners.get(event)?.delete(listener);
- globalThis.window={addEventListener:add,removeEventListener:remove};
+ const store=new Map();
+ globalThis.localStorage={
+  getItem:k=>store.get(k)??null,
+  setItem:(k,v)=>store.set(k,String(v)),
+  removeItem:k=>store.delete(k)
+ };
+ globalThis.window={addEventListener:add,removeEventListener:remove,
+  setInterval(){return 1},clearInterval(){}};
  globalThis.document={hidden:false,addEventListener:add,removeEventListener:remove};
  return {emit:event=>listeners.get(event)?.forEach(listener=>listener())};
 }
@@ -44,7 +51,9 @@ function fakeServer(){
      rpcCalls.push(name);
      if(offline)return {data:null,error:{message:'network'}};
      const n=args.p_exercise,current=row(n);
-     if(name==='mission1_draft_move'){
+     if(name==='mission1_draft_move_checked'){
+       if(current.revision!==Number(args.p_expected_revision))
+         return {data:{status:'conflict',...snapshot(n)},error:null};
        const before=current.placements[args.p_item]??null;
        if(before!==(args.p_expected_slot??null))
          return {data:{status:'conflict',...snapshot(n)},error:null};
@@ -81,13 +90,16 @@ test('Dos alumnos sincronizan colocaciones independientes y el reinicio obsoleto
  environment();
  const server=fakeServer(),a=[],b=[],events=[];
  const first=createMission1DraftSync({client:server.client,teamId:'test-team',
-   exercise:3,onDraft:p=>a.push(p),onStatus:(msg,kind)=>events.push(kind)});
+   exercise:3,userId:'student-a',onDraft:p=>a.push(p),onStatus:(msg,kind)=>events.push(kind)});
  const second=createMission1DraftSync({client:server.client,teamId:'test-team',
-   exercise:3,onDraft:p=>b.push(p),onStatus:(msg,kind)=>events.push(kind)});
+   exercise:3,userId:'student-b',onDraft:p=>b.push(p),onStatus:(msg,kind)=>events.push(kind)});
  await first.start();await second.start();
  try{
    assert.equal(first.ready,true);
    assert.equal(await first.move('capital','resources',null),true);
+   assert.equal(await second.move('exploit','purpose',null),false,
+     'No se acepta el movimiento con revisión antigua');
+   await second.load();
    assert.equal(await second.move('exploit','purpose',null),true);
    assert.equal(await first.reset(),false,'El reinicio antiguo debe sufrir conflicto');
    assert.equal(a.at(-1).exploit,'purpose');
@@ -103,7 +115,7 @@ test('Dos alumnos sincronizan colocaciones independientes y el reinicio obsoleto
 });
 test('Desconexión deshabilita cambios; reconexión conserva borrador sin pistas',async()=>{
  const env=environment(),server=fakeServer(),states=[],reports=[];
- const draft=createMission1DraftSync({client:server.client,teamId:'test-team',exercise:5,
+ const draft=createMission1DraftSync({client:server.client,teamId:'test-team',exercise:5,userId:'student-a',
    onDraft:p=>states.push(p),onStatus:(msg,kind)=>reports.push({msg,kind})});
  await draft.start();
  try{
@@ -115,8 +127,8 @@ test('Desconexión deshabilita cambios; reconexión conserva borrador sin pistas
    server.setOffline(false);env.emit('online');
    await new Promise(resolve=>setImmediate(resolve));
    assert.equal(draft.ready,true);
-   assert.deepEqual(draft.placements,{koloniak:'1'});
-   assert.equal(await draft.move('metropoliak','2',null),true);
+   assert.deepEqual(draft.placements,{koloniak:'1',metropoliak:'2'},
+     'La nueva versión recupera el movimiento interrumpido al reconectar');
    assert.equal(await draft.reset(),true);
    assert.deepEqual(draft.placements,{});
    const log=reports.map(x=>x.msg).join(' ');
