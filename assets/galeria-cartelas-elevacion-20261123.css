@@ -1,0 +1,76 @@
+/* Potentzia handien galeria · Paso 1: cartelas como objetos físicos.
+   Solo actúa DURANTE el arrastre; no cambia posición, respuesta ni materiales
+   de las cartelas en reposo. Los cinco destinos se comportan por igual. */
+
+/* Ratón: la propia ficha se levanta antes de generar su imagen de arrastre. */
+#app-shell.gallery-active .gal-tile.gal-native-drag-source:not(:disabled){
+  position:relative;
+  z-index:30;
+  opacity:.91;
+  filter:brightness(1.025);
+  transform:translate3d(0,-6px,0) rotate(-.55deg) scale(1.016)!important;
+  box-shadow:
+    inset 0 0 0 1px #fff8df,
+    inset 0 3px 8px #fff8dd79,
+    0 3px 0 #936537,
+    0 10px 19px #21100880,
+    0 18px 26px #12090540!important;
+  transition:transform .12s cubic-bezier(.21,.7,.3,1),
+             box-shadow .12s ease,opacity .12s ease!important;
+  will-change:transform;
+}
+
+/* Tableta y móvil: deja ver la mesa debajo del objeto levantado. */
+#app-shell.gallery-active .gal-tile.gal-touch-source:not(:disabled){
+  opacity:.44;
+  transition:opacity .12s ease!important;
+}
+
+/* Copia táctil: conserva la ilustración y la paleta del pergamino histórico. */
+#app-shell.gallery-active .gal-tile.gal-touch-ghost{
+  border:3px ridge #b78b4f!important;
+  border-radius:6px!important;
+  color:#38200e!important;
+  background:
+    radial-gradient(ellipse 100% 155% at 48% -60%,#fffef0 0%,#fff1cf82 45%,transparent 83%),
+    radial-gradient(ellipse at 95% 120%,#b77f4628 0%,transparent 78%),
+    repeating-linear-gradient(109deg,transparent 0 13px,#af79390b 14px,transparent 15px 31px),
+    linear-gradient(154deg,#fbe9c1 0%,#f7e0ae 42%,#e9c38a 78%,#d8a56e 100%)!important;
+  transform:translate3d(-50%,-72%,0) translateY(-5px) rotate(-.9deg) scale(1.018)!important;
+  box-shadow:
+    inset 0 0 0 1px #fff8df,
+    inset 0 3px 8px #fff8dd80,
+    0 3px 0 #926136,
+    0 11px 23px #21100883,
+    0 21px 30px #12090545!important;
+  filter:brightness(1.025);
+  opacity:.98!important;
+  max-width:calc(100vw - 24px)!important;
+  overflow:visible;
+  transition:none!important;
+  pointer-events:none!important;
+}
+#app-shell.gallery-active .gal-tile.gal-touch-ghost.gal-tile-placed{
+  border:1px solid #b78a51!important;
+  border-radius:4px!important;
+}
+#app-shell.gallery-active .gal-tile.gal-touch-ghost .gal-tile-artwork{
+  pointer-events:none!important;
+}
+
+/* Sin desplazamiento decorativo para quien solicita movimiento reducido.
+   El objeto sigue bajo el dedo o el ratón por funcionalidad de arrastre. */
+@media(prefers-reduced-motion:reduce){
+  #app-shell.gallery-active .gal-tile.gal-native-drag-source:not(:disabled){
+    transform:none!important;
+    transition:none!important;
+    will-change:auto;
+  }
+  #app-shell.gallery-active .gal-tile.gal-touch-ghost{
+    transform:translate3d(-50%,-65%,0)!important;
+    transition:none!important;
+  }
+  #app-shell.gallery-active .gal-tile.gal-touch-source:not(:disabled){
+    transition:none!important;
+  }
+}
