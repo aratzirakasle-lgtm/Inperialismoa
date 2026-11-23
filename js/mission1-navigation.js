@@ -1,4 +1,4 @@
-import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261123-aula2';
+import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261123-aula3';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[
