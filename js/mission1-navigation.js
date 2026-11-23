@@ -1,11 +1,11 @@
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[
- [1,"Potentzien galeria","./index.html#mission1gallery","./index.html#teacherpreviewgallery"],
+ [1,"Boterearen mapa","./index.html#mission1gallery","./index.html#teacherpreviewgallery"],
  [2,"Bi sistema, bi Europa","./bi-sistema.html","./bi-sistema.html?preview=1"],
- [3,"Inperialismoaren definizioa","./inperialismoaren-definizioa.html","./inperialismoaren-definizioa.html?preview=1"],
- [4,"Inperioen aztarnak","./inperioen-aztarnak.html","./inperioen-aztarnak.html?preview=1"],
- [5,"Esaldiak osatu","./esaldiak-osatu.html","./esaldiak-osatu.html?preview=1"]
+ [3,"Inperioaren giltzak","./inperialismoaren-definizioa.html","./inperialismoaren-definizioa.html?preview=1"],
+ [4,"Kolonien espedienteak","./inperioen-aztarnak.html","./inperioen-aztarnak.html?preview=1"],
+ [5,"Azken zigilua","./esaldiak-osatu.html","./esaldiak-osatu.html?preview=1"]
 ];
 function style(){
  if(document.getElementById("m1-navigation-style"))return;
