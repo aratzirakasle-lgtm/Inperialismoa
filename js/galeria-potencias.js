@@ -80,13 +80,13 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
  const canMove=id=>LOOKUP.has(id)&&!state.locked.has(id)&&!state.busy&&(!sharedSync||sharedSync.ready);
  const place=(id,zone)=>{
    if(!canMove(id)||!ZONES.has(zone))return;
-   if(sharedSync){sharedSync.move(id,zone);return}
+   if(sharedSync){sharedSync.move(id,zone);refocus('[data-gallery-zone="'+zone+'"]');return}
    state.placements[id]=zone;state.selected=null;state.wrong.delete(id);
    state.feedback="";saveDraft();draw();refocus('[data-gallery-zone="'+zone+'"]');
  };
  const unplace=id=>{
    if(!canMove(id))return;
-   if(sharedSync){sharedSync.move(id,null);return}
+   if(sharedSync){sharedSync.move(id,null);refocus('[data-gallery-tray]');return}
    delete state.placements[id];
    state.selected=null;
    state.feedback="";
@@ -253,12 +253,13 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    const zone=e.target.matches('[data-gallery-zone]')?e.target:null;if(zone&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();place(state.selected,zone.dataset.galleryZone)}else if(e.target.matches('[data-gallery-tray]')&&state.selected&&(e.key==='Enter'||e.key===' ')){e.preventDefault();unplace(state.selected);}},{signal:controller.signal});
  // Arrastre táctil real: se mantiene además el método de pulsar cartela y vitrina.
  // No calcula respuestas correctas ni modifica la comprobación de Supabase.
- const touchTargets=()=>root.querySelectorAll('.gal-touch-target');
+ let activeTouchTarget=null;
  const cleanTouch=()=>{
    setMuseumDragMode(false);
    touchDrag?.card?.classList.remove('gal-touch-source');
    touchDrag?.ghost?.remove();
-   touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
+   activeTouchTarget?.classList.remove('gal-touch-target');
+   activeTouchTarget=null;
    touchDrag=null;
  };
  root.addEventListener('pointerdown',e=>{
@@ -290,9 +291,13 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    e.preventDefault();
    d.ghost.style.left=e.clientX+'px';
    d.ghost.style.top=e.clientY+'px';
-   touchTargets().forEach(el=>el.classList.remove('gal-touch-target'));
-   const hit=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-gallery-zone], [data-gallery-tray]');
-   if(hit&&root.contains(hit))hit.classList.add('gal-touch-target');
+   const rawHit=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-gallery-zone], [data-gallery-tray]');
+   const hit=rawHit&&root.contains(rawHit)?rawHit:null;
+   if(hit!==activeTouchTarget){
+     activeTouchTarget?.classList.remove('gal-touch-target');
+     hit?.classList.add('gal-touch-target');
+     activeTouchTarget=hit;
+   }
  },{signal:controller.signal,passive:false});
  root.addEventListener('pointerup',e=>{
    const d=touchDrag;
