@@ -306,26 +306,45 @@
 @media(max-width:480px){.atlas-concept-one .atlas-header{padding:8px 16px}.atlas-concept-one .atlas-display{border-width:3px}}
 @media(prefers-reduced-motion:reduce){.atlas-concept-one .atlas-continue{transition:none}}
 
-/* Phase 2 / 1: actual raster material taken from the atlas reference.
-   No printed completion state survives in the artwork. All contents are live HTML.
-   Retain the scalable illustrated backing on very small screens. */
+/* Phase 2 / 1: reference-derived passport, corrected open-book proportions.
+   Keep the book wider than tall without clipping the live seals and dates.
+   On narrow screens keep the single-column layout and all four mission cards. */
 @media(min-width:901px){
+ .atlas-concept-one .atlas-desk{grid-template-columns:minmax(0,52fr) minmax(0,48fr);gap:.85cqw;align-items:center}
+ .atlas-concept-one .atlas-passport{padding:.25cqw 0 .35cqw;align-items:center;min-width:0}
  .atlas-concept-one .atlas-book{
+   box-sizing:border-box;width:100%;max-width:none;min-width:0;aspect-ratio:270/230;
    background:url('./atlas-pasaporte-foto.svg') center/100% 100% no-repeat;
-   padding:3.1cqw 2.2cqw 2.35cqw 1.9cqw;
+   padding:2.7cqw 1.65cqw 1.95cqw 1.6cqw;
    transform:none;filter:drop-shadow(4px 7px 5px #0b0604aa);
  }
  .atlas-concept-one .atlas-book-spread{
-   grid-template-columns:minmax(0,46%) minmax(0,54%);
-   min-height:33.5cqw;height:auto;align-items:stretch;
+   grid-template-columns:minmax(0,47%) minmax(0,53%);
+   min-height:0;height:100%;align-items:stretch;
  }
- .atlas-concept-one .atlas-book-page{padding:0 .32cqw;background:none}
+ .atlas-concept-one .atlas-book-page{padding:0 .24cqw;background:none;min-width:0}
  .atlas-concept-one .atlas-book-page::before{display:block;inset:3% 6% 4%;background:url('./atlas-papel-fibras.svg') center/100% 100% no-repeat;opacity:.15;mix-blend-mode:multiply;transform:none;border-radius:5%}
  .atlas-concept-one .atlas-book-page::after{display:none}
- .atlas-concept-one .atlas-identity .atlas-paper-frame{padding:1.25cqw .5cqw .6cqw .3cqw;transform:rotate(-2.2deg)}
- .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{padding:.45cqw .15cqw .65cqw .6cqw;transform:rotate(-1.4deg)}
+ .atlas-concept-one .atlas-identity .atlas-paper-frame{padding:1cqw .4cqw .4cqw .3cqw;transform:rotate(-2.2deg)}
+ .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{padding:.35cqw .2cqw .4cqw .5cqw;transform:rotate(-1.4deg)}
  .atlas-concept-one .atlas-book-page h3{color:#40230f;text-shadow:none}
- .atlas-concept-one .atlas-identity-photo{width:94%;max-width:94%;transform:rotate(-3deg);border:1px solid #a47b50;box-shadow:1px 3px 4px #4b2b1966}
+ .atlas-concept-one .atlas-identity-photo{width:86%;max-width:86%;transform:rotate(-3deg);border:1px solid #a47b50;box-shadow:1px 3px 4px #4b2b1966}
+ .atlas-concept-one .atlas-identity-photo img{aspect-ratio:.86;max-height:17cqw}
  .atlas-concept-one .atlas-team-name{overflow-wrap:anywhere}
  .atlas-concept-one .atlas-engraved-seal{mix-blend-mode:multiply}
+ .atlas-concept-one .atlas-seals{gap:.28cqw .35cqw}
+ .atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,8.7cqw)}
+ .atlas-concept-one .atlas-medals .mp-medal{width:min(100%,5.2cqw);height:6.6cqw}
+ .atlas-concept-one .atlas-right{padding-right:.2cqw;align-self:stretch;justify-content:center;min-width:0}
+ .atlas-concept-one .atlas-missions{gap:.45cqw}
+ .atlas-concept-one .atlas-mission{padding:.65cqw .48cqw .65cqw}
+}
+@media(min-width:901px) and (max-width:1199px){
+ .atlas-concept-one .atlas-desk{grid-template-columns:minmax(0,50fr) minmax(0,50fr)}
+ .atlas-concept-one .atlas-book{padding:2.6cqw 1.3cqw 1.8cqw}
+ .atlas-concept-one .atlas-book-page h3{font-size:clamp(12px,1.3cqw,18px)}
+}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-book{width:min(100%,740px);max-width:none}
+ .atlas-concept-one .atlas-book-spread{grid-template-columns:minmax(0,47%) minmax(0,53%)}
 }
