@@ -247,3 +247,25 @@
 .atlas-concept-one .atlas-mission-content{background-image:url('./atlas-papel-fibras.svg');background-size:100% 100%}
 .atlas-concept-one .atlas-archive{background-image:url('./atlas-pergamino-bordes.svg');background-size:100% 100%;background-color:#d6ae75}
 @media(max-width:900px){.atlas-concept-one .atlas-totals{padding:12px}.atlas-concept-one .mp-stamp-date{padding:3px 5px}}
+
+/* Element 4 — framed museum miniatures, brass relief and printed nameplates. */
+.atlas-concept-one .atlas-missions{gap:.7cqw;align-items:stretch}
+.atlas-concept-one .atlas-mission{isolation:isolate;border:0;border-radius:5px;padding:.9cqw .62cqw .82cqw;background:linear-gradient(120deg,#49301b,#2e1c11 58%,#674425);box-shadow:2px 5px 7px #090603c0;min-width:0}
+.atlas-concept-one .atlas-mission::after{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;background:url('./atlas-marco-laton.svg') center/100% 100% no-repeat}
+.atlas-concept-one .atlas-mission-name{position:relative;z-index:1;border:0;border-radius:0;box-shadow:none;background:url('./atlas-cartela-laton.svg') center/100% 100% no-repeat;color:#482b14;padding:.6cqw .32cqw;margin:0 -.16cqw .28cqw;line-height:1.12;text-shadow:0 1px #ffe7b1}
+.atlas-concept-one .atlas-mission-art{min-height:9.7cqw;border:1px solid #805728;box-shadow:0 0 0 1px #d1a05c;overflow:hidden}
+.atlas-concept-one .atlas-mission-art::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 8px #2a190b85;background:linear-gradient(145deg,#ffd89812,transparent 40%,#100a061c);z-index:1}
+.atlas-concept-one .atlas-mission-art img{filter:sepia(.1) saturate(.96) contrast(1.04)}
+.atlas-concept-one .atlas-mission-content{position:relative;padding:.4cqw .25cqw .35cqw;border:1px solid #aa7c42;border-top:0;box-shadow:inset 0 -2px 4px #80542b44}
+.atlas-concept-one .atlas-mission-content h3{color:#432710;text-shadow:0 1px #ffefc35c;font-weight:700}
+.atlas-concept-one .atlas-state{position:relative;isolation:isolate;padding:.48cqw .25cqw;border:1px solid #8b6130;border-radius:3px;box-shadow:inset 0 0 0 1px #e3c18caa,0 1px 2px #432c1666;background:linear-gradient(150deg,#ebd4a6,#bfa174 60%,#e5cca0);font-size:clamp(8px,.77cqw,12px)}
+.atlas-concept-one .atlas-mission.is-done .atlas-state{background:linear-gradient(155deg,#52704b,#21442d 48%,#142c1f);color:#f6e1ab;transform:none;border-color:#c29a54;text-shadow:0 1px #102518}
+.atlas-concept-one .atlas-mission.is-active{box-shadow:0 0 0 1px #e7b85d,0 0 13px #edbc6070,2px 5px 7px #090603c0}
+.atlas-concept-one .atlas-mission.is-active .atlas-state{background:linear-gradient(#f4d593,#ca9448 56%,#e8b96d);color:#4a2b11}
+.atlas-concept-one .atlas-mission.is-locked .atlas-mission-art img{filter:grayscale(.85) sepia(.27) brightness(.82) contrast(.94)}
+.atlas-concept-one .atlas-mission.is-locked .atlas-mission-content{filter:saturate(.85)}
+.atlas-concept-one .atlas-lock-badge{z-index:2;top:76%;color:#f4deaa;filter:drop-shadow(0 2px 2px #2b1a11c0)}
+.atlas-concept-one .atlas-mission.is-locked::after{filter:saturate(.72) brightness(.92)}
+.atlas-concept-one .atlas-section-title{margin:.45cqw 0;color:#f0cf91;text-shadow:0 2px 2px #091b12;letter-spacing:.1em}
+@media(max-width:900px){.atlas-concept-one .atlas-missions{gap:8px}.atlas-concept-one .atlas-mission{padding:9px 7px 9px}.atlas-concept-one .atlas-mission-name{padding:7px 4px;margin:0 -1px 3px}.atlas-concept-one .atlas-mission-art{min-height:110px}.atlas-concept-one .atlas-mission-content{padding:5px 3px}.atlas-concept-one .atlas-state{padding:5px 3px;font-size:11px}}
+@media(max-width:480px){.atlas-concept-one .atlas-mission-art{min-height:100px}}
