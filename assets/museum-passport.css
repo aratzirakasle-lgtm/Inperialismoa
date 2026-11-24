@@ -34,3 +34,8 @@
 @media(prefers-reduced-motion:reduce){.mp-imprint .mp-stamp{animation:none}}
 
 .mp-medals{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:100%}.mp-medals>div{display:flex;flex-direction:column;align-items:center;min-width:0;flex:1 1 65px}.m2-finished .mp-passport{margin:18px auto;max-width:660px}
+
+.mp-stamp-date{display:flex;flex-direction:column;align-items:center;gap:0;font:600 10px/1.25 Georgia,serif;color:#6c3027;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mp-date-unknown{white-space:normal;color:#785f43;font-size:9px;font-weight:400}
+.mp-final-date{margin-top:6px;border-top:1px solid #b89b65;padding-top:5px;font-size:10px;letter-spacing:.05em}
+.mp-stamps{align-items:start;max-width:250px}

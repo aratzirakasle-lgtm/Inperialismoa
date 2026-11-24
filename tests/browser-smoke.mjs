@@ -434,7 +434,9 @@ try{
      assert.equal(await page.locator('.c-museo-m3').isDisabled(),true,'Misión 3 aún no publicada');
      assert.equal(await page.locator('.c-museo-m4').isDisabled(),true,'Misión 4 aún no publicada');
      await page.locator('[data-c-globe]').click();
-     assert.match(await page.locator('#modal-title').innerText(),/Esplorazioen atlasa/);
+     assert.match(await page.locator('#modal-title').innerText(),/Ikertzailearen atlasa/);
+     assert.equal(await page.locator('.museum-expedition .mp-slot').count(),4);
+     assert.equal(await page.locator('.atlas-mission').count(),4);
      await page.locator('#modal-close').click();
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/c-museo-alumno-autenticado-escritorio.png',fullPage:true,animations:'disabled'});
