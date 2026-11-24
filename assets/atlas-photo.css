@@ -1,0 +1,51 @@
+/* Photo-first globe view. Positions reference the original 1672 × 941 composition. */
+.atlas-photo{display:none;position:relative;isolation:isolate;container-type:inline-size;width:100%;aspect-ratio:1672/941;font-family:Georgia,'Times New Roman',serif;color:#472915;overflow:hidden}
+.atlas-photo-img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;pointer-events:none;user-select:none}
+.atlas-photo *{box-sizing:border-box}
+.ap-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ap-team,.ap-notice,.ap-date,.ap-number,.ap-meter,.ap-stamp,.ap-medal-mask,.ap-card,.ap-archive,.ap-action,.ap-action-caption{position:absolute}
+.ap-team{left:11%;top:71%;width:13.5%;text-align:center;font-weight:700;font-size:1.1cqw;line-height:1.15;overflow-wrap:anywhere;color:#53331d}
+.ap-notice{left:10.5%;top:73.4%;width:14%;text-align:center;font-size:.68cqw;line-height:1.1;font-weight:bold;color:#792d20}
+.ap-stamp{top:29.5%;width:7.8%;height:13.8%;transform:rotate(-5deg)}
+.ap-stamp-1{left:26.2%}.ap-stamp-2{left:34.2%;top:29%;transform:rotate(-3deg)}
+.ap-stamp:not(.ap-earned),.ap-medal-mask{background:radial-gradient(ellipse at 40% 40%,#ecd0a3,#dcb586);box-shadow:0 0 .65cqw .4cqw #e5c397}
+.ap-stamp-ring{position:absolute;inset:5%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.25cqw;border:.2cqw double #a28b67;border-radius:50%;color:#897451;font-size:.79cqw;line-height:1.05}
+.ap-stamp-ring span{font-size:2.6cqw;line-height:1}
+.ap-stamp-ring strong{background:#ead2a7;border:1px solid #ac9064;padding:.18cqw .2cqw;font-size:.69cqw;max-width:110%;white-space:normal}
+.ap-date{top:43.9%;height:2.8%;width:7.4%;display:grid;place-items:center;background:linear-gradient(100deg,#e2c18d,#efd7ab 50%,#e3c18e);border:1px solid #b9915f;font-size:.71cqw;font-weight:bold;line-height:1;transform:rotate(-6deg);text-align:center}
+.ap-date-1{left:26.7%}.ap-date-2{left:34.6%;top:42.8%;transform:rotate(-3deg)}
+.ap-medal-mask{left:28.7%;top:60.5%;width:5.4%;height:14.5%;transform:rotate(-5deg);border-radius:45%}
+.ap-medal-2{left:35.5%;top:59.9%}
+.ap-number{left:85.3%;width:4.5%;height:3%;display:grid;place-items:center;text-align:right;background:linear-gradient(90deg,#efd4a5,#f0d6ac);font:bold 1.28cqw/1 Georgia,serif;color:#39210e}
+.ap-number-m{top:29.4%}.ap-number-e{top:36.2%}
+.ap-meter{left:74%;width:15.35%;height:1.7%;overflow:hidden;background:linear-gradient(#f1dbb6,#e5c18e);border:1px solid #ad905f;border-radius:99px;box-shadow:inset 0 1px 2px #926e4040}
+.ap-meter-m{top:32.8%}.ap-meter-e{top:39.6%}
+.ap-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(#2f6144,#16432f);box-shadow:inset 0 1px 2px #62927188}
+.ap-card{top:47.7%;width:10.8%;height:23.6%}
+.ap-card-1{left:46.8%}.ap-card-2{left:58.6%}.ap-card-3{left:70.4%}.ap-card-4{left:82%}
+.ap-card-shade{position:absolute;left:6%;right:6%;top:18%;height:53%;background:#3b2d1726}
+.ap-card-badge{position:absolute;left:9%;right:9%;top:72%;height:19%;display:grid;place-items:center;text-align:center;background:linear-gradient(110deg,#d1b082,#efd6aa 45%,#cfa979);border:.22cqw ridge #ad8b51;color:#51371f;font:bold .83cqw/1.04 Georgia,serif;transform:rotate(-3deg);box-shadow:0 2px 4px #4c321d80}
+.ap-card-badge.ap-active{background:linear-gradient(#eed096,#bd8539);color:#4d2c0b}
+.ap-archive{left:34%;top:75%;width:33%;height:24%;z-index:3}
+.ap-archive summary{display:block;width:100%;height:100%;cursor:pointer;list-style:none;background:transparent;border:0}
+.ap-archive summary::-webkit-details-marker{display:none}
+.ap-archive summary:hover{filter:drop-shadow(0 0 5px #ffe0a5)}
+.ap-archive[open]{z-index:10}
+.ap-archive-panel{position:absolute;bottom:12%;left:-27%;width:155%;max-height:55cqw;overflow:auto;padding:1.5cqw;background:linear-gradient(125deg,#f1dbb2,#dfbd88);border:.4cqw ridge #b88b48;border-radius:5px;box-shadow:0 10px 40px #000b;font-size:1cqw;color:#482d18;display:grid;grid-template-columns:1fr 1fr;gap:1cqw}
+.ap-archive-panel>h3{grid-column:1/-1;text-align:center;font-size:1.4cqw;margin:0;color:#482d18}
+.ap-archive-panel .atlas-file h4{font-size:1.15cqw;margin:0 0 .4cqw;color:#482d18}
+.ap-archive-panel .atlas-file li{font-size:.95cqw}
+.ap-action{left:70.2%;top:78.2%;width:22.2%;height:8.7%;display:grid;place-items:center;cursor:pointer;background:transparent;border:0;border-radius:8px;padding:0;color:#ffe0a5;font:bold 1.62cqw/1 Georgia,serif;text-shadow:0 2px 2px #122319}
+.ap-action span{display:grid;place-items:center;width:80%;height:69%;margin-left:8%;background:radial-gradient(ellipse at top,#3b5b42,#173824 75%);border-radius:4px}
+.ap-action-original span{opacity:0}
+.ap-action:hover{box-shadow:0 0 1.3cqw #ffd18b80}
+.ap-action-caption{left:72%;top:87.6%;width:18.5%;height:3%;background:radial-gradient(ellipse at center,#263a29,#203124);display:grid;place-items:center;color:#e5bc7c;text-align:center;font:bold .87cqw/1 Georgia,serif;letter-spacing:.05em}
+.ap-action:focus-visible,.ap-archive summary:focus-visible{outline:3px solid #ffdc95;outline-offset:3px}
+@media(min-width:901px){
+ .atlas-photo-ready>.atlas-concept-one{display:none}
+ .atlas-photo-ready>.atlas-photo{display:block}
+ #modal:has(.atlas-photo-ready) .modal-card{width:min(98vw,174dvh,1800px);max-width:none;max-height:98dvh;padding:0;border:0;border-radius:4px;overflow:visible;background:#1a160f}
+ #modal:has(.atlas-photo-ready) #modal-close{position:absolute;z-index:30;top:15.6%;right:8%;width:3.7%;height:6%;min-width:0;min-height:0;border:0;padding:0;background:transparent;box-shadow:none;color:transparent;font-size:0;border-radius:50%}
+ #modal:has(.atlas-photo-ready) #modal-close:hover{box-shadow:0 0 1cqw #f7ca75}
+ #modal:has(.atlas-photo-ready) #modal-close:focus-visible{outline:3px solid #ffdc95;outline-offset:2px}
+}
