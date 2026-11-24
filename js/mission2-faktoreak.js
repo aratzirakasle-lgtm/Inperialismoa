@@ -1,6 +1,6 @@
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync2';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync3';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
@@ -743,6 +743,7 @@ function atlasPartCheck(part){
  setFeedback(ready?'Atala osatuta. Erantzunak amaieran egiaztatuko dira.':'Osatu atal honetako erantzun guztiak.');
 }
 app.addEventListener('click',event=>{
+ if(submitting||releaseClosed)return;
  const elem=event.target.closest('button');
  if(!elem||!app.contains(elem)){
    const zone=event.target.closest('[data-zone]');
@@ -781,6 +782,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-ending')&&(teacher||completions.size===5)){teacherEnding=true;render()}
 });
 app.addEventListener('change',event=>{
+ if(submitting||releaseClosed)return;
  const target=event.target;
  if(target.matches('select[data-field],input[type="radio"][data-field]')){
   taskState(active)[target.dataset.field]=target.value;
@@ -805,6 +807,7 @@ app.addEventListener('keydown',event=>{
  if(zone&&event.target===zone){event.preventDefault();assignToCategory(zone.dataset.zone)}
 });
 app.addEventListener('dragstart',event=>{
+ if(submitting||releaseClosed){event.preventDefault();return}
  if(active===3){
   const route=event.target.closest('[data-atlas-route]');
   const item=event.target.closest('[data-atlas-bag-card]');
@@ -824,6 +827,7 @@ app.addEventListener('dragover',event=>{
  if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
 });
 app.addEventListener('drop',event=>{
+ if(submitting||releaseClosed){event.preventDefault();return}
  if(active===3){
   const pin=event.target.closest('[data-atlas-target]');
   const bag=event.target.closest('[data-atlas-bag-zone]');

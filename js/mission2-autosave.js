@@ -105,6 +105,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
    for(const [id,entry] of Object.entries(entries)){
     restored[id]=mergeMission2Patch(entry.reset?{}:restored[id],entry.patch);
    }
+   if(!alive)return false;
    onRestore(restored);
    if(busy()){status('Aurreko saioko aldaketak berreskuratzen…','saving');schedule(10)}
    else status('✓ Taldearen aurrerapena berreskuratuta.','saved');

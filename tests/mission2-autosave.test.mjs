@@ -113,3 +113,12 @@ test('El frontend usa acceso por equipo y una RPC, sin enviar aciertos ni usar c
  assert.deepEqual(f.calls[0].p_patch,{assignments:{a:'political'}});
  a.destroy();
 });
+
+
+test('Un compañero que cambia otra tarjeta se recupera en la siguiente lectura',async()=>{
+ const f=fixture();let restored={};const session=f.create(rows=>{restored=rows});
+ try{await session.load();session.queue(1,{assignments:{a:'economic'}});await session.flush();
+ f.data.set('team:1',{assignments:{a:'economic',b:'political'}});
+ await session.load();assert.deepEqual(restored[1].assignments,{a:'economic',b:'political'});
+ }finally{session.destroy()}
+});

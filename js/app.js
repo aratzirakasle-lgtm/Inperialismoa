@@ -424,8 +424,8 @@ async function refreshData(){if(demo)return;
    db.from("mission1_exercise_completions").select("team_id,exercise"),
    db.rpc("mission1_class_progress_members"),
    teacher?db.from("class_student_roster").select("id,team_id,slot,display_name,auth_user_id"):empty(),
-   teacher?empty():db.rpc("mission2_access_status",{}),
-   teacher?db.rpc("mission2_class_progress_members",{}):empty()
+   teacher?empty():Promise.resolve(db.rpc("mission2_access_status",{})).catch(error=>({data:false,error})),
+   teacher?Promise.resolve(db.rpc("mission2_class_progress_members",{})).catch(error=>({data:[],error})):empty()
  ]);
  for(const result of [gs,gd,bs,bd,es,ea,ba,ga,m1f])if(result.error)throw result.error;
  galleryStates=gs.data||[];
