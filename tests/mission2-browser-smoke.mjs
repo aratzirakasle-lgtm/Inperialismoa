@@ -306,6 +306,7 @@ try{
     await page.locator('[data-source-zoom="press"]').click();
     await page.locator('#m2-reading-dialog').waitFor({state:'visible'});
     assert.match(await page.locator('#m2-reading-dialog').innerText(),/Prentsa eta prestigioa/);
+    assert.equal(await page.locator('.m2-dialog-source-art').evaluate(el=>getComputedStyle(el).backgroundPosition),await page.locator('[data-source="press"] .m2-source-engraving').evaluate(el=>getComputedStyle(el).backgroundPosition));
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
     await page.locator('[data-reset]').click();
@@ -659,6 +660,12 @@ try{
    assert.equal(await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"] img.m2-atlas-card-illustration').count(),1,
      'La misma ilustración debe acompañar a la ficha al colocarla');
    await page.locator('.m2-atlas-suitcase-cause [data-atlas-bag-card="growth"]').click();
+   await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="effect"]').click();
+   assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
+   await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').click();
+   await page.locator('[data-bag-return]').click();
+   assert.equal(await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="growth"]').count(),1);
+   await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="growth"]').click();
    await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="effect"]').click();
    assert.equal(await page.locator('.m2-atlas-suitcase-effect [data-atlas-bag-card="growth"]').count(),1);
    await ensureAtlasPicturesDecoded(page);

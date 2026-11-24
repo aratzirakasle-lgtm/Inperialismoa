@@ -11,7 +11,7 @@ async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
  try{const {data,error}=await client.rpc('mission2_access_status',{});if(error||typeof data!=='boolean')return;
- if(data===false&&!releaseClosed){releaseClosed=true;autosave?.destroy();document.querySelector('.m2-class-widget')?.__classProgressCleanup?.();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
+ if(data===false&&!releaseClosed){releaseClosed=true;document.querySelector('#m2-reading-dialog')?.close();autosave?.destroy();document.querySelector('.m2-class-widget')?.__classProgressCleanup?.();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
  else if(data===true&&releaseClosed)location.reload();
  }catch{}finally{releaseChecking=false}
 }
@@ -119,9 +119,17 @@ function museumDialog(title,content,{confirm=false,onConfirm=null}={}){
 function openSource(id){
  const source=archives.find(a=>a.id===id);if(!source)return;
  const art=app.querySelector('[data-source="'+id+'"] .m2-source-engraving');
- const image=art?getComputedStyle(art).backgroundImage:'none';
+ const style=art?getComputedStyle(art):null;
+ const image=style?.backgroundImage||'none',position=style?.backgroundPosition,size=style?.backgroundSize;
+ const rect=art?.getBoundingClientRect();
  museumDialog(source.title,'<p class="m2-dialog-ref">'+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div><p class="m2-dialog-reading">'+esc(source.body)+'</p>');
- if(image!=='none'){const picture=document.querySelector('.m2-dialog-source-art');picture.style.backgroundImage=image;picture.classList.add('has-photo')}
+ if(image!=='none'){
+  const picture=document.querySelector('.m2-dialog-source-art');
+  picture.style.backgroundImage=image;picture.style.backgroundPosition=position;
+  picture.style.backgroundSize=size;
+  if(rect?.width&&rect.height){const ratio=rect.width/rect.height;picture.style.aspectRatio=String(ratio);picture.style.width='min(100%, '+Math.min(540,Math.round(330*ratio))+'px)';picture.style.height='auto';}
+  picture.classList.add('has-photo')
+ }
 }
 function openMap(kind){
  if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa historikoa">');
@@ -845,6 +853,7 @@ app.addEventListener('change',event=>{
  const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
 });
 app.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&(selected||atlasSelectedRoute||atlasSelectedLuggage)){event.preventDefault();selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render();return}
  if(active!==1||!['Enter',' '].includes(event.key))return;
  const zone=event.target.closest('[data-zone]');
  if(zone&&event.target===zone){event.preventDefault();assignToCategory(zone.dataset.zone)}
