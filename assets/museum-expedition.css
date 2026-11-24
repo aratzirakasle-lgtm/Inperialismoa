@@ -320,7 +320,8 @@
    min-height:33.5cqw;height:auto;align-items:stretch;
  }
  .atlas-concept-one .atlas-book-page{padding:0 .32cqw;background:none}
- .atlas-concept-one .atlas-book-page::before,.atlas-concept-one .atlas-book-page::after{display:none}
+ .atlas-concept-one .atlas-book-page::before{display:block;inset:3% 6% 4%;background:url('./atlas-papel-fibras.svg') center/100% 100% no-repeat;opacity:.15;mix-blend-mode:multiply;transform:none;border-radius:5%}
+ .atlas-concept-one .atlas-book-page::after{display:none}
  .atlas-concept-one .atlas-identity .atlas-paper-frame{padding:1.25cqw .5cqw .6cqw .3cqw;transform:rotate(-2.2deg)}
  .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{padding:.45cqw .15cqw .65cqw .6cqw;transform:rotate(-1.4deg)}
  .atlas-concept-one .atlas-book-page h3{color:#40230f;text-shadow:none}
