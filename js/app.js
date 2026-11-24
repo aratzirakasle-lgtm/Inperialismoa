@@ -297,12 +297,13 @@ async function enrollTeacherStudents(classId,rosterId=null){
    if(error)throw error;
    if(data?.error)throw Error(data.error);
    const newly=Array.isArray(data?.created)?data.created:[];
-   // El listado y los usuarios del profesor se actualizan con el servidor.
-   await refreshData();render();
    if(!newly.length){
+     await refreshData();render();
      toast('Kontuak lehendik sortuta daude. Pasahitzak berritu daitezke.');
      return;
    }
+   // Guardar y mostrar las credenciales ANTES de cualquier refresco secundario:
+   // si falla la conexión, la pantalla con claves no se puede perder.
    issuedClassCredentials=newly;
    const credentialRows=newly.map(x=>'<tr><td>'+esc(x.team)+'</td><td>'+
      esc(x.name)+'</td><td><code>'+esc(x.email)+'</code></td><td><code>'+
@@ -319,6 +320,10 @@ async function enrollTeacherStudents(classId,rosterId=null){
      '<p><button type="button" class="btn primary" id="download-class-credentials">'+
      '↓ Descargar CSV privado</button> <button type="button" class="btn outline" '+
      'id="copy-class-credentials">Copiar credenciales</button></p>');
+   try{await refreshData();render()}catch(refreshError){
+     console.warn('La actualización del panel docente se reintentará al recargar.',refreshError);
+     toast('Las credenciales están visibles; guárdalas antes de actualizar la página.');
+   }
  }catch(error){
    console.error('No se ha podido completar el alta del alumnado',error);
    toast('Error al preparar las cuentas: '+String(error?.message||'sin conexión'));
