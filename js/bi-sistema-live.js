@@ -1,9 +1,10 @@
+import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-guardado1';
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261124-wallet1";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
-import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-interv3a";
+import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261124-guardado1";
 
 const TRAITS=[
   ["army","Armadak pisu handia",""],
@@ -54,7 +55,8 @@ const labels={auth:"Sistema autoritarioak",lib:"Erregimen liberalak"};
 const roomOf=id=>positions[id]||pending[id]||null;
 function syncStatus(message,problem=false){
   if(syncBanner){
-    syncBanner.querySelector('.bi-sync-message').textContent=message;
+    const kind=problem?'error':message===SAVE_TEXT.saving?'saving':message===SAVE_TEXT.saved?'saved':message===SAVE_TEXT.loading?'loading':'ready';
+    paintSaveIndicator(syncBanner.querySelector('.bi-sync-message'),kind,message);
     syncBanner.classList.toggle('bi-sync-error',problem);
     syncBanner.querySelector('.bi-sync-retry').hidden=!!teamSync?.ready&&!problem;
   }
@@ -540,7 +542,7 @@ async function boot(){
     syncBanner.className="bi-shared-banner";syncBanner.setAttribute("role","status");
     syncBanner.setAttribute("aria-live","polite");
     const message=document.createElement("span");message.className="bi-sync-message";
-    message.textContent="Taldearen mahaia kargatzen…";
+    paintSaveIndicator(message,"loading");
     const retry=document.createElement("button");retry.type="button";
     retry.className="bi-sync-retry";retry.textContent="↻ Berriro konektatu";
     retry.addEventListener("click",()=>void teamSync?.load());

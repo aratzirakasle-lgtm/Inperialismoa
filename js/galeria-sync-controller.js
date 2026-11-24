@@ -75,7 +75,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
      ready=true;
      return result?.status==='saved';
    }catch(e){
-     if(alive)fail(e,'Konexio-arazoa. Azken aldaketa gailuan gordeta dago. Sakatu «Berriro konektatu».');
+     if(alive)fail(e,'Konexio-arazoa. Gorde gabeko aldaketa dago. Sakatu «Berriro konektatu».');
    }finally{
      if(alive){state.busy=false;draw();if(recheck&&ready)void refresh()}
    }
@@ -137,6 +137,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
      if(alive){fail(e,'Ezin izan da taldearen lana kargatu. Sakatu «Berriro konektatu».');draw()}
    }finally{
      connecting=false;
+     if(alive)draw();
      if(alive&&ready&&recheck&&!state.busy){
        recheck=false;
        void refresh();
@@ -189,6 +190,7 @@ export function createGallerySyncController({adapter,state,items,zones,draftKey,
  return {start,stop,move,reset,refresh,connect,apply,handleResult,
    submit:()=>adapter.submit(revision),
    get ready(){return ready},
+   get connecting(){return connecting},
    get revision(){return revision},
    get pending(){return !!pending}
  };

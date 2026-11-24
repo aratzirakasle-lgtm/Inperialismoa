@@ -1,6 +1,7 @@
+import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-guardado1';
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft3';
+import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261124-guardado1';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-wallet1';
 
 const message=document.querySelector('#message');
@@ -87,7 +88,7 @@ async function initialize(){
         client,teamId:team,exercise:3,userId:user.id,
         onDraft:places=>window.m1ThirdDraftApply?.(places),
         onStatus:(msg,kind)=>{
-          signal.textContent=' · '+msg;
+          paintSaveIndicator(signal,kind,kind==='ready'?SAVE_TEXT.ready:msg);
           retry.style.display=kind==='error'?'inline-block':'none';
           window.m1ThirdDraftStatus?.(msg,kind);
         },

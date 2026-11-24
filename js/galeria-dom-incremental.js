@@ -1,3 +1,4 @@
+import { gallerySaveState, gallerySaveText, paintSaveIndicator } from './save-indicator.js?v=20261124-guardado1';
 /* Galeria: actualización parcial de cartelas sin reconstruir las vitrinas.
    Nunca recibe claves correctas ni decide destinos; solo refleja el estado. */
 export function createGalleryIncremental(root,{items,state,tile,count,shared,allow,canSkip}){
@@ -98,9 +99,8 @@ export function createGalleryIncremental(root,{items,state,tile,count,shared,all
    reset.disabled=state.busy;
    if(team){
      const syncText=banner.querySelector('span:not(.gal-shared-dot)');
-     if(syncText)syncText.textContent=state.busy?'Aldaketa gordetzen…'
-       :team.ready?'Sinkronizatuta · '+count()+' / 20 kartela'
-       :'Konexioa eten da. Tokiko kopia gordeta dago.';
+     const saveState=gallerySaveState({busy:state.busy,ready:team.ready,connecting:team.connecting,pending:team.pending});
+     paintSaveIndicator(syncText,saveState,gallerySaveText(saveState,count()));
      const oldRetry=banner.querySelector('[data-gallery-action="sync-retry"]');
      if(!team.ready&&!state.busy&&!oldRetry){
        const button=document.createElement('button');

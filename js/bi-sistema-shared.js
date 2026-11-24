@@ -51,7 +51,8 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
      const changed=!ready||next.revision!==revision;
      if(changed)apply(next);
      ready=true;
-     if(changed)onStatus('Sinkronizatuta · taldearen mahai partekatua',false);
+     if(pending)onStatus('Aldaketak gordetzen…',false);
+     else if(changed)onStatus('Taldearen lana sinkronizatuta.',false);
      if(pending){
        const saved=pending;
        // Reintentar exactamente la última acción no confirmada; si otro
@@ -70,7 +71,7 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
  }
  async function move(id,zone,expected){
    if(!active||!ready||busy)return false;
-   busy=true;onStatus('Aldaketa gordetzen…',false);
+   busy=true;onStatus('Aldaketak gordetzen…',false);
    savePending({id,zone,expected});
    try{
      const data=await call('bi_sistema_draft_move',{
@@ -83,13 +84,13 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
      else if(data.status==='full')onStatus('Erakusleiho hau beteta dago.',true);
      else if(data.status==='locked')onStatus('Fase hau jada egiaztatuta dago.',false);
      else if(data.status==='completed')onStatus('Ariketa hau taldeak gainditu du.',false);
-     else if(data.status==='saved')onStatus('Sinkronizatuta · taldearen mahai partekatua',false);
+     else if(data.status==='saved')onStatus('✓ Taldearen lana gordeta.',false);
      else throw Error('Egoera ezezaguna');
      return data.status==='saved';
    }catch(e){
      if(!active)return false;
      ready=false;console.error('Bi sistema · gorde',e);
-     onStatus('Konexio-arazoa. Aldaketa gailuan gordeta dago. Berriro konektatu.',true);
+     onStatus('Konexio-arazoa. Gorde gabeko aldaketa dago. Berriro konektatu.',true);
      return false;
    }finally{
      busy=false;
@@ -98,13 +99,13 @@ export function createBiSistemaShared({client,teamId,userId,localDraft,onDraft,o
  }
  async function reset(){
    if(!active||!ready||busy)return false;
-   busy=true;
+   busy=true;onStatus('Aldaketak gordetzen…',false);
    try{
      const data=await call('bi_sistema_draft_reset',{p_revision:revision});
      if(!active)return false;
      apply(data);savePending(null);
      if(data.status==='conflict')onStatus('Beste ikasle batek aldaketa egin du; eguneratu da.',true);
-     else onStatus('Taldearen mahai partekatua berrabiarazita.',false);
+     else if(data.status==='saved')onStatus('✓ Taldearen lana gordeta.',false);
      return data.status==='saved';
    }catch(e){
      ready=false;console.error('Bi sistema · reset',e);

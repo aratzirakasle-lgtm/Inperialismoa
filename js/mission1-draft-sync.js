@@ -96,7 +96,7 @@ export function createMission1DraftSync({client,teamId,exercise,userId,onDraft,o
      if(!validPending(p))return false;
      savePending(p);
    }
-   busy=true;tell('Aldaketa gordetzen…','saving');paint();
+   busy=true;tell('Aldaketak gordetzen…','saving');paint();
    try{
      const {data,error}=await client.rpc(rpc,{p_exercise:exercise,...args});
      if(error)throw error;
@@ -118,7 +118,7 @@ export function createMission1DraftSync({client,teamId,exercise,userId,onDraft,o
    }catch(e){
      console.error('M1 borrador · gorde',e);
      ready=false;
-     tell(pending?'Gorde gabeko mugimendua gailuan dago. Berriro konektatu.':
+     tell(pending?'Gorde gabeko mugimendua dago. Berriro konektatu.':
        'Ezin izan da gorde. Berriro konektatu.','error');
      return false;
    }finally{

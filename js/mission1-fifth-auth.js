@@ -1,6 +1,7 @@
+import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-guardado1';
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft3';
+import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261124-guardado1';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-wallet1';
 
 import { renderMuseumPassport } from './museum-passport.js?v=2';
@@ -80,7 +81,7 @@ async function initialize(){
         client,teamId:id,exercise:5,userId:user.id,
         onDraft:places=>window.m1FifthDraftApply?.(places),
         onStatus:(msg,kind)=>{
-          say(msg);retry.style.display=kind==='error'?'inline-block':'none';
+          paintSaveIndicator(status,kind,kind==='ready'?SAVE_TEXT.ready:msg);retry.style.display=kind==='error'?'inline-block':'none';
           window.m1FifthDraftStatus?.(msg,kind);
         },
         onCompleted:()=>markMission1NavCompleted(5)
