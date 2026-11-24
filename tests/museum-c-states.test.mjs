@@ -11,7 +11,9 @@ test('Egoera 0/4: lehen misioa erabilgarri, bigarrena itxita',()=>{
  assert.match(html,/c-museo-m2[^>]*disabled/);
  assert.match(html,/c-museo-m3[^>]*disabled/);
  assert.match(html,/c-museo-m4[^>]*disabled/);
- assert.doesNotMatch(html,/HASI|c-museo-brass|c-museo-status1|c-museo-status2/);
+ assert.match(html,/c-museo-inscription-1 is-next[^>]*>HASI</);
+ assert.match(html,/c-museo-inscription-2 is-locked[^>]*>.*BLOKEATUTA/s);
+ assert.doesNotMatch(html,/c-museo-brass|c-museo-status1|c-museo-status2/);
  assert.match(html,/museo-c-restauracion-mision1\.svg/);
  assert.match(html,/museo-c-restauracion-mision2\.svg/);
  assert.doesNotMatch(html,/c-museo-flag-pin|c-museo-banner-retouch/);
@@ -26,9 +28,10 @@ test('Egoera 1/4: argazkiaren jatorrizko %25 dago; ez dago tinta bikoiztuta',()=
  assert.match(html,/class="c-museo-book-bar"><i style="width:25%"/);
  assert.match(html,/class="c-museo-book-next"/);
  assert.match(html,/c-museo-m2[^>]*data-mission="2"/);
- assert.doesNotMatch(html,/c-museo-banner-repair/);
- assert.doesNotMatch(html,/museo-c-restauracion-mision/);
- assert.doesNotMatch(html,/>OSATUTA<|>HASI/);
+ assert.match(html,/museo-c-restauracion-mision2\.svg/);
+ assert.doesNotMatch(html,/museo-c-restauracion-mision1\.svg/);
+ assert.match(html,/c-museo-inscription-2 is-next[^>]*>HASI</);
+ assert.doesNotMatch(html,/c-museo-inscription-1/);
  assert.match(html,/Inperialismoaren faktoreak/);
 });
 
@@ -88,7 +91,9 @@ test('Lau estandarteen argiztapena egiaztatutako egoeraren araberakoa da',()=>{
  assert.match(css,/\.c-museo-portal\.is-available:enabled::before/);
  assert.match(module,/museo-c-restauracion-mision1\.svg/);
  assert.match(module,/museo-c-restauracion-mision2\.svg/);
- assert.doesNotMatch(module,/>HASI|>OSATUTA|c-museo-brass/);
+ assert.doesNotMatch(module,/>OSATUTA|c-museo-brass/);
+ assert.match(css,/\.c-museo-hotspots \.c-museo-portal\.is-next:enabled::before/);
+ assert.match(css,/\.c-museo-hotspots \.c-museo-portal:is\(\.is-locked,\.is-upcoming\):disabled::before/);
  assert.match(css,/prefers-reduced-motion:reduce/);
  assert.match(module,/data-state="/);
  assert.match(module,/data-c-logout="1"/);
@@ -112,8 +117,8 @@ test('Estandarteak: jatorrizko irudiaren materiala bakarrik zaharberritu, inoiz 
    assert.ok(raw.length<4000,'Zaharberritzearen geruza txikia izan behar da');
  }
  const original=renderVestibuloC({teamName:'Atlas',completedIds:[1]});
- assert.doesNotMatch(original,/museo-c-restauracion-mision[12]/,
-    '1/4 egoeran jatorrizko estandarteak oso-osorik ageri dira');
+ assert.doesNotMatch(original,/museo-c-restauracion-mision1/);
+ assert.match(original,/museo-c-restauracion-mision2/,'Se sustituye solo JARRAITU por HASI');
  const blank=renderVestibuloC({teamName:'Nilo',completedIds:[]});
  assert.equal((blank.match(/c-museo-banner-repair/g)||[]).length,2);
  const completed=renderVestibuloC({teamName:'Nilo',completedIds:[1,2]});
@@ -150,4 +155,19 @@ test('Itxiera: lehen misioa amaituta ere bigarrena ezin da ireki',()=>{
  assert.match(html,/c-museo-book2[^>]*disabled/);
  assert.doesNotMatch(html,/data-mission="2"/);
  assert.match(html,/1 \/ 4 misio osatuta/);
+});
+
+
+test('HASI únicamente en la próxima misión habilitada; cierre y sellos se conservan',()=>{
+ for(const [completedIds,mission2Open,active] of [[[],true,1],[[],false,1],[[1],true,2],[[1],false,0],[[1,2],true,0],[[1,2],false,0]]){
+  const html=renderVestibuloC({completedIds,mission2Open});
+  const labels=[...html.matchAll(/c-museo-inscription-([12]) is-next[^>]*>HASI</g)].map(m=>Number(m[1]));
+  assert.deepEqual(labels,active?[active]:[]);
+  const available=[...html.matchAll(/c-museo-m([12]) is-available is-next/g)].map(m=>Number(m[1]));
+  assert.deepEqual(available,active?[active]:[]);
+  assert.match(html,/c-museo-m3[^>]*disabled/);
+  assert.match(html,/c-museo-m4[^>]*disabled/);
+  if(completedIds.includes(2))assert.match(html,/museo-c-osatuta-mision2/);
+  if(!mission2Open)assert.doesNotMatch(html,/data-mission="2"/);
+ }
 });

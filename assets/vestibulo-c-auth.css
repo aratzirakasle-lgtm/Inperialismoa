@@ -375,3 +375,35 @@
 @media(prefers-reduced-motion:reduce){
  .c-museo-hotspots .c-museo-portal::before{transition:none!important}
 }
+
+/* HASI y candados: luz localizada, nunca un rectángulo de botón moderno. */
+.c-museo-hotspots .c-museo-hotspot:disabled{
+ background:transparent!important;border-color:transparent!important;
+ box-shadow:none!important;opacity:1!important;appearance:none;
+}
+.c-museo-inscription{
+ position:absolute;z-index:3;display:flex;align-items:center;justify-content:center;gap:.22cqw;
+ pointer-events:none;user-select:none;white-space:nowrap;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ color:#38230c;text-shadow:0 .055cqw #ffe3a16b;
+ font:900 1.45cqw/1 Georgia,'Times New Roman',serif;letter-spacing:.025em;
+}
+/* Coordenadas de las cartelas originales (1672 × 941). */
+.c-museo-inscription-1{left:18.66%;top:53.56%;width:6.40%;height:3.19%}
+.c-museo-inscription-2{left:31.0%;top:53.54%;width:7.10%;height:2.75%}
+.c-museo-inscription.is-locked{font-size:.79cqw;letter-spacing:0;color:#302419;text-shadow:0 .04cqw #e3bd7066}
+.c-museo-inscription.is-locked svg{width:.85cqw;height:.94cqw;flex:none}
+.c-museo-hotspots .c-museo-portal.is-next:enabled::before{
+ opacity:.77;border-color:#ffe0a9b5;
+ background:linear-gradient(180deg,#ffe3a006 0%,#ffdb7020 65%,#f2b64825);
+ box-shadow:inset 0 0 1.1cqw #f8d99542,0 0 .9cqw #f1bd6199;
+}
+.c-museo-hotspots .c-museo-portal.is-next:enabled:is(:hover,:focus-visible)::before{opacity:1}
+.c-museo-hotspots .c-museo-portal:is(.is-locked,.is-upcoming):disabled::before{
+ content:"";position:absolute;inset:1% 3% 3%;pointer-events:none;
+ clip-path:polygon(1% 0,99% 0,99% 87%,50% 100%,1% 87%);
+ border:0;border-radius:8px 8px 42% 42%;
+ background:linear-gradient(180deg,#151c1360 0%,#10181044 55%,#10181030);
+ box-shadow:none;opacity:.55;
+}
+.c-museo-mobile-mission.is-next:not(:disabled){border-color:#e6bd65;box-shadow:0 0 12px #dfb25170}

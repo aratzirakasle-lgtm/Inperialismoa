@@ -501,9 +501,15 @@ try{
        'Se restauran solo el escudo y la cartela con texto incompatible');
      await page.locator('.c-museo-banner-repair').evaluateAll(
        imgs=>Promise.all(imgs.map(img=>img.decode())));
+     assert.equal(await page.locator('.c-museo-inscription-1.is-next').innerText(),'HASI');
+     assert.equal(await page.locator('.c-museo-inscription-2.is-locked svg').count(),1);
+     assert.equal(await page.locator('.c-museo-m2').isDisabled(),true);
+     for(const id of [2,3,4]){
+       const state=await page.locator('.c-museo-m'+id).evaluate(el=>({bg:getComputedStyle(el).backgroundColor,shade:Number(getComputedStyle(el,'::before').opacity)}));
+       assert.equal(state.bg,'rgba(0, 0, 0, 0)');assert.ok(state.shade>0&&state.shade<1);
+     }
+     await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
      await page.locator('.c-museo-m1').hover();
-     await page.waitForFunction(()=>Number(getComputedStyle(
-       document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
      await page.locator('.c-museo-m1').focus();
      assert.equal(await page.locator('.c-museo-m1').evaluate(el=>document.activeElement===el),true);
      assert.match(await page.locator('.c-museo-m1').getAttribute('aria-label'),/Eskuragarri/);
@@ -529,13 +535,16 @@ try{
      assert.match(summary,new RegExp((expected/25)+' / 4 misio osatuta'));
      assert.match(summary,new RegExp(expected+' %'));
      if(expected===25){
-       assert.equal(await page.locator('.c-museo-banner-repair').count(),0,
-        '1/4 muestra la pintura original intacta, con su OSATUTA integrado');
+       assert.equal(await page.locator('.c-museo-banner-repair').count(),1,
+        '1/4 conserva OSATUTA en M1 y sustituye JARRAITU por HASI en M2');
+       assert.equal(await page.locator('.c-museo-inscription-2.is-next').innerText(),'HASI');
+       assert.equal(await page.locator('.c-museo-inscription-1').count(),0);
        assert.equal(await page.locator('.c-museo-book-progress').innerText(),'1 / 4',
         'El dato real se imprime una sola vez en el pergamino restaurado');
      }else{
        assert.equal(await page.locator('.c-museo-banner-repair').count(),1,
         '2/4 conserva el estandarte original primero y adapta solo la inscripción del segundo');
+       assert.equal(await page.locator('.c-museo-inscription.is-next').count(),0);
        const image=page.locator('.c-museo-banner-repair');
        assert.match(await image.getAttribute('src'),/museo-c-osatuta-mision2\.svg/);
        await image.evaluate(img=>img.decode());

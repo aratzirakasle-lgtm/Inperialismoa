@@ -16,6 +16,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  const count=done.size,pct=count*25;
  const canEnter2=mission2Open&&complete1;
  const nextId=complete1?(complete2?0:2):1;
+ const activeId=nextId===1?1:nextId===2&&canEnter2?2:0;
  const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title+(nextId===2&&!mission2Open?'\n(Blokeatuta)':''):"3. Misioa:\nInperioen banaketa\n(Prestatzen)";
  const rawName=String(teamName||"Taldea").trim().slice(0,80)||"Taldea";
  const safeName=esc(rawName);
@@ -26,11 +27,11 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  // Inpimatutako izen, aurrerapen eta hurrengo misioaren gaineko letrak beti kentzen dira.
  // Pergaminoa gardentasuneko geruza txiki batekin leheneratzen da.
  const zones=[
-  hotspot("c-museo-portal c-museo-m1 "+(complete1?"is-complete":"is-available"),
+  hotspot("c-museo-portal c-museo-m1 "+(complete1?"is-complete":"is-available is-next"),
    "1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-state="'+(complete1?"complete":"available")+'" data-mission="1"'),
-  hotspot("c-museo-portal c-museo-m2 "+(!mission2Open?"is-locked":complete2?"is-complete":complete1?"is-available":"is-locked"),
-   "2. misioa: "+display[2].title+". "+(!mission2Open?"Blokeatuta":complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),
-   'data-state="'+(!mission2Open?"locked":complete2?"complete":complete1?"available":"locked")+'" '+(canEnter2?'data-mission="2"':'disabled')),
+  hotspot("c-museo-portal c-museo-m2 "+(complete2?"is-complete":canEnter2?"is-available is-next":"is-locked"),
+   "2. misioa: "+display[2].title+". "+(complete2?"Osatuta":canEnter2?"Eskuragarri":"Blokeatuta"),
+   'data-state="'+(complete2?"complete":canEnter2?"available":"locked")+'" '+(canEnter2?'data-mission="2"':'disabled')),
   hotspot("c-museo-portal c-museo-m3 is-upcoming","3. misioa: "+display[3].title+". Prestatzen",
    'data-state="upcoming" disabled'),
   hotspot("c-museo-portal c-museo-m4 is-upcoming","4. misioa: "+display[4].title+". Prestatzen",
@@ -45,15 +46,19 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  // Bestela inprimatutako tinta bakarrik kendu, jatorrizko pergamino/metalaren
  // fotogramak berreskuratuz. Ez da gaineko beste zigilu edo txartelik gehitzen.
  const restoration1=complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision1.svg?v=1" alt="" aria-hidden="true" draggable="false">';
- const restoration2=!mission2Open?'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">':complete2
+ const restoration2=complete2
   ?'<img class="c-museo-banner-repair" src="./assets/museo-c-osatuta-mision2.svg?v=2" alt="" aria-hidden="true" draggable="false">'
-  :complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">';
+  :'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">';
+ // Tinta sobre el material original. Los candados de M3/M4 ya están en la pintura.
+ const lock='<svg viewBox="0 0 24 26" fill="none" aria-hidden="true" focusable="false"><path d="M6 11V7a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2.5"/><rect x="3" y="10" width="18" height="14" rx="2.5" fill="currentColor"/><path d="M12 15v4" stroke="#d4b170" stroke-width="2" stroke-linecap="round"/></svg>';
+ const inscription=(id,label,active)=>'<span class="c-museo-inscription c-museo-inscription-'+id+(active?' is-next':' is-locked')+'" aria-hidden="true">'+label+'</span>';
+ const inscriptions=(complete1?'':inscription(1,'HASI',true))+(complete2?'':inscription(2,activeId===2?'HASI':lock+'<span>BLOKEATUTA</span>',activeId===2));
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
   const unlocked=id===1||id===2&&canEnter2;
-  const state=!published?'Prestatzen':id===2&&!mission2Open?'Blokeatuta':doneMission?'Osatuta':unlocked?'Eskuragarri':'Blokeatuta';
-  return '<button type="button" class="c-museo-mobile-mission" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(!published||!unlocked?'🔒':doneMission?'✓':'→')+'</span></button>';
+  const state=!published?'Prestatzen':doneMission?'Osatuta':id===activeId?'HASI':'Blokeatuta';
+  return '<button type="button" class="c-museo-mobile-mission'+(id===activeId?' is-next':'')+'" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(doneMission?'✓':!published||!unlocked?'🔒':'→')+'</span></button>';
  }).join('');
  return '<div class="c-museo-home" lang="eu">'+
  '<div class="c-museo-toolbar"><span class="c-museo-toolbar-brand">✦ MUSEO DIGITALA <span>· 4 MISIO</span></span>'+
@@ -66,7 +71,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  '</div></div>'+
  '<div class="c-museo-stage" aria-label="Inperialismoaren garaia. Lau misioko museoa">'+
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
- restoration1+restoration2+
+ restoration1+restoration2+inscriptions+
  '<div class="c-museo-real-data">'+
  '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
  '<span class="c-museo-book-name '+nameSize+'" title="'+safeName+'">'+safeName+'</span>'+ 
