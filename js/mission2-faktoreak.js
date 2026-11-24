@@ -1,4 +1,5 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
 
 const app=document.querySelector('#m2-app');
 const $=(selector,root=document)=>root.querySelector(selector);
@@ -60,6 +61,15 @@ const riverOptions=[['nile','Nilo'],['niger','Niger'],['congo','Kongo'],['zambez
 const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','Australiako basamortua'],['nile','Nilo'],['suez','Suez']];
 let teacher=false,teamId=null,active=1,selected=null,submitting=false,teacherEnding=false;
 let completions=new Set(),draft={},feedback='',feedbackState='';
+let autosave=null,saveStatus='Taldearen aurrerapena kargatzen…',saveKind='saving';
+function autosaveStatus(message,kind=''){
+ saveStatus=message;saveKind=kind;
+ const el=$('#m2-autosave');
+ if(el){el.textContent=message;el.dataset.state=kind}
+}
+function queueMission2(patch,exercise=active){
+ if(!teacher&&!completions.has(exercise))autosave?.queue(exercise,patch);
+}
 const steps=[1,2,3,4,5];
 const responseKeys={
  1:causes.map(item=>item.id),
@@ -106,6 +116,13 @@ async function initialize(){
    }
    completions=new Set((saved.data||[]).map(x=>Number(x.exercise)).filter(x=>steps.includes(x)));
    active=currentNext();
+   autosave=createMission2Autosave({
+    client,teamId,userId:authUser.id,
+    onRestore:rows=>{draft={...draft,...rows};if(app.querySelector('.m2-controls'))render()},
+    onStatus:autosaveStatus,
+    onCompleted:exercise=>{completions.add(exercise);if(exercise===active)render()}
+   });
+   await autosave.load();
   }
   render();
  }catch(error){console.error('M2 hasiera:',error);cardMessage('Ezin izan da misioa kargatu','Konexioa edo sarbidea egiaztatu eta saiatu berriro.')}
@@ -556,7 +573,7 @@ function isReady(){
 function controls(){
  const done=completions.has(active);
  const canGoForward=teacher||done;
- return '<div class="m2-controls"><p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
+ return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
  '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+(submitting?'disabled':'')+'>Berriz hasi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
@@ -633,10 +650,11 @@ async function check(){
  }catch(error){
   console.error('M2 egiaztapena:',error);
   setFeedback('Ezin izan dira erantzunak egiaztatu. Konexioa egiaztatu eta saiatu berriro.','error');
- }finally{submitting=false;const checkButton=$('[data-check]');if(checkButton)checkButton.disabled=!isReady()}
+ }finally{submitting=false;const checkButton=$('[data-check]');if(checkButton)checkButton.disabled=!isReady()||completions.has(active)}
 }
 function openExercise(n){
  if(!steps.includes(n)||!canOpen(n))return;
+ if(!teacher)void autosave?.flush();
  active=n;selected=null;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});
 }
@@ -644,21 +662,23 @@ function assignToCategory(catId){
  if(active!==1||!selected||!categories.some(c=>c.id===catId))return;
  const state=taskState(1);state.assignments=state.assignments||{};
  state.assignments[selected]=catId;const former=selected;selected=null;
+ queueMission2({assignments:{[former]:catId}},1);
  feedback='';feedbackState='';render();
  $('[data-card="'+former+'"]')?.focus({preventScroll:true});
 }
 function assignYear(year){
  if(active!==2||!selected)return;
  const state=taskState(2);
- for(const y of ['1869','1908','1914'])if(state[y]===selected)delete state[y];
- state[year]=selected;selected=null;render();
+ const patch={};
+ for(const y of ['1869','1908','1914'])if(state[y]===selected){delete state[y];patch[y]=null}
+ state[year]=selected;patch[year]=selected;queueMission2(patch,2);selected=null;render();
  $('[data-year="'+year+'"]')?.focus({preventScroll:true});
 }
 function toggleMulti(group,value){
  const state=taskState(5);state.multi=state.multi||{};
  const list=new Set(state.multi[group]||[]);
  if(list.has(value))list.delete(value);else list.add(value);
- state.multi[group]=[...list];render();
+ state.multi[group]=[...list];queueMission2({multi:{[group]:state.multi[group]}},5);render();
  $('[data-multi="'+group+'"][data-value="'+value+'"]')?.focus({preventScroll:true});
 }
 
@@ -667,16 +687,19 @@ function toggleMulti(group,value){
 function atlasMoveRoute(location){
  if(active!==3||!atlasSelectedRoute||!atlasRoutes.some(r=>r.id===location))return;
  const state=taskState(3);
+ const patch={};
  for(const route of atlasRoutes){
-  if(route.id!==atlasSelectedRoute&&state['route_'+route.id]===location)delete state['route_'+route.id];
+  if(route.id!==atlasSelectedRoute&&state['route_'+route.id]===location){delete state['route_'+route.id];patch['route_'+route.id]=null}
  }
  state['route_'+atlasSelectedRoute]=location;
+ patch['route_'+atlasSelectedRoute]=location;queueMission2(patch,3);
  atlasSelectedRoute=null;
  feedback='';feedbackState='';render();
 }
 function atlasPack(bag){
  if(active!==3||!atlasSelectedLuggage||!['cause','effect'].includes(bag))return;
  taskState(3)['bag_'+atlasSelectedLuggage]=bag;
+ queueMission2({['bag_'+atlasSelectedLuggage]:bag},3);
  atlasSelectedLuggage=null;
  feedback='';feedbackState='';render();
 }
@@ -696,7 +719,8 @@ app.addEventListener('click',event=>{
    const desk=event.target.closest('[data-unassign]');
    if(desk&&selected&&active===1){
      const assignments=taskState(1).assignments||{};
-     delete assignments[selected];selected=null;feedback='';feedbackState='';render();
+     const removed=selected;delete assignments[removed];queueMission2({assignments:{[removed]:null}},1);
+     selected=null;feedback='';feedbackState='';render();
    }
    return;
  }
@@ -718,7 +742,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
  if(elem.hasAttribute('data-year'))return assignYear(elem.dataset.year);
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
- if(elem.hasAttribute('data-reset')){draft[active]={};selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render();return}
+ if(elem.hasAttribute('data-reset')){if(completions.has(active)&&!teacher)return;draft[active]={};if(!teacher)autosave?.reset(active);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render();return}
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
  if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
@@ -727,12 +751,16 @@ app.addEventListener('click',event=>{
 });
 app.addEventListener('change',event=>{
  const target=event.target;
- if(target.matches('select[data-field],input[type="radio"][data-field]'))taskState(active)[target.dataset.field]=target.value;
+ if(target.matches('select[data-field],input[type="radio"][data-field]')){
+  taskState(active)[target.dataset.field]=target.value;
+  queueMission2({[target.dataset.field]:target.value});
+ }
  if(active===3&&target.matches('select[data-field],input[type="radio"][data-field]')){
   render();return;
  }
  if(target.matches('input[data-archive]')){
   taskState(4)[target.dataset.archive]=target.value;
+  queueMission2({[target.dataset.archive]:target.value},4);
   const dossier=target.closest('.m2-archive-dossier');
   if(dossier)dossier.dataset.answered='true';
   const badge=$('[data-archive-progress]');
@@ -785,7 +813,8 @@ app.addEventListener('drop',event=>{
  const moved=event.dataTransfer?.getData('text/plain');
  if(moved)selected=moved;
  if(loose&&active===1&&selected){
-   delete taskState(1).assignments?.[selected];selected=null;feedback='';feedbackState='';render();return;
+   const removed=selected;delete taskState(1).assignments?.[removed];
+   queueMission2({assignments:{[removed]:null}},1);selected=null;feedback='';feedbackState='';render();return;
  }
  if(zone)assignToCategory(zone.dataset.zone);
  if(year)assignYear(year.dataset.year);
