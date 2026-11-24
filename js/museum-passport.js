@@ -40,6 +40,7 @@ function atlasSeal(id,won,available,mark){
 
 // Atlas-only medal illustration; awards are still derived from earned IDs.
 function atlasMedal(id){
+ if(id===1||id===2)return '<img class="mp-medal atlas-photo-medal" src="./assets/atlas-medalla-referencia-'+id+'.svg" width="76" height="131" alt="" aria-hidden="true">';
  const u='atlas-medal-'+id;
  const palette=[['#244b40','#102b21'],['#862e28','#41130e'],['#244c72','#12283f'],['#785130','#382418']][id-1];
  const icons=[
