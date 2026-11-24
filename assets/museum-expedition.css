@@ -225,6 +225,7 @@
 }
 .atlas-concept-one .atlas-totals::before{
  content:'';position:absolute;z-index:-1;inset:-.35cqw -.4cqw;
+ width:auto;height:auto;min-width:0;min-height:0;border-radius:0;box-shadow:none;
  background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat;
  filter:drop-shadow(1px 4px 3px #31200c8c);
  pointer-events:none;
