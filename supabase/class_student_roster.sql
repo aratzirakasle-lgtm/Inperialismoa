@@ -4,7 +4,7 @@
 CREATE TABLE IF NOT EXISTS public.class_student_roster (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
  team_id uuid NOT NULL REFERENCES public.teams(id) ON DELETE RESTRICT,
- slot smallint NOT NULL CHECK (slot BETWEEN 1 AND 2),
+ slot smallint NOT NULL CHECK (slot BETWEEN 1 AND 3),
  display_name text NOT NULL CHECK (char_length(btrim(display_name)) BETWEEN 1 AND 100),
  auth_user_id uuid UNIQUE REFERENCES auth.users(id) ON DELETE SET NULL,
  created_at timestamptz NOT NULL DEFAULT now(),
