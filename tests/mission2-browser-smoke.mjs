@@ -38,6 +38,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
    from:table,
    rpc:async(name,args)=>{
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
+    if(name==='save_mission2_team_draft')return {data:{status:'saved',answers:args.p_patch},error:null};
     return {data:{completed:true,mission_completed:args.p_exercise===5},error:null};
    }
   })};
@@ -397,7 +398,8 @@ try{
    await page.locator('[data-ending]').click();
    assert.equal(await page.locator('.m2-finished').count(),1);
    assert.equal(await page.locator('.m2-finished').innerText().then(t=>t.includes('3. misioa')),true);
-   assert.deepEqual((await page.evaluate(()=>window.__m2RpcCalls)).map(x=>x.exercise),[1,2,3,4,5]);
+   assert.deepEqual((await page.evaluate(()=>window.__m2RpcCalls))
+     .filter(x=>x.name==='submit_mission2_exercise').map(x=>x.exercise),[1,2,3,4,5]);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
