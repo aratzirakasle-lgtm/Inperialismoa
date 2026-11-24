@@ -23,11 +23,12 @@ async function open(role='student',size={width:1365,height:900},badge=true){
  await context.addInitScript(({role,badge})=>{
   const myId=role==='teacher'?'qa-teacher':'qa-student';
   window.__m2RpcCalls=[];
+  const drafts={},finished=new Set();
   const table=key=>{
    const rows=key==='profiles'?[{id:myId,role,team_id:role==='student'?'qa-team':null}]:
     key==='mission_badges'?[{mission_id:1,team_id:'qa-team'}]:
     key==='mission1_exercise_completions'?(badge?[{exercise:5,team_id:'qa-team'}]:[]):
-    key==='mission2_exercise_completions'?[]:[];
+    key==='mission2_exercise_completions'?[...finished].map(exercise=>({exercise})):key==='mission2_team_drafts'?Object.entries(drafts).map(([exercise,answers])=>({exercise:Number(exercise),answers})):[];
    const q={
     select(){return this},eq(){return this},limit(){return this},
     single:async()=>({data:rows[0]||null,error:rows.length?null:{message:'not found'}}),
@@ -42,7 +43,8 @@ async function open(role='student',size={width:1365,height:900},badge=true){
     if(name==='class_access_status')return {data:true,error:null};
     if(name==='mission2_class_progress_members')return {data:[{team_id:'qa-team',class_id:'qa-class',team_name:'Atlas',member_names:['Ane'],exercise_1:true,mission_completed:false},{team_id:'other-team',class_id:'qa-class',team_name:'Nilo',member_names:['Jon'],exercise_1:true,exercise_2:true,mission_completed:false}],error:null};
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
-    if(name==='save_mission2_team_draft')return {data:{status:'saved',answers:args.p_patch},error:null};
+    if(name==='save_mission2_team_draft'){const old=args.p_reset?{}:drafts[args.p_exercise]||{};const next={...old,...args.p_patch};for(const k of ['assignments','multi'])if(args.p_patch[k])next[k]={...(old[k]||{}),...args.p_patch[k]};drafts[args.p_exercise]=next;return {data:{status:'saved',answers:next},error:null}}
+    if(name==='submit_mission2_exercise')finished.add(args.p_exercise);
     return {data:{completed:true,mission_completed:args.p_exercise===5},error:null};
    }
   })};
@@ -418,7 +420,9 @@ try{
    await page.locator('[data-ending]').waitFor();
    await page.locator('[data-ending]').click();
    assert.equal(await page.locator('.m2-finished').count(),1);
-   assert.equal(await page.locator('.m2-finished').innerText().then(t=>t.includes('3. misioa')),true);
+   assert.match(await page.locator('.m2-finished').innerText(),/3. misioa prestatzen/);
+   assert.equal(await page.locator('.m2-finished .mp-earned').count(),2);
+   assert.equal(await page.locator('.m2-finished .mp-medal').count(),2);
    assert.deepEqual((await page.evaluate(()=>window.__m2RpcCalls))
      .filter(x=>x.name==='submit_mission2_exercise').map(x=>x.exercise),[1,2,3,4,5]);
    assert.deepEqual(errors,[]);

@@ -1,16 +1,17 @@
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync2';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
+import { renderMuseumPassport } from './museum-passport.js?v=3';
 const app=document.querySelector('#m2-app');
 let mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
 async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
  try{const {data,error}=await client.rpc('mission2_access_status',{});if(error||typeof data!=='boolean')return;
- if(data===false&&!releaseClosed){releaseClosed=true;cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
+ if(data===false&&!releaseClosed){releaseClosed=true;autosave?.destroy();document.querySelector('.m2-class-widget')?.__classProgressCleanup?.();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
  else if(data===true&&releaseClosed)location.reload();
  }catch{}finally{releaseChecking=false}
 }
@@ -139,13 +140,16 @@ async function initialize(){
    }
    completions=new Set((saved.data||[]).map(x=>Number(x.exercise)).filter(x=>steps.includes(x)));
    active=currentNext();
+   if(completions.size===5)teacherEnding=true;
    autosave=createMission2Autosave({
     client,teamId,userId:authUser.id,
-    onRestore:rows=>{draft={...draft,...rows};if(app.querySelector('.m2-controls'))render()},
+    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);draft=rows;if(changed&&!submitting&&!releaseClosed&&app.querySelector('.m2-controls'))render()},
     onStatus:autosaveStatus,
     onCompleted:exercise=>{completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active)render()}
    });
    await autosave.load();
+   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;let changed=false;for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));render()}}catch{}};
+   const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);autosave?.destroy()},{once:true});
    mountClassroomProgressPanel(client,teamId,{missionId:2});
   }
   render();
@@ -617,8 +621,9 @@ function renderEnd(){
  return hero()+nav()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
  '<h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
  (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
- '<p><strong>3. misioa desblokeatuta dago.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
- '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'#mission3')+'">Museora itzuli →</a></section>';
+ '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
+ renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],preview:teacher,animate:true,animateMission:2})+
+ '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">Museora itzuli →</a></section>';
 }
 function render(){
  if(releaseClosed)return;
@@ -773,7 +778,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
  if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
  if(elem.hasAttribute('data-preview-next')){if(active===5){teacherEnding=true;render()}else openExercise(active+1);return}
- if(elem.hasAttribute('data-ending')){teacherEnding=true;render()}
+ if(elem.hasAttribute('data-ending')&&(teacher||completions.size===5)){teacherEnding=true;render()}
 });
 app.addEventListener('change',event=>{
  const target=event.target;

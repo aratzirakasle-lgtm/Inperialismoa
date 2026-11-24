@@ -39,7 +39,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
     entries[id]={reset:entry.reset===true,patch:entry.patch};
   }
  }catch(e){console.warn('M2: tokiko borradorra ezin izan da irakurri',e)}
- let timer=null,working=false,alive=true,failed=false;
+ let timer=null,working=false,loading=false,alive=true,failed=false;
  const busy=()=>Object.keys(entries).length>0;
  const persist=()=>{
   try{
@@ -64,6 +64,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
  }
  async function flush(){
   if(!alive||working||!busy())return;
+  if(loading){schedule(100);return}
   working=true;failed=false;
   try{
    for(const id of Object.keys(entries).sort()){
@@ -90,7 +91,8 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
   }
  }
  async function load(){
-  if(!alive)return false;
+  if(!alive||loading||working)return false;
+  loading=true;
   try{
    const {data,error}=await client.from('mission2_team_drafts')
     .select('exercise,answers').eq('team_id',teamId);
@@ -111,17 +113,18 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
    console.error('M2: borradorrak berreskuratzea',e);
    status('Taldearen lana ezin izan da sinkronizatu. Egiaztatu konexioa.','error');
    return false;
-  }
+  }finally{loading=false}
  }
  const onOnline=()=>{if(busy())schedule(10);else if(!working)void load()};
  const onVisible=()=>{if(document.visibilityState==='visible')onOnline()};
+ const refreshTimer=setInterval(()=>{if(alive&&document.visibilityState==='visible'&&!working&&!loading){if(busy())schedule(10);else void load()}},5000);
  const onPageHide=()=>{if(busy())void flush()};
  window.addEventListener('online',onOnline);
  window.addEventListener('focus',onOnline);
  window.addEventListener('pagehide',onPageHide);
  document.addEventListener('visibilitychange',onVisible);
  return {load,queue,reset,flush,hasPending:busy,destroy(){
-  alive=false;if(timer!==null)clearTimeout(timer);
+  alive=false;clearInterval(refreshTimer);if(timer!==null)clearTimeout(timer);
   window.removeEventListener('online',onOnline);
   window.removeEventListener('focus',onOnline);
   window.removeEventListener('pagehide',onPageHide);

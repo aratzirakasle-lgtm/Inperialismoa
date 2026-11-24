@@ -16,3 +16,5 @@ test('pasaporte: vista previa explícita y nombre seguro',()=>{
  assert.doesNotMatch(html,/<script>/);assert.match(html,/&lt;script&gt;/);
  assert.match(html,/SIMULAZIOA/);assert.doesNotMatch(html,/mp-imprint/);
 });
+
+ test('Segunda misión: dos medallas y dos sellos',()=>{const html=renderMuseumPassport({completedIds:[1,2],animate:true,animateMission:2});assert.equal((html.match(/class="mp-medal"/g)||[]).length,2);assert.match(html,/II\. MISIOAREN DOMINA/);});
