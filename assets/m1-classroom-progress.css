@@ -43,3 +43,7 @@
 .m1-class-panel{width:min(354px,calc(100vw - 24px))}
 .m1-class-panel-body .m1-class-members,.m1-class-archive .m1-class-members{font-size:11px}
 @media(max-width:560px){.m1-class-archive .m1-class-members{font-size:10px}}
+
+/* Misma medalla y tablero del aula, sin modificar los ejercicios. */
+.m2-class-widget .m1-class-toggle{display:flex;align-items:center;gap:6px;padding:4px 15px 4px 7px;min-height:41px}
+.m2-class-trophy{width:32px;height:32px;flex:0 0 32px;filter:drop-shadow(0 0 3px #e3b45e66)}

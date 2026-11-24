@@ -39,6 +39,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
    from:table,
    rpc:async(name,args)=>{
     if(name==='class_access_status')return {data:true,error:null};
+    if(name==='mission2_class_progress_members')return {data:[{team_id:'qa-team',class_id:'qa-class',team_name:'Atlas',member_names:['Ane'],exercise_1:true,mission_completed:false},{team_id:'other-team',class_id:'qa-class',team_name:'Nilo',member_names:['Jon'],exercise_1:true,exercise_2:true,mission_completed:false}],error:null};
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
     if(name==='save_mission2_team_draft')return {data:{status:'saved',answers:args.p_patch},error:null};
     return {data:{completed:true,mission_completed:args.p_exercise===5},error:null};
@@ -329,6 +330,23 @@ try{
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
+ });
+ await scenario('Alumno: pestaña de compañeros de la misión 2',async()=>{
+  const {page,context,errors}=await open('student');
+  try{
+   const toggle=page.locator('.m2-class-widget .m1-class-toggle');
+   await toggle.waitFor({state:'visible'});
+   assert.equal(await page.locator('.m1-class-panel').isVisible(),false);
+   await toggle.click();
+   await page.locator('.m1-class-team').first().waitFor({state:'visible'});
+   assert.match(await page.locator('.m1-class-panel').innerText(),/2\. MISIOA/);
+   assert.equal(await page.locator('.m1-class-team').count(),2);
+   assert.match(await page.locator('.m1-class-panel').innerText(),/ZUEN TALDEA/);
+   assert.match(await page.locator('.m1-class-panel').innerText(),/Nilo/);
+   await page.locator('.m1-class-close').click();
+   assert.equal(await page.locator('.m1-class-panel').isVisible(),false);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
  });
  await scenario('Alumno: cinco ejercicios progresivos y desbloqueo de final (servidor simulado)',async()=>{
   const {page,context,errors}=await open('student');

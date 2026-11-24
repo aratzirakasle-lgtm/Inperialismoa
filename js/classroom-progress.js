@@ -12,8 +12,9 @@ const mark = (done,label,mission=false) =>
   '" title="'+esc(label+(done?' gaindituta':' osatu gabe'))+'">'+(done?'✓':'○')+'</span>';
 
 export function renderMission1ClassProgress(rows,{
-  ownTeamId=null,classId=null,loading=false,error=false
+  ownTeamId=null,classId=null,loading=false,error=false,missionId=1
 }={}){
+  const mission=missionId===2?2:1;
   const list=(Array.isArray(rows)?rows:[]).filter(row=>
     row && (classId===null||String(row.class_id)===String(classId)));
   if(!list.length){
@@ -33,10 +34,10 @@ export function renderMission1ClassProgress(rows,{
       '<span class="m1-class-name" title="'+esc(row.team_name)+'">'+esc(row.team_name)+
         members+(own?'<span class="m1-class-you">ZUEN TALDEA</span>':'')+
         '<small>'+total+'/5</small></span>'+
-      checks+mark(row.mission_completed===true,'1. misioa',true)+'</div>';
+      checks+mark(row.mission_completed===true,mission+'. misioa',true)+'</div>';
   }).join('');
   const info=error?'<p class="m1-class-info is-error">Konexioa eten da · azken datuak</p>':
     '<p class="m1-class-info">✓ Ariketa gaindituta · M misio osoa</p>';
-  return '<div class="m1-class-progress" aria-label="1. misioa: taldeen ariketa eta misioaren aurrerapena">'+
+  return '<div class="m1-class-progress" aria-label="'+mission+'. misioa: taldeen ariketa eta misioaren aurrerapena">'+
     head+body+info+'</div>';
 }

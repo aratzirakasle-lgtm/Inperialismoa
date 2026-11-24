@@ -3,6 +3,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
+import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
 const app=document.querySelector('#m2-app');
 const $=(selector,root=document)=>root.querySelector(selector);
 const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
@@ -124,9 +125,10 @@ async function initialize(){
     client,teamId,userId:authUser.id,
     onRestore:rows=>{draft={...draft,...rows};if(app.querySelector('.m2-controls'))render()},
     onStatus:autosaveStatus,
-    onCompleted:exercise=>{completions.add(exercise);if(exercise===active)render()}
+    onCompleted:exercise=>{completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active)render()}
    });
    await autosave.load();
+   mountClassroomProgressPanel(client,teamId,{missionId:2});
   }
   render();
  }catch(error){console.error('M2 hasiera:',error);cardMessage('Ezin izan da misioa kargatu','Konexioa edo sarbidea egiaztatu eta saiatu berriro.')}
@@ -645,6 +647,7 @@ async function check(){
   if(error)throw error;
   if(data?.completed){
    completions.add(active);
+   window.dispatchEvent(new Event('m2:progress-changed'));
    feedback='Ariketa gaindituta! Taldearen aurrerapena gorde da.';
    feedbackState='success';
    render();

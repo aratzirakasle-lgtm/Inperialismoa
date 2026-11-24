@@ -43,3 +43,10 @@ test('Los integrantes aparecen bajo su equipo y nunca se muestran los de otra cl
  assert.ok(!html.includes('Beste ikaslea'));
  assert.ok(!html.includes('Jon <b>'));
 });
+
+
+test('La misión 2 reutiliza las cinco marcas y etiqueta correctamente su sello',()=>{
+ const html=renderMission1ClassProgress([{...rows[0],member_names:['Ane']},rows[1]],{ownTeamId:'a',classId:'class1',missionId:2});
+ assert.match(html,/2\. misioa: taldeen/);assert.match(html,/2\. misioa osatu gabe/);assert.match(html,/2\. misioa gaindituta/);
+ assert.doesNotMatch(html,/1\. misioa/);assert.match(html,/Ane/);assert.match(html,/ZUEN TALDEA/);
+});
