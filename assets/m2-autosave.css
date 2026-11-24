@@ -1,0 +1,14 @@
+/* Aviso discreto y accesible; no altera las vitrinas ni las tarjetas. */
+.m2-autosave-status{
+ margin:0 0 .55rem;
+ padding:.45rem .7rem;
+ border:1px solid rgba(141,112,70,.38);
+ border-radius:8px;
+ background:rgba(241,218,166,.12);
+ color:inherit;
+ font-size:.85rem;
+ line-height:1.4;
+}
+.m2-autosave-status[data-state="saved"]{border-color:rgba(91,142,113,.5)}
+.m2-autosave-status[data-state="saving"]{border-color:rgba(173,136,76,.5)}
+.m2-autosave-status[data-state="error"]{border-color:rgba(161,76,62,.7)}
