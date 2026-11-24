@@ -258,7 +258,8 @@ drop policy if exists "Equipo y docente consultan sus PDFs" on storage.objects;
 create policy "Equipo y profesor propietario consultan PDF" on storage.objects for select to authenticated
 using(bucket_id='entregas' and (
   (storage.foldername(name))[1]=public.my_team()::text
-  or exists(select 1 from public.teams t where t.id::text=(storage.foldername(name))[1] and public.teacher_owns_team(t.id))
+  -- La ruta es la del OBJETO, no t.name del equipo (subconsulta anidada).
+  or exists(select 1 from public.teams t where t.id::text=(storage.foldername(objects.name))[1] and public.teacher_owns_team(t.id))
 ));
 
 -- Evento en tiempo real: los alumnos ven badges, sin metadatos privados.
