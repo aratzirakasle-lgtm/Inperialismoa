@@ -82,26 +82,25 @@ BEGIN
   WHERE team_id=v_team AND exercise=p_exercise
   FOR UPDATE;
 
-  IF p_reset THEN
-    v_new := '{}'::jsonb;
-  ELSE
-    v_new := v_old || (p_patch - 'assignments' - 'multi');
-    IF p_patch ? 'assignments' THEN
-      v_new := pg_catalog.jsonb_set(
-        v_new, '{assignments}',
-        pg_catalog.jsonb_strip_nulls(
-          COALESCE(v_old->'assignments','{}'::jsonb) || (p_patch->'assignments')
-        )
-      );
-    END IF;
-    IF p_patch ? 'multi' THEN
-      v_new := pg_catalog.jsonb_set(
-        v_new, '{multi}',
-        pg_catalog.jsonb_strip_nulls(
-          COALESCE(v_old->'multi','{}'::jsonb) || (p_patch->'multi')
-        )
-      );
-    END IF;
+  -- Si el grupo reinicia y vuelve a contestar antes de sincronizar,
+  -- las nuevas respuestas deben sobrevivir al reinicio pendiente.
+  IF p_reset THEN v_old := '{}'::jsonb; END IF;
+  v_new := v_old || (p_patch - 'assignments' - 'multi');
+  IF p_patch ? 'assignments' THEN
+    v_new := pg_catalog.jsonb_set(
+      v_new, '{assignments}',
+      pg_catalog.jsonb_strip_nulls(
+        COALESCE(v_old->'assignments','{}'::jsonb) || (p_patch->'assignments')
+      )
+    );
+  END IF;
+  IF p_patch ? 'multi' THEN
+    v_new := pg_catalog.jsonb_set(
+      v_new, '{multi}',
+      pg_catalog.jsonb_strip_nulls(
+        COALESCE(v_old->'multi','{}'::jsonb) || (p_patch->'multi')
+      )
+    );
   END IF;
   IF pg_catalog.octet_length(v_new::text)>16000 THEN
     RAISE EXCEPTION 'Borradorra handiegia da';
