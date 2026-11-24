@@ -1,0 +1,30 @@
+/* Unified museum portfolio, compact entrance, no audio. */
+.museum-wallet-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:30px;padding:4px 12px;border:2px ridge #c2a06a;border-radius:5px;background:linear-gradient(#385445,#1c3027);color:#f3dfb1;font:700 12px/1.3 Georgia,'Times New Roman',serif;cursor:pointer;box-shadow:0 2px 4px #0005}
+.museum-wallet-button:focus-visible,#museum-wallet-dialog button:focus-visible{outline:3px solid #c99c4b;outline-offset:2px}
+.museum-wallet-bar{display:flex;justify-content:center;margin:4px auto 6px}
+#museum-wallet-dialog{box-sizing:border-box;width:min(760px,calc(100% - 24px));max-height:90vh;overflow:auto;padding:0;border:4px ridge #ba9456;border-radius:9px;background:linear-gradient(115deg,#f8ebcd,#e6d0a0);color:#48321c;font:15px/1.45 Georgia,'Times New Roman',serif;box-shadow:0 16px 55px #0009;z-index:200}
+#museum-wallet-dialog::backdrop{background:#0a160fd0}
+#museum-wallet-dialog header{position:relative;background:linear-gradient(#344f40,#1a3428);color:#f5dfad;padding:16px 44px 12px;text-align:center;border-bottom:3px ridge #c19b5f}
+#museum-wallet-dialog header p{font-size:11px;letter-spacing:.16em;margin:0 0 4px}
+#museum-wallet-dialog h2{font:700 clamp(20px,4vw,28px)/1.2 Georgia,serif;margin:0}
+#museum-wallet-dialog button{font:700 13px/1.2 Georgia,serif;border:1px solid #a4824b;border-radius:5px;background:#eedcb5;color:#51381d;padding:8px 10px;cursor:pointer;min-height:34px}
+#museum-wallet-dialog button[aria-pressed=true],#museum-wallet-dialog footer button{background:#2c4c39;color:#f5dfb1;border-color:#a98a54}
+#museum-wallet-dialog button:disabled{opacity:.45;cursor:default}
+#museum-wallet-dialog header button{position:absolute;top:10px;right:10px;min-width:34px;padding:3px;font-size:22px;background:#263d30;color:#f5dfb1}
+#museum-wallet-dialog nav,.mw-mission-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:10px}
+#museum-wallet-dialog .mw-status{padding:0 14px;margin:4px 0;font-size:12px;text-align:center;color:#76572f}
+#museum-wallet-dialog .mw-content{padding:4px 15px 12px;min-height:130px}
+#museum-wallet-dialog footer{border-top:1px solid #b39a6a;padding:10px;text-align:center}
+.mw-file{border:1px solid #b89a65;background:#fff3d14f;border-radius:6px;padding:10px;margin:10px 0}
+.mw-file h3{display:flex;justify-content:space-between;margin:0 0 8px;font-size:15px;color:#5c4020}
+.mw-file ol{list-style:none;padding:0;margin:0;display:grid;gap:5px}
+.mw-file li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px;border-bottom:1px solid #cdb88e;font-size:13px}
+.mw-file li>span{display:grid;place-items:center;width:28px;height:28px;border:2px ridge #b38b4c;border-radius:50%;color:#79582b}
+.mw-file li.mw-sealed>span{background:#345a40;color:#f6dfab}
+.mw-file li small{font-size:10px;color:#79582b}
+.mw-file li.mw-sealed small{color:#345a40;font-weight:bold}
+.mw-future{font-size:13px;text-align:center;color:#79582b}
+#museum-wallet-dialog .m1-class-grid{grid-template-columns:minmax(75px,1fr) repeat(5,minmax(19px,36px)) 32px;gap:5px}
+#museum-wallet-dialog .m1-class-mark{width:24px;height:24px}
+#museum-wallet-dialog .m1-class-name{color:#4a321c}
+@media(max-width:450px){#museum-wallet-dialog .mw-content{padding:5px 8px}#museum-wallet-dialog nav button{flex:1 1 42%;font-size:12px}#museum-wallet-dialog .m1-class-grid{grid-template-columns:minmax(55px,1fr) repeat(5,19px) 23px;gap:2px}#museum-wallet-dialog .m1-class-mark{width:18px;height:18px}.mw-file li{font-size:12px}}

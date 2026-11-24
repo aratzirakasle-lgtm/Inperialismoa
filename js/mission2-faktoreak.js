@@ -3,8 +3,9 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync4';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-experience1';
-import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=1';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-wallet1';
+import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=1';
+import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
 import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
 import { renderMuseumPassport } from './museum-passport.js?v=3';
 const app=document.querySelector('#m2-app');
@@ -13,7 +14,7 @@ async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
  try{const {data,error}=await client.rpc('mission2_access_status',{});if(error||typeof data!=='boolean')return;
- if(data===false&&!releaseClosed){releaseClosed=true;document.querySelector('#m2-reading-dialog')?.close();autosave?.destroy();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
+ if(data===false&&!releaseClosed){releaseClosed=true;walletContext(null);document.querySelector('#m2-reading-dialog')?.close();autosave?.destroy();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
  else if(data===true&&releaseClosed)location.reload();
  }catch{}finally{releaseChecking=false}
 }
@@ -242,6 +243,7 @@ async function initialize(){
    const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);clearTimeout(remoteRenderTimer);autosave?.destroy()},{once:true});
 
   }
+  walletContext({client,team:teamId,mission:2,preview:teacher});prepareWallet();
   render();
  }catch(error){console.error('M2 hasiera:',error);cardMessage('Ezin izan da misioa kargatu','Konexioa edo sarbidea egiaztatu eta saiatu berriro.')}
 }
@@ -253,7 +255,7 @@ function hero(){
 function nav(){
  const trophy='<svg class="m1-progress-emblem" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false"><circle class="m1-progress-medallion" cx="20" cy="20" r="17.5" fill="#392a1a" stroke="#dcb36a" stroke-width="1.2"/><circle cx="20" cy="20" r="14.5" fill="none" stroke="#98733c" stroke-width=".7"/><path d="M14 11H26V19C26 23 23 25 20 25S14 23 14 19Z" fill="#e2b75e" stroke="#fff0bf" stroke-width=".8"/><path d="M14 13H10V16C10 20 12 21 15 21M26 13H30V16C30 20 28 21 25 21" fill="none" stroke="#e8c779" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 25V29M16 29H24L26 32H14Z" fill="#e2b75e" stroke="#edcf86" stroke-width="1.3" stroke-linejoin="round"/><path d="M20 14L21.1 17.2L24.5 17.2L21.8 19.2L22.8 22.4L20 20.5L17.2 22.4L18.2 19.2L15.5 17.2L18.9 17.2Z" fill="#795020"/><path class="m1-progress-spark" d="M31 5V11M28 8H34M8 27V31M6 29H10" stroke="#ffedb0" stroke-width="1.4" stroke-linecap="round"/></svg>';
  return mission2RouteMarkup(activities,active,{teacher,completedSteps:[...completions],canOpen,ending:teacherEnding})+
- '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+(!teacher?'<button type="button" data-m2-class-progress aria-haspopup="dialog">'+trophy+'Taldeen aurrerapena</button>':'')+missionBriefButton(2)+'</div>';
+ '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+(!teacher?'<button type="button" data-m2-class-progress aria-haspopup="dialog">'+trophy+'Taldeen aurrerapena</button>':'')+missionBriefButton(2)+walletButton()+'</div>';
 }
 function dossierMarkup(){
  const rows=activities.map(({id,title})=>'<li class="'+(completions.has(id)?'m1-sealed':'')+'"><span class="m1-medal">'+(completions.has(id)?'✓':String(id).padStart(2,'0'))+'</span><span>'+esc(title)+'</span><small>'+(completions.has(id)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');

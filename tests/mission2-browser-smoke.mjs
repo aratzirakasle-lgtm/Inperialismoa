@@ -41,6 +41,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
    rpc:async(name,args)=>{
     if(name==='mission2_access_status')return {data:true,error:null};
     if(name==='class_access_status')return {data:true,error:null};
+    if(name==='mission1_class_progress_members')return {data:[{team_id:'qa-team',class_id:'qa-class',team_name:'Atlas',exercise_1:true,exercise_2:true,exercise_3:true,exercise_4:true,exercise_5:true,mission_completed:true}],error:null};
     if(name==='mission2_class_progress_members')return {data:[{team_id:'qa-team',class_id:'qa-class',team_name:'Atlas',member_names:['Ane'],exercise_1:true,mission_completed:false},{team_id:'other-team',class_id:'qa-class',team_name:'Nilo',member_names:['Jon'],exercise_1:true,exercise_2:true,mission_completed:false}],error:null};
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
     if(name==='save_mission2_team_draft'){const old=args.p_reset?{}:drafts[args.p_exercise]||{};const next={...old,...args.p_patch};for(const k of ['assignments','multi'])if(args.p_patch[k])next[k]={...(old[k]||{}),...args.p_patch[k]};drafts[args.p_exercise]=next;return {data:{status:'saved',answers:next},error:null}}
@@ -60,6 +61,23 @@ async function scenario(name,callback){
  catch(error){console.error('✗ '+name);throw error}
 }
 try{
+ await scenario('Cartera común: pasaporte confirmado, dos expedientes y clase sin respuestas',async()=>{
+  const {page,context,errors}=await open();try{
+   await page.locator('[data-museum-wallet]').click();
+   await page.locator('#museum-wallet-dialog .mp-earned').waitFor();
+   assert.equal(await page.locator('#museum-wallet-dialog .mp-earned').count(),1);
+   await page.locator('[data-mw-tab="archive"]').click();
+   assert.equal(await page.locator('.mw-file li').count(),10);
+   assert.equal(await page.locator('.mw-file .mw-sealed').count(),6);
+   await page.locator('[data-mw-tab="class"]').click();
+   assert.match(await page.locator('#museum-wallet-dialog .m1-class-progress').innerText(),/Nilo/);
+   await page.locator('[data-mw-tab="help"]').click();
+   assert.match(await page.locator('.mw-help').innerText(),/Nola jokatu/);
+   await page.locator('#museum-wallet-dialog footer button').click();
+   assert.equal(await page.locator('#museum-wallet-dialog').count(),0);
+   assert.deepEqual(errors,[]);
+  }finally{await context.close()}
+ });
  await scenario('Vitrinas: comparación real antes/después y luz uniforme sin pistas',async()=>{
   const {page,context,errors}=await open('teacher',{width:1672,height:941});
   try{

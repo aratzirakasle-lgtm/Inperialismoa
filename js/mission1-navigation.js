@@ -1,5 +1,6 @@
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-members1';
-import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=1';
+import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=2';
+import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=1';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[
@@ -413,6 +414,9 @@ export function mountExerciseNav(active,options){
  const nav=holder.firstElementChild;
  document.querySelector('.m1-nav')?.remove();
  document.body.prepend(nav);
+ document.querySelector('.museum-wallet-bar')?.remove();
+ const bar=document.createElement('div');bar.className='museum-wallet-bar';bar.innerHTML=walletButton();nav.after(bar);prepareWallet();
+ if(options?.teacher!==false)walletContext({preview:true,mission:1});
  arriveMuseumRoom(document.body,'1:'+active);
  return nav;
 }
@@ -436,6 +440,7 @@ export async function loadMission1Completed(client,team){
  return complete;
 }
 export async function mountStudentExerciseNav(active,client,team){
+ walletContext({client,team,mission:1,preview:false});
  try{
    const complete=await loadMission1Completed(client,team);
    const nav=mountExerciseNav(active,{teacher:false,completedSteps:complete});

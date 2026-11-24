@@ -2,17 +2,17 @@
 const seen=new Set();
 const arrivals=new WeakMap();
 function ensureStyle(){
- if(document.querySelector('link[data-museum-experience]'))return;
+ if(typeof document==='undefined'||document.querySelector('link[data-museum-experience]'))return;
  const link=document.createElement('link');link.rel='stylesheet';link.href='./assets/museum-experience.css?v=2';link.dataset.museumExperience='1';document.head.append(link);
 }
 export function arriveMuseumRoom(root,key){
- if(!root||arrivals.get(root)===key)return;
+ if(typeof document==='undefined'||typeof window==='undefined'||!root||arrivals.get(root)===key)return;
  arrivals.set(root,key);ensureStyle();
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  root.animate?.([{opacity:.9},{opacity:1}],{duration:240,easing:'ease-out'});
 }
 export function stampMuseumExercise(mission,step){
- if(![1,2].includes(mission)||![1,2,3,4,5].includes(step))return false;
+ if(typeof document==='undefined'||typeof window==='undefined'||![1,2].includes(mission)||![1,2,3,4,5].includes(step))return false;
  const key=mission+':'+step;if(seen.has(key))return false;seen.add(key);ensureStyle();
  document.querySelector('.museum-seal-notice')?.remove();
  const node=document.createElement('div');node.className='museum-seal-notice';node.dataset.mission=String(mission);node.dataset.exercise=String(step);node.setAttribute('role','status');

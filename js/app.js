@@ -5,9 +5,10 @@ import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-experience1";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-wallet1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport } from "./museum-passport.js?v=3";
+import {walletContext,prepareWallet} from "./museum-wallet.js?v=1";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -59,7 +60,7 @@ function closeModal(){const classBoard=$("#m1-class-modal-board");$("#modal").hi
  if(classBoard){classBoard.textContent="";document.querySelector('[data-m1-class-progress]')?.focus();}
  if(issuedClassCredentials.length){issuedClassCredentials=[];$("#modal-body").textContent="";}
 }
-function switchScreen(logged){if(!logged){stopClassAccess();if($('#m1-class-modal-board')){closeModal();$('#modal-body').textContent='';}issuedClassCredentials=[];classStudentRoster=[];unmountClassroomProgressPanel();$("#view")?.__galleryCleanup?.();teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
+function switchScreen(logged){if(!logged){walletContext(null);stopClassAccess();if($('#m1-class-modal-board')){closeModal();$('#modal-body').textContent='';}issuedClassCredentials=[];classStudentRoster=[];unmountClassroomProgressPanel();$("#view")?.__galleryCleanup?.();teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
 function render(){if(!user)return;if(!(currentMission===0&&conceptCHome&&!accountIsTeacher()))unmountClassroomProgressPanel();const showGallery=currentMission===1&&!galleryQuestionsOpen&&!isTeacher();if(!showGallery&&$("#view").__galleryCleanup)$("#view").__galleryCleanup();$("#app-shell").classList.toggle("gallery-active",showGallery);$("#app-shell").classList.toggle("museum-replica-home",!isTeacher()&&currentMission===0&&!conceptCHome);$("#app-shell").classList.toggle("museo-c-enabled",!isTeacher()&&currentMission===0&&conceptCHome&&!!viewTeamId());$("#topbar-user").textContent=displayName();$("#team-summary").innerHTML=isTeacher()?'<div class="team-name">Irakaslearen ikuspegia</div><p class="team-members">Kudeaketa eta jarraipen pribatua</p>':('<div class="team-name">'+esc(mine()?.name||"Taldea")+'</div><div class="team-members">'+(mine()?.members||[]).map(esc).join(" · ")+'</div><div class="team-progress"><span style="width:'+Math.round(100*[1,2].filter(id=>completed(viewTeamId(),id)).length/4)+'%"></span></div><div class="team-members">'+[1,2].filter(id=>completed(viewTeamId(),id)).length+' / 4 misio osatuta</div>');$("#mission-count").textContent=isTeacher()?missions.length:4;
 $("#mission-nav").innerHTML=(isTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Irakaslearen panela</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Ikaslearen ikuspegia</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Nire espedizioa</span></button>')+(isTeacher()?missions:missions.filter(m=>m.id>=1&&m.id<=4)).map(m=>{const locked=(!isTeacher()&&m.id>=3)||!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?(m.id>=3?'Prestatzen':'Blokeatuta'):done?'Osatuta':'Eskuragarri')+'</span></span></button>'}).join("");
 paintScoreboard();
@@ -278,6 +279,7 @@ function m1Ceremony(){
 }
 function renderGallery(){
  const team=viewTeamId();
+ walletContext({client:db,team,mission:1,preview:demo||teacherPreview});prepareWallet();
  const current=galleryStates.find(x=>x.team_id===team)||{};
  const canSkip=teacherPreview||!!current.completed_at;
  const sharedDraft=(!demo&&!teacherPreview&&team&&user?.id)
