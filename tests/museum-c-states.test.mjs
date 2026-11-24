@@ -142,3 +142,12 @@ test('Bi misioak OSATUTA: bigarrenean jatorrizko tipografiaren tinta fotografiko
  assert.equal(bytes.readUInt32LE(4)+8,bytes.length);
  assert.ok(bytes.length<4000,'La inscripción debe ser una capa fotográfica mínima');
 });
+
+
+test('Itxiera: lehen misioa amaituta ere bigarrena ezin da ireki',()=>{
+ const html=renderVestibuloC({teamName:'Atlas',completedIds:[1],mission2Open:false});
+ assert.match(html,/c-museo-m2[^>]*disabled/);
+ assert.match(html,/c-museo-book2[^>]*disabled/);
+ assert.doesNotMatch(html,/data-mission="2"/);
+ assert.match(html,/1 \/ 4 misio osatuta/);
+});

@@ -107,10 +107,10 @@ body{background:radial-gradient(ellipse at 50% 17%,#1e4033,#071b15 82%)}button,a
 <div class="choice-area" id="choices" aria-label="Zortzi hitz aukeran"></div>
 <button class="verify" id="verify" aria-label="Egiaztatu bost erantzunak" title="Egiaztatu" disabled>Egiaztatu</button>
 <div class="hud" id="hud" aria-live="polite">0 / 5</div><div class="toast" id="toast" role="status" hidden></div>
-<div class="success" id="success" hidden><h2 id="completion-title">✦ Lehen misioa osatuta!</h2><p id="completion-copy">Zorionak! Zuen taldeak bost ariketak gainditu ditu. Bigarren misioa desblokeatu da.</p><div id="m1-passport-reward" hidden></div><button id="review" type="button">Erantzunak ikusi</button><a id="mission2-link" href="./index.html#mission2">2. misiora joan →</a></div>
+<div class="success" id="success" hidden><h2 id="completion-title">✦ Lehen misioa osatuta!</h2><p id="completion-copy">Zorionak! Zuen taldeak bost ariketak gainditu ditu. Bigarren misioa irakasleak irekiko du.</p><div id="m1-passport-reward" hidden></div><button id="review" type="button">Erantzunak ikusi</button><a id="mission2-link" href="./index.html">Museora itzuli →</a></div>
 </section></div><p class="footnote" id="online-state" role="status">Saioa eta taldearen aurrerapena egiaztatzen…</p></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
-<script type="module" src="./js/mission1-fifth-auth.js?v=20261124-passport2"></script>
+<script type="module" src="./js/mission1-fifth-auth.js?v=20261124-lock1"></script>
 <script>
 'use strict';
 const words=[['koloniak','koloniak'],['kapitalismoa','kapitalismoa'],['nagusitasuna','nagusitasuna'],['inperialismoa','inperialismoa'],['ustiapena','ustiapena'],['metropoliak','metropoliak'],['merkataritza','merkataritza'],['dominazioa','dominazioa']];
@@ -228,7 +228,9 @@ async function check(){
       $('#mission2-link').textContent='Museora itzuli →';
     }else if(response.mission_completed){
       $('#completion-title').textContent='✦ Lehen misioa osatuta!';
-      $('#completion-copy').textContent='Zorionak! Zuen taldeak lehen misioa amaitu du. Bigarren misioa desblokeatuta dago.';
+      $('#completion-copy').textContent='Zorionak! Zuen taldeak lehen misioa amaitu du. '+(window.m1Mission2Open?'Bigarren misioa desblokeatuta dago.':window.m1Mission2LockedText||'Bigarren misioa irakasleak irekiko du.');
+  $('#mission2-link').href=window.m1Mission2Open?'./index.html#mission2':'./index.html';
+  $('#mission2-link').textContent=window.m1Mission2Open?'2. misiora joan →':'Museora itzuli →';
     }else{
       throw new Error('Ezin izan da misioaren amaiera egiaztatu');
     }
@@ -270,9 +272,9 @@ window.m1FifthRestoreCompletion=()=>{
   done=true;chosen=null;lastMovement=null;window.m1FifthSavedReplay=true;
   $('#reopen-success').hidden=false;
   $('#completion-title').textContent='✦ Lehen misioa osatuta!';
-  $('#completion-copy').textContent='Zorionak! Zuen taldeak bost ariketak gainditu ditu. Bigarren misioa desblokeatuta dago.';
-  $('#mission2-link').href='./index.html#mission2';
-  $('#mission2-link').textContent='2. misiora joan →';
+  $('#completion-copy').textContent='Zorionak! Zuen taldeak bost ariketak gainditu ditu. '+(window.m1Mission2Open?'Bigarren misioa desblokeatuta dago.':window.m1Mission2LockedText||'Bigarren misioa irakasleak irekiko du.');
+  $('#mission2-link').href=window.m1Mission2Open?'./index.html#mission2':'./index.html';
+  $('#mission2-link').textContent=window.m1Mission2Open?'2. misiora joan →':'Museora itzuli →';
   $('#review').textContent='Ariketa berriz egin';
   render();window.m1FifthShowPassport?.({animate:false});$('#success').hidden=false;
 };

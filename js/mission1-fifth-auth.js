@@ -4,6 +4,9 @@ import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1d
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-members1';
 
 import { renderMuseumPassport } from './museum-passport.js?v=2';
+import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
+window.m1Mission2Open=MISSION2_OPEN;
+window.m1Mission2LockedText=MISSION2_LOCKED_TEXT;
 const status=document.querySelector('#online-state');
 let passportTeam='Taldea';
 window.m1FifthShowPassport=({preview=false,animate=false}={})=>{
@@ -61,7 +64,7 @@ async function initialize(){
     if(prior){
       window.m1FifthLocalMode='practice';
       window.m1FifthProgress=async()=>({completed:true,already_completed:true,practice:true,mission_completed:true});
-      say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. Bigarren misiora joan zaitezkete.');
+      say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. '+(MISSION2_OPEN?'Bigarren misiora joan zaitezkete.':MISSION2_LOCKED_TEXT));
       // 5/5 gaindituta badago, ez behartu ikaslea berriro jokatzera.
       window.m1FifthRestoreCompletion?.();
     }else{

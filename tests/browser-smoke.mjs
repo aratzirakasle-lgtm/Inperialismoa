@@ -21,6 +21,9 @@ async function open(role,path,viewport={width:1365,height:900}){
    const url=route.request().url();
    await route.fulfill({status:200,contentType:url.includes('.css')?'text/css':'application/javascript',body:''});
  });
+ if(!params.has('smoke_m2_closed')){
+ await context.route('**/js/mission-release.js*',r=>r.fulfill({status:200,contentType:'application/javascript',body:"export const MISSION2_OPEN=true;export const MISSION2_LOCKED_TEXT='Bigarren misioa irakasleak irekiko du.';"}));
+ }
  await context.addInitScript(({role,badges,completedSteps})=>{
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
@@ -1207,6 +1210,20 @@ try{
      await waitVisible(page,'.history-file');
      assert.deepEqual(errors,[]);
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
+   }finally{await context.close()}
+ });
+ await scenario('Cierre temporal: el alumno conserva el pasaporte pero no entra en misión 2',async()=>{
+   const {page,context,errors}=await open('student','esaldiak-osatu.html?smoke_m1_steps=5&smoke_m2_closed=1');
+   try{
+     await waitVisible(page,'#success');
+     assert.equal(await page.locator('#m1-passport-reward .mp-medal').isVisible(),true);
+     assert.equal(await page.locator('#mission2-link').getAttribute('href'),'./index.html');
+     assert.match(await page.locator('#completion-copy').innerText(),/irakasleak irekiko du/);
+     await page.goto(new URL('inperialismoaren-faktoreak.html',BASE).href);
+     await waitVisible(page,'.m2-message-card');
+     assert.match(await page.locator('.m2-message-card').innerText(),/Bigarren misioa blokeatuta/);
+     assert.equal(await page.locator('.m2-steps').count(),0);
+     assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
  await scenario('Alumno: al regresar al quinto ejercicio ve el sello, accede a misión 2 y puede repetir opcionalmente',async()=>{

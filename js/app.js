@@ -1,6 +1,6 @@
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261124-lock1";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-members1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
@@ -8,6 +8,7 @@ import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard2";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport } from "./museum-passport.js?v=2";
+import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = s => s ? new Date(s).toLocaleString("eu-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Madrid"}) : "Pendiente";
@@ -46,7 +47,7 @@ const completed=(team,id)=>Number(id)===1&&!demo
  ?mission1FifthStates.some(e=>String(e.team_id)===String(team)&&Number(e.exercise)===5)
  :progress.some(p=>String(p.team_id)===String(team)&&Number(p.mission_id)===Number(id));
 const countDone=team=>missions.filter(m=>completed(team,m.id)).length;
-const available=id=>accountIsTeacher()||(id===1||id===2&&completed(viewTeamId(),1));
+const available=id=>accountIsTeacher()||(id===1||id===2&&MISSION2_OPEN&&completed(viewTeamId(),1));
 const displayName=()=>teacherPreview?"Ikaslearen aurrebista":isTeacher()?"Irakaslea":(user?.name||"Ikaslea");
 const missionById=id=>missions.find(m=>Number(m.id)===Number(id));
 const cleanHtml = s=>esc(s).replace(/\n/g,"<br>");
@@ -136,7 +137,7 @@ function renderHome(){
     mountClassroomProgressPanel(db,viewTeamId());
   const id=viewTeamId();
   const completedIds=[1,2].filter(missionId=>completed(id,missionId));
-  $("#view").innerHTML=renderVestibuloC({teamName:mine()?.name||"Taldea",completedIds,preview:teacherPreview});
+  $("#view").innerHTML=renderVestibuloC({teamName:mine()?.name||"Taldea",completedIds,preview:teacherPreview,mission2Open:MISSION2_OPEN||accountIsTeacher()});
   return;
  }
  const museumMissions=missions.filter(m=>m.id>=1&&m.id<=4);
@@ -179,7 +180,7 @@ function renderHome(){
     <div class="museum-next-photo museum-art museum-art--ship" aria-hidden="true"></div>
     <div><strong>${esc(next.title)}</strong><p>${esc(next.subtitle||"Hurrengo atala")}</p></div>
   </div>
-  ${action(next,available(next.id)?"Hurrengo misiora →":next.id>=3?"🔒 Prestatzen":"🔒 Aurreko misioa amaitu","outline museum-next-cta")}
+  ${action(next,available(next.id)?"Hurrengo misiora →":next.id>=3?"🔒 Prestatzen":!MISSION2_OPEN?"🔒 Irakasleak irekiko du":"🔒 Aurreko misioa amaitu","outline museum-next-cta")}
  `:`<p class="museum-next-completed">${n===total?"✓ Ibilbide osoa gainditu duzue.":"Misioaren hurrengo urratsa prestatzen ari da."}</p>`;
  $("#view").innerHTML=`
  <div class="content-width museum-gallery-home">
@@ -249,16 +250,16 @@ function m1Dossier(){
  const team=viewTeamId();if(!team)return;
  const pieces=m1Pieces(team),done=completed(team,1);
  const rows=M1_ARTXIBOA.map((name,i)=>'<li class="'+(pieces.has(i+1)?'m1-sealed':'')+'"><span class="m1-medal">'+(pieces.has(i+1)?'✓':String(i+1).padStart(2,'0'))+'</span><span>'+name+'</span><small>'+(pieces.has(i+1)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
- modal('<div class="m1-archive"><p class="m1-overline">MUSEOKO ARTXIBOA · I. MISIOA</p><h2 id="modal-title">Ikerketa-espedientea</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p><p>Ariketak gainditu ahala, bost dokumentuak zigilatuko dira.</p><ol>'+rows+'</ol><p class="m1-note">'+pieces.size+' / 5 · '+(done?'Lehen misioa osatuta.':'Bosgarren ariketa gainditzean, bigarren misioa desblokeatuko da.')+'</p>'+(done?'<button type="button" class="btn" data-m1-ceremony="1">Ikusi pasaportea eta domina ✧</button>':'')+'</div>');
+ modal('<div class="m1-archive"><p class="m1-overline">MUSEOKO ARTXIBOA · I. MISIOA</p><h2 id="modal-title">Ikerketa-espedientea</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p><p>Ariketak gainditu ahala, bost dokumentuak zigilatuko dira.</p><ol>'+rows+'</ol><p class="m1-note">'+pieces.size+' / 5 · '+(done?'Lehen misioa osatuta.':'Bosgarren ariketa gainditzean, pasaportea zigilatuko da.')+'</p>'+(done?'<button type="button" class="btn" data-m1-ceremony="1">Ikusi pasaportea eta domina ✧</button>':'')+'</div>');
 }
 function museumPassport(){
  const team=viewTeamId();if(!team)return;
  const earned=[1,2,3,4].filter(id=>completed(team,id));
- modal('<h2 id="modal-title">Ikerketa-pasaportea</h2>'+renderMuseumPassport({teamName:mine()?.name||'Taldea',completedIds:earned})+'<div class="mp-ledger-actions"><button type="button" class="m1-ledger-open" data-m1-dossier="1">Lehen misioaren espedientea</button>'+(earned.includes(1)?'<button type="button" class="m1-ledger-open" data-m1-next="2">2. misiora joan →</button>':'')+'</div>');
+ modal('<h2 id="modal-title">Ikerketa-pasaportea</h2>'+renderMuseumPassport({teamName:mine()?.name||'Taldea',completedIds:earned})+'<div class="mp-ledger-actions"><button type="button" class="m1-ledger-open" data-m1-dossier="1">Lehen misioaren espedientea</button>'+(earned.includes(1)&&available(2)?'<button type="button" class="m1-ledger-open" data-m1-next="2">2. misiora joan →</button>':'')+'</div>');
 }
 function m1Ceremony(){
  if(!completed(viewTeamId(),1))return;
- modal('<div class="m1-certificate"><p>MUSEOKO ARTXIBOA · XIX. MENDEA</p><h2 id="modal-title">LEHEN MISIOA OSATUTA</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p>'+renderMuseumPassport({teamName:mine()?.name||'Taldea',completedIds:[1,2,3,4].filter(id=>completed(viewTeamId(),id))})+'<p>ESPEDIENTEA ZIGILATUTA</p><p>Bost ariketako ikerketa amaitu duzue. Bigarren misioa desblokeatuta dago.</p><button type="button" class="btn" data-m1-next="2">Joan bigarren misiora →</button></div>');
+ modal('<div class="m1-certificate"><p>MUSEOKO ARTXIBOA · XIX. MENDEA</p><h2 id="modal-title">LEHEN MISIOA OSATUTA</h2><p class="m1-team">'+esc(mine()?.name||'Taldea')+'</p>'+renderMuseumPassport({teamName:mine()?.name||'Taldea',completedIds:[1,2,3,4].filter(id=>completed(viewTeamId(),id))})+'<p>ESPEDIENTEA ZIGILATUTA</p><p>Bost ariketako ikerketa amaitu duzue. '+(available(2)?'Bigarren misioa desblokeatuta dago.':MISSION2_LOCKED_TEXT)+'</p>'+(available(2)?'<button type="button" class="btn" data-m1-next="2">Joan bigarren misiora →</button>':'')+'</div>');
 }
 function renderGallery(){
  const team=viewTeamId();
@@ -285,7 +286,7 @@ function renderGallery(){
    }
  });
 }
-function renderMission(){if(currentMission===2&&!demo){location.assign('./inperialismoaren-faktoreak.html'+(accountIsTeacher()?'?preview=1':''));return;}if(currentMission===1&&(!galleryQuestionsOpen||!demo)&&!isTeacher())return renderGallery();const m=missionById(currentMission);if(!m)return;const done=!isTeacher()&&completed(viewTeamId(),m.id);const qs=m.questions||[];const answered=qs.filter(q=>responses[q.id]!==undefined).length;$("#view").innerHTML='<div class="content-width">'+pageHeading("MISIOA "+String(m.id).padStart(2,"0")+" · INPERIALISMOAREN HISTORIA",m.title,m.intro,done?'✓ OSATUTA':'AURRERA EGITEKO % 100')+'<div class="card"><div class="eyebrow">HASI AURRETIK</div><h3>'+esc(m.subtitle)+'</h3><p class="card-sub">Irakurri arretaz. '+qs.length+' galdera daude. Guztiak asmatu behar dituzu; ondo erantzundakoak gordeko dira, eta berriro saia zaitezke.</p><div class="progressbar"><span style="width:'+(qs.length?100*qs.filter(q=>checkFeedback?.correct?.includes(q.id)).length/qs.length:0)+'%"></span></div><div class="card-sub">'+answered+' / '+qs.length+' erantzunda</div></div>'+qs.map((q,i)=>'<section class="card question-card"><div class="eyebrow">GALDERA '+String(i+1).padStart(2,"0")+'</div><div class="question-title">'+esc(q.text)+'</div><div class="question-options">'+q.options.map((opt,j)=>'<label class="option '+(checkFeedback?.correct?.includes(q.id)&&responses[q.id]===j?'locked-correct':'')+'"><input type="radio" name="question-'+esc(q.id)+'" value="'+j+'" data-question="'+esc(q.id)+'" '+(responses[q.id]===j?'checked':'')+' '+(checkFeedback?.correct?.includes(q.id)||done||isTeacher()?'disabled':'')+'><span>'+esc(opt)+'</span></label>').join("")+'</div>'+(checkFeedback?.correct?.includes(q.id)?'<div class="question-feedback ok">✓ Erantzun zuzena</div>':checkFeedback?.incorrect?.includes(q.id)?'<div class="question-feedback bad">Berrikusi erantzuna eta saiatu berriro.</div>':'')+'</section>').join("")+(done?'<div class="complete-banner"><h3>✓ Misioa gaindituta!</h3><p>Zuen taldeak erantzun guztiak asmatu ditu. Hurrengo misioa desblokeatu da.</p><button class="btn primary" data-mission="'+Math.min(m.id+1,6)+'">Espedizioarekin jarraitu →</button></div>':isTeacher()?'<div class="notice">Irakaslearen aurrebista. Erantzunak ez dira pantaila honetatik bidaltzen.</div>':'<div class="mission-actions"><button class="btn primary" id="check-mission" '+(answered!==qs.length?'disabled':'')+'>Egiaztatu '+qs.length+' erantzunak →</button><span class="card-sub">Saiakera mugagabeak · Aurrerapena gordeta</span></div>')+'</div>';
+function renderMission(){if(currentMission===2&&!available(2)){currentMission=0;return render()}if(currentMission===2&&!demo){location.assign('./inperialismoaren-faktoreak.html'+(accountIsTeacher()?'?preview=1':''));return;}if(currentMission===1&&(!galleryQuestionsOpen||!demo)&&!isTeacher())return renderGallery();const m=missionById(currentMission);if(!m)return;const done=!isTeacher()&&completed(viewTeamId(),m.id);const qs=m.questions||[];const answered=qs.filter(q=>responses[q.id]!==undefined).length;$("#view").innerHTML='<div class="content-width">'+pageHeading("MISIOA "+String(m.id).padStart(2,"0")+" · INPERIALISMOAREN HISTORIA",m.title,m.intro,done?'✓ OSATUTA':'AURRERA EGITEKO % 100')+'<div class="card"><div class="eyebrow">HASI AURRETIK</div><h3>'+esc(m.subtitle)+'</h3><p class="card-sub">Irakurri arretaz. '+qs.length+' galdera daude. Guztiak asmatu behar dituzu; ondo erantzundakoak gordeko dira, eta berriro saia zaitezke.</p><div class="progressbar"><span style="width:'+(qs.length?100*qs.filter(q=>checkFeedback?.correct?.includes(q.id)).length/qs.length:0)+'%"></span></div><div class="card-sub">'+answered+' / '+qs.length+' erantzunda</div></div>'+qs.map((q,i)=>'<section class="card question-card"><div class="eyebrow">GALDERA '+String(i+1).padStart(2,"0")+'</div><div class="question-title">'+esc(q.text)+'</div><div class="question-options">'+q.options.map((opt,j)=>'<label class="option '+(checkFeedback?.correct?.includes(q.id)&&responses[q.id]===j?'locked-correct':'')+'"><input type="radio" name="question-'+esc(q.id)+'" value="'+j+'" data-question="'+esc(q.id)+'" '+(responses[q.id]===j?'checked':'')+' '+(checkFeedback?.correct?.includes(q.id)||done||isTeacher()?'disabled':'')+'><span>'+esc(opt)+'</span></label>').join("")+'</div>'+(checkFeedback?.correct?.includes(q.id)?'<div class="question-feedback ok">✓ Erantzun zuzena</div>':checkFeedback?.incorrect?.includes(q.id)?'<div class="question-feedback bad">Berrikusi erantzuna eta saiatu berriro.</div>':'')+'</section>').join("")+(done?'<div class="complete-banner"><h3>✓ Misioa gaindituta!</h3><p>Zuen taldeak erantzun guztiak asmatu ditu. Hurrengo misioa desblokeatu da.</p><button class="btn primary" data-mission="'+Math.min(m.id+1,6)+'">Espedizioarekin jarraitu →</button></div>':isTeacher()?'<div class="notice">Irakaslearen aurrebista. Erantzunak ez dira pantaila honetatik bidaltzen.</div>':'<div class="mission-actions"><button class="btn primary" id="check-mission" '+(answered!==qs.length?'disabled':'')+'>Egiaztatu '+qs.length+' erantzunak →</button><span class="card-sub">Saiakera mugagabeak · Aurrerapena gordeta</span></div>')+'</div>';
 }
 async function submitMission(){if(teacherPreview)return toast("Aurrebista: erabili probako ikasle-kontu bat benetako zuzenketa probatzeko.");const m=missionById(currentMission);if(!m||!user||isTeacher())return;if(m.id===1)return toast("Lehen misioa bost ariketa interaktiboak gainditzean osatzen da.");const qs=m.questions||[];if(qs.some(q=>responses[q.id]===undefined))return toast("Erantzun galdera guztiei.");let correct=[],incorrect=[],complete=false,attemptNo=0;
 if(demo){correct=qs.filter(q=>Number(responses[q.id])===q.correct).map(q=>q.id);incorrect=qs.filter(q=>!correct.includes(q.id)).map(q=>q.id);attemptNo=attempts.filter(a=>a.team_id===viewTeamId()&&a.mission_id===m.id).length+1;attempts.push({team_id:viewTeamId(),mission_id:m.id,created_at:time(),correct_count:correct.length});complete=correct.length===qs.length;if(complete&&!completed(viewTeamId(),m.id))progress.push({team_id:viewTeamId(),mission_id:m.id,completed_by:user.id,completed_at:time(),attempt_count:attemptNo});storage.save()}

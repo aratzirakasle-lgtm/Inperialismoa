@@ -2,6 +2,7 @@ import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
 
+import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const app=document.querySelector('#m2-app');
 const $=(selector,root=document)=>root.querySelector(selector);
 const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
@@ -100,6 +101,7 @@ async function initialize(){
   if(profile.role==='teacher'&&!teacher){location.replace('./inperialismoaren-faktoreak.html?preview=1');return}
   if(!teacher){
    if(profile.role!=='student'||!profile.team_id){cardMessage('Sarrera mugatua','Talde bateko ikasle gisa sartu behar duzu.');return}
+   if(!MISSION2_OPEN){cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT);return}
     if(!(await startClassAccess(client)))return;
    teamId=profile.team_id;
    // Lehen misioaren lehenagoko lorpena datu-basean mantentzen da,

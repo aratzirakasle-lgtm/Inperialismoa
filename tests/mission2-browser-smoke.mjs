@@ -19,6 +19,7 @@ async function ensureAtlasPicturesDecoded(page){
 async function open(role='student',size={width:1365,height:900},badge=true){
  const context=await browser.newContext({viewport:size,reducedMotion:'reduce'});
  await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/,r=>r.fulfill({status:200,contentType:r.request().url().endsWith('.css')?'text/css':'application/javascript',body:''}));
+ await context.route('**/js/mission-release.js*',r=>r.fulfill({status:200,contentType:'application/javascript',body:"export const MISSION2_OPEN=true;export const MISSION2_LOCKED_TEXT='Bigarren misioa irakasleak irekiko du.';"}));
  await context.addInitScript(({role,badge})=>{
   const myId=role==='teacher'?'qa-teacher':'qa-student';
   window.__m2RpcCalls=[];

@@ -10,12 +10,13 @@ const display = {
 };
 const hotspot=(css,label,attrs="") =>
  '<button type="button" class="c-museo-hotspot '+css+'" aria-label="'+esc(label)+'" title="'+esc(label)+'" '+attrs+'><span class="c-museo-sr">'+esc(label)+'</span></button>';
-export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
+export function renderVestibuloC({teamName,completedIds=[],preview=false,mission2Open=true}={}){
  const done=new Set(completedIds.filter(id=>id===1||id===2));
  const complete1=done.has(1),complete2=done.has(2);
  const count=done.size,pct=count*25;
+ const canEnter2=mission2Open&&complete1;
  const nextId=complete1?(complete2?0:2):1;
- const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title:"3. Misioa:\nInperioen banaketa\n(Prestatzen)";
+ const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title+(nextId===2&&!mission2Open?'\n(Blokeatuta)':''):"3. Misioa:\nInperioen banaketa\n(Prestatzen)";
  const rawName=String(teamName||"Taldea").trim().slice(0,80)||"Taldea";
  const safeName=esc(rawName);
  const shortName=esc(rawName.length>9?rawName.slice(0,8)+'…':rawName);
@@ -27,9 +28,9 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
  const zones=[
   hotspot("c-museo-portal c-museo-m1 "+(complete1?"is-complete":"is-available"),
    "1. misioa: "+display[1].title+". "+(complete1?"Osatuta":"Eskuragarri"),'data-state="'+(complete1?"complete":"available")+'" data-mission="1"'),
-  hotspot("c-museo-portal c-museo-m2 "+(complete2?"is-complete":complete1?"is-available":"is-locked"),
-   "2. misioa: "+display[2].title+". "+(complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),
-   'data-state="'+(complete2?"complete":complete1?"available":"locked")+'" '+(complete1?'data-mission="2"':'disabled')),
+  hotspot("c-museo-portal c-museo-m2 "+(!mission2Open?"is-locked":complete2?"is-complete":complete1?"is-available":"is-locked"),
+   "2. misioa: "+display[2].title+". "+(!mission2Open?"Blokeatuta":complete2?"Osatuta":complete1?"Eskuragarri":"Blokeatuta"),
+   'data-state="'+(!mission2Open?"locked":complete2?"complete":complete1?"available":"locked")+'" '+(canEnter2?'data-mission="2"':'disabled')),
   hotspot("c-museo-portal c-museo-m3 is-upcoming","3. misioa: "+display[3].title+". Prestatzen",
    'data-state="upcoming" disabled'),
   hotspot("c-museo-portal c-museo-m4 is-upcoming","4. misioa: "+display[4].title+". Prestatzen",
@@ -38,21 +39,21 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false}={}){
   hotspot("c-museo-power","Irten museotik",'data-c-logout="1"'),
   hotspot("c-museo-book1","Taldearen espedientea: "+rawName+", "+count+"/4 misio",'data-c-ledger="1"'),
   hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",
-   nextId?'data-mission="'+nextId+'"':'disabled')
+   nextId&&(nextId!==2||canEnter2)?'data-mission="'+nextId+'"':'disabled')
  ].join("");
  // Margolanaren jatorrizko zigilua (OSATUTA) benetakoa denean mantendu.
  // Bestela inprimatutako tinta bakarrik kendu, jatorrizko pergamino/metalaren
  // fotogramak berreskuratuz. Ez da gaineko beste zigilu edo txartelik gehitzen.
  const restoration1=complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision1.svg?v=1" alt="" aria-hidden="true" draggable="false">';
- const restoration2=complete2
+ const restoration2=!mission2Open?'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">':complete2
   ?'<img class="c-museo-banner-repair" src="./assets/museo-c-osatuta-mision2.svg?v=2" alt="" aria-hidden="true" draggable="false">'
   :complete1?'':'<img class="c-museo-banner-repair" src="./assets/museo-c-restauracion-mision2.svg?v=1" alt="" aria-hidden="true" draggable="false">';
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
-  const unlocked=id===1||id===2&&complete1;
-  const state=!published?'Prestatzen':doneMission?'Osatuta':unlocked?'Eskuragarri':'Blokeatuta';
-  return '<button type="button" class="c-museo-mobile-mission" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(doneMission?'✓':!published||!unlocked?'🔒':'→')+'</span></button>';
+  const unlocked=id===1||id===2&&canEnter2;
+  const state=!published?'Prestatzen':id===2&&!mission2Open?'Blokeatuta':doneMission?'Osatuta':unlocked?'Eskuragarri':'Blokeatuta';
+  return '<button type="button" class="c-museo-mobile-mission" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(!published||!unlocked?'🔒':doneMission?'✓':'→')+'</span></button>';
  }).join('');
  return '<div class="c-museo-home" lang="eu">'+
  '<div class="c-museo-toolbar"><span class="c-museo-toolbar-brand">✦ MUSEO DIGITALA <span>· 4 MISIO</span></span>'+
