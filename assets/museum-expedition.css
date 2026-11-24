@@ -486,3 +486,19 @@
 .atlas-concept-one .atlas-totals p{margin:0;font-size:clamp(8px,.62cqw,10px)}
 @media(max-width:900px){.atlas-concept-one .atlas-map-and-progress{min-height:190px;padding:6px}.atlas-concept-one .atlas-totals{padding:12px}.atlas-concept-one .atlas-totals h3{font-size:15px;margin-bottom:9px}.atlas-concept-one .atlas-progress-row{gap:3px;margin-bottom:7px}.atlas-concept-one .atlas-progress-row>div{font-size:12px}}
 @media(max-width:480px){.atlas-concept-one .atlas-map-and-progress{grid-template-columns:1fr;gap:6px;padding:5px}.atlas-concept-one .atlas-map{position:relative;inset:auto;aspect-ratio:2/1;grid-column:1;z-index:0}.atlas-concept-one .atlas-map img{width:98%;height:94%;mask-image:none}.atlas-concept-one .atlas-totals{grid-column:1;width:100%;box-sizing:border-box;max-width:none;margin:0}}
+
+/* Phase 2 / 7: reference-derived desk objects; native details remains interactive. */
+.atlas-concept-one .atlas-table{grid-template-columns:minmax(0,28fr) minmax(0,42fr) minmax(0,30fr);align-items:center;gap:.6cqw;padding:1.1cqw .8cqw 1.4cqw}
+.atlas-concept-one .atlas-desk-objects{min-height:0;transform:none;justify-content:center;align-self:center}
+.atlas-concept-one .atlas-desk-objects::before{display:none}
+.atlas-concept-one .atlas-desk-objects img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:126/96;object-fit:contain;border:0;border-radius:0;transform:none;box-shadow:none;filter:drop-shadow(2px 4px 3px #211109a0)}
+.atlas-concept-one .atlas-archive:not([open]){transform:none;margin:0}
+.atlas-concept-one .atlas-archive:not([open]) summary{box-sizing:border-box;display:block;aspect-ratio:180/74;min-height:0;padding:0;border:0;background:url('./atlas-expediente-foto.svg') center/100% 100% no-repeat;filter:drop-shadow(2px 5px 3px #1f100baf)}
+.atlas-concept-one .atlas-archive:not([open]) summary::after{display:none}
+.atlas-concept-one .atlas-archive:not([open]) .atlas-archive-flourish{display:none}
+.atlas-concept-one .atlas-archive:not([open]) summary strong{position:absolute;left:24%;top:27%;width:48%;font-size:clamp(10px,1.02cqw,17px);line-height:1.1;letter-spacing:.015em;color:#412610;text-shadow:none;transform:rotate(-8deg);text-align:center}
+.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{position:absolute;left:28%;top:42%;width:39%;font-size:clamp(8px,.66cqw,11px);line-height:1.12;transform:rotate(-8deg);color:#5f391c;text-shadow:0 1px #f5dcb080}
+.atlas-concept-one .atlas-archive:not([open]) summary:hover{filter:drop-shadow(2px 5px 4px #1f100bc0) brightness(1.06)}
+.atlas-concept-one .atlas-archive[open]{grid-column:2/-1}
+@media(max-width:900px){.atlas-concept-one .atlas-table{grid-template-columns:1fr 1fr;gap:12px;padding:12px}.atlas-concept-one .atlas-archive[open]{grid-column:1/-1}.atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(10px,1.8vw,16px)}.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(8px,1.3vw,11px)}}
+@media(max-width:480px){.atlas-concept-one .atlas-table{grid-template-columns:1fr}.atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(12px,3.5vw,16px)}.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(9px,2.6vw,11px)}}
