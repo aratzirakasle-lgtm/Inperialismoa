@@ -173,3 +173,39 @@
 .atlas-concept-one .atlas-mission-content{background-image:url('./atlas-pergamino-archivo.svg');background-size:cover}
 @media(max-width:900px){.atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,102px)}}
 @media(max-width:480px){.atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,75px)}}
+
+/* Element 1 — a shaped leather book, not two rectangular UI panels. 
+   All text, seals, dates and awards remain live HTML. */
+.atlas-concept-one .atlas-passport{position:relative;align-items:stretch;padding:.65cqw .25cqw .8cqw .45cqw}
+.atlas-concept-one .atlas-book{position:relative;isolation:isolate;padding:2.3cqw 1.3cqw 2.65cqw;border:0;border-radius:0;background:url('./atlas-libro-encuadernado.svg') center/100% 100% no-repeat;box-shadow:none;filter:drop-shadow(3px 8px 5px #0b0604b8);transform:rotate(-2.5deg)}
+.atlas-concept-one .atlas-book-spread{position:relative;min-height:34.5cqw;height:100%;overflow:visible;grid-template-columns:minmax(0,46.5%) minmax(0,53.5%);background:none;box-shadow:none;border:0;border-radius:0}
+.atlas-concept-one .atlas-book-page{position:relative;isolation:isolate;background:none;border-radius:0;box-shadow:none;padding:.45cqw .55cqw .45cqw}
+.atlas-concept-one .atlas-book-page::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:url('./atlas-pergamino-archivo.svg') center/100% 100% no-repeat;mix-blend-mode:multiply;opacity:.46}
+.atlas-concept-one .atlas-identity::before{border-radius:22% 5% 3% 12% / 3% 2% 2% 3%;transform:skewY(-1.1deg)}
+.atlas-concept-one .atlas-stamp-page::before{border-radius:4% 14% 10% 3% / 2% 3% 3% 2%;transform:skewY(-.45deg)}
+.atlas-concept-one .atlas-book-page::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none}
+.atlas-concept-one .atlas-identity::after{background:linear-gradient(90deg,transparent 76%,#754e2212 87%,#60391931 95%,#3a1a143f 100%)}
+.atlas-concept-one .atlas-stamp-page::after{background:linear-gradient(90deg,#5e361e38 0%,#80512812 7%,transparent 18%)}
+.atlas-concept-one .atlas-paper-frame{position:relative;min-height:100%;height:auto;border:0;outline:0;padding:1.15cqw .5cqw .4cqw;gap:.45cqw}
+.atlas-concept-one .atlas-paper-frame::before,.atlas-concept-one .atlas-paper-frame::after{display:none}
+.atlas-concept-one .atlas-page-emblem{font-size:2cqw;line-height:1;color:#8b6136}
+.atlas-concept-one .atlas-identity-photo{max-width:91%;padding:.35cqw;background:#d7b17b;border:1px solid #a77e50;box-shadow:1px 3px 5px #6a411c80;transform:rotate(-5deg)}
+.atlas-concept-one .atlas-identity-photo::before,.atlas-concept-one .atlas-identity-photo::after{background:linear-gradient(125deg,#9a6c37,#d3b07a 50%,#82602f);width:1.4cqw;height:.85cqw}
+.atlas-concept-one .atlas-signature{font-style:italic;color:#78502e;text-shadow:0 .25px #b38654}
+.atlas-concept-one .atlas-seals{width:100%;gap:.35cqw .18cqw}
+.atlas-concept-one .atlas-book-page h3{position:relative;color:#4b2b17;text-shadow:0 1px #f7dfb0}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-book{transform:none;padding:22px 15px 26px}
+ .atlas-concept-one .atlas-book-spread{min-height:350px}
+ .atlas-concept-one .atlas-book-page{padding:5px}
+ .atlas-concept-one .atlas-paper-frame{padding:12px 6px 5px;gap:5px}
+ .atlas-concept-one .atlas-page-emblem{font-size:24px}
+ .atlas-concept-one .atlas-identity-photo{padding:4px}
+ .atlas-concept-one .atlas-seals{gap:4px 2px}
+}
+@media(max-width:480px){
+ .atlas-concept-one .atlas-book{padding:14px 8px 19px}
+ .atlas-concept-one .atlas-book-spread{min-height:305px}
+ .atlas-concept-one .atlas-book-page{padding:2px}
+ .atlas-concept-one .atlas-paper-frame{padding:8px 2px 4px;gap:4px}
+}
