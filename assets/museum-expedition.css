@@ -404,3 +404,9 @@
 .atlas-concept-one .atlas-totals .atlas-progress-row strong{color:#3b2313}
 .atlas-concept-one .mp-stamp-date{color:#4f2b15;filter:drop-shadow(1px 2px 1px #72502e70)}
 .atlas-concept-one .atlas-archive[open]{color:#452b18}
+
+/* Phase 2 / 4: reference-derived transparent medal silhouettes. */
+.atlas-concept-one .atlas-medals .atlas-photo-medal{object-fit:contain;display:block;width:min(100%,5.1cqw);height:7.4cqw;filter:drop-shadow(2px 3px 2px #52341d80)}
+.atlas-concept-one .atlas-medals>div:nth-child(1) .atlas-photo-medal{transform:rotate(-2deg)}
+.atlas-concept-one .atlas-medals>div:nth-child(2) .atlas-photo-medal{transform:rotate(1deg)}
+@media(max-width:900px){.atlas-concept-one .atlas-medals .atlas-photo-medal{width:46px;height:76px}}
