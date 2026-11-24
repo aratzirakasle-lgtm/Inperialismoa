@@ -502,3 +502,31 @@
 .atlas-concept-one .atlas-archive[open]{grid-column:2/-1}
 @media(max-width:900px){.atlas-concept-one .atlas-table{grid-template-columns:1fr 1fr;gap:12px;padding:12px}.atlas-concept-one .atlas-archive[open]{grid-column:1/-1}.atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(10px,1.8vw,16px)}.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(8px,1.3vw,11px)}}
 @media(max-width:480px){.atlas-concept-one .atlas-table{grid-template-columns:1fr}.atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(12px,3.5vw,16px)}.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(9px,2.6vw,11px)}}
+
+/* Phase 2 / 8 — decorative museum environment assembled from the reference.
+   All photographic fragments are local resources; no text or progress is baked in. */
+@media(min-width:901px){
+ .atlas-concept-one{
+  padding:0 6% 2.3%;
+  background:radial-gradient(ellipse at 12% 8%,#ffce7b19,transparent 36%),url('./atlas-sala-referencia.svg') center top/100% 100% no-repeat,#17271e;
+ }
+ .atlas-concept-one .atlas-brand{
+  margin-bottom:4.1cqw;background:linear-gradient(95deg,#12261eea,#203b29ed,#12261eea);
+  box-shadow:0 4px 8px #0b0d08ad;
+ }
+ .atlas-concept-one .atlas-display{
+  background:radial-gradient(ellipse at 4% 0%,#f2bb6b3b,transparent 34%),linear-gradient(115deg,#11261d16,transparent 42%,#0c171b26 94%),repeating-linear-gradient(42deg,#ffffff04 0 1px,#00000006 1px 3px,transparent 3px 5px),radial-gradient(ellipse at 30% 15%,#294433,#19362a 52%,#0e211a);
+  box-shadow:0 11px 25px #000c,inset 0 0 0 2px #4d311a,inset 0 0 0 4px #dab56b70;
+ }
+ .atlas-concept-one .atlas-table{
+  background:radial-gradient(ellipse at 17% 0%,#ffc77936,transparent 65%),linear-gradient(180deg,#26140840,transparent 20%,#25100735),url('./atlas-madera-referencia.svg') center/32cqw 100% repeat-x,#754524;
+  border-top:3px ridge #b9824b;
+  box-shadow:inset 0 6px 8px #2b150d88,inset 0 -2px #331a0f,0 3px 4px #160e09a0;
+ }
+ .atlas-concept-one .atlas-book{filter:drop-shadow(5px 8px 5px #0d0804c0)}
+ .atlas-concept-one .atlas-desk-objects img{filter:drop-shadow(3px 5px 3px #241106b0)}
+ .atlas-concept-one .atlas-header{filter:drop-shadow(2px 5px 3px #120b05b8)}
+}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-table{background:linear-gradient(180deg,#25120833,transparent 25%,#25100733),url('./atlas-madera-referencia.svg') center/320px 100% repeat-x,#754524}
+}
