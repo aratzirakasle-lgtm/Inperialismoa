@@ -28,7 +28,7 @@ export const ITEMS=[
 const LOOKUP=new Map(ITEMS.map(x=>[x.id,x]));
 const ZONES=new Set(["eu_auth","eu_liberal","ru","us","jp"]);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,navigationCompleted=null,draftKey=null,dossierProgress=null,sharedDraft=null,onTeamCompleted=null}={}){
+export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip=false,preview=false,navigationEnabled=false,navigationPreview=false,navigationCompleted=null,draftKey=null,dossierProgress=null,classProgressEnabled=false,sharedDraft=null,onTeamCompleted=null}={}){
  if(root.__galleryCleanup)root.__galleryCleanup();
  const controller=new AbortController();
  let touchDrag=null,suppressTouchClick=false,sharedSync=null,nativeDragSource=null;
@@ -210,7 +210,7 @@ export function mountGallery(root,{initial={},onSubmit,onContinue,onBack,canSkip
    if(incremental.tryUpdate())return;
    const tray=state.previewFull||state.previewPartial?[]:ITEMS.filter(x=>!state.placements[x.id]);
    const sharedBanner=sharedSync?'<div class="gal-shared-banner" role="status" aria-live="polite"><span aria-hidden="true" class="gal-shared-dot"></span><strong>TALDEAREN MAHAI PARTEKATUA</strong><span>'+(state.busy?'Aldaketa gordetzen…':sharedSync.ready?'Sinkronizatuta · '+count()+' / 20 kartela':'Konexioa eten da. Tokiko kopia gordeta dago.')+'</span>'+(!sharedSync.ready&&!state.busy?'<button type="button" class="gal-shared-retry" data-gallery-action="sync-retry">↻ Berriro konektatu</button>':'')+'</div>':'';
-   const archiveButton=typeof dossierProgress==='function'?'<div class="m1-archive-open"><button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+Math.max(0,Math.min(5,Number(dossierProgress())||0))+' / 5</span></button></div>':'';
+   const archiveButton=typeof dossierProgress==='function'?'<div class="m1-archive-open"><button type="button" data-m1-dossier="1">✧ Ikerketa-espedientea <span>'+Math.max(0,Math.min(5,Number(dossierProgress())||0))+' / 5</span></button>'+(classProgressEnabled?'<button type="button" data-m1-class-progress="1" aria-haspopup="dialog">✓ Taldeen aurrerapena</button>':'')+'</div>':'';
    const previewNotice=(state.previewFull||state.previewPartial)?'IRAKASLEAREN MAKETA: jatorrizko kartelak ausaz banatuta. EZ DA EBAZPENA. Ez da ezer gordetzen.':'';
    const previewRibbon=(state.previewFull||state.previewPartial)?'<p class="gal-preview-ribbon" role="note"><strong>IRAKASLEAREN DISEINU-PROBA</strong><span>Benetako 20 kontzeptuak eta irudiak; ausaz banatuta. <b>EZ DA EBAZPENA.</b> Ez da ezer gordetzen.</span></p>':'';
 

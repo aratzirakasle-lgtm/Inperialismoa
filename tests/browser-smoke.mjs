@@ -359,6 +359,28 @@ function verifyCardsInsideZones(page){
 }
 
 try{
+ await scenario('Galería: marcador de aula junto al expediente, sin modificar el juego',async()=>{
+   const {page,context,errors}=await open('student','index.html#mission1gallery');
+   try{
+     await waitVisible(page,'.gal-hall');
+     const buttons=page.locator('.m1-archive-open button');
+     assert.equal(await buttons.count(),2);
+     assert.match(await buttons.first().textContent(),/Ikerketa-espedientea/);
+     await page.locator('[data-m1-class-progress]').click();
+     await waitVisible(page,'#m1-class-modal-board .m1-class-team');
+     assert.match(await page.locator('#m1-class-modal-board').textContent(),/Exploradores/);
+     assert.match(await page.locator('#m1-class-modal-board').textContent(),/ZUEN TALDEA/);
+     assert.equal(await page.locator('#m1-class-modal-board .m1-class-mark').count(),6);
+     await page.locator('#modal-close').click();
+     assert.equal(await page.locator('#modal').isVisible(),false);
+     await page.locator('[data-m1-dossier]').click();
+     await waitVisible(page,'.m1-archive ol');
+     await page.locator('#modal-close').click();
+     assert.equal(await page.locator('.gal-hall').isVisible(),true);
+     assert.equal(await page.locator('[data-gallery-zone]').count(),5);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Vestíbulo C: alumno autenticado ve progreso real sin escrituras y puede volver al modo anterior',async()=>{
    const {page,context,errors}=await open('student','index.html?museo=c',{width:1672,height:941});
    try{
