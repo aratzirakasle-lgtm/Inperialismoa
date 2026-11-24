@@ -78,7 +78,7 @@ test('El modo alumno sigue registrando; el profesor sigue previsualizando',()=>{
  assert.match(third,/createMission1DraftSync/);
  assert.match(third,/window\.m1ThirdProgress=async\(\)=>sync\.submit\(\)/);
  assert.match(fifth,/createMission1DraftSync/);
- assert.match(fifth,/window\.m1FifthProgress=async\(\)=>sync\.submit\(\)/);
+ assert.match(fifth,/window\.m1FifthProgress=async\(\)=>\{\s*const result=await sync\.submit\(\)/);
  assert.match(read('js/mission1-draft-sync.js'),/mission1_draft_submit/);
  assert.match(fourth,/rpc\('check_empire_dossier_with_reading'/);
  assert.match(third,/role==='teacher'&&previewRequested/);
