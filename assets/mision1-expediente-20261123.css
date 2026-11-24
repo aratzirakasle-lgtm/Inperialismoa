@@ -28,3 +28,11 @@
 .m1-class-archive .m1-class-team{border-bottom-color:#cbb995}
 .m1-class-archive .m1-class-head,.m1-class-archive .m1-class-info{color:#655b45}
 @media(max-width:560px){.m1-archive-open{gap:6px}.m1-archive-open button{padding:8px 12px}.m1-class-archive{padding:14px 10px}.m1-class-archive .m1-class-grid{grid-template-columns:minmax(55px,1fr) repeat(5,18px) 23px;gap:1px}.m1-class-archive .m1-class-name{font-size:10px}}
+
+/* Medalla de progreso: icono de trofeo integrado, sin parpadeo ni cambios en el juego. */
+.m1-archive-open button[data-m1-class-progress]{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:4px 19px 4px 8px;border-color:#c39b55;min-height:39px;transition:border-color .2s,box-shadow .2s}
+.m1-progress-emblem{flex:0 0 32px;width:32px;height:32px;overflow:visible;filter:drop-shadow(0 0 3px #e3b45e66);animation:m1-progress-glow 2.8s ease-in-out 3}
+.m1-archive-open button[data-m1-class-progress]:hover,.m1-archive-open button[data-m1-class-progress]:focus-visible{border-color:#f2d58e;box-shadow:0 0 14px #dcb36a55,0 3px 18px #0003}
+@keyframes m1-progress-glow{0%,100%{filter:drop-shadow(0 0 3px #e3b45e66)}50%{filter:drop-shadow(0 0 6px #f6d58dbb)}}
+@media(max-width:560px){.m1-archive-open button[data-m1-class-progress]{padding:3px 10px 3px 6px;gap:5px;min-height:36px}.m1-progress-emblem{width:28px;height:28px;flex-basis:28px}}
+@media(prefers-reduced-motion:reduce){.m1-progress-emblem{animation:none!important}.m1-archive-open button[data-m1-class-progress]{transition:none}}

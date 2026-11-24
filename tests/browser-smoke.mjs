@@ -365,6 +365,8 @@ try{
      await waitVisible(page,'.gal-hall');
      const buttons=page.locator('.m1-archive-open button');
      assert.equal(await buttons.count(),2);
+     assert.equal(await page.locator('[data-m1-class-progress] .m1-progress-emblem').count(),1);
+     assert.equal(await page.locator('[data-m1-class-progress] .m1-progress-emblem').getAttribute('aria-hidden'),'true');
      assert.match(await buttons.first().textContent(),/Ikerketa-espedientea/);
      await page.locator('[data-m1-class-progress]').click();
      await waitVisible(page,'#m1-class-modal-board .m1-class-team');

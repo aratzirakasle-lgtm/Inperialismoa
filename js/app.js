@@ -4,7 +4,7 @@ import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261123-
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-audit1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard1";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard2";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
