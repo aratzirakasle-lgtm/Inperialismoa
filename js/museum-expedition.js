@@ -1,5 +1,5 @@
 /* Read-only atlas. Existing server records are the only source of timestamps. */
-import {renderMuseumPassport,confirmedStamp,stampLabel} from './museum-passport.js?v=20261124-engraving1';
+import {renderMuseumPassport,confirmedStamp,stampLabel} from './museum-passport.js?v=20261124-seals2';
 import {renderAtlasPhoto} from './atlas-photo.js?v=20261124-photo1';
 export {activateAtlasPhoto} from './atlas-photo.js?v=20261124-photo1';
 const titles=['Aurrekarriak eta oinarriak','Inperialismoaren faktoreak','Inperioen banaketa','Inperioen itzalak'];
