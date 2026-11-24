@@ -530,3 +530,64 @@
 @media(max-width:900px){
  .atlas-concept-one .atlas-table{background:linear-gradient(180deg,#25120833,transparent 25%,#25100733),url('./atlas-madera-referencia.svg') center/320px 100% repeat-x,#754524}
 }
+
+/* Phase 2 / 9: final composition. Keep the reference's wide two-page book,
+   a generous mission gallery, a readable archive and an unobstructed exit.
+   Do not constrain the book to a fixed height when real team data needs space. */
+@media(min-width:901px){
+ .atlas-concept-one .atlas-desk{grid-template-columns:minmax(0,48fr) minmax(0,52fr);gap:1.05cqw;align-items:center}
+ .atlas-concept-one .atlas-book{aspect-ratio:1.23;min-height:max-content;padding:2.6cqw 1.55cqw 2.15cqw 1.55cqw}
+ .atlas-concept-one .atlas-book-spread{height:auto;min-height:0;align-items:stretch;grid-template-columns:minmax(0,47%) minmax(0,53%)}
+ .atlas-concept-one .atlas-paper-frame{min-height:0;height:100%}
+ .atlas-concept-one .atlas-identity .atlas-paper-frame{padding:.45cqw .1cqw .3cqw;gap:.25cqw;transform:rotate(-1.5deg)}
+ .atlas-concept-one .atlas-identity .atlas-paper-frame::before{width:100%;max-height:26cqw;aspect-ratio:200/306;flex-shrink:0;background-size:contain;mask-image:radial-gradient(ellipse farthest-corner,#000 81%,#000d 93%,transparent 100%)}
+ .atlas-concept-one .atlas-identity .atlas-team-name{max-width:100%;font-size:clamp(13px,1.35cqw,22px);line-height:1.13}
+ .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{padding:.5cqw .15cqw .4cqw .45cqw;transform:rotate(-.7deg);gap:.22cqw}
+ .atlas-concept-one .atlas-seals{gap:.4cqw .3cqw}
+ .atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,8.5cqw)}
+ .atlas-concept-one .atlas-medals{min-height:0;gap:.28cqw;flex-wrap:wrap}
+ .atlas-concept-one .atlas-medals>div{flex:1 1 21%;min-width:0}
+ .atlas-concept-one .atlas-medals .mp-medal{height:6.25cqw;width:min(100%,4.7cqw);min-height:0}
+ .atlas-concept-one .atlas-map-and-progress{min-height:15.2cqw}
+ .atlas-concept-one .atlas-right{gap:.55cqw;justify-content:center}
+ .atlas-concept-one .atlas-missions{gap:.55cqw;flex:0 0 auto}
+ .atlas-concept-one .atlas-mission{padding:1.02cqw .62cqw .78cqw}
+ .atlas-concept-one .atlas-mission-art{min-height:9.25cqw;flex:0 0 auto}
+ .atlas-concept-one .atlas-mission-content{flex:1;min-width:0}
+ .atlas-concept-one .atlas-mission-content h3{min-height:2.65em;font-size:clamp(10px,.93cqw,15px)}
+ .atlas-concept-one .atlas-state{overflow-wrap:anywhere;white-space:normal;line-height:1.12}
+ .atlas-concept-one .atlas-steps{gap:.12cqw;flex-wrap:wrap}
+ .atlas-concept-one .atlas-steps li{flex:0 0 auto;width:clamp(12px,1.05cqw,17px);height:clamp(12px,1.05cqw,17px)}
+ .atlas-concept-one .atlas-table{grid-template-columns:minmax(0,25fr) minmax(0,44fr) minmax(0,31fr);gap:1cqw}
+ .atlas-concept-one .atlas-desk-objects img{width:min(100%,20cqw)}
+ .atlas-concept-one .atlas-archive:not([open]) summary{width:100%;max-height:15.5cqw}
+ .atlas-concept-one .atlas-actions{padding:0 .5cqw}
+ .atlas-concept-one .atlas-archive[open]+.atlas-actions{grid-column:3}
+}
+@media(min-width:901px) and (max-width:1100px){
+ .atlas-concept-one .atlas-desk{grid-template-columns:minmax(0,47fr) minmax(0,53fr)}
+ .atlas-concept-one .atlas-missions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .atlas-concept-one .atlas-mission-art{min-height:10cqw}
+}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-book{width:min(100%,740px);aspect-ratio:auto}
+ .atlas-concept-one .atlas-book-spread{height:auto;min-height:350px}
+ .atlas-concept-one .atlas-medals{flex-wrap:wrap}
+ .atlas-concept-one .atlas-medals>div{flex:1 1 21%}
+ .atlas-concept-one .atlas-archive[open]+.atlas-actions{grid-column:2}
+}
+@media(max-width:650px){
+ .atlas-concept-one .atlas-missions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .atlas-concept-one .atlas-mission-art{min-height:120px}
+ .atlas-concept-one .atlas-steps{flex-wrap:wrap;gap:3px}
+ .atlas-concept-one .atlas-steps li{width:18px;height:18px;flex:0 0 18px}
+}
+@media(max-width:480px){
+ .atlas-concept-one .atlas-book-spread{min-height:305px}
+ .atlas-concept-one .atlas-header h2{font-size:clamp(16px,5vw,21px);white-space:normal}
+ .atlas-concept-one .atlas-archive[open]+.atlas-actions{grid-column:1}
+}
+.atlas-concept-one .atlas-mission time{white-space:normal;overflow-wrap:anywhere}
+.atlas-concept-one .atlas-team-name,.atlas-concept-one .atlas-seal-caption{overflow-wrap:anywhere}
+.atlas-concept-one .atlas-actions button,.atlas-concept-one .atlas-archive summary{touch-action:manipulation}
+.atlas-concept-one .atlas-back{min-height:36px}
