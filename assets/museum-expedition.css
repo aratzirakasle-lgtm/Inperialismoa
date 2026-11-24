@@ -682,3 +682,71 @@
  .atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(10px,3.4vw,15px)}
  .atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(9px,2.5vw,12px)}
 }
+
+/* Museum finishing pass: a single warm light from upper left, print typography,
+   restrained depth, and original ink engravings for confirmed rewards. */
+.atlas-concept-one{font-family:Georgia,'Times New Roman',serif}
+.atlas-concept-one .atlas-display::after{
+ background:radial-gradient(ellipse at 3% 1%,#ffdf9d29,transparent 48%),linear-gradient(125deg,transparent 40%,#24170e0a 70%,#130e091f);
+ box-shadow:inset 0 0 24px #080e0845;pointer-events:none
+}
+.atlas-concept-one .atlas-book{filter:drop-shadow(5px 8px 5px #100a05b3)}
+.atlas-concept-one .atlas-book::before{
+ background-image:linear-gradient(115deg,#fff2c114,transparent 43%,#683d1c15),url('./atlas-pasaporte-foto-hd.webp')
+}
+.atlas-concept-one .atlas-book-spread::after{
+ content:'';position:absolute;inset:1% 0 2%;pointer-events:none;
+ background:linear-gradient(90deg,transparent 40%,#69401c08 43%,#70421c20 46%,#fff4cf17 47.4%,transparent 51%);
+ z-index:2
+}
+.atlas-concept-one .atlas-identity .atlas-paper-frame::before{
+ mask-image:radial-gradient(ellipse farthest-corner,#000 75%,#000e 86%,#0005 97%,transparent);
+ background-size:contain
+}
+.atlas-concept-one .atlas-header h2{font-family:Georgia,'Times New Roman',serif;font-weight:700;letter-spacing:-.025em;text-shadow:0 1px #ffe2ad80;color:#3b210e}
+.atlas-concept-one .atlas-brand{letter-spacing:.02em;color:#e7c385}
+.atlas-concept-one .atlas-section-title{
+ display:flex;align-items:center;justify-content:center;gap:.7em;
+ letter-spacing:.095em;font-size:clamp(12px,1.05cqw,17px)
+}
+.atlas-concept-one .atlas-section-title::before,.atlas-concept-one .atlas-section-title::after{
+ content:'';height:1px;flex:1;max-width:7em;background:linear-gradient(90deg,transparent,#c69d58)
+}
+.atlas-concept-one .atlas-section-title::after{transform:scaleX(-1)}
+.atlas-concept-one .atlas-mission-content{
+ background-image:linear-gradient(115deg,#ffeecb28,transparent 55%,#88572a12),url('./atlas-papel-referencia.svg')
+}
+.atlas-concept-one .atlas-mission-content h3{font-weight:700;line-height:1.16;text-wrap:balance;letter-spacing:0}
+.atlas-concept-one .atlas-mission-name{letter-spacing:.035em}
+.atlas-concept-one .atlas-state{letter-spacing:.035em}
+.atlas-concept-one .atlas-mission.is-done .atlas-state{transform:rotate(-1.5deg)}
+.atlas-concept-one .atlas-mission-art::after{
+ background:linear-gradient(115deg,#ffdd9420,transparent 50%,#34200d22);
+ box-shadow:inset 0 0 6px #39271165
+}
+.atlas-concept-one .atlas-totals::before{filter:drop-shadow(3px 5px 3px #38240e77)}
+.atlas-concept-one .atlas-totals h3{letter-spacing:.025em}
+.atlas-concept-one .atlas-progress-row strong{font-variant-numeric:tabular-nums}
+.atlas-concept-one .atlas-original-seal{overflow:hidden;aspect-ratio:130/125;opacity:.98;mix-blend-mode:multiply}
+.atlas-concept-one .atlas-seal:has(.atlas-original-seal) .atlas-ink-stamp{transform:none}
+.atlas-concept-one .mp-stamp-date{font-variant-numeric:tabular-nums;text-shadow:none;filter:none}
+.atlas-concept-one .atlas-table{
+ background-image:radial-gradient(ellipse at 14% 0%,#ffd18b30,transparent 55%),linear-gradient(115deg,transparent 35%,#27140b35),url('./atlas-madera-referencia-hd.webp')
+}
+.atlas-concept-one .atlas-archive:not([open]) summary{filter:drop-shadow(4px 6px 3px #211209ad)}
+.atlas-concept-one .atlas-archive:not([open]) summary strong{letter-spacing:.005em}
+.atlas-concept-one .atlas-archive[open]{grid-column:1/-1}
+.atlas-concept-one .atlas-archive[open]+.atlas-actions{grid-column:1/-1;justify-self:end;max-width:340px;width:100%}
+.atlas-concept-one .atlas-archive[open] summary{min-height:44px}
+@media(min-width:901px){
+ .atlas-concept-one .atlas-brand{margin-bottom:3.6cqw}
+ .atlas-concept-one .atlas-display{padding-top:3.1cqw}
+ .atlas-concept-one .atlas-desk{align-items:center;gap:1.15cqw}
+ .atlas-concept-one .atlas-missions{align-items:stretch}
+ .atlas-concept-one .atlas-mission-content h3{font-size:clamp(11px,.94cqw,15px)}
+ .atlas-concept-one .atlas-table{padding-top:.8cqw}
+}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-archive[open]+.atlas-actions{justify-self:center}
+ .atlas-concept-one .atlas-mission-content h3{font-size:14px;min-height:2.4em}
+}

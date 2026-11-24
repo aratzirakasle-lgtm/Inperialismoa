@@ -405,6 +405,7 @@ try{
      await waitVisible(page,'#museum-wallet-dialog');
      assert.match(await page.locator('#museum-wallet-dialog').innerText(),/Ikertzailearen zorroa/);
      await page.locator('#museum-wallet-dialog [data-mw-close]').first().click();
+     await page.locator('#museum-wallet-dialog').waitFor({state:'detached'});
      assert.equal(await page.locator('#museum-wallet-dialog').count(),0);
      await page.locator('[data-museum-brief="1"]').click();
      await waitVisible(page,'#museum-brief-dialog');

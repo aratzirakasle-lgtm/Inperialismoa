@@ -16,7 +16,17 @@ function medal(mission=1){
  return `<svg class="mp-medal" viewBox="0 0 132 172" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M32 4H100L88 66 66 78 44 66Z" fill="${mission===2?'#254b6a':'#762e29'}" stroke="#bc9148" stroke-width="2"/><path d="M48 5H55L60 70 53 67ZM77 5H84L79 67 72 70Z" fill="#e8ce8b"/><path d="M62 68h8v13h-8z" fill="#94703a"/><path d="M66 77l9 6 11-1 6 10 11 4 1 11 8 8-4 11 4 10-8 8-1 11-11 4-6 10-11-1-9 6-9-6-11 1-6-10-11-4-1-11-8-8 4-10-4-11 8-8 1-11 11-4 6-10 11 1z" fill="#b68b42" stroke="#64451f" stroke-width="2"/><circle cx="66" cy="126" r="37" fill="#e7c77b" stroke="#795522" stroke-width="2"/><circle cx="66" cy="126" r="31" fill="#d4a75b" stroke="#f9e0a5" stroke-width="2"/><path d="${mission===2?'M66 113l3 10 12 3-12 3-3 13-3-13-12-3 12-3zM48 126a18 18 0 1 0 36 0a18 18 0 1 0-36 0':'M43 125l23-13 23 13zM46 128h40M48 146h36M43 150h46M51 131v13m10-13v13m10-13v13m10-13v13'}" fill="none" stroke="#64451f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M39 110l5-6m49 6-5-6" stroke="#fff1c5" stroke-width="2"/><text x="66" y="106" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#62421d">${mission===2?'II':'I'}</text></svg>`;
 }
 // Engraved atlas seals: only the confirmed state determines ink and legend.
+
+// Extract only the engraved ink from the original photographic reference.
+// Neither the printed date below the seal nor other UI areas are in the crop.
+function atlasOriginalSeal(id){
+ const [x,y,w,h]=id===1?[434,280,130,125]:[569,275,129,125];
+ const uid='atlas-original-ink-'+id;
+ return '<svg class="atlas-engraved-seal atlas-original-seal" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="'+id+'. MISIOA · OSATUTA" xmlns="http://www.w3.org/2000/svg"><defs><filter id="'+uid+'" filterUnits="userSpaceOnUse" x="0" y="0" width="'+w+'" height="'+h+'" color-interpolation-filters="sRGB"><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 -3.1 0 0 2.05" result="density"/><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  5 -5 0 0 -.7" result="redInk"/><feComposite in="density" in2="redInk" operator="in" result="inkMask"/><feFlood flood-color="#862821" result="pigment"/><feComposite in="pigment" in2="inkMask" operator="in"/></filter></defs><image href="./assets/atlas-original-hd.webp" x="'+(-x)+'" y="'+(-y)+'" width="1672" height="941" filter="url(#'+uid+')"/></svg>';
+}
+
 function atlasSeal(id,won,available,mark){
+ if(won&&(id===1||id===2))return atlasOriginalSeal(id);
  const ink=won?['#862821','#a13928','#733c2c','#854522'][id-1]:available?'#976427':['#877052','#8e7251','#77644b','#8b724d'][id-1];
  const uid='atlas-seal-'+id;
  const harbor='<g fill="currentColor"><path d="M29 99l13-10 9 2 11-7 10 6 10-4 12 9 15-5 16 10v6H29z"/><path d="M87 91V65h8V54h5v11h7v26zm21-1V77h8v-8h6v21zm-49 0V74h5v-7h5v7h5v17z"/><path d="M35 91l10 4 14-3-3 7H39z"/></g><g fill="none" stroke="currentColor" stroke-width="1.4"><path d="M43 92V54m11 38V61M43 55l-15 28h15zm1 5l15 23H44zm10 4l12 19H54M31 108q10-3 20 0t20 0 20 0 20 0 20 0M33 113q10-3 20 0t20 0 20 0 20 0 20 0"/><path d="M90 70h4m5 0h4m-13 7h4m5 0h4m-13 7h4m5 0h4"/></g>';
