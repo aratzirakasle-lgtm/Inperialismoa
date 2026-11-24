@@ -451,6 +451,14 @@ try{
      const layout=await page.locator('.atlas-desk').evaluate(el=>({w:el.clientWidth,scroll:el.scrollWidth,columns:getComputedStyle(el).gridTemplateColumns.split(' ').length}));
      assert.ok(layout.scroll<=layout.w+3,'El atlas no debe desbordar horizontalmente');
      assert.equal(layout.columns,2);
+     const atlasGeometry=await page.locator('.atlas-concept-one').evaluate(el=>{
+       const card=el.closest('.modal-card'),btn=el.querySelector('.atlas-continue'),table=el.querySelector('.atlas-table');
+       const rect=x=>{const r=x.getBoundingClientRect();return {top:Math.round(r.top),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)}};
+       return {card:rect(card),atlas:rect(el),table:rect(table),continueButton:rect(btn),viewport:innerHeight};
+     });
+     console.log('ATLAS_GEOMETRY '+JSON.stringify(atlasGeometry));
+     assert.ok(atlasGeometry.continueButton.bottom<=atlasGeometry.card.bottom+2,'El botón principal debe estar visible sin desplazar en escritorio');
+
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/c-museo-atlas-concepto1-escritorio.png',animations:'disabled'});
      await page.locator('.atlas-archive summary').click();
