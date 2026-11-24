@@ -925,6 +925,14 @@ try{
         ['parliament','auth'],['separation','lib'],['rights','lib'],
         ['suffrage','lib'],['socialist','lib']])await put(id,zone);
       assert.equal(await page.locator('#bi-check').isEnabled(),true);
+      const checkButtonUncovered=await page.evaluate(()=>{
+        const button=document.querySelector('#bi-check');
+        const r=button?.getBoundingClientRect();
+        if(!r)return false;
+        const element=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+        return !!element&&(element===button||button.contains(element));
+      });
+      assert.equal(checkButtonUncovered,true,'El marcador no puede tapar el botón de comprobar');
       await page.locator('#bi-check').click();
       await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='challenge');
       assert.equal(await page.locator('.bi-card.bi-locked').count(),7);
