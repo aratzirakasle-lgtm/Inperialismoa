@@ -373,3 +373,18 @@
  .atlas-concept-one .atlas-stamp-page .atlas-page-caption{padding-top:.3cqw;border-top:1px solid #9a713d55;width:88%}
  .atlas-concept-one .atlas-medals{border-top:1px solid #9b6a3445;padding-top:.35cqw}
 }
+
+/* Phase 2 / 2: historical miniature impressions in the passport.
+   The engraved image and all state text share the same ink colour. */
+.atlas-concept-one .atlas-seal .atlas-ink-stamp{background:transparent;box-shadow:none;isolation:auto}
+.atlas-concept-one .atlas-engraved-seal{filter:none;mix-blend-mode:multiply;opacity:.71}
+.atlas-concept-one .mp-earned .atlas-engraved-seal{opacity:.96}
+.atlas-concept-one .is-current .atlas-engraved-seal{opacity:.89}
+.atlas-concept-one .atlas-seal-caption{font-family:Georgia,serif;color:#765332;letter-spacing:.015em;font-size:clamp(9px,.76cqw,12px)}
+.atlas-concept-one .mp-stamp-date{font-weight:700;letter-spacing:.01em;color:#603c24}
+@media(min-width:901px){
+ .atlas-concept-one .atlas-seals{gap:.48cqw .55cqw;align-items:start}
+ .atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,9.25cqw)}
+ .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{gap:.25cqw}
+ .atlas-concept-one .atlas-medals{padding-top:.2cqw;margin-top:.15cqw}
+}
