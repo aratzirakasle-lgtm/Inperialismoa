@@ -397,7 +397,15 @@ try{
    try{
      await waitVisible(page,'.gal-hall');
      const buttons=page.locator('.m1-archive-open button');
-     assert.equal(await buttons.count(),3);
+     assert.equal(await buttons.count(),4);
+     for(const selector of ['[data-m1-dossier]','[data-m1-class-progress]','[data-museum-brief]','[data-museum-wallet]']){
+       assert.equal(await page.locator('.m1-archive-open '+selector).count(),1);
+     }
+     await page.locator('.m1-archive-open [data-museum-wallet]').click();
+     await waitVisible(page,'#museum-wallet-dialog');
+     assert.match(await page.locator('#museum-wallet-dialog').innerText(),/Ikertzailearen zorroa/);
+     await page.locator('#museum-wallet-dialog [data-mw-close]').first().click();
+     assert.equal(await page.locator('#museum-wallet-dialog').count(),0);
      await page.locator('[data-museum-brief="1"]').click();
      await waitVisible(page,'#museum-brief-dialog');
      assert.match(await page.locator('#museum-brief-dialog').innerText(),/Lehen ikerketa/);
