@@ -556,7 +556,6 @@ function multiButtons(group,options,selectedIds){
  const ids=new Set(selectedIds||[]),limit=group==='africa'?4:3;
  return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div><p class="m2-selection-count" role="status">'+ids.size+' / '+limit+' hautatuta</p>';
 }
-}
 function expeditionMap(){
  return '<svg class="m2-expedition-svg" viewBox="0 0 540 620" role="img" aria-label="Afrikako eskema historikoan ibai nagusiak, meridianoak eta iparrorratza agertzen dira. Mapa orientagarria da, ez eskala zehatzekoa." xmlns="http://www.w3.org/2000/svg">'+
  '<defs><radialGradient id="m2-land" cx=".39" cy=".34" r=".79"><stop stop-color="#e3d4a9"/><stop offset=".68" stop-color="#cbbb87"/><stop offset="1" stop-color="#aa9b6c"/></radialGradient>'+
