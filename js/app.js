@@ -9,7 +9,7 @@ import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-guardado1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261124-atlas1";
-import {readExpedition,renderExpedition} from "./museum-expedition.js?v=20261124-atlas-concept1";
+import {readExpedition,renderExpedition} from "./museum-expedition.js?v=20261124-atlas-concept2";
 import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
