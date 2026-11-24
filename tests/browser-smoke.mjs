@@ -1185,6 +1185,7 @@ try{
      await page.locator('#verify').click();
      await page.waitForFunction(()=>document.querySelector('#toast')?.textContent?.includes('Ez da zuzena'));
      assert.equal(await page.locator('#success').isVisible(),false);
+     assert.equal(await page.locator('#m1-passport-reward .mp-earned').count(),0);
      const calls=await page.evaluate(()=>window.__smokeRpcCalls);
      assert.ok(calls.includes('mission1_draft_submit'));
      assert.ok(!calls.includes('submit_mission1_exercise'));

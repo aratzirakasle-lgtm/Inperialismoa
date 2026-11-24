@@ -7,7 +7,7 @@ import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./cl
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard2";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
-import { renderMuseumPassport } from "./museum-passport.js?v=1";
+import { renderMuseumPassport } from "./museum-passport.js?v=2";
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = s => s ? new Date(s).toLocaleString("eu-ES",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit",timeZone:"Europe/Madrid"}) : "Pendiente";

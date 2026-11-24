@@ -3,13 +3,13 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft3';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-members1';
 
-import { renderMuseumPassport } from './museum-passport.js?v=1';
+import { renderMuseumPassport } from './museum-passport.js?v=2';
 const status=document.querySelector('#online-state');
-let passportTeam='Taldea',passportOtherIds=[],passportOtherUnknown=true;
+let passportTeam='Taldea';
 window.m1FifthShowPassport=({preview=false,animate=false}={})=>{
   const target=document.querySelector('#m1-passport-reward');
   if(!target)return;
-  target.innerHTML=renderMuseumPassport({teamName:preview?'Probako taldea':passportTeam,completedIds:preview?[1]:[1,...passportOtherIds],preview,animate,otherUnknown:!preview&&passportOtherUnknown});
+  target.innerHTML=renderMuseumPassport({teamName:preview?'Probako taldea':passportTeam,completedIds:[1],preview,animate,otherUnknown:!preview});
   target.hidden=false;
   document.querySelector('#success')?.classList.add('mp-reward-visible');
 };
@@ -55,15 +55,8 @@ async function initialize(){
     }
     // Estos datos solo personalizan la recompensa; no conceden ni bloquean el logro.
     try{
-      const [teamInfo,badges]=await Promise.all([
-        client.from('teams').select('name').eq('id',id).maybeSingle(),
-        client.from('mission_badges').select('mission_id').eq('team_id',id)
-      ]);
+      const teamInfo=await client.from('teams').select('name').eq('id',id).maybeSingle();
       if(!teamInfo.error&&teamInfo.data?.name)passportTeam=teamInfo.data.name;
-      if(!badges.error&&Array.isArray(badges.data)){
-        passportOtherIds=badges.data.map(b=>Number(b.mission_id)).filter(n=>n>=2&&n<=4);
-        passportOtherUnknown=false;
-      }
     }catch(e){console.warn('Pasaportearen izena',e)}
     if(prior){
       window.m1FifthLocalMode='practice';
