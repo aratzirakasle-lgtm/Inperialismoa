@@ -148,6 +148,7 @@ function openSource(id){
  if(!teacher&&completions.has(4))dialog.querySelectorAll('input').forEach(input=>input.disabled=true);
  dialog.querySelector('[data-file-prev]').onclick=()=>{if(index>0)openSource(archives[index-1].id)};
  dialog.querySelector('[data-file-next]').onclick=()=>{if(index<archives.length-1)openSource(archives[index+1].id)};
+ dialog.addEventListener('close',()=>{if(!document.querySelector('#m2-reading-dialog[open]'))app.querySelector('[data-source-zoom="'+id+'"]')?.focus({preventScroll:true})},{once:true});
  if(image!=='none'){
   const picture=document.querySelector('.m2-dialog-source-art');
   picture.style.backgroundImage=image;picture.style.backgroundPosition=position;

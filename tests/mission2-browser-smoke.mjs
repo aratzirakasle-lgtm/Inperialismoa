@@ -176,6 +176,9 @@ try{
    await page.locator('[data-zone="demographic"] [data-card="new_markets"]').click();
    await page.locator('[data-zone="economic"] .m2-case-target').click();
    assert.equal(await page.locator('[data-zone="economic"] [data-card="new_markets"]').count(),1);
+   await page.locator('[data-cabinet-undo]').click();
+   assert.equal(await page.locator('[data-zone="demographic"] [data-card="new_markets"]').count(),1);
+   assert.equal(await page.locator('[data-cabinet-undo]').isDisabled(),true);
    for(let n=2;n<=5;n++){
     await page.locator('[data-open="'+n+'"]').click();
     assert.ok((await page.locator(n===3?'.m2-atlas-heading h1':'.m2-section-head h2').innerText()).length>4);
@@ -314,6 +317,10 @@ try{
     await page.locator('#m2-reading-dialog input[value="b"]').check();
     assert.equal(await page.locator('input[data-archive="press"][value="b"]').isChecked(),true);
     await page.locator('#m2-reading-dialog input[value="a"]').check();
+    await page.locator('[data-file-next]').click();
+    await page.locator('#m2-reading-title').waitFor({state:'visible'});
+    await page.locator('[data-file-prev]').click();
+    assert.equal(await page.locator('#m2-reading-dialog input[value="a"]').isChecked(),true);
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
     await page.locator('[data-reset]').click();
