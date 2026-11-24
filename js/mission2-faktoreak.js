@@ -81,6 +81,7 @@ const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','A
 let teacher=false,teamId=null,active=1,selected=null,submitting=false,teacherEnding=false;
 let completions=new Set(),draft={},feedback='',feedbackState='';
 let remoteRenderTimer=null,remoteRenderPending=false,dragging=false,pointerEditing=false;
+let lastCabinetMove=null;
 function interacting(){return dragging||pointerEditing||!!selected||!!atlasSelectedRoute||!!atlasSelectedLuggage||!!document.querySelector('#m2-reading-dialog[open]')||app.contains(document.activeElement)&&document.activeElement?.matches('select')}
 function requestRemoteRender(){
  remoteRenderPending=true;
@@ -132,7 +133,21 @@ function openSource(id){
  const style=art?getComputedStyle(art):null;
  const image=style?.backgroundImage||'none',position=style?.backgroundPosition,size=style?.backgroundSize;
  const rect=art?.getBoundingClientRect();
- museumDialog(source.title,'<p class="m2-dialog-ref">'+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div><p class="m2-dialog-reading">'+esc(source.body)+'</p>');
+ const current=taskState(4)[id],index=archives.indexOf(source);
+ museumDialog(source.title,'<p class="m2-dialog-ref">AGIRIA '+(index+1)+' / 5 · '+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div><p class="m2-dialog-reading">'+esc(source.body)+'</p><fieldset class="m2-reading-choices"><legend>'+esc(source.question)+'</legend>'+source.options.map(([key,label])=>'<label><input type="radio" name="m2-dialog-answer" value="'+esc(key)+'" '+(current===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset><div class="m2-file-navigation"><button type="button" data-file-prev class="m2-button secondary" '+(index===0?'disabled':'')+'>← Aurreko agiria</button><span data-file-status role="status">'+(current?'Erantzuna hautatuta':'Erantzun bat hautatu')+'</span><button type="button" data-file-next class="m2-button secondary" '+(index===archives.length-1?'disabled':'')+'>Hurrengo agiria →</button></div>');
+ const dialog=document.querySelector('#m2-reading-dialog');
+ dialog.querySelectorAll('input[name="m2-dialog-answer"]').forEach(input=>input.addEventListener('change',()=>{
+  if(releaseClosed||submitting||active!==4||!teacher&&completions.has(4))return;
+  taskState(4)[id]=input.value;queueMission2({[id]:input.value},4);
+  const original=app.querySelector('input[data-archive="'+id+'"][value="'+input.value+'"]');if(original)original.checked=true;
+  const dossier=app.querySelector('[data-source="'+id+'"]');if(dossier)dossier.dataset.answered='true';
+  const badge=$('[data-archive-progress]');if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
+  const check=$('[data-check]');if(check)check.disabled=!isReady();
+  dialog.querySelector('[data-file-status]').textContent='Erantzuna hautatuta';
+ }));
+ if(!teacher&&completions.has(4))dialog.querySelectorAll('input').forEach(input=>input.disabled=true);
+ dialog.querySelector('[data-file-prev]').onclick=()=>{if(index>0)openSource(archives[index-1].id)};
+ dialog.querySelector('[data-file-next]').onclick=()=>{if(index<archives.length-1)openSource(archives[index+1].id)};
  if(image!=='none'){
   const picture=document.querySelector('.m2-dialog-source-art');
   picture.style.backgroundImage=image;picture.style.backgroundPosition=position;
@@ -143,7 +158,29 @@ function openSource(id){
 }
 function openMap(kind){
  if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa historikoa">');
- else if(kind==='expedition')museumDialog('Esplorazioen atlasa','<div class="m2-dialog-expedition">'+expeditionMap().replaceAll('id="m2-','id="m2-zoom-').replaceAll('url(#m2-','url(#m2-zoom-')+'</div>');
+ else if(kind==='expedition'){
+  museumDialog('Esplorazioen atlasa','<div class="m2-map-tools" aria-label="Maparen kontrolak"><button type="button" data-map-action="out" aria-label="Txikitu">−</button><span data-map-scale role="status">100 %</span><button type="button" data-map-action="in" aria-label="Handitu">+</button><button type="button" data-map-action="left" aria-label="Ezkerrera">←</button><button type="button" data-map-action="up" aria-label="Gora">↑</button><button type="button" data-map-action="down" aria-label="Behera">↓</button><button type="button" data-map-action="right" aria-label="Eskuinera">→</button><button type="button" data-map-action="reset">Hasierako ikuspegia</button></div><div class="m2-dialog-expedition">'+expeditionMap().replaceAll('id="m2-','id="m2-zoom-').replaceAll('url(#m2-','url(#m2-zoom-')+'</div><p class="m2-map-help">Handitu mapa eta mugitu norabide-botoiekin edo arrastatuz. Ez da erantzunik egiaztatzen.</p>');
+  const dialog=document.querySelector('#m2-reading-dialog'),svg=dialog.querySelector('svg');
+  let zoom=1,x=0,y=0,drag=null;
+  function redraw(){
+   const w=540/zoom,h=620/zoom;x=Math.max(0,Math.min(540-w,x));y=Math.max(0,Math.min(620-h,y));
+   svg.setAttribute('viewBox',[x,y,w,h].join(' '));dialog.querySelector('[data-map-scale]').textContent=Math.round(zoom*100)+' %';
+   dialog.querySelector('[data-map-action="in"]').disabled=zoom>=3;dialog.querySelector('[data-map-action="out"]').disabled=zoom<=1;
+   for(const [key,disabled] of [['left',x<=0],['right',x>=540-w-.01],['up',y<=0],['down',y>=620-h-.01]])dialog.querySelector('[data-map-action="'+key+'"]').disabled=disabled;
+  }
+  dialog.querySelector('.m2-map-tools').addEventListener('click',event=>{
+   const action=event.target.closest('[data-map-action]')?.dataset.mapAction;if(!action)return;
+   const w=540/zoom,h=620/zoom;
+   if(action==='in'||action==='out'){const next=Math.max(1,Math.min(3,zoom+(action==='in'?.5:-.5)));x+=(w-540/next)/2;y+=(h-620/next)/2;zoom=next}
+   else if(action==='reset'){zoom=1;x=0;y=0}
+   else if(action==='left')x-=w*.22;else if(action==='right')x+=w*.22;else if(action==='up')y-=h*.22;else if(action==='down')y+=h*.22;
+   redraw();
+  });
+  svg.addEventListener('pointerdown',event=>{if(zoom<=1)return;drag={id:event.pointerId,x:event.clientX,y:event.clientY};svg.setPointerCapture?.(event.pointerId)});
+  svg.addEventListener('pointermove',event=>{if(!drag||drag.id!==event.pointerId)return;const r=svg.getBoundingClientRect();x-=(event.clientX-drag.x)*540/zoom/r.width;y-=(event.clientY-drag.y)*620/zoom/r.height;drag.x=event.clientX;drag.y=event.clientY;redraw()});
+  for(const type of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(type,()=>{drag=null});
+  redraw();
+ }
 }
 function animatePlacement(selector){
  const el=app.querySelector(selector);if(!el||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
@@ -191,7 +228,7 @@ async function initialize(){
    autosave=createMission2Autosave({
     client,teamId,userId:authUser.id,
     canRefresh:()=>!submitting&&!interacting(),
-    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);draft=rows;if(changed&&!releaseClosed&&app.querySelector('.m2-controls'))requestRemoteRender()},
+    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);if(lastCabinetMove&&(rows[1]?.assignments?.[lastCabinetMove.card]||null)!==lastCabinetMove.after)lastCabinetMove=null;draft=rows;if(changed&&!releaseClosed&&app.querySelector('.m2-controls'))requestRemoteRender()},
     onStatus:autosaveStatus,
     onCompleted:markRemoteCompletion
    });
@@ -451,7 +488,7 @@ function renderPopulation(){
  (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>●</span>':'<span>+</span>')+'</button>').join('');
  const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
-  return point?'<path d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
+  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
  const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
   '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
@@ -594,6 +631,9 @@ function expeditionMap(){
  '<path d="M20 20H520V600H20Z" fill="none" stroke="#a89462" stroke-width="2"/><path d="M29 29H511V591H29Z" fill="none" stroke="#ad9b6b" stroke-width="1"/>'+
  '</svg>';
 }
+function explorerCards(field,label,options,state){
+ return '<fieldset class="m2-explorer-cards"><legend>'+esc(label)+'</legend><div class="m2-explorer-options">'+options.map(([value,name])=>'<button type="button" class="m2-explorer-card" data-expedition-field="'+field+'" data-expedition-value="'+value+'" aria-pressed="'+(state[field]===value)+'"><span aria-hidden="true">'+(field==='meeting'?'✦':'✥')+'</span><strong>'+esc(name)+'</strong></button>').join('')+'</div></fieldset>';
+}
 function renderExpedition(){
  const state=taskState(5),data=state.multi||{};
  const chosen=[...(data.africa||[])];
@@ -616,14 +656,10 @@ function renderExpedition(){
     '<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
     multiButtons('asia',asiaOptions,data.asia)+'</section>'+
    '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3></header>'+
-    '<div class="m2-mini-grid"><label class="m2-field">Ipar Poloa<select data-field="north"><option value="">Aukeratu</option>'+
-     option('peary','Peary',state.north)+option('amundsen','Amundsen',state.north)+'</select></label>'+
-    '<label class="m2-field">Hego Poloa<select data-field="south"><option value="">Aukeratu</option>'+
-     option('peary','Peary',state.south)+option('amundsen','Amundsen',state.south)+'</select></label></div></section>'+
+    '<div class="m2-mini-grid">'+explorerCards('north','Ipar Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+explorerCards('south','Hego Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+'</div></section>'+
    '<section class="m2-panel m2-expedition-panel m2-expedition-meeting"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3></header>'+
     '<p class="m2-caption">Prentsak ospetsu egin zuen bi esploratzaileen topaketa. Aztertu 18. diapositibako gertakaria.</p>'+
-    '<label class="m2-field">Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?<select data-field="meeting"><option value="">Aukeratu</option>'+
-     option('1869','1869',state.meeting)+option('1871','1871',state.meeting)+option('1908','1908',state.meeting)+'</select></label></section>'+
+    explorerCards('meeting','Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?',[['1869','1869'],['1871','1871'],['1908','1908']],state)+'</section>'+
    '<section class="m2-panel m2-expedition-panel m2-expedition-congo"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3></header>'+
     '<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura. Esplorazioa eta ustiapena ez dira gauza bera, baina lotuta egon ziren.</p>'+
     '<label class="m2-field">Zer lotura nabarmentzen du azken diapositibak?<select data-field="congo"><option value="">Aukeratu</option>'+
@@ -647,11 +683,12 @@ function isReady(){
  if(active===5)return (state.multi?.africa?.length===4&&state.multi?.asia?.length===3&&['north','south','meeting','congo'].every(k=>!!state[k]));
  return responseKeys[active].every(key=>!!state[key]);
 }
+function canUndoCabinet(){return active===1&&!!lastCabinetMove&&(teacher||!completions.has(1))&&(taskState(1).assignments?.[lastCabinetMove.card]||null)===lastCabinetMove.after}
 function controls(){
  const done=completions.has(active);
 
  return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
- '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>Berriz hasi</button>'+
+ '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||submitting?'disabled':'')+'>↶ Azken mugimendua desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>Berriz hasi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
@@ -668,7 +705,7 @@ function animateRoomArrival(room){
 function renderEnd(){
  const label=teacher?'IRAKASLEAREN AURREBISTA · EZ DA GORDE':'2. MISIOA GAINDITUTA';
  return hero()+nav()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
- '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
+ '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><div class="m2-ceremony-stars" aria-hidden="true">✦ ✧ ✦ ✧ ✦</div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
  (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
  '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
  renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],preview:teacher,animate:true,animateMission:2})+
@@ -736,13 +773,15 @@ async function check(){
 function openExercise(n){
  if(releaseClosed||submitting||!steps.includes(n)||!canOpen(n))return;
  if(!teacher)void autosave?.flush();
- active=n;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
+ active=n;lastCabinetMove=null;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});
 }
 function assignToCategory(catId){
  if(active!==1||!causes.some(c=>c.id===selected)||!categories.some(c=>c.id===catId))return;
  const state=taskState(1);state.assignments=state.assignments||{};
- state.assignments[selected]=catId;const former=selected;selected=null;
+ const former=selected;const before=state.assignments[former]||null;
+ if(before!==catId)lastCabinetMove={card:former,before,after:catId};
+ state.assignments[former]=catId;selected=null;
  queueMission2({assignments:{[former]:catId}},1);
  feedback='';feedbackState='';render();
  $('[data-card="'+former+'"]')?.focus({preventScroll:true});animatePlacement('[data-card="'+former+'"]');
@@ -754,6 +793,7 @@ function assignYear(year){
  for(const y of ['1869','1908','1914'])if(state[y]===selected){delete state[y];patch[y]=null}
  state[year]=selected;patch[year]=selected;queueMission2(patch,2);selected=null;render();
  $('[data-year="'+year+'"]')?.focus({preventScroll:true});animatePlacement('[data-year="'+year+'"]');
+ const dial=$('.m2-e2-globe');if(!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)dial?.animate?.([{transform:'rotate(-3deg)'},{transform:'rotate(2deg)'},{transform:'rotate(0deg)'}],{duration:460,easing:'ease-out'});
 }
 function toggleMulti(group,value){
  const state=taskState(5);state.multi=state.multi||{};
@@ -773,10 +813,11 @@ function atlasMoveRoute(location){
  for(const route of atlasRoutes){
   if(route.id!==atlasSelectedRoute&&state['route_'+route.id]===location){delete state['route_'+route.id];patch['route_'+route.id]=null}
  }
- state['route_'+atlasSelectedRoute]=location;
- patch['route_'+atlasSelectedRoute]=location;queueMission2(patch,3);
+ const moved=atlasSelectedRoute;state['route_'+moved]=location;
+ patch['route_'+moved]=location;queueMission2(patch,3);
  atlasSelectedRoute=null;
  feedback='';feedbackState='';render();
+ if(!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)$('[data-route-trace="'+moved+'"]')?.animate?.([{strokeDasharray:'1',strokeDashoffset:1},{strokeDasharray:'1',strokeDashoffset:0}],{duration:550,easing:'ease-out'});
 }
 function atlasPack(bag){
  if(active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage)||!['cause','effect'].includes(bag))return;
@@ -807,7 +848,7 @@ app.addEventListener('click',event=>{
    const desk=event.target.closest('[data-unassign]');
    if(desk&&selected&&active===1){
      const assignments=taskState(1).assignments||{};
-     const removed=selected;delete assignments[removed];queueMission2({assignments:{[removed]:null}},1);
+     const removed=selected;if(assignments[removed])lastCabinetMove={card:removed,before:assignments[removed],after:null};delete assignments[removed];queueMission2({assignments:{[removed]:null}},1);
      selected=null;feedback='';feedbackState='';render();
    }
    return;
@@ -845,10 +886,24 @@ app.addEventListener('click',event=>{
   selected=null;if(Object.keys(patch).length)queueMission2(patch,2);render();return;
  }
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
+ if(elem.hasAttribute('data-expedition-field')){
+  if(active!==5||!teacher&&completions.has(5))return;
+  const field=elem.dataset.expeditionField,value=elem.dataset.expeditionValue;
+  const permitted={north:['peary','amundsen'],south:['peary','amundsen'],meeting:['1869','1871','1908']};
+  if(!permitted[field]?.includes(value))return;
+  const state=taskState(5);if(state[field]===value){delete state[field];queueMission2({[field]:null},5)}else{state[field]=value;queueMission2({[field]:value},5)}
+  render();$('[data-expedition-field="'+field+'"][data-expedition-value="'+value+'"]')?.focus({preventScroll:true});return;
+ }
+ if(elem.hasAttribute('data-cabinet-undo')){
+  if(!canUndoCabinet())return;
+  const {card,before}=lastCabinetMove;lastCabinetMove=null;const assignments=taskState(1).assignments||(taskState(1).assignments={});
+  if(before)assignments[card]=before;else delete assignments[card];
+  queueMission2({assignments:{[card]:before}},1);selected=null;feedback='';feedbackState='';render();return;
+ }
  if(elem.hasAttribute('data-reset')){
   if(completions.has(active)&&!teacher)return;
   const exercise=active;
-  museumDialog('Ariketa berriz hasi?','<p class="m2-dialog-reading">'+(teacher?'Aurrebistako erantzunak ezabatuko dira.':'Ariketa honetako taldearen erantzunak ezabatuko dira, baita beste kideek gordetakoak ere. Lortutako zigiluak ez dira galduko.')+'</p>',{confirm:true,onConfirm:()=>{if(active!==exercise||!teacher&&completions.has(exercise))return;draft[exercise]={};if(!teacher)autosave?.reset(exercise);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render()}});return
+  museumDialog('Ariketa berriz hasi?','<p class="m2-dialog-reading">'+(teacher?'Aurrebistako erantzunak ezabatuko dira.':'Ariketa honetako taldearen erantzunak ezabatuko dira, baita beste kideek gordetakoak ere. Lortutako zigiluak ez dira galduko.')+'</p>',{confirm:true,onConfirm:()=>{if(active!==exercise||!teacher&&completions.has(exercise))return;draft[exercise]={};if(exercise===1)lastCabinetMove=null;if(!teacher)autosave?.reset(exercise);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render()}});return
  }
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
@@ -932,7 +987,7 @@ app.addEventListener('drop',event=>{
  if(active===1&&!causes.some(c=>c.id===moved)||active===2&&!infrastructure.some(i=>i.id===moved))return;
  if(moved)selected=moved;
  if(loose&&active===1&&selected){
-   const removed=selected;delete taskState(1).assignments?.[removed];
+   const removed=selected;const before=taskState(1).assignments?.[removed];if(before)lastCabinetMove={card:removed,before,after:null};delete taskState(1).assignments?.[removed];
    queueMission2({assignments:{[removed]:null}},1);selected=null;feedback='';feedbackState='';render();return;
  }
  if(zone)assignToCategory(zone.dataset.zone);

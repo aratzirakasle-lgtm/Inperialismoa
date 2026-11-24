@@ -311,6 +311,9 @@ try{
     await page.locator('#m2-reading-dialog').waitFor({state:'visible'});
     assert.match(await page.locator('#m2-reading-dialog').innerText(),/Prentsa eta prestigioa/);
     assert.equal(await page.locator('.m2-dialog-source-art').evaluate(el=>getComputedStyle(el).backgroundPosition),await page.locator('[data-source="press"] .m2-source-engraving').evaluate(el=>getComputedStyle(el).backgroundPosition));
+    await page.locator('#m2-reading-dialog input[value="b"]').check();
+    assert.equal(await page.locator('input[data-archive="press"][value="b"]').isChecked(),true);
+    await page.locator('#m2-reading-dialog input[value="a"]').check();
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
     await page.locator('[data-reset]').click();
@@ -329,7 +332,8 @@ try{
     assert.equal(await page.locator('.m2-expedition-svg .m2-historic-rivers path').count(),4);
     assert.equal(await page.locator('[data-multi="africa"]').count(),6);
     assert.equal(await page.locator('[data-multi="asia"]').count(),5);
-    assert.equal(await page.locator('select[data-field]').count(),4);
+    assert.equal(await page.locator('select[data-field]').count(),1);
+    assert.equal(await page.locator('[data-expedition-field]').count(),7);
     const expLayout=await page.locator('.m2-expedition-research').evaluate(el=>{
      const root=el.getBoundingClientRect(),atlas=el.querySelector('.m2-atlas').getBoundingClientRect();
      return {rootWidth:root.width,rootLeft:root.left,rootRight:root.right,
@@ -342,12 +346,19 @@ try{
     await page.locator('[data-multi="africa"][data-value="congo"]').click();
     assert.match(await page.locator('.m2-atlas-route-ledger').innerText(),/Kongo/);
     assert.equal(await page.locator('[data-multi="africa"][data-value="congo"]').getAttribute('aria-pressed'),'true');
-    await page.locator('[data-field="meeting"]').selectOption('1869');
-    assert.equal(await page.locator('[data-field="meeting"]').inputValue(),'1869');
+    await page.locator('[data-expedition-field="meeting"][data-expedition-value="1869"]').click();
+    assert.equal(await page.locator('[data-expedition-field="meeting"][data-expedition-value="1869"]').getAttribute('aria-pressed'),'true');
     await page.locator('[data-map-zoom="expedition"]').click();
     await page.locator('#m2-reading-dialog .m2-expedition-svg').waitFor({state:'visible'});
+    await page.locator('[data-map-action="in"]').click();
+    assert.equal(await page.locator('[data-map-scale]').innerText(),'150 %');
+    const box=await page.locator('#m2-reading-dialog .m2-expedition-svg').getAttribute('viewBox');
+    await page.locator('[data-map-action="right"]').click();
+    assert.notEqual(await page.locator('#m2-reading-dialog .m2-expedition-svg').getAttribute('viewBox'),box);
+    await page.locator('[data-map-action="reset"]').click();
+    assert.equal(await page.locator('[data-map-scale]').innerText(),'100 %');
     await page.locator('[data-dialog-close]').click();
-    assert.equal(await page.locator('[data-field="meeting"]').inputValue(),'1869');
+    assert.equal(await page.locator('[data-expedition-field="meeting"][data-expedition-value="1869"]').getAttribute('aria-pressed'),'true');
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
@@ -432,8 +443,9 @@ try{
     await page.locator('[data-multi="africa"][data-value="'+id+'"]').click();
    for(const id of ['himalaya','siberia','australia'])
     await page.locator('[data-multi="asia"][data-value="'+id+'"]').click();
-   for(const [id,value] of [['north','peary'],['south','amundsen'],['meeting','1871'],['congo','exploitation']])
-    await page.locator('[data-field="'+id+'"]').selectOption(value);
+   for(const [id,value] of [['north','peary'],['south','amundsen'],['meeting','1871']])
+    await page.locator('[data-expedition-field="'+id+'"][data-expedition-value="'+value+'"]').click();
+   await page.locator('[data-field="congo"]').selectOption('exploitation');
    await page.locator('[data-check]').click();
    await page.locator('[data-ending]').waitFor();
    await page.locator('[data-ending]').click();

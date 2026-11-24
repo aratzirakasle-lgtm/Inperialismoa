@@ -24,3 +24,28 @@
 .m2-dialog-map,.m2-dialog-expedition svg{display:block;max-width:100%;max-height:65vh;width:auto;height:auto;margin:auto;object-fit:contain}
 .m2-reading-dialog footer{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:12px 22px;border-top:1px solid #c8ac76}
 @media(prefers-reduced-motion:reduce){.m2-reading-dialog *{animation:none!important;transition:none!important}}
+
+/* Interacciones de exposición: madera, latón y pergamino; ninguna marca de corrección. */
+.m2-reading-dialog .m2-dialog-content{animation:m2-folder-open .22s ease-out;transform-origin:top center}
+@keyframes m2-folder-open{from{opacity:.65;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.m2-reading-choices{margin:18px 0 8px;padding:14px;border:1px solid #b99b65;border-radius:6px}
+.m2-reading-choices legend{font-weight:bold;padding:0 6px}
+.m2-reading-choices label{display:flex;gap:10px;align-items:flex-start;padding:8px;border:1px solid transparent;border-radius:4px;cursor:pointer}
+.m2-reading-choices label:has(input:checked){border-color:#a77c34;background:#e8d3a6}
+.m2-reading-choices input{accent-color:#84622e;margin-top:5px}
+.m2-file-navigation,.m2-map-tools{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:10px 0}
+.m2-file-navigation [data-file-status],.m2-map-tools [data-map-scale]{font-size:13px;font-weight:bold}
+.m2-map-tools button{background:#49351f;color:#f5dfad;border:1px solid #ad894a;border-radius:4px;padding:6px 10px;min-height:35px;cursor:pointer;font:700 13px Georgia,serif}
+.m2-map-tools button:disabled{opacity:.45;cursor:default}
+.m2-dialog-expedition svg{touch-action:none;cursor:grab}
+.m2-dialog-expedition svg:active{cursor:grabbing}
+.m2-map-help{font-size:13px;text-align:center;color:#795b36}
+.m2-explorer-cards{margin:0;padding:8px;border:1px solid #b7965d;border-radius:6px;min-width:0}
+.m2-explorer-cards legend{padding:0 4px;color:inherit;font-size:13px;font-weight:700}
+.m2-explorer-options{display:flex;flex-wrap:wrap;gap:6px}
+.m2-explorer-card{flex:1 1 65px;min-width:0;display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 5px;border:1px solid #9a743b;border-radius:5px;background:linear-gradient(#f4e6c8,#ddc28e);color:#49331d;cursor:pointer;font:700 13px Georgia,serif;box-shadow:0 2px 3px #37270b22}
+.m2-explorer-card[aria-pressed=true]{outline:2px solid #c69b47;background:#694c28;color:#fff0ca;box-shadow:0 0 8px #caab6466}
+.m2-explorer-card:focus-visible,.m2-map-tools button:focus-visible{outline:3px solid #a77b33;outline-offset:2px}
+.m2-ceremony-stars{text-align:center;color:#a88035;letter-spacing:.4em;font:700 18px Georgia,serif;animation:m2-ceremony-rise .65s ease-out both}
+@keyframes m2-ceremony-rise{from{opacity:0;transform:translateY(7px) scale(.92)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.m2-reading-dialog .m2-dialog-content,.m2-ceremony-stars{animation:none}}
