@@ -41,11 +41,13 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
  }catch(e){console.warn('M2: tokiko borradorra ezin izan da irakurri',e)}
  let timer=null,working=false,loading=false,alive=true,failed=false,hasRestored=false,inFlightId=null,afterFlight=null;
  const busy=()=>Object.keys(entries).length>0;
+ let localDurable=busy();
  const persist=()=>{
   try{
    if(busy())localStorage.setItem(key,JSON.stringify(entries));
    else localStorage.removeItem(key);
-  }catch(e){console.warn('M2: azken mugimendua ezin izan da gailuan gorde',e)}
+   localDurable=busy();
+  }catch(e){localDurable=false;console.warn('M2: azken mugimendua ezin izan da gailuan gorde',e)}
  };
  const status=(message,kind)=>{if(alive)onStatus(message,kind)};
  function schedule(delay=250){
@@ -90,7 +92,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
   }catch(e){
    console.error('M2: taldeko borradorra gordetzea',e);
    failed=true;
-   status('Konexio-arazoa: aldaketak gailuan daude. Berriro konektatzean gordeko dira.','error');
+   status(localDurable?'Konexio-arazoa. Aldaketak gailuan gordeta daude; berriro konektatzean bidaliko dira.':'Konexio-arazoa. Aldaketak ez dira zerbitzarian edo gailuan baieztatu. Ez itxi orria.','error');
   }finally{
    working=false;inFlightId=null;afterFlight=null;
    if(alive&&busy()&&!failed)schedule(10);
@@ -114,7 +116,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
    if(!alive)return false;
    hasRestored=true;onRestore(restored);
    if(busy()){status('Aurreko saioko aldaketak berreskuratzen…','saving');schedule(10)}
-   else status('✓ Taldearen aurrerapena berreskuratuta.','saved');
+   else status('Taldearen lana sinkronizatuta.','ready');
    return true;
   }catch(e){
    console.error('M2: borradorrak berreskuratzea',e);
@@ -122,7 +124,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
     const local={};for(const [id,entry] of Object.entries(entries))local[id]=mergeMission2Patch({},entry.patch);
     hasRestored=true;onRestore(local);
    }
-   status('Taldearen lana ezin izan da sinkronizatu. Gailuko aldaketak berreskuratu dira; egiaztatu konexioa.','error');
+   status(busy()&&localDurable?'Konexio-arazoa. Gailuko aldaketak berreskuratu dira.':'Taldearen lana ezin izan da sinkronizatu. Egiaztatu konexioa.','error');
    return false;
   }finally{loading=false}
  }

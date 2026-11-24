@@ -145,3 +145,18 @@ test('Un cambio durante un envío no vuelve a escribir campos ya confirmados',as
  assert.deepEqual(f.data.get('team:1').assignments,{a:'religious',b:'political'});
  }finally{session.destroy()}
 });
+
+test('Sin almacenamiento local y sin red no se afirma que exista una copia guardada',async()=>{
+ const f=fixture();const statuses=[];const session=f.create(()=>{},(message,kind)=>statuses.push({message,kind}));
+ try{
+  await session.load();
+  globalThis.localStorage.setItem=()=>{throw Error('storage disabled')};
+  f.setOffline(true);session.queue(1,{assignments:{a:'economic'}});await session.flush();
+  assert.equal(session.hasPending(),true);
+  assert.equal(statuses.at(-1).kind,'error');
+  assert.match(statuses.at(-1).message,/Ez itxi orria/);
+  assert.doesNotMatch(statuses.at(-1).message,/gailuan gordeta daude/);
+  f.setOffline(false);await session.flush();assert.equal(session.hasPending(),false);
+  assert.equal(statuses.at(-1).kind,'saved');
+ }finally{session.destroy()}
+});

@@ -1,6 +1,7 @@
+import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-guardado1';
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync4';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261124-guardado1';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-wallet1';
@@ -96,11 +97,11 @@ function requestRemoteRender(){
 }
 function markRemoteCompletion(exercise){if(completions.has(exercise))return;completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active||app.querySelector('.m2-controls'))requestRemoteRender()}
 
-let autosave=null,saveStatus='Taldearen aurrerapena kargatzen…',saveKind='saving';
+let autosave=null,saveStatus=SAVE_TEXT.loading,saveKind='loading';
 function autosaveStatus(message,kind=''){
  saveStatus=message;saveKind=kind;
  const el=$('#m2-autosave');
- if(el){el.textContent=message;el.dataset.state=kind}
+ if(el){paintSaveIndicator(el,kind,message);el.dataset.state=kind}
 }
 function queueMission2(patch,exercise=active){
  if(!teacher&&!completions.has(exercise))autosave?.queue(exercise,patch);
@@ -724,7 +725,7 @@ function canUndoCabinet(){return active===1&&!!lastCabinetMove&&(teacher||!compl
 function controls(){
  const done=completions.has(active);
 
- return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
+ return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-save-state="'+esc(saveKind)+'" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
  '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||submitting?'disabled':'')+'>↶ Desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>↻ Berrabiarazi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':

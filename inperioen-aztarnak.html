@@ -167,6 +167,7 @@
 <link rel="stylesheet" href="./assets/inperioen-integracion-v6.css?v=20261122-seleccion-naranja1">
 <link rel="stylesheet" href="./assets/inperioen-globo-reparado-v1.css?v=20261119-1">
   <link rel="stylesheet" href="./assets/accesibilidad-juegos.css?v=20261120-1">
+<link rel="stylesheet" href="./assets/save-indicator.css?v=20261124-guardado1">
 </head>
 <body>
 <main class="museum-scene" aria-label="Inperioen aztarnak · diseinu-aurrebista">
@@ -240,6 +241,21 @@ let modalMode='case';
 let studentId=null;
 const clueRequestsInFlight=new Set();
 const modal=$('#dossier-overlay');
+const dossierSaveStates=new Map(),dossierReadFailures=new Set();
+function dossierSave(id,kind,message){
+ if(teacherPreview)return;
+ dossierSaveStates.set(id,{kind,message});
+ if((id==='final'&&modalMode!=='final')||(id!=='final'&&currentCase!==id))return;
+ const target=modal.querySelector('#case-feedback,#final-feedback');
+ let el=modal.querySelector('.dossier-save-indicator');
+ if(!el&&target){el=document.createElement('p');el.className='dossier-save-indicator';el.setAttribute('role','status');target.before(el);}
+ if(el){el.dataset.saveState=kind;el.textContent=message;}
+}
+function restoreDossierSave(id){
+ const state=dossierSaveStates.get(id);
+ dossierSave(id,state?.kind||'ready',state?.message||'Hautatutako erantzuna egiaztatzean bidaliko da.');
+}
+
 const flagCode={india:'🇮🇳',aljeria:'🇩🇿',indonesia:'🇮🇩',angola:'🇦🇴'};
 const LINES={
  india:'M289 149 Q424 122 490 295',
@@ -332,7 +348,8 @@ function updateClueUnlock(id){
 async function markClueRead(id,index){
  if(clueSet(id).has(index)||clueRequestsInFlight.has(id+':'+index))return;
  const key=id+':'+index;
- clueRequestsInFlight.add(key);
+ clueRequestsInFlight.add(key);dossierReadFailures.delete(key);
+ dossierSave(id,'saving','Aldaketak gordetzen…');
  try{
   if(!teacherPreview){
    const {error}=await client.rpc('record_empire_dossier_clue',{p_case_id:id,p_clue_no:index+1});
@@ -343,10 +360,17 @@ async function markClueRead(id,index){
   updateScene();
  }catch(error){
   console.error('Pista gordetzeko errorea:',error);
+  dossierReadFailures.add(key);
   if(currentCase===id){
    const msg=$('#choice-locked-note');if(msg)msg.textContent='Ezin izan da pista erregistratu. Egiaztatu konexioa eta ireki berriro.';
   }
- }finally{clueRequestsInFlight.delete(key)}
+ }finally{
+  clueRequestsInFlight.delete(key);
+  if(![...clueRequestsInFlight].some(k=>k.startsWith(id+':'))){
+   if([...dossierReadFailures].some(k=>k.startsWith(id+':')))dossierSave(id,'error','Konexio-arazoa. Irakurketa bat ez da baieztatu. Ireki agiria berriro.');
+   else dossierSave(id,'saved','✓ Agiriaren irakurketa gordeta. Hautatutako erantzuna egiaztatzean bidaliko da.');
+  }
+ }
 }
 async function loadClueReads(){
  if(teacherPreview||!studentId)return;
@@ -397,12 +421,14 @@ function openCase(id){
  for(const input of modal.querySelectorAll('input[name="choice"]'))input.addEventListener('change',()=>{
   if(clueCount(id)!==3||solved.has(id)||saving){input.checked=false;return;}
   selected[id]=input.value;lastResult[id]=null;
+  dossierSave(id,'ready','Hautatutako erantzuna egiaztatzean bidaliko da.');
   const feedback=$('#case-feedback');if(feedback)feedback.innerHTML='';
   updateClueUnlock(id);
  });
  for(const detail of modal.querySelectorAll('details[data-clue]'))detail.addEventListener('toggle',()=>{
   const index=Number(detail.dataset.clue);if(detail.open)void markClueRead(id,index);
  });
+ restoreDossierSave(id);
  $('#dossier-verify').addEventListener('click',()=>void verifyCase(id));
  const closeBtn=modal.querySelector('[data-close-dossier]');closeBtn?.focus();
 }
@@ -419,13 +445,15 @@ async function rpcVerify(kind,id,choice){
 async function verifyCase(id){
  if(saving||solved.has(id)||!selected[id]||clueCount(id)!==3)return;
  saving=true;let redraw=false;const btn=$('#dossier-verify');btn.disabled=true;btn.textContent='Egiaztatzen…';
+ dossierSave(id,'saving','Aldaketak gordetzen…');
  try{
   const res=await rpcVerify('case',id,selected[id]);
+  dossierSave(id,'saved','✓ Erantzunaren bidalketa baieztatuta.');
   if(res.correct){solved.add(id);lastResult[id]={correct:true,explanation:res.explanation||''};}
   else{lastResult[id]={wrong:true};selected[id]=null;}
   if(!teacherPreview){await loadState().catch(()=>{});}else updateScene();
   redraw=true;
- }catch(err){console.error('Egiaztapenaren errorea',err);$('#case-feedback').innerHTML='<div class="dossier-feedback bad" role="alert">Ezin izan da erantzuna egiaztatu. Egiaztatu konexioa.</div>';btn.disabled=false;}
+ }catch(err){dossierSave(id,'error','Konexio-arazoa. Bidalketa ez da baieztatu.');console.error('Egiaztapenaren errorea',err);$('#case-feedback').innerHTML='<div class="dossier-feedback bad" role="alert">Ezin izan da erantzuna egiaztatu. Egiaztatu konexioa.</div>';btn.disabled=false;}
  finally{saving=false;if(redraw&&modalMode==='case'&&currentCase===id)openCase(id)}
 }
 function showFinal(){
@@ -440,17 +468,20 @@ function showFinal(){
  ${finalComplete?'<a href="./esaldiak-osatu.html'+(teacherPreview?'?preview=1':'')+'">5. ariketa · Azken zigilua →</a>':''}
  </div></section>`;
  $('#dossier-close').addEventListener('click',closeModal);
- for(const inp of modal.querySelectorAll('input[name="reflection"]'))inp.addEventListener('change',()=>{selected.final=inp.value;lastResult.final=null;$('#reflection-verify').disabled=false;$('#final-feedback').innerHTML=''});
+ for(const inp of modal.querySelectorAll('input[name="reflection"]'))inp.addEventListener('change',()=>{selected.final=inp.value;lastResult.final=null;dossierSave('final','ready','Hautatutako erantzuna egiaztatzean bidaliko da.');$('#reflection-verify').disabled=false;$('#final-feedback').innerHTML=''});
+ restoreDossierSave('final');
  $('#reflection-verify')?.addEventListener('click',()=>void verifyFinal());$('#dossier-close').focus();
 }
 async function verifyFinal(){if(saving||finalComplete||!selected.final)return;
  saving=true;$('#reflection-verify').disabled=true;
+ dossierSave('final','saving','Aldaketak gordetzen…');
  try{const res=await rpcVerify('reflection','final',selected.final);
+  dossierSave('final','saved','✓ Erantzunaren bidalketa baieztatuta.');
   if(res.correct){finalComplete=true;lastResult.final={correct:true,explanation:res.explanation};if(!teacherPreview)markMission1NavCompleted(4);}
   else{lastResult.final={wrong:true};selected.final=null;}
   if(!teacherPreview)await loadState().catch(()=>{});else updateScene();
   showFinal();
- }catch(err){console.error(err);$('#final-feedback').innerHTML='<div class="dossier-feedback bad">Ezin izan da egiaztatu. Saiatu berriro.</div>';const retry=$('#reflection-verify');if(retry)retry.disabled=false;}
+ }catch(err){dossierSave('final','error','Konexio-arazoa. Bidalketa ez da baieztatu.');console.error(err);$('#final-feedback').innerHTML='<div class="dossier-feedback bad">Ezin izan da egiaztatu. Saiatu berriro.</div>';const retry=$('#reflection-verify');if(retry)retry.disabled=false;}
  finally{saving=false;}
 }
 async function loadState(){
