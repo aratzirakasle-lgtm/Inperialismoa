@@ -74,8 +74,10 @@ Deno.serve(async (req:Request)=>{
    if(row.auth_user_id)continue;
    const team=names.get(row.team_id);
    if(!team){problem="Equipo desconocido.";break}
-   const email="ikasle-"+classRow.name.toLowerCase().replace(/[^a-z0-9]/g,"")+"-"+
-      row.slot+"-"+shortId()+"@example.com";
+   const aliases4A:Record<string,string>={"Atlaseko Itzalak":"atlas","Berlingo Kartografoak":"berlin","Burdinbideko Kronikak":"burdin","Inperioen Aztarnak":"inperio","Kolonietako Ahotsak":"kolonia","Kongoko Lekukoak":"kongo","Muga Berrien Mapak":"muga","Suezko Iparrorratzak":"suez"};
+   const alias=classRow.name==="4A"&&classRow.school_year==="2026-2027"?aliases4A[team]:undefined;
+   const email=alias?"4a."+alias+String(row.slot).padStart(2,"0")+"@example.com":
+      "ikasle-"+classRow.name.toLowerCase().replace(/[^a-z0-9]/g,"")+"-"+row.slot+"-"+shortId()+"@example.com";
    const password=randomPassword();
    const {data:newUser,error:createError}=await admin.auth.admin.createUser({
      email,password,email_confirm:true,
