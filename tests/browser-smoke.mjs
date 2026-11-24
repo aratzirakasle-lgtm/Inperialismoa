@@ -24,7 +24,7 @@ async function open(role,path,viewport={width:1365,height:900}){
  if(!params.has('smoke_m2_closed')){
  await context.route('**/js/mission-release.js*',r=>r.fulfill({status:200,contentType:'application/javascript',body:"export const MISSION2_OPEN=true;export const MISSION2_LOCKED_TEXT='Bigarren misioa irakasleak irekiko du.';"}));
  }
- await context.addInitScript(({role,badges,completedSteps})=>{
+ await context.addInitScript(({role,badges,completedSteps,m2Open})=>{
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
@@ -120,6 +120,9 @@ async function open(role,path,viewport={width:1365,height:900}){
      },
      from:table=>builder(table),
      rpc:async(name,args)=>{
+       if(name==='mission2_access_status')return {data:m2Open,error:null};
+       if(name==='mission2_class_progress_members')return {data:[],error:null};
+       if(name==='teacher_set_mission2_access'){tables.classes.find(c=>c.id===args.p_class_id).mission2_open=args.p_open;return {data:args.p_open,error:null}}
        if(name==='class_access_status')return {data:window.__smokeAccessOpen!==false,error:null};
        if(name==='teacher_set_class_access'){tables.classes.find(c=>c.id===args.p_class_id).access_open=args.p_open;return {data:args.p_open,error:null}}
        // Marcador de aula: lectura autorizada, nunca escritura ni intento.
@@ -327,7 +330,7 @@ async function open(role,path,viewport={width:1365,height:900}){
    };
    window.__smokeRpcCalls=[];
    window.supabase={createClient:()=>client};
- },{role,badges,completedSteps});
+ },{role,badges,completedSteps,m2Open:!params.has('smoke_m2_closed')});
  const page=await context.newPage();
  const errors=[];
  page.on('pageerror',err=>errors.push(err.message));

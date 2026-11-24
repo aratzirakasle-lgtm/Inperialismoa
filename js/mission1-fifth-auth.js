@@ -5,7 +5,7 @@ import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, ad
 
 import { renderMuseumPassport } from './museum-passport.js?v=2';
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-window.m1Mission2Open=MISSION2_OPEN;
+window.m1Mission2Open=false;
 window.m1Mission2LockedText=MISSION2_LOCKED_TEXT;
 const status=document.querySelector('#online-state');
 let passportTeam='Taldea';
@@ -47,6 +47,8 @@ async function initialize(){
     if(!(await startClassAccess(client)))return;
     if(!profile.team_id){location.replace('./index.html');return}
     const id=profile.team_id;
+    try{const {data,error}=await client.rpc('mission2_access_status',{});window.m1Mission2Open=!error&&data===true}catch{}
+
     const [{data:third,error:thirdError},{data:fourth,error:fourthError},{data:prior,error:priorError}]=await Promise.all([
       client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',3).maybeSingle(),
       client.from('empire_dossier_team_state').select('completed_at').eq('team_id',id).maybeSingle(),
@@ -64,7 +66,7 @@ async function initialize(){
     if(prior){
       window.m1FifthLocalMode='practice';
       window.m1FifthProgress=async()=>({completed:true,already_completed:true,practice:true,mission_completed:true});
-      say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. '+(MISSION2_OPEN?'Bigarren misiora joan zaitezkete.':MISSION2_LOCKED_TEXT));
+      say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. '+(window.m1Mission2Open?'Bigarren misiora joan zaitezkete.':MISSION2_LOCKED_TEXT));
       // 5/5 gaindituta badago, ez behartu ikaslea berriro jokatzera.
       window.m1FifthRestoreCompletion?.();
     }else{

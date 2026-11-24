@@ -5,6 +5,21 @@ import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2'
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
 const app=document.querySelector('#m2-app');
+let mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
+async function checkMission2Release(){
+ if(teacher||releaseChecking)return;
+ releaseChecking=true;
+ try{const {data,error}=await client.rpc('mission2_access_status',{});if(error||typeof data!=='boolean')return;
+ if(data===false&&!releaseClosed){releaseClosed=true;cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
+ else if(data===true&&releaseClosed)location.reload();
+ }catch{}finally{releaseChecking=false}
+}
+function watchMission2Release(){
+ if(releaseTimer!==null)return;
+ releaseTimer=setInterval(()=>{if(!document.hidden)void checkMission2Release()},5000);
+ window.addEventListener('focus',checkMission2Release);
+ window.addEventListener('pagehide',()=>{clearInterval(releaseTimer);window.removeEventListener('focus',checkMission2Release)},{once:true});
+}
 const $=(selector,root=document)=>root.querySelector(selector);
 const ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
 const esc=value=>String(value??'').replace(/[&<>"']/g,character=>ESC[character]);
@@ -102,9 +117,12 @@ async function initialize(){
   if(profile.role==='teacher'&&!teacher){location.replace('./inperialismoaren-faktoreak.html?preview=1');return}
   if(!teacher){
    if(profile.role!=='student'||!profile.team_id){cardMessage('Sarrera mugatua','Talde bateko ikasle gisa sartu behar duzu.');return}
-   if(!MISSION2_OPEN){cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT);return}
+   const access=await client.rpc('mission2_access_status',{});
+   if(access.error||access.data!==true){releaseClosed=true;cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT);watchMission2Release();return}
+   watchMission2Release();
     if(!(await startClassAccess(client)))return;
    teamId=profile.team_id;
+   try{const team=await client.from('teams').select('name').eq('id',teamId).single();if(!team.error&&team.data?.name)mission2TeamName=team.data.name}catch{}
    // Lehen misioaren lehenagoko lorpena datu-basean mantentzen da,
    // baina bost joko berriak amaitu arte ez du bigarren misioa irekitzen.
    const fifth=await client.from('mission1_exercise_completions')
@@ -603,6 +621,7 @@ function renderEnd(){
  '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'#mission3')+'">Museora itzuli →</a></section>';
 }
 function render(){
+ if(releaseClosed)return;
  animateRoomArrival(teacherEnding?'amaiera':String(active));
  const firstRoom=active===1&&!teacherEnding;
  const atlasRoom=active===3&&!teacherEnding;
@@ -638,7 +657,7 @@ function getAnswers(){
 }
 async function check(){
  if(teacher){setFeedback('Irakaslearen aurrebistan ez da erantzunik bidaltzen.','');return}
- if(submitting||completions.has(active)||!isReady())return;
+ if(releaseClosed||submitting||completions.has(active)||!isReady())return;
  submitting=true;
  setFeedback('Erantzunak egiaztatzen…');
  const saveButton=$('[data-check]');if(saveButton)saveButton.disabled=true;
@@ -660,7 +679,7 @@ async function check(){
  }finally{submitting=false;const checkButton=$('[data-check]');if(checkButton)checkButton.disabled=!isReady()||completions.has(active)}
 }
 function openExercise(n){
- if(!steps.includes(n)||!canOpen(n))return;
+ if(releaseClosed||submitting||!steps.includes(n)||!canOpen(n))return;
  if(!teacher)void autosave?.flush();
  active=n;selected=null;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});

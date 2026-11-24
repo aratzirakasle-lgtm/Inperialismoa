@@ -38,6 +38,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
    auth:{getUser:async()=>({data:{user:{id:myId}},error:null})},
    from:table,
    rpc:async(name,args)=>{
+    if(name==='mission2_access_status')return {data:true,error:null};
     if(name==='class_access_status')return {data:true,error:null};
     if(name==='mission2_class_progress_members')return {data:[{team_id:'qa-team',class_id:'qa-class',team_name:'Atlas',member_names:['Ane'],exercise_1:true,mission_completed:false},{team_id:'other-team',class_id:'qa-class',team_name:'Nilo',member_names:['Jon'],exercise_1:true,exercise_2:true,mission_completed:false}],error:null};
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
