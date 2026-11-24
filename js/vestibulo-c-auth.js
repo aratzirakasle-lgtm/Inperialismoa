@@ -36,7 +36,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
    'data-state="upcoming" disabled'),
   hotspot("c-museo-portal c-museo-m4 is-upcoming","4. misioa: "+display[4].title+". Prestatzen",
    'data-state="upcoming" disabled'),
-  hotspot("c-museo-globe","Esplorazioen atlasa: informazioa ikusi",'data-c-globe="1"'),
+  hotspot("c-museo-globe","Ikertzailearen atlasa: pasaportea, dominak eta aurrerapena",'data-c-globe="1" aria-haspopup="dialog"'),
   hotspot("c-museo-power","Irten museotik",'data-c-logout="1"'),
   hotspot("c-museo-book1","Taldearen espedientea: "+rawName+", "+count+"/4 misio",'data-c-ledger="1"'),
   hotspot("c-museo-book2",nextId?"Hurrengo erronka: "+display[nextId].title:"Hurrengo bi misioak prestatzen ari gara",
@@ -83,7 +83,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
 
  '</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
- '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
+ '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><button type="button" class="c-museo-mobile-atlas" data-c-globe="1" aria-haspopup="dialog">✧ Ikertzailearen atlasa · Pasaportea</button><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
  '<p class="c-museo-footer">Zuen taldearen benetako aurrerapena azaltzen da. 3. eta 4. misioetako aretoak prestatzen ari gara.</p>'+
  '</div>';
 }

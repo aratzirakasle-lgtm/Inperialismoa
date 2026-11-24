@@ -1,6 +1,7 @@
 /* Shared, read-only museum portfolio. Class scope and progress come from existing RPCs.
  * No answer data, new grants, audio, local achievements or writes. */
-import {renderMuseumPassport} from './museum-passport.js?v=3';
+import {renderMuseumPassport} from './museum-passport.js?v=20261124-atlas1';
+import {completionRows} from './museum-expedition.js?v=20261124-atlas2';
 import {renderMission1ClassProgress} from './classroom-progress.js?v=20261124-m2board1';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const archiveTitles=[
@@ -30,7 +31,7 @@ export function archiveMarkup(summary){
  }).join('')+'<p class="mw-future">III. eta IV. misioak · Prestatzen</p>';
 }
 function ensureStyle(){
- for(const [key,href] of [['wallet','./assets/museum-wallet.css?v=1'],['wallet-passport','./assets/museum-passport.css?v=3'],['wallet-class','./assets/m1-classroom-progress.css?v=20261124-m2board1']]){
+ for(const [key,href] of [['wallet','./assets/museum-wallet.css?v=1'],['wallet-passport','./assets/museum-passport.css?v=20261124-atlas1'],['wallet-class','./assets/m1-classroom-progress.css?v=20261124-m2board1']]){
   if(document.querySelector('link[data-museum-style="'+key+'"]')||Array.from(document.querySelectorAll('link[rel="stylesheet"]')).some(l=>l.getAttribute('href')?.split('?')[0]===href.split('?')[0]))continue;
   const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset.museumStyle=key;document.head.append(link);
  }
@@ -42,7 +43,7 @@ export function openWallet(){
  const d=document.createElement('dialog');d.id='museum-wallet-dialog';d.setAttribute('aria-labelledby','mw-title');
  d.innerHTML='<header><p>MUSEOKO ARTXIBOA</p><h2 id="mw-title">Ikertzailearen zorroa</h2><button type="button" data-mw-close aria-label="Itxi">×</button></header><nav aria-label="Zorroaren atalak"><button type="button" data-mw-tab="passport" aria-pressed="true">Pasaportea · Dominak</button><button type="button" data-mw-tab="archive" aria-pressed="false">Espedienteak</button><button type="button" data-mw-tab="class" aria-pressed="false" '+(cfg.preview?'disabled':'')+'>Taldeen aurrerapena</button><button type="button" data-mw-tab="help" aria-pressed="false">Nola jokatu</button></nav><p class="mw-status" role="status"></p><div class="mw-content"></div><footer><button type="button" data-mw-close>Itxi · Ikerketara itzuli</button></footer>';
  document.body.append(d);
- let active='passport',boardMission=cfg.mission===2?2:1,rows={},errors={},busy=false,alive=true,loading=!cfg.preview;
+ let active='passport',boardMission=cfg.mission===2?2:1,rows={},errors={},sealDates={},busy=false,alive=true,loading=!cfg.preview;
  const content=d.querySelector('.mw-content'),status=d.querySelector('.mw-status');
  function paint(){
   if(!alive)return;
@@ -52,7 +53,7 @@ export function openWallet(){
   let html='';
   if(active==='passport'){
    if(!known&&summary.every(s=>!s))html='<p>Pasaportea ezin da oraindik egiaztatu.</p>';
-   else html=renderMuseumPassport({teamName:cfg.preview?'Probako taldea':summary.find(Boolean)?.teamName||'Taldea',completedIds:summary.flatMap((s,i)=>s?.completed?[i+1]:[]),preview:cfg.preview,otherUnknown:!known});
+   else html=renderMuseumPassport({teamName:cfg.preview?'Probako taldea':summary.find(Boolean)?.teamName||'Taldea',completedIds:summary.flatMap((s,i)=>s?.completed?[i+1]:[]),preview:cfg.preview,otherUnknown:!known,completedAt:sealDates});
   }else if(active==='archive')html=archiveMarkup(summary);
   else if(active==='class'){
    html='<div class="mw-mission-tabs"><button type="button" data-mw-mission="1" aria-pressed="'+(boardMission===1)+'">I. misioa</button><button type="button" data-mw-mission="2" aria-pressed="'+(boardMission===2)+'">II. misioa</button></div>'+renderMission1ClassProgress(rows[boardMission]||[],{ownTeamId:cfg.team,missionId:boardMission,error:!!errors[boardMission]});
@@ -65,10 +66,16 @@ export function openWallet(){
  async function refresh(){
   if(!alive||busy||cfg.preview||document.hidden)return;
   busy=true;
+  const stamps=Promise.all([1,2].map(async m=>{
+   try{const r=await cfg.client.from('mission'+m+'_exercise_completions').select('team_id,exercise,completed_at').eq('team_id',cfg.team);
+    if(r.error||!alive)return;const data=completionRows(r.data,cfg.team);if(!data)return;
+    sealDates[m]=m===1?data.get(5)||null:data.size===5&&[...data.values()].every(Boolean)?[...data.values()].sort().at(-1):null;
+   }catch{}
+  }));
   try{await Promise.all([1,2].map(async m=>{
    try{const result=await cfg.client.rpc(m===1?'mission1_class_progress_members':'mission2_class_progress_members',{});if(result.error)throw result.error;if(!alive)return;const data=Array.isArray(result.data)?result.data:[];const own=data.find(r=>String(r.team_id)===String(cfg.team));if(!own)throw Error('team not returned');rows[m]=data.filter(r=>String(r.class_id)===String(own.class_id));errors[m]=false}
    catch{if(alive)errors[m]=true}
-  }))}finally{busy=false;loading=false;paint()}
+  }));await stamps}finally{busy=false;loading=false;paint()}
  }
  function stop(){alive=false;clearInterval(timer);window.removeEventListener('online',refresh);window.removeEventListener('m1:progress-changed',refresh);window.removeEventListener('m2:progress-changed',refresh)}
  const timer=cfg.preview?null:setInterval(refresh,15000);

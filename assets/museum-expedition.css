@@ -16,3 +16,8 @@
 .atlas-archive{margin-top:13px;border:1px solid #ae8c52;background:#e8d3a9;color:#4c3420;border-radius:4px;padding:10px}.atlas-archive summary{font-weight:bold;cursor:pointer;color:#634526}.atlas-archive>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.atlas-file h4{font-size:12px;margin:10px 0 6px}.atlas-file ol{padding:0;margin:0;list-style:none}.atlas-file li{padding:5px 0;border-bottom:1px solid #bc9d6d55;font-size:13px}.atlas-file li span{display:inline-block;width:20px;color:#866f4a}.atlas-file .sealed span{color:#386137;font-weight:bold}
 .atlas-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.museum-expedition footer{text-align:center;margin-top:12px}.museum-expedition button:focus-visible,.atlas-archive summary:focus-visible{outline:3px solid #f4cb73;outline-offset:2px}
 @media(max-width:700px){.atlas-desk,.atlas-missions,.atlas-archive>div{grid-template-columns:1fr}.atlas-header{gap:8px}.atlas-totals{display:grid;grid-template-columns:1fr 1fr;gap:8px}.atlas-totals h3,.atlas-totals p{grid-column:1/-1}.atlas-totals>div{margin:0}.atlas-desk{padding:7px}}
+
+.atlas-totals .atlas-map{margin:0 0 10px;border:2px ridge #a18045;box-shadow:1px 2px 4px #4e382777;overflow:hidden}
+.atlas-map img{display:block;width:100%;height:auto}
+@media(max-width:700px){.atlas-totals .atlas-map{grid-column:1/-1;max-height:180px}.atlas-map img{max-height:180px;object-fit:cover}}
+@media(prefers-reduced-motion:no-preference){.museum-expedition{animation:atlas-open .22s ease-out}@keyframes atlas-open{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:none}}}

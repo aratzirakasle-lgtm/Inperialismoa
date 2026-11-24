@@ -18,10 +18,10 @@ export function indexTeacherActivity(sources){
  }
  return index;
 }
-export function renderTeacherLiveProgress({teams=[],m1=[],m2=[],activity=new Map(),classId=null,errors=[],lastSync=null,demo=false}={}){
+export function renderTeacherLiveProgress({teams=[],m1=[],m2=[],activity=new Map(),missionDates=new Map(),datesError=false,classId=null,errors=[],lastSync=null,demo=false}={}){
  if(demo)return '<section class="card"><h3>Seguimiento de los diez ejercicios</h3><p>Disponible con una sesión docente real.</p></section>';
  const visible=teams.filter(t=>!classId||same(t.class_id,classId));
- const date=x=>{if(!x)return '—';const d=new Date(x);return Number.isFinite(+d)?d.toLocaleString('es-ES',{timeZone:'Europe/Madrid',dateStyle:'short',timeStyle:'short'}):'—'};
+ const date=x=>{if(!x)return '—';const d=new Date(x);return Number.isFinite(+d)?d.toLocaleString('es-ES',{timeZone:'Europe/Madrid',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}):'—'};
  const rows=[m1,m2];
  const summary=rows.map(list=>{
   const known=visible.filter(t=>list.some(r=>same(r.team_id,t.id)&&typeof r.mission_completed==='boolean'));
@@ -43,12 +43,13 @@ export function renderTeacherLiveProgress({teams=[],m1=[],m2=[],activity=new Map
    }).join('');
   }).join('');
   const roster=rows.map(list=>list.find(r=>same(r.team_id,t.id))?.member_names).find(v=>Array.isArray(v)&&v.length)||t.members||[];
-  return '<tr><th scope="row">'+esc(t.name)+'<span class="teacher-live-members">'+esc(roster.join(', '))+'</span></th>'+marks+'<td>'+esc(date(last))+'</td></tr>';
+  const seals=rows.map((list,i)=>{const row=list.find(r=>same(r.team_id,t.id)),stamp=missionDates.get(t.id+':'+(i+1));return '<td>'+esc(row?.mission_completed===true?(stamp?date(stamp):'Fecha no confirmada'):row?'—':'Sin datos')+'</td>'}).join('');
+  return '<tr><th scope="row">'+esc(t.name)+'<span class="teacher-live-members">'+esc(roster.join(', '))+'</span></th>'+marks+seals+'<td>'+esc(date(last))+'</td></tr>';
  }).join('');
  const header=names.map((list,i)=>list.map((name,j)=>'<th scope="col" title="'+esc(name)+'" aria-label="'+esc('Misión '+(i+1)+': '+name)+'">'+(j+1)+'</th>').join('')).join('');
  return '<section class="card"><h3>Seguimiento de los diez ejercicios</h3><p class="card-sub">Por clase y equipo · actualización cada 15 segundos con el panel visible.</p><div class="teacher-live-stats"><span>Equipos: '+visible.length+'</span><span>Misión 1: '+(errors.includes('m1')?'últimos datos · ':'')+esc(summary[0])+'</span><span>Misión 2: '+(errors.includes('m2')?'últimos datos · ':'')+esc(summary[1])+'</span></div>'+
- (errors.length?'<p class="notice amber" role="status">No se han podido actualizar todos los datos. Se muestran los últimos confirmados; los desconocidos llevan ?.</p>':'')+
- '<div class="table-scroll"><table class="teacher-live-grid"><thead><tr><th rowspan="2" scope="col">Equipo e integrantes</th><th colspan="5" scope="colgroup">Misión 1</th><th colspan="5" scope="colgroup">Misión 2</th><th rowspan="2" scope="col">Última actividad registrada</th></tr><tr>'+header+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
+ (datesError?'<p class="notice amber">No se han actualizado todas las fechas de los sellos. Se muestran las últimas confirmadas.</p>':'')+(errors.length?'<p class="notice amber" role="status">No se han podido actualizar todos los datos. Se muestran los últimos confirmados; los desconocidos llevan ?.</p>':'')+
+ '<div class="table-scroll"><table class="teacher-live-grid"><thead><tr><th rowspan="2" scope="col">Equipo e integrantes</th><th colspan="5" scope="colgroup">Misión 1</th><th colspan="5" scope="colgroup">Misión 2</th><th rowspan="2" scope="col">Sello M1 · fecha y hora</th><th rowspan="2" scope="col">Sello M2 · fecha y hora</th><th rowspan="2" scope="col">Última actividad registrada</th></tr><tr>'+header+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
  (!visible.length?'<p>No hay equipos en esta selección.</p>':'')+
  '<p class="teacher-live-note">✓ Superado · ◐ Actividad registrada sin superación · ○ No superado, sin actividad confirmada · ? Sin datos. La actividad refleja escrituras o intentos guardados, no presencia en línea ni corrección de borradores.</p><p class="teacher-live-note">Última consulta completa: '+esc(date(lastSync))+'</p></section>';
 }

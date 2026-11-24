@@ -1,16 +1,16 @@
-import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-progress.js?v=20261124-seguimiento1";
+import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-progress.js?v=20261124-atlas2";
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261124-hasi1";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261124-atlas2";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-m2board1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-guardado1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
-import { renderMuseumPassport } from "./museum-passport.js?v=20261124-atlas1";
-import {readExpedition,renderExpedition} from "./museum-expedition.js?v=20261124-atlas1";
-import {walletContext,prepareWallet} from "./museum-wallet.js?v=1";
+import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261124-atlas1";
+import {readExpedition,renderExpedition} from "./museum-expedition.js?v=20261124-atlas2";
+import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -35,7 +35,7 @@ const key = "inperialismoa-demo-v1";
 let conceptCHome=new URLSearchParams(location.search).get("museo")!=="anterior";
 let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 let mission2Open=false,m2Rows=[],m2Error=false;
-let teacherActivity=new Map(),teacherActivityError=true,teacherLastSync=null,teacherActivityRequest=null;
+let teacherActivity=new Map(),teacherActivityError=true,teacherLastSync=null,teacherActivityRequest=null,teacherMissionDates=new Map(),teacherDatesError=true;
 let classProgressRows=[],classProgressError=false,classProgressTicker=null;
 let classStudentRoster=[],issuedClassCredentials=[];
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
@@ -342,7 +342,7 @@ const active=features.filter(f=>{const c=codeMap[f.properties?.name];return c&&l
 const visibleTeacherTeams=()=>teams.filter(t=>!teacherClassId||t.class_id===teacherClassId);
 const visibleTeacherIds=()=>new Set(visibleTeacherTeams().map(t=>t.id));
 function teacherLiveBoard(){
- return renderTeacherLiveProgress({teams:visibleTeacherTeams(),m1:classProgressRows,m2:m2Rows,activity:teacherActivity,classId:teacherClassId||null,
+ return renderTeacherLiveProgress({teams:visibleTeacherTeams(),m1:classProgressRows,m2:m2Rows,activity:teacherActivity,missionDates:teacherMissionDates,datesError:teacherDatesError,classId:teacherClassId||null,
   errors:[...(classProgressError?['m1']:[]),...(m2Error?['m2']:[]),...(teacherActivityError?['activity']:[])],lastSync:teacherLastSync,demo});
 }
 async function syncTeacherActivity(forUser=user?.id){
@@ -356,17 +356,23 @@ async function syncTeacherActivity(forUser=user?.id){
   ['empire_dossier_attempts','team_id,created_at',1,4]
  ];
  try{
+  const dateQueries=Promise.all([1,2].map(async n=>{try{const r=await db.from('mission'+n+'_exercise_completions').select('team_id,exercise,completed_at').eq('exercise',5);return r.error?null:r.data||[]}catch{return null}}));
   const results=await Promise.all(specs.map(async ([table,fields,mission,exercise])=>{
    try{let q=db.from(table).select(fields);if(table==='empire_dossier_attempts')q=q.order('created_at',{ascending:false}).limit(1000);
     const {data,error}=await q;if(error)throw error;return {mission,exercise,rows:data||[]};
    }catch{return {mission,exercise,rows:null};}
   }));
+  const dateRows=await dateQueries;
   if(user?.id!==forUser||!isTeacher())return;
+  teacherDatesError=dateRows.some(x=>x===null);
+  const visible=new Set(teams.map(t=>String(t.id))),newDates=new Map();
+  dateRows.forEach((rows,i)=>{if(rows===null){for(const [key,value] of teacherMissionDates)if(key.endsWith(':'+(i+1)))newDates.set(key,value);return}for(const r of rows){const stamp=confirmedStamp(r.completed_at);if(!visible.has(String(r.team_id))||Number(r.exercise)!==5||!stamp)continue;const key=r.team_id+':'+(i+1);if(!newDates.has(key)||stamp<newDates.get(key))newDates.set(key,stamp)}});
+  teacherMissionDates=newDates;
   teacherActivityError=results.some(x=>x.rows===null);
   const next=indexTeacherActivity(results);
   if(teacherActivityError){for(const [key,value] of teacherActivity){const current=next.get(key);if(!current||Date.parse(value)>Date.parse(current))next.set(key,value);}}
   teacherActivity=next;
-  if(!teacherActivityError&&!classProgressError&&!m2Error)teacherLastSync=new Date().toISOString();
+  if(!teacherActivityError&&!teacherDatesError&&!classProgressError&&!m2Error)teacherLastSync=new Date().toISOString();
   const el=$('#teacher-live-board');if(teacherTab==='overview'&&el){const html=teacherLiveBoard();if(el.innerHTML!==html)el.innerHTML=html;}
  }finally{if(teacherActivityRequest===forUser)teacherActivityRequest=null;}
 }
@@ -524,7 +530,7 @@ async function refreshFromRealtime(){
  }catch(error){console.error("Actualización en tiempo real",error)}
  finally{realtimeRefreshing=false}
 }
-async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");if(user?.id!==p.id){classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;}
+async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");if(user?.id!==p.id){classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;}
  user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};
  if(p.role==="student"&&!(await startClassAccess(db)))return;
  await refreshData();
@@ -535,7 +541,7 @@ async function setSession(){const {data:{user:authUser}}=await db.auth.getUser()
  else{currentMission=0;galleryQuestionsOpen=false}
  if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
  switchScreen(true);startClassProgressPolling();if(isTeacher()&&teacherTab==='overview')void syncTeacherActivity();if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
-async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;stopClassProgressPolling();classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
+async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;stopClassProgressPolling();classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
 if(b.hasAttribute("data-m2-class")){
  if(demo||!isTeacher()||b.disabled)return;
