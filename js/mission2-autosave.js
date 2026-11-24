@@ -20,10 +20,13 @@ export function mergeMission2Patch(base,patch){
 }
 function combineEntries(previous,next){
  if(!previous||next.reset)return {reset:!!next.reset,patch:next.patch||{}};
- return {
-  reset:!!previous.reset,
-  patch:mergeMission2Patch(previous.patch,next.patch)
- };
+ // Mantener los null: indican que hay que retirar una tarjeta previamente guardada.
+ const patch={...previous.patch,...next.patch};
+ for(const name of ['assignments','multi']){
+  if(object(previous.patch[name])&&object(next.patch[name]))
+   patch[name]={...previous.patch[name],...next.patch[name]};
+ }
+ return {reset:!!previous.reset,patch};
 }
 export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,onCompleted=()=>{}}){
  if(!client||!teamId||!userId)throw Error('Taldearen saioa falta da');
