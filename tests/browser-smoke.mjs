@@ -925,14 +925,9 @@ try{
         ['parliament','auth'],['separation','lib'],['rights','lib'],
         ['suffrage','lib'],['socialist','lib']])await put(id,zone);
       assert.equal(await page.locator('#bi-check').isEnabled(),true);
-      const checkButtonUncovered=await page.evaluate(()=>{
-        const button=document.querySelector('#bi-check');
-        const r=button?.getBoundingClientRect();
-        if(!r)return false;
-        const element=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
-        return !!element&&(element===button||button.contains(element));
-      });
-      assert.equal(checkButtonUncovered,true,'El marcador no puede tapar el botón de comprobar');
+      // Playwright desplaza el botón al área visible y comprueba si puede
+      // recibir eventos sin ejecutar todavía la corrección del ejercicio.
+      await page.locator('#bi-check').click({trial:true,timeout:5000});
       await page.locator('#bi-check').click();
       await page.waitForFunction(()=>document.querySelector('#bi-stage')?.dataset.phase==='challenge');
       assert.equal(await page.locator('.bi-card.bi-locked').count(),7);
