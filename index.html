@@ -50,9 +50,9 @@
       </header>
 
       <form id="login-form" class="museo-form" aria-label="Museora sartzeko datuak">
-        <label for="login-user" class="sr-only">Helbide elektronikoa</label>
+        <label for="login-user" class="sr-only">Erabiltzailea edo helbide elektronikoa</label>
         <div class="museo-field-frame museo-username-frame">
-          <input id="login-user" class="museo-field museo-username" name="username" type="email" autocomplete="username" placeholder="Erabiltzailea / e-posta" aria-label="Helbide elektronikoa" required spellcheck="false">
+          <input id="login-user" class="museo-field museo-username" name="username" type="text" autocomplete="username" placeholder="Erabiltzailea / e-posta" aria-label="Erabiltzailea edo helbide elektronikoa" required spellcheck="false" autocapitalize="none">
         </div>
 
         <label for="login-password" class="sr-only">Pasahitza</label>
@@ -109,6 +109,6 @@
   <div id="modal" class="modal-backdrop" hidden><div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="modal-close" id="modal-close" aria-label="Itxi">×</button><div id="modal-body"></div></div></div>
   <div id="toast" class="toast" role="status" hidden></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
-  <script type="module" src="./js/app.js?v=20261124-audit2"></script>
+  <script type="module" src="./js/app.js?v=20261124-username1"></script>
 </body>
 </html>
