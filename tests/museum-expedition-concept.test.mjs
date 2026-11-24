@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {renderExpedition,expeditionSummary} from '../js/museum-expedition.js';
+test('La mesa del cartógrafo conserva sus cuatro cartelas y cuatro sellos con datos reales',()=>{
+ const team='atlas',stamp='2026-11-24T10:13:05Z',summary=expeditionSummary({team,m1:[{team_id:team,exercise:5,completed_at:stamp}],m2:[],mission2Open:true});
+ const html=renderExpedition({teamName:'<Atlas>',summary});
+ assert.match(html,/atlas-concept-one/);assert.match(html,/atlas-book-spread/);assert.equal((html.match(/<article class="atlas-mission /g)||[]).length,4);assert.equal((html.match(/class="mp-slot atlas-seal/g)||[]).length,4);assert.match(html,/11:13:05/);assert.match(html,/&lt;Atlas&gt;/);assert.match(html,/data-atlas-continue="2"/);assert.doesNotMatch(html,/data-atlas-continue="[34]"/);assert.match(html,/<details class="atlas-archive"/);assert.equal((html.match(/data-atlas-continue=/g)||[]).length,1);
+});
+test('Sin misión disponible no se simula una acción ni un sello',()=>{const html=renderExpedition({summary:expeditionSummary({team:'a'})});assert.doesNotMatch(html,/data-atlas-continue=/);assert.match(html,/data-atlas-close/);assert.doesNotMatch(html,/mp-earned/);});

@@ -1,0 +1,2 @@
+# Atlas · concepto 1 (mesa de cartógrafo)
+La pantalla del globo conserva las consultas y controles existentes. Se reproduce la composición de la propuesta aprobada: libro abierto, mapa neutral, ficha de progreso, cuatro cartelas, dossier y botón de continuación. Los textos, porcentajes, sellos, fechas y estados son HTML real. Las fotografías decorativas proceden de los recursos ya disponibles en el museo, no del archivo original generado. No se publican fechas ficticias ni se activan las misiones III/IV. Estilos exclusivos del atlas, con adaptación a pantallas estrechas.
