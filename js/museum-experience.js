@@ -3,7 +3,7 @@ const seen=new Set();
 const arrivals=new WeakMap();
 function ensureStyle(){
  if(document.querySelector('link[data-museum-experience]'))return;
- const link=document.createElement('link');link.rel='stylesheet';link.href='./assets/museum-experience.css?v=1';link.dataset.museumExperience='1';document.head.append(link);
+ const link=document.createElement('link');link.rel='stylesheet';link.href='./assets/museum-experience.css?v=2';link.dataset.museumExperience='1';document.head.append(link);
 }
 export function arriveMuseumRoom(root,key){
  if(!root||arrivals.get(root)===key)return;

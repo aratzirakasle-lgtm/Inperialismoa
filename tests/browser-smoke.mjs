@@ -397,7 +397,11 @@ try{
    try{
      await waitVisible(page,'.gal-hall');
      const buttons=page.locator('.m1-archive-open button');
-     assert.equal(await buttons.count(),2);
+     assert.equal(await buttons.count(),3);
+     await page.locator('[data-museum-brief="1"]').click();
+     await waitVisible(page,'#museum-brief-dialog');
+     assert.match(await page.locator('#museum-brief-dialog').innerText(),/Lehen ikerketa/);
+     await page.locator('#museum-brief-dialog button').click();
      assert.equal(await page.locator('[data-m1-class-progress] .m1-progress-emblem').count(),1);
      assert.equal(await page.locator('[data-m1-class-progress] .m1-progress-emblem').getAttribute('aria-hidden'),'true');
      assert.match(await buttons.first().textContent(),/Ikerketa-espedientea/);

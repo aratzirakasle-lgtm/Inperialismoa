@@ -13,3 +13,23 @@
 .museum-brief-signature{border-top:1px solid #ad8b55;padding-top:12px;margin-top:20px}
 .museum-brief-close{margin-top:10px}
 .m1-archive-open .museum-brief-button,.m2-archive-access .museum-brief-button{font-size:12px}
+
+/* Common control materials, scoped to existing game actions; keep geometry intact. */
+.gal-bottom-bar .gal-action-primary,#bi-check,#bi-check-cases,button#check,button#verify,
+#m2-app .m2-controls [data-check],#m2-app .m2-controls [data-preview-check]{
+ background:linear-gradient(180deg,#476347,#254a35 55%,#193225)!important;
+ color:#ffedbf!important;border-color:#c5a165!important;
+}
+.gal-bottom-bar .gal-action-outline,#bi-reset,#bi-undo,#undo-last,
+#m2-app .m2-controls [data-reset],#m2-app .m2-controls [data-cabinet-undo]{
+ background:linear-gradient(180deg,#6a5030,#3e2c1b)!important;
+ color:#f5dfb3!important;border-color:#bd985d!important;
+}
+.gal-bottom-bar .gal-action-next,#next-fourth,#mission2-link,
+#m2-app .m2-controls [data-next],#m2-app .m2-controls [data-ending]{
+ background:linear-gradient(180deg,#e9d29c,#c7a363)!important;
+ color:#342413!important;border-color:#a97e40!important;
+}
+.gal-bottom-bar .gal-action:focus-visible,#bi-check:focus-visible,#bi-check-cases:focus-visible,
+#bi-reset:focus-visible,#bi-undo:focus-visible,#undo-last:focus-visible,#check:focus-visible,#verify:focus-visible,
+#m2-app .m2-controls button:focus-visible{outline:2px solid #e1b865;outline-offset:2px}
