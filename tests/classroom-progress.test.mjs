@@ -9,7 +9,7 @@ const rows=[
 ];
 test('El marcador ofrece cinco ejercicios y misión completa sin enseñar resultados privados',()=>{
  const html=renderMission1ClassProgress(rows,{ownTeamId:'a',classId:'class1'});
- assert.equal((html.match(/1\. ariketa/g)||[]).length,2);
+ assert.equal((html.match(/aria-label="1\. ariketa (?:gaindituta|osatu gabe)"/g)||[]).length,2);
  for(const n of [1,2,3,4,5])assert.ok(html.includes(n+'. ariketa'));
  assert.ok(html.includes('1. misioa'));
  assert.ok(html.includes('0/5')===false);
