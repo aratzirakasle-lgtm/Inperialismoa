@@ -119,3 +119,11 @@ test('La segunda misión conserva sus protecciones de foco y movimiento',()=>{
  assert.match(css,/prefers-reduced-motion/);
  assert.match(read('inperialismoaren-faktoreak.html'),/id="m2-app"/);
 });
+
+test('El panel del profesor contabiliza las cuatro misiones actuales sin borrar el archivo histórico',()=>{
+ const app=read('js/app.js');
+ assert.match(app,/function renderTeacher\(\)\{[^\n]*const missionIds=\[1,2,3,4\]/);
+ assert.match(app,/const total=visibleIds\.size\*missionIds\.length/);
+ assert.match(app,/Misiones 1–4 completadas/);
+ assert.doesNotMatch(app,/Misiones 1–5 completadas/);
+});
