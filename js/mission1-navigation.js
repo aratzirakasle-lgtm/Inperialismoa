@@ -1,6 +1,6 @@
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-members1';
 import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=2';
-import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=1';
+import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[

@@ -4,13 +4,13 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-guardado1';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-wallet1';
-import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=1';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-atlas3';
+import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
 import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
-import { renderMuseumPassport } from './museum-passport.js?v=3';
+import { renderMuseumPassport } from './museum-passport.js?v=20261124-atlas1';
 const app=document.querySelector('#m2-app');
-let mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
+let passportDates={},mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
 async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
@@ -94,6 +94,10 @@ function requestRemoteRender(){
  if(remoteRenderTimer!==null)return;
  const apply=()=>{remoteRenderTimer=null;if(!remoteRenderPending||releaseClosed)return;if(submitting||interacting()){remoteRenderTimer=setTimeout(apply,250);return}render()};
  remoteRenderTimer=setTimeout(apply,100);
+}
+function updateMission2PassportDate(rows){
+ const valid=rows.filter(r=>steps.includes(Number(r.exercise))&&typeof r.completed_at==='string'&&Number.isFinite(Date.parse(r.completed_at)));
+ if(new Set(valid.map(r=>Number(r.exercise))).size===5)passportDates[2]=valid.map(r=>new Date(r.completed_at).toISOString()).sort().at(-1);
 }
 function markRemoteCompletion(exercise){if(completions.has(exercise))return;completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active||app.querySelector('.m2-controls'))requestRemoteRender()}
 
@@ -218,17 +222,19 @@ async function initialize(){
    // Lehen misioaren lehenagoko lorpena datu-basean mantentzen da,
    // baina bost joko berriak amaitu arte ez du bigarren misioa irekitzen.
    const fifth=await client.from('mission1_exercise_completions')
-     .select('exercise').eq('team_id',teamId).eq('exercise',5).limit(1);
+     .select('exercise,completed_at').eq('team_id',teamId).eq('exercise',5).limit(1);
    if(fifth.error)throw fifth.error;
    if(!fifth.data?.length){
      cardMessage('Bigarren misioa blokeatuta','Lehen misioaren bost ariketak osatu behar dituzue bigarren misioan sartzeko.');
      return;
    }
+   passportDates[1]=fifth.data[0]?.completed_at||null;
    const saved=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);
    if(saved.error){
     console.warn('2. misioaren egitura ez dago oraindik aktibatuta:',saved.error.message);
     cardMessage('Bigarren misioa prestatzen','Bost ariketak prestatuta daude, baina irakasleak oraindik datu-baseko aktibazioa amaitu behar du.');return;
    }
+   updateMission2PassportDate(saved.data||[]);
    completions=new Set((saved.data||[]).map(x=>Number(x.exercise)).filter(x=>steps.includes(x)));
    active=currentNext();
    if(completions.size===5)teacherEnding=true;
@@ -240,7 +246,7 @@ async function initialize(){
     onCompleted:markRemoteCompletion
    });
    await autosave.load();
-   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;let changed=false;for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
+   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;const previousDate=passportDates[2];updateMission2PassportDate(data||[]);let changed=previousDate!==passportDates[2];for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
    const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);clearTimeout(remoteRenderTimer);autosave?.destroy()},{once:true});
 
   }
@@ -740,7 +746,7 @@ function renderEnd(){
  '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><div class="m2-ceremony-stars" aria-hidden="true">✦ ✧ ✦ ✧ ✦</div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
  (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
  '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
- renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],preview:teacher,animate:true,animateMission:2})+
+ renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],completedAt:passportDates,preview:teacher,animate:true,animateMission:2})+
  '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">Museora itzuli →</a></section>';
 }
 function render(){
@@ -790,6 +796,7 @@ async function check(){
   if(error)throw error;
   if(data?.completed){
    completions.add(active);
+   if(completions.size===5)try{const r=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(!r.error)updateMission2PassportDate(r.data||[])}catch{}
    window.dispatchEvent(new Event('m2:progress-changed'));
    feedback='Ariketa gaindituta! Taldearen aurrerapena gorde da.';
    feedbackState='success';

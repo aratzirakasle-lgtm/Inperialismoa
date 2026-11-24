@@ -2,18 +2,18 @@ import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-gu
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261124-guardado1';
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-wallet1';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-atlas3';
 
-import { renderMuseumPassport } from './museum-passport.js?v=2';
+import { renderMuseumPassport } from './museum-passport.js?v=20261124-atlas1';
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 window.m1Mission2Open=false;
 window.m1Mission2LockedText=MISSION2_LOCKED_TEXT;
 const status=document.querySelector('#online-state');
-let passportTeam='Taldea';
+let passportTeam='Taldea',passportDate=null;
 window.m1FifthShowPassport=({preview=false,animate=false}={})=>{
   const target=document.querySelector('#m1-passport-reward');
   if(!target)return;
-  target.innerHTML=renderMuseumPassport({teamName:preview?'Probako taldea':passportTeam,completedIds:[1],preview,animate,otherUnknown:!preview});
+  target.innerHTML=renderMuseumPassport({teamName:preview?'Probako taldea':passportTeam,completedIds:[1],completedAt:{1:passportDate},preview,animate,otherUnknown:!preview});
   target.hidden=false;
   document.querySelector('#success')?.classList.add('mp-reward-visible');
 };
@@ -53,7 +53,7 @@ async function initialize(){
     const [{data:third,error:thirdError},{data:fourth,error:fourthError},{data:prior,error:priorError}]=await Promise.all([
       client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',3).maybeSingle(),
       client.from('empire_dossier_team_state').select('completed_at').eq('team_id',id).maybeSingle(),
-      client.from('mission1_exercise_completions').select('exercise').eq('team_id',id).eq('exercise',5).maybeSingle()
+      client.from('mission1_exercise_completions').select('exercise,completed_at').eq('team_id',id).eq('exercise',5).maybeSingle()
     ]);
     if(thirdError||fourthError||priorError)throw thirdError||fourthError||priorError;
     if(!third||!fourth?.completed_at){
@@ -65,6 +65,7 @@ async function initialize(){
       if(!teamInfo.error&&teamInfo.data?.name)passportTeam=teamInfo.data.name;
     }catch(e){console.warn('Pasaportearen izena',e)}
     if(prior){
+      passportDate=prior.completed_at||null;
       window.m1FifthLocalMode='practice';
       window.m1FifthProgress=async()=>({completed:true,already_completed:true,practice:true,mission_completed:true});
       say('✓ Lehen misioa jada osatuta eta taldearen emaitza gordeta dago. '+(window.m1Mission2Open?'Bigarren misiora joan zaitezkete.':MISSION2_LOCKED_TEXT));
@@ -87,7 +88,11 @@ async function initialize(){
         onCompleted:()=>markMission1NavCompleted(5)
       });
       window.m1FifthDraftSync=sync;
-      window.m1FifthProgress=async()=>sync.submit();
+      window.m1FifthProgress=async()=>{
+        const result=await sync.submit();
+        if(result?.completed||result?.mission_completed)try{const r=await client.from('mission1_exercise_completions').select('exercise,completed_at').eq('team_id',id).eq('exercise',5).maybeSingle();if(!r.error)passportDate=r.data?.completed_at||null}catch{}
+        return result;
+      };
       window.addEventListener('pagehide',()=>sync.stop(),{once:true});
       await sync.start();
     }

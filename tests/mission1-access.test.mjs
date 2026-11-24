@@ -121,7 +121,7 @@ test('El menú del alumno exige el quinto juego; el profesor conserva los logros
  const app=read('js/app.js');
  const second=read('js/mission2-faktoreak.js');
  has('js/app.js',/mission1FifthStates=m1f\.data\|\|\[\]/);
- has('js/app.js',/db\.from\("mission1_exercise_completions"\)\.select\("team_id,exercise"\)/);
+ has('js/app.js',/db\.from\("mission1_exercise_completions"\)\.select\("team_id,exercise(?:,completed_at)?"\)/);
  assert.match(app,/\.filter\(n=>n===3\|\|n===5\)/,'El expediente recoge los ejercicios tercero y quinto');
  assert.match(app,/Number\(id\)===1&&!demo/,'El progreso confirmado de la primera misión es común a todos los roles');
  assert.doesNotMatch(app,/Number\(id\)===1&&!demo&&\(user\?\.role/,
