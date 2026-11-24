@@ -213,7 +213,7 @@
 /* Element 3: separate artwork for bound paper and loose archival sheets.
    Keep all data, meters and interactive controls as live HTML. */
 .atlas-concept-one .atlas-book-page::before{
- background-image:url('./atlas-papel-fibras.svg');
+ background-image:url('./atlas-papel-referencia.svg');
  background-size:100% 100%;opacity:.72;mix-blend-mode:multiply;
 }
 .atlas-concept-one .atlas-identity::before{background-position:left center}
@@ -226,7 +226,7 @@
 .atlas-concept-one .atlas-totals::before{
  content:'';position:absolute;z-index:-1;inset:-.35cqw -.4cqw;
  width:auto;height:auto;min-width:0;min-height:0;border-radius:0;box-shadow:none;
- background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat;
+ background:url('./atlas-pergamino-referencia.svg') center/100% 100% no-repeat;
  filter:drop-shadow(1px 4px 3px #31200c8c);
  pointer-events:none;
 }
@@ -241,11 +241,11 @@
 .atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{background:linear-gradient(#376447,#1c4a34 60%,#153d28)}
 .atlas-concept-one .atlas-totals meter::-moz-meter-bar{background:linear-gradient(#376447,#1c4a34 60%,#153d28);border-radius:100px}
 .atlas-concept-one .mp-stamp-date{
- background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat;
+ background:url('./atlas-pergamino-referencia.svg') center/100% 100% no-repeat;
  border:0;box-shadow:none;filter:drop-shadow(1px 1.5px 1px #72502e70);padding:.3cqw .55cqw;
 }
-.atlas-concept-one .atlas-mission-content{background-image:url('./atlas-papel-fibras.svg');background-size:100% 100%}
-.atlas-concept-one .atlas-archive{background-image:url('./atlas-pergamino-bordes.svg');background-size:100% 100%;background-color:#d6ae75}
+.atlas-concept-one .atlas-mission-content{background-image:url('./atlas-papel-referencia.svg');background-size:100% 100%}
+.atlas-concept-one .atlas-archive{background-image:url('./atlas-pergamino-referencia.svg');background-size:100% 100%;background-color:#d6ae75}
 @media(max-width:900px){.atlas-concept-one .atlas-totals{padding:12px}.atlas-concept-one .mp-stamp-date{padding:3px 5px}}
 
 /* Element 4 — framed museum miniatures, brass relief and printed nameplates. */
@@ -278,7 +278,7 @@
 .atlas-concept-one .atlas-archive:not([open]) .atlas-archive-flourish{color:#785128;text-shadow:0 1px #ffe4b1;font-size:clamp(18px,2cqw,28px)}
 .atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(12px,1.25cqw,20px);letter-spacing:.025em;text-shadow:0 1px #ffe2ad}
 .atlas-concept-one .atlas-archive:not([open]) summary:hover{filter:drop-shadow(3px 6px 4px #1f100bc0) brightness(1.06)}
-.atlas-concept-one .atlas-archive[open]{background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat,#d9b47e;border:1px solid #966b3c;padding:.5cqw 1cqw;box-shadow:4px 6px 14px #211009b0}
+.atlas-concept-one .atlas-archive[open]{background:url('./atlas-pergamino-referencia.svg') center/100% 100% no-repeat,#d9b47e;border:1px solid #966b3c;padding:.5cqw 1cqw;box-shadow:4px 6px 14px #211009b0}
 .atlas-concept-one .atlas-archive[open] summary{min-height:0;padding:.7cqw;border:0;border-bottom:1px solid #9c733c88}
 .atlas-concept-one .atlas-archive[open] > div{border:0;padding:.7cqw 1.1cqw 1.2cqw}
 .atlas-concept-one .atlas-desk-objects{min-height:8.4cqw;isolation:isolate;overflow:visible;border:0;background:none;box-shadow:none;transform:rotate(-3deg)}
@@ -323,7 +323,7 @@
    min-height:0;height:100%;align-items:stretch;
  }
  .atlas-concept-one .atlas-book-page{padding:0 .24cqw;background:none;min-width:0}
- .atlas-concept-one .atlas-book-page::before{display:block;inset:3% 6% 4%;background:url('./atlas-papel-fibras.svg') center/100% 100% no-repeat;opacity:.15;mix-blend-mode:multiply;transform:none;border-radius:5%}
+ .atlas-concept-one .atlas-book-page::before{display:block;inset:3% 6% 4%;background:url('./atlas-papel-referencia.svg') center/100% 100% no-repeat;opacity:.15;mix-blend-mode:multiply;transform:none;border-radius:5%}
  .atlas-concept-one .atlas-book-page::after{display:none}
  .atlas-concept-one .atlas-identity .atlas-paper-frame{padding:1cqw .4cqw .4cqw .3cqw;transform:rotate(-2.2deg)}
  .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{padding:.35cqw .2cqw .4cqw .5cqw;transform:rotate(-1.4deg)}
@@ -388,3 +388,19 @@
  .atlas-concept-one .atlas-stamp-page .atlas-paper-frame{gap:.25cqw}
  .atlas-concept-one .atlas-medals{padding-top:.2cqw;margin-top:.15cqw}
 }
+
+/* Phase 2 / 3 — paper texture sampled from the approved atlas image.
+   Feather the bound page at the edges; preserve the original book's spine and cover. */
+@media(min-width:901px){
+ .atlas-concept-one .atlas-stamp-page::before{
+  inset:1% 2% 1%;opacity:.56;mix-blend-mode:normal;
+  border-radius:8% 8% 7% 5% / 2% 3% 3% 2%;
+  mask-image:radial-gradient(ellipse closest-side,#000 78%,#000c 91%,transparent 100%);
+ }
+ .atlas-concept-one .atlas-identity::before{opacity:.27;mix-blend-mode:normal;mask-image:radial-gradient(ellipse,#000 65%,transparent 100%)}
+}
+.atlas-concept-one .atlas-totals h3{color:#4b2c16;text-shadow:0 1px #fbe5b980}
+.atlas-concept-one .atlas-totals .atlas-progress-row{color:#452b18}
+.atlas-concept-one .atlas-totals .atlas-progress-row strong{color:#3b2313}
+.atlas-concept-one .mp-stamp-date{color:#4f2b15;filter:drop-shadow(1px 2px 1px #72502e70)}
+.atlas-concept-one .atlas-archive[open]{color:#452b18}
