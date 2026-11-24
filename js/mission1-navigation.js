@@ -1,4 +1,5 @@
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-members1';
+import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=1';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
  * alumnado con estado real del equipo y enlaces restringidos. Solo lectura. */
 const pages=[
@@ -412,6 +413,7 @@ export function mountExerciseNav(active,options){
  const nav=holder.firstElementChild;
  document.querySelector('.m1-nav')?.remove();
  document.body.prepend(nav);
+ arriveMuseumRoom(document.body,'1:'+active);
  return nav;
 }
 // Toda lectura es select de las tablas permitidas al alumno; no se consulta
@@ -451,11 +453,12 @@ export async function mountStudentExerciseNav(active,client,team){
 export function markMission1NavCompleted(step){
  const nav=document.querySelector('.m1-nav[data-m1-role="student"]');
  if(!nav)return;
- const done=[...nav.querySelectorAll('.m1-route-stop.is-done')].map(x=>Number(x.dataset.m1Step));
- done.push(step);
+ const done=[...nav.querySelectorAll('.m1-route-stop .m1-route-seal')].map(x=>Number(x.closest('[data-m1-step]').dataset.m1Step));
+ const newlyCompleted=!done.includes(step);done.push(step);
  const holder=document.createElement('div');
  holder.innerHTML=exerciseNavMarkup(step,{teacher:false,completedSteps:done});
  nav.replaceWith(holder.firstElementChild);
+ if(newlyCompleted)stampMuseumExercise(1,step);
  window.dispatchEvent(new Event('m1:progress-changed'));
 }
 export function addTeacherStageControls(stages){

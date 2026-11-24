@@ -5,7 +5,7 @@ import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard2";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-experience1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport } from "./museum-passport.js?v=3";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';

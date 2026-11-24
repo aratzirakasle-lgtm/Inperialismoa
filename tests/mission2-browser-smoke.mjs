@@ -391,6 +391,9 @@ try{
   const {page,context,errors}=await open('student');
   try{
    assert.equal(await page.locator('.m2-shared-route [data-open]:disabled').count(),4);
+   await page.locator('[data-museum-brief="2"]').click();
+   assert.match(await page.locator('#museum-brief-dialog').innerText(),/Lehen misioan/);
+   await page.locator('#museum-brief-dialog button').click();
    await page.locator('[data-m2-dossier]').click();
    assert.equal(await page.locator('.m2-dossier li').count(),5);
    assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),0);
@@ -412,6 +415,7 @@ try{
    assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
+   assert.equal(await page.locator('.museum-seal-notice[data-mission="2"][data-exercise="1"]').count(),1);
    await page.locator('[data-m2-dossier]').click();
    assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),1);
    assert.equal(await page.locator('.m2-dossier li').count(),5);

@@ -1,0 +1,15 @@
+
+/* Brief shared museum language; no changes to room layout or validation. */
+.museum-seal-notice{position:fixed;z-index:1000;bottom:18px;right:18px;display:flex;align-items:center;gap:12px;max-width:min(370px,calc(100vw - 36px));padding:12px 15px;background:linear-gradient(135deg,#f9edcf,#e2c997);border:3px ridge #b38b49;border-radius:7px;box-shadow:0 7px 22px #0006;color:#46331d;font:14px/1.35 Georgia,'Times New Roman',serif;pointer-events:none}
+.museum-seal-notice>span:last-child{display:grid;gap:4px}.museum-seal-notice strong{font-size:15px}.museum-seal-notice small{font-size:10px;letter-spacing:.08em}
+.museum-seal-mark{flex:0 0 66px;width:66px;height:66px;border:4px double #e0bf7c;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;background:radial-gradient(#47654b,#203e2e);color:#f3d99b;transform:rotate(-7deg);box-shadow:0 2px 5px #0004}
+.museum-seal-mark b{font-size:23px;line-height:1}.museum-seal-mark small{font-size:8px;letter-spacing:.04em}
+.museum-brief-button,.museum-brief-close{border:2px ridge #b89154;border-radius:5px;background:linear-gradient(#405b45,#20392c);color:#f8e0ad;padding:5px 12px;font:700 12px/1.25 Georgia,'Times New Roman',serif;cursor:pointer}
+.museum-brief-button:focus-visible,.museum-brief-close:focus-visible{outline:2px solid #e3bc6f;outline-offset:2px}
+.museum-brief-dialog{box-sizing:border-box;width:min(530px,calc(100vw - 24px));max-height:85vh;padding:24px;border:5px ridge #ae8144;border-radius:8px;background:radial-gradient(ellipse at 40% 0,#fff4d7,#e7cfa0);color:#4a321d;box-shadow:0 12px 60px #0008;text-align:center;font:16px/1.6 Georgia,'Times New Roman',serif}
+.museum-brief-dialog::backdrop{background:#0b1f18b8}
+.museum-brief-dialog h2{font:700 26px/1.2 Georgia,serif;margin:12px 0}
+.museum-brief-overline,.museum-brief-signature{font-size:12px;letter-spacing:.12em;color:#805b2b;font-weight:bold}
+.museum-brief-signature{border-top:1px solid #ad8b55;padding-top:12px;margin-top:20px}
+.museum-brief-close{margin-top:10px}
+.m1-archive-open .museum-brief-button,.m2-archive-access .museum-brief-button{font-size:12px}

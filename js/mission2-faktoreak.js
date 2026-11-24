@@ -3,7 +3,8 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync4';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-cohesion1';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-experience1';
+import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=1';
 import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
 import { renderMuseumPassport } from './museum-passport.js?v=3';
 const app=document.querySelector('#m2-app');
@@ -252,7 +253,7 @@ function hero(){
 function nav(){
  const trophy='<svg class="m1-progress-emblem" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false"><circle class="m1-progress-medallion" cx="20" cy="20" r="17.5" fill="#392a1a" stroke="#dcb36a" stroke-width="1.2"/><circle cx="20" cy="20" r="14.5" fill="none" stroke="#98733c" stroke-width=".7"/><path d="M14 11H26V19C26 23 23 25 20 25S14 23 14 19Z" fill="#e2b75e" stroke="#fff0bf" stroke-width=".8"/><path d="M14 13H10V16C10 20 12 21 15 21M26 13H30V16C30 20 28 21 25 21" fill="none" stroke="#e8c779" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 25V29M16 29H24L26 32H14Z" fill="#e2b75e" stroke="#edcf86" stroke-width="1.3" stroke-linejoin="round"/><path d="M20 14L21.1 17.2L24.5 17.2L21.8 19.2L22.8 22.4L20 20.5L17.2 22.4L18.2 19.2L15.5 17.2L18.9 17.2Z" fill="#795020"/><path class="m1-progress-spark" d="M31 5V11M28 8H34M8 27V31M6 29H10" stroke="#ffedb0" stroke-width="1.4" stroke-linecap="round"/></svg>';
  return mission2RouteMarkup(activities,active,{teacher,completedSteps:[...completions],canOpen,ending:teacherEnding})+
- '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+(!teacher?'<button type="button" data-m2-class-progress aria-haspopup="dialog">'+trophy+'Taldeen aurrerapena</button>':'')+'</div>';
+ '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+(!teacher?'<button type="button" data-m2-class-progress aria-haspopup="dialog">'+trophy+'Taldeen aurrerapena</button>':'')+missionBriefButton(2)+'</div>';
 }
 function dossierMarkup(){
  const rows=activities.map(({id,title})=>'<li class="'+(completions.has(id)?'m1-sealed':'')+'"><span class="m1-medal">'+(completions.has(id)?'✓':String(id).padStart(2,'0'))+'</span><span>'+esc(title)+'</span><small>'+(completions.has(id)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
@@ -722,20 +723,14 @@ function controls(){
  const done=completions.has(active);
 
  return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
- '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||submitting?'disabled':'')+'>↶ Azken mugimendua desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>Berriz hasi</button>'+
+ '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||submitting?'disabled':'')+'>↶ Desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>↻ Berrabiarazi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
- '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+(active===1?'✓ EGIAZTATU':'Erantzunak egiaztatu →')+'</button>')+
+ '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+'✓ Erantzunak egiaztatu'+'</button>')+
  '</div></div>';
 }
-function animateRoomArrival(room){
- if(app.dataset.museumRoom===room)return;
- app.dataset.museumRoom=room;
- if(typeof app.animate!=='function'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
- app.animate([{opacity:.82,filter:'brightness(1.06)'},{opacity:1,filter:'brightness(1)'}],
-  {duration:320,easing:'ease-out'});
-}
+function animateRoomArrival(room){arriveMuseumRoom(app,'2:'+room)}
 function renderEnd(){
  const label=teacher?'IRAKASLEAREN AURREBISTA · EZ DA GORDE':'2. MISIOA GAINDITUTA';
  return nav()+hero()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
@@ -795,7 +790,7 @@ async function check(){
    window.dispatchEvent(new Event('m2:progress-changed'));
    feedback='Ariketa gaindituta! Taldearen aurrerapena gorde da.';
    feedbackState='success';
-   render();
+   render();stampMuseumExercise(2,active);
   }else{
    setFeedback('Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.','error');
   }
