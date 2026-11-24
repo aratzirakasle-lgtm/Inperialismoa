@@ -149,3 +149,27 @@
 .atlas-continue{border:5px ridge #d7ad60;background:radial-gradient(ellipse at top,#426548,#173b27 70%);padding:1cqw .4cqw;box-shadow:0 0 0 2px #593614,0 5px 9px #0009,inset 0 0 0 2px #e1ba69}
 @media(max-width:900px){.atlas-concept-one .atlas-book{transform:none}.atlas-book-spread{min-height:350px}.atlas-concept-one .atlas-ink-stamp{width:min(100%,84px)}.atlas-concept-one .atlas-medals .mp-medal{width:58px;height:75px}.atlas-map-and-progress{min-height:180px}.atlas-mission-art{min-height:110px}.atlas-archive{transform:none}}
 @media(max-width:480px){.atlas-brand{margin-bottom:22px}.atlas-book-spread{min-height:310px}.atlas-concept-one .atlas-ink-stamp{width:min(100%,67px)}.atlas-map-and-progress{grid-template-columns:1fr;min-height:0}.atlas-mission-art{min-height:100px}}
+
+/* Atlas only: distressed engraved stamps on archival paper, never a separate UI tile. */
+.atlas-concept-one .atlas-book-spread{background:#c39a62;box-shadow:0 0 0 1px #ad7943,0 2px 0 #b68a53,0 4px 0 #d1a772,0 6px 0 #81502e}
+.atlas-concept-one .atlas-book-page{background-image:url('./atlas-pergamino-archivo.svg');background-size:100% 100%;background-repeat:no-repeat}
+.atlas-concept-one .atlas-identity{box-shadow:inset -17px 0 20px -12px #57351bd9,inset 0 0 14px #8b542e68}
+.atlas-concept-one .atlas-stamp-page{box-shadow:inset 15px 0 19px -12px #71421fc9,inset 0 0 15px #8b542e68}
+.atlas-concept-one .atlas-paper-frame{border:1px solid #986b3a88;outline:1px solid #986b3a44;outline-offset:-5px}
+.atlas-concept-one .atlas-paper-frame::before,.atlas-concept-one .atlas-paper-frame::after{color:#8b602f;text-shadow:0 1px #f7d5a2}
+.atlas-concept-one .atlas-seals{gap:.42cqw .26cqw;margin:.15cqw 0;align-items:start}
+.atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,9.4cqw);aspect-ratio:160/164;height:auto;display:block;border:0!important;background:none;box-shadow:none;transform:rotate(-7deg);border-radius:0;overflow:visible}
+.atlas-concept-one .atlas-seal:nth-child(even) .atlas-ink-stamp{transform:rotate(4deg)}
+.atlas-concept-one .atlas-seal:nth-child(3) .atlas-ink-stamp{transform:rotate(-3deg)}
+.atlas-concept-one .atlas-seal:nth-child(4) .atlas-ink-stamp{transform:rotate(2deg)}
+.atlas-concept-one .atlas-engraved-seal{width:100%;height:auto;display:block;mix-blend-mode:multiply;filter:contrast(1.04);overflow:visible;opacity:.7}
+.atlas-concept-one .mp-earned .atlas-engraved-seal{opacity:.98}
+.atlas-concept-one .is-current .atlas-engraved-seal{opacity:.95}
+.atlas-concept-one .mp-stamp-date{background:url('./atlas-pergamino-archivo.svg') center/cover;border:1px solid #ad7f4d88;box-shadow:1px 2px 2px #6b46253d;padding:.25cqw .35cqw;color:#51331b;transform:rotate(-3deg);font-size:clamp(9px,.8cqw,13px);white-space:normal}
+.atlas-concept-one .atlas-seal:nth-child(even) .mp-stamp-date{transform:rotate(2deg)}
+.atlas-concept-one .atlas-seal-caption{color:#725333;line-height:1.15}
+.atlas-concept-one .atlas-totals,.atlas-concept-one .atlas-archive{background-image:url('./atlas-pergamino-archivo.svg');background-size:cover;box-shadow:3px 5px 9px #38220e88,inset 0 0 10px #8f5b2f35}
+.atlas-concept-one .atlas-archive:not([open]){box-shadow:5px 5px 0 #b99565,9px 8px 0 #d4b382,13px 12px 0 #9b7548,15px 16px 12px #1d0d07a0}
+.atlas-concept-one .atlas-mission-content{background-image:url('./atlas-pergamino-archivo.svg');background-size:cover}
+@media(max-width:900px){.atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,102px)}}
+@media(max-width:480px){.atlas-concept-one .atlas-ink-stamp,.atlas-concept-one .mp-earned .atlas-ink-stamp,.atlas-concept-one .atlas-seal.is-current .atlas-ink-stamp{width:min(100%,75px)}}
