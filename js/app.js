@@ -9,7 +9,7 @@ import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-guardado1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261124-atlas-finish21";
-import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261124-atlas-finish21";
+import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261124-scene24";
 import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
@@ -286,7 +286,13 @@ async function openExpedition(mode='atlas'){
  const node=$('#expedition-live');
  const paint=summary=>{
   if(request!==atlasRequest||user?.id!==forUser||viewTeamId()!==team||!node.isConnected||$('#modal').hidden)return;
-  if(mode==='atlas'){node.innerHTML=renderExpedition({teamName,summary,preview,demo:sim});activateAtlasPhoto(node);}
+  if(mode==='atlas'){
+   const photo=new URLSearchParams(location.search).get('atlas')!=='classic'&&matchMedia('(min-width:1100px) and (min-height:620px)').matches;
+   const renderAtlas=layout=>renderExpedition({teamName,summary,preview,demo:sim,layout});
+   node.innerHTML=renderAtlas(photo?'photo':'classic');
+   const art=activateAtlasPhoto(node);
+   if(art){const fallback=()=>{if(art.isConnected&&node.isConnected)node.innerHTML=renderAtlas('classic')};art.addEventListener('error',fallback,{once:true});if(art.complete&&!art.naturalWidth)fallback();}
+  }
   else node.innerHTML='<h2 id="modal-title">Ikerketa-pasaportea</h2>'+renderMuseumPassport({teamName,completedIds:summary?.completedIds||[],completedAt:summary?.completedAt||{},preview:preview||sim,otherUnknown:!summary||!summary.known.slice(0,2).every(Boolean)})+'<div class="mp-ledger-actions"><button type="button" class="m1-ledger-open" data-c-globe="1">Ikertzailearen atlasa →</button><button type="button" class="m1-ledger-open" data-m1-dossier="1">Lehen misioaren espedientea</button></div>';
  };
  paint(preview||sim?previewExpedition(team):null);

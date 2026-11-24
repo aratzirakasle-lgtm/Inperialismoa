@@ -1,6 +1,7 @@
 /* Read-only atlas. Existing server records are the only source of timestamps. */
 import {renderMuseumPassport,confirmedStamp,stampLabel} from './museum-passport.js?v=20261124-atlas-finish21';
-export {activateAtlasPhoto} from './atlas-photo.js?v=20261124-photo1';
+import {renderAtlasPhoto} from './atlas-photo.js?v=20261124-scene24';
+export {activateAtlasPhoto} from './atlas-photo.js?v=20261124-scene24';
 const titles=['Aurrekarriak eta oinarriak','Inperialismoaren faktoreak','Inperioen banaketa','Inperioen itzalak'];
 const files=[['Potentzien galeriaren inbentarioa','Bi sistemen txostena','Inperialismoaren kontzeptu-fitxa','Inperioen espedienteak','Azken sintesiaren zigilua'],['Kausen kabinetea','Kapitalaren ibilbideak','Migrazioen liburua','Boterearen artxiboa','Esploratzaileen espedientea']];
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -37,7 +38,7 @@ export async function readExpedition(client,team,{mission2Open=false}={}){
  ]);
  return expeditionSummary({team,m1,m2,m1Flags,mission2Open});
 }
-export function renderExpedition({teamName='Taldea',summary=null,preview=false,demo=false}={}){
+export function renderExpedition({teamName='Taldea',summary=null,preview=false,demo=false,layout='classic'}={}){
  const s=summary||{completedIds:[],completedAt:{},steps:[null,null,null,null],known:[false,false,false,false],next:0};
  const partial=!s.known[0]||!s.known[1],mc=s.completedIds.length,ec=s.steps.slice(0,2).reduce((a,b)=>a+(b?.length||0),0);
  const count=n=>partial?'Gutxienez '+n:n;
@@ -57,6 +58,7 @@ export function renderExpedition({teamName='Taldea',summary=null,preview=false,d
  const archive=files.map((list,i)=>'<section class="atlas-file"><h4>'+roman[i]+'. MISIOA</h4><ol>'+list.map((name,j)=>'<li class="'+(s.steps[i]?.includes(j+1)?'sealed':'')+'"><span>'+ (s.steps[i]?.includes(j+1)?'✓':s.steps[i]?'○':'?')+'</span>'+esc(name)+'</li>').join('')+'</ol></section>').join('');
  const next=s.next, pending=next?ids.find(k=>!s.steps[next-1]?.includes(k))||1:0;
  const canContinue=next===1||next===2;
+ if(layout==='photo')return renderAtlasPhoto({teamName,s,partial,mc,ec,preview,demo,archive,next,pending,canContinue,dateLabels:{1:stampLabel(s.completedAt[1]),2:stampLabel(s.completedAt[2])},titles,files,loading:!summary});
  const action=canContinue?'<button type="button" class="atlas-continue" data-atlas-continue="'+next+'" data-atlas-step="'+pending+'"><span aria-hidden="true">✥</span> '+(s.steps[next-1]?.length?'JARRAITU':'HASI')+' <span aria-hidden="true">›</span></button><p>'+next+'. MISIOA · '+pending+'. ARIKETA</p>':'<button type="button" class="atlas-continue atlas-return" data-atlas-close>← MUSEORA ITZULI</button><p>'+(partial?'AURRERAPENA EGIAZTATZEN':'HURRENGO ARETOA · PRESTATZEN')+'</p>';
  return '<div class="atlas-reference-shell"><section class="museum-expedition atlas-concept-one" lang="eu"><div class="atlas-brand">✦ &nbsp; Inperialismoa &nbsp; ✦</div><div class="atlas-display"><header class="atlas-header">'+compass+'<h2 id="modal-title">Ikertzailearen atlasa</h2></header>'+
  (preview||demo?'<p class="atlas-notice">AURREBISTA / SIMULAZIOA · Ez da ezer gordetzen.</p>':!summary?'<p role="status" class="atlas-notice">Aurrerapena kargatzen…</p>':partial?'<p role="status" class="atlas-notice">Datu batzuk egiaztatu gabe daude.</p>':'')+

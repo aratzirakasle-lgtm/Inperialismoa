@@ -434,7 +434,7 @@ try{
    }finally{await context.close()}
  });
  await scenario('Vestíbulo C: menú predeterminado sin parámetros, progreso real y vista anterior opcional',async()=>{
-   const {page,context,errors}=await open('student','index.html',{width:1672,height:941});
+   const {page,context,errors}=await open('student','index.html?atlas=classic',{width:1672,height:941});
    try{
      await waitVisible(page,'.c-museo-stage');
      assert.equal(await page.locator('.c-museo-home').count(),1);
@@ -611,9 +611,10 @@ try{
   }
  });
  await scenario('Atlas: dos misiones confirmadas, grabados, fechas y expediente visible',async()=>{
-   const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges=1,2&smoke_atlas_complete=1',{width:1672,height:941});
+   const {page,context,errors}=await open('student','index.html?museo=c&atlas=classic&smoke_m1_steps=5&smoke_badges=1,2&smoke_atlas_complete=1',{width:1672,height:941});
    try{
      await waitVisible(page,'.c-museo-stage');
+     const widgetWasVisible=await page.locator('.m1-class-widget').isVisible();
      await page.locator('.c-museo-globe').click();
      await page.locator('.atlas-original-seal').nth(1).waitFor();
      assert.equal(await page.locator('.atlas-original-seal').count(),2);
@@ -631,9 +632,41 @@ try{
      await page.locator('.atlas-archive[open]').scrollIntoViewIfNeeded();
      await page.screenshot({path:'test-output/c-museo-atlas-dos-misiones-expediente.png',animations:'disabled'});
      await page.locator('#modal-close').click();
-     assert.equal(await page.locator('.m1-class-widget').isVisible(),true);
+     await page.locator('#modal').waitFor({state:'hidden'});
+     if(widgetWasVisible)await page.locator('.m1-class-widget').waitFor({state:'visible'});
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
+ });
+ await scenario('Atlas fotográfico: escena nativa y progreso confirmado, sin premios de muestra',async()=>{
+   for(const done of [false,true]){
+    const suffix=done?'&smoke_m1_steps=5&smoke_badges=1,2&smoke_atlas_complete=1':'';
+    const {page,context,errors}=await open('student','index.html?museo=c'+suffix,{width:1672,height:941});
+    try{
+     await waitVisible(page,'.c-museo-stage');
+     await page.locator('.c-museo-globe').click();
+     const stage=page.locator('.atlas-photo');await stage.waitFor();
+     if(done)await stage.locator('.ap-earned-medal').nth(1).waitFor();
+     else await stage.locator('[data-atlas-continue="1"]').waitFor();
+     await stage.locator('.atlas-photo-img').evaluate(img=>img.decode());
+     assert.equal(await stage.locator('.atlas-photo-img').evaluate(img=>img.naturalWidth),1672);
+     assert.equal(await stage.locator('.ap-earned-medal').count(),done?2:0);
+     assert.equal(await stage.locator('.ap-earned-seal').count(),done?2:0);
+     assert.equal(await stage.locator('time[datetime]').count(),done?2:0);
+     assert.equal(await stage.locator('.ap-meter-m').getAttribute('aria-valuenow'),done?'2':'0');
+     assert.equal(await stage.locator('.ap-meter-e').getAttribute('aria-valuenow'),done?'10':'0');
+     const geom=await stage.evaluate(el=>{const r=el.getBoundingClientRect(),b=el.querySelector('.ap-action').getBoundingClientRect();return {ratio:r.width/r.height,top:r.top,bottom:r.bottom,button:b.bottom,viewport:innerHeight}});
+     assert.ok(Math.abs(geom.ratio-1672/941)<.02);
+     assert.ok(geom.top>=-2&&geom.bottom<=geom.viewport+2&&geom.button<=geom.bottom);
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-atlas-fotografico-'+(done?'dos':'cero')+'.png',animations:'disabled'});
+     await stage.locator('.ap-archive summary').click();assert.equal(await stage.locator('.ap-archive[open] .atlas-file li').count(),10);
+     await stage.locator('.ap-archive summary').click();
+     await stage.locator('.ap-card-1 summary').click();assert.equal(await stage.locator('.ap-card-1[open] li').count(),5);
+     await stage.locator('.ap-card-1 summary').click();
+     await page.locator('#modal-close').click();await page.locator('#modal').waitFor({state:'hidden'});
+     assert.deepEqual(errors,[]);
+    }finally{await context.close()}
+   }
  });
  await scenario('Vestíbulo C: la navegación móvil es legible y no desbloquea misiones futuras',async()=>{
    const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges=1',{width:390,height:844});
