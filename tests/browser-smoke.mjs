@@ -17,6 +17,7 @@ async function open(role,path,viewport={width:1365,height:900}){
  const params=new URL(path,BASE).searchParams;
  const badges=(params.get('smoke_badges')||'').split(',').map(Number).filter(id=>id===1||id===2);
  const completedSteps=Math.min(5,Math.max(0,Number(params.get('smoke_m1_steps'))||0));
+ const atlasComplete=params.has('smoke_atlas_complete');
  await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/,async route=>{
    const url=route.request().url();
    await route.fulfill({status:200,contentType:url.includes('.css')?'text/css':'application/javascript',body:''});
@@ -24,7 +25,7 @@ async function open(role,path,viewport={width:1365,height:900}){
  if(!params.has('smoke_m2_closed')){
  await context.route('**/js/mission-release.js*',r=>r.fulfill({status:200,contentType:'application/javascript',body:"export const MISSION2_OPEN=true;export const MISSION2_LOCKED_TEXT='Bigarren misioa irakasleak irekiko du.';"}));
  }
- await context.addInitScript(({role,badges,completedSteps,m2Open})=>{
+ await context.addInitScript(({role,badges,completedSteps,m2Open,atlasComplete})=>{
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
@@ -48,7 +49,8 @@ async function open(role,path,viewport={width:1365,height:900}){
      empire_dossier_team_state:completedSteps>=4?[{team_id:'team1',solved_ids:['india','aljeria','indonesia','angola'],completed_at:'2026-11-22T11:40:00Z'}]:[],
      mission_badges:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
      mission_completions:badges.map(mission_id=>({team_id:'team1',mission_id,completed_at:'2026-11-21T12:00:00Z'})),
-     mission1_exercise_completions:[...(completedSteps>=3?[{team_id:'team1',exercise:3}]:[]),...(completedSteps>=5?[{team_id:'team1',exercise:5}]:[])],
+     mission1_exercise_completions:atlasComplete?Array.from({length:5},(_,i)=>({team_id:'team1',exercise:i+1,completed_at:'2026-11-22T11:00:00Z'})):[...(completedSteps>=3?[{team_id:'team1',exercise:3}]:[]),...(completedSteps>=5?[{team_id:'team1',exercise:5}]:[])],
+     mission2_exercise_completions:atlasComplete?Array.from({length:5},(_,i)=>({team_id:'team1',exercise:i+1,completed_at:'2026-11-23T12:00:00Z'})):[],
      mission1_team_drafts:Array.isArray(previousM1Drafts)?previousM1Drafts:[],
      territory_claims:[],territory_markers:[],submissions:[],submission_assessments:[],
      mission_attempts:[],attempt_answers:[],empire_dossier_attempts:[],
@@ -330,7 +332,7 @@ async function open(role,path,viewport={width:1365,height:900}){
    };
    window.__smokeRpcCalls=[];
    window.supabase={createClient:()=>client};
- },{role,badges,completedSteps,m2Open:!params.has('smoke_m2_closed')});
+ },{role,badges,completedSteps,m2Open:!params.has('smoke_m2_closed'),atlasComplete});
  const page=await context.newPage();
  const errors=[];
  page.on('pageerror',err=>errors.push(err.message));
@@ -513,6 +515,8 @@ try{
      const overflow=await page.locator('.modal-card').evaluate(el=>el.scrollWidth-el.clientWidth);
      assert.ok(overflow<=3,'El atlas móvil no debe desbordarse');
      await page.screenshot({path:'test-output/c-museo-atlas-concepto1-movil.png',animations:'disabled'});
+     await page.locator('.atlas-continue').scrollIntoViewIfNeeded();
+     await page.screenshot({path:'test-output/c-museo-atlas-movil-escritorio-inferior.png',animations:'disabled'});
      await page.locator('#modal-close').click();
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
@@ -605,6 +609,31 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
+ });
+ await scenario('Atlas: dos misiones confirmadas, grabados, fechas y expediente visible',async()=>{
+   const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges=1,2&smoke_atlas_complete=1',{width:1672,height:941});
+   try{
+     await waitVisible(page,'.c-museo-stage');
+     await page.locator('.c-museo-globe').click();
+     await page.locator('.atlas-original-seal').nth(1).waitFor();
+     assert.equal(await page.locator('.atlas-original-seal').count(),2);
+     assert.equal(await page.locator('.atlas-photo-medal').count(),2);
+     assert.equal(await page.locator('.atlas-seals time[datetime]').count(),2);
+     assert.equal(await page.locator('.atlas-totals meter').first().getAttribute('value'),'2');
+     assert.equal(await page.locator('.atlas-totals meter').nth(1).getAttribute('value'),'10');
+     assert.equal(await page.locator('.atlas-mission.is-locked').count(),2);
+     assert.equal(await page.locator('.m1-class-widget').isVisible(),false);
+     await page.locator('.atlas-mission-art img,.atlas-photo-medal').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-atlas-dos-misiones-escritorio.png',animations:'disabled'});
+     await page.locator('.atlas-archive summary').click();
+     assert.equal(await page.locator('.atlas-archive[open] .atlas-file li').count(),10);
+     await page.locator('.atlas-archive[open]').scrollIntoViewIfNeeded();
+     await page.screenshot({path:'test-output/c-museo-atlas-dos-misiones-expediente.png',animations:'disabled'});
+     await page.locator('#modal-close').click();
+     assert.equal(await page.locator('.m1-class-widget').isVisible(),true);
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
  });
  await scenario('Vestíbulo C: la navegación móvil es legible y no desbloquea misiones futuras',async()=>{
    const {page,context,errors}=await open('student','index.html?museo=c&smoke_m1_steps=5&smoke_badges=1',{width:390,height:844});

@@ -838,3 +838,6 @@
  .atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(11px,3.4vw,15px)}
  .atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{font-size:clamp(10px,2.8vw,12px)}
 }
+
+/* Keep the floating classroom board available in the museum, but never over the atlas dialog. */
+body:has(#modal:not([hidden]) .atlas-concept-one) .m1-class-widget{visibility:hidden;pointer-events:none}
