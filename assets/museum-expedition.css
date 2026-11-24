@@ -269,3 +269,19 @@
 .atlas-concept-one .atlas-section-title{margin:.45cqw 0;color:#f0cf91;text-shadow:0 2px 2px #091b12;letter-spacing:.1em}
 @media(max-width:900px){.atlas-concept-one .atlas-missions{gap:8px}.atlas-concept-one .atlas-mission{padding:9px 7px 9px}.atlas-concept-one .atlas-mission-name{padding:7px 4px;margin:0 -1px 3px}.atlas-concept-one .atlas-mission-art{min-height:110px}.atlas-concept-one .atlas-mission-content{padding:5px 3px}.atlas-concept-one .atlas-state{padding:5px 3px;font-size:11px}}
 @media(max-width:480px){.atlas-concept-one .atlas-mission-art{min-height:100px}}
+
+/* Element 6 — physical archive bundle and expedition desk objects. */
+.atlas-concept-one .atlas-table{align-items:center;gap:1.1cqw;padding:1.35cqw 1.35cqw 1.65cqw;min-height:10.8cqw}
+.atlas-concept-one .atlas-archive:not([open]){isolation:isolate;overflow:visible;background:none;border:0;box-shadow:none;transform:rotate(-5deg);margin:.3cqw .15cqw;color:#4e3019}
+.atlas-concept-one .atlas-archive:not([open]) summary{position:relative;min-height:9.6cqw;padding:.8cqw 1.3cqw .9cqw 7.2cqw;gap:.35cqw;border:0;background:url('./atlas-expediente-documentos.svg') center/100% 100% no-repeat;filter:drop-shadow(3px 6px 3px #1f100bc0)}
+.atlas-concept-one .atlas-archive:not([open]) summary::after{content:'';position:absolute;left:1.05cqw;bottom:.45cqw;width:5.7cqw;height:4.8cqw;transform:rotate(-9deg);background:linear-gradient(#8b592b24,#4d2b172e),url('./atlas-mission-1.png') center/cover no-repeat;border:.35cqw solid #e5c590;box-shadow:0 0 0 1px #976a40,2px 3px 4px #4c2f18a0;filter:sepia(.65) saturate(.65);pointer-events:none}
+.atlas-concept-one .atlas-archive:not([open]) .atlas-archive-flourish{color:#785128;text-shadow:0 1px #ffe4b1;font-size:clamp(18px,2cqw,28px)}
+.atlas-concept-one .atlas-archive:not([open]) summary strong{font-size:clamp(12px,1.25cqw,20px);letter-spacing:.025em;text-shadow:0 1px #ffe2ad}
+.atlas-concept-one .atlas-archive:not([open]) summary:hover{filter:drop-shadow(3px 6px 4px #1f100bc0) brightness(1.06)}
+.atlas-concept-one .atlas-archive[open]{background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat,#d9b47e;border:1px solid #966b3c;padding:.5cqw 1cqw;box-shadow:4px 6px 14px #211009b0}
+.atlas-concept-one .atlas-archive[open] summary{min-height:0;padding:.7cqw;border:0;border-bottom:1px solid #9c733c88}
+.atlas-concept-one .atlas-archive[open] > div{border:0;padding:.7cqw 1.1cqw 1.2cqw}
+.atlas-concept-one .atlas-desk-objects{min-height:8.4cqw;isolation:isolate;overflow:visible;border:0;background:none;box-shadow:none;transform:rotate(-3deg)}
+.atlas-concept-one .atlas-desk-objects::before{content:'';position:absolute;z-index:-1;left:0;top:20%;width:85%;height:72%;border-radius:4px 10px 8px 4px;background:repeating-linear-gradient(0deg,#e3c490 0 1px,#b28a58 1px 2px,#d9b77f 2px 3px) bottom/90% 14% no-repeat,repeating-linear-gradient(90deg,#bf985522 0 1px,transparent 1px 3px),linear-gradient(130deg,#263e2d,#11291d 50%,#294530);border:3px double #ac8650;box-shadow:3px 5px 5px #1e1009b0,inset 0 0 0 2px #15291d,inset 0 0 0 3px #a9864c80;transform:rotate(-4deg)}
+.atlas-concept-one .atlas-desk-objects img{position:relative;width:57%;max-width:170px;transform:translate(2%,-6%) rotate(8deg);filter:sepia(.08) saturate(1.12);box-shadow:2px 6px 7px #1d100ac0}
+@media(max-width:900px){.atlas-concept-one .atlas-table{gap:12px;padding:14px}.atlas-concept-one .atlas-archive:not([open]){transform:none}.atlas-concept-one .atlas-archive:not([open]) summary{min-height:100px;padding:12px 12px 12px 66px}.atlas-concept-one .atlas-archive:not([open]) summary::after{width:48px;height:44px;left:8px;bottom:8px;border:3px solid #e5c590}.atlas-concept-one .atlas-archive[open]{padding:8px}.atlas-concept-one .atlas-archive[open] > div{padding:10px}}
