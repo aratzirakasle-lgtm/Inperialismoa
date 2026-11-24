@@ -74,6 +74,7 @@ try{
    await page.locator('[data-mw-tab="help"]').click();
    assert.match(await page.locator('.mw-help').innerText(),/Nola jokatu/);
    await page.locator('#museum-wallet-dialog footer button').click();
+   await page.locator('#museum-wallet-dialog').waitFor({state:'detached'});
    assert.equal(await page.locator('#museum-wallet-dialog').count(),0);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}

@@ -445,6 +445,16 @@ try{
      assert.match(await page.locator('#modal-title').innerText(),/Ikertzailearen atlasa/);
      assert.equal(await page.locator('.museum-expedition .mp-slot').count(),4);
      assert.equal(await page.locator('.atlas-mission').count(),4);
+     await page.locator('.atlas-continue[data-atlas-continue="1"]').waitFor();
+     await page.locator('.atlas-mission-art img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+     const layout=await page.locator('.atlas-desk').evaluate(el=>({w:el.clientWidth,scroll:el.scrollWidth,columns:getComputedStyle(el).gridTemplateColumns.split(' ').length}));
+     assert.ok(layout.scroll<=layout.w+3,'El atlas no debe desbordar horizontalmente');
+     assert.equal(layout.columns,2);
+     await mkdir('test-output',{recursive:true});
+     await page.screenshot({path:'test-output/c-museo-atlas-concepto1-escritorio.png',animations:'disabled'});
+     await page.locator('.atlas-archive summary').click();
+     assert.equal(await page.locator('.atlas-archive[open] .atlas-file li').count(),10);
+     await page.locator('.atlas-archive summary').click();
      await page.locator('#modal-close').click();
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/c-museo-alumno-autenticado-escritorio.png',fullPage:true,animations:'disabled'});
@@ -487,6 +497,14 @@ try{
      assert.equal(await page.locator('.c-museo-portal').count(),4);
      await mkdir('test-output',{recursive:true});
      await page.screenshot({path:'test-output/c-museo-alumno-movil.png',fullPage:true,animations:'disabled'});
+     await page.locator('.c-museo-mobile-atlas').click();
+     await page.locator('.atlas-continue[data-atlas-continue="1"]').waitFor();
+     await page.locator('.atlas-mission-art img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+     assert.equal(await page.locator('.atlas-desk').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),1);
+     const overflow=await page.locator('.modal-card').evaluate(el=>el.scrollWidth-el.clientWidth);
+     assert.ok(overflow<=3,'El atlas móvil no debe desbordarse');
+     await page.screenshot({path:'test-output/c-museo-atlas-concepto1-movil.png',animations:'disabled'});
+     await page.locator('#modal-close').click();
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
