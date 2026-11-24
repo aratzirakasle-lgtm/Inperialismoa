@@ -37,6 +37,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
    auth:{getUser:async()=>({data:{user:{id:myId}},error:null})},
    from:table,
    rpc:async(name,args)=>{
+    if(name==='class_access_status')return {data:true,error:null};
     window.__m2RpcCalls.push({name,exercise:args.p_exercise});
     if(name==='save_mission2_team_draft')return {data:{status:'saved',answers:args.p_patch},error:null};
     return {data:{completed:true,mission_completed:args.p_exercise===5},error:null};

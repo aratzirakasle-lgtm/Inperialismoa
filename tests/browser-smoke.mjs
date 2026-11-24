@@ -37,7 +37,7 @@ async function open(role,path,viewport={width:1365,height:900}){
      profiles:people,
      teams:[{id:'team1',name:'Exploradores',class_id:'class1'}],
      missions:[1,2,3,4,5,6].map(id=>({id,title:'Misioa '+id,subtitle:'Historia',intro:'Inperialismoa'})),
-     classes:[{id:'class1',name:'Clase de pruebas',school_year:'2026-2027'}],
+     classes:[{id:'class1',name:'Clase de pruebas',school_year:'2026-2027',access_open:true}],
      public_questions:[],
      gallery_team_state:completedSteps>=1?[{team_id:'team1',locked_ids:[],locked_positions:{},completed_at:'2026-11-22T11:00:00Z'}]:[],
      bi_sistema_team_state:previousBiState?[previousBiState]:(completedSteps>=2?[{team_id:'team1',locked_ids:[],locked_positions:{},challenge_locked:[],completed_at:'2026-11-22T11:10:00Z'}]:[]),
@@ -117,6 +117,8 @@ async function open(role,path,viewport={width:1365,height:900}){
      },
      from:table=>builder(table),
      rpc:async(name,args)=>{
+       if(name==='class_access_status')return {data:window.__smokeAccessOpen!==false,error:null};
+       if(name==='teacher_set_class_access'){tables.classes.find(c=>c.id===args.p_class_id).access_open=args.p_open;return {data:args.p_open,error:null}}
        // Marcador de aula: lectura autorizada, nunca escritura ni intento.
        // No incluir esta consulta en el registro de mutaciones simulado.
        if(name==='mission1_class_progress'){
@@ -359,6 +361,31 @@ function verifyCardsInsideZones(page){
 }
 
 try{
+ await scenario('Control de acceso: cierre durante una sesión y reapertura',async()=>{
+   const {page,context,errors}=await open('student','index.html#mission1gallery');
+   try{
+     await waitVisible(page,'.gal-hall');
+     await page.evaluate(()=>{window.__smokeAccessOpen=false;window.dispatchEvent(new Event('focus'))});
+     await waitVisible(page,'#class-access-dialog');
+     assert.match(await page.locator('#class-access-dialog').textContent(),/Museoa itxita dago/);
+     await page.keyboard.press('Escape');
+     assert.equal(await page.locator('#class-access-dialog').isVisible(),true);
+     await page.evaluate(()=>{window.__smokeAccessOpen=true;window.dispatchEvent(new Event('focus'))});
+     await page.locator('#class-access-dialog').waitFor({state:'hidden',timeout:15000});
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
+ await scenario('Control de acceso: profesor cierra y abre su clase',async()=>{
+   const {page,context,errors}=await open('teacher','index.html');
+   try{
+     await waitVisible(page,'[data-class-access]');
+     await page.locator('[data-class-access][data-access-open="false"]').click();
+     await waitVisible(page,'[data-class-access][data-access-open="true"]');
+     await page.locator('[data-class-access][data-access-open="true"]').click();
+     await waitVisible(page,'[data-class-access][data-access-open="false"]');
+     assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+ });
  await scenario('Galería: marcador de aula junto al expediente, sin modificar el juego',async()=>{
    const {page,context,errors}=await open('student','index.html#mission1gallery');
    try{

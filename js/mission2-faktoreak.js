@@ -1,3 +1,4 @@
+import { startClassAccess } from "./class-access.js?v=20261124-access1";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
 
@@ -99,6 +100,7 @@ async function initialize(){
   if(profile.role==='teacher'&&!teacher){location.replace('./inperialismoaren-faktoreak.html?preview=1');return}
   if(!teacher){
    if(profile.role!=='student'||!profile.team_id){cardMessage('Sarrera mugatua','Talde bateko ikasle gisa sartu behar duzu.');return}
+    if(!(await startClassAccess(client)))return;
    teamId=profile.team_id;
    // Lehen misioaren lehenagoko lorpena datu-basean mantentzen da,
    // baina bost joko berriak amaitu arte ez du bigarren misioa irekitzen.

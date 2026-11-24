@@ -1,3 +1,4 @@
+import { startClassAccess } from "./class-access.js?v=20261124-access1";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft3';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-audit1';
@@ -31,6 +32,7 @@ async function initialize(){
       say('Irakaslearen aurrebista: ez dira benetako taldearen emaitzak gordeko.');
       return;
     }
+    if(!(await startClassAccess(client)))return;
     if(!profile.team_id){location.replace('./index.html');return}
     const id=profile.team_id;
     const [{data:third,error:thirdError},{data:fourth,error:fourthError},{data:prior,error:priorError}]=await Promise.all([

@@ -1,3 +1,4 @@
+import { startClassAccess } from "./class-access.js?v=20261124-access1";
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261124-audit1";
@@ -521,6 +522,7 @@ async function boot(){
       ]);
       return;
     }
+    if(!(await startClassAccess(client)))return;
     teamId=profile.team_id;
     if(!teamId){location.replace("./index.html");return}
     // Lehen ariketa benetan osatu behar da: lehengo misio-zigiluak
