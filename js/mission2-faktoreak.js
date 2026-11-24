@@ -3,7 +3,8 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync4';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-cohesion1';
+import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
 import { renderMuseumPassport } from './museum-passport.js?v=3';
 const app=document.querySelector('#m2-app');
 let mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
@@ -11,7 +12,7 @@ async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
  try{const {data,error}=await client.rpc('mission2_access_status',{});if(error||typeof data!=='boolean')return;
- if(data===false&&!releaseClosed){releaseClosed=true;document.querySelector('#m2-reading-dialog')?.close();autosave?.destroy();document.querySelector('.m2-class-widget')?.__classProgressCleanup?.();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
+ if(data===false&&!releaseClosed){releaseClosed=true;document.querySelector('#m2-reading-dialog')?.close();autosave?.destroy();cardMessage('Bigarren misioa blokeatuta',MISSION2_LOCKED_TEXT)}
  else if(data===true&&releaseClosed)location.reload();
  }catch{}finally{releaseChecking=false}
 }
@@ -84,6 +85,8 @@ let remoteRenderTimer=null,remoteRenderPending=false,dragging=false,pointerEditi
 let lastCabinetMove=null;
 function interacting(){return dragging||pointerEditing||!!selected||!!atlasSelectedRoute||!!atlasSelectedLuggage||!!document.querySelector('#m2-reading-dialog[open]')||app.contains(document.activeElement)&&document.activeElement?.matches('select')}
 function requestRemoteRender(){
+ const dossier=document.querySelector('#m2-reading-dialog[open][data-museum-panel="dossier"] .m2-dossier');
+ if(dossier){const holder=document.createElement('div');holder.innerHTML=dossierMarkup();dossier.querySelector('ol').innerHTML=holder.querySelector('ol').innerHTML;dossier.querySelector('.m1-note').textContent=holder.querySelector('.m1-note').textContent}
  remoteRenderPending=true;
  if(remoteRenderTimer!==null)return;
  const apply=()=>{remoteRenderTimer=null;if(!remoteRenderPending||releaseClosed)return;if(submitting||interacting()){remoteRenderTimer=setTimeout(apply,250);return}render()};
@@ -236,7 +239,7 @@ async function initialize(){
    await autosave.load();
    const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;let changed=false;for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
    const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);clearTimeout(remoteRenderTimer);autosave?.destroy()},{once:true});
-   mountClassroomProgressPanel(client,teamId,{missionId:2});
+
   }
   render();
  }catch(error){console.error('M2 hasiera:',error);cardMessage('Ezin izan da misioa kargatu','Konexioa edo sarbidea egiaztatu eta saiatu berriro.')}
@@ -247,9 +250,39 @@ function hero(){
  '<div class="m2-hero-seal" aria-hidden="true"><strong>02</strong><span>IKERKETA HISTORIKOA</span></div></header>';
 }
 function nav(){
- return '<ol class="m2-steps" aria-label="Bost ariketen aurrerapena">'+activities.map(item=>
-  '<li><button type="button" class="m2-step '+(completions.has(item.id)?'m2-done':'')+'" data-open="'+item.id+'" '+(canOpen(item.id)?'':'disabled')+' '+(active===item.id?'aria-current="step"':'')+' title="'+esc(item.title)+'"><strong>'+(completions.has(item.id)?'✓':item.id)+'</strong><span>'+esc(item.title)+'</span></button></li>'
- ).join('')+'</ol>';
+ const trophy='<svg class="m1-progress-emblem" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false"><circle class="m1-progress-medallion" cx="20" cy="20" r="17.5" fill="#392a1a" stroke="#dcb36a" stroke-width="1.2"/><circle cx="20" cy="20" r="14.5" fill="none" stroke="#98733c" stroke-width=".7"/><path d="M14 11H26V19C26 23 23 25 20 25S14 23 14 19Z" fill="#e2b75e" stroke="#fff0bf" stroke-width=".8"/><path d="M14 13H10V16C10 20 12 21 15 21M26 13H30V16C30 20 28 21 25 21" fill="none" stroke="#e8c779" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 25V29M16 29H24L26 32H14Z" fill="#e2b75e" stroke="#edcf86" stroke-width="1.3" stroke-linejoin="round"/><path d="M20 14L21.1 17.2L24.5 17.2L21.8 19.2L22.8 22.4L20 20.5L17.2 22.4L18.2 19.2L15.5 17.2L18.9 17.2Z" fill="#795020"/><path class="m1-progress-spark" d="M31 5V11M28 8H34M8 27V31M6 29H10" stroke="#ffedb0" stroke-width="1.4" stroke-linecap="round"/></svg>';
+ return mission2RouteMarkup(activities,active,{teacher,completedSteps:[...completions],canOpen,ending:teacherEnding})+
+ '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+(!teacher?'<button type="button" data-m2-class-progress aria-haspopup="dialog">'+trophy+'Taldeen aurrerapena</button>':'')+'</div>';
+}
+function dossierMarkup(){
+ const rows=activities.map(({id,title})=>'<li class="'+(completions.has(id)?'m1-sealed':'')+'"><span class="m1-medal">'+(completions.has(id)?'✓':String(id).padStart(2,'0'))+'</span><span>'+esc(title)+'</span><small>'+(completions.has(id)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
+ return '<div class="m1-archive m2-dossier"><p class="m1-overline">MUSEOKO ARTXIBOA · II. MISIOA</p><p class="m1-team">'+esc(teacher?'Probako taldea':mission2TeamName)+'</p><p>Ariketak gainditu ahala, bost dokumentuak zigilatuko dira.</p><ol>'+rows+'</ol><p class="m1-note">'+completions.size+' / 5 · '+(completions.size===5?'Bigarren misioa osatuta.':'Bosgarren ariketa gainditzean, pasaportea zigilatuko da.')+'</p>'+(teacher?'<p>IRAKASLEAREN AURREBISTA · Ez da daturik gordeko.</p>':'')+(completions.size===5?'<button type="button" class="m2-button" data-dossier-passport>Ikusi pasaportea eta dominak ✧</button>':'')+'</div>';
+}
+function openDossier(){
+ museumDialog('Ikerketa-espedientea',dossierMarkup());
+ const dialog=document.querySelector('#m2-reading-dialog');
+ dialog.dataset.museumPanel='dossier';
+ dialog.querySelector('[data-dossier-passport]')?.addEventListener('click',()=>{
+  if(releaseClosed||completions.size!==5)return;dialog.close();teacherEnding=true;render();window.scrollTo({top:0,behavior:'instant'});
+ });
+}
+function openClassProgress(){
+ if(teacher||!teamId||releaseClosed)return;
+ museumDialog('Taldeen aurrerapena','<div class="m1-archive m1-class-archive"><p class="m1-overline">MUSEOKO ARTXIBOA · II. MISIOA</p><p>Gelako taldeen aurrerapena · 15 segundoan behin eguneratzen da.</p><div id="m2-class-modal-board" aria-live="polite" aria-atomic="true"><p>Taldeen aurrerapena kargatzen…</p></div></div>');
+ const dialog=document.querySelector('#m2-reading-dialog'),board=dialog.querySelector('#m2-class-modal-board');
+ let alive=true,busy=false,rows=[];
+ async function refresh(){
+  if(!alive||busy||!dialog.open||releaseClosed||document.hidden)return;
+  busy=true;let error=false;
+  try{const result=await client.rpc('mission2_class_progress_members');if(result.error)throw result.error;rows=Array.isArray(result.data)?result.data:[]}
+  catch(e){error=true;console.warn('Taldeen aurrerapenaren kontsulta',e)}
+  finally{busy=false;if(alive&&dialog.open&&!releaseClosed){const html=renderMission1ClassProgress(rows,{ownTeamId:teamId,missionId:2,error});if(board.innerHTML!==html)board.innerHTML=html}}
+ }
+ const timer=setInterval(refresh,15000);
+ const cleanup=()=>{alive=false;clearInterval(timer);window.removeEventListener('focus',refresh);window.removeEventListener('online',refresh);window.removeEventListener('m2:progress-changed',refresh);document.removeEventListener('visibilitychange',refresh);window.removeEventListener('pagehide',cleanup)};
+ dialog.addEventListener('close',cleanup,{once:true});
+ window.addEventListener('focus',refresh);window.addEventListener('online',refresh);window.addEventListener('m2:progress-changed',refresh);document.addEventListener('visibilitychange',refresh);window.addEventListener('pagehide',cleanup,{once:true});
+ void refresh();
 }
 function intro(){
  const item=activity(active);
@@ -321,7 +354,7 @@ function museumHeader(){
  return '<header class="m2-hero m2-museum-title-row">'+
  '<div class="m2-museum-mission-plaque"><span class="m2-museum-world" aria-hidden="true">◉</span><div><strong>2. MISIOA</strong><span>Inperialismoaren faktoreak</span></div></div>'+
  '<div class="m2-museum-title"><h1>1. Kausen kabinetea</h1><p>Inperialismoa zergatik hedatu zen?</p></div>'+
- '<div class="m2-museum-step-holder"><span class="m2-sr-only">Bost ariketak</span>'+nav()+'</div></header>';
+ '</header>';
 }
 function museumInstruction(){
  return '<div class="m2-museum-instructions"><span class="m2-museum-hand" aria-hidden="true">☞</span> Dagozkion arrazoien arabera, kokatu beheko txartelak bost faktore hauetan:</div>';
@@ -516,7 +549,7 @@ function renderPopulation(){
  return '<section class="m2-atlas-screen m2-migration-gallery" aria-label="Migrazioen bulegoa: lau jarduera interaktibo">'+
   '<header class="m2-atlas-heading"><a class="m2-atlas-home-link" href="./index.html" aria-label="Museora itzuli">← MUSEOA</a><span class="m2-atlas-navigation">BIGARREN MISIOA · 3 / 5</span><h1>MIGRAZIOEN BULEGOA <em>(1850–1900)</em></h1>'+
   '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' osatuta</div></header>'+
-  '<div class="m2-atlas-navigation-strip">'+nav()+'</div>'+
+  ''+
   (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
   '<div class="m2-atlas-main">'+
    '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">B</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
@@ -705,7 +738,7 @@ function animateRoomArrival(room){
 }
 function renderEnd(){
  const label=teacher?'IRAKASLEAREN AURREBISTA · EZ DA GORDE':'2. MISIOA GAINDITUTA';
- return hero()+nav()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
+ return nav()+hero()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
  '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><div class="m2-ceremony-stars" aria-hidden="true">✦ ✧ ✦ ✧ ✦</div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
  (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
  '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
@@ -727,16 +760,16 @@ function render(){
  document.querySelector('.m2-page')?.classList.toggle('m2-atlas-page',atlasRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-capital-page',active===2&&!teacherEnding);
  if(teacherEnding){app.innerHTML=renderEnd();return}
- if(atlasRoom){app.innerHTML=renderPopulation();return}
+ if(atlasRoom){app.innerHTML=nav()+renderPopulation();return}
  if(firstRoom){
-  app.innerHTML=museumHeader()+museumInstruction()+
+  app.innerHTML=nav()+museumHeader()+museumInstruction()+
     (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
     renderClassification()+controls();
   return;
  }
  const item=activity(active);
- app.innerHTML=hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
- nav()+intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();
+ app.innerHTML=nav()+hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
+ intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();
 }
 function getAnswers(){
  const state=taskState(active);
@@ -857,6 +890,8 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-source-zoom'))return openSource(elem.dataset.sourceZoom);
  if(elem.hasAttribute('data-map-zoom'))return openMap(elem.dataset.mapZoom);
  if(elem.hasAttribute('data-bag-return'))return atlasReturnBag();
+ if(elem.hasAttribute('data-m2-dossier'))return openDossier();
+ if(elem.hasAttribute('data-m2-class-progress'))return openClassProgress();
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
  if(active===3&&elem.hasAttribute('data-atlas-route')){
   atlasSelectedRoute=atlasSelectedRoute===elem.dataset.atlasRoute?null:elem.dataset.atlasRoute;

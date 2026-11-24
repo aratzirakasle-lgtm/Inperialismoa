@@ -470,3 +470,15 @@ export function addTeacherStageControls(stages){
  }
  nav.after(bar);
 }
+
+/* Misma fundición del recorrido de la primera misión, con navegación local. */
+export function mission2RouteMarkup(activities,active,{teacher=false,completedSteps=[],canOpen=()=>false,ending=false}={}){
+ style();
+ const done=new Set(completedSteps);
+ const items=activities.map(({id,title})=>{
+  const current=!ending&&id===active,complete=done.has(id),locked=!canOpen(id);
+  const state=(current?' is-current':'')+(complete?' is-done':'')+(locked?' is-locked':'');
+  return '<button type="button" class="m1-route-stop'+state+'" data-open="'+id+'" '+(locked?'disabled':'')+(current?' aria-current="step"':'')+' title="'+id+'. ariketa · '+title+'"><span class="m1-nav-num">'+id+(!teacher&&complete?'<small class="m1-route-seal" aria-label="Gaindituta">✓</small>':'')+(locked?'<small class="m1-route-lock" aria-label="Blokeatuta"></small>':'')+'</span><span class="m1-nav-label">'+title+'</span></button>';
+ }).join('');
+ return '<nav class="m1-nav m1-museum-route m2-shared-route" data-m2-role="'+(teacher?'teacher':'student')+'" aria-label="Bigarren misioko bost aretoen ibilbidea"><span class="m1-nav-title">'+(teacher?'IRAKASLEAREN AURREBISTA · 2. MISIOA':'2. MISIOA · MUSEOKO IBILBIDEA')+'</span><div class="m1-nav-links">'+items+'</div><a class="m1-route-return" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">'+(teacher?'← Irakaslearen panelera':'← Museora itzuli')+'</a></nav>';
+}

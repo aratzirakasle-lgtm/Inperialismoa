@@ -52,7 +52,7 @@ async function open(role='student',size={width:1365,height:900},badge=true){
  const page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto(new URL('inperialismoaren-faktoreak.html'+(role==='teacher'?'?preview=1':''),BASE).href,{waitUntil:'domcontentloaded'});
- await page.locator('.m2-steps').waitFor({state:'visible',timeout:12000}).catch(()=>{});
+ await page.locator('.m2-shared-route').waitFor({state:'visible',timeout:12000}).catch(()=>{});
  return {page,context,errors};
 }
 async function scenario(name,callback){
@@ -132,7 +132,7 @@ try{
  await scenario('Profesor: cinco pantallas y final navegables, sin escrituras',async()=>{
   const {page,context,errors}=await open('teacher');
   try{
-   assert.equal(await page.locator('.m2-step').count(),5);
+   assert.equal(await page.locator('.m2-shared-route [data-open]').count(),5);
    assert.equal(await page.locator('.m2-passport').count(),0,'La sala no debe mostrar pasaporte');
    assert.equal(await page.locator('[data-card]').count(),11);
    assert.equal(await page.locator('.m2-archive-card').count(),11,'Once cartelas históricas independientes');
@@ -373,24 +373,28 @@ try{
  await scenario('Alumno: pestaña de compañeros de la misión 2',async()=>{
   const {page,context,errors}=await open('student');
   try{
-   const toggle=page.locator('.m2-class-widget .m1-class-toggle');
+   const toggle=page.locator('[data-m2-class-progress]');
    await toggle.waitFor({state:'visible'});
-   assert.equal(await page.locator('.m1-class-panel').isVisible(),false);
+   assert.equal(await page.locator('#m2-class-modal-board').isVisible(),false);
    await toggle.click();
    await page.locator('.m1-class-team').first().waitFor({state:'visible'});
-   assert.match(await page.locator('.m1-class-panel').innerText(),/2\. MISIOA/);
+   assert.match(await page.locator('#m2-reading-dialog').innerText(),/II\. MISIOA/);
    assert.equal(await page.locator('.m1-class-team').count(),2);
-   assert.match(await page.locator('.m1-class-panel').innerText(),/ZUEN TALDEA/);
-   assert.match(await page.locator('.m1-class-panel').innerText(),/Nilo/);
-   await page.locator('.m1-class-close').click();
-   assert.equal(await page.locator('.m1-class-panel').isVisible(),false);
+   assert.match(await page.locator('#m2-class-modal-board').innerText(),/ZUEN TALDEA/);
+   assert.match(await page.locator('#m2-class-modal-board').innerText(),/Nilo/);
+   await page.locator('[data-dialog-close]').click();
+   assert.equal(await page.locator('#m2-class-modal-board').isVisible(),false);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
  });
  await scenario('Alumno: cinco ejercicios progresivos y desbloqueo de final (servidor simulado)',async()=>{
   const {page,context,errors}=await open('student');
   try{
-   assert.equal(await page.locator('.m2-step:disabled').count(),4);
+   assert.equal(await page.locator('.m2-shared-route [data-open]:disabled').count(),4);
+   await page.locator('[data-m2-dossier]').click();
+   assert.equal(await page.locator('.m2-dossier li').count(),5);
+   assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),0);
+   await page.locator('[data-dialog-close]').click();
    for(const id of ['new_markets','cheap_resources','investments','settlement','working_conditions','conversion','missions','sea_routes','chauvinism','racist_theories','exploration']){
     await page.locator('[data-card="'+id+'"]').click();
     await page.locator('[data-zone="economic"] .m2-case-title-action').click();
@@ -408,7 +412,12 @@ try{
    assert.equal(await page.locator('[data-check]').isEnabled(),true);
    await page.locator('[data-check]').click();
    await page.locator('[data-next]').waitFor();
+   await page.locator('[data-m2-dossier]').click();
+   assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),1);
+   assert.equal(await page.locator('.m2-dossier li').count(),5);
+   await page.locator('[data-dialog-close]').click();
    await page.locator('[data-next]').click();
+   assert.equal(await page.locator('[data-m2-class-progress]').isVisible(),true);
 
    for(const [event,year] of [['suez','1869'],['hijaz','1908'],['panama','1914']]){
     await page.locator('[data-event="'+event+'"]').click();await page.locator('[data-year="'+year+'"]').click();
@@ -460,6 +469,10 @@ try{
    assert.match(await page.locator('.m2-finished').innerText(),/3. misioa prestatzen/);
    assert.equal(await page.locator('.m2-finished .mp-earned').count(),2);
    assert.equal(await page.locator('.m2-finished .mp-medal').count(),2);
+   await page.locator('[data-m2-dossier]').click();
+   assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),5);
+   await page.locator('[data-dossier-passport]').click();
+   assert.equal(await page.locator('.m2-finished').count(),1);
    assert.deepEqual((await page.evaluate(()=>window.__m2RpcCalls))
      .filter(x=>x.name==='submit_mission2_exercise').map(x=>x.exercise),[1,2,3,4,5]);
    assert.deepEqual(errors,[]);

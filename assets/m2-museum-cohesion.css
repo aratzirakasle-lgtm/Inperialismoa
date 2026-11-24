@@ -1,0 +1,50 @@
+
+/* Same medallions and gallery controls; only compact geometry differs. */
+#m2-app .m2-shared-route{width:100%;max-width:100%;min-height:0;margin:0 auto 5px;padding:5px 12px 7px;border-width:4px;box-sizing:border-box}
+#m2-app .m2-shared-route .m1-nav-title{margin:0 0 5px;padding:2px 21px;font-size:10px}
+#m2-app .m2-shared-route .m1-nav-links{gap:6px}
+#m2-app .m2-shared-route .m1-nav-links::before{top:20px;height:5px}
+#m2-app .m2-shared-route .m1-route-stop{width:100%;gap:5px;padding:0 1px;min-width:0;opacity:1}
+#m2-app .m2-shared-route .m1-route-stop.is-locked{opacity:.52}
+#m2-app .m2-shared-route .m1-route-stop::before{top:35px;height:18px}
+#m2-app .m2-shared-route .m1-nav-num{width:45px;height:45px;font-size:25px;border-width:4px}
+#m2-app .m2-shared-route .m1-nav-label{min-height:32px;font-size:clamp(10px,1vw,13px);padding:4px 5px;border-width:2px;overflow-wrap:anywhere;white-space:normal}
+#m2-app .m2-shared-route .m1-route-return{font-size:10px}
+#m2-app .m2-museum-title-row{grid-template-columns:minmax(140px,240px) minmax(0,1fr);gap:10px}
+#m2-app .m2-archive-access{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 6px;position:relative;z-index:5}
+.m2-archive-access button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:32px;border:2px ridge #bd9759;border-radius:6px;background:linear-gradient(#3e5844,#1b3327);color:#f8e1b1;padding:3px 11px;font:700 12px/1.2 Georgia,'Times New Roman',serif;cursor:pointer;box-shadow:0 2px 5px #0005}
+.m2-archive-access button>span{border:1px solid #bb9b63;border-radius:3px;padding:2px 5px;background:#20392c}
+.m2-archive-access .m1-progress-emblem{width:25px;height:25px;flex:0 0 25px}
+.m2-archive-access button:focus-visible{outline:2px solid #f1c779;outline-offset:2px}
+#m2-reading-dialog .m1-archive{font-family:Georgia,'Times New Roman',serif;color:#48331d}
+#m2-reading-dialog .m1-overline{font-size:12px;font-weight:700;letter-spacing:.11em;color:#866535}
+#m2-reading-dialog .m1-team{font-size:20px;font-weight:700;margin:8px 0}
+#m2-reading-dialog .m2-dossier ol{padding:0;list-style:none;margin:14px 0;display:grid;gap:8px}
+#m2-reading-dialog .m2-dossier li{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:10px;border:1px solid #b99e68;border-radius:5px;background:linear-gradient(120deg,#f8edcf,#e8d4a7);padding:9px 10px;font-weight:bold}
+#m2-reading-dialog .m2-dossier .m1-medal{display:grid;place-items:center;width:33px;height:33px;border:2px ridge #b68a45;border-radius:50%;color:#765326}
+#m2-reading-dialog .m2-dossier small{font-size:10px;color:#8a6a3c}
+#m2-reading-dialog .m2-dossier .m1-sealed .m1-medal{background:#355c40;color:#f2d699}
+#m2-reading-dialog .m2-dossier .m1-sealed small{color:#305b3d}
+#m2-reading-dialog .m1-note{font-size:14px;font-weight:bold}
+#m2-class-modal-board .m1-class-grid{grid-template-columns:minmax(70px,1fr) repeat(5,minmax(22px,36px)) minmax(26px,38px);gap:5px}
+#m2-class-modal-board .m1-class-team{border-bottom-color:#c9b68f;padding:8px 3px}
+#m2-class-modal-board .m1-class-name{font-size:14px}
+#m2-class-modal-board .m1-class-members{font-size:12px}
+#m2-class-modal-board .m1-class-mark{width:24px;height:24px}
+#m2-class-modal-board .m1-class-mark.is-mission{width:27px}
+@media(max-width:750px){
+ #m2-app .m2-shared-route{padding:5px 5px 7px}
+ #m2-app .m2-shared-route .m1-nav-links{gap:3px}
+ #m2-app .m2-shared-route .m1-nav-label{font-size:9px;min-height:35px;padding:3px 1px}
+ #m2-app .m2-shared-route .m1-nav-num{width:34px;height:34px;font-size:19px;border-width:3px}
+ #m2-app .m2-shared-route .m1-nav-links::before{top:15px}
+ #m2-app .m2-shared-route .m1-route-stop::before{top:25px}
+ #m2-app .m2-shared-route .m1-route-return{position:static;display:inline-block;margin:5px 0 0}
+ #m2-app .m2-museum-title-row{grid-template-columns:1fr}
+ .m2-archive-access button{font-size:11px;padding:4px 7px}
+ #m2-class-modal-board .m1-class-grid{grid-template-columns:minmax(56px,1fr) repeat(5,19px) 25px;gap:2px}
+ #m2-class-modal-board .m1-class-mark{width:18px;height:18px}
+ #m2-class-modal-board .m1-class-mark.is-mission{width:23px}
+ #m2-class-modal-board .m1-class-name{font-size:11px}
+ #m2-class-modal-board .m1-class-members{font-size:10px}
+}
