@@ -1,6 +1,6 @@
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync3';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261124-sync4';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-m2board1';
@@ -80,6 +80,16 @@ const riverOptions=[['nile','Nilo'],['niger','Niger'],['congo','Kongo'],['zambez
 const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','Australiako basamortua'],['nile','Nilo'],['suez','Suez']];
 let teacher=false,teamId=null,active=1,selected=null,submitting=false,teacherEnding=false;
 let completions=new Set(),draft={},feedback='',feedbackState='';
+let remoteRenderTimer=null,remoteRenderPending=false,dragging=false,pointerEditing=false;
+function interacting(){return dragging||pointerEditing||!!selected||!!atlasSelectedRoute||!!atlasSelectedLuggage||!!document.querySelector('#m2-reading-dialog[open]')||app.contains(document.activeElement)&&document.activeElement?.matches('select')}
+function requestRemoteRender(){
+ remoteRenderPending=true;
+ if(remoteRenderTimer!==null)return;
+ const apply=()=>{remoteRenderTimer=null;if(!remoteRenderPending||releaseClosed)return;if(submitting||interacting()){remoteRenderTimer=setTimeout(apply,250);return}render()};
+ remoteRenderTimer=setTimeout(apply,100);
+}
+function markRemoteCompletion(exercise){if(completions.has(exercise))return;completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active||app.querySelector('.m2-controls'))requestRemoteRender()}
+
 let autosave=null,saveStatus='Taldearen aurrerapena kargatzen…',saveKind='saving';
 function autosaveStatus(message,kind=''){
  saveStatus=message;saveKind=kind;
@@ -180,13 +190,14 @@ async function initialize(){
    if(completions.size===5)teacherEnding=true;
    autosave=createMission2Autosave({
     client,teamId,userId:authUser.id,
-    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);draft=rows;if(changed&&!submitting&&!releaseClosed&&app.querySelector('.m2-controls'))render()},
+    canRefresh:()=>!submitting&&!interacting(),
+    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);draft=rows;if(changed&&!releaseClosed&&app.querySelector('.m2-controls'))requestRemoteRender()},
     onStatus:autosaveStatus,
-    onCompleted:exercise=>{completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active)render()}
+    onCompleted:markRemoteCompletion
    });
    await autosave.load();
-   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;let changed=false;for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));render()}}catch{}};
-   const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);autosave?.destroy()},{once:true});
+   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;let changed=false;for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
+   const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);clearTimeout(remoteRenderTimer);autosave?.destroy()},{once:true});
    mountClassroomProgressPanel(client,teamId,{missionId:2});
   }
   render();
@@ -353,6 +364,7 @@ function renderTimeline(){
     ${slots}
    </div>
    <div class="m2-e2-dial-progress" role="status" aria-live="polite">✦ <strong>${placed} / 3</strong> pieza ✦</div>
+   ${selected&&taken.has(selected)?'<button type="button" class="m2-button secondary m2-return-piece" data-year-return>↶ Itzuli bildumara</button>':''}
   </section>
  </div>
  <section class="m2-e2-ledger" aria-label="Kapitalaren inbertsioen liburua">
@@ -491,7 +503,7 @@ function renderPopulation(){
     '<div class="m2-atlas-route-map"><img src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa" draggable="false">'+
     '<svg class="m2-atlas-route-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="atlasArrow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto"><path d="M0 0L4 2L0 4Z" fill="#c13020"/></marker></defs>'+lines+'</svg>'+
     routePins+'</div></div>'+
-    '<footer>'+atlasSectionStatus(2,placed,3)+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
+    '<footer>'+atlasSectionStatus(2,placed,3)+(atlasSelectedRoute&&state['route_'+atlasSelectedRoute]?'<button type="button" class="m2-bag-return" data-route-return>↶ Kendu ibilbidea</button>':'')+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
    '</section>'+
    '<section class="m2-atlas-facts-activity m2-atlas-activity">'+
     '<header><span class="m2-atlas-number">3</span><h2>Emigrazioaren ondorioak</h2></header>'+
@@ -631,13 +643,13 @@ function renderExercise(){
 }
 function isReady(){
  const state=taskState(active);
- if(active===1)return Object.keys(state.assignments||{}).length===causes.length;
+ if(active===1)return causes.every(c=>categories.some(cat=>cat.id===state.assignments?.[c.id]));
  if(active===5)return (state.multi?.africa?.length===4&&state.multi?.asia?.length===3&&['north','south','meeting','congo'].every(k=>!!state[k]));
  return responseKeys[active].every(key=>!!state[key]);
 }
 function controls(){
  const done=completions.has(active);
- const canGoForward=teacher||done;
+
  return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
  '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>Berriz hasi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
@@ -664,6 +676,7 @@ function renderEnd(){
 }
 function render(){
  if(releaseClosed)return;
+ remoteRenderPending=false;clearTimeout(remoteRenderTimer);remoteRenderTimer=null;
  animateRoomArrival(teacherEnding?'amaiera':String(active));
  const firstRoom=active===1&&!teacherEnding;
  const atlasRoom=active===3&&!teacherEnding;
@@ -723,7 +736,7 @@ async function check(){
 function openExercise(n){
  if(releaseClosed||submitting||!steps.includes(n)||!canOpen(n))return;
  if(!teacher)void autosave?.flush();
- active=n;selected=null;feedback='';feedbackState='';teacherEnding=false;render();
+ active=n;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});
 }
 function assignToCategory(catId){
@@ -808,6 +821,10 @@ app.addEventListener('click',event=>{
   atlasSelectedLuggage=null;render();return;
  }
  if(active===3&&elem.hasAttribute('data-atlas-target'))return atlasMoveRoute(elem.dataset.atlasTarget);
+ if(active===3&&elem.hasAttribute('data-route-return')){
+  if(!atlasRoutes.some(r=>r.id===atlasSelectedRoute))return;
+  const field='route_'+atlasSelectedRoute;delete taskState(3)[field];queueMission2({[field]:null},3);atlasSelectedRoute=null;render();return;
+ }
  if(active===3&&elem.hasAttribute('data-atlas-bag-card')){
   atlasSelectedLuggage=atlasSelectedLuggage===elem.dataset.atlasBagCard?null:elem.dataset.atlasBagCard;
   atlasSelectedRoute=null;render();return;
@@ -818,7 +835,15 @@ app.addEventListener('click',event=>{
  const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
  if(active===3&&elem.closest('[data-atlas-bag-zone]'))return atlasPack(elem.closest('[data-atlas-bag-zone]').dataset.atlasBagZone);
  if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
- if(elem.hasAttribute('data-year'))return assignYear(elem.dataset.year);
+ if(elem.hasAttribute('data-year')){
+  if(!selected&&active===2&&taskState(2)[elem.dataset.year]){selected=taskState(2)[elem.dataset.year];render();return}
+  return assignYear(elem.dataset.year)
+ }
+ if(elem.hasAttribute('data-year-return')){
+  if(active!==2||!selected)return;
+  const state=taskState(2),patch={};for(const year of ['1869','1908','1914'])if(state[year]===selected){delete state[year];patch[year]=null}
+  selected=null;if(Object.keys(patch).length)queueMission2(patch,2);render();return;
+ }
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
  if(elem.hasAttribute('data-reset')){
   if(completions.has(active)&&!teacher)return;
@@ -835,11 +860,12 @@ app.addEventListener('change',event=>{
  if(submitting||releaseClosed)return;
  const target=event.target;
  if(target.matches('select[data-field],input[type="radio"][data-field]')){
-  taskState(active)[target.dataset.field]=target.value;
-  queueMission2({[target.dataset.field]:target.value});
+  if(target.value)taskState(active)[target.dataset.field]=target.value;else delete taskState(active)[target.dataset.field];
+  queueMission2({[target.dataset.field]:target.value||null});
  }
  if(active===3&&target.matches('select[data-field],input[type="radio"][data-field]')){
-  render();return;
+  const selector=target.tagName==='SELECT'?'select[data-field="'+target.dataset.field+'"]':'input[data-field="'+target.dataset.field+'"][value="'+target.value+'"]';
+  render();$(selector)?.focus({preventScroll:true});return;
  }
  if(target.matches('input[data-archive]')){
   taskState(4)[target.dataset.archive]=target.value;
@@ -857,8 +883,13 @@ app.addEventListener('keydown',event=>{
  const zone=event.target.closest('[data-zone]');
  if(zone&&event.target===zone){event.preventDefault();assignToCategory(zone.dataset.zone)}
 });
+app.addEventListener('pointerdown',()=>{pointerEditing=true});
+window.addEventListener('pointerup',()=>{pointerEditing=false});
+window.addEventListener('pointercancel',()=>{pointerEditing=false});
+window.addEventListener('blur',()=>{pointerEditing=false;dragging=false});
 app.addEventListener('dragstart',event=>{
  if(submitting||releaseClosed){event.preventDefault();return}
+ dragging=true;pointerEditing=false;
  if(active===3){
   const route=event.target.closest('[data-atlas-route]');
   const item=event.target.closest('[data-atlas-bag-card]');
@@ -866,7 +897,7 @@ app.addEventListener('dragstart',event=>{
   if(item){atlasSelectedLuggage=item.dataset.atlasBagCard;event.dataTransfer?.setData('text/plain','bag:'+atlasSelectedLuggage);return}
  }
  const card=event.target.closest('[data-card]')||event.target.closest('[data-event]');
- if(!card)return;
+ if(!card){dragging=false;return}
  selected=card.dataset.card||card.dataset.event;
  event.dataTransfer?.setData('text/plain',selected);
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
@@ -878,6 +909,7 @@ app.addEventListener('dragover',event=>{
  if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
 });
 app.addEventListener('drop',event=>{
+ dragging=false;pointerEditing=false;
  if(submitting||releaseClosed){event.preventDefault();return}
  if(active===3){
   const pin=event.target.closest('[data-atlas-target]');
@@ -906,5 +938,5 @@ app.addEventListener('drop',event=>{
  if(zone)assignToCategory(zone.dataset.zone);
  if(year)assignYear(year.dataset.year);
 });
-app.addEventListener('dragend',()=>{if(selected||atlasSelectedRoute||atlasSelectedLuggage){selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render()}});
+document.addEventListener('dragend',()=>{dragging=false;pointerEditing=false;if(selected||atlasSelectedRoute||atlasSelectedLuggage){selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render()}});
 initialize();

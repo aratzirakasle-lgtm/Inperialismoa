@@ -12,7 +12,7 @@ function fixture(){
  globalThis.window=new EventTarget();
  globalThis.document=new EventTarget();
  document.visibilityState='visible';
- let offline=false;
+ let offline=false,readOffline=false,hold=null;
  const client={
   from(name){
    assert.equal(name,'mission2_team_drafts');
@@ -20,6 +20,7 @@ function fixture(){
     select(fields){assert.equal(fields,'exercise,answers');return this},
     async eq(field,teamId){
      assert.equal(field,'team_id');
+     if(readOffline)return {data:null,error:{message:'offline'}};
      return {data:[...data.entries()].filter(([k])=>k.startsWith(teamId+':'))
       .map(([k,answers])=>({exercise:Number(k.split(':')[1]),answers})),error:null};
     }
@@ -28,6 +29,7 @@ function fixture(){
   async rpc(name,args){
    assert.equal(name,'save_mission2_team_draft');
    calls.push(args);
+   if(hold){const waiting=hold;hold=null;await waiting;}
    if(offline)return {data:null,error:{message:'offline'}};
    const key='team:'+args.p_exercise;
    data.set(key,args.p_reset?{}:mergeMission2Patch(data.get(key)||{},args.p_patch));
@@ -37,7 +39,7 @@ function fixture(){
  const create=(onRestore=()=>{},onStatus=()=>{})=>createMission2Autosave({
   client,teamId:'team',userId:'student',onRestore,onStatus
  });
- return {create,data,storage,calls,setOffline(value){offline=value}};
+ return {create,data,storage,calls,setOffline(value){offline=value},setReadOffline(value){readOffline=value},holdWrite(promise){hold=promise}};
 }
 
 test('La combinación permite eliminar una cartela ya colocada',()=>{
@@ -120,5 +122,26 @@ test('Un compañero que cambia otra tarjeta se recupera en la siguiente lectura'
  try{await session.load();session.queue(1,{assignments:{a:'economic'}});await session.flush();
  f.data.set('team:1',{assignments:{a:'economic',b:'political'}});
  await session.load();assert.deepEqual(restored[1].assignments,{a:'economic',b:'political'});
+ }finally{session.destroy()}
+});
+
+
+test('Sin lectura de red al iniciar, se restauran las elecciones pendientes del mismo usuario',async()=>{
+ const f=fixture(),first=f.create();await first.load();f.setOffline(true);
+ first.queue(3,{bag_growth:'cause'});await first.flush();first.destroy();
+ f.setReadOffline(true);let restored={};const next=f.create(rows=>{restored=rows});
+ try{assert.equal(await next.load(),false);assert.equal(restored[3].bag_growth,'cause');assert.equal(next.hasPending(),true);
+ f.setReadOffline(false);f.setOffline(false);await next.flush();await next.load();assert.equal(restored[3].bag_growth,'cause');
+ }finally{next.destroy()}
+});
+test('Un cambio durante un envío no vuelve a escribir campos ya confirmados',async()=>{
+ const f=fixture(),session=f.create();let release;
+ try{await session.load();f.holdWrite(new Promise(r=>{release=r}));
+ session.queue(1,{assignments:{a:'economic'}});
+ const sending=session.flush();session.queue(1,{assignments:{b:'political'}});
+ release();await sending;
+ f.data.set('team:1',{assignments:{a:'religious'}});
+ await session.flush();assert.deepEqual(f.calls[1].p_patch,{assignments:{b:'political'}});
+ assert.deepEqual(f.data.get('team:1').assignments,{a:'religious',b:'political'});
  }finally{session.destroy()}
 });

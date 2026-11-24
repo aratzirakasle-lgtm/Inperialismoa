@@ -28,7 +28,7 @@ function combineEntries(previous,next){
  }
  return {reset:!!previous.reset,patch};
 }
-export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,onCompleted=()=>{}}){
+export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,onCompleted=()=>{},canRefresh=()=>true}){
  if(!client||!teamId||!userId)throw Error('Taldearen saioa falta da');
  const key='inperialismoa:m2:unsent:'+teamId+':'+userId;
  let entries={};
@@ -39,7 +39,7 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
     entries[id]={reset:entry.reset===true,patch:entry.patch};
   }
  }catch(e){console.warn('M2: tokiko borradorra ezin izan da irakurri',e)}
- let timer=null,working=false,loading=false,alive=true,failed=false;
+ let timer=null,working=false,loading=false,alive=true,failed=false,hasRestored=false,inFlightId=null,afterFlight=null;
  const busy=()=>Object.keys(entries).length>0;
  const persist=()=>{
   try{
@@ -54,12 +54,15 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
  }
  function queue(exercise,patch){
   if(!alive||![1,2,3,4,5].includes(exercise)||!object(patch))return;
-  entries[exercise]=combineEntries(entries[exercise],{reset:false,patch});
+  const next={reset:false,patch};
+  entries[exercise]=combineEntries(entries[exercise],next);
+  if(String(exercise)===inFlightId)afterFlight=combineEntries(afterFlight,next);
   failed=false;persist();status('Aldaketak gordetzen…','saving');schedule();
  }
  function reset(exercise){
   if(!alive||![1,2,3,4,5].includes(exercise))return;
   entries[exercise]={reset:true,patch:{}};
+  if(String(exercise)===inFlightId)afterFlight={reset:true,patch:{}};
   failed=false;persist();status('Aldaketak gordetzen…','saving');schedule(10);
  }
  async function flush(){
@@ -71,13 +74,16 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
     if(!alive)break;
     const entry=entries[id];
     if(!entry)continue;
+    inFlightId=id;afterFlight=null;
     const {data,error}=await client.rpc('save_mission2_team_draft',{
      p_exercise:Number(id),p_patch:entry.patch,p_reset:entry.reset
     });
     if(error)throw error;
     if(!data||!['saved','completed'].includes(data.status))throw Error('Gordetze-erantzun baliogabea');
-    if(entries[id]===entry)delete entries[id];
-    if(data.status==='completed')onCompleted(Number(id));
+    // El servidor confirmó este envío; no reenviar campos antiguos al guardar cambios nuevos.
+    if(afterFlight&&data.status!=='completed')entries[id]=afterFlight;else delete entries[id];
+    inFlightId=null;afterFlight=null;
+    if(alive&&data.status==='completed')onCompleted(Number(id));
     persist();
    }
    if(alive&&!busy())status('✓ Taldearen lana gordeta.','saved');
@@ -86,12 +92,12 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
    failed=true;
    status('Konexio-arazoa: aldaketak gailuan daude. Berriro konektatzean gordeko dira.','error');
   }finally{
-   working=false;
+   working=false;inFlightId=null;afterFlight=null;
    if(alive&&busy()&&!failed)schedule(10);
   }
  }
  async function load(){
-  if(!alive||loading||working)return false;
+  if(!alive||loading||working||(hasRestored&&!canRefresh()))return false;
   loading=true;
   try{
    const {data,error}=await client.from('mission2_team_drafts')
@@ -106,13 +112,17 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
     restored[id]=mergeMission2Patch(entry.reset?{}:restored[id],entry.patch);
    }
    if(!alive)return false;
-   onRestore(restored);
+   hasRestored=true;onRestore(restored);
    if(busy()){status('Aurreko saioko aldaketak berreskuratzen…','saving');schedule(10)}
    else status('✓ Taldearen aurrerapena berreskuratuta.','saved');
    return true;
   }catch(e){
    console.error('M2: borradorrak berreskuratzea',e);
-   status('Taldearen lana ezin izan da sinkronizatu. Egiaztatu konexioa.','error');
+   if(alive&&!hasRestored){
+    const local={};for(const [id,entry] of Object.entries(entries))local[id]=mergeMission2Patch({},entry.patch);
+    hasRestored=true;onRestore(local);
+   }
+   status('Taldearen lana ezin izan da sinkronizatu. Gailuko aldaketak berreskuratu dira; egiaztatu konexioa.','error');
    return false;
   }finally{loading=false}
  }

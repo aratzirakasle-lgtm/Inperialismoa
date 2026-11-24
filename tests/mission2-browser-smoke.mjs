@@ -210,7 +210,11 @@ try{
     await page.locator('input[data-field="funding"][value="credits"]').check();
     await page.locator('input[data-field="works"][value="rail_ports_canals"]').check();
     assert.equal(await page.locator('.m2-e2-option input:checked').count(),2);
+    await page.locator('[data-year="1914"]').click();
+    await page.locator('[data-year-return]').click();
+    assert.equal(await page.locator('.m2-e2-slot.m2-selected-year').count(),2);
     await page.locator('[data-reset]').click();
+    await page.locator('[data-dialog-confirm]').click();
     assert.equal(await page.locator('.m2-e2-slot.m2-selected-year').count(),0);
     assert.equal(await page.locator('.m2-e2-option input:checked').count(),0);
     const horizontalOverflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);

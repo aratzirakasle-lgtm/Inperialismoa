@@ -871,7 +871,7 @@ try{
      await setCard(page,'eu_army','eu_auth');
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
      await page.reload({waitUntil:'domcontentloaded'});
-     await page.locator('[data-mission="1"]').first().click();
+     await page.locator('.c-museo-m1').click();
      await waitVisible(page,'.gal-hall');
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),1);
      assert.equal(await page.locator('[data-gallery-action="next"]').count(),0);
@@ -889,7 +889,7 @@ try{
      assert.ok((await page.evaluate(()=>window.__smokeRpcCalls)).includes('gallery_draft_reset'),
        'El reinicio se registra en el borrador compartido antes de recargar');
      await page.reload({waitUntil:'domcontentloaded'});
-     await page.locator('[data-mission="1"]').first().click();
+     await page.locator('.c-museo-m1').click();
      await waitVisible(page,'.gal-hall');
      assert.equal(await page.locator('[data-gallery-zone="eu_auth"] .gal-tile-placed').count(),0);
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
