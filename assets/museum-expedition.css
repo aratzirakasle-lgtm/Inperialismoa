@@ -209,3 +209,40 @@
  .atlas-concept-one .atlas-book-page{padding:2px}
  .atlas-concept-one .atlas-paper-frame{padding:8px 2px 4px;gap:4px}
 }
+
+/* Element 3: separate artwork for bound paper and loose archival sheets.
+   Keep all data, meters and interactive controls as live HTML. */
+.atlas-concept-one .atlas-book-page::before{
+ background-image:url('./atlas-papel-fibras.svg');
+ background-size:100% 100%;opacity:.72;mix-blend-mode:multiply;
+}
+.atlas-concept-one .atlas-identity::before{background-position:left center}
+.atlas-concept-one .atlas-stamp-page::before{transform:skewY(-.45deg) scaleX(-1);background-position:right center}
+.atlas-concept-one .atlas-book-page h3{color:#402410;text-shadow:0 1px #ffeac480}
+.atlas-concept-one .atlas-totals{
+ border:0;border-radius:0;background:transparent;box-shadow:none;
+ isolation:isolate;padding:1.2cqw 1.25cqw 1.05cqw;transform:rotate(.5deg);
+}
+.atlas-concept-one .atlas-totals::before{
+ content:'';position:absolute;z-index:-1;inset:-.35cqw -.4cqw;
+ background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat;
+ filter:drop-shadow(1px 4px 3px #31200c8c);
+ pointer-events:none;
+}
+.atlas-concept-one .atlas-totals::after{
+ content:'';position:absolute;top:.25cqw;left:.6cqw;width:.8cqw;height:.8cqw;
+ min-width:9px;min-height:9px;bottom:auto;border-radius:50%;
+ background:radial-gradient(circle at 30% 24%,#fff0ba 0%,#e5bd6e 22%,#a67028 52%,#59350f 83%);
+ box-shadow:1px 2px 3px #3d230eb0;pointer-events:none;
+}
+.atlas-concept-one .atlas-totals h3{border-bottom:1px solid #92623770;padding-bottom:.45cqw}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-bar{background:linear-gradient(#d0aa72,#f1d7a5);border-color:#967244}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{background:linear-gradient(#376447,#1c4a34 60%,#153d28)}
+.atlas-concept-one .atlas-totals meter::-moz-meter-bar{background:linear-gradient(#376447,#1c4a34 60%,#153d28);border-radius:100px}
+.atlas-concept-one .mp-stamp-date{
+ background:url('./atlas-pergamino-bordes.svg') center/100% 100% no-repeat;
+ border:0;box-shadow:none;filter:drop-shadow(1px 1.5px 1px #72502e70);padding:.3cqw .55cqw;
+}
+.atlas-concept-one .atlas-mission-content{background-image:url('./atlas-papel-fibras.svg');background-size:100% 100%}
+.atlas-concept-one .atlas-archive{background-image:url('./atlas-pergamino-bordes.svg');background-size:100% 100%;background-color:#d6ae75}
+@media(max-width:900px){.atlas-concept-one .atlas-totals{padding:12px}.atlas-concept-one .mp-stamp-date{padding:3px 5px}}
