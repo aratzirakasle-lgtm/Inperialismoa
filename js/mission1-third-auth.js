@@ -1,4 +1,4 @@
-import { startClassAccess } from "./class-access.js?v=20261124-access1";
+import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261123-m1draft3';
 import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261124-audit1';

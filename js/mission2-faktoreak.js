@@ -1,4 +1,4 @@
-import { startClassAccess } from "./class-access.js?v=20261124-access1";
+import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261124-aula2';
 

@@ -31,10 +31,12 @@ export function startClassAccess(client){
  function hide(){if(dialog?.open)dialog.close();dialog?.remove();dialog=null}
  async function check(){
   if(stopped||checking)return;
-  checking=true;
+  if(navigator.onLine===false){offline();return}
+  checking=true;let timeout;
   try{
-   const {data,error}=await client.rpc('class_access_status',{});
+   const {data,error}=await Promise.race([client.rpc('class_access_status',{}),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Access check timeout')),8000)})]);
    if(stopped)return;
+   if(navigator.onLine===false){offline();return}
    if(error||typeof data!=='boolean')throw error||Error('Invalid access status');
    if(data===true){
     if(initialized&&wasClosed){location.reload();return}
@@ -42,14 +44,17 @@ export function startClassAccess(client){
     if(!initialized){initialized=true;resolveInitial(true)}
    }else{if(initialized)wasClosed=true;show('Museoa itxita dago','Irakasleak gela berriro ireki arte ezin da ariketetan lan egin.')}
   }catch(e){if(!stopped)show('Sarrera egiaztatzen','Ezin da gelako baimena egiaztatu. Konexioa berreskuratzean automatikoki saiatuko gara.')}
-  finally{checking=false}
+  finally{clearTimeout(timeout);checking=false}
  }
  show('Sarrera egiaztatzen','Gelako sarbidea egiaztatzen ari gara.');
  const timer=setInterval(()=>{if(!document.hidden)void check()},5000);
  const visible=()=>{if(!document.hidden)void check()};
- window.addEventListener('focus',visible);window.addEventListener('online',visible);document.addEventListener('visibilitychange',visible);
- const cleanup=()=>{if(stopped)return;stopped=true;clearInterval(timer);window.removeEventListener('focus',visible);window.removeEventListener('online',visible);document.removeEventListener('visibilitychange',visible);window.removeEventListener('pagehide',cleanup);hide();style.remove();if(!initialized)resolveInitial(false)};
- stopCurrent=cleanup;window.addEventListener('pagehide',cleanup,{once:true});
+ const offline=()=>{if(!stopped)show('Sarrera egiaztatzen','Konexioa eten da. Interneteko konexioa berreskuratu behar duzu.')};
+ const pagehide=e=>{if(!e.persisted)cleanup()};
+ const pageshow=e=>{if(e.persisted){show('Sarrera egiaztatzen','Gelako sarbidea egiaztatzen ari gara.');void check()}};
+ window.addEventListener('focus',visible);window.addEventListener('online',visible);window.addEventListener('offline',offline);window.addEventListener('pageshow',pageshow);document.addEventListener('visibilitychange',visible);
+ const cleanup=()=>{if(stopped)return;stopped=true;clearInterval(timer);window.removeEventListener('focus',visible);window.removeEventListener('online',visible);document.removeEventListener('visibilitychange',visible);window.removeEventListener('pagehide',pagehide);window.removeEventListener('pageshow',pageshow);window.removeEventListener('offline',offline);hide();style.remove();if(!initialized)resolveInitial(false)};
+ stopCurrent=cleanup;window.addEventListener('pagehide',pagehide);
  void check();return ready;
 }
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -1,4 +1,4 @@
-import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access1";
+import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261123-aula1";
