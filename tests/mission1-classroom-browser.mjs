@@ -42,6 +42,8 @@ function serverFor(exercise){
     return {data,error:request.single&&!data&&!request.maybe?{message:'Not found'}:null};
    }
    if(request.kind!=='rpc')throw Error('Unrecognized action '+request.kind);
+   // Read-only classroom access check; the simulated class is open.
+   if(request.name==='class_access_status')return {data:true,error:null};
    if(isTeacher)throw Error('La vista de profesor no puede escribir');
    const {name,args={}}=request;
    logs.push({role,name,exercise:args.p_exercise??null});
