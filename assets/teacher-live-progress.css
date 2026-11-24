@@ -1,0 +1,13 @@
+/* Panel privado del profesorado. */
+.teacher-live-grid{width:100%;min-width:720px}
+.teacher-live-grid th,.teacher-live-grid td{text-align:center;white-space:nowrap}
+.teacher-live-grid th:first-child,.teacher-live-grid td:first-child{text-align:left;white-space:normal;min-width:150px}
+.teacher-live-members{display:block;font-size:.78rem;opacity:.8;margin-top:.25rem}
+.teacher-live-mark{display:inline-flex;align-items:center;justify-content:center;min-width:1.65rem;height:1.65rem;border-radius:.35rem;border:1px solid currentColor;font-weight:700}
+.teacher-live-mark.is-done{color:#24774b;background:#e3f3e9}
+.teacher-live-mark.is-draft{color:#815515;background:#fff1cf}
+.teacher-live-mark.is-pending{color:#67645e;background:#f0eee8}
+.teacher-live-mark.is-unknown{color:#67645e;background:transparent;border-style:dashed}
+.teacher-live-note{font-size:.85rem;margin:.55rem 0}
+.teacher-live-stats{display:flex;flex-wrap:wrap;gap:.55rem;margin:.7rem 0}
+.teacher-live-stats span{padding:.4rem .7rem;border:1px solid #b89b66;border-radius:.35rem}
