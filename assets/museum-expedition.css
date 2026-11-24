@@ -465,3 +465,24 @@
  .atlas-concept-one .atlas-mission-content{padding:3px 4px 5px}
  .atlas-concept-one .atlas-state{margin:-10px 1px 5px;padding:7px 5px;font-size:11px}
 }
+
+/* Phase 2 / 6: original decorative cartography and separately rendered progress.
+   Map routes are scenery, never an answer or an indicator of completion. */
+.atlas-concept-one .atlas-map-and-progress{grid-template-columns:minmax(0,55fr) minmax(0,45fr);gap:0;padding:.35cqw .4cqw .5cqw;min-height:16.1cqw;align-items:stretch}
+.atlas-concept-one .atlas-map{inset:0;transform:rotate(.35deg);border:0;outline:0;background:url('./atlas-pergamino-referencia.svg') center/100% 100% no-repeat;overflow:visible;box-shadow:none;filter:drop-shadow(2px 4px 2px #20140bc0)}
+.atlas-concept-one .atlas-map img{position:absolute;left:1%;top:3%;width:57%;height:94%;object-fit:fill;filter:none;mask-image:radial-gradient(ellipse farthest-corner,#000 80%,#000d 94%,transparent 100%);border-radius:3px}
+.atlas-concept-one .atlas-totals{grid-column:2;max-width:none;margin:0;align-self:stretch;display:flex;flex-direction:column;justify-content:center;padding:1cqw .8cqw .8cqw;transform:rotate(-.45deg);color:#422712}
+.atlas-concept-one .atlas-totals::before{inset:-.35cqw -.5cqw -.35cqw -.4cqw;filter:drop-shadow(2px 3px 2px #63401980)}
+.atlas-concept-one .atlas-totals h3{position:relative;letter-spacing:.025em;line-height:1.1;font-size:clamp(12px,1.1cqw,19px);padding:.15cqw .4cqw .5cqw;margin:0 0 .65cqw;border-bottom:1px solid #ad804b90}
+.atlas-concept-one .atlas-totals h3::before,.atlas-concept-one .atlas-totals h3::after{content:'❧';position:absolute;top:10%;font-size:clamp(12px,1.25cqw,21px);color:#98703e;font-weight:400}
+.atlas-concept-one .atlas-totals h3::before{left:-.3cqw;transform:rotate(-65deg)}
+.atlas-concept-one .atlas-totals h3::after{right:-.3cqw;transform:rotate(65deg) scaleX(-1)}
+.atlas-concept-one .atlas-progress-row{gap:.24cqw;margin-bottom:.6cqw}
+.atlas-concept-one .atlas-progress-row>div{font-size:clamp(10px,.84cqw,14px);gap:.15cqw}
+.atlas-concept-one .atlas-progress-row strong{font-size:clamp(12px,1.15cqw,18px);font-weight:700}
+.atlas-concept-one .atlas-progress-row meter{height:clamp(9px,1cqw,16px)}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-bar{background:linear-gradient(#c3a16b,#edcd99);border:1px solid #a07a43;box-shadow:inset 0 1px 2px #6e482940}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{background:linear-gradient(#427054,#24563e 42%,#183d2b);box-shadow:inset 0 1px 1px #ffffff20}
+.atlas-concept-one .atlas-totals p{margin:0;font-size:clamp(8px,.62cqw,10px)}
+@media(max-width:900px){.atlas-concept-one .atlas-map-and-progress{min-height:190px;padding:6px}.atlas-concept-one .atlas-totals{padding:12px}.atlas-concept-one .atlas-totals h3{font-size:15px;margin-bottom:9px}.atlas-concept-one .atlas-progress-row{gap:3px;margin-bottom:7px}.atlas-concept-one .atlas-progress-row>div{font-size:12px}}
+@media(max-width:480px){.atlas-concept-one .atlas-map-and-progress{grid-template-columns:1fr;gap:6px;padding:5px}.atlas-concept-one .atlas-map{position:relative;inset:auto;aspect-ratio:2/1;grid-column:1;z-index:0}.atlas-concept-one .atlas-map img{width:98%;height:94%;mask-image:none}.atlas-concept-one .atlas-totals{grid-column:1;width:100%;box-sizing:border-box;max-width:none;margin:0}}
