@@ -116,3 +116,36 @@
 .atlas-desk-objects img{width:46%;max-width:145px;aspect-ratio:1;object-fit:cover;border-radius:50%;transform:translate(-8%,-9%) rotate(4deg);box-shadow:2px 5px 9px #0009}
 @media(max-width:900px){.atlas-desk{grid-template-columns:1fr}.atlas-table{grid-template-columns:1fr 1fr}.atlas-desk-objects{display:none}}
 @media(max-width:480px){.atlas-table{grid-template-columns:1fr}}
+
+/* Atlas reference: museum desk composition, scoped to globe modal. */
+.atlas-concept-one{background:radial-gradient(ellipse at 9% 3%,#e6ac5266,transparent 28%),linear-gradient(90deg,#100a05a0,transparent 15%,transparent 85%,#100a0590),url('./m2-e4-mesa-archivo-museo.svg') center/cover no-repeat,#17271e}
+.atlas-brand{margin-bottom:4.1cqw;padding:.3cqw 3.5cqw .5cqw;border-bottom:3px double #c69c58}
+.atlas-display{background:radial-gradient(ellipse at 0% 0%,#e5bd6245,transparent 28%),repeating-linear-gradient(35deg,#ffffff05 0 1px,#00000006 1px 3px,transparent 3px 5px),radial-gradient(ellipse at top,#244333,#10281e 75%);border:6px ridge #b88b47}
+.atlas-header{min-width:48%;padding:.7cqw 2.8cqw;border-radius:4px;box-shadow:0 5px 12px #0009,inset 0 0 0 3px #6e451e}
+.atlas-book-spread{min-height:36cqw}
+.atlas-concept-one .atlas-book{transform:rotate(-2.5deg);box-shadow:5px 12px 18px #000b,inset 0 0 0 2px #2c130d,inset 0 0 0 4px #95613a}
+.atlas-identity-photo img{aspect-ratio:.82;object-fit:cover}
+.atlas-concept-one .atlas-ink-stamp{width:min(100%,8.1cqw);aspect-ratio:1}
+.atlas-concept-one .mp-earned .atlas-ink-stamp{border:4px double currentColor;color:#922e23}
+.atlas-concept-one .atlas-medals .mp-medal{width:min(100%,5.5cqw);height:7.2cqw}
+.atlas-map-and-progress{min-height:15.7cqw;grid-template-columns:1fr minmax(0,46%)}
+.atlas-map{border:0;outline:1px solid #8e6937;box-shadow:4px 5px 7px #0008}
+.atlas-totals{padding:1cqw 1.05cqw;box-shadow:4px 5px 9px #0007}
+.atlas-totals h3{font-size:clamp(13px,1.65cqw,25px);margin-bottom:1cqw}
+.atlas-progress-row{margin-bottom:.65cqw}
+.atlas-progress-row meter{height:clamp(10px,1.05cqw,17px)}
+.atlas-mission{border:4px ridge #c6a05e;padding:.28cqw;box-shadow:2px 5px 7px #000b,inset 0 0 0 1px #f3cf8a}
+.atlas-mission-art{min-height:8.3cqw}
+.atlas-mission-name{padding:.55cqw .1cqw;background:linear-gradient(90deg,#ac793c,#f4deb1 12%,#ead0a0 88%,#ac793c)}
+.atlas-mission.is-locked .atlas-mission-art img{filter:grayscale(.75) sepia(.45) brightness(.78)}
+.atlas-lock-badge{top:78%;background:none;border:0;box-shadow:none;color:#f3dfba}
+.atlas-seal-check{display:none}
+.atlas-state{border:2px ridge #bc965b;padding:.38cqw .12cqw}
+.atlas-mission.is-done .atlas-state{transform:rotate(-3deg);box-shadow:0 2px 3px #0006}
+.atlas-table{background:repeating-linear-gradient(3deg,#ce965530 0 1px,#00000013 1px 3px,transparent 3px 13px),linear-gradient(175deg,#4b2915,#a46d40 27%,#61361d 64%,#30190f);padding:1.3cqw 1.25cqw 1.5cqw}
+.atlas-archive{transform:rotate(-6deg);box-shadow:5px 5px 0 #b99565,9px 8px 0 #d4b382,13px 12px 0 #9b7548,15px 16px 12px #1d0d07a0}
+.atlas-archive summary{min-height:7cqw;border:2px solid #aa895750}
+.atlas-archive[open]{transform:none}
+.atlas-continue{border:5px ridge #d7ad60;background:radial-gradient(ellipse at top,#426548,#173b27 70%);padding:1cqw .4cqw;box-shadow:0 0 0 2px #593614,0 5px 9px #0009,inset 0 0 0 2px #e1ba69}
+@media(max-width:900px){.atlas-concept-one .atlas-book{transform:none}.atlas-book-spread{min-height:350px}.atlas-concept-one .atlas-ink-stamp{width:min(100%,84px)}.atlas-concept-one .atlas-medals .mp-medal{width:58px;height:75px}.atlas-map-and-progress{min-height:180px}.atlas-mission-art{min-height:110px}.atlas-archive{transform:none}}
+@media(max-width:480px){.atlas-brand{margin-bottom:22px}.atlas-book-spread{min-height:310px}.atlas-concept-one .atlas-ink-stamp{width:min(100%,67px)}.atlas-map-and-progress{grid-template-columns:1fr;min-height:0}.atlas-mission-art{min-height:100px}}
