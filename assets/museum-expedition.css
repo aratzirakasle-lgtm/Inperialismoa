@@ -410,3 +410,58 @@
 .atlas-concept-one .atlas-medals>div:nth-child(1) .atlas-photo-medal{transform:rotate(-2deg)}
 .atlas-concept-one .atlas-medals>div:nth-child(2) .atlas-photo-medal{transform:rotate(1deg)}
 @media(max-width:900px){.atlas-concept-one .atlas-medals .atlas-photo-medal{width:46px;height:76px}}
+
+/* Phase 2 / 5: actual gilt frame and clean plaques sampled from the reference.
+   The mission artwork, titles, progress dots and state labels remain live. */
+.atlas-concept-one .atlas-mission{
+ padding:1.05cqw .72cqw .82cqw;
+ border-radius:0;background:transparent;box-shadow:none;
+ filter:drop-shadow(2px 4px 3px #0b0805b0)
+}
+.atlas-concept-one .atlas-mission::after{
+ background-image:url('./atlas-marco-referencia.svg');
+ inset:0;z-index:4;pointer-events:none
+}
+.atlas-concept-one .atlas-mission-name{
+ background-image:url('./atlas-cartela-titulo-real.svg');margin:0 0 .15cqw;
+ padding:.45cqw .15cqw;font-size:clamp(10px,1.03cqw,16px);
+ color:#39200e;text-shadow:0 1px #f8dfb5
+}
+.atlas-concept-one .atlas-mission-art{
+ min-height:10.6cqw;border:0;box-shadow:none
+}
+.atlas-concept-one .atlas-mission-art::after{
+ box-shadow:inset 0 0 .65cqw #563b2270;background:linear-gradient(0deg,#39251145,transparent 34%)
+}
+.atlas-concept-one .atlas-mission-content{
+ display:flex;flex-direction:column;align-items:stretch;
+ padding:.15cqw .24cqw .3cqw;border:0;
+ box-shadow:inset 0 -2px 5px #80542b30
+}
+.atlas-concept-one .atlas-state{
+ order:-1;z-index:3;margin:-.95cqw .1cqw .35cqw;
+ padding:.5cqw .28cqw;border:0;border-radius:0;box-shadow:none;
+ background:url('./atlas-cartela-titulo-real.svg') center/100% 100% no-repeat;
+ color:#452b16;text-shadow:0 1px #f1dab3;
+ filter:drop-shadow(1px 2px 1px #3d271b80)
+}
+.atlas-concept-one .atlas-mission.is-done .atlas-state{
+ background:url('./atlas-cartela-estado-real.svg') center/100% 100% no-repeat;
+ color:#f7e5b5;text-shadow:0 1px #1d351e;transform:rotate(-2.5deg)
+}
+.atlas-concept-one .atlas-mission.is-active .atlas-state{
+ background:url('./atlas-cartela-titulo-real.svg') center/100% 100% no-repeat;
+ color:#633b13;filter:drop-shadow(0 0 3px #eac079)
+}
+.atlas-concept-one .atlas-mission.is-active{box-shadow:none;filter:drop-shadow(0 0 5px #e1b65b90) drop-shadow(2px 4px 3px #0b0805a0)}
+.atlas-concept-one .atlas-mission.is-locked .atlas-state{opacity:.94}
+.atlas-concept-one .atlas-mission.is-locked::after{filter:saturate(.72) brightness(.92)}
+.atlas-concept-one .atlas-lock-badge{top:65%}
+.atlas-concept-one .atlas-mission-content h3{margin:.1cqw 0 .25cqw;min-height:2.5em}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-mission{padding:13px 10px 12px}
+ .atlas-concept-one .atlas-mission-name{padding:7px 3px;margin-bottom:2px;font-size:14px}
+ .atlas-concept-one .atlas-mission-art{min-height:120px}
+ .atlas-concept-one .atlas-mission-content{padding:3px 4px 5px}
+ .atlas-concept-one .atlas-state{margin:-10px 1px 5px;padding:7px 5px;font-size:11px}
+}
