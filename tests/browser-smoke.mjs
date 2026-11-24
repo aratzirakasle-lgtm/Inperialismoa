@@ -1213,6 +1213,8 @@ try{
    try{
      await waitVisible(page,'#success');
      assert.match(await page.locator('#completion-title').innerText(),/Lehen misioa osatuta/);
+     assert.equal(await page.locator('#m1-passport-reward .mp-earned').count(),1);
+     assert.equal(await page.locator('#m1-passport-reward .mp-medal').isVisible(),true);
      assert.equal(await page.locator('#mission2-link').getAttribute('href'),'./index.html#mission2');
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[],
        'Recuperar el sello no vuelve a registrar intentos');
