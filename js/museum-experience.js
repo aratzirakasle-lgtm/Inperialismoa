@@ -37,4 +37,4 @@ export function openMuseumBrief(mission){
  dialog.addEventListener('close',()=>{dialog.remove();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
  dialog.showModal();
 }
-document.addEventListener('click',event=>{const button=event.target.closest?.('[data-museum-brief]');if(button)openMuseumBrief(Number(button.dataset.museumBrief))});
+if(typeof document!=='undefined')document.addEventListener('click',event=>{const button=event.target.closest?.('[data-museum-brief]');if(button)openMuseumBrief(Number(button.dataset.museumBrief))});
