@@ -1,6 +1,7 @@
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261123-aula1";
+import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261123-aula3";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261123-interv3a";
@@ -27,6 +28,7 @@ const key = "inperialismoa-demo-v1";
 let conceptCHome=new URLSearchParams(location.search).get("museo")==="c";
 let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 let classProgressRows=[],classProgressError=false,classProgressTicker=null;
+let classStudentRoster=[],issuedClassCredentials=[];
 const storage = {read(){try{return JSON.parse(localStorage.getItem(key))}catch{return null}},save(){if(demo)localStorage.setItem(key,JSON.stringify(demoData))}};
 function initDemo(){demoData=storage.read()||{progress:[{team_id:"nilo",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:1},{team_id:"atlas",mission_id:1,completed_at:time(),completed_by:"demo",attempt_count:2},{team_id:"nilo",mission_id:2,completed_at:time(),completed_by:"demo",attempt_count:1}],claims:[{country_code:"EG",team_id:"nilo",claimed_at:time()}],submissions:[],attempts:[]};teams=DEMO_TEAMS;missions=DEMO_MISSIONS.map(euskaratuMisioa);progress=demoData.progress;claims=demoData.claims;submissions=demoData.submissions;attempts=demoData.attempts}
 const accountIsTeacher=()=>user?.role==="teacher";
@@ -48,8 +50,10 @@ const missionById=id=>missions.find(m=>Number(m.id)===Number(id));
 const cleanHtml = s=>esc(s).replace(/\n/g,"<br>");
 function toast(message){const el=$("#toast");el.textContent=message;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,3600)}
 function modal(html){$("#modal-body").innerHTML=html;$("#modal").hidden=false}
-function closeModal(){$("#modal").hidden=true}
-function switchScreen(logged){if(!logged){unmountClassroomProgressPanel();$("#view")?.__galleryCleanup?.();teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
+function closeModal(){$("#modal").hidden=true;
+ if(issuedClassCredentials.length){issuedClassCredentials=[];$("#modal-body").textContent="";}
+}
+function switchScreen(logged){if(!logged){issuedClassCredentials=[];classStudentRoster=[];unmountClassroomProgressPanel();$("#view")?.__galleryCleanup?.();teacherPreview=false;teacherPreviewTeamId=null}$("#loading").hidden=true;$("#login-screen").hidden=logged;$("#app-shell").hidden=!logged;$("#demo-banner").hidden=!demo;$("#demo-access").hidden=!demo;$("#mode-badge").hidden=!demo;if(logged)render()}
 function render(){if(!user)return;if(!(currentMission===0&&conceptCHome&&!accountIsTeacher()))unmountClassroomProgressPanel();const showGallery=currentMission===1&&!galleryQuestionsOpen&&!isTeacher();if(!showGallery&&$("#view").__galleryCleanup)$("#view").__galleryCleanup();$("#app-shell").classList.toggle("gallery-active",showGallery);$("#app-shell").classList.toggle("museum-replica-home",!isTeacher()&&currentMission===0&&!conceptCHome);$("#app-shell").classList.toggle("museo-c-enabled",!isTeacher()&&currentMission===0&&conceptCHome&&!!viewTeamId());$("#topbar-user").textContent=displayName();$("#team-summary").innerHTML=isTeacher()?'<div class="team-name">Irakaslearen ikuspegia</div><p class="team-members">Kudeaketa eta jarraipen pribatua</p>':('<div class="team-name">'+esc(mine()?.name||"Taldea")+'</div><div class="team-members">'+(mine()?.members||[]).map(esc).join(" · ")+'</div><div class="team-progress"><span style="width:'+Math.round(100*[1,2].filter(id=>completed(viewTeamId(),id)).length/4)+'%"></span></div><div class="team-members">'+[1,2].filter(id=>completed(viewTeamId(),id)).length+' / 4 misio osatuta</div>');$("#mission-count").textContent=isTeacher()?missions.length:4;
 $("#mission-nav").innerHTML=(isTeacher()?'<button class="nav-mission '+(currentMission===0&&!teacherPreview?'active':'')+'" data-view="teacher"><span class="nav-number">⌂</span><span class="nav-title">Irakaslearen panela</span></button><button class="nav-mission '+(teacherPreview?'active':'')+'" data-view="preview"><span class="nav-number">👁</span><span class="nav-title">Ikaslearen ikuspegia</span></button>':'<button class="nav-mission '+(currentMission===0?'active':'')+'" data-view="home"><span class="nav-number">⌂</span><span class="nav-title">Nire espedizioa</span></button>')+(isTeacher()?missions:missions.filter(m=>m.id>=1&&m.id<=4)).map(m=>{const locked=(!isTeacher()&&m.id>=3)||!available(m.id),done=!isTeacher()&&completed(viewTeamId(),m.id);return '<button class="nav-mission '+(currentMission===m.id?'active ':'')+(done?'done':'')+'" data-mission="'+m.id+'" '+(locked?'disabled':'')+'><span class="nav-number">'+(done?'✓':locked?'🔒':m.id)+'</span><span><span class="nav-title">'+esc(m.title)+'</span><br><span class="nav-sub">'+(locked?(m.id>=3?'Prestatzen':'Blokeatuta'):done?'Osatuta':'Eskuragarri')+'</span></span></button>'}).join("");
 paintScoreboard();
@@ -276,7 +280,53 @@ async function createTestStudents(){if(demo||!isTeacher())return;const button=$(
 const criteria=[["rigor","Rigor y precisión histórica",3],["causas","Causas y consecuencias",2],["fuentes","Fuentes y mapas",2],["critica","Reflexión crítica",2],["presentacion","Organización y presentación",1]];
 const personName=id=>profiles.find(p=>p.id===id)?.display_name||"—";
 const teamName=id=>teams.find(t=>t.id===id)?.name||"—";
-function teacherStudentsPanel(){const ids=visibleTeacherIds();const students=profiles.filter(p=>p.role==="student"&&ids.has(p.team_id));return '<div class="card"><h3>Seguimiento individual · solo profesor</h3><p class="card-sub">Cada intento identifica a quien envió las respuestas, no mide por sí solo la contribución de todo el equipo.</p><div class="table-scroll"><table><thead><tr><th>Alumno</th><th>Equipo</th><th>Envíos</th><th>Último envío</th><th>Promedio de aciertos</th></tr></thead><tbody>'+students.map(p=>{const rows=attempts.filter(a=>a.submitted_by===p.id);const pct=rows.length?Math.round(100*rows.reduce((v,a)=>v+a.correct_count/Math.max(1,a.question_count),0)/rows.length)+'%':'—';return '<tr><td>'+esc(p.display_name)+'</td><td>'+esc(teamName(p.team_id))+'</td><td>'+rows.length+'</td><td>'+fmt(rows[0]?.created_at)+'</td><td>'+pct+'</td></tr>'}).join("")+'</tbody></table></div>'+(students.length?'':'<div class="empty">Todavía no hay alumnos asignados.</div>')+'</div>'}
+// Preparar alumnos solo desde una sesión docente validada. Las claves se
+// muestran una única vez en esta ventana y nunca se envían a GitHub.
+async function enrollTeacherStudents(classId,rosterId=null){
+ if(!isTeacher()||demo)return;
+ const cl=classes.find(c=>String(c.id)===String(classId));
+ if(!cl)return toast('Clase no autorizada.');
+ const target=rosterId?
+   document.querySelector('[data-roster-reset="'+rosterId+'"]'):
+   document.querySelector('[data-roster-create="'+classId+'"]');
+ if(target)target.disabled=true;
+ try{
+   const body={action:rosterId?'reset':'create',class_id:classId};
+   if(rosterId)body.roster_id=rosterId;
+   const {data,error}=await db.functions.invoke('teacher-enroll-class-students',{body});
+   if(error)throw error;
+   if(data?.error)throw Error(data.error);
+   const newly=Array.isArray(data?.created)?data.created:[];
+   // El listado y los usuarios del profesor se actualizan con el servidor.
+   await refreshData();render();
+   if(!newly.length){
+     toast('Kontuak lehendik sortuta daude. Pasahitzak berritu daitezke.');
+     return;
+   }
+   issuedClassCredentials=newly;
+   const credentialRows=newly.map(x=>'<tr><td>'+esc(x.team)+'</td><td>'+
+     esc(x.name)+'</td><td><code>'+esc(x.email)+'</code></td><td><code>'+
+     esc(x.password)+'</code></td></tr>').join('');
+   const warning=data.problem?'<div class="notice amber">'+esc(data.problem)+
+     ' Gorde beheko kontuak eta saiatu berriz gainerakoak sortzeko.</div>':'';
+   modal('<h2 id="modal-title">Accesos individuales · '+esc(cl.name)+'</h2>'+
+     '<p>Estas contraseñas se muestran una sola vez. Descarga el listado y guárdalo '+
+     'de forma privada antes de cerrar la ventana. No lo publiques ni lo subas a GitHub.</p>'+
+     warning+'<p><strong>'+newly.length+' credenciales nuevas</strong></p>'+
+     '<div class="table-scroll"><table><thead><tr><th>Equipo</th><th>Alumno</th>'+
+     '<th>Usuario</th><th>Contraseña</th></tr></thead><tbody>'+
+     credentialRows+'</tbody></table></div>'+
+     '<p><button type="button" class="btn primary" id="download-class-credentials">'+
+     '↓ Descargar CSV privado</button> <button type="button" class="btn outline" '+
+     'id="copy-class-credentials">Copiar credenciales</button></p>');
+ }catch(error){
+   console.error('No se ha podido completar el alta del alumnado',error);
+   toast('Error al preparar las cuentas: '+String(error?.message||'sin conexión'));
+ }finally{
+   if(target?.isConnected)target.disabled=false;
+ }
+}
+function teacherStudentsPanel(){const ids=visibleTeacherIds();const students=profiles.filter(p=>p.role==="student"&&ids.has(p.team_id));return '<div class="card"><h3>Seguimiento individual · solo profesor</h3><p class="card-sub">Cada intento identifica a quien envió las respuestas, no mide por sí solo la contribución de todo el equipo.</p><div class="table-scroll"><table><thead><tr><th>Alumno</th><th>Equipo</th><th>Envíos</th><th>Último envío</th><th>Promedio de aciertos</th></tr></thead><tbody>'+students.map(p=>{const rows=attempts.filter(a=>a.submitted_by===p.id);const pct=rows.length?Math.round(100*rows.reduce((v,a)=>v+a.correct_count/Math.max(1,a.question_count),0)/rows.length)+'%':'—';return '<tr><td>'+esc(p.display_name)+'</td><td>'+esc(teamName(p.team_id))+'</td><td>'+rows.length+'</td><td>'+fmt(rows[0]?.created_at)+'</td><td>'+pct+'</td></tr>'}).join("")+'</tbody></table></div>'+(students.length?'':'<div class="empty">Todavía no hay alumnos asignados.</div>')+'</div>'+renderTeacherRoster(classes,teams,classStudentRoster,teacherClassId)}
 function teacherQuestionsPanel(){const ids=visibleTeacherIds(),validAttempts=new Set(attempts.filter(a=>ids.has(a.team_id)).map(a=>a.id));const qs=missions.flatMap(m=>(m.questions||[]).map(q=>({...q,mission:m.id})));return '<div class="card"><h3>Dificultades por pregunta · solo profesor</h3><p class="card-sub">Frecuencia de errores en los envíos registrados. Un porcentaje elevado ayuda a detectar conceptos para reforzar.</p><div class="table-scroll"><table><thead><tr><th>Misión</th><th>Pregunta</th><th>Respuestas</th><th>Errores</th><th>% de error</th></tr></thead><tbody>'+qs.map(q=>{const rows=answerDetails.filter(x=>x.question_id===q.id&&validAttempts.has(x.attempt_id));const errors=rows.filter(x=>!x.is_correct).length;const pct=rows.length?Math.round(100*errors/rows.length):null;return '<tr><td>'+q.mission+'</td><td>'+esc(q.text)+'</td><td>'+rows.length+'</td><td>'+errors+'</td><td>'+(pct===null?'—':pct+'%')+'</td></tr>'}).join("")+'</tbody></table></div><button class="btn outline" id="export-errors">↓ Exportar errores por pregunta</button></div>'}
 function teacherClassesPanel(){return '<div class="card"><h3>Clases y cursos</h3><p class="card-sub">Cada clase tendrá sus propios equipos, marcadores, países y registros privados. El profesor ve sus clases.</p><div class="table-scroll"><table><thead><tr><th>Clase</th><th>Curso</th><th>Equipos</th></tr></thead><tbody>'+classes.map(c=>'<tr><td>'+esc(c.name)+'</td><td>'+esc(c.school_year)+'</td><td>'+teams.filter(t=>t.class_id===c.id).length+'</td></tr>').join("")+'</tbody></table></div><form id="create-class-form" class="card"><h3>Nueva clase</h3><label>Nombre <input name="class_name" maxlength="100" required placeholder="4.º ESO A"></label><label>Curso escolar <input name="school_year" maxlength="25" value="2026-2027" required></label><button class="btn primary">Crear clase</button></form><form id="create-team-form" class="card"><h3>Nuevo equipo</h3><label>Clase <select name="class_id" required>'+classes.map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+' · '+esc(c.school_year)+'</option>').join("")+'</select></label><label>Apodo del equipo <input name="team_name" maxlength="80" required placeholder="Equipo Atlas"></label><button class="btn primary">Crear equipo</button></form></div>'}
 function teacherRubricsPanel(){const ids=visibleTeacherIds();return '<div class="card"><h3>Rúbrica privada de las entregas PDF</h3><p class="card-sub">La nota, los criterios y los comentarios se guardan para el profesor: el alumnado no puede consultar la tabla de evaluaciones.</p><div class="table-scroll"><table><thead><tr><th>Equipo</th><th>Documento</th><th>Nota /10</th><th>Revisado</th><th>Acción</th></tr></thead><tbody>'+submissions.filter(s=>ids.has(s.team_id)).map(s=>{const a=assessments.find(a=>a.submission_id===s.id);return '<tr><td>'+esc(teamName(s.team_id))+'</td><td>'+esc(s.filename)+'</td><td>'+(a?Number(a.score_total).toFixed(1):'Pendiente')+'</td><td>'+(a?fmt(a.reviewed_at):'—')+'</td><td><button class="btn tiny outline" data-assess="'+esc(s.id)+'">Evaluar</button></td></tr>'}).join("")+'</tbody></table></div>'+(submissions.length?'':'<div class="empty">Aún no hay PDF para evaluar.</div>')+'</div>'}
@@ -308,7 +358,7 @@ async function refreshData(){if(demo)return;
  // Las consultas son independientes: resolverlas juntas evita esperas sucesivas.
  const teacher=accountIsTeacher();
  const empty=()=>Promise.resolve({data:[],error:null});
- const [gs,gd,bs,bd,es,ea,ba,ga,m1f,cp]=await Promise.all([
+ const [gs,gd,bs,bd,es,ea,ba,ga,m1f,cp,roster]=await Promise.all([
    db.from("gallery_team_state").select("team_id,locked_ids,locked_positions,completed_at,updated_at"),
    teacher?db.from("gallery_team_drafts").select("team_id,placements,revision,updated_at"):empty(),
    db.from("bi_sistema_team_state").select("team_id,locked_ids,challenge_locked,completed_at"),
@@ -318,7 +368,8 @@ async function refreshData(){if(demo)return;
    teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    db.from("mission1_exercise_completions").select("team_id,exercise"),
-   db.rpc("mission1_class_progress")
+   db.rpc("mission1_class_progress"),
+   teacher?db.from("class_student_roster").select("id,team_id,slot,display_name,auth_user_id"):empty()
  ]);
  for(const result of [gs,gd,bs,bd,es,ea,ba,ga,m1f])if(result.error)throw result.error;
  galleryStates=gs.data||[];
@@ -330,6 +381,10 @@ async function refreshData(){if(demo)return;
  biSistemaAttempts=ba.data||[];
  galleryHistory=ga.data||[];
  mission1FifthStates=m1f.data||[];
+ if(roster.error){
+   classStudentRoster=[];
+   console.warn('Irakaslearen ikasle-zerrenda ezin izan da kargatu',roster.error);
+ }else classStudentRoster=teacher?(roster.data||[]):[];
  if(cp.error){
    classProgressError=true;
    console.warn('Taldeen aurrerapena',cp.error);
@@ -403,8 +458,21 @@ if(b.id==="teacher-preview-gallery"&&accountIsTeacher()){
    teacherPreview=false;teacherPreviewTeamId=null;
  }
  currentMission=0;responses={};checkFeedback=null;render();return;
-}if(b.dataset.next){closeModal();changeMission(Number(b.dataset.next))}if(b.dataset.continent){continent=b.dataset.continent;selectedCountry=null;renderFinal()}if(b.dataset.country)chooseCountry(b.dataset.country);if(b.dataset.confirmCountry)await confirmClaim(b.dataset.confirmCountry);if(b.dataset.teacherTab){teacherTab=b.dataset.teacherTab;renderTeacher()}if(b.dataset.releaseCountry)modal('<h2 id="modal-title">¿Liberar territorio?</h2><p>El país volverá a estar disponible para otros equipos.</p><button class="btn warn full" data-yes-release="'+b.dataset.releaseCountry+'">Confirmar liberación</button>');if(b.dataset.yesRelease){closeModal();await releaseCountry(b.dataset.yesRelease)}if(b.dataset.download)await downloadSubmission(b.dataset.download);if(b.dataset.assess)openAssessment(b.dataset.assess)});
+}if(b.dataset.next){closeModal();changeMission(Number(b.dataset.next))}if(b.dataset.continent){continent=b.dataset.continent;selectedCountry=null;renderFinal()}if(b.dataset.country)chooseCountry(b.dataset.country);if(b.dataset.confirmCountry)await confirmClaim(b.dataset.confirmCountry);if(b.dataset.rosterCreate){await enrollTeacherStudents(b.dataset.rosterCreate);return}
+if(b.dataset.rosterReset){await enrollTeacherStudents(b.dataset.rosterClass,b.dataset.rosterReset);return}
+if(b.dataset.teacherTab){teacherTab=b.dataset.teacherTab;renderTeacher()}if(b.dataset.releaseCountry)modal('<h2 id="modal-title">¿Liberar territorio?</h2><p>El país volverá a estar disponible para otros equipos.</p><button class="btn warn full" data-yes-release="'+b.dataset.releaseCountry+'">Confirmar liberación</button>');if(b.dataset.yesRelease){closeModal();await releaseCountry(b.dataset.yesRelease)}if(b.dataset.download)await downloadSubmission(b.dataset.download);if(b.dataset.assess)openAssessment(b.dataset.assess)});
 document.addEventListener("change",e=>{if(e.target.id==="teacher-class-select"&&isTeacher()){teacherClassId=e.target.value;paintScoreboard();renderTeacher();return}if(e.target.matches("[data-question]")){responses[e.target.dataset.question]=Number(e.target.value);const q=e.target.dataset.question;if(checkFeedback?.incorrect?.includes(q))checkFeedback.incorrect=checkFeedback.incorrect.filter(id=>id!==q);const btn=$("#check-mission");if(btn){const m=missionById(currentMission);btn.disabled=m.questions.some(x=>responses[x.id]===undefined)}}});
 document.addEventListener("submit",async e=>{if(e.target.id==="login-form"){e.preventDefault();if(demo){$("#login-error").textContent="Aukeratu beheko erakustaldi-kontuetako bat.";return}await signInReal(e)}if(e.target.id==="upload-form")await uploadPdf(e);if(e.target.id==="assessment-form"){e.preventDefault();await saveAssessment(e.target)}if(e.target.id==="create-class-form"){e.preventDefault();await createClass(e.target)}if(e.target.id==="create-team-form"){e.preventDefault();await createTeam(e.target)}});
-document.addEventListener("click",async e=>{if(e.target.closest("#check-mission"))await submitMission();if(e.target.closest("#claim-button")&&selectedCountry)await claimCountry(selectedCountry);if(e.target.closest("#create-test-students"))await createTestStudents();if(e.target.closest("#copy-test-credentials")){const c=window.__testCredentials||[];if(c.length){await navigator.clipboard.writeText(c.map(a=>a.name+"\nUsuario: "+a.email+"\nContraseña: "+a.password).join("\n\n"));toast("Credenciales copiadas.");}}if(e.target.closest("#export-progress"))downloadCSV();if(e.target.closest("#export-errors"))exportErrors();if(e.target.closest("#reset-demo")){localStorage.removeItem(key);initDemo();render();toast("Demostración reiniciada")}if(e.target.closest("#modal-close")||e.target.id==="modal")closeModal();if(e.target.closest("#toggle-password")){const i=$("#login-password");i.type=i.type==="password"?"text":"password"}if(e.target.closest("#logout-btn")){if(demo){user=null;currentMission=0;switchScreen(false)}else await db.auth.signOut()}});
+document.addEventListener("click",async e=>{if(e.target.closest("#check-mission"))await submitMission();if(e.target.closest("#claim-button")&&selectedCountry)await claimCountry(selectedCountry);if(e.target.closest("#create-test-students"))await createTestStudents();if(e.target.closest("#copy-test-credentials")){const c=window.__testCredentials||[];if(c.length){await navigator.clipboard.writeText(c.map(a=>a.name+"\nUsuario: "+a.email+"\nContraseña: "+a.password).join("\n\n"));toast("Credenciales copiadas.");}}if(e.target.closest("#copy-class-credentials")&&issuedClassCredentials.length){
+   await navigator.clipboard.writeText(issuedClassCredentials.map(c=>
+     [c.team,c.name,c.email,c.password].join(' | ')).join('\n'));
+   toast('Credenciales copiadas. Guárdalas de forma privada.');
+ }
+ if(e.target.closest("#download-class-credentials")&&issuedClassCredentials.length){
+   exportRows([["Equipo","Alumno","Usuario","Contraseña"],
+     ...issuedClassCredentials.map(c=>[c.team,c.name,c.email,c.password])],
+     '4B-credenciales-PRIVADO.csv');
+   toast('Listado privado preparado. Custodia el archivo.');
+ }
+ if(e.target.closest("#export-progress"))downloadCSV();if(e.target.closest("#export-errors"))exportErrors();if(e.target.closest("#reset-demo")){localStorage.removeItem(key);initDemo();render();toast("Demostración reiniciada")}if(e.target.closest("#modal-close")||e.target.id==="modal")closeModal();if(e.target.closest("#toggle-password")){const i=$("#login-password");i.type=i.type==="password"?"text":"password"}if(e.target.closest("#logout-btn")){if(demo){user=null;currentMission=0;switchScreen(false)}else await db.auth.signOut()}});
 start();
