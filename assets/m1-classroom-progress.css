@@ -20,11 +20,11 @@
 @media(max-width:720px){.m1-class-grid{grid-template-columns:minmax(70px,1fr) repeat(5,19px) 25px}}
 
 /* Recuadro desplegable de las páginas 2–5: cerrado por defecto. */
-.m1-class-widget{position:fixed;z-index:115;right:12px;bottom:12px;display:flex;flex-direction:column;align-items:flex-end;gap:7px;max-width:calc(100vw - 24px);font-family:Georgia,'Times New Roman',serif}
-.m1-class-toggle{appearance:none;cursor:pointer;background:linear-gradient(180deg,#365143,#172f26);border:1px solid #c39c61;border-radius:9px;padding:10px 13px;color:#f7deb1;font:bold 10px Georgia,'Times New Roman',serif;letter-spacing:.06em;box-shadow:0 4px 13px #0008;text-shadow:0 1px 2px #0009}
+.m1-class-widget{position:fixed;z-index:115;left:12px;right:auto;bottom:12px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;max-width:calc(100vw - 24px);font-family:Georgia,'Times New Roman',serif;pointer-events:none}
+.m1-class-toggle{pointer-events:auto;appearance:none;cursor:pointer;background:linear-gradient(180deg,#365143,#172f26);border:1px solid #c39c61;border-radius:9px;padding:10px 13px;color:#f7deb1;font:bold 10px Georgia,'Times New Roman',serif;letter-spacing:.06em;box-shadow:0 4px 13px #0008;text-shadow:0 1px 2px #0009}
 .m1-class-toggle>span{font-size:14px;color:#f9d993;margin-right:5px}
 .m1-class-toggle:hover,.m1-class-toggle:focus-visible{outline:2px solid #e3bf74;outline-offset:2px}
-.m1-class-panel{width:min(316px,calc(100vw - 24px));max-height:min(70vh,560px);overflow:hidden;border:2px solid #ae8c56;border-radius:9px;background:#f8f4e9;color:#263e35;box-shadow:0 12px 35px #000b;display:flex;flex-direction:column}
+.m1-class-panel{pointer-events:auto;width:min(316px,calc(100vw - 24px));max-height:min(70vh,560px);overflow:hidden;border:2px solid #ae8c56;border-radius:9px;background:#f8f4e9;color:#263e35;box-shadow:0 12px 35px #000b;display:flex;flex-direction:column}
 .m1-class-panel[hidden]{display:none!important}
 .m1-class-panel-head{background:linear-gradient(90deg,#213c30,#3b533f);padding:9px 12px;display:flex;justify-content:space-between;align-items:center;color:#f7e3b6;font:bold 11px Georgia,'Times New Roman',serif;letter-spacing:.09em}
 .m1-class-close{border:0;background:transparent;color:#f7e3b6;cursor:pointer;font-size:19px;line-height:1.1;padding:0 5px}
@@ -33,5 +33,5 @@
 .m1-class-panel-body .m1-class-mark{width:21px;height:21px}
 .m1-class-panel-body .m1-class-mark.is-mission{width:25px;height:24px}
 .m1-class-panel-body .m1-class-name{font-size:12px}
-@media(max-width:420px){.m1-class-widget{right:8px;bottom:8px}.m1-class-panel-body .m1-class-grid{grid-template-columns:minmax(60px,1fr) repeat(5,20px) 23px;gap:2px}}
+@media(max-width:420px){.m1-class-widget{left:8px;right:auto;bottom:8px}.m1-class-panel-body .m1-class-grid{grid-template-columns:minmax(60px,1fr) repeat(5,20px) 23px;gap:2px}}
 @media(prefers-reduced-motion:reduce){.m1-class-widget *{transition:none!important}}
