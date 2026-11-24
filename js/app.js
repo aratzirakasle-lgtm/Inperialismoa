@@ -400,7 +400,7 @@ async function refreshData(){if(demo)return;
 
 }
 async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-demo",name:"Docente (demo)",role:"teacher"}:{id:"student-demo",name:"Ane (demo)",role:"student",team_id:"atlas"};currentMission=0;teacherTab="overview";responses={};checkFeedback=null;switchScreen(true)}
-async function signInReal(e){e.preventDefault();const email=$("#login-user").value.trim(),password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession()}catch(err){$("#login-error").textContent="Ezin izan da saioa hasi. Egiaztatu datuak edo galdetu irakasleari."}finally{btn.disabled=false}}
+async function signInReal(e){e.preventDefault();const login=$("#login-user").value.trim(),email=login.includes("@")?login:login.toLowerCase()+"@example.com",password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession()}catch(err){$("#login-error").textContent="Ezin izan da saioa hasi. Egiaztatu datuak edo galdetu irakasleari."}finally{btn.disabled=false}}
 // Agrupar notificaciones simultáneas sin perder los cambios recibidos.
 async function refreshFromRealtime(){
  if(!user)return;
