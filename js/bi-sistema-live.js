@@ -1,7 +1,7 @@
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261124-audit1";
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261124-members1";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261123-interv3a";
 

@@ -36,3 +36,10 @@ test('La misión completa es una marca separada de los cinco ejercicios',()=>{
  assert.ok(html.includes('1. misioa osatu gabe'));
  assert.ok(html.includes('1. ariketa gaindituta'));
 });
+
+test('Los integrantes aparecen bajo su equipo y nunca se muestran los de otra clase',()=>{
+ const html=renderMission1ClassProgress([{...rows[0],member_names:['Ane','Jon <b>']},{...rows[2],member_names:['Beste ikaslea']}],{classId:'class1'});
+ assert.match(html,/Atlas<span class="m1-class-members"><span>Ane<\/span><span>Jon &lt;b&gt;<\/span>/);
+ assert.ok(!html.includes('Beste ikaslea'));
+ assert.ok(!html.includes('Jon <b>'));
+});

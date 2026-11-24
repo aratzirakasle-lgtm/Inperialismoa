@@ -1,7 +1,7 @@
 /* Acceso discreto al marcador desde los ejercicios 2–5.
  * Lee solo una RPC autorizada por clase. No interfiere con los juegos.
  */
-import { renderMission1ClassProgress } from './classroom-progress.js?v=20261123-aula1';
+import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-members1';
 export function unmountClassroomProgressPanel(){
  const old=document.querySelector('.m1-class-widget');
  if(old?.__classProgressCleanup)old.__classProgressCleanup();
@@ -13,7 +13,7 @@ export function mountClassroomProgressPanel(client,teamId){
  if(!document.querySelector('link[href*="m1-classroom-progress.css"]')){
    const style=document.createElement('link');
    style.rel='stylesheet';
-   style.href='./assets/m1-classroom-progress.css?v=20261124-audit1';
+   style.href='./assets/m1-classroom-progress.css?v=20261124-members1';
    document.head.append(style);
  }
  const root=document.createElement('aside');
@@ -40,7 +40,7 @@ export function mountClassroomProgressPanel(client,teamId){
    if(refreshing){pending=true;return}
    refreshing=true;
    try{
-     const {data,error}=await client.rpc('mission1_class_progress');
+     const {data,error}=await client.rpc('mission1_class_progress_members');
      if(error)throw error;
      rows=Array.isArray(data)?data:[];
      hadError=false;

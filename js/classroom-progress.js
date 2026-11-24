@@ -1,5 +1,5 @@
 /* Marcador de aula (misión 1). Solo utiliza datos mínimos confirmados por Supabase:
- * nombre del equipo y seis marcas de finalización. Nunca respuestas o intentos.
+ * nombre del equipo, integrantes registrados y seis marcas de finalización. Nunca respuestas o intentos.
  * Función pura para permitir pruebas y actualización sin remontar las salas.
  */
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => (
@@ -27,9 +27,11 @@ export function renderMission1ClassProgress(rows,{
     const own=String(row.team_id)===String(ownTeamId);
     const checks=flags.map(n=>mark(row['exercise_'+n]===true,n+'. ariketa')).join('');
     const total=flags.filter(n=>row['exercise_'+n]===true).length;
+    const names=Array.isArray(row.member_names)?row.member_names.filter(name=>typeof name==='string'&&name.trim()):[];
+    const members=names.length?'<span class="m1-class-members">'+names.map(name=>'<span>'+esc(name.trim())+'</span>').join('')+'</span>':'';
     return '<div class="m1-class-grid m1-class-team'+(own?' is-own':'')+'">'+
       '<span class="m1-class-name" title="'+esc(row.team_name)+'">'+esc(row.team_name)+
-        (own?'<span class="m1-class-you">ZUEN TALDEA</span>':'')+
+        members+(own?'<span class="m1-class-you">ZUEN TALDEA</span>':'')+
         '<small>'+total+'/5</small></span>'+
       checks+mark(row.mission_completed===true,'1. misioa',true)+'</div>';
   }).join('');

@@ -1,9 +1,9 @@
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261122-osatuta16";
-import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261123-aula1";
+import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-members1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
-import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-audit1";
+import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-classboard2";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
@@ -99,7 +99,7 @@ async function syncClassProgress(){
  if(!db||!user||demo)return;
  const forUser=user.id;
  try{
-   const {data,error}=await db.rpc('mission1_class_progress');
+   const {data,error}=await db.rpc('mission1_class_progress_members');
    if(!user||user.id!==forUser)return; // Evitar mezclar datos de dos sesiones.
    if(error)throw error;
    classProgressRows=Array.isArray(data)?data:[];
@@ -394,7 +394,7 @@ async function refreshData(){if(demo)return;
    teacher?db.from("bi_sistema_attempts").select("id,team_id,submitted_by,phase,created_at,correct_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    teacher?db.from("gallery_attempts").select("id,team_id,submitted_by,created_at,correct_count,question_count,wrong_ids").order("created_at",{ascending:false}).limit(3000):empty(),
    db.from("mission1_exercise_completions").select("team_id,exercise"),
-   db.rpc("mission1_class_progress"),
+   db.rpc("mission1_class_progress_members"),
    teacher?db.from("class_student_roster").select("id,team_id,slot,display_name,auth_user_id"):empty()
  ]);
  for(const result of [gs,gd,bs,bd,es,ea,ba,ga,m1f])if(result.error)throw result.error;

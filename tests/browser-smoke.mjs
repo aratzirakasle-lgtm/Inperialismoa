@@ -121,14 +121,14 @@ async function open(role,path,viewport={width:1365,height:900}){
        if(name==='teacher_set_class_access'){tables.classes.find(c=>c.id===args.p_class_id).access_open=args.p_open;return {data:args.p_open,error:null}}
        // Marcador de aula: lectura autorizada, nunca escritura ni intento.
        // No incluir esta consulta en el registro de mutaciones simulado.
-       if(name==='mission1_class_progress'){
+       if(name==='mission1_class_progress'||name==='mission1_class_progress_members'){
          const gs=tables.gallery_team_state?.[0];
          const bs=tables.bi_sistema_team_state?.[0];
          const ds=tables.empire_dossier_team_state?.[0];
          const steps=tables.mission1_exercise_completions||[];
          const e3=steps.some(x=>Number(x.exercise)===3);
          const e5=steps.some(x=>Number(x.exercise)===5);
-         return {data:[{team_id:'team1',class_id:'class1',team_name:'Exploradores',
+         return {data:[{team_id:'team1',class_id:'class1',team_name:'Exploradores',member_names:['Ane (proba)','Jon (proba)'],
            exercise_1:!!gs?.completed_at,exercise_2:!!bs?.completed_at,
            exercise_3:e3,exercise_4:!!ds?.completed_at,
            exercise_5:e5,mission_completed:e5}],error:null};
@@ -398,6 +398,8 @@ try{
      await page.locator('[data-m1-class-progress]').click();
      await waitVisible(page,'#m1-class-modal-board .m1-class-team');
      assert.match(await page.locator('#m1-class-modal-board').textContent(),/Exploradores/);
+     assert.match(await page.locator('#m1-class-modal-board .m1-class-members').textContent(),/Ane \(proba\)/);
+     assert.match(await page.locator('#m1-class-modal-board .m1-class-members').textContent(),/Jon \(proba\)/);
      assert.match(await page.locator('#m1-class-modal-board').textContent(),/ZUEN TALDEA/);
      assert.equal(await page.locator('#m1-class-modal-board .m1-class-mark').count(),6);
      await page.locator('#modal-close').click();
