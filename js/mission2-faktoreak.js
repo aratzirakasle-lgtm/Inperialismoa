@@ -102,6 +102,35 @@ function taskState(n){if(!draft[n])draft[n]={};return draft[n]}
 function currentNext(){return steps.find(n=>!completions.has(n))||5}
 function canOpen(n){return teacher||completions.has(n)||n===currentNext()}
 function setFeedback(value,kind=''){feedback=value;feedbackState=kind;const status=$('#m2-feedback');if(status){status.textContent=value;status.dataset.state=kind}}
+// Dialogs reuse only the existing teaching materials, never answer keys.
+function museumDialog(title,content,{confirm=false,onConfirm=null}={}){
+ const old=document.querySelector('#m2-reading-dialog');old?.close();old?.remove();
+ const focus=document.activeElement;
+ const dialog=document.createElement('dialog');dialog.id='m2-reading-dialog';dialog.className='m2-reading-dialog';
+ dialog.setAttribute('aria-labelledby','m2-reading-title');
+ dialog.innerHTML='<header><span>✦ MUSEOKO ARTXIBOA ✦</span><h2 id="m2-reading-title">'+esc(title)+'</h2><button type="button" class="m2-dialog-x" aria-label="Itxi">×</button></header><div class="m2-dialog-content">'+content+'</div><footer><button type="button" class="m2-button secondary" data-dialog-close>'+ (confirm?'Utzi':'Itxi')+'</button>'+(confirm?'<button type="button" class="m2-button" data-dialog-confirm>Berriz hasi</button>':'')+'</footer>';
+ document.body.append(dialog);
+ dialog.querySelector('.m2-dialog-x').onclick=()=>dialog.close();
+ dialog.querySelector('[data-dialog-close]').onclick=()=>dialog.close();
+ dialog.querySelector('[data-dialog-confirm]')?.addEventListener('click',()=>{dialog.close();if(!releaseClosed&&!submitting)onConfirm?.()});
+ dialog.addEventListener('close',()=>{dialog.remove();if(focus?.isConnected)focus.focus({preventScroll:true})},{once:true});
+ dialog.showModal();dialog.querySelector('[data-dialog-close]').focus();
+}
+function openSource(id){
+ const source=archives.find(a=>a.id===id);if(!source)return;
+ const art=app.querySelector('[data-source="'+id+'"] .m2-source-engraving');
+ const image=art?getComputedStyle(art).backgroundImage:'none';
+ museumDialog(source.title,'<p class="m2-dialog-ref">'+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div><p class="m2-dialog-reading">'+esc(source.body)+'</p>');
+ if(image!=='none'){const picture=document.querySelector('.m2-dialog-source-art');picture.style.backgroundImage=image;picture.classList.add('has-photo')}
+}
+function openMap(kind){
+ if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa historikoa">');
+ else if(kind==='expedition')museumDialog('Esplorazioen atlasa','<div class="m2-dialog-expedition">'+expeditionMap().replaceAll('id="m2-','id="m2-zoom-').replaceAll('url(#m2-','url(#m2-zoom-')+'</div>');
+}
+function animatePlacement(selector){
+ const el=app.querySelector(selector);if(!el||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+ el.animate?.([{filter:'brightness(1.22)',transform:'translateY(-3px)'},{filter:'brightness(1)',transform:'translateY(0)'}],{duration:230,easing:'ease-out'});
+}
 function cardMessage(title,message){
  app.innerHTML='<div class="m2-message-card"><span class="m2-eyebrow">MISIOA 02</span><h1>'+esc(title)+'</h1><p>'+esc(message)+'</p><a class="m2-link" href="./index.html">← Museora itzuli</a></div>';
 }
@@ -262,10 +291,10 @@ function renderClassification(){
    '</div><span class="m2-case-foot" aria-hidden="true"></span><span class="m2-case-foundation" aria-hidden="true"><span class="m2-case-lock"></span></span></article>';
  }).join('');
  const unassigned=causes.filter(c=>!assigned[c.id]);
- return '<section class="m2-museum-interaction" aria-label="Bost faktoreen kabinetearen sailkapena">'+
+ return '<section class="m2-museum-interaction'+(selected?' m2-carrying':'')+'" aria-label="Bost faktoreen kabinetearen sailkapena">'+
   '<div class="m2-museum-cabinet-wall">'+cabinets+'</div>'+
   '<div class="m2-museum-desktop"><span class="m2-desk-left-trim" aria-hidden="true"></span><span class="m2-desk-right-trim" aria-hidden="true"></span><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
-  '<span class="m2-museum-drag">☞ &nbsp; Aukeratu edo arrastatu</span></div>'+
+  '<span class="m2-museum-drag">☞ &nbsp; '+(selected?'Hautatu helmuga edo mahaia':'Aukeratu edo arrastatu')+'</span></div>'+
   '<div class="m2-museum-cards" data-unassign aria-label="Sailkatu gabeko kartelak">'+unassigned.map(tile).join('')+
   (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div><span class="m2-desk-front" aria-hidden="true"><span class="m2-desk-cabinet"></span></span></div></section>';
 }
@@ -289,7 +318,7 @@ function renderTimeline(){
  const choices=(field,items)=>items.map(([value,label,icon])=>
   `<label class="m2-e2-option"><input type="radio" name="m2-e2-${field}" data-field="${field}" value="${value}" ${state[field]===value?'checked':''}><span class="m2-e2-radio" aria-hidden="true"></span><span class="m2-e2-option-copy">${esc(label)}</span><span class="m2-e2-option-icon m2-e2-icon-${icon}" aria-hidden="true"></span></label>`
  ).join('');
- return `<div class="m2-e2-scene">
+ return `<div class="m2-e2-scene ${selected?'m2-carrying':''}">
  <div class="m2-e2-upper">
   <div class="m2-e2-left">
    <header class="m2-e2-intro"><span>ARIKETA 2 / 5 · 2. MISIOA</span><h2>Kapitalaren ibilbideak</h2><p>Hartu hiru obra historikoak eta kokatu dagozkien urteetan; osatu kapitalaren ibilbidea.</p></header>
@@ -393,13 +422,13 @@ function renderPopulation(){
   ['merchants_only','Merkataritza-enpresek soilik']]);
  const routes=atlasRoutes.map((dest,i)=>
   '<div class="m2-atlas-route-line">'+
-   '<button type="button" draggable="true" data-atlas-route="'+dest.id+'" aria-pressed="'+(atlasSelectedRoute===dest.id)+'" class="m2-atlas-route-card">'+
+   '<button type="button" draggable="true" data-atlas-route="'+dest.id+'" aria-pressed="'+(atlasSelectedRoute===dest.id)+'" class="m2-atlas-route-card'+(state['route_'+dest.id]?' m2-route-placed':'')+'">'+
    '<span class="m2-atlas-route-numeral">'+String(i+1).padStart(2,'0')+'</span><span>'+esc(dest.title)+'</span>'+
    '<span aria-hidden="true" class="m2-atlas-route-connector">◉</span></button></div>'
  ).join('');
  const placed=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).length;
- const routePins=atlasRoutes.map(dest=>'<button type="button" class="m2-atlas-pin '+(Object.values(state).includes(dest.id)?'m2-pin-used':'')+'" data-atlas-target="'+dest.id+'" style="left:'+dest.x+'%;top:'+dest.y+'%;" aria-label="Mapako tokia: '+esc(dest.title)+'">'+
- (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>✓</span>':'<span>+</span>')+'</button>').join('');
+ const routePins=atlasRoutes.map(dest=>'<button type="button" class="m2-atlas-pin '+(atlasRoutes.some(item=>state['route_'+item.id]===dest.id)?'m2-pin-used':'')+'" data-atlas-target="'+dest.id+'" style="left:'+dest.x+'%;top:'+dest.y+'%;" aria-label="Mapako tokia: '+esc(dest.title)+'">'+
+ (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>●</span>':'<span>+</span>')+'</button>').join('');
  const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
   return point?'<path d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
@@ -419,13 +448,13 @@ function renderPopulation(){
    '<header><strong>'+esc(title)+'</strong><small>'+subtitle+'</small></header>'+
    '<button type="button" class="m2-atlas-luggage-drop" data-atlas-bag-zone="'+key+'" aria-label="'+esc(title)+' maletan kokatu">+ KOKATU HEMEN</button>'+
    '<div class="m2-atlas-suitcase-items">'+inside.map(c=>
-     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" loading="eager" decoding="sync" draggable="false">'+esc(c[1])+'</button>').join('')+
+     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" loading="eager" decoding="sync" draggable="false">'+esc(c[1])+'</button>').join('')+
    '</div></section>';
  }).join('');
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
  const stage3=atlasStatements.filter(c=>!!state[c[0]]).length;
  const stage4=atlasSuitcase.filter(c=>!!state['bag_'+c[0]]).length;
- const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+'>'+label+' ✦</button>';
+ const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+' title="Atalaren osotasuna soilik; zuzentasuna amaieran egiaztatuko da." aria-label="'+n+'. atala: osotasuna egiaztatu">'+(ready?'OSATUTA':'OSATU ATALA')+' ✦</button>';
  return '<section class="m2-atlas-screen m2-migration-gallery" aria-label="Migrazioen bulegoa: lau jarduera interaktibo">'+
   '<header class="m2-atlas-heading"><a class="m2-atlas-home-link" href="./index.html" aria-label="Museora itzuli">← MUSEOA</a><span class="m2-atlas-navigation">BIGARREN MISIOA · 3 / 5</span><h1>MIGRAZIOEN BULEGOA <em>(1850–1900)</em></h1>'+
   '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' osatuta</div></header>'+
@@ -438,13 +467,13 @@ function renderPopulation(){
     '<div class="m2-atlas-pop-list">'+population+'</div>'+
     '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-travelers-cutout.webp" alt="" draggable="false"></section>'+
    '<div class="m2-atlas-main-map"><img src="./assets/m2-atlas-original-map.webp" alt="XIX. mendeko atlas historikoaren ilustrazioa" draggable="false">'+
-    '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span></div>'+
+    '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span><button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="migration" aria-label="Munduko mapa handitu" title="Mapa handitu">＋</button></div>'+
    '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
     '<h3>Migrazioak</h3>'+dossierOne+'</section>'+
    '<section class="m2-atlas-top-question m2-atlas-top-mission m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-mission.webp" alt="" draggable="false">'+
     '<h3>Misio erlijiosoak</h3>'+dossierTwo+'</section>'+
    '<aside class="m2-atlas-critical"><strong>Interpretazio historiko kritikoa:</strong> Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</aside>'+
-   '<div class="m2-atlas-top-check">'+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
+   '<div class="m2-atlas-top-check">'+atlasSectionStatus(1,stage1,5)+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
   '</div>'+
   '<div class="m2-atlas-row-two">'+
    '<section class="m2-atlas-route-activity m2-atlas-activity">'+
@@ -467,7 +496,7 @@ function renderPopulation(){
   '<div class="m2-atlas-luggage-activity m2-atlas-activity">'+
    '<header><span class="m2-atlas-number">4</span><h2>Emigrantearen maleta</h2>'+
     '<p>Zer bultzatu zuen kolonizazioa eta zer eragin izan zuen? Sailkatu zortzi agiriak.</p></header>'+
-   '<div class="m2-atlas-luggage-board"><div class="m2-atlas-luggage-available" data-atlas-bag-reset><span class="m2-atlas-luggage-note">SAILKATZEKO AGIRIAK · '+(8-stage4)+'</span><div class="m2-atlas-luggage-cards">'+cards+'</div></div>'+
+   '<div class="m2-atlas-luggage-board"><div class="m2-atlas-luggage-available" data-atlas-bag-reset><span class="m2-atlas-luggage-note">SAILKATZEKO AGIRIAK · '+(8-stage4)+'</span><button type="button" data-bag-return class="m2-bag-return" '+(!atlasSelectedLuggage||!state['bag_'+atlasSelectedLuggage]?'hidden':'')+'>↶ Itzuli mahaira</button><div class="m2-atlas-luggage-cards">'+cards+'</div></div>'+
    '<div class="m2-atlas-luggage-targets">'+cases+'</div></div>'+
    '<footer>'+atlasSectionStatus(4,stage4,8)+stageAction(4,'EGIAZTATU',stage4===8)+'</footer></div>'+
   '<div class="m2-atlas-final-controls">'+controls()+'</div>'+
@@ -493,7 +522,7 @@ function renderArchive(){
     '<span class="m2-source-kind">'+esc(a.type)+'</span></header>'+
    '<div class="m2-archive-card-body">'+
     '<div class="m2-archive-illustration"><div class="m2-source-engraving" aria-hidden="true">'+archiveEngraving(a.art)+'</div>'+
-     '<span class="m2-archive-image-caption">'+esc(a.ref)+'</span></div>'+
+     '<span class="m2-archive-image-caption">'+esc(a.ref)+'</span><button type="button" class="m2-zoom-button m2-source-zoom" data-source-zoom="'+esc(a.id)+'" aria-label="'+esc(a.title)+' handitu" title="Agiria handitu">＋</button></div>'+
     '<div class="m2-archive-card-writing"><div class="m2-source-titling"><h3>'+esc(a.title)+'</h3></div>'+
      '<p class="m2-source-text">'+esc(a.body)+'</p>'+
      '<fieldset><legend><span class="m2-archive-question-mark" aria-hidden="true">?</span>'+esc(a.question)+'</legend>'+
@@ -516,8 +545,9 @@ function renderArchive(){
   '</div>';
 }
 function multiButtons(group,options,selectedIds){
- const ids=new Set(selectedIds||[]);
- return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div>';
+ const ids=new Set(selectedIds||[]),limit=group==='africa'?4:3;
+ return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div><p class="m2-selection-count" role="status">'+ids.size+' / '+limit+' hautatuta</p>';
+}
 }
 function expeditionMap(){
  return '<svg class="m2-expedition-svg" viewBox="0 0 540 620" role="img" aria-label="Afrikako eskema historikoan ibai nagusiak, meridianoak eta iparrorratza agertzen dira. Mapa orientagarria da, ez eskala zehatzekoa." xmlns="http://www.w3.org/2000/svg">'+
@@ -552,7 +582,7 @@ function renderExpedition(){
  return '<div class="m2-expedition m2-expedition-research">'+
   '<aside class="m2-atlas m2-historical-map">'+
    '<div class="m2-atlas-museum-title"><span>ESPLORAZIOEN ATLASA</span><small>XIX. MENDEA · AGIRIA 05</small></div>'+
-   expeditionMap()+
+   '<div class="m2-expedition-map-wrap">'+expeditionMap()+'<button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="expedition" aria-label="Esplorazioen mapa handitu" title="Mapa handitu">＋</button></div>'+
    '<div class="m2-atlas-route-ledger"><strong>Aukeratutako izenak · '+chosen.length+' / 4</strong>'+
     '<div class="m2-atlas-route-tags" aria-live="polite">'+(chosenLabels.length?chosenLabels.map(label=>'<span>'+esc(label)+'</span>').join(''):'<em>Oraindik ez da izenik aukeratu.</em>')+'</div></div>'+
    '<p class="m2-atlas-footnote">Atlas eskematikoa. Ibaien ibilbideek esplorazioaren eta kolonizazioaren historia ulertzen laguntzen dute.</p>'+
@@ -602,7 +632,7 @@ function controls(){
  const done=completions.has(active);
  const canGoForward=teacher||done;
  return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
- '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+(submitting?'disabled':'')+'>Berriz hasi</button>'+
+ '<div class="m2-buttons"><button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>Berriz hasi</button>'+
  (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
@@ -619,7 +649,7 @@ function animateRoomArrival(room){
 function renderEnd(){
  const label=teacher?'IRAKASLEAREN AURREBISTA · EZ DA GORDE':'2. MISIOA GAINDITUTA';
  return hero()+nav()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
- '<h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
+ '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
  (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
  '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
  renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],preview:teacher,animate:true,animateMission:2})+
@@ -690,25 +720,26 @@ function openExercise(n){
  window.scrollTo({top:0,behavior:'instant'});
 }
 function assignToCategory(catId){
- if(active!==1||!selected||!categories.some(c=>c.id===catId))return;
+ if(active!==1||!causes.some(c=>c.id===selected)||!categories.some(c=>c.id===catId))return;
  const state=taskState(1);state.assignments=state.assignments||{};
  state.assignments[selected]=catId;const former=selected;selected=null;
  queueMission2({assignments:{[former]:catId}},1);
  feedback='';feedbackState='';render();
- $('[data-card="'+former+'"]')?.focus({preventScroll:true});
+ $('[data-card="'+former+'"]')?.focus({preventScroll:true});animatePlacement('[data-card="'+former+'"]');
 }
 function assignYear(year){
- if(active!==2||!selected)return;
+ if(active!==2||!infrastructure.some(i=>i.id===selected)||!['1869','1908','1914'].includes(year))return;
  const state=taskState(2);
  const patch={};
  for(const y of ['1869','1908','1914'])if(state[y]===selected){delete state[y];patch[y]=null}
  state[year]=selected;patch[year]=selected;queueMission2(patch,2);selected=null;render();
- $('[data-year="'+year+'"]')?.focus({preventScroll:true});
+ $('[data-year="'+year+'"]')?.focus({preventScroll:true});animatePlacement('[data-year="'+year+'"]');
 }
 function toggleMulti(group,value){
  const state=taskState(5);state.multi=state.multi||{};
- const list=new Set(state.multi[group]||[]);
- if(list.has(value))list.delete(value);else list.add(value);
+ if(!['africa','asia'].includes(group)||!(group==='africa'?riverOptions:asiaOptions).some(([id])=>id===value))return;
+ const list=new Set(state.multi[group]||[]),limit=group==='africa'?4:3;
+ if(list.has(value))list.delete(value);else if(list.size<limit)list.add(value);else{setFeedback('Kendu hautatutako aukera bat beste bat hautatu aurretik.');return}
  state.multi[group]=[...list];queueMission2({multi:{[group]:state.multi[group]}},5);render();
  $('[data-multi="'+group+'"][data-value="'+value+'"]')?.focus({preventScroll:true});
 }
@@ -716,7 +747,7 @@ function toggleMulti(group,value){
 /* Los cuatro paneles conservan los campos en draft[3], no corrigen en el cliente.
    Las respuestas de la misión se validan únicamente mediante la RPC privada. */
 function atlasMoveRoute(location){
- if(active!==3||!atlasSelectedRoute||!atlasRoutes.some(r=>r.id===location))return;
+ if(active!==3||!atlasRoutes.some(r=>r.id===atlasSelectedRoute)||!atlasRoutes.some(r=>r.id===location))return;
  const state=taskState(3);
  const patch={};
  for(const route of atlasRoutes){
@@ -728,11 +759,16 @@ function atlasMoveRoute(location){
  feedback='';feedbackState='';render();
 }
 function atlasPack(bag){
- if(active!==3||!atlasSelectedLuggage||!['cause','effect'].includes(bag))return;
- taskState(3)['bag_'+atlasSelectedLuggage]=bag;
- queueMission2({['bag_'+atlasSelectedLuggage]:bag},3);
+ if(active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage)||!['cause','effect'].includes(bag))return;
+ const item=atlasSelectedLuggage;taskState(3)['bag_'+item]=bag;
+ queueMission2({['bag_'+item]:bag},3);
  atlasSelectedLuggage=null;
- feedback='';feedbackState='';render();
+ feedback='';feedbackState='';render();animatePlacement('[data-atlas-bag-card="'+item+'"]');
+}
+function atlasReturnBag(){
+ if(active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage))return;
+ const item=atlasSelectedLuggage;delete taskState(3)['bag_'+item];queueMission2({['bag_'+item]:null},3);
+ atlasSelectedLuggage=null;render();$('[data-atlas-bag-card="'+item+'"]')?.focus({preventScroll:true});
 }
 function atlasPartCheck(part){
  const state=taskState(3);
@@ -756,6 +792,9 @@ app.addEventListener('click',event=>{
    }
    return;
  }
+ if(elem.hasAttribute('data-source-zoom'))return openSource(elem.dataset.sourceZoom);
+ if(elem.hasAttribute('data-map-zoom'))return openMap(elem.dataset.mapZoom);
+ if(elem.hasAttribute('data-bag-return'))return atlasReturnBag();
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
  if(active===3&&elem.hasAttribute('data-atlas-route')){
   atlasSelectedRoute=atlasSelectedRoute===elem.dataset.atlasRoute?null:elem.dataset.atlasRoute;
@@ -774,7 +813,11 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
  if(elem.hasAttribute('data-year'))return assignYear(elem.dataset.year);
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
- if(elem.hasAttribute('data-reset')){if(completions.has(active)&&!teacher)return;draft[active]={};if(!teacher)autosave?.reset(active);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render();return}
+ if(elem.hasAttribute('data-reset')){
+  if(completions.has(active)&&!teacher)return;
+  const exercise=active;
+  museumDialog('Ariketa berriz hasi?','<p class="m2-dialog-reading">'+(teacher?'Aurrebistako erantzunak ezabatuko dira.':'Ariketa honetako taldearen erantzunak ezabatuko dira, baita beste kideek gordetakoak ere. Lortutako zigiluak ez dira galduko.')+'</p>',{confirm:true,onConfirm:()=>{if(active!==exercise||!teacher&&completions.has(exercise))return;draft[exercise]={};if(!teacher)autosave?.reset(exercise);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render()}});return
+ }
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
  if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
@@ -821,7 +864,7 @@ app.addEventListener('dragstart',event=>{
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
 });
 app.addEventListener('dragover',event=>{
- if(active===3&&event.target.closest('[data-atlas-target],[data-atlas-bag-zone]')){
+ if(active===3&&event.target.closest('[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]')){
   event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';return;
  }
  if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
@@ -831,13 +874,13 @@ app.addEventListener('drop',event=>{
  if(active===3){
   const pin=event.target.closest('[data-atlas-target]');
   const bag=event.target.closest('[data-atlas-bag-zone]');
-  if(pin||bag){
+  const tray=event.target.closest('[data-atlas-bag-reset]');
+  if(pin||bag||tray){
    event.preventDefault();
    const type=event.dataTransfer?.getData('text/plain')||'';
-   if(type.startsWith('route:'))atlasSelectedRoute=type.slice(6);
-   if(type.startsWith('bag:'))atlasSelectedLuggage=type.slice(4);
-   if(pin)return atlasMoveRoute(pin.dataset.atlasTarget);
-   if(bag)return atlasPack(bag.dataset.atlasBagZone);
+   if(pin&&type.startsWith('route:')){atlasSelectedRoute=type.slice(6);return atlasMoveRoute(pin.dataset.atlasTarget)}
+   if((bag||tray)&&type.startsWith('bag:')){atlasSelectedLuggage=type.slice(4);return bag?atlasPack(bag.dataset.atlasBagZone):atlasReturnBag()}
+   return;
   }
  }
  const zone=event.target.closest('[data-zone]');
@@ -846,6 +889,7 @@ app.addEventListener('drop',event=>{
  if(!zone&&!year&&!loose)return;
  event.preventDefault();
  const moved=event.dataTransfer?.getData('text/plain');
+ if(active===1&&!causes.some(c=>c.id===moved)||active===2&&!infrastructure.some(i=>i.id===moved))return;
  if(moved)selected=moved;
  if(loose&&active===1&&selected){
    const removed=selected;delete taskState(1).assignments?.[removed];
@@ -854,4 +898,5 @@ app.addEventListener('drop',event=>{
  if(zone)assignToCategory(zone.dataset.zone);
  if(year)assignYear(year.dataset.year);
 });
+app.addEventListener('dragend',()=>{if(selected||atlasSelectedRoute||atlasSelectedLuggage){selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render()}});
 initialize();

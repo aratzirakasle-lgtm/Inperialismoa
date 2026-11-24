@@ -303,7 +303,16 @@ try{
     assert.equal(await page.locator('.m2-archive-dossier[data-source="press"]').getAttribute('data-answered'),'true');
     assert.equal(await page.locator('[data-archive-progress]').innerText(),'1 / 5');
     assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
+    await page.locator('[data-source-zoom="press"]').click();
+    await page.locator('#m2-reading-dialog').waitFor({state:'visible'});
+    assert.match(await page.locator('#m2-reading-dialog').innerText(),/Prentsa eta prestigioa/);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),true);
     await page.locator('[data-reset]').click();
+    await page.locator('[data-dialog-close]').click();
+    assert.equal(await page.locator('[data-archive-progress]').innerText(),'1 / 5');
+    await page.locator('[data-reset]').click();
+    await page.locator('[data-dialog-confirm]').click();
     assert.equal(await page.locator('[data-archive-progress]').innerText(),'0 / 5');
     assert.equal(await page.locator('input[data-archive="press"][value="a"]').isChecked(),false);
     assert.equal(await page.locator('.m2-source-file').count(),5);
@@ -329,6 +338,10 @@ try{
     assert.match(await page.locator('.m2-atlas-route-ledger').innerText(),/Kongo/);
     assert.equal(await page.locator('[data-multi="africa"][data-value="congo"]').getAttribute('aria-pressed'),'true');
     await page.locator('[data-field="meeting"]').selectOption('1869');
+    assert.equal(await page.locator('[data-field="meeting"]').inputValue(),'1869');
+    await page.locator('[data-map-zoom="expedition"]').click();
+    await page.locator('#m2-reading-dialog .m2-expedition-svg').waitFor({state:'visible'});
+    await page.locator('[data-dialog-close]').click();
     assert.equal(await page.locator('[data-field="meeting"]').inputValue(),'1869');
     assert.deepEqual(errors,[]);
    }finally{await context.close()}

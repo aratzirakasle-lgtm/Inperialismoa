@@ -1,0 +1,26 @@
+/* Ajustes locales de interacción; no cambian la composición de las salas. */
+.m2-carrying .m2-case-target,.m2-carrying [data-year]{outline:2px solid #e3c17f!important;outline-offset:2px}
+.m2-museum-card[aria-pressed=true],.m2-e2-piece[aria-pressed=true],.m2-atlas-route-card[aria-pressed=true],.m2-atlas-luggage-card[aria-pressed=true],.m2-atlas-packed[aria-pressed=true],.m2-expedition-panel .m2-tile[aria-pressed=true]{outline:2px solid #e3bd6a!important;outline-offset:1px;box-shadow:0 0 9px #d0a85d88!important}
+.m2-route-placed .m2-atlas-route-connector{opacity:.65}
+.m2-atlas-main-map,.m2-archive-illustration,.m2-expedition-map-wrap{position:relative}
+.m2-zoom-button{position:absolute;z-index:5;top:5px;right:5px;display:grid;place-items:center;min-width:28px;min-height:28px;padding:0 4px;border:1px solid #c6a15c;border-radius:50%;background:#382c1c;color:#ffe6ac;font:bold 18px/1 Georgia,serif;cursor:zoom-in;box-shadow:0 2px 5px #21170966}
+.m2-zoom-button:focus-visible,.m2-bag-return:focus-visible{outline:3px solid #e8c578;outline-offset:2px}
+.m2-expedition-map-wrap .m2-expedition-svg{display:block;width:100%;height:auto}
+.m2-bag-return{border:1px solid #a78146;border-radius:4px;background:#f2e1b8;color:#513b20;padding:3px 8px;font:700 11px Georgia,serif;cursor:pointer}
+.m2-bag-return[hidden]{display:none!important}
+.m2-atlas-top-check [data-atlas-count="1"]{display:inline-block;margin-right:6px;font-size:10px}
+.m2-selection-count{margin:4px 0 0;font:600 11px Georgia,serif;color:inherit;text-align:right}
+.m2-victory-ribbon{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px auto;color:#74531e;font:700 13px Georgia,serif;letter-spacing:.09em}
+.m2-victory-ribbon span{color:#b48b43;font-size:18px}
+.m2-reading-dialog{box-sizing:border-box;width:min(760px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;background:#f6e7c6;color:#3d2b1b;border:4px double #9d773f;border-radius:12px;box-shadow:0 22px 80px #0008;font:16px/1.55 Georgia,serif;overflow:auto}
+.m2-reading-dialog::backdrop{background:#19150fba}
+.m2-reading-dialog header{position:relative;padding:18px 45px 15px 22px;background:linear-gradient(120deg,#44331f,#6a4d2b);color:#f9e8c2;border-bottom:2px solid #b48b48}
+.m2-reading-dialog header span{font-size:11px;letter-spacing:.13em}
+.m2-reading-dialog h2{margin:5px 0 0;font:700 clamp(20px,4vw,30px)/1.2 Georgia,serif;color:#f9e8c2}
+.m2-dialog-x{position:absolute;right:12px;top:12px;background:transparent;color:#f9e8c2;border:1px solid #c5a66c;border-radius:5px;font-size:24px;cursor:pointer;min-width:32px;min-height:32px}
+.m2-dialog-content{padding:18px 22px}.m2-dialog-reading{font-size:clamp(17px,2.5vw,22px);line-height:1.6;margin:12px 0}.m2-dialog-ref{font-size:13px;color:#79592f;margin:0 0 12px}
+.m2-dialog-source-art{margin:auto;width:min(100%,440px);height:clamp(120px,30vh,260px);background-position:center;background-size:contain;background-repeat:no-repeat}
+.m2-dialog-source-art svg{width:100%;height:100%}.m2-dialog-source-art.has-photo svg{visibility:hidden}
+.m2-dialog-map,.m2-dialog-expedition svg{display:block;max-width:100%;max-height:65vh;width:auto;height:auto;margin:auto;object-fit:contain}
+.m2-reading-dialog footer{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:12px 22px;border-top:1px solid #c8ac76}
+@media(prefers-reduced-motion:reduce){.m2-reading-dialog *{animation:none!important;transition:none!important}}
