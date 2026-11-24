@@ -28,7 +28,8 @@ const TERRITORIES=[
 const territories=TERRITORIES.map(([code,name,continent])=>({code,name,continent}));
 const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoint(127397+c.charCodeAt(0))).join(""):"🌐";
 const key = "inperialismoa-demo-v1";
-let conceptCHome=new URLSearchParams(location.search).get("museo")==="c";
+// El vestíbulo C es el menú oficial. La vista anterior se conserva como alternativa explícita.
+let conceptCHome=new URLSearchParams(location.search).get("museo")!=="anterior";
 let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 let mission2Open=false,m2Rows=[],m2Error=false;
 let classProgressRows=[],classProgressError=false,classProgressTicker=null;
@@ -198,7 +199,7 @@ function renderHome(){
  `:`<p class="museum-next-completed">${n===total?"✓ Ibilbide osoa gainditu duzue.":"Misioaren hurrengo urratsa prestatzen ari da."}</p>`;
  $("#view").innerHTML=`
  <div class="content-width museum-gallery-home">
-  <div class="notice amber" style="margin:0 0 13px"><strong>Ikasleen museo berria:</strong> C kontzeptuaren ataria, benetako taldearen aurrerapenarekin. <button class="btn primary" type="button" data-c-toggle="1">Museo berria ikusi →</button></div>
+  <div class="notice amber" style="margin:0 0 13px"><strong>Museoaren atari nagusia:</strong> Taldearen benetako aurrerapena ikusi. <button class="btn primary" type="button" data-c-toggle="1">Museora itzuli →</button></div>
   ${heading}
   ${featured}
   <section class="museum-gallery-lower" aria-label="Aurrerapena eta testuingurua">
@@ -500,7 +501,7 @@ if(b.hasAttribute("data-c-logout")){
 if(b.hasAttribute("data-c-toggle")){
   conceptCHome=!conceptCHome;
   const url=new URL(location.href);
-  if(conceptCHome)url.searchParams.set("museo","c");else url.searchParams.delete("museo");
+  if(conceptCHome)url.searchParams.delete("museo");else url.searchParams.set("museo","anterior");
   history.replaceState(null,"",url.pathname+url.search+url.hash);
   currentMission=0;render();return;
 }

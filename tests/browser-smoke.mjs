@@ -418,8 +418,8 @@ try{
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
- await scenario('Vestíbulo C: alumno autenticado ve progreso real sin escrituras y puede volver al modo anterior',async()=>{
-   const {page,context,errors}=await open('student','index.html?museo=c',{width:1672,height:941});
+ await scenario('Vestíbulo C: menú predeterminado sin parámetros, progreso real y vista anterior opcional',async()=>{
+   const {page,context,errors}=await open('student','index.html',{width:1672,height:941});
    try{
      await waitVisible(page,'.c-museo-stage');
      assert.equal(await page.locator('.c-museo-home').count(),1);
@@ -437,12 +437,20 @@ try{
      await page.locator('[data-c-toggle]').click();
      await waitVisible(page,'.museum-gallery-home');
      assert.equal(await page.locator('.c-museo-home').count(),0);
+     assert.match(page.url(),/museo=anterior/);
+     await page.reload({waitUntil:'domcontentloaded'});
+     await waitVisible(page,'.museum-gallery-home');
+     await page.locator('[data-c-toggle]').click();
+     await waitVisible(page,'.c-museo-stage');
+     assert.equal(new URL(page.url()).searchParams.has('museo'),false);
+     await page.reload({waitUntil:'domcontentloaded'});
+     await waitVisible(page,'.c-museo-stage');
      assert.deepEqual(await page.evaluate(()=>window.__smokeRpcCalls),[]);
      assert.deepEqual(errors,[]);
    }finally{await context.close()}
  });
  await scenario('Vestíbulo C: el profesor conserva el panel y puede entrar y salir de la vista del alumno',async()=>{
-   const {page,context,errors}=await open('teacher','index.html?museo=c',{width:1365,height:900});
+   const {page,context,errors}=await open('teacher','index.html',{width:1365,height:900});
    try{
      await waitVisible(page,'#view');
      assert.equal(await page.locator('.c-museo-home').count(),0,'El panel docente permanece por defecto');
@@ -457,7 +465,7 @@ try{
    }finally{await context.close()}
  });
  await scenario('Vestíbulo C: el escenario conserva proporción de referencia en móvil',async()=>{
-   const {page,context,errors}=await open('student','index.html?museo=c',{width:390,height:844});
+   const {page,context,errors}=await open('student','index.html',{width:390,height:844});
    try{
      await waitVisible(page,'.c-museo-stage');
      const geom=await page.locator('.c-museo-stage').evaluate(el=>{const r=el.getBoundingClientRect();return {w:r.width,h:r.height}});

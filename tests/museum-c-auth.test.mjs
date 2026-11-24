@@ -7,11 +7,11 @@ import {fileURLToPath} from 'node:url';
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=file=>readFileSync(resolve(root,file),'utf8');
 
-test('El museo C está disponible solo en una vista optativa del alumno autenticado',()=>{
+test('El museo C es la vista principal del alumno autenticado; el profesor conserva su panel',()=>{
  const app=read('js/app.js');
  const page=read('index.html');
  assert.match(app,/import \{ renderVestibuloC \} from "\.\/vestibulo-c-auth\.js\?v=20261124-lock1"/);
- assert.match(app,/new URLSearchParams\(location\.search\)\.get\("museo"\)==="c"/);
+ assert.match(app,/new URLSearchParams\(location\.search\)\.get\("museo"\)!=="anterior"/);
  assert.match(app,/if\(conceptCHome && viewTeamId\(\)\)/);
  assert.match(app,/completedIds=\[1,2\]\.filter\(missionId=>completed\(id,missionId\)\)/);
  assert.match(app,/classList\.toggle\("museo-c-enabled",!isTeacher\(\)&&currentMission===0&&conceptCHome/);
