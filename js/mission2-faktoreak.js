@@ -168,7 +168,7 @@ function openSource(id){
  }
 }
 function openMap(kind){
- if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa historikoa">');
+ if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa historikoa">');
  else if(kind==='expedition'){
   museumDialog('Esplorazioen atlasa','<div class="m2-map-tools" aria-label="Maparen kontrolak"><button type="button" data-map-action="out" aria-label="Txikitu">−</button><span data-map-scale role="status">100 %</span><button type="button" data-map-action="in" aria-label="Handitu">+</button><button type="button" data-map-action="left" aria-label="Ezkerrera">←</button><button type="button" data-map-action="up" aria-label="Gora">↑</button><button type="button" data-map-action="down" aria-label="Behera">↓</button><button type="button" data-map-action="right" aria-label="Eskuinera">→</button><button type="button" data-map-action="reset">Hasierako ikuspegia</button></div><div class="m2-dialog-expedition">'+expeditionMap().replaceAll('id="m2-','id="m2-zoom-').replaceAll('url(#m2-','url(#m2-zoom-')+'</div><p class="m2-map-help">Handitu mapa eta mugitu norabide-botoiekin edo arrastatuz. Ez da erantzunik egiaztatzen.</p>');
   const dialog=document.querySelector('#m2-reading-dialog'),svg=dialog.querySelector('svg');
@@ -476,9 +476,9 @@ function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'
  * del PDF del proyecto. Las nuevas respuestas también deben añadirse a la
  * clave privada de Supabase antes de publicar esta rama. */
 const atlasRoutes=[
- {id:'africa',title:'Afrika',x:52,y:52},
- {id:'asia',title:'Asia',x:84,y:36},
- {id:'oceania',title:'Ozeania',x:88,y:76}
+ {id:'africa',title:'Afrika',x:56,y:51},
+ {id:'asia',title:'Asia',x:77,y:34},
+ {id:'oceania',title:'Ozeania',x:89,y:68}
 ];
 const atlasStatements=[
  ['statement_1','1850ean Europako biztanleria 266 milioikoa zen.'],
@@ -539,7 +539,7 @@ function renderPopulation(){
  (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>●</span>':'<span>+</span>')+'</button>').join('');
  const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
-  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 50 22 Q '+((50+point.x)/2-10)+' 1 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
+  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 53 22 Q '+((53+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
  const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
   '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
@@ -570,15 +570,15 @@ function renderPopulation(){
   (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
   '<div class="m2-atlas-main">'+
    '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">B</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
-   '<section class="m2-atlas-pop m2-migration-folio"><h3>Europako biztanleria <small>(milioi biztanle)</small></h3>'+
+   '<section class="m2-atlas-pop m2-migration-folio"><h3><span class="m2-migration-index" aria-hidden="true">1</span> Europako biztanleria <small>(milioi biztanle)</small></h3>'+
     '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
     '<div class="m2-atlas-pop-list">'+population+'</div>'+
     '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-travelers-cutout.webp" alt="" draggable="false"></section>'+
-   '<div class="m2-atlas-main-map"><img src="./assets/m2-atlas-original-map.webp" alt="XIX. mendeko atlas historikoaren ilustrazioa" draggable="false">'+
+   '<div class="m2-atlas-main-map"><img src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa orientagarria; muga historikorik eta ibilbiderik gabe" draggable="false">'+
     '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span><button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="migration" aria-label="Munduko mapa handitu" title="Mapa handitu">＋</button></div>'+
-   '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-migrants.webp" alt="" draggable="false">'+
+   '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-suitcase-better-restored.webp" alt="" draggable="false">'+
     '<h3>Migrazioak</h3>'+dossierOne+'</section>'+
-   '<section class="m2-atlas-top-question m2-atlas-top-mission m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-atlas-original-mission.webp" alt="" draggable="false">'+
+   '<section class="m2-atlas-top-question m2-atlas-top-mission m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-suitcase-missions-restored.webp" alt="" draggable="false">'+
     '<h3>Misio erlijiosoak</h3>'+dossierTwo+'</section>'+
    '<aside class="m2-atlas-critical"><strong>Interpretazio historiko kritikoa:</strong> Ikerketaren ikuspegi kritikoa: misiolarien jarduera kolonizazioaren justifikazio erlijioso gisa erabili zen eta tokiko sinesmen eta kulturen gaineko presioa ekarri zuen.</aside>'+
    '<div class="m2-atlas-top-check">'+atlasSectionStatus(1,stage1,5)+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
@@ -588,7 +588,7 @@ function renderPopulation(){
     '<header><span class="m2-atlas-number">2</span><h2>Norantz hedatu ziren misioak?</h2></header>'+
     '<p class="m2-atlas-exercise-instruction">Lotu PDFan aipatutako hiru eremuak atlasaren tokiekin. Hautatu izena eta jarri mapan.</p>'+
     '<div class="m2-atlas-route-stage"><div class="m2-atlas-route-labels">'+routes+'</div>'+
-    '<div class="m2-atlas-route-map"><img src="./assets/m2-atlas-original-map.webp" alt="Munduko mapa" draggable="false">'+
+    '<div class="m2-atlas-route-map"><img src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa" draggable="false">'+
     '<svg class="m2-atlas-route-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="atlasArrow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto"><path d="M0 0L4 2L0 4Z" fill="#c13020"/></marker></defs>'+lines+'</svg>'+
     routePins+'</div></div>'+
     '<footer>'+atlasSectionStatus(2,placed,3)+(atlasSelectedRoute&&state['route_'+atlasSelectedRoute]?'<button type="button" class="m2-bag-return" data-route-return>↶ Kendu ibilbidea</button>':'')+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+

@@ -845,3 +845,6 @@ body:has(#modal:not([hidden]) .atlas-concept-one) .m1-class-widget{visibility:hi
 /* V27: matching more vivid progress fill in the responsive atlas. */
 .atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{background:linear-gradient(#68bd68,#3da950 43%,#288443);box-shadow:inset 0 1px 1px #b1e3a780}
 .atlas-concept-one .atlas-totals meter::-moz-meter-bar{background:linear-gradient(#68bd68,#3da950 43%,#288443);border-radius:100px}
+
+.atlas-concept-one .atlas-signatures{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;max-width:100%;color:#51301d}
+.atlas-concept-one .atlas-name-signature{font:italic 600 clamp(13px,1.15cqw,20px)/1.1 "Segoe Script","Bradley Hand","URW Chancery L",cursive,Georgia,serif;transform:rotate(-5deg);overflow-wrap:anywhere;text-align:center}

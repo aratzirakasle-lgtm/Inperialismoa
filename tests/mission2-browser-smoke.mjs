@@ -642,6 +642,9 @@ try{
    assert.equal(await page.locator('.m2-atlas-pop-row').count(),3);
    assert.equal(await page.locator('.m2-atlas-top-question').count(),2);
    assert.equal(await page.locator('.m2-atlas-route-card').count(),3);
+   assert.equal(await page.locator('.m2-atlas-route-map img').getAttribute('src'),'./assets/m2-migration-map-clean.svg');
+   assert.equal(await page.locator('[data-route-trace]').count(),0);
+   await page.locator('.m2-atlas-route-map img').evaluate(img=>img.decode());
    assert.equal(await page.locator('.m2-atlas-statement').count(),5);
    assert.equal(await page.locator('.m2-atlas-luggage-card').count(),8);
    assert.equal(await page.locator('.m2-atlas-luggage-card img.m2-atlas-card-illustration').count(),8,
@@ -719,6 +722,7 @@ try{
    await page.locator('[data-atlas-route="africa"]').click();
    assert.equal(await page.locator('[data-atlas-route="africa"]').getAttribute('aria-pressed'),'true');
    await page.locator('[data-atlas-target="oceania"]').click();
+   assert.equal(await page.locator('[data-route-trace="africa"]').count(),1);
    assert.equal(await page.locator('[data-atlas-pin]').count(),0);
    await page.locator('[data-atlas-bag-card="growth"]').click();
    assert.equal(await page.locator('[data-atlas-bag-card="growth"]').getAttribute('aria-pressed'),'true');

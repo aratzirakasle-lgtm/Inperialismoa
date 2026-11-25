@@ -8,8 +8,8 @@ import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./cl
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-guardado1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
-import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261124-atlas-finish21";
-import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-detail27";
+import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-signatures28";
+import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-signatures28";
 import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
@@ -282,13 +282,16 @@ async function openExpedition(mode='atlas'){
  const team=viewTeamId();if(!team||!user)return;
  const request=++atlasRequest,forUser=user.id,preview=teacherPreview,sim=demo;
  const teamName=mine()?.name||'Taldea',open=mission2Open||accountIsTeacher()||demo;
+ const ownProfiles=profiles.filter(p=>p.role==='student'&&p.team_id===team).map(p=>p.display_name);
+ const rosterNames=accountIsTeacher()?classStudentRoster.filter(p=>p.team_id===team).sort((a,b)=>a.slot-b.slot).map(p=>p.display_name):[];
+ const memberNames=[...new Set((rosterNames.length?rosterNames:ownProfiles.length?ownProfiles:sim?(mine()?.members||[]):[]).filter(n=>typeof n==='string'&&n.trim()).map(n=>n.trim()))].slice(0,2);
  modal('<div id="expedition-live"></div>');
  const node=$('#expedition-live');
  const paint=summary=>{
   if(request!==atlasRequest||user?.id!==forUser||viewTeamId()!==team||!node.isConnected||$('#modal').hidden)return;
   if(mode==='atlas'){
    const photo=new URLSearchParams(location.search).get('atlas')!=='classic'&&matchMedia('(min-width:1100px) and (min-height:620px)').matches;
-   const renderAtlas=layout=>renderExpedition({teamName,summary,preview,demo:sim,layout});
+   const renderAtlas=layout=>renderExpedition({teamName,memberNames,summary,preview,demo:sim,layout});
    node.innerHTML=renderAtlas(photo?'photo':'classic');
    const art=activateAtlasPhoto(node);
    if(art){const fallback=()=>{if(art.isConnected&&node.isConnected)node.innerHTML=renderAtlas('classic')};art.addEventListener('error',fallback,{once:true});if(art.complete&&!art.naturalWidth)fallback();}

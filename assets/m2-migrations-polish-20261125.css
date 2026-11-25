@@ -1,0 +1,39 @@
+/* Migrazioen bulegoa: preserve all eight original transparent objects and luggage artwork.
+   The neutral map never displays a correct route until the student selects one. */
+.m2-atlas-screen .m2-atlas-main-map>img,.m2-atlas-screen .m2-atlas-route-map>img{
+ object-fit:fill!important;filter:saturate(1.13) contrast(1.07);
+}
+.m2-atlas-screen .m2-atlas-main-map,.m2-atlas-screen .m2-atlas-route-map{
+ background:#e6c99a;box-shadow:inset 0 0 0 1px #fbe1b1,0 3px 6px #2e190e90;
+}
+.m2-atlas-screen .m2-atlas-route-lines{filter:drop-shadow(0 1px 1px #fff1b5)}
+.m2-atlas-screen .m2-atlas-pin{z-index:3}
+.m2-atlas-screen .m2-atlas-pin:focus-visible,.m2-atlas-screen .m2-atlas-luggage-drop:focus-visible{
+ outline:3px solid #ffe099;outline-offset:2px;
+}
+.m2-atlas-screen .m2-atlas-top-scene{
+ object-fit:contain!important;background:radial-gradient(ellipse,#f5dfb5,#d9b17b);
+ filter:saturate(1.16) contrast(1.04);
+}
+.m2-atlas-screen .m2-migration-index{
+ display:inline-grid;place-items:center;width:1.35em;height:1.35em;
+ border:1px solid #ae7c39;border-radius:50%;background:#f0d4a0;color:#573316;
+ font-size:.8em;vertical-align:middle
+}
+.m2-atlas-screen .m2-atlas-route-card[aria-pressed="true"],
+.m2-atlas-screen .m2-atlas-luggage-card[aria-pressed="true"],
+.m2-atlas-screen .m2-atlas-packed[aria-pressed="true"]{
+ outline:2px solid #ffdc82!important;outline-offset:1px;
+ box-shadow:0 0 10px #f9c66fbb!important;
+}
+.m2-atlas-screen .m2-atlas-card-illustration{
+ filter:saturate(1.13) contrast(1.06) drop-shadow(0 1px 1px #57361e55);
+}
+.m2-atlas-screen .m2-atlas-suitcase-items{align-items:stretch}
+.m2-atlas-screen .m2-atlas-packed{min-width:0;white-space:normal;overflow-wrap:anywhere}
+.m2-atlas-screen .m2-atlas-section-status{font-variant-numeric:tabular-nums}
+.m2-atlas-screen .m2-atlas-statement-select,.m2-atlas-screen .m2-atlas-pop-row select{color:#382419}
+@media(max-width:620px){
+ .m2-atlas-screen .m2-atlas-pin{min-width:28px;min-height:28px}
+ .m2-atlas-screen .m2-atlas-statement-select,.m2-atlas-screen .m2-atlas-pop-row select{min-height:32px}
+}

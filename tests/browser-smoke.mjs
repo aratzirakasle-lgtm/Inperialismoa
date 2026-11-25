@@ -29,7 +29,8 @@ async function open(role,path,viewport={width:1365,height:900}){
    const userId=role==='teacher'?'teacher1':'student1';
    const people=[
      {id:'teacher1',display_name:'Profesor de pruebas',role:'teacher',team_id:null,class_id:'class1'},
-     {id:'student1',display_name:'Alumno de pruebas',role:'student',team_id:'team1',class_id:'class1'}
+     {id:'student1',display_name:'Alumno de pruebas',role:'student',team_id:'team1',class_id:'class1'},
+     {id:'student2',display_name:'Ikasle Proba',role:'student',team_id:'team1',class_id:'class1'}
    ];
    // Servidor simulado por contexto; persiste en recargas sin contactar con Supabase.
    let previousDraft=null,previousBiDraft=null,previousBiState=null,previousM1Drafts=null;
@@ -649,6 +650,7 @@ try{
      else await stage.locator('[data-atlas-continue="1"]').waitFor();
      await stage.locator('.atlas-photo-img').evaluate(img=>img.decode());
      assert.equal(await stage.locator('.atlas-photo-img').evaluate(img=>img.naturalWidth),3344);
+     assert.deepEqual(await stage.locator('.ap-name-signature').allTextContents(),['Alumno d. p.','Ikasle P.']);
      await stage.locator('.ap-mission-artwork').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
      assert.deepEqual(await stage.locator('.ap-mission-artwork').evaluateAll(imgs=>imgs.map(img=>[img.naturalWidth,img.naturalHeight])),Array.from({length:4},()=>[1619,971]));
      assert.equal(await stage.locator('.ap-art-lock').count(),2);
