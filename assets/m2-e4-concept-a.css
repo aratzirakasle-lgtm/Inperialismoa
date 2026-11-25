@@ -185,3 +185,6 @@
 
 /* E4 only: remove the redundant green mission heading; retain navigation and the archive title. */
 #m2-app.m2-archive-active > .m2-hero{display:none!important}
+
+/* E4: remove the individual red + buttons; retain the sequential document reader. */
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-zoom{display:none!important}
