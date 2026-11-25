@@ -243,3 +243,10 @@
 @media(max-width:620px){
  #m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-fact-miniature{width:24px;height:24px;margin-right:4px}
 }
+
+/* At large desktop widths an extra wrapped line must fit in the same row. */
+@media(min-width:1700px){
+ #m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statement{
+  padding-block:3px;line-height:1.1;min-height:41px;
+ }
+}
