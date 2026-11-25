@@ -533,13 +533,13 @@ function renderTimeline(){
   `<label class="m2-e2-option"><input type="radio" name="m2-e2-${field}" data-field="${field}" value="${value}" ${state[field]===value?'checked':''}><span class="m2-e2-radio" aria-hidden="true"></span><span class="m2-e2-option-copy">${esc(label)}</span><span class="m2-e2-option-icon m2-e2-icon-${icon}" aria-hidden="true"></span></label>`
  ).join('');
  return `<div class="m2-e2-scene ${selected?'m2-carrying':''}">
+ <header class="m2-e2-intro">
+  <span>ARIKETA 2 / 5 · 2. MISIOA</span>
+  <h2>2. Kapitalaren ibilbideak</h2>
+  <strong class="m2-e2-concept-subtitle">Kronografo historikoa</strong>
+  <p>Lotu hiru obra historikoak dagokien urtearekin, eta erantzun kapitalaren inbertsioei buruzko bi galderei.</p>
+ </header>
  <div class="m2-e2-upper">
-  <div class="m2-e2-left">
-   <header class="m2-e2-intro"><span>ARIKETA 2 / 5 · 2. MISIOA</span><h2>Kapitalaren ibilbideak</h2><p>Hartu hiru obra historikoak eta kokatu dagozkien urteetan; osatu kapitalaren ibilbidea.</p></header>
-   <section class="m2-e2-catalogue" aria-label="Obren bilduma"><header><strong>✦ &nbsp; OBREN BILDUMA &nbsp; ✦</strong><small>Garraio-azpiegitura handiak</small></header>
-     <div class="m2-e2-pieces" data-year-tray aria-label="Obren bilduma; piezak itzultzeko">${cards}</div>
-   </section>
-  </div>
   <section class="m2-e2-chronograph" aria-label="Azpiegituren kronologia">
    <header class="m2-e2-chronograph-title"><strong>AZPIEGITUREN KRONOLOGIA</strong><small>Inperialismoaren azpiegitura handiak eta kapitalaren hedapena</small></header>
    <div class="m2-e2-clock-dial">
@@ -552,6 +552,13 @@ function renderTimeline(){
    <div class="m2-e2-dial-progress" role="status" aria-live="polite">✦ <strong>${placed} / 3</strong> pieza ✦</div>
    <div class="m2-e2-return-slot">${selected&&taken.has(selected)?'<button type="button" class="m2-button secondary m2-return-piece" data-year-return>↶ Itzuli bildumara</button>':''}</div>
   </section>
+
+  <div class="m2-e2-left">
+   <section class="m2-e2-catalogue" aria-label="Obren bilduma"><header><strong>✦ &nbsp; ARRASTATU PIEZAK &nbsp; ✦</strong><small>Kokatu obra bakoitza dagokion urtean</small></header>
+     <div class="m2-e2-pieces" data-year-tray aria-label="Obren bilduma; piezak itzultzeko">${cards}</div>
+   </section>
+
+  </div>
  </div>
  <section class="m2-e2-ledger" aria-label="Kapitalaren inbertsioen liburua">
   <h3>✦ &nbsp; KAPITALAREN INBERTSIOEN LIBURUA &nbsp; ✦</h3>
@@ -566,7 +573,7 @@ function renderTimeline(){
    </fieldset>
   </div>
   <p class="m2-e2-source-note">Iturria: 7.–9. diapositibak. Aztertu dokumentazioa eta osatu kronologia eta inbertsioen liburua.</p>
- </section></div>`;
+ </section>${controls()}</div>`;
 }
 function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'selected':'')+'>'+esc(label)+'</option>'}
 /* Una sala, cuatro actividades: atlas fiel al concepto visual elegido.
@@ -917,7 +924,7 @@ function render(){
  }
  const item=activity(active);
  paintRoom(nav()+hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
- intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls());freezeAnswers();
+ intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+(active===2?'':controls()));freezeAnswers();
 }
 function getAnswers(){
  const state=taskState(active);
