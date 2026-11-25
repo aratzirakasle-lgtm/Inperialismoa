@@ -668,7 +668,7 @@ function renderPopulation(){
   roomIndex([{id:'m2-population-part',title:'1 · Biztanleria',filled:stage1,total:5},{id:'m2-route-part',title:'2 · Ibilbideak',filled:placed,total:3},{id:'m2-facts-part',title:'3 · Baieztapenak',filled:stage3,total:5},{id:'m2-luggage-part',title:'4 · Maletak',filled:stage4,total:8}],'Migrazioen lau atalak')+
    (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
   '<div class="m2-atlas-main" id="m2-population-part" tabindex="-1">'+
-   '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">B</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
+   '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">1</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
    '<section class="m2-atlas-pop m2-migration-folio"><h3><span class="m2-migration-index" aria-hidden="true">1</span> Europako biztanleria <small>(milioi biztanle)</small></h3>'+
     '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
     '<div class="m2-atlas-pop-list">'+population+'</div>'+
