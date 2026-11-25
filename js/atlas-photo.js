@@ -29,7 +29,7 @@ export function renderAtlasPhoto({teamName,memberNames=[],s,partial,mc,ec,previe
   return (won?sprite('s'+n,'ap-earned-seal'):'<span class="ap-seal-state ap-seal-'+n+'">'+esc(status(n))+'</span>')+
    '<span class="ap-sr">'+n+'. MISIOA · '+esc(status(n))+'</span>'+
    '<span class="ap-date ap-date-'+n+'" style="'+box(rects['d'+n])+'">'+(date?'<time datetime="'+esc(date.iso)+'">'+esc(printedDate(date.iso))+'</time>':esc(won?(preview||demo?'AURREBISTA':'Data egiaztatu gabe'):s.next===n?'Ikerketa zabalik':s.known[n-1]?'Zain':'Egiaztatu gabe'))+'</span>'+
-   (won?sprite('med'+n,'ap-earned-medal')+'<span class="ap-sr">'+n+'. misioaren domina</span>':'');
+   (won?sprite('med'+n,'ap-earned-medal ap-earned-medal-'+n)+'<span class="ap-sr">'+n+'. misioaren domina</span>':'');
  }).join('');
  const cards=[1,2,3,4].map(n=>{
   const won=completed(n),state=status(n),steps=s.steps[n-1],active=s.next===n;
