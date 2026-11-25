@@ -69,7 +69,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  (preview?'<button type="button" data-view="teacher" class="c-museo-return">← Irakaslearen panela</button>':'')+
  '<button type="button" data-c-logout="1" class="c-museo-exit">Irten ↗</button>'+
  '</div></div>'+
- '<div class="c-museo-stage" aria-label="Inperialismoaren garaia. Lau misioko museoa">'+
+ '<div class="c-museo-stage" aria-label="Ongi etorri, ikertzaileak. Inperialismoaren garaia. Lau misioko museoa">'+
  '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
  restoration1+restoration2+inscriptions+
  '<div class="c-museo-real-data">'+
@@ -83,7 +83,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
 
  '</div>'+
  '<div class="c-museo-hotspots">'+zones+'</div></div>'+
- '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><div class="c-museo-mobile-summary"><button type="button" class="c-museo-mobile-atlas" data-c-globe="1" aria-haspopup="dialog">✧ Ikertzailearen atlasa · Pasaportea</button><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
+ '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><h1 class="c-museo-mobile-welcome">Ongi etorri, ikertzaileak</h1><div class="c-museo-mobile-summary"><button type="button" class="c-museo-mobile-atlas" data-c-globe="1" aria-haspopup="dialog">✧ Ikertzailearen atlasa · Pasaportea</button><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
  '<p class="c-museo-footer">Zuen taldearen benetako aurrerapena azaltzen da. 3. eta 4. misioetako aretoak prestatzen ari gara.</p>'+
  '</div>';
 }
