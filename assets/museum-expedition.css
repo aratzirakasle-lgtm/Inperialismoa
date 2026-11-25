@@ -872,3 +872,15 @@ body:has(#modal:not([hidden]) .atlas-concept-one) .m1-class-widget{visibility:hi
 .atlas-concept-one .atlas-totals meter::-webkit-meter-bar{box-shadow:none;border:0;outline:1px solid #9c7c4e}
 .atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{box-shadow:none;border:0;background:linear-gradient(#68bd68,#3da950 43%,#288443)}
 .atlas-concept-one .atlas-totals meter::-moz-meter-bar{box-shadow:none;border:0}
+
+/* V32: companion polish for the existing tablet/mobile book. */
+.atlas-concept-one .atlas-signature-name{font-weight:400;fill:#51321e}
+.atlas-concept-one .atlas-signature-ink{mix-blend-mode:multiply}
+.atlas-concept-one .atlas-team-name{color:#4a2d18;letter-spacing:.012em}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{background:linear-gradient(#61a961,#398d4c 43%,#28743e)}
+.atlas-concept-one .atlas-totals meter::-moz-meter-bar{background:linear-gradient(#61a961,#398d4c 43%,#28743e)}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-bar{background:linear-gradient(#d8b98b,#ebcfa3 65%,#d9bc8e)}
+.atlas-concept-one .atlas-progress-row strong{font-variant-numeric:tabular-nums}
+.atlas-concept-one .atlas-archive:not([open]) summary strong{transform:rotate(-2deg);letter-spacing:.015em}
+.atlas-concept-one .atlas-archive:not([open]) summary>span:last-child{transform:rotate(-2deg)}
+.atlas-concept-one .atlas-continue{letter-spacing:.035em;text-shadow:0 1px 1px #1c2a18}
