@@ -250,3 +250,11 @@
   padding-block:3px;line-height:1.1;min-height:41px;
  }
 }
+
+/* E3: distinguish the two upper question stems from their answer options. */
+#m2-app.m2-atlas-active .m2-atlas-top-question .m2-atlas-radios legend{
+ color:#7b2528;font-weight:700;
+}
+#m2-app.m2-atlas-active .m2-atlas-top-question .m2-atlas-radio>span:last-child{
+ color:#39281e;font-weight:400;
+}
