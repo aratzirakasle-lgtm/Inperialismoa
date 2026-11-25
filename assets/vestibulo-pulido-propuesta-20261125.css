@@ -185,8 +185,20 @@
 .c-museo-home .c-museo-mission-lettering-2{--mission-center:34.7%}
 .c-museo-home .c-museo-mission-lettering-3{--mission-center:66.9%}
 .c-museo-home .c-museo-mission-lettering-4{--mission-center:79.6%}
-.c-museo-home .c-museo-inscription,.c-museo-home .c-museo-inscription.is-locked{
- font-family:Georgia,'Times New Roman',serif;font-size:1.02cqw;font-weight:700;letter-spacing:0;
+/* HASI y BLOKEATUTA: exactamente la misma tinta y métrica.
+   La palabra más larga determina el tamaño común para que quepa en su cartela. */
+.c-museo-home .c-museo-inscription,
+.c-museo-home .c-museo-inscription.is-locked{
+ font:700 .88cqw/1 Georgia,'Times New Roman',serif;
+ letter-spacing:0;color:#38230c;text-shadow:0 .04cqw #ffe3a16b;
+ gap:.18cqw;
+}
+.c-museo-home .c-museo-inscription.is-locked svg{
+ width:.78cqw;height:.88cqw;flex:none;
+}
+.c-museo-home .c-museo-inscription.is-locked>span{font:inherit;color:inherit;letter-spacing:inherit}
+.c-museo-home .c-museo-mobile-info small{
+ text-transform:uppercase;font-family:Georgia,'Times New Roman',serif;font-weight:700;letter-spacing:0;
 }
 /* Restauración localizada de las letras antiguas que aún se transparentan. */
 .c-museo-home .c-museo-real-data::after{
