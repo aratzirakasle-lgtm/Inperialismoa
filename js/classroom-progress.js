@@ -33,8 +33,15 @@ function assignEmblems(rows){
    const firstPalette=emblemHash(classKey)%emblemPalettes.length;
    const count=emblemMotifs.length*emblemPalettes.length;
    for(const id of [...ids].sort()){
-     let index=emblemHash(id)%emblemMotifs.length;
-     if(used.size<count){while(used.has(index))index=(index+1)%count;}
+     const seed=emblemHash(id)%emblemMotifs.length;
+     let index=seed;
+     // Agotar todos los motivos de la primera paleta antes de usar la siguiente.
+     if(used.size<count){
+       for(let offset=0;offset<count;offset++){
+         const candidate=Math.floor(offset/emblemMotifs.length)*emblemMotifs.length+(seed+offset)%emblemMotifs.length;
+         if(!used.has(candidate)){index=candidate;break;}
+       }
+     }
      used.add(index);
      const motif=emblemMotifs[index%emblemMotifs.length];
      const palette=emblemPalettes[(firstPalette+Math.floor(index/emblemMotifs.length))%emblemPalettes.length];

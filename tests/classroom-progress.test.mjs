@@ -62,3 +62,10 @@ test('Medallones ilustrados: ocho motivos y variantes sin duplicados en un aula 
  assert.equal((before.match(/<img class="m1-team-emblem /g)||[]).length,10);
  assert.doesNotMatch(renderMission1ClassProgress(ten),/team-emblem-/);
 });
+
+test('Ocho equipos agotan los ocho motivos antes de cambiar de color',()=>{
+ const eight=Array.from({length:8},(_,i)=>({team_id:'a-'+i,team_name:'Taldea '+i,class_id:'class1'}));
+ const emblems=[...renderMission1ClassProgress(eight,{showEmblems:true}).matchAll(/data-emblem="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(new Set(emblems).size,8);
+ assert.equal(new Set(emblems.map(e=>e.split('-')[0])).size,1);
+});
