@@ -864,3 +864,11 @@ body:has(#modal:not([hidden]) .atlas-concept-one) .m1-class-widget{visibility:hi
  .atlas-concept-one .atlas-signatures{max-width:min(100%,130px)}
  .atlas-concept-one .atlas-identity .atlas-paper-frame:has(.atlas-signature-ink)::before{max-height:160px}
 }
+
+/* V30 — same continuous green fill in the responsive atlas. */
+.atlas-concept-one .atlas-signatures,.atlas-concept-one .atlas-signature-ink{background:none;border:0;outline:0;box-shadow:none}
+.atlas-concept-one .atlas-medals{border-top:0}
+.atlas-concept-one .atlas-medals>div{filter:none;background:none;border:0;box-shadow:none}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-bar{box-shadow:none;border:0;outline:1px solid #9c7c4e}
+.atlas-concept-one .atlas-totals meter::-webkit-meter-optimum-value{box-shadow:none;border:0;background:linear-gradient(#68bd68,#3da950 43%,#288443)}
+.atlas-concept-one .atlas-totals meter::-moz-meter-bar{box-shadow:none;border:0}
