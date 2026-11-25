@@ -411,3 +411,6 @@
 .c-museo-hotspots .c-museo-globe:enabled{box-shadow:inset 0 0 1.6cqw #f5d18716,0 0 .7cqw #e6bf6c25}
 .c-museo-hotspots .c-museo-globe:enabled:is(:hover,:focus-visible){box-shadow:inset 0 0 1.6cqw #f5d18742,0 0 .9cqw #e6bf6c8a}
 .c-museo-mobile-atlas{display:block;width:100%;padding:10px;border:2px ridge #a78245;background:#284735;color:#f4dba0;font:700 14px Georgia,serif;border-radius:5px;margin:0 0 9px}
+
+/* La bienvenida del vestíbulo también se lee en la guía móvil. */
+.c-museo-mobile-guide .c-museo-mobile-welcome{margin:0 0 12px;text-align:center;font:700 clamp(20px,4vw,28px)/1.25 Georgia,'Times New Roman',serif;color:#ffe4b0;text-shadow:0 2px 3px #14291d}
