@@ -1,6 +1,6 @@
 /* Photo-first atlas: a cleaned native-resolution scene plus confirmed live data.
    No sample dates, progress or rewards are shown on the base image. */
-import {atlasSignatureNames} from './museum-passport.js?v=20261125-signatures28';
+import {renderAtlasSignatures} from './museum-passport.js?v=20261125-signatures29';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rects={s1:[25.9709,29.7414,7.8883,13.4698],s2:[34.0413,29.0948,7.6456,13.4698],d1:[26.7597,44.181,7.0995,2.2629],d2:[34.6481,43.1034,7.0995,2.1552],med1:[28.7621,60.1293,4.915,14.4397],med2:[35.4369,59.5905,5.0364,14.2241],b1:[47.7549,63.7931,9.1626,5.4957],b2:[59.4053,63.7931,9.2233,5.3879]};
 const box=r=>'left:'+r[0]+'%;top:'+r[1]+'%;width:'+r[2]+'%;height:'+r[3]+'%';
@@ -21,6 +21,7 @@ const printedDate=iso=>{
  return get('year')+'-'+get('month')+'-'+get('day')+' · '+get('hour')+':'+get('minute');
 };
 export function renderAtlasPhoto({teamName,memberNames=[],s,partial,mc,ec,preview,demo,archive,next,pending,canContinue,dateLabels,titles,files,loading=false}){
+ const signatures=renderAtlasSignatures(memberNames);
  const completed=n=>s.completedIds.includes(n);
  const status=n=>completed(n)?'OSATUTA':s.next===n?(s.steps[n-1]?.length?'MARTXAN':'HASI'):n>2?'PRESTATZEN':s.known[n-1]?'BLOKEATUTA':'EGIAZTATU GABE';
  const stamps=[1,2].map(n=>{
@@ -38,7 +39,7 @@ export function renderAtlasPhoto({teamName,memberNames=[],s,partial,mc,ec,previe
  }).join('');
  const total=(n,max,id,label)=>'<span class="ap-number ap-number-'+id+'">'+(partial?'≥ ':'')+n+' / '+max+'</span><div class="ap-meter ap-meter-'+id+'" role="progressbar" aria-label="'+label+'" aria-valuemin="0" aria-valuemax="'+max+'" aria-valuenow="'+n+'" aria-valuetext="'+(partial?'Gutxienez ':'')+n+' / '+max+'"><span style="width:'+Math.min(100,100*n/max)+'%"></span></div>';
  const actionText=canContinue?(s.steps[next-1]?.length?'JARRAITU':'HASI'):'Museora itzuli';
- return '<section class="atlas-photo" lang="eu" aria-labelledby="modal-title"><img class="atlas-photo-img" src="./assets/atlas-escena-base-2x-v26.webp" alt="" width="3344" height="1882" decoding="async"><h2 id="modal-title" class="ap-sr">Ikertzailearen atlasa</h2><span class="ap-team">TALDEA · '+esc(teamName)+'</span>'+(atlasSignatureNames(memberNames).length?'<div class="ap-signatures" aria-label="Izen kaligrafiko apaingarriak"><span class="ap-signature-paper" aria-hidden="true"></span>'+atlasSignatureNames(memberNames).map(n=>'<span class="ap-name-signature">'+esc(n)+'</span>').join('')+'</div>':'')+((preview||demo)?'<span class="ap-notice">AURREBISTA · EZ DA GORDETZEN</span>':loading?'<span class="ap-notice" role="status">Aurrerapena kargatzen…</span>':partial?'<span class="ap-notice" role="status">DATU BATZUK EGIAZTATU GABE</span>':'')+
+ return '<section class="atlas-photo" lang="eu" aria-labelledby="modal-title"><img class="atlas-photo-img" src="./assets/atlas-escena-base-2x-v26.webp" alt="" width="3344" height="1882" decoding="async"><h2 id="modal-title" class="ap-sr">Ikertzailearen atlasa</h2><span class="ap-team">TALDEA · '+esc(teamName)+'</span>'+(signatures?'<div class="ap-signatures"><span class="ap-signature-paper" aria-hidden="true"></span>'+signatures+'</div>':'')+((preview||demo)?'<span class="ap-notice">AURREBISTA · EZ DA GORDETZEN</span>':loading?'<span class="ap-notice" role="status">Aurrerapena kargatzen…</span>':partial?'<span class="ap-notice" role="status">DATU BATZUK EGIAZTATU GABE</span>':'')+
  stamps+'<span class="ap-sr">3. MISIOA · PRESTATZEN; 4. MISIOA · PRESTATZEN</span>'+'<span class="ap-progress-label ap-progress-label-m">Misio osatuta</span><span class="ap-progress-label ap-progress-label-e">Ariketa osatuta</span>'+total(mc,4,'m','Misio osatuta')+total(ec,20,'e','Ariketa osatuta')+cards+
  '<details class="ap-archive"><summary aria-label="Ireki ikerketa-espedienteak"></summary><div class="ap-archive-panel"><h3>IKERKETA-ESPEDIENTEAK</h3><p>'+ (partial?'Gutxienez ':'')+ec+' zigilu · 10 ariketa argitaratuta</p>'+archive+'</div></details>'+
  '<span class="ap-action-enamel" aria-hidden="true"></span><button type="button" class="ap-action" '+(canContinue?'data-atlas-continue="'+next+'" data-atlas-step="'+pending+'"':'data-atlas-close')+'><span>'+actionText+'</span></button><span class="ap-caption-surface" aria-hidden="true"></span><span class="ap-action-caption">'+(canContinue?next+'. MISIOA · '+pending+'. ARIKETA':partial?'AURRERAPENA EGIAZTATZEN':'HURRENGO ARETOA · PRESTATZEN')+'</span></section>';
