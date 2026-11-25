@@ -1,6 +1,13 @@
 name: Captura comparativa del atlas (rama de validación)
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/atlas-photo.css'
+      - 'assets/museum-expedition.css'
+      - 'tests/capture-atlas-comparison.mjs'
+      - '.github/workflows/capture-atlas-comparison.yml'
   push:
     branches: [atlas-pulido-validacion]
     paths:
@@ -16,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -29,6 +37,7 @@ jobs:
           python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/atlas-despues.log 2>&1 &
           node tests/capture-atlas-comparison.mjs
       - name: Publicar capturas de validación únicamente en la rama de prueba
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
