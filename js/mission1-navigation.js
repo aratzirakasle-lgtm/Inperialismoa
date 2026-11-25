@@ -1,4 +1,4 @@
-import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261124-members1';
+import { mountClassroomProgressPanel } from './classroom-progress-overlay.js?v=20261125-inline1';
 import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=2';
 import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 /* Recorrido de museo de la primera misión. Navegación docente libre;
@@ -380,6 +380,18 @@ function style(){
 
  `;
  document.head.append(el);
+ const progressStyle=document.createElement('style');progressStyle.id='m1-inline-progress-style';
+ progressStyle.textContent=`
+ .museum-wallet-bar:has(.m1-class-widget-inline){display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;position:relative;z-index:30;padding:4px 12px}
+ .museum-wallet-bar .m1-class-widget-inline{position:relative;inset:auto;display:inline-flex;flex:none;align-items:center;max-width:100%;gap:0;z-index:auto;pointer-events:auto}
+ .museum-wallet-bar .m1-class-widget-inline .m1-class-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:4px 19px 4px 8px;min-height:39px;border:1px solid #c39b55;border-radius:30px;background:linear-gradient(115deg,#392d23,#5a452a);color:#fff2d2;font:600 13px Georgia,serif;letter-spacing:.035em;box-shadow:0 3px 18px #0003;text-shadow:none}
+ .museum-wallet-bar .m1-progress-emblem{flex:0 0 32px;width:32px;height:32px;filter:drop-shadow(0 0 3px #e3b45e66)}
+ .museum-wallet-bar .m1-class-widget-inline .m1-class-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 24px));max-height:85dvh;z-index:10000;box-shadow:0 12px 35px #000b,0 0 0 100vmax #0008}
+ .museum-wallet-bar .m1-class-widget-inline .m1-class-panel[hidden]{display:none!important}
+ .museum-wallet-bar .m1-class-widget-inline .m1-class-panel-body{overflow:auto}
+ @media(max-width:560px){.museum-wallet-bar{gap:6px}.museum-wallet-bar .m1-class-widget-inline .m1-class-toggle{padding:3px 10px 3px 6px;font-size:12px;min-height:36px}.museum-wallet-bar .m1-progress-emblem{width:28px;height:28px;flex-basis:28px}}
+ `;
+ document.head.append(progressStyle);
 }
 function navSteps(active,completedSteps){
  const done=new Set(Array.from(completedSteps||[]).map(Number).filter(n=>n>=1&&n<=5));
@@ -416,7 +428,7 @@ export function mountExerciseNav(active,options){
  document.body.prepend(nav);
  document.querySelector('.museum-wallet-bar')?.remove();
  const bar=document.createElement('div');bar.className='museum-wallet-bar';bar.innerHTML=walletButton();nav.after(bar);prepareWallet();
- if(options?.teacher!==false)walletContext({preview:true,mission:1});
+ if(options?.teacher!==false){walletContext({preview:true,mission:1});mountClassroomProgressPanel(null,null,{target:bar,preview:true});}
  arriveMuseumRoom(document.body,'1:'+active);
  return nav;
 }
@@ -444,14 +456,14 @@ export async function mountStudentExerciseNav(active,client,team){
  try{
    const complete=await loadMission1Completed(client,team);
    const nav=mountExerciseNav(active,{teacher:false,completedSteps:complete});
-   mountClassroomProgressPanel(client,team);
+   mountClassroomProgressPanel(client,team,{target:document.querySelector('.museum-wallet-bar')});
    return nav;
  }catch(err){
    console.warn('Misioko ibilbidea ezin izan da kargatu',err);
    // Falla cerrado: solo queda disponible la sala actual; los demás enlaces
    // no se inventan a partir de una marca histórica.
    const nav=mountExerciseNav(active,{teacher:false,completedSteps:Array.from({length:active-1},(_,i)=>i+1)});
-   mountClassroomProgressPanel(client,team);
+   mountClassroomProgressPanel(client,team,{target:document.querySelector('.museum-wallet-bar')});
    return nav;
  }
 }
