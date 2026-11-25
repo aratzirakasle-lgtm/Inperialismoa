@@ -1,0 +1,238 @@
+/* INPERIALISMOA · MISIOA 02 · Restauración gráfica de las cinco salas.
+ * Capa exclusivamente visual: conserva imágenes, geometría de juego, textos,
+ * estados semánticos, interacción y evaluación. Dorado = selección, no acierto.
+ * No se introducen recursos externos, scripts, ni capas sobre los objetivos. */
+#m2-app{
+ --m2-ink:#38261a;
+ --m2-paper-light:#fff2d7;
+ --m2-paper-shadow:#dbc092;
+ --m2-brass:#c39a56;
+ --m2-brass-light:#f3d79d;
+ --m2-brass-dark:#805a30;
+ --m2-forest:#254839;
+ --m2-walnut:#3c2418;
+ --m2-display:"Libre Baskerville",Georgia,"Times New Roman",serif;
+ --m2-book:Georgia,"Times New Roman",serif;
+ --m2-plate:linear-gradient(155deg,#f7dda3 0%,#c69b57 35%,#e8c889 65%,#a87c3d 100%);
+ --m2-card-paper:radial-gradient(ellipse at 18% 0%,#fffaf0ba,transparent 65%),linear-gradient(145deg,#fff0d3,#ebcfa0);
+}
+#m2-app .m2-room-index{
+ border-color:#bb9457;
+ background:radial-gradient(ellipse at 50% 0%,#426b4b55,transparent 80%),linear-gradient(180deg,#29483a,#1a3027);
+ box-shadow:inset 0 0 0 1px #d3ad6359,0 3px 6px #160e0a66;
+}
+#m2-app .m2-room-index-item{
+ background:var(--m2-plate);
+ color:#342416;
+ border-color:#96703e;
+ box-shadow:inset 0 1px 0 #fff0c9,0 2px 3px #17120e66;
+ font-family:var(--m2-book);
+}
+#m2-app .m2-room-index-item small{color:#4f361f;font-variant-numeric:tabular-nums}
+#m2-app .m2-controls .m2-button:not(:disabled):focus-visible,
+#m2-app .m2-room-index-item:focus-visible{
+ outline:2px solid #ffe6ac;outline-offset:3px;
+}
+#m2-app .m2-controls .m2-button:not(.secondary):not(:disabled){
+ background:linear-gradient(160deg,#45734f,#254839 58%,#17362d);
+ border-color:#c5a063;color:#fff0cb;
+ box-shadow:inset 0 0 0 1px #e1bd7770,0 3px 0 #4b2d17,0 5px 8px #1b10096b;
+}
+#m2-app .m2-controls .m2-button.secondary:not(:disabled){
+ background:var(--m2-plate);border-color:#946c39;color:#342519;
+ box-shadow:inset 0 1px #fff2cc,0 3px 5px #2b1a124d;text-shadow:none;
+}
+#m2-app .m2-answer-count{font-family:var(--m2-book);font-variant-numeric:tabular-nums;letter-spacing:.025em}
+#m2-app .m2-answer-count::before,#m2-app .m2-answer-count::after{content:"";display:inline-block;width:6px;height:6px;margin:0 8px;vertical-align:middle;background:#bc9250;transform:rotate(45deg)}
+/* 01 · Cabinet: polished glass and dark recessed wells, identical for every category. */
+#m2-app.m2-first-room .m2-museum-case .m2-case-arch{
+ border-color:#be9457;
+ box-shadow:inset 0 0 0 1px #f2d5a1,inset 0 0 14px #3620148c,0 2px 7px #180d09a1;
+}
+#m2-app.m2-first-room .m2-photo-vitrine::before{
+ background:linear-gradient(112deg,transparent 9%,#fff4d92e 10%,transparent 26%,transparent 68%,#fff4df1d 74%,transparent 84%),radial-gradient(ellipse at 50% 0%,#ffe4ad36,transparent 68%);
+ pointer-events:none;
+}
+#m2-app.m2-first-room .m2-case-title-action{font-family:var(--m2-book);font-weight:700;color:#3b2616;text-shadow:0 1px #f9e6b9}
+#m2-app.m2-first-room .m2-museum-case .m2-case-well{
+ box-shadow:inset 0 0 0 1px #f2d3a179,inset 0 7px 14px #0d0909ac,inset 0 -3px 9px #e6b45e36,0 2px 4px #25150b8f;
+}
+#m2-app.m2-first-room .m2-museum-desktop{
+ background-image:radial-gradient(ellipse at 50% 0%,#ffe0a749,transparent 66%),linear-gradient(155deg,#44220e16,#2e140c55),url('./atlas-madera-referencia-hd.webp');
+ box-shadow:inset 0 0 0 1px #f9dba9,0 0 0 2px #75502d,0 0 0 4px #c09250,0 9px 0 #3d2419,0 14px 18px #120c09a8;
+}
+#m2-app.m2-first-room .m2-archive-card.m2-tile{
+ background:var(--m2-card-paper)!important;
+ border-color:#bc9153!important;
+}
+#m2-app.m2-first-room .m2-card-archive-mark{color:#70512c}
+#m2-app.m2-first-room .m2-museum-card-copy{color:#2e2017;text-shadow:none}
+#m2-app.m2-first-room .m2-archive-card[aria-pressed="true"]{
+ outline:2px solid #f9d68d!important;outline-offset:1px;
+ box-shadow:inset 0 0 0 1px #fff4cc,0 0 0 1px #9c723e,0 0 10px #e8b55a99!important;
+}
+/* 02 · Chronograph: warmer metal, catalogue plates and ledger paper. */
+#m2-app.m2-capital-active .m2-e2-catalogue{
+ border-color:#be9457;
+ box-shadow:inset 0 0 0 1px #e4ba7770,0 4px 9px #1c100b80;
+}
+#m2-app.m2-capital-active .m2-e2-catalogue>header,
+#m2-app.m2-capital-active .m2-e2-chronograph-title{
+ border-color:#cda76b;
+ background:linear-gradient(155deg,#6f4b2c,#3e2818);
+ color:#ffe6ae;text-shadow:0 1px 2px #211309;
+ box-shadow:inset 0 1px #e5c08570,0 2px 5px #2114097a;
+}
+#m2-app.m2-capital-active .m2-e2-piece{
+ background-image:var(--m2-card-paper);
+ border-color:#bd9559;box-shadow:inset 0 0 0 1px #fff1d0,0 3px 6px #24160977;
+}
+#m2-app.m2-capital-active .m2-e2-picture,
+#m2-app.m2-capital-active .m2-e2-small-picture{
+ border-color:#b18c53;box-shadow:inset 0 0 0 1px #fff2d3;
+}
+#m2-app.m2-capital-active .m2-e2-slot>strong{
+ background:var(--m2-plate);color:#382419;text-shadow:0 1px #ffedb8;border-color:#a17a3f;
+}
+#m2-app.m2-capital-active .m2-e2-dial-progress{
+ color:#f7e0aa;font-variant-numeric:tabular-nums;
+ text-shadow:0 1px 2px #241309;
+}
+#m2-app.m2-capital-active .m2-e2-ledger{
+ border-color:#a77943;box-shadow:inset 0 0 0 2px #f4ddb0,inset 0 0 16px #8a603538,0 5px 10px #2413099c;
+}
+#m2-app.m2-capital-active .m2-e2-option{
+ border-color:#bc9a63;
+ background:linear-gradient(155deg,#fff2d5,#e9cfa3);
+ color:#39271c;
+}
+#m2-app.m2-capital-active .m2-e2-option:has(input:checked){
+ background:linear-gradient(150deg,#fff0c5,#d9b779)!important;
+ border-color:#926a34!important;box-shadow:inset 0 0 0 1px #fff4d0,0 0 0 1px #c29858;
+}
+#m2-app.m2-capital-active .m2-e2-option:has(input:focus-visible){outline:2px solid #986e35;outline-offset:2px}
+/* 03 · Migration office: readable folios, existing maps and eight cutout objects. */
+#m2-app .m2-atlas-screen .m2-atlas-heading{
+ background:radial-gradient(ellipse at 50% 0%,#53795985,transparent 70%),linear-gradient(180deg,#345c43,#1e392c 65%,#2c503b);
+ border-color:#c6a064;
+ box-shadow:inset 0 0 0 1px #e6c78c,0 3px 0 #4a2b18,0 6px 10px #100b08a6;
+}
+#m2-app .m2-atlas-screen .m2-atlas-heading h1{color:#ffe9bf;text-shadow:0 2px 2px #18291b}
+#m2-app .m2-atlas-screen .m2-atlas-total{
+ background:var(--m2-plate);color:#352313;border-color:#99703e;text-shadow:none;font-variant-numeric:tabular-nums;
+}
+#m2-app .m2-atlas-screen .m2-atlas-intro,
+#m2-app .m2-atlas-screen .m2-atlas-pop,
+#m2-app .m2-atlas-screen .m2-atlas-top-question,
+#m2-app .m2-atlas-screen .m2-atlas-row-two .m2-atlas-activity{
+ border-color:#b68b52;
+ box-shadow:inset 0 0 0 1px #fff0cb,inset 0 0 10px #91673927,0 3px 6px #2b180d7a;
+}
+#m2-app .m2-atlas-screen .m2-atlas-pop-year,
+#m2-app .m2-atlas-screen .m2-migration-index{
+ color:#3c2817;
+}
+#m2-app .m2-atlas-screen .m2-atlas-route-card,
+#m2-app .m2-atlas-screen .m2-atlas-luggage-card{
+ background:var(--m2-card-paper)!important;
+ border-color:#b38a51!important;
+ box-shadow:inset 0 0 0 1px #fff3d6,0 2px 4px #2c190d69;
+}
+#m2-app .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration,
+#m2-app .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ filter:saturate(1.13) contrast(1.04) drop-shadow(0 2px 2px #3923196b);
+}
+#m2-app .m2-atlas-screen .m2-atlas-pop-row select,
+#m2-app .m2-atlas-screen .m2-atlas-statement-select{
+ border-color:#ae8c58;background:linear-gradient(#fff9e9,#f1dfbd);color:#38261a;
+}
+#m2-app .m2-atlas-screen .m2-neutral-stage{
+ background:var(--m2-plate)!important;color:#3b2919!important;text-shadow:none!important;border-color:#ad864c!important;
+ box-shadow:inset 0 1px #fff1c4,0 2px 3px #30201366!important;
+}
+#m2-app .m2-atlas-screen .m2-atlas-final-controls .m2-controls{
+ background:linear-gradient(160deg,#314f3d,#20382b);
+ border-color:#b58b51;color:#ffedc7;
+}
+#m2-app .m2-atlas-screen .m2-atlas-final-controls .m2-answer-count{color:#ffedc7}
+#m2-app .m2-atlas-screen .m2-atlas-final-controls .m2-feedback{color:#ffedc7}
+/* 04 · Archive: paper depth without disturbing photographs or reading geometry. */
+#m2-app.m2-archive-active .m2-archive-dossier{
+ border-color:#b88e51;
+ box-shadow:inset 0 0 0 1px #fff3d0,inset 0 0 15px #b27c3933,0 3px 0 #9b713d,0 7px 12px #25160b75;
+}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-source-index{
+ background:var(--m2-plate);color:#3c2818;text-shadow:none;border-color:#a27b42;
+}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-source-titling h3{
+ color:#3b2819;text-shadow:0 1px #fff3d4;
+}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-source-text{color:#35271d}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-choice{
+ border-color:#d0b181;background:linear-gradient(150deg,#fff4dc,#efdab2);
+}
+#m2-app.m2-archive-active .m2-source-seal[data-source-status]{
+ border:2px double #99703d;color:#654522;background:#f0dfbd;letter-spacing:.025em;
+}
+#m2-app.m2-archive-active[data-m2-readonly] .m2-source-seal[data-source-status]{
+ border-color:#bc9c62;color:#ffeac0;background:#2a4937;
+}
+#m2-reading-dialog.m2-archive-reading-dialog header{
+ background:linear-gradient(155deg,#34543f,#1d352a);
+ border-bottom-color:#bd985e;
+}
+#m2-reading-dialog.m2-archive-reading-dialog .m2-reading-choices{
+ background:linear-gradient(150deg,#fff4dba0,#e7d0a775);border-color:#b8955c;
+}
+/* 05 · Expedition: atlas mount, archival headings and uniform brass selection. */
+#m2-app.m2-expedition-active .m2-historical-map{
+ border-color:#ba9156;
+ box-shadow:inset 0 0 0 1px #f8e0aa,0 5px 0 #6b4627,0 9px 16px #26190d90;
+}
+#m2-app.m2-expedition-active .m2-atlas-museum-title{
+ color:#f9e2af;background:linear-gradient(155deg,#3f6449,#233e2f);
+ border-color:#c39a56;text-shadow:0 1px 2px #19291c;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel{
+ border-color:#b48c54;box-shadow:inset 0 0 0 1px #fff3d3,0 3px 0 #a07a47,0 6px 10px #3422145c;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel header{
+ background:linear-gradient(145deg,#42674b,#254536 72%,#20382e);
+ color:#ffebc3;border-color:#c29a57;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel header h3,
+#m2-app.m2-expedition-active .m2-expedition-panel header>span:not(.m2-expedition-file-status){color:#ffebc3;text-shadow:0 1px 2px #17251b}
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-expedition-file-status{
+ background:#f1dfb7;color:#52381d;border-color:#d7b778;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-multi .m2-tile,
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-explorer-card{
+ border-color:#ad8650;background:var(--m2-card-paper);color:#382718;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-multi .m2-tile[aria-pressed="true"],
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-explorer-card[aria-pressed="true"]{
+ background:var(--m2-plate);color:#392619;outline:2px solid #b88b45;outline-offset:1px;
+ box-shadow:inset 0 0 0 1px #fff0c8,0 0 6px #be955b88!important;
+}
+#m2-app.m2-expedition-active .m2-exploration-art img:not([src$="atlas-expediente-foto-hd.webp"]){
+ border-color:#b99054;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel select{
+ background:linear-gradient(#fff9e7,#eedbb7);border-color:#a7824c;color:#36251a;
+}
+/* The final certificate is a reward only after whole-mission validation. */
+#m2-app .m2-ceremony-frame{
+ box-shadow:inset 0 0 0 1px #e7c98c5e,inset 0 0 26px #0f2318b0,0 7px 15px #111a13ad;
+}
+#m2-app .m2-ceremony-plaque{background:var(--m2-plate);color:#352316;text-shadow:0 1px #ffe8b6}
+#m2-app .m2-ceremony-certificate{
+ box-shadow:inset 0 0 0 1px #fff2cb,inset 0 0 14px #98703e45,0 6px 14px #142319a0;
+}
+@media(max-width:640px){
+ #m2-app .m2-room-index-item{font-size:12px}
+ #m2-app .m2-room-index-item small{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app .m2-room-index-item,#m2-app .m2-controls .m2-button{transition:none!important}
+}
