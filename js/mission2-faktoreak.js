@@ -8,7 +8,7 @@ import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-atlas3'
 import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
 import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
-import { renderMuseumPassport } from './museum-passport.js?v=20261124-atlas1';
+import { renderMuseumPassport } from './museum-passport.js?v=20261125-ceremony29';
 const app=document.querySelector('#m2-app');
 let passportDates={},mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
 async function checkMission2Release(){
@@ -744,16 +744,23 @@ function controls(){
 }
 function animateRoomArrival(room){arriveMuseumRoom(app,'2:'+room)}
 function renderEnd(){
+ // Preview never changes the student's stored completions.
  const label=teacher?'IRAKASLEAREN AURREBISTA · EZ DA GORDE':'2. MISIOA GAINDITUTA';
- return nav()+hero()+'<section class="m2-finished"><div class="m2-star" aria-hidden="true">✦</div><span class="m2-eyebrow">'+label+'</span>'+
- '<div class="m2-victory-ribbon" aria-label="5 ariketa osatuta"><span>✦</span> BOST ARIKETAK OSATUTA <span>✦</span></div><div class="m2-ceremony-stars" aria-hidden="true">✦ ✧ ✦ ✧ ✦</div><h2>Inperialismoaren faktoreak aztertu dituzue!</h2><p>Bost ariketetan ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologiaren eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p>'+
- (teacher?'<p>Irakaslearen aurrebista da. Ez da saiakerarik edo osatzerik gorde.</p>':
- '<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+
- renderMuseumPassport({teamName:teacher?'Probako taldea':mission2TeamName,completedIds:[1,2],completedAt:passportDates,preview:teacher,animate:true,animateMission:2})+
- '<a class="m2-button" style="display:inline-flex;align-items:center;text-decoration:none" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">Museora itzuli →</a></section>';
+ const team=teacher?'Probako taldea':mission2TeamName;
+ const files=activities.map(({id,title})=>'<li><span class="m2-ceremony-file-seal" aria-hidden="true">✓</span><span><small>AGIRIA '+String(id).padStart(2,'0')+'</small><strong>'+esc(title)+'</strong></span><small class="m2-ceremony-file-mark">'+(teacher?'SIMULAZIOA':'ZIGILATUA')+'</small></li>').join('');
+ return nav()+'<section class="m2-finished m2-award-ceremony" data-ceremony-preview="'+teacher+'" aria-labelledby="m2-ceremony-title">'+
+ '<div class="m2-ceremony-frame"><header class="m2-ceremony-header"><span class="m2-ceremony-plaque">MUSEOKO ARTXIBOA · II. MISIOA</span><span class="m2-ceremony-label">'+label+'</span><h1 id="m2-ceremony-title">'+(teacher?'Bigarren misioaren amaiera':'Zorionak, ikertzaileak!')+'</h1><p>Inperialismoaren faktoreak aztertu dituzue!</p></header>'+
+ '<div class="m2-ceremony-layout"><article class="m2-ceremony-certificate"><div class="m2-ceremony-certificate-heading"><span>IKERKETA HISTORIKOAREN EGIAZTAGIRIA</span><h2>'+esc(team)+'</h2><div class="m2-victory-ribbon"><span aria-hidden="true">✦</span> BOST ARIKETAK OSATUTA <span aria-hidden="true">✦</span></div></div>'+
+ '<ol class="m2-ceremony-files" aria-label="Bost ikerketa-agiriak">'+files+'</ol><p class="m2-ceremony-reflection">Ekonomiaren, demografiaren, erlijioaren, politikaren eta ideologien eragina ikertu duzue. Erabili ikuspegi kritikoa kolonialismoaren justifikazioak aztertzerakoan.</p></article>'+
+ '<div class="m2-ceremony-reward"><div class="m2-ceremony-award-title">BIGARREN MISIOAREN DOMINA</div>'+
+ renderMuseumPassport({teamName:team,completedIds:[1,2],completedAt:passportDates,preview:teacher,animate:!teacher,animateMission:2,variant:'ceremony'})+
+ '</div></div>'+
+ '<footer class="m2-ceremony-footer"><div>'+(teacher?'<p><strong>Irakaslearen aurrebista.</strong> Ez da saiakerarik edo osatzerik gorde.</p>':'<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+'</div>'+
+ '<a class="m2-button m2-ceremony-return" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">Museora itzuli →</a></footer></div></section>';
 }
 function render(){
  if(releaseClosed)return;
+ if(teacherEnding&&!teacher&&completions.size!==5)teacherEnding=false;
  remoteRenderPending=false;clearTimeout(remoteRenderTimer);remoteRenderTimer=null;
  animateRoomArrival(teacherEnding?'amaiera':String(active));
  const firstRoom=active===1&&!teacherEnding;

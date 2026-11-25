@@ -208,6 +208,11 @@ try{
    }
    await page.locator('[data-preview-next]').click();
    assert.equal(await page.locator('.m2-finished').count(),1);
+   assert.equal(await page.locator('.m2-award-ceremony').getAttribute('data-ceremony-preview'),'true');
+   assert.equal(await page.locator('.m2-ceremony-files li').count(),5);
+   assert.equal(await page.locator('.m2-finished time[datetime]').count(),0);
+   await page.locator('.m2-finished .atlas-photo-medal').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+   await page.screenshot({path:'test-output/m2-ceremony-teacher.png',fullPage:true,animations:'disabled'});
    assert.deepEqual(await page.evaluate(()=>window.__m2RpcCalls),[]);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
@@ -518,6 +523,14 @@ try{
    assert.match(await page.locator('.m2-finished').innerText(),/3. misioa prestatzen/);
    assert.equal(await page.locator('.m2-finished .mp-earned').count(),2);
    assert.equal(await page.locator('.m2-finished .mp-medal').count(),2);
+   assert.equal(await page.locator('.m2-award-ceremony').getAttribute('data-ceremony-preview'),'false');
+   assert.equal(await page.locator('.m2-ceremony-files li').count(),5);
+   assert.equal(await page.locator('.m2-finished .mp-ceremony-ink').count(),2);
+   await page.locator('.m2-finished .atlas-photo-medal').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+   await page.screenshot({path:'test-output/m2-ceremony-student.png',fullPage:true,animations:'disabled'});
+   await page.setViewportSize({width:390,height:844});
+   assert.ok(await page.locator('.m2-award-ceremony').evaluate(el=>el.scrollWidth<=el.clientWidth+2));
+   await page.screenshot({path:'test-output/m2-ceremony-mobile.png',fullPage:true,animations:'disabled'});
    await page.locator('[data-m2-dossier]').click();
    assert.equal(await page.locator('.m2-dossier .m1-sealed').count(),5);
    await page.locator('[data-dossier-passport]').click();
