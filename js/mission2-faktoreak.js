@@ -849,7 +849,17 @@ function paintRoom(markup){
   if(current.length!==next.length||!current.length){app.innerHTML=markup;restoreRoomFocus(saved);return}
   for(let i=0;i<current.length;i++)pairs.push([current[i],next[i]]);
  }
- for(const [current,next] of pairs)if(current.outerHTML!==next.outerHTML)current.replaceWith(next.cloneNode(true));
+ // Live form properties can differ from their HTML attributes after a local
+ // edit. A remote reset may produce the same markup as before the edit.
+ for(const [current,next] of pairs){
+  if(current.outerHTML!==next.outerHTML){current.replaceWith(next.cloneNode(true));continue}
+  const live=current.querySelectorAll('input,select'),expected=next.querySelectorAll('input,select');
+  for(let i=0;i<live.length;i++){
+   const control=live[i],target=expected[i];if(!target)continue;
+   if(control.matches('input[type="radio"],input[type="checkbox"]')){if(control.checked!==target.checked)control.checked=target.checked}
+   else if(control.value!==target.value)control.value=target.value;
+  }
+ }
  for(const selector of ['.m2-museum-interaction','.m2-e2-scene']){
   const current=app.querySelector(selector),next=template.content.querySelector(selector);
   if(current&&next)current.className=next.className;
