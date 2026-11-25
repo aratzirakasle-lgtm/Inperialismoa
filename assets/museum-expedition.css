@@ -848,3 +848,19 @@ body:has(#modal:not([hidden]) .atlas-concept-one) .m1-class-widget{visibility:hi
 
 .atlas-concept-one .atlas-signatures{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;max-width:100%;color:#51301d}
 .atlas-concept-one .atlas-name-signature{font:italic 600 clamp(13px,1.15cqw,20px)/1.1 "Segoe Script","Bradley Hand","URW Chancery L",cursive,Georgia,serif;transform:rotate(-5deg);overflow-wrap:anywhere;text-align:center}
+
+/* V29: reserve independent space for all signatures on the responsive book. */
+.atlas-concept-one .atlas-signatures{display:block;width:100%;max-width:min(100%,12.5cqw);flex:0 0 auto;min-width:0;line-height:0;margin:.08cqw auto}
+.atlas-concept-one .atlas-signatures:empty{display:none}
+.atlas-concept-one .atlas-signature-ink{display:block;width:100%;height:auto;aspect-ratio:156/72;overflow:hidden}
+.atlas-concept-one .atlas-signature-name{font-family:"Segoe Script","Bradley Hand","URW Chancery L","Apple Chancery",Georgia,serif;font-style:italic;font-weight:500;text-anchor:middle;fill:#4b2c19;stroke:none;letter-spacing:0}
+.atlas-concept-one .atlas-identity .atlas-paper-frame:has(.atlas-signature-ink)::before{max-height:21cqw}
+.atlas-concept-one .atlas-identity .atlas-page-caption{flex:0 0 auto}
+@media(max-width:900px){
+ .atlas-concept-one .atlas-signatures{max-width:min(100%,185px)}
+ .atlas-concept-one .atlas-identity .atlas-paper-frame:has(.atlas-signature-ink)::before{max-height:230px}
+}
+@media(max-width:480px){
+ .atlas-concept-one .atlas-signatures{max-width:min(100%,130px)}
+ .atlas-concept-one .atlas-identity .atlas-paper-frame:has(.atlas-signature-ink)::before{max-height:160px}
+}
