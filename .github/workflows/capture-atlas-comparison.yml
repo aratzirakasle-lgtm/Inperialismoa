@@ -1,0 +1,52 @@
+name: Captura comparativa del atlas (rama de validación)
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/atlas-photo.css'
+      - 'assets/museum-expedition.css'
+      - 'tests/capture-atlas-comparison.mjs'
+      - '.github/workflows/capture-atlas-comparison.yml'
+  push:
+    branches: [atlas-pulido-validacion]
+    paths:
+      - '.github/workflows/capture-atlas-comparison.yml'
+      - 'tests/capture-atlas-comparison.mjs'
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar dos versiones idénticas salvo el pulido
+        run: |
+          git worktree add --detach /tmp/atlas-antes 7dbd4a61d06f035090a68f71625ee5a4aec4fb20
+          npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Capturar ambas versiones sin Supabase
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory /tmp/atlas-antes >/tmp/atlas-antes.log 2>&1 &
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/atlas-despues.log 2>&1 &
+          node tests/capture-atlas-comparison.mjs
+      - name: Publicar capturas de validación únicamente en la rama de prueba
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/capturas/atlas-*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Capturas reales antes y después del atlas"
+            git push origin HEAD:atlas-pulido-validacion
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atlas-comparativa
+          path: docs/capturas/atlas-*.png

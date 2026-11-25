@@ -1,6 +1,6 @@
 /* Photo-first atlas: a cleaned native-resolution scene plus confirmed live data.
    No sample dates, progress or rewards are shown on the base image. */
-import {renderAtlasSignatures} from './museum-passport.js?v=20261125-signatures29';
+import {renderAtlasSignatures} from './museum-passport.js?v=20261125-pulido32';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rects={s1:[25.9709,29.7414,7.8883,13.4698],s2:[34.0413,29.0948,7.6456,13.4698],d1:[26.7597,44.181,7.0995,2.2629],d2:[34.6481,43.1034,7.0995,2.1552],med1:[28.7621,60.1293,4.915,14.4397],med2:[35.4369,59.5905,5.0364,14.2241],b1:[47.7549,63.7931,9.1626,5.4957],b2:[59.4053,63.7931,9.2233,5.3879]};
 const box=r=>'left:'+r[0]+'%;top:'+r[1]+'%;width:'+r[2]+'%;height:'+r[3]+'%';

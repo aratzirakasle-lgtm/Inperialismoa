@@ -76,7 +76,7 @@ export function renderAtlasSignatures(names=[]){
  const rows=list.map((name,i)=>{
   const y=36+(i-(count-1)/2)*step+font*.29;
   const length=Math.min(132,Math.max(font*.8,[...name].length*font*.52));
-  return '<text class="atlas-signature-name" x="78" y="'+y.toFixed(2)+'" font-size="'+font.toFixed(2)+'" textLength="'+length.toFixed(2)+'" lengthAdjust="spacingAndGlyphs" transform="rotate('+(-3+i%3)+' 78 '+y.toFixed(2)+')">'+escapeHtml(name)+'</text>';
+  return '<text class="atlas-signature-name" x="78" y="'+y.toFixed(2)+'" font-size="'+font.toFixed(2)+'" textLength="'+length.toFixed(2)+'" lengthAdjust="spacingAndGlyphs" transform="rotate('+([-5,2,-2][i%3])+' 78 '+y.toFixed(2)+')">'+escapeHtml(name)+'</text>';
  }).join('');
  return '<svg class="atlas-signature-ink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 72" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+escapeHtml('Izen kaligrafiko apaingarriak: '+list.join(', '))+'">'+rows+'</svg>';
 }
