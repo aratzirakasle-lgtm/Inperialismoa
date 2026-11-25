@@ -61,3 +61,83 @@
  display:block;width:100%;height:auto;max-height:none;aspect-ratio:2/1;
  object-fit:contain;filter:none;border:0;
 }
+
+/* E5: unified museum catalogue cartouches, neutral selection only.
+   All answer options use the same material, ornament and selected state. */
+#m2-app.m2-expedition-active .m2-expedition-files{
+ --e5-card-face:linear-gradient(145deg,#fff8e6e8,#f5e1b5b8 52%,#dab57a8c),url('./atlas-papel-referencia.svg') center/100% 100%;
+ --e5-card-selected:linear-gradient(145deg,#fff1bc,#e8c67f 45%,#d1a459);
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-multi{
+ gap:9px;grid-template-columns:repeat(3,minmax(0,1fr));
+}
+#m2-app.m2-expedition-active #m2-exp-file-2 .m2-multi>.m2-tile:last-child:nth-child(3n+2){grid-column:auto}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-multi .m2-tile,
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-card{
+ box-sizing:border-box;position:relative;isolation:isolate;
+ display:flex;align-items:center;justify-content:center;gap:7px;
+ min-width:0;min-height:53px;height:auto;padding:9px 13px;
+ border:3px double #a17b43;border-radius:7px;
+ background:var(--e5-card-face),#ecd4a7;color:#382619;
+ box-shadow:inset 0 0 0 1px #fff3d4,inset 0 -3px 6px #9f733318,0 2px 0 #9c743d,0 4px 5px #4c30152c;
+ font:700 clamp(12px,.93vw,15px)/1.3 Georgia,serif;
+ white-space:normal;overflow-wrap:break-word;text-align:center;
+ outline:0;cursor:pointer;transition:background .15s,box-shadow .15s,border-color .15s,transform .15s;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::before,
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::after{
+ content:"";position:absolute;top:50%;width:4px;height:4px;
+ background:linear-gradient(145deg,#ffe9ac,#98672c);border:1px solid #a47737;
+ border-radius:50%;transform:translateY(-50%);pointer-events:none;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::before{left:4px}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::after{right:4px}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-card>span{
+ display:none;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-card>strong{min-width:0;font:inherit}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-cards{
+ border:1px solid #b99460;border-radius:6px;padding:8px;
+ background:#fff2d21c;min-width:0;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-cards>legend{
+ color:#7b2528;font:700 clamp(13px,1vw,16px)/1.3 Georgia,serif;
+ padding:0 6px;max-width:100%;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-options{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;
+}
+#m2-app.m2-expedition-active #m2-exp-file-4 .m2-explorer-options{grid-template-columns:repeat(3,minmax(0,1fr))}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-options{grid-template-columns:minmax(0,1fr)}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-card{justify-content:flex-start;text-align:left;padding-inline:20px;min-height:48px}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-card>strong{font-weight:500}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)[aria-pressed="true"]{
+ background:var(--e5-card-selected);color:#32220f;border-color:#956a29;
+ outline:2px solid #b78a38;outline-offset:1px;
+ box-shadow:inset 0 0 0 1px #fff6cf,0 0 8px #d4ae6280,0 3px 4px #61411c45!important;
+}
+@media(hover:hover) and (pointer:fine){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):not(:disabled):hover{
+ border-color:#c69a4c;transform:translateY(-1px);
+ }
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):focus-visible{
+ outline:3px solid #6b481e;outline-offset:3px;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):disabled{
+ opacity:.85;cursor:default;transform:none;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel .m2-caption{
+ color:#7b2528;font-weight:700;
+}
+@media(max-width:760px){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-multi{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-card{min-height:48px}
+}
+@media(max-width:370px){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-multi .m2-tile,
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-explorer-card{padding-inline:10px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card){transition:none!important;transform:none!important}
+}

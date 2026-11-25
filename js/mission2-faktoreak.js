@@ -808,10 +808,7 @@ function renderExpedition(){
     explorerCards('meeting','Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?',[['1869','1869'],['1871','1871'],['1908','1908']],state)+'</section>'+
    '<section class="m2-panel m2-expedition-panel m2-expedition-congo" id="m2-exp-file-5" tabindex="-1"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3>'+fileStatus(5)+'</header>'+
     ''+dossierArt('atlas-expediente-foto-hd.webp','m2-exploration-congo-art','Artxiboko apaindura · Ez da Kongoko jatorrizko dokumentua.')+'<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura 18. diapositibako testuinguruan. Bereizi esplorazioaren helburuak eta ondorioak.</p>'+
-    '<label class="m2-field">Zer lotura nabarmentzen du azken diapositibak?<select data-field="congo"><option value="">Aukeratu</option>'+
-     option('research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe',state.congo)+
-     option('exploitation','Kongoko ustiapen kolonialarekin izandako lotura',state.congo)+
-     option('independence','Kongoko independentzia demokratikoa antolatzea',state.congo)+'</select></label></section>'+
+    explorerCards('congo','Zer lotura nabarmentzen du azken diapositibak?',[['research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe'],['exploitation','Kongoko ustiapen kolonialarekin izandako lotura'],['independence','Kongoko independentzia demokratikoa antolatzea']],state)+'</section>'+
   '</div></div>';
 }
 function renderExercise(){
@@ -1092,7 +1089,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-expedition-field')){
   if(active!==5||!teacher&&completions.has(5))return;
   const field=elem.dataset.expeditionField,value=elem.dataset.expeditionValue;
-  const permitted={north:['peary','amundsen'],south:['peary','amundsen'],meeting:['1869','1871','1908']};
+  const permitted={north:['peary','amundsen'],south:['peary','amundsen'],meeting:['1869','1871','1908'],congo:['research_only','exploitation','independence']};
   if(!permitted[field]?.includes(value))return;
   const state=taskState(5);if(state[field]===value){delete state[field];queueMission2({[field]:null},5)}else{state[field]=value;queueMission2({[field]:value},5)}
   render();$('[data-expedition-field="'+field+'"][data-expedition-value="'+value+'"]')?.focus({preventScroll:true});return;
