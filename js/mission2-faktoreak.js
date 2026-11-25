@@ -766,15 +766,20 @@ function renderArchive(){
    '</div>'+
   '</div>';
 }
+// E5: the approved decorative drawings are independent of live, accessible answer labels.
+function expeditionCartela(group,value,label){
+ const art=group==='meeting'?'date':group==='congo'?'context':value;
+ return '<img class="m2-e5-card-art" src="./assets/m2-e5-grabado-'+esc(art)+'.webp" width="360" height="192" alt="" aria-hidden="true" draggable="false" decoding="async"><strong class="m2-e5-card-label">'+esc(label)+'</strong>';
+}
 function multiButtons(group,options,selectedIds){
  const ids=new Set(selectedIds||[]),limit=group==='africa'?4:3;
- return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div><p class="m2-selection-count" role="status">'+ids.size+' / '+limit+' hautatuta</p>';
+ return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+expeditionCartela(group,id,label)+'</button>').join('')+'</div><p class="m2-selection-count" role="status">'+ids.size+' / '+limit+' hautatuta</p>';
 }
 function expeditionMap(){
  return '<svg class="m2-expedition-svg m2-africa-map-hd" viewBox="0 0 540 405" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Afrikako mapa ilustratua, lau ibai nagusi izenik gabe" xmlns="http://www.w3.org/2000/svg"><image href="./assets/m2-e5-afrika-ibaiak-hd.webp" x="0" y="0" width="540" height="405" preserveAspectRatio="xMidYMid meet"/></svg>';
 }
 function explorerCards(field,label,options,state){
- return '<fieldset class="m2-explorer-cards"><legend>'+esc(label)+'</legend><div class="m2-explorer-options">'+options.map(([value,name])=>'<button type="button" class="m2-explorer-card" data-expedition-field="'+field+'" data-expedition-value="'+value+'" aria-pressed="'+(state[field]===value)+'"><span aria-hidden="true">'+(field==='meeting'?'✦':'✥')+'</span><strong>'+esc(name)+'</strong></button>').join('')+'</div></fieldset>';
+ return '<fieldset class="m2-explorer-cards"><legend>'+esc(label)+'</legend><div class="m2-explorer-options">'+options.map(([value,name])=>'<button type="button" class="m2-explorer-card" data-expedition-field="'+field+'" data-expedition-value="'+value+'" aria-pressed="'+(state[field]===value)+'">'+expeditionCartela(field,value,name)+'</button>').join('')+'</div></fieldset>';
 }
 function renderExpedition(){
  const state=taskState(5),data=state.multi||{};

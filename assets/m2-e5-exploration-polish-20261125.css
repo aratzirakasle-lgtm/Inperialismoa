@@ -141,3 +141,81 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card){transition:none!important;transform:none!important}
 }
+
+/* E5: approved emerald-and-brass plates, actual engraved illustrations,
+   native accessible labels. Selection decor is independent of correctness. */
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel .m2-multi{
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));
+ gap:8px;
+}
+#m2-app.m2-expedition-active #m2-exp-file-2 .m2-multi>.m2-tile:last-child:nth-child(3n+2){grid-column:auto}
+#m2-app.m2-expedition-active #m2-exp-file-3 .m2-explorer-options{grid-template-columns:minmax(0,1fr)}
+#m2-app.m2-expedition-active #m2-exp-file-3 .m2-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#m2-app.m2-expedition-active #m2-exp-file-4 .m2-explorer-options{
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,155px),1fr));gap:6px;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card){
+ container-type:inline-size;position:relative;isolation:isolate;
+ box-sizing:border-box;display:block;width:100%;height:auto;
+ aspect-ratio:992/397;min-width:0;min-height:44px;max-width:none;
+ margin:0;padding:0!important;border:0!important;border-radius:0;
+ background:transparent url('./m2-e5-cartela-marco.webp') center/100% 100% no-repeat!important;
+ box-shadow:none!important;color:#163322;outline:0;
+ overflow:visible;filter:drop-shadow(0 2px 2px #3b271960);
+ transition:filter .15s,transform .15s;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::before,
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)::after{content:none!important;display:none!important}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)>.m2-e5-card-art{
+ position:absolute;display:block;left:9.8%;top:30%;width:43%;height:51%;
+ max-width:none;max-height:none;object-fit:contain;object-position:center;
+ margin:0;padding:0;border:0!important;background:none!important;
+ box-shadow:none!important;filter:none;pointer-events:none;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)>.m2-e5-card-label{
+ box-sizing:border-box;position:absolute;display:flex;align-items:center;justify-content:center;
+ left:51%;right:9.5%;top:31%;bottom:18%;min-width:0;
+ margin:0;padding:0 2px;color:#143322;
+ font:700 clamp(11px,6.3cqw,23px)/1.08 Georgia,serif;
+ text-align:center;white-space:normal;overflow-wrap:break-word;
+ text-shadow:0 1px #fff3d7;pointer-events:none;
+}
+#m2-app.m2-expedition-active #m2-exp-file-2 .m2-multi .m2-tile[data-value="australia"]>.m2-e5-card-label{
+ font-size:clamp(10px,5.2cqw,18px);line-height:1.04;
+}
+#m2-app.m2-expedition-active #m2-exp-file-3 .m2-explorer-card>.m2-e5-card-label{
+ font-size:clamp(10px,5.9cqw,21px);
+}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-card{
+ max-width:540px;justify-self:center;min-height:0;
+}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-card>.m2-e5-card-art{
+ left:10%;width:26%;
+}
+#m2-app.m2-expedition-active #m2-exp-file-5 .m2-explorer-card>.m2-e5-card-label{
+ left:36%;right:10%;font-size:clamp(11px,4.7cqw,20px);line-height:1.14;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)[aria-pressed="true"]{
+ background:transparent url('./m2-e5-cartela-marco.webp') center/100% 100% no-repeat!important;
+ box-shadow:none!important;outline:0;
+ filter:drop-shadow(0 0 2px #fff0a6) drop-shadow(0 0 5px #dca52c) drop-shadow(0 2px 2px #49301580);
+}
+@media(hover:hover) and (pointer:fine){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.045) drop-shadow(0 2px 3px #714b2680)}
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card)[aria-pressed="true"]:not(:disabled):hover{filter:drop-shadow(0 0 2px #fff0a6) drop-shadow(0 0 6px #dca52c)}
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):focus-visible{
+ outline:2px solid #6b481e;outline-offset:3px;border-radius:8px;
+}
+#m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card):disabled{opacity:.85;transform:none}
+@media(max-width:480px){
+ #m2-app.m2-expedition-active #m2-exp-file-3 .m2-mini-grid{grid-template-columns:minmax(0,1fr)}
+ #m2-app.m2-expedition-active #m2-exp-file-3 .m2-explorer-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #m2-app.m2-expedition-active #m2-exp-file-3 .m2-explorer-card>.m2-e5-card-label{font-size:clamp(10px,5.8cqw,17px)}
+}
+@media(max-width:350px){
+ #m2-app.m2-expedition-active #m2-exp-file-3 .m2-explorer-options{grid-template-columns:minmax(0,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card){transition:none!important;transform:none!important}
+}
