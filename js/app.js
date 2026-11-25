@@ -33,7 +33,7 @@ const flag = code => /^[A-Z]{2}$/.test(code)?[...code].map(c=>String.fromCodePoi
 const key = "inperialismoa-demo-v1";
 // El vestíbulo C es el menú oficial. La vista anterior se conserva como alternativa explícita.
 let conceptCHome=new URLSearchParams(location.search).get("museo")!=="anterior";
-let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=1,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
+let demoData; let db=null; let demo=false; let user=null; let teams=[],missions=[],progress=[],claims=[],submissions=[],profiles=[],attempts=[],answerDetails=[],assessments=[],classes=[],mission1FifthStates=[];let teacherClassId="";let teacherPreview=false;let teacherPreviewTeamId=null;let currentMission=0,teacherTab="overview",continent="Africa",selectedCountry=null;let galleryQuestionsOpen=false;let galleryStates=[];let galleryTeamDrafts=[];let galleryHistory=[];let biSistemaStates=[];let biSistemaTeamDrafts=[];let biSistemaAttempts=[];let empireDossierStates=[];let empireDossierAttempts=[];let responses={},checkFeedback=null;let realtimeChannel=null;let realtimeRefreshing=false,realtimeDirty=false;
 let mission2Open=false,m2Rows=[],m2Error=false;
 let teacherActivity=new Map(),teacherActivityError=true,teacherLastSync=null,teacherActivityRequest=null,teacherMissionDates=new Map(),teacherDatesError=true;
 let classProgressRows=[],classProgressError=false,classProgressTicker=null;
@@ -523,7 +523,7 @@ async function refreshData(){if(demo)return;
 
 }
 async function signInDemo(role){initDemo();user=role==="teacher"?{id:"teacher-demo",name:"Docente (demo)",role:"teacher"}:{id:"student-demo",name:"Ane (demo)",role:"student",team_id:"atlas"};currentMission=0;teacherTab="overview";responses={};checkFeedback=null;switchScreen(true)}
-async function signInReal(e){e.preventDefault();const login=$("#login-user").value.trim(),email=login.includes("@")?login:login.toLowerCase()+"@example.com",password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession()}catch(err){$("#login-error").textContent="Ezin izan da saioa hasi. Egiaztatu datuak edo galdetu irakasleari."}finally{btn.disabled=false}}
+async function signInReal(e){e.preventDefault();const login=$("#login-user").value.trim(),email=login.includes("@")?login:login.toLowerCase()+"@example.com",password=$("#login-password").value;const btn=$("#login-submit");btn.disabled=true;$("#login-error").textContent="";try{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await setSession({freshLogin:true})}catch(err){$("#login-error").textContent="Ezin izan da saioa hasi. Egiaztatu datuak edo galdetu irakasleari."}finally{btn.disabled=false}}
 // Agrupar notificaciones simultáneas sin perder los cambios recibidos.
 async function refreshFromRealtime(){
  if(!user)return;
@@ -539,16 +539,24 @@ async function refreshFromRealtime(){
  }catch(error){console.error("Actualización en tiempo real",error)}
  finally{realtimeRefreshing=false}
 }
-async function setSession(){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");if(user?.id!==p.id){classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;}
+async function setSession({freshLogin=false}={}){const {data:{user:authUser}}=await db.auth.getUser();if(!authUser){user=null;switchScreen(false);return}const {data:p,error}=await db.from("profiles").select("*").eq("id",authUser.id).single();if(error||!p)throw Error("El usuario no tiene un perfil asignado.");if(user?.id!==p.id){classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;}
  user={id:p.id,name:p.display_name,team_id:p.team_id,role:p.role};
  if(p.role==="student"&&!(await startClassAccess(db)))return;
  await refreshData();
  const hash=location.hash;
- if(accountIsTeacher()&&hash==="#teacherpreviewgallery"){const selected=teams.find(t=>t.name==="Exploradores")||teams[0];teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=1;galleryQuestionsOpen=false}
+ // Cada inicio de sesión del alumnado comienza en el vestíbulo original.
+ // Las rutas internas se mantienen para sesiones ya autenticadas.
+ if(freshLogin&&!accountIsTeacher()){
+  conceptCHome=true;teacherPreview=false;teacherPreviewTeamId=null;
+  currentMission=0;galleryQuestionsOpen=false;responses={};checkFeedback=null;
+  const url=new URL(location.href);url.searchParams.delete("museo");url.hash="";
+  history.replaceState(null,"",url.pathname+url.search);
+ }
+ else if(accountIsTeacher()&&hash==="#teacherpreviewgallery"){const selected=teams.find(t=>t.name==="Exploradores")||teams[0];teacherPreviewTeamId=selected?.id||null;teacherPreview=true;currentMission=1;galleryQuestionsOpen=false}
  else if(!accountIsTeacher()&&hash==="#mission2"&&available(2)){currentMission=2;galleryQuestionsOpen=false}
  else if(!accountIsTeacher()&&hash==="#mission1gallery"){currentMission=1;galleryQuestionsOpen=false}
  else{currentMission=0;galleryQuestionsOpen=false}
- if(hash.startsWith("#mission")||hash.startsWith("#teacherpreview"))history.replaceState(null,"",location.pathname+location.search);
+ if(!(freshLogin&&!accountIsTeacher())&&(hash.startsWith("#mission")||hash.startsWith("#teacherpreview")))history.replaceState(null,"",location.pathname+location.search);
  switchScreen(true);startClassProgressPolling();if(isTeacher()&&teacherTab==='overview')void syncTeacherActivity();if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
 async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;stopClassProgressPolling();classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
