@@ -236,8 +236,11 @@ function openSource(id){
  redraw();
 }
 function openMap(kind){
- if(kind==='migration'){
-  museumDialog('Munduko atlasa','<div class="m2-map-tools" aria-label="Maparen kontrolak"><button type="button" data-world-scale="out" aria-label="Txikitu">−</button><span data-world-percent role="status">100 %</span><button type="button" data-world-scale="in" aria-label="Handitu">+</button><button type="button" data-world-scale="reset">Hasierako ikuspegia</button></div><div class="m2-world-viewport" tabindex="0" aria-label="Munduko mapa; mugitzeko, erabili desplazamendu-barrak"><img class="m2-dialog-map m2-world-zoom" src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa orientagarria, muga historikorik gabe" draggable="false"></div><p class="m2-map-help">Handitu eta mugitu mapa. Ez da erantzunik egiaztatzen.</p>');
+ if(kind==='migration'||kind==='migration-illustration'){
+  const illustration=kind==='migration-illustration';
+  const imagePath=illustration?'m2-e3-mapa-migraciones-hd.webp':'m2-migration-map-clean.svg';
+  const description=illustration?'Emigrazio transatlantikoaren ilustrazio historikoa':'Munduko mapa orientagarria, muga historikorik gabe';
+  museumDialog(illustration?'Migrazioen ilustrazioa':'Munduko atlasa','<div class="m2-map-tools" aria-label="Handitzeko kontrolak"><button type="button" data-world-scale="out" aria-label="Txikitu">−</button><span data-world-percent role="status">100 %</span><button type="button" data-world-scale="in" aria-label="Handitu">+</button><button type="button" data-world-scale="reset">Hasierako ikuspegia</button></div><div class="m2-world-viewport" tabindex="0" aria-label="Irudia; mugitzeko, erabili desplazamendu-barrak"><img class="m2-dialog-map m2-world-zoom" src="./assets/'+imagePath+'" alt="'+description+'" draggable="false"></div><p class="m2-map-help">Handitu eta mugitu irudia. Ez da erantzunik egiaztatzen.</p>');
   const dialog=document.querySelector('#m2-reading-dialog'),viewport=dialog.querySelector('.m2-world-viewport'),image=dialog.querySelector('.m2-world-zoom');let scale=1;
   const redraw=()=>{image.style.width=scale*100+'%';dialog.querySelector('[data-world-percent]').textContent=Math.round(scale*100)+' %';dialog.querySelector('[data-world-scale="out"]').disabled=scale===1;dialog.querySelector('[data-world-scale="in"]').disabled=scale===3;if(scale===1){viewport.scrollLeft=0;viewport.scrollTop=0}};
   dialog.querySelector('.m2-map-tools').addEventListener('click',event=>{const action=event.target.closest('[data-world-scale]')?.dataset.worldScale;if(!action)return;scale=action==='reset'?1:Math.max(1,Math.min(3,scale+(action==='in'?.5:-.5)));redraw()});
@@ -678,13 +681,13 @@ function renderPopulation(){
   roomIndex([{id:'m2-population-part',title:'1 · Biztanleria',filled:stage1,total:5},{id:'m2-route-part',title:'2 · Ibilbideak',filled:placed,total:3},{id:'m2-facts-part',title:'3 · Baieztapenak',filled:stage3,total:5},{id:'m2-luggage-part',title:'4 · Maletak',filled:stage4,total:8}],'Migrazioen lau atalak')+
    (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
   '<div class="m2-atlas-main" id="m2-population-part" tabindex="-1">'+
-   '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">1</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
+   '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">1</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu irudia, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
    '<section class="m2-atlas-pop m2-migration-folio"><h3><span class="m2-migration-index" aria-hidden="true">1</span> Europako biztanleria <small>(milioi biztanle)</small></h3>'+
     '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
     '<div class="m2-atlas-pop-list">'+population+'</div>'+
     '<img class="m2-atlas-migrants-foreground" src="./assets/m2-atlas-travelers-cutout.webp" alt="" draggable="false"></section>'+
-   '<div class="m2-atlas-main-map"><img src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa orientagarria; muga historikorik eta ibilbiderik gabe" draggable="false">'+
-    '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span><button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="migration" aria-label="Munduko mapa handitu" title="Mapa handitu">＋</button></div>'+
+   '<div class="m2-atlas-main-map m2-migration-hero"><img src="./assets/m2-e3-mapa-migraciones-hd.webp" alt="XIX. mendearen amaierako emigrazio transatlantikoaren ilustrazioa: familiak, lurrunontzia eta bidaia-agiriak" draggable="false">'+
+    '<span class="m2-atlas-map-label">EUROPATIK MUNDURA</span><span class="m2-atlas-map-stamp" aria-hidden="true">✵</span><button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="migration-illustration" aria-label="Migrazioen ilustrazioa handitu" title="Irudia handitu">＋</button></div>'+
    '<section class="m2-atlas-top-question m2-atlas-top-migration m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-suitcase-better-restored.webp" alt="" draggable="false">'+
     '<h3>Migrazioak</h3>'+dossierOne+'</section>'+
    '<section class="m2-atlas-top-question m2-atlas-top-mission m2-migration-dossier"><img class="m2-atlas-top-scene" src="./assets/m2-suitcase-missions-restored.webp" alt="" draggable="false">'+

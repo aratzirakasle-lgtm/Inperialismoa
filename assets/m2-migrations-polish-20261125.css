@@ -37,3 +37,6 @@
  .m2-atlas-screen .m2-atlas-pin{min-width:28px;min-height:28px}
  .m2-atlas-screen .m2-atlas-statement-select,.m2-atlas-screen .m2-atlas-pop-row select{min-height:32px}
 }
+
+/* Sala 3: ilustración histórica HD, sin modificar la cartografía interactiva. */
+#m2-app.m2-atlas-active .m2-atlas-main-map.m2-migration-hero>img{object-fit:cover!important;object-position:center center;filter:none!important}
