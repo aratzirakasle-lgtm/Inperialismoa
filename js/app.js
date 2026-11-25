@@ -8,8 +8,8 @@ import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./cl
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261125-eye1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
-import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-signatures28";
-import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-signatures28";
+import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-signatures29";
+import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-signatures29";
 import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
@@ -294,7 +294,7 @@ async function openExpedition(mode='atlas'){
  const teamName=mine()?.name||'Taldea',open=mission2Open||accountIsTeacher()||demo;
  const ownProfiles=profiles.filter(p=>p.role==='student'&&p.team_id===team).map(p=>p.display_name);
  const rosterNames=accountIsTeacher()?classStudentRoster.filter(p=>p.team_id===team).sort((a,b)=>a.slot-b.slot).map(p=>p.display_name):[];
- const memberNames=[...new Set((rosterNames.length?rosterNames:ownProfiles.length?ownProfiles:sim?(mine()?.members||[]):[]).filter(n=>typeof n==='string'&&n.trim()).map(n=>n.trim()))].slice(0,2);
+ const memberNames=[...new Set((rosterNames.length?rosterNames:ownProfiles.length?ownProfiles:sim?(mine()?.members||[]):[]).filter(n=>typeof n==='string'&&n.trim()).map(n=>n.trim()))];
  modal('<div id="expedition-live"></div>');
  const node=$('#expedition-live');
  const paint=summary=>{
