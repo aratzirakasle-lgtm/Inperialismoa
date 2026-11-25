@@ -70,7 +70,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  '<button type="button" data-c-logout="1" class="c-museo-exit">Irten ↗</button>'+
  '</div></div>'+
  '<div class="c-museo-stage" aria-label="Ongi etorri, ikertzaileak. Inperialismoaren garaia. Lau misioko museoa">'+
- '<iframe class="c-museo-picture" src="./preview-vestibulo-concepto-c.html" title="Museoaren irudi originala, dekorazio hutsa" aria-hidden="true" tabindex="-1" sandbox="" loading="eager"></iframe>'+
+ '<img class="c-museo-picture" src="./assets/museo-c-vestibulo-original.png" width="1672" height="941" alt="" aria-hidden="true" draggable="false" loading="eager" fetchpriority="high">'+
  restoration1+restoration2+inscriptions+
  '<div class="c-museo-real-data">'+
  '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
