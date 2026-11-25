@@ -891,6 +891,27 @@ try{
   }
  });
 
+ await scenario('Atlas 3: los tres años de población están visibles dentro de su marco',async()=>{
+  for(const size of [{width:1672,height:941},{width:1365,height:768},{width:1536,height:691},{width:1280,height:600},{width:390,height:844}]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    await page.locator('[data-open="3"]').click();
+    const panel=page.locator('.m2-atlas-pop');
+    await panel.scrollIntoViewIfNeeded();
+    const rows=await panel.locator('.m2-atlas-pop-row').evaluateAll(els=>els.map(el=>{
+     const p=el.closest('.m2-atlas-pop').getBoundingClientRect();
+     const r=el.getBoundingClientRect(),s=el.querySelector('select').getBoundingClientRect();
+     return {year:el.querySelector('.m2-atlas-pop-year').textContent,inside:r.top>=p.top&&r.bottom<=p.bottom+1&&s.bottom<=p.bottom+1&&s.height>0};
+    }));
+    assert.deepEqual(rows.map(r=>r.year),['1850','1870','1900']);
+    assert.ok(rows.every(r=>r.inside),JSON.stringify({size,rows}));
+    const last=panel.locator('select').last();
+    await last.scrollIntoViewIfNeeded();
+    assert.ok(await last.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),'La casilla 1900 está tapada');
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
  await scenario('Atlas 3: diseño panorámico original y botonera general debajo de las maletas',async()=>{
   for(const size of [{width:1536,height:691},{width:1365,height:768},{width:768,height:1024},{width:390,height:844}]){
    const {page,context,errors}=await open('teacher',size);

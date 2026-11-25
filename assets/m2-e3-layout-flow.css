@@ -35,3 +35,31 @@
  #m2-app.m2-atlas-active .m2-atlas-final-controls .m2-controls{flex-direction:column;align-items:stretch}
  #m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons{justify-content:center}
 }
+
+/* Population only: all three years must fit in the original panoramic frame.
+   Fixed pixel heights in the reference table previously clipped the last row
+   on low-height classroom screens. Preserve the artwork and other panels. */
+@media(min-width:1101px){
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-pop{
+  display:flex;flex-direction:column;box-sizing:border-box;min-height:0;
+  padding:.45cqw .45cqw .3cqw;
+ }
+ #m2-app.m2-atlas-active .m2-atlas-pop h3{
+  flex:none;margin:0 0 .28cqw;font-size:1.2cqw;line-height:1.08;
+ }
+ #m2-app.m2-atlas-active .m2-atlas-pop-list{
+  display:grid;grid-template-rows:repeat(3,minmax(0,1fr));flex:1 1 0;
+  min-height:0;gap:0;padding:0;position:relative;z-index:10;
+ }
+ #m2-app.m2-atlas-active .m2-atlas-pop-row{
+  box-sizing:border-box;height:auto;min-height:0;
+  grid-template-columns:minmax(0,24fr) minmax(0,55fr) minmax(0,21fr);
+  gap:.1cqw;padding:.08cqw .15cqw;align-items:center;
+ }
+ #m2-app.m2-atlas-active .m2-atlas-pop-year{font-size:1.45cqw;line-height:1}
+ #m2-app.m2-atlas-active .m2-atlas-pop-row select{
+  box-sizing:border-box;height:85%;min-height:0;max-height:100%;
+  padding:0 .15cqw;font-size:.82cqw;
+ }
+ #m2-app.m2-atlas-active .m2-atlas-pop-row small{font-size:.72cqw}
+}
