@@ -8,8 +8,8 @@ import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./cl
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
 import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261125-eye1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
-import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-signatures29";
-import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-atlas30";
+import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-pulido32";
+import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-pulido32";
 import {walletContext,prepareWallet} from "./museum-wallet.js?v=20261124-atlas2";
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 const $ = s => document.querySelector(s);
