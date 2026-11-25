@@ -226,3 +226,20 @@
  #m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-fact-head{margin-inline:6px}
  #m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statement{grid-template-columns:minmax(0,1fr) 78px;padding:6px 2px}
 }
+
+/* E3 / small decorative historical cutouts. Keep the existing five-row
+   folio, its minimum heights and the answer column unchanged. Text can wrap
+   around the miniature instead of reserving a full extra column. */
+#m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statement-label{
+ display:flow-root;
+}
+#m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-fact-miniature{
+ float:left;display:block;width:clamp(22px,1.8vw,28px);height:clamp(22px,1.8vw,28px);
+ max-width:100%;margin:0 5px 0 0;padding:0;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;object-fit:contain;object-position:center;
+ pointer-events:none;user-select:none;
+}
+@media(max-width:620px){
+ #m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-fact-miniature{width:24px;height:24px;margin-right:4px}
+}

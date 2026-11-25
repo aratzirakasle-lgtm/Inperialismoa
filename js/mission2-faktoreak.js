@@ -652,8 +652,9 @@ function renderPopulation(){
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
   return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 57 29 Q '+((57+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#8c6433" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
+ const statementArt=['population-1850','population-1870','workers','missions','religion'];
  const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
-  '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
+  '<span class="m2-atlas-statement-label"><img class="m2-atlas-fact-miniature" src="./assets/m2-e3-fact-'+statementArt[i]+'.webp" width="26" height="26" alt="" aria-hidden="true" draggable="false" decoding="async">'+esc(text)+'</span>'+
   '<span class="m2-atlas-truth"><select class="m2-atlas-statement-select" data-field="'+key+'" aria-label="'+esc(text)+' — egia edo gezurra">'+
   '<option value="">Aukeratu…</option>'+
   option('egia','E · Egia',state[key])+option('gezurra','G · Gezurra',state[key])+
