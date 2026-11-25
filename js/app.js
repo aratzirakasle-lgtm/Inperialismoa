@@ -1,7 +1,7 @@
 import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-progress.js?v=20261124-atlas2";
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261124-atlas2";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-bienvenida1";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-m2board1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
