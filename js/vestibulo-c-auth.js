@@ -65,6 +65,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  '<span class="c-museo-toolbar-team" title="'+safeName+'">Taldea: <strong>'+safeName+'</strong></span>'+
  '<div class="c-museo-toolbar-actions">'+
  (preview?'<span class="c-museo-preview-tag">IRAKASLEAREN AURREBISTA · EZ DA GORDETZEN</span>':'')+
+ (!preview&&activeId?'<button type="button" data-mission="'+activeId+'" class="c-museo-alternative" aria-label="Jarraitu gordetako aurrerapenetik">Jarraitu gordetako lekutik →</button>':'')+
  '<button type="button" data-c-toggle="1" class="c-museo-alternative">Aurreko ikuspegia</button>'+
  (preview?'<button type="button" data-view="teacher" class="c-museo-return">← Irakaslearen panela</button>':'')+
  '<button type="button" data-c-logout="1" class="c-museo-exit">Irten ↗</button>'+

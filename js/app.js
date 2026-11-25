@@ -1,7 +1,7 @@
 import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-progress.js?v=20261124-atlas2";
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-original2";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-resume1";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-m2board1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
@@ -477,7 +477,17 @@ const historical=progress.filter(p=>ids.has(p.team_id)&&Number(p.mission_id)===1
 const rows=[["Clase","Curso","Equipo","Misión","Fecha","Intentos","Alumno que completó","Tipo de registro"],...[...current,...confirmedFirst,...historical].map(p=>{const team=teams.find(t=>t.id===p.team_id),cl=classes.find(c=>c.id===team?.class_id);return [cl?.name||"",cl?.school_year||"",team?.name||p.team_id,missionById(p.mission_id)?.title||p.mission_id,fmt(p.completed_at),p.attempt_count||"",personName(p.completed_by),p.source==='historical'?'Marca histórica (no desbloquea ejercicios)':'Progreso confirmado'];})];exportRows(rows,"inperialismoa-seguimiento-docente.csv")}
 async function releaseCountry(code){if(!isTeacher())return;try{if(demo){const idx=claims.findIndex(c=>c.country_code===code);if(idx>=0)claims.splice(idx,1);storage.save()}else{const {error}=await db.rpc("teacher_release_territory",{p_country_code:code});if(error)throw error;await refreshData()}render();toast("Territorio liberado")}catch(e){toast(e.message)}}
 async function downloadSubmission(id){const sub=submissions.find(s=>String(s.id)===String(id));if(!sub||!isTeacher())return;const {data,error}=await db.storage.from("entregas").createSignedUrl(sub.file_path,60);if(error)return toast(error.message);window.open(data.signedUrl,"_blank","noopener,noreferrer")}
-function changeMission(id){if(!available(id))return toast("Misio hau oraindik blokeatuta dago.");currentMission=id;galleryQuestionsOpen=false;responses={};checkFeedback=null;selectedCountry=null;render();window.scrollTo({top:0,behavior:"smooth"})}
+function changeMission(id){
+ if(!available(id))return toast("Misio hau oraindik blokeatuta dago.");
+ // A student entering from the museum resumes the first unfinished exercise.
+ // Keep explicit review links, demo and teacher preview unchanged.
+ if(id===1&&currentMission===0&&!demo&&!accountIsTeacher()&&viewTeamId()&&!completed(viewTeamId(),1)){
+  const pieces=m1Pieces(viewTeamId()),next=[1,2,3,4,5].find(n=>!pieces.has(n));
+  const pages={2:'bi-sistema.html',3:'inperialismoaren-definizioa.html',4:'inperioen-aztarnak.html',5:'esaldiak-osatu.html'};
+  if(pages[next]){location.assign('./'+pages[next]);return;}
+ }
+ currentMission=id;galleryQuestionsOpen=false;responses={};checkFeedback=null;selectedCountry=null;render();window.scrollTo({top:0,behavior:"smooth"})
+}
 function chooseCountry(code){const t=territories.find(t=>t.code===code);if(!t||t.continent!==continent||claims.some(c=>c.country_code===code)||claims.some(c=>c.team_id===viewTeamId())||isTeacher())return;selectedCountry=code;renderFinal()}
 async function refreshData(){if(demo)return;
  const base=[db.from("teams").select("*"),db.from(accountIsTeacher()?"mission_completions":"mission_badges").select("*"),db.from(accountIsTeacher()?"territory_claims":"territory_markers").select("*"),db.from("submissions").select("id,team_id,submitted_by,file_path,filename,file_size,created_at,status"),db.from("profiles").select("id,display_name,team_id,role"),db.from("missions").select("id,title,subtitle,intro").order("id"),db.from("public_questions").select("id,mission_id,text,options,sort_order").order("sort_order")];
