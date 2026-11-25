@@ -81,3 +81,83 @@
  #m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-stage{grid-template-columns:minmax(0,1fr)}
  #m2-app.m2-atlas-active .m2-atlas-route-labels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
 }
+
+/* E3: expandable photographed suitcases. Preserve the photographic upper
+   plaque, side trim and bottom hardware as nine-slice borders. Only the
+   interior velvet grows; there are no fixed four-slot limits. */
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity{
+ height:auto;max-height:none;min-height:0;overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-board{
+ height:auto;max-height:none;min-height:0;align-items:start;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-targets{
+ align-items:stretch;min-height:0;min-width:0;height:auto;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase{
+ --case-photo:url('./m2-reference-red-suitcase.webp');
+ --case-lining:#672b31;
+ box-sizing:border-box;display:flex;flex-direction:column;align-self:stretch;
+ min-width:0;min-height:0;height:auto;max-height:none;
+ padding:5px 3px 7px;margin:0;
+ border-style:solid;border-color:transparent;
+ border-width:clamp(53px,5.5vw,93px) clamp(9px,1vw,17px) clamp(23px,2.4vw,40px);
+ border-image-source:var(--case-photo);
+ border-image-slice:100 25 46 32;
+ border-image-width:1;border-image-repeat:stretch;
+ border-radius:0;
+ background:radial-gradient(ellipse at 38% 0%,#ffffff13,transparent 65%),var(--case-lining);
+ background-clip:padding-box;
+ overflow:visible;box-shadow:none;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase-effect{
+ --case-photo:url('./m2-reference-blue-suitcase.webp');
+ --case-lining:#204b63;
+ border-image-slice:100 25 46 32;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase>header{
+ position:absolute!important;width:1px!important;height:1px!important;
+ min-height:0!important;margin:0!important;padding:0!important;
+ border:0!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase .m2-atlas-luggage-drop{
+ box-sizing:border-box;width:100%;height:auto;min-height:20px;flex:0 0 auto;
+ margin:0 0 5px;padding:3px 2px;font-size:clamp(8px,.65vw,11px);line-height:1.15;
+ white-space:normal;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase-items{
+ box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,125px),1fr));
+ grid-auto-rows:auto;align-content:start;align-items:stretch;
+ gap:4px;width:100%;height:auto;min-height:66px;max-height:none;
+ margin:0;padding:2px;border:0;border-radius:4px;background:transparent;
+ overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase-items .m2-atlas-packed{
+ box-sizing:border-box;display:grid;grid-template-columns:minmax(0,28%) minmax(0,1fr);
+ align-items:center;justify-items:start;gap:3px;
+ width:100%;height:auto;min-height:32px;max-height:none;min-width:0;
+ margin:0;padding:3px;border-width:1px;border-radius:4px;
+ white-space:normal;overflow-wrap:anywhere;word-break:normal;overflow:hidden;
+ font:700 clamp(10px,.72vw,12px)/1.16 Georgia,serif;text-align:left;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase-items .m2-atlas-packed img.m2-atlas-card-illustration{
+ display:block!important;width:100%!important;height:auto!important;aspect-ratio:1.25;
+ max-width:34px!important;max-height:30px!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:0!important;object-fit:contain!important;background:transparent!important;
+ border:0!important;box-shadow:none!important;
+}
+@media(min-width:1101px){
+ #m2-app.m2-atlas-active .m2-atlas-luggage-activity{min-height:16.35cqw}
+ #m2-app.m2-atlas-active .m2-atlas-luggage-board{min-height:15.35cqw}
+ #m2-app.m2-atlas-active .m2-atlas-suitcase{
+  border-width:5.25cqw 1.05cqw 2.45cqw;
+  padding:.25cqw .15cqw .35cqw;
+ }
+}
+@media(max-width:620px){
+ #m2-app.m2-atlas-active .m2-atlas-luggage-board{grid-template-columns:minmax(0,1fr);margin:0;padding:0 6px}
+ #m2-app.m2-atlas-active .m2-atlas-luggage-targets{gap:6px}
+ #m2-app.m2-atlas-active .m2-atlas-suitcase{border-width:clamp(54px,15vw,94px) 9px 26px}
+ #m2-app.m2-atlas-active .m2-atlas-suitcase-items .m2-atlas-packed{font-size:11px}
+}
