@@ -49,3 +49,11 @@
 .m2-ceremony-stars{text-align:center;color:#a88035;letter-spacing:.4em;font:700 18px Georgia,serif;animation:m2-ceremony-rise .65s ease-out both}
 @keyframes m2-ceremony-rise{from{opacity:0;transform:translateY(7px) scale(.92)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.m2-reading-dialog .m2-dialog-content,.m2-ceremony-stars{animation:none}}
+
+/* Cohesión con misión 1: controles, lectura protegida y arrastre táctil. */
+#m2-app [data-card],#m2-app [data-event],#m2-app [data-atlas-route],#m2-app [data-atlas-bag-card]{touch-action:none}
+#m2-app .m2-drop-highlight{outline:2px solid #e5be75;outline-offset:3px;box-shadow:0 0 12px #d9b36d80}
+#m2-app .m2-touch-moving{opacity:.55}
+#m2-app[data-m2-readonly] [data-card]:disabled,#m2-app[data-m2-readonly] [data-event]:disabled,#m2-app[data-m2-readonly] [data-atlas-route]:disabled,#m2-app[data-m2-readonly] [data-atlas-bag-card]:disabled,#m2-app[data-m2-readonly] [data-multi]:disabled,#m2-app[data-m2-readonly] [data-expedition-field]:disabled{opacity:1;cursor:default;filter:none}
+.m2-answer-count{font-weight:700;text-align:center;font-variant-numeric:tabular-nums;margin:0 0 6px}
+.m2-preview-states{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:.85rem}
