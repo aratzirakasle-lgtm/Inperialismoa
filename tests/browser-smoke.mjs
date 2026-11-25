@@ -648,7 +648,10 @@ try{
      if(done)await stage.locator('.ap-earned-medal').nth(1).waitFor();
      else await stage.locator('[data-atlas-continue="1"]').waitFor();
      await stage.locator('.atlas-photo-img').evaluate(img=>img.decode());
-     assert.equal(await stage.locator('.atlas-photo-img').evaluate(img=>img.naturalWidth),1672);
+     assert.equal(await stage.locator('.atlas-photo-img').evaluate(img=>img.naturalWidth),3344);
+     await stage.locator('.ap-mission-artwork').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+     assert.deepEqual(await stage.locator('.ap-mission-artwork').evaluateAll(imgs=>imgs.map(img=>[img.naturalWidth,img.naturalHeight])),Array.from({length:4},()=>[1619,971]));
+     assert.equal(await stage.locator('.ap-art-lock').count(),2);
      assert.equal(await stage.locator('.ap-earned-medal').count(),done?2:0);
      assert.equal(await stage.locator('.ap-earned-seal').count(),done?2:0);
      assert.equal(await stage.locator('time[datetime]').count(),done?2:0);

@@ -65,3 +65,14 @@ body:has(#modal:not([hidden]) .atlas-photo) .m1-class-widget{visibility:hidden;p
 .ap-card-panel,.ap-archive-panel{border:3px double #a77b40;background:radial-gradient(ellipse at 18% 12%,#f6e0ba88,transparent 65%),url('./atlas-papel-referencia.svg') center/100% 100% no-repeat,#e7c99b}
 .ap-card-panel h3,.ap-archive-panel h3{font-size:1.2cqw}
 .ap-card-panel li,.ap-archive-panel li{line-height:1.35}
+
+/* V26 — individual native-resolution paintings on the existing photographic scene.
+   Images never carry progress or interaction, and the original gilded frames stay intact. */
+.ap-mission-artwork{position:absolute;display:block;object-fit:cover;object-position:center 52%;pointer-events:none;user-select:none;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);box-shadow:inset 0 0 4px #46270c80;filter:saturate(1.08) contrast(1.025)}
+.ap-mission-artwork.ap-art-locked{filter:saturate(.84) brightness(.87) contrast(1.025)}
+.ap-art-lock{clip-path:polygon(24% 40%,24% 25%,32% 9%,43% 2%,57% 2%,68% 9%,77% 25%,77% 40%,94% 43%,99% 51%,99% 91%,94% 98%,6% 98%,1% 91%,1% 51%,6% 43%);pointer-events:none}
+.ap-card-panel{max-height:24cqw;overflow:auto;overscroll-behavior:contain}
+.ap-art-preview{margin:.4cqw 0 .45cqw}
+.ap-art-preview img{display:block;width:100%;height:auto;max-height:10cqw;object-fit:cover;border:1px solid #a77b4b}
+.ap-art-preview figcaption{font-size:.65cqw;line-height:1.25;color:#72512e;margin-top:.2cqw}
+.atlas-photo-img,.ap-mission-artwork{image-rendering:auto}

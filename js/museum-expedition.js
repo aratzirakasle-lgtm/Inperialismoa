@@ -1,7 +1,7 @@
 /* Read-only atlas. Existing server records are the only source of timestamps. */
 import {renderMuseumPassport,confirmedStamp,stampLabel} from './museum-passport.js?v=20261124-atlas-finish21';
-import {renderAtlasPhoto} from './atlas-photo.js?v=20261125-polish25';
-export {activateAtlasPhoto} from './atlas-photo.js?v=20261125-polish25';
+import {renderAtlasPhoto} from './atlas-photo.js?v=20261125-vivid26';
+export {activateAtlasPhoto} from './atlas-photo.js?v=20261125-vivid26';
 const titles=['Aurrekarriak eta oinarriak','Inperialismoaren faktoreak','Inperioen banaketa','Inperioen itzalak'];
 const files=[['Potentzien galeriaren inbentarioa','Bi sistemen txostena','Inperialismoaren kontzeptu-fitxa','Inperioen espedienteak','Azken sintesiaren zigilua'],['Kausen kabinetea','Kapitalaren ibilbideak','Migrazioen liburua','Boterearen artxiboa','Esploratzaileen espedientea']];
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -44,7 +44,7 @@ export function renderExpedition({teamName='Taldea',summary=null,preview=false,d
  const count=n=>partial?'Gutxienez '+n:n;
  const compass='<svg class="atlas-compass" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="#493921" stroke="#d9b66d" stroke-width="2"/><circle cx="50" cy="50" r="39" fill="#e4c48b" stroke="#98713c" stroke-width="2"/><path d="M50 14l7 29 29 7-29 7-7 29-7-29-29-7 29-7Z" fill="#76522d" stroke="#493921"/><path d="M50 18l-7 32h7Z" fill="#8c3829"/><circle cx="50" cy="50" r="4" fill="#c0a05c"/><text x="50" y="11" text-anchor="middle" font-size="8" fill="#f1d99d">N</text></svg>';
  const lock='<svg class="atlas-lock" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="4" y="9" width="16" height="13" rx="2" fill="currentColor"/><path d="M12 14v4" stroke="#302a20" stroke-width="2"/></svg>';
- const art=['atlas-mission-hd-1.webp','atlas-mission-hd-2.webp','atlas-mission-hd-3.webp','atlas-mission-hd-4.webp'];
+ const art=['atlas-mission-vivid-1.webp','atlas-mission-vivid-2.webp','atlas-mission-vivid-3.webp','atlas-mission-vivid-4.webp'];
  const missions=titles.map((title,i)=>{
   const n=i+1,done=s.completedIds.includes(n),steps=s.steps[i],active=s.next===n;
   const state=done?'OSATUTA':active?(steps?.length?'MARTXAN':'HASI'):n>2?'PRESTATZEN':!s.known[i]?'EGIAZTATU GABE':'BLOKEATUTA';
