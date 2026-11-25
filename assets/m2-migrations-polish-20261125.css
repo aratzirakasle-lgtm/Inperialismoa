@@ -40,3 +40,10 @@
 
 /* Sala 3: ilustración histórica HD, sin modificar la cartografía interactiva. */
 #m2-app.m2-atlas-active .m2-atlas-main-map.m2-migration-hero>img{object-fit:cover!important;object-position:center center;filter:none!important}
+
+/* Exercise 3 only: the image, pins and SVG routes share one undistorted canvas. */
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd{display:grid;place-items:center;container-type:size;background:#155668}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas{position:relative;box-sizing:border-box;width:min(100%,177.577cqh);aspect-ratio:1671/941;max-width:100%;min-width:0}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas>img{display:block;width:100%;height:100%;object-fit:contain!important;filter:none!important;pointer-events:none}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+@supports not (width:1cqh){#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas{width:100%;height:100%;aspect-ratio:auto}#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas>img{object-fit:fill!important}}

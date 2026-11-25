@@ -587,9 +587,9 @@ function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'
  * del PDF del proyecto. Las nuevas respuestas también deben añadirse a la
  * clave privada de Supabase antes de publicar esta rama. */
 const atlasRoutes=[
- {id:'africa',title:'Afrika',x:56,y:51},
- {id:'asia',title:'Asia',x:77,y:34},
- {id:'oceania',title:'Ozeania',x:89,y:68}
+ {id:'africa',title:'Afrika',x:55,y:55},
+ {id:'asia',title:'Asia',x:76,y:34},
+ {id:'oceania',title:'Ozeania',x:86,y:71}
 ];
 const atlasStatements=[
  ['statement_1','1850ean Europako biztanleria 266 milioikoa zen.'],
@@ -650,7 +650,7 @@ function renderPopulation(){
  (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>●</span>':'<span>+</span>')+'</button>').join('');
  const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
-  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 53 22 Q '+((53+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#8c6433" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
+  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 57 29 Q '+((57+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#8c6433" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
  const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
   '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
@@ -700,9 +700,9 @@ function renderPopulation(){
     '<header><span class="m2-atlas-number">2</span><h2>Norantz hedatu ziren misioak?</h2></header>'+
     '<p class="m2-atlas-exercise-instruction">Lotu PDFan aipatutako hiru eremuak atlasaren tokiekin. Hautatu izena eta jarri mapan.</p>'+
     '<div class="m2-atlas-route-stage"><div class="m2-atlas-route-labels">'+routes+'</div>'+
-    '<div class="m2-atlas-route-map"><img src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa" draggable="false">'+
+    '<div class="m2-atlas-route-map m2-atlas-route-map-hd"><div class="m2-atlas-route-canvas"><img src="./assets/m2-e3-mapamundi-mudo-hd.webp" alt="Munduko mapa ilustratua, kontinenteen izenik eta ibilbiderik gabe" draggable="false">'+
     '<svg class="m2-atlas-route-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><marker id="atlasArrow" markerWidth="4" markerHeight="4" refX="3" refY="2" orient="auto"><path d="M0 0L4 2L0 4Z" fill="#8c6433"/></marker></defs>'+lines+'</svg>'+
-    routePins+'</div></div>'+
+    routePins+'</div></div></div>'+
     '<footer>'+atlasSectionStatus(2,placed,3)+(atlasSelectedRoute&&state['route_'+atlasSelectedRoute]?'<button type="button" class="m2-bag-return" data-route-return>↶ Kendu ibilbidea</button>':'')+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
    '</section>'+
    '<section class="m2-atlas-facts-activity m2-atlas-activity" id="m2-facts-part" tabindex="-1">'+
