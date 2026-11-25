@@ -799,7 +799,7 @@ function renderExpedition(){
     '<p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+
     multiButtons('africa',riverOptions,data.africa)+'</section>'+
    '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-2" tabindex="-1"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3>'+fileStatus(2)+'</header>'+
-    ''+dossierArt('m2-migration-map-clean.svg','m2-exploration-map-art','Mapa orientagarria · Ez da garaiko dokumentua.')+'<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
+    ''+dossierArt('m2-e5-asia-ozeania-hd.webp','m2-exploration-map-art','AA bidez sortutako mapa orientagarria · Ez da garaiko dokumentua.')+'<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
     multiButtons('asia',asiaOptions,data.asia)+'</section>'+
    '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-3" tabindex="-1"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3>'+fileStatus(3)+'</header>'+
     '<div class="m2-polar-plate" aria-hidden="true"><svg viewBox="0 0 320 58" xmlns="http://www.w3.org/2000/svg"><path d="M0 42 42 19 66 34 105 12 140 39 180 27 210 7 253 37 290 24 320 41V58H0Z" fill="#b6c6c6"/><path d="M0 47 56 39 102 51 160 39 222 49 284 40 320 48V58H0Z" fill="#f7f4e8"/><g fill="#49656b"><path d="M140 34h35l-8 7h-21Z"/><path d="M156 13v21h-17Z" fill="#e8e1c9"/><path d="M157 16v18h15Z" fill="#b78453"/></g></svg></div><div class="m2-mini-grid">'+explorerCards('north','Ipar Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+explorerCards('south','Hego Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+'</div></section>'+

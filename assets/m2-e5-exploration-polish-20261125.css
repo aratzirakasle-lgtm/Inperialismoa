@@ -43,3 +43,11 @@
  display:block;width:100%;height:auto;aspect-ratio:4/3;background:#175b69;
  touch-action:none;
 }
+
+/* E5 / document 02: retain the entire approved map at its native proportions.
+   The image frame itself follows the map, with no coloured letterbox. */
+#m2-app.m2-expedition-active #m2-exp-file-2 .m2-exploration-map-art img{
+ box-sizing:border-box;display:block;width:min(100%,460px);height:auto!important;
+ max-width:100%;max-height:none;aspect-ratio:1491/1055;object-fit:contain!important;
+ background:transparent;filter:none;
+}
