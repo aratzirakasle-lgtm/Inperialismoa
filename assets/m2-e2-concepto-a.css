@@ -305,3 +305,195 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app.m2-capital-active .m2-e2-piece,#m2-app.m2-capital-active .m2-e2-slot{transition:none!important}
 }
+
+
+/* Segunda pasada: proporciones de la referencia, materiales y recortes originales.
+   Las piezas interactivas y los estados de corrección siguen intactos. */
+#m2-app.m2-capital-active{
+ --e2-gold:linear-gradient(180deg,#f8dfa4 0%,#d1a063 12%,#ebc98d 36%,#b78140 72%,#926033 92%,#e0ad64 100%);
+ --e2-paper:radial-gradient(ellipse at 42% 33%,#fff5dc44,transparent 68%),url('./atlas-papel-referencia.svg');
+ padding:clamp(5px,.6vw,10px);border-color:#664628;
+}
+#m2-app.m2-capital-active .m2-e2-scene{
+ gap:clamp(7px,.8vw,13px) clamp(12px,1.35vw,22px);
+ padding:clamp(10px,1.1vw,18px) clamp(14px,2.1vw,36px) clamp(15px,1.6vw,25px);
+ background:
+ radial-gradient(ellipse at 28% 0%,#cf9b4f27,transparent 40%),
+ linear-gradient(180deg,#091b1280,transparent 48%,#40251218),
+ url('./atlas-sala-referencia-hd.webp') center/100% 100% no-repeat,#102319;
+ border-width:3px;
+}
+#m2-app.m2-capital-active .m2-e2-scene::before{
+ background:repeating-linear-gradient(90deg,transparent 0 7.8%,#06140c38 7.8% 8%,#c6a36319 8% 8.15%,transparent 8.15% 16%),
+ radial-gradient(ellipse at 30% 2%,#efc27432,transparent 43%);
+}
+#m2-app.m2-capital-active .m2-e2-scene::after{
+ top:73%;background:linear-gradient(180deg,#1d0f09a0,transparent 14%,#190b0550),url('./atlas-madera-referencia-hd.webp') center/520px 100% repeat-x;
+}
+#m2-app.m2-capital-active .m2-e2-intro{gap:2px}
+#m2-app.m2-capital-active .m2-e2-intro h2{
+ padding:5px clamp(20px,4.4vw,70px);
+ border:5px double #6f4321;
+ background:var(--e2-gold);border-radius:24px 24px 11px 11px;
+ box-shadow:inset 0 0 0 1px #fff0b5,0 0 0 1px #ddbb75,0 4px 0 #53321a,0 6px 12px #080d08b0;
+ font-size:clamp(23px,3vw,39px);
+}
+#m2-app.m2-capital-active .m2-e2-concept-subtitle{
+ padding:3px 25px;border:3px double #885a2c;border-radius:20px;
+}
+#m2-app.m2-capital-active .m2-e2-intro p{margin:4px 0 0;font-size:clamp(12px,1.15vw,16px)}
+#m2-app.m2-capital-active .m2-e2-chronograph{gap:0}
+#m2-app.m2-capital-active .m2-e2-chronograph-title{
+ position:relative;z-index:2;margin:0 0 -3px;padding:2px 6px;
+ color:#f0d7a1;text-shadow:0 1px 2px #0e190e;
+}
+#m2-app.m2-capital-active .m2-e2-chronograph-title strong{font-size:clamp(10px,.82vw,12px);letter-spacing:.07em}
+#m2-app.m2-capital-active .m2-e2-clock-dial{
+ width:min(100%,660px);aspect-ratio:6/4.7;
+ background-size:100% 100%;
+ filter:drop-shadow(0 5px 5px #0c0b06a6);
+}
+#m2-app.m2-capital-active .m2-e2-globe{
+ left:29%;top:32.5%;width:42%;border:2px solid #aa7b42;
+ background:#315b54 url('./m2-e2-globo-referencia.svg') center/100% 100% no-repeat;
+ box-shadow:inset 0 0 10px #181d1055,0 0 0 2px #4e391f,0 0 0 4px #d4ae71,0 6px 12px #090e09aa;
+}
+#m2-app.m2-capital-active .m2-e2-globe img{opacity:0}
+#m2-app.m2-capital-active .m2-e2-globe::before{
+ background:radial-gradient(ellipse at 22% 12%,#fff1c230,transparent 38%),radial-gradient(ellipse at 35% 30%,transparent 48%,#1722165e);
+ box-shadow:inset 0 -5px 9px #30210f33;
+}
+#m2-app.m2-capital-active .m2-e2-globe::after{display:none}
+#m2-app.m2-capital-active .m2-e2-slot{
+ width:27%;padding:clamp(5px,.55vw,9px) 7px;
+ border:6px ridge #be8c49;
+ background:radial-gradient(ellipse at 30% 18%,#fff2d6,transparent 68%),url('./atlas-papel-referencia.svg') center/100% 100%,#e3bf8a;
+ box-shadow:inset 0 0 0 1px #ffefce,inset 0 0 0 3px #ab7a43,inset 0 0 9px #956b3c70,
+ 0 0 0 2px #633a1b,0 0 0 3px #e4bb74,0 5px 8px #1a110ab5;
+}
+#m2-app.m2-capital-active .m2-e2-slot-1908{left:36.5%;top:1%}
+#m2-app.m2-capital-active .m2-e2-slot-1869{left:5%;top:48%}
+#m2-app.m2-capital-active .m2-e2-slot-1914{right:5%;top:48%}
+#m2-app.m2-capital-active .m2-e2-slot>strong{
+ font:700 clamp(18px,2.25vw,35px)/1.02 Georgia,serif;color:#342313;
+}
+#m2-app.m2-capital-active .m2-e2-slot-face{max-height:70%}
+#m2-app.m2-capital-active .m2-e2-empty-mark{
+ width:clamp(20px,4vw,58px);height:clamp(20px,4vw,58px);
+ border:2px dashed #a78656;background:#af8d5310;
+}
+#m2-app.m2-capital-active .m2-e2-empty-mark::before{
+ content:"";width:58%;height:58%;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M24 5v24M14 20l10 10 10-10M9 29v12h30V29' fill='none' stroke='%238d6b3f' stroke-width='5' stroke-linejoin='miter'/%3E%3C/svg%3E");
+}
+#m2-app.m2-capital-active .m2-e2-empty-label{color:#76552f;font-weight:400}
+#m2-app.m2-capital-active .m2-e2-dial-progress{
+ margin:0;padding:2px 14px;min-height:0;
+ background:linear-gradient(#263e2b,#13271c);border:1px solid #b69156;font-size:11px;
+}
+#m2-app.m2-capital-active .m2-e2-upper{gap:3px}
+#m2-app.m2-capital-active .m2-e2-catalogue{
+ border:8px ridge #8e542d;border-radius:5px;padding:5px clamp(5px,.9vw,13px) 8px;
+ background:linear-gradient(180deg,#27130d8a,#48241135 60%,#170b06ab),url('./atlas-madera-referencia-hd.webp') center/520px 100% repeat-x;
+ box-shadow:inset 0 0 0 1px #d29d58,inset 0 6px 12px #190b06c9,0 6px 0 #2b160b,0 10px 12px #12090699;
+}
+#m2-app.m2-capital-active .m2-e2-catalogue>header{
+ margin:0 auto 6px;padding:3px 13px;width:fit-content;max-width:100%;
+ border:3px double #70421f;border-radius:20px;background:var(--e2-gold);
+}
+#m2-app.m2-capital-active .m2-e2-catalogue>header strong{font-size:clamp(11px,1vw,14px)}
+#m2-app.m2-capital-active .m2-e2-catalogue>header small{font-size:10px}
+#m2-app.m2-capital-active .m2-e2-piece{
+ padding:5px 5px 4px;gap:3px;border:2px solid #9a6b3f;
+ border-radius:7px;background:var(--e2-paper),#e3c18d;
+ box-shadow:inset 0 0 0 1px #f4ddb3,0 2px 0 #987044,0 5px 6px #140b07ad;
+}
+#m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture,
+#m2-app.m2-capital-active .m2-e2-small-picture{
+ background-image:url('./m2-e2-cartelas-referencia.svg');
+ background-size:300% 100%;background-repeat:no-repeat;filter:contrast(1.05) saturate(.92);
+}
+#m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture{aspect-ratio:110/48;border-color:#96764c}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-suez{background-position:0 50%}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-hijaz{background-position:50% 50%}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-panama{background-position:100% 50%}
+#m2-app.m2-capital-active .m2-e2-piece-info strong{
+ padding:3px 2px;border:1px solid #a87d45;border-radius:6px;
+ background:linear-gradient(#f7e6bd,#d7b27a);font-size:clamp(11px,1.1vw,16px);
+ box-shadow:0 1px 2px #50351b50;
+}
+#m2-app.m2-capital-active .m2-e2-piece-info small{font-size:clamp(8px,.72vw,10px)}
+#m2-app.m2-capital-active .m2-e2-ledger{
+ align-self:stretch;justify-content:flex-start;
+ padding:clamp(22px,2.6vw,40px) clamp(17px,2.3vw,35px) 23px;
+ border:10px solid #51301e;border-radius:16px 21px 19px 24px;
+ background:
+ linear-gradient(90deg,#84542c50 0%,#c3965d25 3%,transparent 8% 47%,#80592e26 49%,#fff8e466 51%,transparent 54% 92%,#a275424a 98%),
+ var(--e2-paper),#eed7aa;
+ box-shadow:inset 0 0 0 2px #c79a5f,inset 0 0 0 4px #f7e5bc,inset 0 0 0 6px #b48b52,inset 0 0 0 8px #eedbb0,inset 0 0 26px #8f602d44,0 0 0 2px #bd8a4c,0 0 0 5px #362014,0 4px 0 5px #976c3b,0 9px 0 5px #351e14,0 15px 20px #100a07bf;
+}
+#m2-app.m2-capital-active .m2-e2-ledger::before{
+ left:50%;border:0;width:10px;transform:translateX(-50%);
+ background:linear-gradient(90deg,transparent,#956c3c28 45%,#fff8e455 60%,transparent);pointer-events:none;
+}
+#m2-app.m2-capital-active .m2-e2-ledger::after{
+ content:"";position:absolute;inset:11px;border:1px double #9b723d77;border-radius:6px 9px 11px 7px;pointer-events:none;
+}
+#m2-app.m2-capital-active .m2-e2-ledger>h3{
+ margin:0 auto 20px;padding:0 0 12px;color:#2c1c10;
+ font-size:clamp(21px,2.3vw,33px);border-bottom:2px double #a17b48;
+}
+#m2-app.m2-capital-active .m2-e2-ledger-pages{gap:clamp(14px,2.2vw,30px)}
+#m2-app.m2-capital-active .m2-e2-ledger-page legend{
+ background:linear-gradient(180deg,#f5dfb0,#dbb783);
+ padding:6px 9px;border-color:#b38b51;border-radius:7px;
+ color:#332010;font-size:clamp(14px,1.4vw,20px);
+}
+#m2-app.m2-capital-active .m2-e2-ledger-page legend b{
+ border:3px double #d0a669;background:linear-gradient(#31543b,#142b1b);
+ box-shadow:0 1px 2px #66492766;border-radius:12px;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration{
+ height:14px;display:grid;place-items:center;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration::after{content:"❧ ────── ✧ ────── ❧"}
+#m2-app.m2-capital-active .m2-e2-option{
+ padding:7px 10px;min-height:clamp(33px,3.05vw,45px);gap:10px;border-radius:7px;
+ background:linear-gradient(180deg,#f7e5be,#e7cda0);border:1px solid #b99460;
+ box-shadow:inset 0 1px #fff4d8,0 2px 2px #8c64392e;
+}
+#m2-app.m2-capital-active .m2-e2-option-copy{font-weight:500;line-height:1.28}
+#m2-app.m2-capital-active .m2-e2-option:has(input:checked){
+ background:linear-gradient(180deg,#f8e6b7,#ddba7b);border-color:#9b713a;
+ box-shadow:inset 0 0 0 1px #fff2cc,0 0 0 1px #b78a47;
+}
+#m2-app.m2-capital-active .m2-e2-source-note{margin-top:auto;padding-top:12px}
+#m2-app.m2-capital-active .m2-e2-scene>.m2-controls{
+ background:transparent!important;box-shadow:none!important;border:0!important;
+ padding:6px 0 0!important;gap:5px;margin:6px 0 0;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-answer-count{
+ background:linear-gradient(180deg,#305238,#132d1e);border:4px double #cea362;border-radius:8px;
+ box-shadow:0 2px 3px #0d0906a8;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-buttons>.m2-button{
+ border:4px double #b78a47;border-radius:10px;box-shadow:0 3px 4px #150b08b0;
+}
+@media(min-width:1000px){
+ #m2-app.m2-capital-active .m2-e2-scene{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr)}
+ #m2-app.m2-capital-active .m2-e2-clock-dial{width:min(100%,660px)}
+}
+@media(max-width:900px){
+ #m2-app.m2-capital-active .m2-e2-scene{padding:10px clamp(8px,2vw,18px) 15px;background-size:auto 100%}
+ #m2-app.m2-capital-active .m2-e2-clock-dial{width:min(100%,590px)}
+ #m2-app.m2-capital-active .m2-e2-slot>strong{font-size:clamp(16px,3.5vw,31px)}
+}
+@media(max-width:480px){
+ #m2-app.m2-capital-active .m2-e2-slot{width:29%;border-width:3px;padding:4px 2px}
+ #m2-app.m2-capital-active .m2-e2-slot-1908{left:35.5%}
+ #m2-app.m2-capital-active .m2-e2-slot-1869{left:2%}
+ #m2-app.m2-capital-active .m2-e2-slot-1914{right:2%}
+ #m2-app.m2-capital-active .m2-e2-slot>strong{font-size:clamp(13px,3.6vw,19px)}
+ #m2-app.m2-capital-active .m2-e2-empty-mark{width:22px;height:22px;border-width:1px}
+ #m2-app.m2-capital-active .m2-e2-ledger{border-width:6px;padding:17px 12px 14px}
+ #m2-app.m2-capital-active .m2-e2-piece-info strong{font-size:10px}
+}
