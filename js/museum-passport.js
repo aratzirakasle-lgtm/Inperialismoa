@@ -66,7 +66,19 @@ function atlasMedal(id){
 
 // Decorative calligraphic names, never an authentication or handwritten signature.
 export function atlasSignatureNames(names=[]){
- return names.filter(n=>typeof n==='string'&&n.trim()).slice(0,2).map(n=>{const words=n.trim().split(/\s+/);return words[0]+(words.length>1?' '+words.slice(1).map(w=>w[0]+'.').join(' '):'')});
+ return names.filter(n=>typeof n==='string'&&n.trim()).map(n=>{const words=n.trim().split(/\s+/);return words[0]+(words.length>1?' '+words.slice(1).map(w=>w[0]+'.').join(' '):'')});
+}
+// Fixed, padded SVG signature area: every name has its own baseline and fits the page.
+export function renderAtlasSignatures(names=[]){
+ const list=atlasSignatureNames(names);
+ if(!list.length)return '';
+ const count=list.length,step=Math.min(24,64/count),font=Math.min(24,step*.94);
+ const rows=list.map((name,i)=>{
+  const y=36+(i-(count-1)/2)*step+font*.29;
+  const length=Math.min(132,Math.max(font*.8,[...name].length*font*.52));
+  return '<text class="atlas-signature-name" x="78" y="'+y.toFixed(2)+'" font-size="'+font.toFixed(2)+'" textLength="'+length.toFixed(2)+'" lengthAdjust="spacingAndGlyphs" transform="rotate('+(-3+i%3)+' 78 '+y.toFixed(2)+')">'+escapeHtml(name)+'</text>';
+ }).join('');
+ return '<svg class="atlas-signature-ink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 72" preserveAspectRatio="xMidYMid meet" role="img" aria-label="'+escapeHtml('Izen kaligrafiko apaingarriak: '+list.join(', '))+'">'+rows+'</svg>';
 }
 export function renderMuseumPassport({teamName='Taldea',memberNames=[],completedIds=[],preview=false,animate=false,animateMission=1,otherUnknown=false,completedAt={},variant='default',nextMission=0}={}){
  const earned=new Set(completedIds.filter(id=>[1,2,3,4].includes(id)));
@@ -77,7 +89,7 @@ export function renderMuseumPassport({teamName='Taldea',memberNames=[],completed
    return '<li class="mp-slot atlas-seal'+(won?' mp-earned':'')+(available?' is-current':'')+'"><span class="mp-stamp atlas-ink-stamp">'+atlasSeal(id,won,available,mark)+'</span>'+(won&&!preview?stampDate(completedAt[id]):'<span class="atlas-seal-caption">'+(won?'OSATUTA':available?'Hurrengo zigilua':id>2?'Prestatzen':'Zain')+'</span>')+'</li>';
   }).join('');
   const medals=[1,2,3,4].filter(id=>earned.has(id));
-  return '<section class="mp-passport atlas-book" aria-label="Ikerketa-pasaportea"><div class="atlas-book-spread"><div class="atlas-book-page atlas-identity"><div class="atlas-paper-frame"><span class="atlas-page-emblem" aria-hidden="true">✧</span><h3>IKERTZAILEAREN<br>PASAPORTEA</h3><div class="atlas-identity-photo" aria-hidden="true"><img src="./assets/atlas-identity-photo.png" alt="" width="232" height="190"></div><span class="atlas-team-label">TALDEA</span><strong class="atlas-team-name">'+escapeHtml(teamName)+'</strong><div class="atlas-signatures" aria-label="Izen kaligrafiko apaingarriak">'+(atlasSignatureNames(memberNames).map(n=>'<span class="atlas-name-signature">'+escapeHtml(n)+'</span>').join('')||'<span class="atlas-name-signature">Inperialismoa</span>')+'</div><span class="atlas-page-caption">MUSEOKO ARTXIBOA · XIX. MENDEA</span></div></div><div class="atlas-book-page atlas-stamp-page"><div class="atlas-paper-frame"><h3>ESPEDIZIOAREN<br>ZIGILUAK ETA DOMINAK</h3><ol class="mp-stamps atlas-seals">'+seals+'</ol><div class="mp-medals atlas-medals">'+(medals.length?medals.map(id=>'<div>'+atlasMedal(id)+'<span class="mp-award">'+roman[id-1]+'. MISIOA</span></div>').join(''):'<span class="atlas-medals-empty">Dominak misioak amaitzean lortuko dituzue.</span>')+'</div><span class="atlas-page-caption">'+earned.size+' / 4 · MISIO OSATUTA</span></div></div></div></section>';
+  return '<section class="mp-passport atlas-book" aria-label="Ikerketa-pasaportea"><div class="atlas-book-spread"><div class="atlas-book-page atlas-identity"><div class="atlas-paper-frame"><span class="atlas-page-emblem" aria-hidden="true">✧</span><h3>IKERTZAILEAREN<br>PASAPORTEA</h3><div class="atlas-identity-photo" aria-hidden="true"><img src="./assets/atlas-identity-photo.png" alt="" width="232" height="190"></div><span class="atlas-team-label">TALDEA</span><strong class="atlas-team-name">'+escapeHtml(teamName)+'</strong><div class="atlas-signatures" aria-label="Izen kaligrafiko apaingarriak">'+renderAtlasSignatures(memberNames)+'</div><span class="atlas-page-caption">MUSEOKO ARTXIBOA · XIX. MENDEA</span></div></div><div class="atlas-book-page atlas-stamp-page"><div class="atlas-paper-frame"><h3>ESPEDIZIOAREN<br>ZIGILUAK ETA DOMINAK</h3><ol class="mp-stamps atlas-seals">'+seals+'</ol><div class="mp-medals atlas-medals">'+(medals.length?medals.map(id=>'<div>'+atlasMedal(id)+'<span class="mp-award">'+roman[id-1]+'. MISIOA</span></div>').join(''):'<span class="atlas-medals-empty">Dominak misioak amaitzean lortuko dituzue.</span>')+'</div><span class="atlas-page-caption">'+earned.size+' / 4 · MISIO OSATUTA</span></div></div></div></section>';
  }
  const ceremony=variant==='ceremony';
  const slots=roman.map((n,i)=>{
