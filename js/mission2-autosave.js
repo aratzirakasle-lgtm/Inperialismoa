@@ -113,8 +113,8 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
    for(const [id,entry] of Object.entries(entries)){
     restored[id]=mergeMission2Patch(entry.reset?{}:restored[id],entry.patch);
    }
-   if(!alive)return false;
-   hasRestored=true;onRestore(restored);
+   if(!alive||hasRestored&&!canRefresh())return false;
+    hasRestored=true;onRestore(restored);
    if(busy()){status('Aurreko saioko aldaketak berreskuratzen…','saving');schedule(10)}
    else status('Taldearen lana sinkronizatuta.','ready');
    return true;
@@ -136,7 +136,13 @@ export function createMission2Autosave({client,teamId,userId,onRestore,onStatus,
  window.addEventListener('focus',onOnline);
  window.addEventListener('pagehide',onPageHide);
  document.addEventListener('visibilitychange',onVisible);
- return {load,queue,reset,flush,hasPending:busy,destroy(){
+ async function flushConfirmed(){
+   for(let i=0;i<80&&(working||loading)&&alive;i++)await new Promise(resolve=>setTimeout(resolve,100));
+   if(!alive||working||loading)return false;
+   if(busy())await flush();
+   return alive&&!busy()&&!working;
+  }
+  return {load,queue,reset,flush,flushConfirmed,hasPending:busy,destroy(){
   alive=false;clearInterval(refreshTimer);if(timer!==null)clearTimeout(timer);
   window.removeEventListener('online',onOnline);
   window.removeEventListener('focus',onOnline);
