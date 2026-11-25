@@ -265,6 +265,8 @@ try{
     assert.equal(await page.locator('.m2-source-engraving svg').count(),5);
     assert.equal(await page.locator('input[data-archive]').count(),15);
     assert.equal(await page.locator('.m2-source-file .m2-archive-image-caption').count(),5);
+    assert.equal(await page.locator('.m2-source-file .m2-archive-art-note').count(),5);
+    assert.equal(await page.locator('.m2-source-file .m2-archive-reading-label').count(),5);
     assert.equal(await page.locator('.m2-archive-dossier').count(),5);
     assert.equal(await page.locator('.m2-archive-desk-front').count(),1);
     assert.equal(await page.locator('.m2-archive-warning').count(),1);
@@ -341,6 +343,14 @@ try{
     await page.locator('#m2-reading-dialog').waitFor({state:'visible'});
     assert.match(await page.locator('#m2-reading-dialog').innerText(),/Prentsa eta prestigioa/);
     assert.equal(await page.locator('.m2-dialog-source-art').evaluate(el=>getComputedStyle(el).backgroundPosition),await page.locator('[data-source="press"] .m2-source-engraving').evaluate(el=>getComputedStyle(el).backgroundPosition));
+    await page.locator('[data-source-scale="in"]').click();
+    assert.equal(await page.locator('[data-source-scale-value]').innerText(),'150 %');
+    await page.locator('[data-source-scale="in"]').click();
+    assert.equal(await page.locator('[data-source-scale-value]').innerText(),'200 %');
+    await page.locator('[data-source-scale="reset"]').click();
+    assert.equal(await page.locator('[data-source-scale-value]').innerText(),'100 %');
+    assert.equal(await page.locator('#m2-reading-dialog input[value="a"]').isChecked(),true);
+    await page.screenshot({path:'test-output/m2-e4-agiria-'+label+'.png',animations:'disabled'});
     await page.locator('#m2-reading-dialog input[value="b"]').check();
     assert.equal(await page.locator('input[data-archive="press"][value="b"]').isChecked(),true);
     await page.locator('#m2-reading-dialog input[value="a"]').check();

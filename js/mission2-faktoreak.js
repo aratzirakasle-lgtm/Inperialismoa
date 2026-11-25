@@ -61,23 +61,23 @@ const infrastructure=[
 const archives=[
  {id:'sea',title:'Ibilbide estrategikoak',type:'Geografia politikoa',ref:'13. diapositiba',art:'chart',
   body:'Itsasoko eta lurreko ibilbideak kontrolatzeko lehian, potentziek merkataritzaren eta armadaren joan-etorriak zaindu eta aurkarien hedapena oztopatu nahi zuten.',
-  question:'Zein interes politiko ageri da dokumentu honetan?',
+  question:'Potentzia batek aurkarien itsas sarbidea mugatu nahi badu, zer interes politikok azalduko luke estrategia hori?',
   options:[['a','Ibilbideen kontrol geoestrategikoa'],['b','Europako biztanleriaren hazkundea'],['c','Erlijio-misioak zabaltzea']]},
  {id:'press',title:'Prentsa eta prestigioa',type:'Propaganda',ref:'14. diapositiba',art:'newspaper',
   body:'Politikariek, egunkarien eta beste hedabideen laguntzarekin, kolonien hedapena sustatu zuten herritarren babesa eskuratu eta nazioaren prestigioa handitzeko.',
-  question:'Zein ideologia politiko erabiltzen da justifikazio horretan?',
+  question:'Egunkari batek kolonia gehiago izatea nazioaren ohorearekin lotzen badu, zein ideologia ari da sustatzen?',
   options:[['a','Kapitalen inbertsioa'],['b','Abertzalekeria (chauvinismoa)'],['c','Emigrazioa']]},
  {id:'missions',title:'Agintarien interesa',type:'Erretratuen bilduma',ref:'14. diapositiba',art:'portrait',
   body:'Bismarck, Cecil Rhodes, Jules Ferry, Leopoldo II.a eta Joseph Chamberlain garaiko hedapen kolonialarekin lotutako agintari edo politikariak izan ziren. Beren interesak eta jardunak ez ziren berdinak.',
-  question:'Zer bultzatu nahi zuten hedapen koloniala defendatzen zuten agintariek?',
+  question:'Zein helburu politiko parteka zezaketen hedapen koloniala defendatzen zuten agintariek, interes desberdinak izan arren?',
   options:[['a','Herrialde guztien independentzia bermatzea'],['b','Kolonien gaineko kontrola amaitzea'],['c','Estatuaren indarra eta nazioarteko prestigioa handitzea']]},
  {id:'racism',title:'Biologiaren itxurako argudioak',type:'Ideologia',ref:'15. diapositiba',art:'science',
   body:'Kolonialismoaren defendatzaile batzuek teoria arrazistak zientziaren itxurapean aurkezten zituzten, pertsonen arteko hierarkiak eta lurraldeen menderakuntza justifikatzeko. Teoria horiek ez dute balio zientifikorik.',
-  question:'Zertarako erabiltzen ziren teoria horiek?',
+  question:'Ustezko azalpen biologiko bat erabiliz herri baten askatasuna ukatzen bada, zer funtzio betetzen du argudio horrek?',
   options:[['a','Menderakuntza eta diskriminazioa justifikatzeko'],['b','Herrien eskubide-berdintasuna defendatzeko'],['c','Merkataritza-hesiak kentzeko']]},
  {id:'source1863',title:'1863ko lekukotasuna',type:'Iturriaren azterketa kritikoa',ref:'16. diapositiba',art:'manuscript',
   body:'Londresko Elkarte Antropologikoaren 1863ko saio bati lotutako testu batek pertsona beltzak gutxiesten zituen eta europarren nagusitasuna aldarrikatzen zuen. Giza duintasunaren aurkako ikuspegi arrazista da.',
-  question:'Nola aztertu behar da lekukotasun historiko hori?',
+  question:'Zer ezagutza historiko lor dezakegu 1863ko lekukotasun hori kritikoki aztertuta?',
   options:[['a','Giza taldeen gaitasunen froga objektibo gisa'],['b','Garai hartako ideologia arrazistaren adibide kritiko gisa'],['c','Biztanleria-zentsu zehatz gisa']]}
 ];
 const riverOptions=[['nile','Nilo'],['niger','Niger'],['congo','Kongo'],['zambezi','Zambeze'],['suez','Suez'],['panama','Panama']];
@@ -142,10 +142,10 @@ function openSource(id){
  const art=app.querySelector('[data-source="'+id+'"] .m2-source-engraving');
  const style=art?getComputedStyle(art):null;
  const image=style?.backgroundImage||'none',position=style?.backgroundPosition,size=style?.backgroundSize;
- const rect=art?.getBoundingClientRect();
  const current=taskState(4)[id],index=archives.indexOf(source);
- museumDialog(source.title,'<p class="m2-dialog-ref">AGIRIA '+(index+1)+' / 5 · '+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div><p class="m2-dialog-reading">'+esc(source.body)+'</p><fieldset class="m2-reading-choices"><legend>'+esc(source.question)+'</legend>'+source.options.map(([key,label])=>'<label><input type="radio" name="m2-dialog-answer" value="'+esc(key)+'" '+(current===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset><div class="m2-file-navigation"><button type="button" data-file-prev class="m2-button secondary" '+(index===0?'disabled':'')+'>← Aurreko agiria</button><span data-file-status role="status">'+(current?'Erantzuna hautatuta':'Erantzun bat hautatu')+'</span><button type="button" data-file-next class="m2-button secondary" '+(index===archives.length-1?'disabled':'')+'>Hurrengo agiria →</button></div>');
+ museumDialog(source.title,'<p class="m2-dialog-ref">AGIRIA '+(index+1)+' / 5 · '+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-archive-zoom-tools" aria-label="Irudia handitzeko kontrolak"><button type="button" data-source-scale="out" aria-label="Txikitu">−</button><span data-source-scale-value role="status">100 %</span><button type="button" data-source-scale="in" aria-label="Handitu">+</button><button type="button" data-source-scale="reset">Hasierako neurria</button></div><div class="m2-archive-zoom-viewport" tabindex="0" aria-label="Ilustrazioa"><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div></div><p class="m2-archive-dialog-art-note">Ilustrazio didaktikoa · Ez da jatorrizko dokumentuaren faksimilea.</p><span class="m2-archive-reading-label">TESTU MOLDATUA</span><p class="m2-dialog-reading">'+esc(source.body)+'</p><fieldset class="m2-reading-choices"><legend>'+esc(source.question)+'</legend>'+source.options.map(([key,label])=>'<label><input type="radio" name="m2-dialog-answer" value="'+esc(key)+'" '+(current===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset><div class="m2-file-navigation"><button type="button" data-file-prev class="m2-button secondary" '+(index===0?'disabled':'')+'>← Aurreko agiria</button><span data-file-status role="status">'+(current?'Erantzuna hautatuta':'Erantzun bat hautatu')+'</span><button type="button" data-file-next class="m2-button secondary" '+(index===archives.length-1?'disabled':'')+'>Hurrengo agiria →</button></div>');
  const dialog=document.querySelector('#m2-reading-dialog');
+ dialog.classList.add('m2-archive-reading-dialog');
  dialog.querySelectorAll('input[name="m2-dialog-answer"]').forEach(input=>input.addEventListener('change',()=>{
   if(releaseClosed||submitting||active!==4||!teacher&&completions.has(4))return;
   taskState(4)[id]=input.value;queueMission2({[id]:input.value},4);
@@ -163,9 +163,25 @@ function openSource(id){
   const picture=document.querySelector('.m2-dialog-source-art');
   picture.style.backgroundImage=image;picture.style.backgroundPosition=position;
   picture.style.backgroundSize=size;
-  if(rect?.width&&rect.height){const ratio=rect.width/rect.height;picture.style.aspectRatio=String(ratio);picture.style.width='min(100%, '+Math.min(540,Math.round(330*ratio))+'px)';picture.style.height='auto';}
-  picture.classList.add('has-photo')
+  picture.style.aspectRatio='220 / 340';
+  picture.style.height='auto';
+  picture.classList.add('has-photo');
  }
+ const viewport=dialog.querySelector('.m2-archive-zoom-viewport'),picture=dialog.querySelector('.m2-dialog-source-art');
+ let scale=1;
+ const redraw=()=>{
+  picture.style.width='calc(var(--m2-source-width) * '+scale+')';
+  dialog.querySelector('[data-source-scale-value]').textContent=Math.round(scale*100)+' %';
+  dialog.querySelector('[data-source-scale="out"]').disabled=scale<=1;
+  dialog.querySelector('[data-source-scale="in"]').disabled=scale>=2;
+  if(scale===1){viewport.scrollTop=0;viewport.scrollLeft=0;}
+ };
+ dialog.querySelector('.m2-archive-zoom-tools').addEventListener('click',event=>{
+  const action=event.target.closest('[data-source-scale]')?.dataset.sourceScale;
+  if(!action)return;
+  scale=action==='reset'?1:Math.min(2,Math.max(1,scale+(action==='in'?.5:-.5)));redraw();
+ });
+ redraw();
 }
 function openMap(kind){
  if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa historikoa">');
@@ -630,9 +646,9 @@ function renderArchive(){
     '<span class="m2-source-kind">'+esc(a.type)+'</span></header>'+
    '<div class="m2-archive-card-body">'+
     '<div class="m2-archive-illustration"><div class="m2-source-engraving" aria-hidden="true">'+archiveEngraving(a.art)+'</div>'+
-     '<span class="m2-archive-image-caption">'+esc(a.ref)+'</span><button type="button" class="m2-zoom-button m2-source-zoom" data-source-zoom="'+esc(a.id)+'" aria-label="'+esc(a.title)+' handitu" title="Agiria handitu">＋</button></div>'+
+     '<span class="m2-archive-image-caption">'+esc(a.ref)+'</span><small class="m2-archive-art-note">Ilustrazio didaktikoa</small><button type="button" class="m2-zoom-button m2-source-zoom" data-source-zoom="'+esc(a.id)+'" aria-label="'+esc(a.title)+' handitu" title="Agiria handitu">＋</button></div>'+
     '<div class="m2-archive-card-writing"><div class="m2-source-titling"><h3>'+esc(a.title)+'</h3></div>'+
-     '<p class="m2-source-text">'+esc(a.body)+'</p>'+
+     '<span class="m2-archive-reading-label">TESTU MOLDATUA</span><p class="m2-source-text">'+esc(a.body)+'</p>'+
      '<fieldset><legend><span class="m2-archive-question-mark" aria-hidden="true">?</span>'+esc(a.question)+'</legend>'+
       a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+esc(a.id)+'" value="'+esc(key)+'" data-archive="'+esc(a.id)+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+
      '</fieldset></div>'+
@@ -642,8 +658,8 @@ function renderArchive(){
    '<div class="m2-archive-room-props" aria-hidden="true"></div>'+
    '<div class="m2-archive-desk">'+
     '<div class="m2-archive-desk-crest"><span aria-hidden="true">❧</span><div><span class="m2-archive-eyebrow">IKERKETA HISTORIKOA · 04 / 05</span>'+
-     '<h3>Boterearen artxiboa</h3><p>Aztertu bost agiriak eta aukeratu galdera bakoitzaren erantzuna.</p></div>'+
-     '<div class="m2-archive-progress" role="status" aria-live="polite"><span>AZTERTUTAKO AGIRIAK</span><strong data-archive-progress>'+answered+' / 5</strong></div>'+
+     '<h3>Boterearen artxiboa</h3><p>Aztertu bost agiriak, interpretatu testuinguru historikoa eta aukeratu galdera bakoitzaren erantzuna. Irudiak ilustrazio didaktikoak dira.</p></div>'+
+     '<div class="m2-archive-progress" role="status" aria-live="polite"><span>ERANTZUNDAKO AGIRIAK</span><strong data-archive-progress>'+answered+' / 5</strong></div>'+
     '</div>'+
     '<div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+'</div>'+
     '<div class="m2-archive-desk-front" aria-hidden="true"><span>ARTXIBO HISTORIKOA · XIX. MENDEA</span></div>'+
