@@ -758,11 +758,12 @@ function renderArchive(){
      '<h3>Boterearen artxiboa</h3><p>Aztertu bost agiriak, interpretatu testuinguru historikoa eta aukeratu galdera bakoitzaren erantzuna. Irudiak ilustrazio didaktikoak dira.</p></div>'+
      '<div class="m2-archive-progress" role="status" aria-live="polite"><span>ERANTZUNDAKO AGIRIAK</span><strong data-archive-progress>'+answered+' / 5</strong></div>'+
     '</div>'+
-    '<div class="m2-archive-file-actions"><button type="button" class="m2-button secondary" data-source-zoom="'+archives[0].id+'">✧ Agiriak banan-banan irakurri</button></div><div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+'</div>'+
+    '<div class="m2-archive-file-actions"><button type="button" class="m2-button secondary" data-source-zoom="'+archives[0].id+'">✧ Agiriak banan-banan irakurri</button></div><div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+
+    '<aside class="m2-evidence m2-archive-warning"><span class="m2-archive-warning-emblem" aria-hidden="true">!</span>'+
+    '<div><strong>OHAR KRITIKOA</strong><p>Arrazismoa justifikatzeko erabiltzen ziren teoriak ideologia historikoak ziren, ez zientzia baliozkoa. Horrelako argudioek kolonialismoa eta diskriminazioa legitimatzeko balio izan zuten.</p></div></aside>'+
+    '</div>'+
     '<div class="m2-archive-desk-front" aria-hidden="true"><span>ARTXIBO HISTORIKOA · XIX. MENDEA</span></div>'+
    '</div>'+
-   '<aside class="m2-evidence m2-archive-warning"><span class="m2-archive-warning-emblem" aria-hidden="true">!</span>'+
-    '<div><strong>OHAR KRITIKOA</strong><p>Arrazismoa justifikatzeko erabiltzen ziren teoriak ideologia historikoak ziren, ez zientzia baliozkoa. Horrelako argudioek kolonialismoa eta diskriminazioa legitimatzeko balio izan zuten.</p></div></aside>'+
   '</div>';
 }
 function multiButtons(group,options,selectedIds){
