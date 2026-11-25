@@ -428,11 +428,13 @@ try{
    assert.equal(await page.locator('#m2-class-modal-board').isVisible(),false);
    await toggle.click();
    await page.locator('.m1-class-team').first().waitFor({state:'visible'});
-   assert.match(await page.locator('#m2-reading-dialog').innerText(),/II\. MISIOA/);
+   assert.match(await page.locator('#m2-class-inline').innerText(),/2\. misioa/);
    assert.equal(await page.locator('.m1-class-team').count(),2);
    assert.match(await page.locator('#m2-class-modal-board').innerText(),/ZUEN TALDEA/);
    assert.match(await page.locator('#m2-class-modal-board').innerText(),/Nilo/);
-   await page.locator('[data-dialog-close]').click();
+   assert.match(await page.locator('#m2-class-modal-board').innerText(),/2\/5/);
+   await page.locator('[data-m2-class-refresh]').click();
+   await toggle.click();
    assert.equal(await page.locator('#m2-class-modal-board').isVisible(),false);
    assert.deepEqual(errors,[]);
   }finally{await context.close()}
