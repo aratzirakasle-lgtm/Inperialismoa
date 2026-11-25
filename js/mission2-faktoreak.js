@@ -369,12 +369,28 @@ function museumHeader(){
 function museumInstruction(){
  return '<div class="m2-museum-instructions"><span class="m2-museum-hand" aria-hidden="true">☞</span> Dagozkion arrazoien arabera, kokatu beheko txartelak bost faktore hauetan:</div>';
 }
+// Existing full-colour museum illustrations, not historical primary sources.
+// Keep the remaining engraved motifs where no suitable illustration exists.
+const cabinetArt={
+ economic:'atlas-mission-vivid-1.webp',
+ demographic:'m2-suitcase-better-restored.webp',
+ religious:'m2-suitcase-faith-restored.webp',
+ political:'atlas-mission-vivid-2.webp'
+};
+const cabinetCardArt={
+ new_markets:'m2-reference-harbor.webp',
+ settlement:'m2-suitcase-settlement-restored.webp',
+ working_conditions:'m2-suitcase-conditions-restored.webp',
+ conversion:'m2-suitcase-conversion-restored.webp',
+ missions:'m2-suitcase-missions-restored.webp',
+ sea_routes:'m2-reference-right-steamer.webp'
+};
 function renderClassification(){
  const state=taskState(1),assigned=state.assignments||{};
  function tile(c){
   const catalogNumber=String(causes.indexOf(c)+1).padStart(2,'0');
   return '<button type="button" draggable="true" data-card="'+c.id+'" class="m2-tile m2-museum-card m2-archive-card" title="'+esc(c.label)+'" aria-label="'+esc(c.label)+'" aria-pressed="'+(selected===c.id)+'">'+
-   '<span class="m2-museum-card-art" aria-hidden="true"><img class="m2-card-miniature" src="./assets/m2-card-'+c.id+'.svg" alt="" draggable="false" loading="eager"></span>'+
+   '<span class="m2-museum-card-art" aria-hidden="true"><img class="m2-card-miniature" src="./assets/'+(cabinetCardArt[c.id]||'m2-card-'+c.id+'.svg')+'" alt="" draggable="false" loading="eager"></span>'+
    '<span class="m2-card-copy-group"><span class="m2-museum-card-copy">'+esc(museumCardShort[c.id]||c.label)+'</span>'+
    '<span class="m2-card-archive-mark" aria-hidden="true">AGIRIA · '+catalogNumber+'</span></span>'+
    '<span class="m2-card-foil" aria-hidden="true">✦</span></button>';
@@ -383,7 +399,7 @@ function renderClassification(){
   const inside=causes.filter(c=>assigned[c.id]===cat.id);
   const cabinetTitle=cat.id==='ideological'?'Ideologikoak /<br> zientifikoak':esc(cat.label);
   return '<article class="m2-museum-case m2-case-'+cat.id+'" data-zone="'+cat.id+'" aria-label="'+esc(cat.label)+'">'+
-   '<span class="m2-case-crown" aria-hidden="true"></span><div class="m2-case-arch"><img class="m2-case-scene" src="./assets/m2-painted-'+cat.id+'.svg'+(cat.id==='economic'?'?v=20261123-monedas2':'')+'" alt="" loading="eager" draggable="false"><span class="m2-case-spot" aria-hidden="true"></span>'+museumSceneDetails(cat.id)+'<div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
+   '<span class="m2-case-crown" aria-hidden="true"></span><div class="m2-case-arch'+(cabinetArt[cat.id]?' m2-photo-vitrine':'')+'"><img class="m2-case-scene" src="./assets/'+(cabinetArt[cat.id]||'m2-painted-'+cat.id+'.svg')+'" alt="" loading="eager" draggable="false"><span class="m2-case-spot" aria-hidden="true"></span>'+museumSceneDetails(cat.id)+'<div class="m2-case-icon" aria-hidden="true">'+museumIllustration(museumCategoryArt[cat.id],true)+'</div>'+
    '<h3 class="m2-case-title"><button type="button" class="m2-case-title-action" aria-label="'+esc(cat.label)+' faktorean kokatu">'+cabinetTitle+'</button></h3></div>'+
    '<div class="m2-case-well"><button class="m2-case-target" type="button" aria-label="'+esc(cat.label)+' faktorean kokatu">+</button>'+
    '<div class="m2-case-contents">'+inside.map(c=>tile(c)).join('')+'</div>'+
@@ -460,7 +476,7 @@ function renderTimeline(){
     <div class="m2-e2-options">${choices('works',[['rail_ports_canals','Trenbideak, portuak eta kanalak','train'],['palaces_only','Jauregiak soilik','palace'],['schools_only','Eskolak soilik','school']])}</div>
    </fieldset>
   </div>
-  <p class="m2-e2-source-note">Iturriak: Suezko kanalaren inaugurazioa (1869), Hijazko trenbidea (1908) eta Panamako kanala (1914). Garraioa eta kapital-inbertsioa hedapen ekonomikoarekin lotzen dira.</p>
+  <p class="m2-e2-source-note">Iturria: 7.–9. diapositibak. Aztertu dokumentazioa eta osatu kronologia eta inbertsioen liburua.</p>
  </section></div>`;
 }
 function option(id,label,actual){return '<option value="'+id+'" '+(actual===id?'selected':'')+'>'+esc(label)+'</option>'}

@@ -86,6 +86,9 @@ try{
    assert.equal(await sheet.count(),1,'La iluminación nueva debe estar cargada');
    const count=await page.locator('.m2-museum-case').count();
    assert.equal(count,5);
+   assert.equal(await page.locator('.m2-photo-vitrine').count(),4);
+   await page.locator('.m2-case-scene,.m2-card-miniature').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+   assert.equal(await page.locator('.m2-card-miniature[src$=".webp"]').count(),6);
    await page.locator('[data-card="new_markets"]').click();
    assert.equal(await page.locator('[data-card="new_markets"]').getAttribute('aria-pressed'),'true');
    await page.evaluate(()=>{document.activeElement?.blur();window.scrollTo(0,0)});

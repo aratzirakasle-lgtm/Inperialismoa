@@ -60,3 +60,5 @@ test('El ejercicio de la maleta usa los ocho dibujos antiguos, transparentes y a
  }
  assert.doesNotMatch(script,/m2-suitcase-[a-z]+-restored\.webp/);
 });
+
+test('El gabinete reutiliza ilustraciones del museo y el cronógrafo no publica las soluciones en su nota',()=>{const js=read('js/mission2-faktoreak.js');for(const filename of ['atlas-mission-vivid-1.webp','atlas-mission-vivid-2.webp','m2-suitcase-better-restored.webp','m2-suitcase-faith-restored.webp','m2-suitcase-settlement-restored.webp','m2-suitcase-conditions-restored.webp','m2-suitcase-conversion-restored.webp','m2-suitcase-missions-restored.webp','m2-reference-harbor.webp','m2-reference-right-steamer.webp']){assert.ok(js.includes(filename));assert.ok(readFileSync(new URL('../assets/'+filename,import.meta.url)).length>1000)}assert.doesNotMatch(js,/Suezko kanalaren inaugurazioa \(1869\), Hijazko trenbidea \(1908\)/);assert.match(js,/Iturria: 7\.–9\. diapositibak\. Aztertu dokumentazioa/);});

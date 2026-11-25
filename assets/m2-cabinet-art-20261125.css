@@ -1,0 +1,40 @@
+/* First cabinet refinement: historical artwork and tactile presentation.
+   Purely visual. Same hitboxes, same light in all five destinations, no correctness signal. */
+.m2-first-room .m2-photo-vitrine{
+ background:radial-gradient(ellipse at 50% 15%,#e5c58f,#aa7847 65%,#42291a);
+}
+.m2-first-room .m2-photo-vitrine .m2-case-scene{
+ object-fit:cover;object-position:center 48%;
+ filter:saturate(1.12) contrast(1.04) brightness(1.04);
+}
+.m2-first-room .m2-case-demographic .m2-photo-vitrine .m2-case-scene,
+.m2-first-room .m2-case-religious .m2-photo-vitrine .m2-case-scene{
+ object-fit:contain;object-position:center 44%;
+}
+.m2-first-room .m2-photo-vitrine .m2-case-details{opacity:0}
+.m2-first-room .m2-photo-vitrine::before{
+ background:linear-gradient(115deg,#fff3cd35,transparent 24%,transparent 73%,#fff8e021 83%,transparent 93%),
+ radial-gradient(ellipse at 50% 0%,#ffe6ac30,transparent 65%);
+}
+.m2-first-room .m2-museum-desktop{
+ background-image:radial-gradient(ellipse at 20% 0%,#ffd59a35,transparent 65%),linear-gradient(170deg,#7f4a2620,#3a1c0d38),url('./atlas-madera-referencia-hd.webp');
+ background-size:100% 100%,100% 100%,clamp(300px,35vw,580px) 100%;
+ background-repeat:no-repeat,no-repeat,repeat-x;
+}
+.m2-first-room .m2-archive-card .m2-museum-card-art{background:transparent;box-shadow:none}
+.m2-first-room .m2-archive-card .m2-card-miniature[src$=".webp"]{
+ object-fit:contain;filter:saturate(1.13) contrast(1.04) drop-shadow(0 1px 1px #50301550);
+}
+.m2-first-room .m2-archive-card .m2-museum-card-copy{color:#2e1b10;text-shadow:none}
+.m2-first-room .m2-archive-card[aria-pressed="true"]{
+ outline:2px solid #ffe09c!important;outline-offset:1px;
+}
+.m2-first-room .m2-archive-card[aria-pressed="true"] .m2-card-miniature{
+ filter:saturate(1.15) drop-shadow(0 2px 2px #6c421f66);
+}
+.m2-first-room .m2-case-title-action:focus-visible,.m2-first-room .m2-case-target:focus-visible{
+ outline:2px solid #f9db92;outline-offset:2px;
+}
+@media(prefers-reduced-motion:no-preference){
+ .m2-first-room .m2-archive-card{transition:box-shadow .16s ease,outline-color .16s ease}
+}
