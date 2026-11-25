@@ -652,6 +652,10 @@ try{
      assert.equal(await stage.locator('.ap-earned-medal').count(),done?2:0);
      assert.equal(await stage.locator('.ap-earned-seal').count(),done?2:0);
      assert.equal(await stage.locator('time[datetime]').count(),done?2:0);
+     if(done){for(const date of await stage.locator('time[datetime]').allTextContents())assert.match(date,/^\d{4}-\d{2}-\d{2} · \d{2}:\d{2}$/);}
+     assert.equal(await stage.locator('.ap-card-label').count(),done?0:2);
+     assert.equal(await stage.locator('.ap-caption-surface').count(),1);
+
      assert.equal(await stage.locator('.ap-meter-m').getAttribute('aria-valuenow'),done?'2':'0');
      assert.equal(await stage.locator('.ap-meter-e').getAttribute('aria-valuenow'),done?'10':'0');
      const geom=await stage.evaluate(el=>{const r=el.getBoundingClientRect(),b=el.querySelector('.ap-action').getBoundingClientRect();return {ratio:r.width/r.height,top:r.top,bottom:r.bottom,button:b.bottom,viewport:innerHeight}});

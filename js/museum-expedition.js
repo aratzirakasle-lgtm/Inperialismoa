@@ -1,7 +1,7 @@
 /* Read-only atlas. Existing server records are the only source of timestamps. */
 import {renderMuseumPassport,confirmedStamp,stampLabel} from './museum-passport.js?v=20261124-atlas-finish21';
-import {renderAtlasPhoto} from './atlas-photo.js?v=20261124-scene24';
-export {activateAtlasPhoto} from './atlas-photo.js?v=20261124-scene24';
+import {renderAtlasPhoto} from './atlas-photo.js?v=20261125-polish25';
+export {activateAtlasPhoto} from './atlas-photo.js?v=20261125-polish25';
 const titles=['Aurrekarriak eta oinarriak','Inperialismoaren faktoreak','Inperioen banaketa','Inperioen itzalak'];
 const files=[['Potentzien galeriaren inbentarioa','Bi sistemen txostena','Inperialismoaren kontzeptu-fitxa','Inperioen espedienteak','Azken sintesiaren zigilua'],['Kausen kabinetea','Kapitalaren ibilbideak','Migrazioen liburua','Boterearen artxiboa','Esploratzaileen espedientea']];
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

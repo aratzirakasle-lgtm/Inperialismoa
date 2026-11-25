@@ -48,3 +48,20 @@
 #modal:has(.atlas-photo) #modal-close{position:absolute;z-index:30;top:15.8%;right:8%;width:3.6%;height:6.4%;min-width:0;min-height:0;border:0;padding:0;background:transparent;box-shadow:none;color:transparent;font-size:0;border-radius:50%}
 #modal:has(.atlas-photo) #modal-close:hover,#modal:has(.atlas-photo) #modal-close:focus-visible{outline:2px solid #f7ca75;outline-offset:2px;box-shadow:0 0 12px #f7ca75}
 body:has(#modal:not([hidden]) .atlas-photo) .m1-class-widget{visibility:hidden;pointer-events:none}
+
+/* Photo polish 25 — original plaque relief, real leather and locale-safe dates. */
+.ap-card-label{
+ background-size:100% 100%;background-repeat:no-repeat;
+ border:0;clip-path:none;transform:none;padding:0;
+ font:700 .88cqw/1 Georgia,'Times New Roman',serif;color:#452b15;
+}
+.ap-card-label>span{display:block;max-width:90%;text-align:center;transform:rotate(-4deg);text-shadow:0 1px #f2dbaf50}
+.ap-label-1,.ap-label-1.ap-label-active{background-image:url('./atlas-plaque-b1-v25.webp')}
+.ap-label-2,.ap-label-2.ap-label-active{background-image:url('./atlas-plaque-b2-v25.webp')}
+.ap-label-active>span{color:#694018}
+.ap-date{font-size:.72cqw;font-variant-numeric:tabular-nums}
+.ap-caption-surface{position:absolute;left:73.444976%;top:87.035069%;width:16.148325%;height:3.506907%;background:url('./atlas-plaque-caption-v25.webp') center/100% 100% no-repeat;pointer-events:none}
+.ap-action-caption{left:72.9%;width:17.3%;font-size:.78cqw;line-height:1.08;text-wrap:balance;text-shadow:0 1px 1px #101c13}
+.ap-card-panel,.ap-archive-panel{border:3px double #a77b40;background:radial-gradient(ellipse at 18% 12%,#f6e0ba88,transparent 65%),url('./atlas-papel-referencia.svg') center/100% 100% no-repeat,#e7c99b}
+.ap-card-panel h3,.ap-archive-panel h3{font-size:1.2cqw}
+.ap-card-panel li,.ap-archive-panel li{line-height:1.35}
