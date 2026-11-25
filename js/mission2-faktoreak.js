@@ -654,7 +654,7 @@ function renderPopulation(){
    '<header><strong>'+esc(title)+'</strong><small>'+subtitle+'</small></header>'+
    '<button type="button" class="m2-atlas-luggage-drop" data-atlas-bag-zone="'+key+'" aria-label="'+esc(title)+' maletan kokatu">+ KOKATU HEMEN</button>'+
    '<div class="m2-atlas-suitcase-items">'+inside.map(c=>
-     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" loading="eager" decoding="sync" draggable="false">'+esc(c[1])+'</button>').join('')+
+     '<button type="button" draggable="true" class="m2-atlas-packed" data-atlas-bag-card="'+c[0]+'" aria-pressed="'+(atlasSelectedLuggage===c[0])+'" aria-label="'+esc(c[1])+'; berriz hautatu lekuz aldatzeko"><img class="m2-atlas-card-illustration" src="./assets/'+c[2]+'" width="52" height="40" alt="" loading="eager" decoding="sync" draggable="false"><span class="m2-atlas-packed-label">'+esc(c[1])+'</span></button>').join('')+
    '</div></section>';
  }).join('');
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;

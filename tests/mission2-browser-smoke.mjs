@@ -916,12 +916,33 @@ try{
       assert.ok(await field.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}), 'Control tapado: '+await field.getAttribute('class'));
      }
     };
+    const assertCardText=async()=>{
+     const problems=await page.locator('.m2-atlas-luggage-board').evaluate(board=>{
+      const cards=[...board.querySelectorAll('.m2-atlas-luggage-card,.m2-atlas-packed')];
+      const r=el=>el.getBoundingClientRect();
+      const intersects=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1;
+      const issues=[];
+      cards.forEach((card,i)=>{
+       const box=r(card),image=r(card.querySelector('img')),label=r(card.querySelector('span:last-child'));
+       if(label.top<image.bottom-1||label.bottom>box.bottom+1||label.right>box.right+1||label.left<box.left-1)issues.push('Rótulo fuera de su tarjeta: '+card.dataset.atlasBagCard);
+       if(cards.slice(0,i).some(other=>intersects(box,r(other))))issues.push('Tarjetas superpuestas: '+card.dataset.atlasBagCard);
+      });
+      for(const box of board.querySelectorAll('.m2-atlas-suitcase')){
+       const header=r(box.querySelector('header')),drop=r(box.querySelector('.m2-atlas-luggage-drop')),items=r(box.querySelector('.m2-atlas-suitcase-items'));
+       if(drop.top<header.bottom-1||items.top<drop.bottom-1||items.bottom>r(box).bottom+1)issues.push('Maleta: cabecera, botón o contenido superpuesto');
+      }
+      return issues;
+     });
+     assert.deepEqual(problems,[],JSON.stringify({size,problems}));
+    };
     await checkLayout();
+    await assertCardText();
     for(const id of await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card]').evaluateAll(els=>els.map(el=>el.dataset.atlasBagCard))){
      await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="'+id+'"]').click();
      await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
     }
     await checkLayout();
+    await assertCardText();
     await page.locator('.m2-atlas-final-controls [data-preview-check]').click();
     await page.locator('.m2-atlas-final-controls [data-preview-next]').click();
     await page.locator('.m2-archive-active').waitFor();

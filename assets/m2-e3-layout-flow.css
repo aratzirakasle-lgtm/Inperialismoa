@@ -194,3 +194,78 @@
  #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-final-controls{margin:14px 3px 0!important}
  #m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons>.m2-button{flex:1 1 140px}
 }
+
+/* E3: the older reference stylesheet sets fixed grid rows with !important.
+   Override those rows as well as card internals; retain all existing artwork.
+   The tray and the two cases get separate, non-overlapping full-width rows. */
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-board{
+ grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;
+ gap:18px;align-items:start;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-available,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-targets{
+ box-sizing:border-box;min-width:0;max-width:100%;
+ height:auto;max-height:none;align-self:start;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-note,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-available>.m2-bag-return{
+ position:static;inset:auto;transform:none;flex:0 0 auto;
+ height:auto;max-height:none;white-space:normal;overflow-wrap:anywhere;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-cards{
+ box-sizing:border-box;grid-template-columns:repeat(4,minmax(0,1fr));
+ grid-template-rows:none!important;grid-auto-rows:auto!important;
+ gap:12px!important;height:auto!important;align-items:stretch;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-card,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-packed{
+ box-sizing:border-box;display:flex;flex-direction:column;align-items:center;
+ justify-content:flex-start;gap:7px!important;position:relative;inset:auto;
+ width:100%;min-width:0;height:auto!important;max-height:none;overflow:visible;
+ padding:8px!important;text-align:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-packed{
+ min-height:90px;white-space:normal;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-card img.m2-atlas-card-illustration,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-packed img.m2-atlas-card-illustration{
+ position:static;flex:0 0 auto!important;display:block!important;
+ margin:0 auto!important;max-width:100%!important;object-fit:contain!important;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-card>span:last-child,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-packed>.m2-atlas-packed-label{
+ box-sizing:border-box;display:block;position:static;inset:auto;
+ flex:0 0 auto;width:100%;min-width:0;height:auto;max-height:none;
+ padding:0 2px 2px;margin:0;font-size:13px;line-height:1.35;
+ white-space:normal;word-break:normal;overflow-wrap:anywhere;text-align:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-targets{
+ grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase{
+ box-sizing:border-box;align-self:start;min-width:0;max-width:100%;
+ height:auto!important;min-height:0;max-height:none;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase>header{
+ display:flex;flex-direction:column;gap:4px;min-width:0;min-height:0;
+ width:100%!important;box-sizing:border-box;position:static!important;
+ white-space:normal!important;overflow-wrap:anywhere;text-align:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase>header strong,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase>header small{
+ position:static;inset:auto;max-width:100%;white-space:normal;overflow-wrap:anywhere;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase-items{
+ box-sizing:border-box;grid-template-columns:repeat(2,minmax(0,1fr));
+ grid-template-rows:none!important;grid-auto-rows:auto!important;
+ align-items:stretch;min-width:0;height:auto!important;max-height:none;gap:10px;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-activity>footer,
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-final-controls{
+ clear:both;position:static!important;inset:auto!important;transform:none!important;
+ height:auto!important;max-height:none;overflow:visible;
+}
+@media(max-width:680px){
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-targets{grid-template-columns:minmax(0,1fr)}
+}
