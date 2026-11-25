@@ -1,7 +1,7 @@
 import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-progress.js?v=20261124-atlas2";
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
-import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-resume1";
+import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-pulido2";
 import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261125-eye1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
 import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261125-eye1";
@@ -158,7 +158,11 @@ function renderHome(){
     mountClassroomProgressPanel(db,viewTeamId());
   const id=viewTeamId();
   const completedIds=[1,2].filter(missionId=>completed(id,missionId));
+  // Desacoplar temporalmente el marcador para preservar eventos y temporizador.
+  const classWidget=document.querySelector('.m1-class-widget');
+  classWidget?.remove();
   $("#view").innerHTML=renderVestibuloC({teamName:mine()?.name||"Taldea",completedIds,preview:teacherPreview,mission2Open:mission2Open||accountIsTeacher()});
+  if(classWidget)document.querySelector('.c-museo-toolbar-actions')?.append(classWidget);
   return;
  }
  const museumMissions=missions.filter(m=>m.id>=1&&m.id<=4);
