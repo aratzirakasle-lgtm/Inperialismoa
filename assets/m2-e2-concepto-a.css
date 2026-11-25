@@ -355,7 +355,7 @@
 }
 #m2-app.m2-capital-active .m2-e2-globe{
  left:29%;top:32.5%;width:42%;border:2px solid #aa7b42;
- background:#315b54 url('./m2-e2-globo-referencia.svg') center/100% 100% no-repeat;
+ background:#315b54 url('./m2-e2-globo-hd.webp') center/100% 100% no-repeat;
  box-shadow:inset 0 0 10px #181d1055,0 0 0 2px #4e391f,0 0 0 4px #d4ae71,0 6px 12px #090e09aa;
 }
 #m2-app.m2-capital-active .m2-e2-globe img{opacity:0}
@@ -409,7 +409,7 @@
 }
 #m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture,
 #m2-app.m2-capital-active .m2-e2-small-picture{
- background-image:url('./m2-e2-cartelas-referencia.svg');
+ background-image:url('./m2-e2-cartelas-hd.webp');
  background-size:300% 100%;background-repeat:no-repeat;filter:contrast(1.05) saturate(.92);
 }
 #m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture{aspect-ratio:110/48;border-color:#96764c}
