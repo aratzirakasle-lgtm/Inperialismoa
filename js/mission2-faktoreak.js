@@ -85,8 +85,9 @@ const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','A
 let teacher=false,teamId=null,active=1,selected=null,submitting=false,teacherEnding=false;
 let completions=new Set(),draft={},feedback='',feedbackState='';
 let remoteRenderTimer=null,remoteRenderPending=false,dragging=false,pointerEditing=false;
-let lastCabinetMove=null,lastPlacement=null,previewSealed=false;
-const editSelector='[data-card],[data-event],[data-year],[data-year-return],[data-zone],[data-unassign],[data-atlas-route],[data-atlas-target],[data-route-return],[data-atlas-bag-card],[data-atlas-bag-zone],[data-atlas-bag-reset],[data-bag-return],[data-atlas-stage],[data-multi],[data-expedition-field],[data-field],[data-archive],[data-cabinet-undo],[data-placement-undo],[data-reset]';
+let lastCabinetMove=null,lastPlacement=null,previewSealed=false,lastPaintKey='';
+const WRONG_MESSAGE='Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.';
+const editSelector='[data-card],[data-return-card],[data-event],[data-year],[data-year-tray],[data-year-return],[data-zone],[data-unassign],[data-atlas-route],[data-atlas-target],[data-route-return],[data-atlas-bag-card],[data-atlas-bag-zone],[data-atlas-bag-reset],[data-bag-return],[data-atlas-stage],[data-multi],[data-expedition-field],[data-field],[data-archive],[data-cabinet-undo],[data-placement-undo],[data-reset]';
 const readOnly=()=>teacher?previewSealed:completions.has(active);
 const canEdit=()=>!releaseClosed&&!submitting&&!teacherEnding&&!readOnly();
 function freezeAnswers(){
@@ -122,6 +123,18 @@ function answerCount(){
  if(active===1)return [causes.filter(c=>categories.some(cat=>cat.id===state.assignments?.[c.id])).length,causes.length];
  if(active===5)return [[state.multi?.africa?.length===4,state.multi?.asia?.length===3,...['north','south','meeting','congo'].map(k=>!!state[k])].filter(Boolean).length,6];
  return [responseKeys[active].filter(key=>!!state[key]).length,responseKeys[active].length];
+}
+function archiveStatus(answered){
+ return readOnly()?(teacher?'SIMULAZIOA':'ZIGILATUA'):answered?'ERANTZUNDA':'ZAIN';
+}
+function refreshArchiveStatus(id){
+ const chosen=!!taskState(4)[id],dossier=app.querySelector('[data-source="'+id+'"]');
+ if(dossier){dossier.dataset.answered=String(chosen);const seal=dossier.querySelector('[data-source-status]');if(seal)seal.textContent=archiveStatus(chosen)}
+ const badge=$('[data-archive-progress]');if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
+}
+function roomIndex(entries,label){
+ return '<nav class="m2-room-index" aria-label="'+esc(label)+'">'+entries.map(({id,title,filled,total})=>
+  '<button type="button" data-room-jump="'+esc(id)+'" class="m2-room-index-item"><span>'+esc(title)+'</span><small>'+ (readOnly()?(teacher?'Simulazioa':'Zigilatua'):filled+' / '+total+' beteta')+'</small></button>').join('')+'</nav>';
 }
 function updateAnswerCount(){const el=$('[data-m2-answer-count]');if(el){const [count,total]=answerCount();el.textContent=count+' / '+total+' erantzunda'}}
 function interacting(){return dragging||pointerEditing||!!selected||!!atlasSelectedRoute||!!atlasSelectedLuggage||!!document.querySelector('#m2-reading-dialog[open]')||app.contains(document.activeElement)&&document.activeElement?.matches('select')}
@@ -181,7 +194,7 @@ function openSource(id){
  const style=art?getComputedStyle(art):null;
  const image=style?.backgroundImage||'none',position=style?.backgroundPosition,size=style?.backgroundSize;
  const current=taskState(4)[id],index=archives.indexOf(source);
- museumDialog(source.title,'<p class="m2-dialog-ref">AGIRIA '+(index+1)+' / 5 · '+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-archive-zoom-tools" aria-label="Irudia handitzeko kontrolak"><button type="button" data-source-scale="out" aria-label="Txikitu">−</button><span data-source-scale-value role="status">100 %</span><button type="button" data-source-scale="in" aria-label="Handitu">+</button><button type="button" data-source-scale="reset">Hasierako neurria</button></div><div class="m2-archive-zoom-viewport" tabindex="0" aria-label="Ilustrazioa"><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div></div><p class="m2-archive-dialog-art-note">Ilustrazio didaktikoa · Ez da jatorrizko dokumentuaren faksimilea.</p><span class="m2-archive-reading-label">TESTU MOLDATUA</span><p class="m2-dialog-reading">'+esc(source.body)+'</p><fieldset class="m2-reading-choices"><legend>'+esc(source.question)+'</legend>'+source.options.map(([key,label])=>'<label><input type="radio" name="m2-dialog-answer" value="'+esc(key)+'" '+(current===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset><div class="m2-file-navigation"><button type="button" data-file-prev class="m2-button secondary" '+(index===0?'disabled':'')+'>← Aurreko agiria</button><span data-file-status role="status">'+(current?'Erantzuna hautatuta':'Erantzun bat hautatu')+'</span><button type="button" data-file-next class="m2-button secondary" '+(index===archives.length-1?'disabled':'')+'>Hurrengo agiria →</button></div>');
+ museumDialog(source.title,'<p class="m2-dialog-ref">AGIRIA '+(index+1)+' / 5 · '+esc(source.type)+' · '+esc(source.ref)+'</p><div class="m2-archive-zoom-tools" aria-label="Irudia handitzeko kontrolak"><button type="button" data-source-scale="out" aria-label="Txikitu">−</button><span data-source-scale-value role="status">100 %</span><button type="button" data-source-scale="in" aria-label="Handitu">+</button><button type="button" data-source-scale="reset">Hasierako neurria</button></div><div class="m2-archive-zoom-viewport" tabindex="0" aria-label="Ilustrazioa"><div class="m2-dialog-source-art" aria-hidden="true">'+archiveEngraving(source.art)+'</div></div><p class="m2-archive-dialog-art-note">Ilustrazio didaktikoa · Ez da jatorrizko dokumentuaren faksimilea.</p><span class="m2-archive-reading-label">TESTU MOLDATUA</span><p class="m2-dialog-reading">'+esc(source.body)+'</p><fieldset class="m2-reading-choices"><legend>'+esc(source.question)+'</legend>'+source.options.map(([key,label])=>'<label><input type="radio" name="m2-dialog-answer" value="'+esc(key)+'" '+(current===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+'</fieldset><div class="m2-file-navigation"><button type="button" data-file-prev class="m2-button secondary" '+(index===0?'disabled':'')+'>← Aurreko agiria</button><span data-file-status role="status">'+(readOnly()?archiveStatus(!!current):current?'Erantzuna hautatuta':'Erantzun bat hautatu')+'</span><button type="button" data-file-next class="m2-button secondary" '+(index===archives.length-1?'disabled':'')+'>Hurrengo agiria →</button></div>');
  const dialog=document.querySelector('#m2-reading-dialog');
  dialog.classList.add('m2-archive-reading-dialog');
  dialog.querySelectorAll('input[name="m2-dialog-answer"]').forEach(input=>input.addEventListener('change',()=>{
@@ -191,7 +204,7 @@ function openSource(id){
   const dossier=app.querySelector('[data-source="'+id+'"]');if(dossier)dossier.dataset.answered='true';
   const badge=$('[data-archive-progress]');if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
   const check=$('[data-check]');if(check)check.disabled=!isReady();updateAnswerCount();
-  dialog.querySelector('[data-file-status]').textContent='Erantzuna hautatuta';
+  refreshArchiveStatus(id);dialog.querySelector('[data-file-status]').textContent=archiveStatus(true);
  }));
  if(readOnly())dialog.querySelectorAll('input').forEach(input=>input.disabled=true);
  dialog.querySelector('[data-file-prev]').onclick=()=>{if(index>0)openSource(archives[index-1].id)};
@@ -464,9 +477,9 @@ function renderClassification(){
  return '<section class="m2-museum-interaction'+(selected?' m2-carrying':'')+'" aria-label="Bost faktoreen kabinetearen sailkapena">'+
   '<div class="m2-museum-cabinet-wall">'+cabinets+'</div>'+
   '<div class="m2-museum-desktop"><span class="m2-desk-left-trim" aria-hidden="true"></span><span class="m2-desk-right-trim" aria-hidden="true"></span><div class="m2-museum-desktop-top"><span>TXARTEL HISTORIKOAK · '+(unassigned.length)+' / '+causes.length+'</span>'+
-  '<span class="m2-museum-drag">☞ &nbsp; '+(selected?'Hautatu helmuga edo mahaia':'Aukeratu edo arrastatu')+'</span></div>'+
+  '<span class="m2-museum-drag">☞ &nbsp; '+(selected?'Hautatu helmuga edo mahaia':'Aukeratu edo arrastatu')+'</span><button type="button" class="m2-button secondary m2-return-card" data-return-card '+(!selected||!assigned[selected]||readOnly()?'hidden':'')+'>↶ Itzuli mahaira</button></div>'+
   '<div class="m2-museum-cards" data-unassign aria-label="Sailkatu gabeko kartelak">'+unassigned.map(tile).join('')+
-  (unassigned.length===0?'<p class="m2-museum-all-placed">Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.</p>':'')+'</div><span class="m2-desk-front" aria-hidden="true"><span class="m2-desk-cabinet"></span></span></div></section>';
+  (unassigned.length===0?'<p class="m2-museum-all-placed">'+(readOnly()?'Ariketa zigilatuta.':'Kartel guztiak kokatuta. Orain, egiaztatu erantzunak.')+'</p>':'')+'</div><span class="m2-desk-front" aria-hidden="true"><span class="m2-desk-cabinet"></span></span></div></section>';
 }
 
 function renderTimeline(){
@@ -477,11 +490,11 @@ function renderTimeline(){
  const cards=['panama','suez','hijaz'].map(id=>infrastructure.find(item=>item.id===id)).map(item=>
   `<button type="button" class="m2-tile m2-e2-piece ${taken.has(item.id)?'m2-used':''} ${selected===item.id?'m2-e2-piece-active':''}" draggable="true" data-event="${esc(item.id)}" aria-pressed="${selected===item.id?'true':'false'}">
    <span class="m2-e2-picture m2-e2-art-${esc(item.id)}" aria-hidden="true"></span>
-   <span class="m2-e2-piece-info"><strong>${esc(item.label)}</strong><small>Hartu pieza · Kokatu urtean</small></span><span class="m2-e2-grip" aria-hidden="true">⋮</span></button>`
+   <span class="m2-e2-piece-info"><strong>${esc(item.label)}</strong><small>${taken.has(item.id)?"Kokatuta · Hautatu lekuz aldatzeko":"Hartu pieza · Kokatu urtean"}</small></span><span class="m2-e2-grip" aria-hidden="true">⋮</span></button>`
  ).join('');
  const slots=years.map(year=>{
   const item=infrastructure.find(p=>p.id===state[year]);
-  return `<button type="button" class="m2-year m2-e2-slot m2-e2-slot-${year} ${item?'m2-selected-year':''}" data-year="${year}" aria-label="${year}: ${item?esc(item.label):'Kokatu pieza hemen'}">
+  return `<button type="button" class="m2-year m2-e2-slot m2-e2-slot-${year} ${item?'m2-selected-year':''}" data-year="${year}" ${item?`draggable="true" data-year-piece="${esc(item.id)}"`:""} aria-label="${year}: ${item?esc(item.label):'Kokatu pieza hemen'}">
      <strong>${year}</strong><span class="m2-e2-slot-face">${item?`<span class="m2-e2-small-picture m2-e2-art-${esc(item.id)}" aria-hidden="true"></span><span class="m2-e2-filled-label">${esc(item.label)}</span>`:'<span class="m2-e2-empty-mark" aria-hidden="true">✣</span><span class="m2-e2-empty-label">Kokatu pieza hemen</span>'}</span>
     </button>`;
  }).join('');
@@ -493,7 +506,7 @@ function renderTimeline(){
   <div class="m2-e2-left">
    <header class="m2-e2-intro"><span>ARIKETA 2 / 5 · 2. MISIOA</span><h2>Kapitalaren ibilbideak</h2><p>Hartu hiru obra historikoak eta kokatu dagozkien urteetan; osatu kapitalaren ibilbidea.</p></header>
    <section class="m2-e2-catalogue" aria-label="Obren bilduma"><header><strong>✦ &nbsp; OBREN BILDUMA &nbsp; ✦</strong><small>Garraio-azpiegitura handiak</small></header>
-     <div class="m2-e2-pieces">${cards}</div>
+     <div class="m2-e2-pieces" data-year-tray aria-label="Obren bilduma; piezak itzultzeko">${cards}</div>
    </section>
   </div>
   <section class="m2-e2-chronograph" aria-label="Azpiegituren kronologia">
@@ -506,7 +519,7 @@ function renderTimeline(){
     ${slots}
    </div>
    <div class="m2-e2-dial-progress" role="status" aria-live="polite">✦ <strong>${placed} / 3</strong> pieza ✦</div>
-   ${selected&&taken.has(selected)?'<button type="button" class="m2-button secondary m2-return-piece" data-year-return>↶ Itzuli bildumara</button>':''}
+   <div class="m2-e2-return-slot">${selected&&taken.has(selected)?'<button type="button" class="m2-button secondary m2-return-piece" data-year-return>↶ Itzuli bildumara</button>':''}</div>
   </section>
  </div>
  <section class="m2-e2-ledger" aria-label="Kapitalaren inbertsioen liburua">
@@ -593,7 +606,7 @@ function renderPopulation(){
  (atlasRoutes.find(item=>state['route_'+item.id]===dest.id)?'<span>●</span>':'<span>+</span>')+'</button>').join('');
  const lines=atlasRoutes.filter(dest=>!!state['route_'+dest.id]).map(dest=>{
   const point=atlasRoutes.find(item=>item.id===state['route_'+dest.id]);
-  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 53 22 Q '+((53+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#c13020" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
+  return point?'<path data-route-trace="'+dest.id+'" pathLength="1" d="M 53 22 Q '+((53+point.x)/2-8)+' 10 '+point.x+' '+point.y+'" fill="none" stroke="#8c6433" stroke-width="1.1" stroke-linecap="round" marker-end="url(#atlasArrow)"/>':'';
  }).join('');
  const statements=atlasStatements.map(([key,text],i)=>'<label class="m2-atlas-statement">'+
   '<span class="m2-atlas-statement-label">'+esc(text)+'</span>'+
@@ -616,13 +629,14 @@ function renderPopulation(){
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
  const stage3=atlasStatements.filter(c=>!!state[c[0]]).length;
  const stage4=atlasSuitcase.filter(c=>!!state['bag_'+c[0]]).length;
- const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+' title="Atalaren osotasuna soilik; zuzentasuna amaieran egiaztatuko da." aria-label="'+n+'. atala: osotasuna egiaztatu">'+(ready?'BETETA':'BETE ATALA')+' ✦</button>';
+ const stageAction=(n,label,ready)=>'<span class="m2-atlas-check m2-neutral-stage" role="status" title="Zuzentasuna amaieran bakarrik egiaztatzen da.">'+(readOnly()?(teacher?'SIMULAZIOA':'ZIGILATUA'):ready?'BETETA':'BETETZEKO')+' ✦</span>';
  return '<section class="m2-atlas-screen m2-migration-gallery" aria-label="Migrazioen bulegoa: lau jarduera interaktibo">'+
   '<header class="m2-atlas-heading"><a class="m2-atlas-home-link" href="./index.html" aria-label="Museora itzuli">← MUSEOA</a><span class="m2-atlas-navigation">BIGARREN MISIOA · 3 / 5</span><h1>MIGRAZIOEN BULEGOA <em>(1850–1900)</em></h1>'+
   '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' beteta</div></header>'+
   ''+
-  (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
-  '<div class="m2-atlas-main">'+
+  roomIndex([{id:'m2-population-part',title:'1 · Biztanleria',filled:stage1,total:5},{id:'m2-route-part',title:'2 · Ibilbideak',filled:placed,total:3},{id:'m2-facts-part',title:'3 · Baieztapenak',filled:stage3,total:5},{id:'m2-luggage-part',title:'4 · Maletak',filled:stage4,total:8}],'Migrazioen lau atalak')+
+   (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
+  '<div class="m2-atlas-main" id="m2-population-part" tabindex="-1">'+
    '<section class="m2-atlas-intro"><div class="m2-atlas-roundel">B</div><h2>Mundu<br> mugimenduan</h2><p>Europatik mundura: biztanleria, migrazioak eta misio erlijiosoak. Aztertu mapa, osatu datuak eta erantzun galderak.</p><span class="m2-atlas-intro-ornament" aria-hidden="true">✦ ❧ ✦</span></section>'+
    '<section class="m2-atlas-pop m2-migration-folio"><h3><span class="m2-migration-index" aria-hidden="true">1</span> Europako biztanleria <small>(milioi biztanle)</small></h3>'+
     '<p>Lotu urtea eta biztanle kopurua. Erabili 10. diapositibako taularen datuak.</p>'+
@@ -638,7 +652,7 @@ function renderPopulation(){
    '<div class="m2-atlas-top-check">'+atlasSectionStatus(1,stage1,5)+stageAction(1,'EGIAZTATU',stage1===5)+'</div>'+
   '</div>'+
   '<div class="m2-atlas-row-two">'+
-   '<section class="m2-atlas-route-activity m2-atlas-activity">'+
+   '<section class="m2-atlas-route-activity m2-atlas-activity" id="m2-route-part" tabindex="-1">'+
     '<header><span class="m2-atlas-number">2</span><h2>Norantz hedatu ziren misioak?</h2></header>'+
     '<p class="m2-atlas-exercise-instruction">Lotu PDFan aipatutako hiru eremuak atlasaren tokiekin. Hautatu izena eta jarri mapan.</p>'+
     '<div class="m2-atlas-route-stage"><div class="m2-atlas-route-labels">'+routes+'</div>'+
@@ -647,7 +661,7 @@ function renderPopulation(){
     routePins+'</div></div>'+
     '<footer>'+atlasSectionStatus(2,placed,3)+(atlasSelectedRoute&&state['route_'+atlasSelectedRoute]?'<button type="button" class="m2-bag-return" data-route-return>↶ Kendu ibilbidea</button>':'')+stageAction(2,'EGIAZTATU',placed===3)+'</footer>'+
    '</section>'+
-   '<section class="m2-atlas-facts-activity m2-atlas-activity">'+
+   '<section class="m2-atlas-facts-activity m2-atlas-activity" id="m2-facts-part" tabindex="-1">'+
     '<header><span class="m2-atlas-number">3</span><h2>Emigrazioaren ondorioak</h2></header>'+
     '<p class="m2-atlas-exercise-instruction">PDFko baieztapenak: aukeratu E (egia) edo G (gezurra). Ez dago pistarik.</p>'+
     '<div class="m2-atlas-fact-head"><span>BAIEZTAPEN HISTORIKOAK</span><span>EGIA · GEZURRA</span></div>'+
@@ -655,7 +669,7 @@ function renderPopulation(){
     '<footer>'+atlasSectionStatus(3,stage3,5)+stageAction(3,'EGIAZTATU',stage3===5)+'</footer>'+
    '</section>'+
   '</div>'+
-  '<div class="m2-atlas-luggage-activity m2-atlas-activity">'+
+  '<div class="m2-atlas-luggage-activity m2-atlas-activity" id="m2-luggage-part" tabindex="-1">'+
    '<header><span class="m2-atlas-number">4</span><h2>Emigrantearen maleta</h2>'+
     '<p>Zer bultzatu zuen kolonizazioa eta zer eragin izan zuen? Sailkatu zortzi agiriak.</p></header>'+
    '<div class="m2-atlas-luggage-board"><div class="m2-atlas-luggage-available" data-atlas-bag-reset><span class="m2-atlas-luggage-note">SAILKATZEKO AGIRIAK · '+(8-stage4)+'</span><button type="button" data-bag-return class="m2-bag-return" '+(!atlasSelectedLuggage||!state['bag_'+atlasSelectedLuggage]?'hidden':'')+'>↶ Itzuli mahaira</button><div class="m2-atlas-luggage-cards">'+cards+'</div></div>'+
@@ -690,7 +704,7 @@ function renderArchive(){
      '<fieldset><legend><span class="m2-archive-question-mark" aria-hidden="true">?</span>'+esc(a.question)+'</legend>'+
       a.options.map(([key,label])=>'<label class="m2-choice"><input type="radio" name="source-'+esc(a.id)+'" value="'+esc(key)+'" data-archive="'+esc(a.id)+'" '+(state[a.id]===key?'checked':'')+'><span>'+esc(label)+'</span></label>').join('')+
      '</fieldset></div>'+
-   '</div><span class="m2-source-seal" aria-hidden="true">ARTXIBOA</span></article>';
+   '</div><span class="m2-source-seal" data-source-status aria-label="Agiriaren egoera">'+archiveStatus(chosen)+'</span></article>';
  }).join('');
  return '<div class="m2-archive-scene">'+
    '<div class="m2-archive-room-props" aria-hidden="true"></div>'+
@@ -699,7 +713,7 @@ function renderArchive(){
      '<h3>Boterearen artxiboa</h3><p>Aztertu bost agiriak, interpretatu testuinguru historikoa eta aukeratu galdera bakoitzaren erantzuna. Irudiak ilustrazio didaktikoak dira.</p></div>'+
      '<div class="m2-archive-progress" role="status" aria-live="polite"><span>ERANTZUNDAKO AGIRIAK</span><strong data-archive-progress>'+answered+' / 5</strong></div>'+
     '</div>'+
-    '<div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+'</div>'+
+    '<div class="m2-archive-file-actions"><button type="button" class="m2-button secondary" data-source-zoom="'+archives[0].id+'">✧ Agiriak banan-banan irakurri</button></div><div class="m2-source-grid m2-source-grid-museum m2-archive-five-files">'+cards+'</div>'+
     '<div class="m2-archive-desk-front" aria-hidden="true"><span>ARTXIBO HISTORIKOA · XIX. MENDEA</span></div>'+
    '</div>'+
    '<aside class="m2-evidence m2-archive-warning"><span class="m2-archive-warning-emblem" aria-hidden="true">!</span>'+
@@ -720,32 +734,33 @@ function renderExpedition(){
  const state=taskState(5),data=state.multi||{};
  const chosen=[...(data.africa||[])];
  const filled=[chosen.length===4,(data.asia||[]).length===3,!!(state.north&&state.south),!!state.meeting,!!state.congo];
- const fileStatus=n=>'<span class="m2-expedition-file-status" data-file-filled="'+filled[n-1]+'">'+(filled[n-1]?'Erantzunda':'Zain')+'</span>';
+ const fileStatus=n=>'<span class="m2-expedition-file-status" data-file-filled="'+filled[n-1]+'">'+archiveStatus(filled[n-1])+'</span>';
  const dossierArt=(src,cls,caption)=>'<figure class="m2-exploration-art '+cls+'"><img src="./assets/'+src+'" alt="" decoding="async"><figcaption>'+caption+'</figcaption></figure>';
- const chosenLabels=chosen.map(id=>riverOptions.find(x=>x[0]===id)?.[1]||id);
+ const chosenLabels=chosen.map(id=>[id,riverOptions.find(x=>x[0]===id)?.[1]||id]);
  return '<div class="m2-expedition m2-expedition-research">'+
   '<aside class="m2-atlas m2-historical-map">'+
    '<div class="m2-atlas-museum-title"><span>ESPLORAZIOEN ATLASA</span><small>XIX. MENDEA · AGIRIA 05</small></div>'+
    '<div class="m2-expedition-map-wrap">'+expeditionMap()+'<button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="expedition" aria-label="Esplorazioen mapa handitu" title="Mapa handitu">＋</button></div>'+
    '<div class="m2-atlas-route-ledger"><strong>Aukeratutako izenak · '+chosen.length+' / 4</strong>'+
-    '<div class="m2-atlas-route-tags" aria-live="polite">'+(chosenLabels.length?chosenLabels.map(label=>'<span>'+esc(label)+'</span>').join(''):'<em>Oraindik ez da izenik aukeratu.</em>')+'</div></div>'+
-   '<p class="m2-atlas-footnote">Kostaldeak: Natural Earth. Ibaien trazadurak eskematikoak eta izenik gabeak dira. Handitu mapa xehetasunak aztertzeko.</p>'+
+    '<div class="m2-atlas-route-tags" aria-live="polite">'+(chosenLabels.length?chosenLabels.map(([id,label])=>'<button type="button" data-multi="africa" data-value="'+esc(id)+'" aria-label="'+esc(label)+(readOnly()?'':' kendu')+'" class="m2-atlas-tag">'+esc(label)+(readOnly()?'':' ×')+'</button>').join(''):'<em>Oraindik ez da izenik aukeratu.</em>')+'</div></div>'+
+   '<div class="m2-atlas-links"><button type="button" class="m2-button secondary" data-room-jump="m2-exp-file-1">Ibaietako agiria →</button><button type="button" class="m2-button secondary" data-map-zoom="migration">Munduko atlasa ＋</button></div><p class="m2-atlas-footnote">Kostaldeak: Natural Earth. Ibaien trazadurak eskematikoak eta izenik gabeak dira. Handitu mapa xehetasunak aztertzeko.</p>'+
   '</aside>'+
   '<div class="m2-atlas-notes m2-expedition-files">'+
    '<div class="m2-expedition-intro"><span class="m2-archive-eyebrow">IKERKETA GEOGRAFIKOA · 05 / 05</span><h3>Esploratzaileen espedientea</h3>'+
     '<p>Lotu mapa, espedizioak eta Kongoko ustiapen kolonialaren testuingurua. Aztertu bost agiriak; erantzun guztiak osatu arte ezingo dituzue egiaztatu.</p><div class="m2-expedition-progress" role="status"><span>ERANTZUNDAKO AGIRIAK</span><strong>'+filled.filter(Boolean).length+' / 5</strong><span class="m2-expedition-progress-track" aria-hidden="true"><i style="width:'+filled.filter(Boolean).length*20+'%"></i></span></div></div>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3>'+fileStatus(1)+'</header>'+
+   roomIndex(['Ibaiak','Asia eta Ozeania','Poloak','Topaketa','Kongo'].map((title,i)=>({id:'m2-exp-file-'+(i+1),title,filled:filled[i]?1:0,total:1})),'Esploratzaileen bost agiriak')+
+   '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-1" tabindex="-1"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3>'+fileStatus(1)+'</header>'+
     '<p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+
     multiButtons('africa',riverOptions,data.africa)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3>'+fileStatus(2)+'</header>'+
+   '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-2" tabindex="-1"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3>'+fileStatus(2)+'</header>'+
     ''+dossierArt('m2-migration-map-clean.svg','m2-exploration-map-art','Mapa orientagarria · Ez da garaiko dokumentua.')+'<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
     multiButtons('asia',asiaOptions,data.asia)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3>'+fileStatus(3)+'</header>'+
+   '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-3" tabindex="-1"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3>'+fileStatus(3)+'</header>'+
     '<div class="m2-polar-plate" aria-hidden="true"><svg viewBox="0 0 320 58" xmlns="http://www.w3.org/2000/svg"><path d="M0 42 42 19 66 34 105 12 140 39 180 27 210 7 253 37 290 24 320 41V58H0Z" fill="#b6c6c6"/><path d="M0 47 56 39 102 51 160 39 222 49 284 40 320 48V58H0Z" fill="#f7f4e8"/><g fill="#49656b"><path d="M140 34h35l-8 7h-21Z"/><path d="M156 13v21h-17Z" fill="#e8e1c9"/><path d="M157 16v18h15Z" fill="#b78453"/></g></svg></div><div class="m2-mini-grid">'+explorerCards('north','Ipar Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+explorerCards('south','Hego Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+'</div></section>'+
-   '<section class="m2-panel m2-expedition-panel m2-expedition-meeting"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3>'+fileStatus(4)+'</header>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-meeting" id="m2-exp-file-4" tabindex="-1"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3>'+fileStatus(4)+'</header>'+
     ''+dossierArt('atlas-mission-vivid-2.webp','m2-exploration-meeting-art','AA bidez sortutako giro historikoa; ez da Stanleyren eta Livingstoneren erretratua.')+'<p class="m2-caption">Prentsak ospetsu egin zuen bi esploratzaileen topaketa. Aztertu 18. diapositibako gertakaria.</p>'+
     explorerCards('meeting','Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?',[['1869','1869'],['1871','1871'],['1908','1908']],state)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel m2-expedition-congo"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3>'+fileStatus(5)+'</header>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-congo" id="m2-exp-file-5" tabindex="-1"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3>'+fileStatus(5)+'</header>'+
     ''+dossierArt('atlas-expediente-foto-hd.webp','m2-exploration-congo-art','Artxiboko apaindura · Ez da Kongoko jatorrizko dokumentua.')+'<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura 18. diapositibako testuinguruan. Bereizi esplorazioaren helburuak eta ondorioak.</p>'+
     '<label class="m2-field">Zer lotura nabarmentzen du azken diapositibak?<select data-field="congo"><option value="">Aukeratu</option>'+
      option('research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe',state.congo)+
@@ -841,7 +856,7 @@ async function check(){
    if(releaseClosed||completions.has(active))return;
   const {data,error}=await client.rpc('submit_mission2_exercise',{p_exercise:active,p_answers:getAnswers()});
   if(error)throw error;
-  if(data?.completed){
+  if(data?.completed===true){
    completions.add(active);
    if(completions.size===5)try{const r=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(!r.error)updateMission2PassportDate(r.data||[])}catch{}
    window.dispatchEvent(new Event('m2:progress-changed'));
@@ -849,7 +864,7 @@ async function check(){
    feedbackState='success';
    stamped=true;
   }else{
-   setFeedback('Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.','error');
+   setFeedback(WRONG_MESSAGE,'error');
   }
  }catch(error){
   console.error('M2 egiaztapena:',error);
@@ -861,6 +876,17 @@ function openExercise(n){
  if(!teacher)void autosave?.flush();
  active=n;lastCabinetMove=null;lastPlacement=null;previewSealed=false;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});
+}
+function returnCabinetCard(){
+ if(!canEdit()||active!==1||!selected||!taskState(1).assignments?.[selected])return;
+ const card=selected,before=taskState(1).assignments[card];lastCabinetMove={card,before,after:null};
+ delete taskState(1).assignments[card];queueMission2({assignments:{[card]:null}},1);selected=null;feedback='';feedbackState='';render();
+ $('[data-card="'+card+'"]')?.focus({preventScroll:true});
+}
+function returnTimeline(){
+ if(!canEdit()||active!==2||!selected)return;
+ const state=taskState(2),before={...state},patch={};for(const year of ['1869','1908','1914'])if(state[year]===selected){delete state[year];patch[year]=null}
+ selected=null;if(Object.keys(patch).length){recordUndo(before,patch);queueMission2(patch,2)}render();
 }
 function assignToCategory(catId){
  if(!canEdit()||active!==1||!causes.some(c=>c.id===selected)||!categories.some(c=>c.id===catId))return;
@@ -941,6 +967,8 @@ app.addEventListener('click',event=>{
    }
    return;
  }
+ if(elem.hasAttribute('data-room-jump')){const dest=document.getElementById(elem.dataset.roomJump);if(dest&&app.contains(dest)){dest.focus({preventScroll:true});dest.scrollIntoView({block:'start',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}return}
+ if(elem.hasAttribute('data-return-card'))return returnCabinetCard();
  if(elem.hasAttribute('data-source-zoom'))return openSource(elem.dataset.sourceZoom);
  if(elem.hasAttribute('data-map-zoom'))return openMap(elem.dataset.mapZoom);
  if(elem.hasAttribute('data-bag-return'))return atlasReturnBag();
@@ -970,11 +998,7 @@ app.addEventListener('click',event=>{
   if(!selected&&active===2&&taskState(2)[elem.dataset.year]){selected=taskState(2)[elem.dataset.year];render();return}
   return assignYear(elem.dataset.year)
  }
- if(elem.hasAttribute('data-year-return')){
-  if(active!==2||!selected)return;
-  const state=taskState(2),before={...state},patch={};for(const year of ['1869','1908','1914'])if(state[year]===selected){delete state[year];patch[year]=null}
-  selected=null;if(Object.keys(patch).length){recordUndo(before,patch);queueMission2(patch,2)}render();return;
- }
+ if(elem.hasAttribute('data-year-return'))return returnTimeline();
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
  if(elem.hasAttribute('data-expedition-field')){
   if(active!==5||!teacher&&completions.has(5))return;
@@ -1010,14 +1034,15 @@ app.addEventListener('change',event=>{
   if(target.value)taskState(active)[target.dataset.field]=target.value;else delete taskState(active)[target.dataset.field];
   queueMission2({[target.dataset.field]:target.value||null});
  }
- if(active===3&&target.matches('select[data-field],input[type="radio"][data-field]')){
+ if((active===3||active===5)&&target.matches('select[data-field],input[type="radio"][data-field]')){
   const selector=target.tagName==='SELECT'?'select[data-field="'+target.dataset.field+'"]':'input[data-field="'+target.dataset.field+'"][value="'+target.value+'"]';
   render();$(selector)?.focus({preventScroll:true});return;
  }
  if(target.matches('input[data-archive]')){
   taskState(4)[target.dataset.archive]=target.value;
   queueMission2({[target.dataset.archive]:target.value},4);
-  const dossier=target.closest('.m2-archive-dossier');
+  refreshArchiveStatus(target.dataset.archive);
+   const dossier=target.closest('.m2-archive-dossier');
   if(dossier)dossier.dataset.answered='true';
   const badge=$('[data-archive-progress]');
   if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
@@ -1044,9 +1069,9 @@ app.addEventListener('dragstart',event=>{
   if(route){atlasSelectedRoute=route.dataset.atlasRoute;event.dataTransfer?.setData('text/plain','route:'+atlasSelectedRoute);return}
   if(item){atlasSelectedLuggage=item.dataset.atlasBagCard;event.dataTransfer?.setData('text/plain','bag:'+atlasSelectedLuggage);return}
  }
- const card=event.target.closest('[data-card]')||event.target.closest('[data-event]');
+ const card=event.target.closest('[data-card],[data-event],[data-year-piece]');
  if(!card){dragging=false;return}
- selected=card.dataset.card||card.dataset.event;
+ selected=card.dataset.card||card.dataset.event||card.dataset.yearPiece;
  event.dataTransfer?.setData('text/plain',selected);
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
 });
@@ -1055,7 +1080,7 @@ app.addEventListener('dragover',event=>{
  if(active===3&&event.target.closest('[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]')){
   event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';return;
  }
- if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
+ if(event.target.closest('[data-zone],[data-year],[data-unassign],[data-year-tray]'))event.preventDefault();
 });
 function dropOn(target,moved){
  dragging=false;pointerEditing=false;
@@ -1071,6 +1096,7 @@ function dropOn(target,moved){
    return;
   }
  }
+ if(active===2&&target.closest('[data-year-tray]')&&infrastructure.some(i=>i.id===moved)){selected=moved;return returnTimeline()}
  const zone=target.closest('[data-zone]');
  const year=target.closest('[data-year]');
  const loose=target.closest('[data-unassign]');
@@ -1087,8 +1113,8 @@ function dropOn(target,moved){
 }
 app.addEventListener('drop',event=>{event.preventDefault();dropOn(event.target,event.dataTransfer?.getData('text/plain')||'')});
 let touchDrag=null,suppressTouchClick=false;
-const touchItems='[data-card],[data-event],[data-atlas-route],[data-atlas-bag-card]';
-const dropTargets='[data-zone],[data-year],[data-unassign],[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]';
+const touchItems='[data-card],[data-event],[data-year-piece],[data-atlas-route],[data-atlas-bag-card]';
+const dropTargets='[data-zone],[data-year],[data-year-tray],[data-unassign],[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]';
 function clearTouch(){
  if(!touchDrag)return;
  const d=touchDrag;touchDrag=null;d.ghost?.remove();d.target?.classList.remove('m2-drop-highlight');d.card.classList.remove('m2-touch-moving');
@@ -1099,7 +1125,7 @@ app.addEventListener('pointerdown',event=>{
  suppressTouchClick=false;
  const card=event.target.closest(touchItems);
  if(!canEdit()||event.pointerType==='mouse'||!event.isPrimary||!card||card.disabled)return;
- const token=card.dataset.card||card.dataset.event||(card.dataset.atlasRoute?'route:'+card.dataset.atlasRoute:'bag:'+card.dataset.atlasBagCard);
+ const token=card.dataset.card||card.dataset.event||card.dataset.yearPiece||(card.dataset.atlasRoute?'route:'+card.dataset.atlasRoute:'bag:'+card.dataset.atlasBagCard);
  touchDrag={id:event.pointerId,card,token,x:event.clientX,y:event.clientY,moving:false};
  card.setPointerCapture?.(event.pointerId);
 });
