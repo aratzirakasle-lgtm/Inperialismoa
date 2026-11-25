@@ -795,7 +795,7 @@ function controls(){
  return '<div class="m2-controls">'+(!done?'<p class="m2-answer-count" data-m2-answer-count role="status">'+count+' / '+total+' erantzunda</p>':'')+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-save-state="'+esc(saveKind)+'" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
  '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||!canEdit()?'disabled':'')+'>↶ Desegin</button>':active===2||active===3?'<button type="button" class="m2-button secondary" data-placement-undo '+(!canUndoPlacement()?'disabled':'')+'>↶ Desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done)?'disabled':'')+'>↻ Berrabiarazi</button>'+
  (teacher?'<button type="button" class="m2-button" data-preview-check '+(previewSealed?'disabled':'')+'>✓ Egiaztatu (simulazioa)</button><button type="button" class="m2-button secondary" data-preview-next>'+(active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>':
- done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
+ done&&active<5?'<button type="button" class="m2-button" data-next aria-label="'+(active+1)+'. ariketara joan">'+(active===1?'2. ariketara →':'Hurrengo aretoa →')+'</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
  '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+'✓ Erantzunak egiaztatu'+'</button>')+
  '</div>'+(teacher?'<div class="m2-preview-states" aria-label="Irakaslearen simulazioak"><span>Ez da daturik gordetzen:</span><button type="button" class="m2-button secondary" data-preview-state="initial">Hasierako pantaila</button><button type="button" class="m2-button secondary" data-preview-state="error">Errorea simulatu</button><button type="button" class="m2-button secondary" data-preview-state="sealed">Gaindituta simulatu</button></div>':'')+'</div>';
@@ -926,7 +926,7 @@ async function check(){
  }catch(error){
   console.error('M2 egiaztapena:',error);
   setFeedback('Ezin izan dira erantzunak egiaztatu. Konexioa egiaztatu eta saiatu berriro.','error');
- }finally{submitting=false;render();if(stamped&&!releaseClosed)stampMuseumExercise(2,active)}
+ }finally{submitting=false;render();if(stamped&&!releaseClosed){stampMuseumExercise(2,active);if(active===1)$('[data-next]')?.focus({preventScroll:false})}}
 }
 function openExercise(n){
  if(releaseClosed||submitting||!steps.includes(n)||!canOpen(n))return;
