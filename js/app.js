@@ -250,18 +250,28 @@ function m1Pieces(team){
  if(empireDossierStates.some(r=>same(r)&&!!r.completed_at))earned.add(4);
  return earned;
 }
+// The RPC also provides the class ID when the team row has not yet been loaded.
+function m1ProgressClassId(){
+ const team=viewTeamId();
+ if(!team)return null;
+ return mine()?.class_id||classProgressRows.find(row=>String(row.team_id)===String(team))?.class_id||null;
+}
+function canViewM1ClassProgress(){
+ return !!user&&!demo&&!!viewTeamId()&&currentMission===1&&!isTeacher();
+}
 function paintClassProgressModal(){
  const board=$("#m1-class-modal-board");
  if(!board||$("#modal").hidden)return;
- const own=mine(),classId=own?.class_id;
- if(!user||demo||!classId||currentMission!==1||isTeacher()){
+ if(!canViewM1ClassProgress()){
    closeModal();board.textContent="";return;
  }
- const html=renderMission1ClassProgress(classProgressRows,{ownTeamId:viewTeamId(),classId,error:classProgressError});
+ const classId=m1ProgressClassId();
+ // Never show unfiltered rows while the class is unknown.
+ const html=renderMission1ClassProgress(classId?classProgressRows:[],{ownTeamId:viewTeamId(),classId,error:classProgressError});
  if(board.innerHTML!==html)board.innerHTML=html;
 }
 function m1ClassProgress(){
- if(!user||demo||!mine()?.class_id||currentMission!==1||isTeacher())return;
+ if(!canViewM1ClassProgress())return;
  modal('<div class="m1-archive m1-class-archive"><p class="m1-overline">MUSEOKO ARTXIBOA · I. MISIOA</p><h2 id="modal-title">Taldeen aurrerapena</h2><p>Gelako taldeen aurrerapena · 15 segundoan behin eguneratzen da.</p><div id="m1-class-modal-board" aria-live="polite" aria-atomic="true"></div></div>');
  paintClassProgressModal();
  $("#modal-close").focus();
@@ -322,7 +332,7 @@ function renderGallery(){
    canSkip,navigationEnabled:true,navigationPreview:teacherPreview,
     navigationCompleted:()=>m1Pieces(team),
    dossierProgress:()=>m1Pieces(team).size,
-   classProgressEnabled:!demo&&!!mine()?.class_id,
+   classProgressEnabled:canViewM1ClassProgress(),
    sharedDraft,onTeamCompleted:()=>refreshFromRealtime(),
    onBack:()=>{galleryQuestionsOpen=false;currentMission=0;render()},
    onContinue:()=>{if(teacherPreview){location.assign("./bi-sistema.html?preview=1")}else if(demo){galleryQuestionsOpen=true;render()}else location.assign("./bi-sistema.html")},

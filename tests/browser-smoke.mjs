@@ -140,7 +140,7 @@ async function open(role,path,viewport={width:1365,height:900}){
          return {data:[{team_id:'team1',class_id:'class1',team_name:'Exploradores',member_names:['Ane (proba)','Jon (proba)'],
            exercise_1:!!gs?.completed_at,exercise_2:!!bs?.completed_at,
            exercise_3:e3,exercise_4:!!ds?.completed_at,
-           exercise_5:e5,mission_completed:e5}],error:null};
+           exercise_5:e5,mission_completed:e5},...(window.__smokeExtraProgress||[])],error:null};
        }
        window.__smokeRpcCalls.push(name);
        if(role==='teacher')throw Error('No se permiten RPC en una simulación docente');
@@ -424,6 +424,12 @@ try{
      assert.match(await page.locator('#m1-class-modal-board .m1-class-members').textContent(),/Jon \(proba\)/);
      assert.match(await page.locator('#m1-class-modal-board').textContent(),/ZUEN TALDEA/);
      assert.equal(await page.locator('#m1-class-modal-board .m1-class-mark').count(),6);
+     // A second team in the class becomes visible on the next refresh.
+     await page.evaluate(()=>{window.__smokeExtraProgress=[{team_id:'team2',class_id:'class1',team_name:'Beste taldea',exercise_1:true,exercise_2:true,mission_completed:false},{team_id:'foreign',class_id:'class2',team_name:'Kanpoko taldea',exercise_1:true}];window.dispatchEvent(new Event('focus'))});
+     await page.waitForFunction(()=>document.querySelector('#m1-class-modal-board')?.textContent.includes('Beste taldea'));
+     assert.equal(await page.locator('#m1-class-modal-board .m1-class-mark').count(),12);
+     assert.match(await page.locator('#m1-class-modal-board').textContent(),/2\/5/);
+     assert.doesNotMatch(await page.locator('#m1-class-modal-board').textContent(),/Kanpoko taldea/);
      await page.locator('#modal-close').click();
      assert.equal(await page.locator('#modal').isVisible(),false);
      await page.locator('[data-m1-dossier]').click();
@@ -1143,6 +1149,10 @@ try{
       assert.equal(await page.locator('.gal-flag-illustration').count(),4);
       assert.equal(await page.locator('[data-gallery-action="next"]').count(),1);
       assert.equal(await page.locator('.m1-teacher-label').count(),1);
+      await page.locator('[data-m1-class-progress]').click();
+      await waitVisible(page,'#m1-class-modal-board .m1-class-team');
+      assert.match(await page.locator('#m1-class-modal-board').textContent(),/Exploradores/);
+      await page.locator('#modal-close').click();
       await page.locator('[data-gallery-action="preview-complete"]').click();
       assert.equal(await page.locator('.gal-preview-ribbon').count(),1);
       assert.equal(await page.locator('[data-gallery-action="check"]').isDisabled(),true);

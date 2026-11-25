@@ -852,6 +852,14 @@ try{
     assert.ok(await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').isVisible());
     await ensureAtlasPicturesDecoded(page);
     await page.screenshot({path:'test-output/m2-e3-filled-suitcase-'+size.width+'.png',fullPage:true,animations:'disabled'});
+    const action=page.locator('.m2-atlas-final-controls [data-preview-check]');
+    await action.scrollIntoViewIfNeeded();
+    assert.ok(await action.evaluate(el=>{const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return r.height>=44&&el.contains(hit)}),'El botón inferior no puede quedar tapado por el menú');
+    assert.ok(await page.locator('.m2-atlas-final-controls').evaluate(el=>el.getBoundingClientRect().top>=document.querySelector('#m2-luggage-part').getBoundingClientRect().bottom-1),'La botonera debe quedar debajo de las maletas');
+    await action.click();
+    assert.match(await page.locator('#m2-feedback').innerText(),/Aurrebista/);
+    await page.locator('.m2-atlas-final-controls [data-preview-next]').click();
+    await page.locator('.m2-archive-active').waitFor();
     assert.deepEqual(errors,[]);
    }finally{await context.close()}
   }
