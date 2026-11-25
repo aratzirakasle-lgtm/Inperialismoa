@@ -673,30 +673,7 @@ function multiButtons(group,options,selectedIds){
  return '<div class="m2-multi">'+options.map(([id,label])=>'<button type="button" class="m2-tile" data-multi="'+group+'" data-value="'+id+'" aria-pressed="'+ids.has(id)+'">'+esc(label)+'</button>').join('')+'</div><p class="m2-selection-count" role="status">'+ids.size+' / '+limit+' hautatuta</p>';
 }
 function expeditionMap(){
- return '<svg class="m2-expedition-svg" viewBox="0 0 540 620" role="img" aria-label="Afrikako eskema historikoan ibai nagusiak, meridianoak eta iparrorratza agertzen dira. Mapa orientagarria da, ez eskala zehatzekoa." xmlns="http://www.w3.org/2000/svg">'+
- '<defs><radialGradient id="m2-land" cx=".39" cy=".34" r=".79"><stop stop-color="#e3d4a9"/><stop offset=".68" stop-color="#cbbb87"/><stop offset="1" stop-color="#aa9b6c"/></radialGradient>'+
- '<pattern id="m2-paper-lines" patternUnits="userSpaceOnUse" width="28" height="28"><path d="M28 0H0V28" fill="none" stroke="#988e6b" stroke-opacity=".17" stroke-width="1"/></pattern></defs>'+
- '<rect width="540" height="620" fill="#d6d6b8"/><rect width="540" height="620" fill="url(#m2-paper-lines)"/>'+
- '<g stroke="#9aa393" stroke-opacity=".7" stroke-width="1" fill="none"><path d="M0 150H540M0 260H540M0 370H540M0 480H540"/><path d="M95 0V620M195 0V620M295 0V620M395 0V620M495 0V620"/></g>'+
- '<g font-family="Georgia,serif" font-size="15" fill="#647e78" opacity=".82"><text x="18" y="318" transform="rotate(-90 18 318)">OZEANO ATLANTIKOA</text><text x="513" y="280" transform="rotate(90 513 280)">INDIAKO OZEANOA</text><text x="263" y="53" font-size="14" text-anchor="middle">MEDITERRANEO ITSASOA</text></g>'+
- '<path class="m2-expedition-land" d="M107 98C129 81 166 70 204 72L240 75 259 66 291 81 320 96 349 104 371 117 387 138 405 146 421 168 445 191 431 202 410 199 397 213 415 239 434 252 461 254 470 281 451 300 426 311 418 340 407 365 391 384 385 410 366 434 351 460 337 486 314 521 282 550 260 573 236 550 225 526 203 508 194 480 177 467 165 432 143 418 130 390 112 362 112 339 88 317 72 290 69 266 58 245 77 213 65 190 74 163 91 144 87 125Z"/>'+
- '<path class="m2-expedition-land" d="M455 413L475 420 486 448 480 475 464 498 450 484 444 451Z"/>'+
- '<path class="m2-expedition-land-shade" d="M164 129Q253 89 325 151T385 335Q350 410 305 449T225 498Q143 399 132 260Z"/>'+
- '<path d="M75 332Q246 333 436 332" stroke="#947246" stroke-width="1.5" stroke-dasharray="5 6" fill="none"/>'+
- '<text x="75" y="327" font-family="Georgia,serif" font-size="10" fill="#715738">EKUATOREA</text>'+
- '<g class="m2-historic-rivers" fill="none" stroke="#688b90" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".90">'+
- '<path d="M333 151Q322 185 324 217T340 263Q334 297 314 313Q296 332 297 353"/>'+
- '<path d="M99 218Q137 223 151 253Q177 262 191 249T220 265Q199 295 160 293T118 285"/>'+
- '<path d="M305 346Q263 313 224 339T189 371Q161 368 137 386"/>'+
- '<path d="M312 412Q335 401 342 417T361 434Q389 426 412 415"/>'+
- '</g>'+
- '<g fill="#8ba6a1" stroke="#537978" stroke-width="1.8"><circle cx="333" cy="151" r="5"/><circle cx="118" cy="285" r="5"/><circle cx="137" cy="386" r="5"/><circle cx="412" cy="415" r="5"/></g>'+
- '<path d="M69 193Q117 155 162 140M352 160Q381 181 411 203" fill="none" stroke="#8c654a" stroke-width="1.6" stroke-dasharray="4 6"/>'+
- '<g transform="translate(459 90)" fill="none" stroke="#81673d"><circle r="31" stroke-width="2"/><circle r="23" stroke-width="1"/><path d="M-37 0H37M0-37V37M-17-17L17 17M17-17L-17 17" stroke-width="1.2"/><path d="M0-22L6 0 0 22-6 0Z" fill="#956845"/><circle r="4" fill="#c5aa78"/></g>'+
- '<text x="458" y="46" text-anchor="middle" font="700 13px Georgia,serif" fill="#675639">I</text>'+
- '<g font-family="Georgia,serif" fill="#755b3d" opacity=".79"><text x="193" y="234" font-size="21" letter-spacing="7">AFRIKA</text><text x="161" y="592" font-size="12" letter-spacing="3">XIX. MENDEKO ATLASA</text></g>'+
- '<path d="M20 20H520V600H20Z" fill="none" stroke="#a89462" stroke-width="2"/><path d="M29 29H511V591H29Z" fill="none" stroke="#ad9b6b" stroke-width="1"/>'+
- '</svg>';
+ return "<svg class=\"m2-expedition-svg\" viewBox=\"0 0 540 620\" role=\"img\" aria-label=\"Afrikako mapa orientagarria, kostaldeak eta lau ibai eskematiko izenik gabe. Ez du muga historikorik erakusten.\" xmlns=\"http://www.w3.org/2000/svg\"><defs><radialGradient id=\"m2-paper\"><stop stop-color=\"#f7e6bd\"/><stop offset=\"1\" stop-color=\"#c5a16b\"/></radialGradient><linearGradient id=\"m2-ink\"><stop stop-color=\"#346f83\"/><stop offset=\"1\" stop-color=\"#206078\"/></linearGradient></defs><rect width=\"540\" height=\"620\" fill=\"url(#m2-paper)\"/><rect x=\"16\" y=\"16\" width=\"508\" height=\"588\" rx=\"3\" fill=\"none\" stroke=\"#957343\" stroke-width=\"2\"/><rect x=\"22\" y=\"22\" width=\"496\" height=\"576\" fill=\"none\" stroke=\"#b48c53\"/><text x=\"270\" y=\"52\" text-anchor=\"middle\" fill=\"#594022\" font-family=\"Georgia,serif\" font-size=\"19\" font-weight=\"bold\" letter-spacing=\"4\">AFRIKAKO ATLASA</text><image class=\"m2-africa-cartography\" href=\"./assets/m2-africa-cartography.svg\" x=\"32\" y=\"70\" width=\"476\" height=\"476\"/><rect x=\"32\" y=\"70\" width=\"476\" height=\"476\" fill=\"none\" stroke=\"#85683d\" stroke-width=\"2\"/><path d=\"M32 308H508\" stroke=\"#987746\" stroke-dasharray=\"5 5\" opacity=\".7\"/><text x=\"40\" y=\"301\" fill=\"#5e563d\" font-family=\"Georgia\" font-size=\"10\">EKUATOREA</text><g class=\"m2-historic-rivers\" fill=\"none\" stroke=\"url(#m2-ink)\" stroke-width=\"3.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M338 313Q326 298 331 280L330 261 342 241 329 211 331 184 326 154 328 144\"/><path d=\"M111 255Q126 232 148 218Q169 223 177 242L183 263 196 282\"/><path d=\"M302 366Q288 351 292 331T296 308Q280 298 259 308L250 321 244 329 228 340\"/><path d=\"M291 371Q284 386 302 403Q317 413 328 399L339 393 350 398 355 409\"/></g><g fill=\"#365e60\" font-family=\"Georgia,serif\" font-size=\"12\" letter-spacing=\"1\"><text x=\"51\" y=\"392\" transform=\"rotate(-90 51 392)\">OZEANO ATLANTIKOA</text><text x=\"490\" y=\"320\" transform=\"rotate(90 490 320)\">INDIAKO OZEANOA</text><text x=\"250\" y=\"112\" text-anchor=\"middle\" font-size=\"11\">MEDITERRANEO ITSASOA</text></g><g transform=\"translate(460 500)\" stroke=\"#604725\" fill=\"#dec28b\"><circle r=\"28\" stroke-width=\"1.5\"/><circle r=\"21\" fill=\"none\"/><path d=\"M0-32 5-5 32 0 5 5 0 32-5 5-32 0-5-5Z\" fill=\"#bc9152\"/><path d=\"M0-32V0L5-5ZM32 0H0L5 5ZM0 32V0L-5 5ZM-32 0H0L-5-5Z\" fill=\"#664a2a\"/><text y=\"-36\" text-anchor=\"middle\" font-family=\"Georgia\" font-size=\"10\" fill=\"#604725\" stroke=\"none\">I</text></g><path d=\"M45 568H77\" stroke=\"#346f83\" stroke-width=\"3.5\" stroke-linecap=\"round\"/><text x=\"85\" y=\"572\" fill=\"#5a4328\" font-family=\"Georgia\" font-size=\"13\">Ibaiak (eskema)</text><text x=\"495\" y=\"572\" text-anchor=\"end\" fill=\"#5a4328\" font-family=\"Georgia\" font-size=\"10\">Natural Earth · 1:110m</text><text x=\"270\" y=\"590\" text-anchor=\"middle\" fill=\"#715736\" font-family=\"Georgia\" font-size=\"10\">Mapa orientagarria · Muga historikorik gabe</text></svg>";
 }
 function explorerCards(field,label,options,state){
  return '<fieldset class="m2-explorer-cards"><legend>'+esc(label)+'</legend><div class="m2-explorer-options">'+options.map(([value,name])=>'<button type="button" class="m2-explorer-card" data-expedition-field="'+field+'" data-expedition-value="'+value+'" aria-pressed="'+(state[field]===value)+'"><span aria-hidden="true">'+(field==='meeting'?'✦':'✥')+'</span><strong>'+esc(name)+'</strong></button>').join('')+'</div></fieldset>';
@@ -704,6 +681,9 @@ function explorerCards(field,label,options,state){
 function renderExpedition(){
  const state=taskState(5),data=state.multi||{};
  const chosen=[...(data.africa||[])];
+ const filled=[chosen.length===4,(data.asia||[]).length===3,!!(state.north&&state.south),!!state.meeting,!!state.congo];
+ const fileStatus=n=>'<span class="m2-expedition-file-status" data-file-filled="'+filled[n-1]+'">'+(filled[n-1]?'Erantzunda':'Zain')+'</span>';
+ const dossierArt=(src,cls,caption)=>'<figure class="m2-exploration-art '+cls+'"><img src="./assets/'+src+'" alt="" decoding="async"><figcaption>'+caption+'</figcaption></figure>';
  const chosenLabels=chosen.map(id=>riverOptions.find(x=>x[0]===id)?.[1]||id);
  return '<div class="m2-expedition m2-expedition-research">'+
   '<aside class="m2-atlas m2-historical-map">'+
@@ -711,24 +691,24 @@ function renderExpedition(){
    '<div class="m2-expedition-map-wrap">'+expeditionMap()+'<button type="button" class="m2-zoom-button m2-map-zoom" data-map-zoom="expedition" aria-label="Esplorazioen mapa handitu" title="Mapa handitu">＋</button></div>'+
    '<div class="m2-atlas-route-ledger"><strong>Aukeratutako izenak · '+chosen.length+' / 4</strong>'+
     '<div class="m2-atlas-route-tags" aria-live="polite">'+(chosenLabels.length?chosenLabels.map(label=>'<span>'+esc(label)+'</span>').join(''):'<em>Oraindik ez da izenik aukeratu.</em>')+'</div></div>'+
-   '<p class="m2-atlas-footnote">Atlas eskematikoa. Ibaien ibilbideek esplorazioaren eta kolonizazioaren historia ulertzen laguntzen dute.</p>'+
+   '<p class="m2-atlas-footnote">Kostaldeak: Natural Earth. Ibaien trazadurak eskematikoak eta izenik gabeak dira. Handitu mapa xehetasunak aztertzeko.</p>'+
   '</aside>'+
   '<div class="m2-atlas-notes m2-expedition-files">'+
    '<div class="m2-expedition-intro"><span class="m2-archive-eyebrow">IKERKETA GEOGRAFIKOA · 05 / 05</span><h3>Esploratzaileen espedientea</h3>'+
-    '<p>Lotu mapa, espedizioak eta Kongoko ustiapen kolonialaren testuingurua. Aztertu bost agiriak; erantzun guztiak osatu arte ezingo dituzue egiaztatu.</p></div>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3></header>'+
+    '<p>Lotu mapa, espedizioak eta Kongoko ustiapen kolonialaren testuingurua. Aztertu bost agiriak; erantzun guztiak osatu arte ezingo dituzue egiaztatu.</p><div class="m2-expedition-progress" role="status"><span>ERANTZUNDAKO AGIRIAK</span><strong>'+filled.filter(Boolean).length+' / 5</strong><span class="m2-expedition-progress-track" aria-hidden="true"><i style="width:'+filled.filter(Boolean).length*20+'%"></i></span></div></div>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3>'+fileStatus(1)+'</header>'+
     '<p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+
     multiButtons('africa',riverOptions,data.africa)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3></header>'+
-    '<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 02</span><h3>Asia eta Ozeaniako esplorazioak</h3>'+fileStatus(2)+'</header>'+
+    ''+dossierArt('m2-migration-map-clean.svg','m2-exploration-map-art','Mapa orientagarria · Ez da garaiko dokumentua.')+'<p class="m2-caption">Aukeratu aipatzen diren HIRU eremuak.</p>'+
     multiButtons('asia',asiaOptions,data.asia)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3></header>'+
-    '<div class="m2-mini-grid">'+explorerCards('north','Ipar Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+explorerCards('south','Hego Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+'</div></section>'+
-   '<section class="m2-panel m2-expedition-panel m2-expedition-meeting"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3></header>'+
-    '<p class="m2-caption">Prentsak ospetsu egin zuen bi esploratzaileen topaketa. Aztertu 18. diapositibako gertakaria.</p>'+
+   '<section class="m2-panel m2-expedition-panel"><header><span>AGIRIA 03</span><h3>Poloetarako espedizioak</h3>'+fileStatus(3)+'</header>'+
+    '<div class="m2-polar-plate" aria-hidden="true"><svg viewBox="0 0 320 58" xmlns="http://www.w3.org/2000/svg"><path d="M0 42 42 19 66 34 105 12 140 39 180 27 210 7 253 37 290 24 320 41V58H0Z" fill="#b6c6c6"/><path d="M0 47 56 39 102 51 160 39 222 49 284 40 320 48V58H0Z" fill="#f7f4e8"/><g fill="#49656b"><path d="M140 34h35l-8 7h-21Z"/><path d="M156 13v21h-17Z" fill="#e8e1c9"/><path d="M157 16v18h15Z" fill="#b78453"/></g></svg></div><div class="m2-mini-grid">'+explorerCards('north','Ipar Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+explorerCards('south','Hego Poloa',[['peary','Peary'],['amundsen','Amundsen']],state)+'</div></section>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-meeting"><header><span>AGIRIA 04</span><h3>Stanley eta Livingstone</h3>'+fileStatus(4)+'</header>'+
+    ''+dossierArt('atlas-mission-vivid-2.webp','m2-exploration-meeting-art','AA bidez sortutako giro historikoa; ez da Stanleyren eta Livingstoneren erretratua.')+'<p class="m2-caption">Prentsak ospetsu egin zuen bi esploratzaileen topaketa. Aztertu 18. diapositibako gertakaria.</p>'+
     explorerCards('meeting','Zein urtetan aurkitu zuen Henry M. Stanleyk David Livingstone?',[['1869','1869'],['1871','1871'],['1908','1908']],state)+'</section>'+
-   '<section class="m2-panel m2-expedition-panel m2-expedition-congo"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3></header>'+
-    '<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura. Esplorazioa eta ustiapena ez dira gauza bera, baina lotuta egon ziren.</p>'+
+   '<section class="m2-panel m2-expedition-panel m2-expedition-congo"><header><span>AGIRIA 05</span><h3>Kongoko espediente koloniala</h3>'+fileStatus(5)+'</header>'+
+    ''+dossierArt('atlas-expediente-foto-hd.webp','m2-exploration-congo-art','Artxiboko apaindura · Ez da Kongoko jatorrizko dokumentua.')+'<p class="m2-caption">Aztertu Henry M. Stanleyren eta Leopoldo II.aren arteko lotura 18. diapositibako testuinguruan. Bereizi esplorazioaren helburuak eta ondorioak.</p>'+
     '<label class="m2-field">Zer lotura nabarmentzen du azken diapositibak?<select data-field="congo"><option value="">Aukeratu</option>'+
      option('research_only','Bidaia zientifiko hutsa, ustiapenarekin loturarik gabe',state.congo)+
      option('exploitation','Kongoko ustiapen kolonialarekin izandako lotura',state.congo)+

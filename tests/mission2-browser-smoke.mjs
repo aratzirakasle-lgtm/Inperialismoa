@@ -374,6 +374,12 @@ try{
     await page.locator('.m2-expedition-svg').waitFor();
     assert.equal(await page.locator('.m2-expedition-panel').count(),5);
     assert.equal(await page.locator('.m2-expedition-svg .m2-historic-rivers path').count(),4);
+    assert.equal(await page.locator('.m2-africa-cartography').getAttribute('href'),'./assets/m2-africa-cartography.svg');
+    assert.equal(await page.locator('.m2-exploration-art').count(),3);
+    await page.locator('.m2-exploration-art img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+    assert.equal(await page.locator('.m2-expedition-file-status[data-file-filled="true"]').count(),0);
+    const mapLoaded=await page.evaluate(async()=>{const img=new Image();img.src='./assets/m2-africa-cartography.svg';await img.decode();return img.naturalWidth>0});
+    assert.ok(mapLoaded);
     assert.equal(await page.locator('[data-multi="africa"]').count(),6);
     assert.equal(await page.locator('[data-multi="asia"]').count(),5);
     assert.equal(await page.locator('select[data-field]').count(),1);
@@ -392,6 +398,8 @@ try{
     assert.equal(await page.locator('[data-multi="africa"][data-value="congo"]').getAttribute('aria-pressed'),'true');
     await page.locator('[data-expedition-field="meeting"][data-expedition-value="1869"]').click();
     assert.equal(await page.locator('[data-expedition-field="meeting"][data-expedition-value="1869"]').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('.m2-expedition-file-status[data-file-filled="true"]').count(),1);
+    assert.match(await page.locator('.m2-expedition-progress strong').innerText(),/1 \/ 5/);
     await page.locator('[data-map-zoom="expedition"]').click();
     await page.locator('#m2-reading-dialog .m2-expedition-svg').waitFor({state:'visible'});
     await page.locator('[data-map-action="in"]').click();
