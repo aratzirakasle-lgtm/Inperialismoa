@@ -1,7 +1,7 @@
 import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-guardado1';
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { createMission2Autosave } from './mission2-autosave.js?v=20261124-guardado1';
+import { createMission2Autosave } from './mission2-autosave.js?v=20261125-cohesion1';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-atlas3';
@@ -85,7 +85,45 @@ const asiaOptions=[['himalaya','Himalaia'],['siberia','Siberia'],['australia','A
 let teacher=false,teamId=null,active=1,selected=null,submitting=false,teacherEnding=false;
 let completions=new Set(),draft={},feedback='',feedbackState='';
 let remoteRenderTimer=null,remoteRenderPending=false,dragging=false,pointerEditing=false;
-let lastCabinetMove=null;
+let lastCabinetMove=null,lastPlacement=null,previewSealed=false;
+const editSelector='[data-card],[data-event],[data-year],[data-year-return],[data-zone],[data-unassign],[data-atlas-route],[data-atlas-target],[data-route-return],[data-atlas-bag-card],[data-atlas-bag-zone],[data-atlas-bag-reset],[data-bag-return],[data-atlas-stage],[data-multi],[data-expedition-field],[data-field],[data-archive],[data-cabinet-undo],[data-placement-undo],[data-reset]';
+const readOnly=()=>teacher?previewSealed:completions.has(active);
+const canEdit=()=>!releaseClosed&&!submitting&&!teacherEnding&&!readOnly();
+function freezeAnswers(){
+ app.toggleAttribute('data-m2-readonly',readOnly());
+ if(!readOnly()&&!submitting)return;
+ for(const el of app.querySelectorAll(editSelector)){
+  if(el.matches('button,input,select,textarea'))el.disabled=true;
+  el.setAttribute('aria-disabled','true');
+  if(el.hasAttribute('draggable'))el.draggable=false;
+ }
+ for(const el of app.querySelectorAll('[data-zone] button,[data-atlas-bag-zone] button'))el.disabled=true;
+ if(readOnly()){
+  selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;
+  document.querySelectorAll('#m2-reading-dialog input[name="m2-dialog-answer"]').forEach(el=>el.disabled=true);
+ }
+}
+function recordUndo(before,patch){
+ const old={},next={};
+ for(const [key,value] of Object.entries(patch))if((before[key]??null)!==(value??null)){old[key]=before[key]??null;next[key]=value??null}
+ if(Object.keys(next).length)lastPlacement={exercise:active,before:old,after:next};
+}
+function canUndoPlacement(){
+ return !!lastPlacement&&lastPlacement.exercise===active&&canEdit()&&Object.entries(lastPlacement.after).every(([key,value])=>(taskState(active)[key]??null)===value);
+}
+function undoPlacement(){
+ if(!canUndoPlacement())return;
+ const patch=lastPlacement.before,state=taskState(active);lastPlacement=null;
+ for(const [key,value] of Object.entries(patch)){if(value===null)delete state[key];else state[key]=value}
+ queueMission2(patch);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render();
+}
+function answerCount(){
+ const state=taskState(active);
+ if(active===1)return [causes.filter(c=>categories.some(cat=>cat.id===state.assignments?.[c.id])).length,causes.length];
+ if(active===5)return [[state.multi?.africa?.length===4,state.multi?.asia?.length===3,...['north','south','meeting','congo'].map(k=>!!state[k])].filter(Boolean).length,6];
+ return [responseKeys[active].filter(key=>!!state[key]).length,responseKeys[active].length];
+}
+function updateAnswerCount(){const el=$('[data-m2-answer-count]');if(el){const [count,total]=answerCount();el.textContent=count+' / '+total+' erantzunda'}}
 function interacting(){return dragging||pointerEditing||!!selected||!!atlasSelectedRoute||!!atlasSelectedLuggage||!!document.querySelector('#m2-reading-dialog[open]')||app.contains(document.activeElement)&&document.activeElement?.matches('select')}
 function requestRemoteRender(){
  const dossier=document.querySelector('#m2-reading-dialog[open][data-museum-panel="dossier"] .m2-dossier');
@@ -99,7 +137,7 @@ function updateMission2PassportDate(rows){
  const valid=rows.filter(r=>steps.includes(Number(r.exercise))&&typeof r.completed_at==='string'&&Number.isFinite(Date.parse(r.completed_at)));
  if(new Set(valid.map(r=>Number(r.exercise))).size===5)passportDates[2]=valid.map(r=>new Date(r.completed_at).toISOString()).sort().at(-1);
 }
-function markRemoteCompletion(exercise){if(completions.has(exercise))return;completions.add(exercise);window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active||app.querySelector('.m2-controls'))requestRemoteRender()}
+function markRemoteCompletion(exercise){if(completions.has(exercise))return;completions.add(exercise);if(exercise===active){lastPlacement=null;lastCabinetMove=null;freezeAnswers();setFeedback('Ariketa gaindituta! Taldearen aurrerapena gorde da.','success')}window.dispatchEvent(new Event('m2:progress-changed'));if(exercise===active||app.querySelector('.m2-controls'))requestRemoteRender()}
 
 let autosave=null,saveStatus=SAVE_TEXT.loading,saveKind='loading';
 function autosaveStatus(message,kind=''){
@@ -147,15 +185,15 @@ function openSource(id){
  const dialog=document.querySelector('#m2-reading-dialog');
  dialog.classList.add('m2-archive-reading-dialog');
  dialog.querySelectorAll('input[name="m2-dialog-answer"]').forEach(input=>input.addEventListener('change',()=>{
-  if(releaseClosed||submitting||active!==4||!teacher&&completions.has(4))return;
+  if(!canEdit()||active!==4)return;
   taskState(4)[id]=input.value;queueMission2({[id]:input.value},4);
   const original=app.querySelector('input[data-archive="'+id+'"][value="'+input.value+'"]');if(original)original.checked=true;
   const dossier=app.querySelector('[data-source="'+id+'"]');if(dossier)dossier.dataset.answered='true';
   const badge=$('[data-archive-progress]');if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
-  const check=$('[data-check]');if(check)check.disabled=!isReady();
+  const check=$('[data-check]');if(check)check.disabled=!isReady();updateAnswerCount();
   dialog.querySelector('[data-file-status]').textContent='Erantzuna hautatuta';
  }));
- if(!teacher&&completions.has(4))dialog.querySelectorAll('input').forEach(input=>input.disabled=true);
+ if(readOnly())dialog.querySelectorAll('input').forEach(input=>input.disabled=true);
  dialog.querySelector('[data-file-prev]').onclick=()=>{if(index>0)openSource(archives[index-1].id)};
  dialog.querySelector('[data-file-next]').onclick=()=>{if(index<archives.length-1)openSource(archives[index+1].id)};
  dialog.addEventListener('close',()=>{if(!document.querySelector('#m2-reading-dialog[open]'))app.querySelector('[data-source-zoom="'+id+'"]')?.focus({preventScroll:true})},{once:true});
@@ -257,12 +295,12 @@ async function initialize(){
    autosave=createMission2Autosave({
     client,teamId,userId:authUser.id,
     canRefresh:()=>!submitting&&!interacting(),
-    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);if(lastCabinetMove&&(rows[1]?.assignments?.[lastCabinetMove.card]||null)!==lastCabinetMove.after)lastCabinetMove=null;draft=rows;if(changed&&!releaseClosed&&app.querySelector('.m2-controls'))requestRemoteRender()},
+    onRestore:rows=>{const changed=JSON.stringify(draft)!==JSON.stringify(rows);if(lastCabinetMove&&(rows[1]?.assignments?.[lastCabinetMove.card]||null)!==lastCabinetMove.after)lastCabinetMove=null;if(lastPlacement&&Object.entries(lastPlacement.after).some(([key,value])=>(rows[lastPlacement.exercise]?.[key]??null)!==value))lastPlacement=null;draft=rows;if(changed&&!releaseClosed&&app.querySelector('.m2-controls'))requestRemoteRender()},
     onStatus:autosaveStatus,
     onCompleted:markRemoteCompletion
    });
    await autosave.load();
-   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;const previousDate=passportDates[2];updateMission2PassportDate(data||[]);let changed=previousDate!==passportDates[2];for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){completions.add(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
+   const poll=async()=>{if(document.hidden||releaseClosed||submitting)return;try{const {data,error}=await client.from('mission2_exercise_completions').select('exercise,completed_at').eq('team_id',teamId);if(error)return;const previousDate=passportDates[2];updateMission2PassportDate(data||[]);let changed=previousDate!==passportDates[2];for(const row of data||[]){const n=Number(row.exercise);if(steps.includes(n)&&!completions.has(n)){markRemoteCompletion(n);changed=true}}if(changed){window.dispatchEvent(new Event('m2:progress-changed'));requestRemoteRender()}}catch{}};
    const pollTimer=setInterval(poll,5000);window.addEventListener('pagehide',()=>{clearInterval(pollTimer);clearTimeout(remoteRenderTimer);autosave?.destroy()},{once:true});
 
   }
@@ -523,7 +561,7 @@ function atlasInput(field,label,value,choices){
  '<span class="m2-atlas-radio-circle" aria-hidden="true"></span><span>'+esc(text)+'</span></label>').join('')+'</fieldset>';
 }
 function atlasSectionStatus(num,count,total){
- return '<span class="m2-atlas-section-status" data-atlas-count="'+num+'">'+count+' / '+total+' osatuta</span>';
+ return '<span class="m2-atlas-section-status" data-atlas-count="'+num+'">'+count+' / '+total+' beteta</span>';
 }
 function renderPopulation(){
  const state=taskState(3);
@@ -578,10 +616,10 @@ function renderPopulation(){
  const stage1=['1850','1870','1900','migration','missionaries'].filter(k=>!!state[k]).length;
  const stage3=atlasStatements.filter(c=>!!state[c[0]]).length;
  const stage4=atlasSuitcase.filter(c=>!!state['bag_'+c[0]]).length;
- const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+' title="Atalaren osotasuna soilik; zuzentasuna amaieran egiaztatuko da." aria-label="'+n+'. atala: osotasuna egiaztatu">'+(ready?'OSATUTA':'OSATU ATALA')+' ✦</button>';
+ const stageAction=(n,label,ready)=>'<button type="button" class="m2-atlas-check" data-atlas-stage="'+n+'" '+(!ready?'disabled':'')+' title="Atalaren osotasuna soilik; zuzentasuna amaieran egiaztatuko da." aria-label="'+n+'. atala: osotasuna egiaztatu">'+(ready?'BETETA':'BETE ATALA')+' ✦</button>';
  return '<section class="m2-atlas-screen m2-migration-gallery" aria-label="Migrazioen bulegoa: lau jarduera interaktibo">'+
   '<header class="m2-atlas-heading"><a class="m2-atlas-home-link" href="./index.html" aria-label="Museora itzuli">← MUSEOA</a><span class="m2-atlas-navigation">BIGARREN MISIOA · 3 / 5</span><h1>MIGRAZIOEN BULEGOA <em>(1850–1900)</em></h1>'+
-  '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' osatuta</div></header>'+
+  '<div class="m2-atlas-total" aria-label="Erantzun osatuak">'+filled+' / '+atlasKeys.length+' beteta</div></header>'+
   ''+
   (teacher?'<p class="m2-atlas-teacher">IRAKASLEAREN AURREBISTA · Ez da daturik gordeko</p>':'')+
   '<div class="m2-atlas-main">'+
@@ -732,15 +770,14 @@ function isReady(){
 }
 function canUndoCabinet(){return active===1&&!!lastCabinetMove&&(teacher||!completions.has(1))&&(taskState(1).assignments?.[lastCabinetMove.card]||null)===lastCabinetMove.after}
 function controls(){
- const done=completions.has(active);
-
- return '<div class="m2-controls">'+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-save-state="'+esc(saveKind)+'" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
- '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||submitting?'disabled':'')+'>↶ Desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done&&!teacher)?'disabled':'')+'>↻ Berrabiarazi</button>'+
- (teacher?(active===1?'<button type="button" class="m2-button" data-preview-check>✓ EGIAZTATU</button><button type="button" class="m2-button secondary" data-preview-next>Hurrengo aretoa →</button>':'<button type="button" class="m2-button" data-preview-next>'+ (active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>'):
+ const done=readOnly();const [count,total]=answerCount();
+ return '<div class="m2-controls">'+(!done?'<p class="m2-answer-count" data-m2-answer-count role="status">'+count+' / '+total+' erantzunda</p>':'')+(teacher?'':'<p id="m2-autosave" class="m2-autosave-status" role="status" data-save-state="'+esc(saveKind)+'" data-state="'+esc(saveKind)+'">'+esc(saveStatus)+'</p>')+'<p id="m2-feedback" class="m2-feedback" role="status" data-state="'+esc(feedbackState)+'">'+esc(feedback||(done?'Ariketa hau osatu duzue.':'Aukerak osatu eta egiaztatu. Ez da erantzun zuzenik agertuko akatsen ondoren.'))+'</p>'+
+ '<div class="m2-buttons">'+(active===1?'<button type="button" class="m2-button secondary" data-cabinet-undo '+(!canUndoCabinet()||!canEdit()?'disabled':'')+'>↶ Desegin</button>':active===2||active===3?'<button type="button" class="m2-button secondary" data-placement-undo '+(!canUndoPlacement()?'disabled':'')+'>↶ Desegin</button>':'')+'<button type="button" class="m2-button secondary" data-reset '+((submitting||done)?'disabled':'')+'>↻ Berrabiarazi</button>'+
+ (teacher?'<button type="button" class="m2-button" data-preview-check '+(previewSealed?'disabled':'')+'>✓ Egiaztatu (simulazioa)</button><button type="button" class="m2-button secondary" data-preview-next>'+(active===5?'Amaierako pantaila ikusi':'Hurrengo aretoa →')+'</button>':
  done&&active<5?'<button type="button" class="m2-button" data-next>Hurrengo aretoa →</button>':
  done&&active===5?'<button type="button" class="m2-button" data-ending>Amaiera ikusi</button>':
  '<button type="button" class="m2-button" data-check '+(!isReady()||submitting?'disabled':'')+'>'+'✓ Erantzunak egiaztatu'+'</button>')+
- '</div></div>';
+ '</div>'+(teacher?'<div class="m2-preview-states" aria-label="Irakaslearen simulazioak"><span>Ez da daturik gordetzen:</span><button type="button" class="m2-button secondary" data-preview-state="initial">Hasierako pantaila</button><button type="button" class="m2-button secondary" data-preview-state="error">Errorea simulatu</button><button type="button" class="m2-button secondary" data-preview-state="sealed">Gaindituta simulatu</button></div>':'')+'</div>';
 }
 function animateRoomArrival(room){arriveMuseumRoom(app,'2:'+room)}
 function renderEnd(){
@@ -774,16 +811,16 @@ function render(){
  document.querySelector('.m2-page')?.classList.toggle('m2-atlas-page',atlasRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-capital-page',active===2&&!teacherEnding);
  if(teacherEnding){app.innerHTML=renderEnd();return}
- if(atlasRoom){app.innerHTML=nav()+renderPopulation();return}
+ if(atlasRoom){app.innerHTML=nav()+renderPopulation();freezeAnswers();return}
  if(firstRoom){
   app.innerHTML=nav()+museumHeader()+museumInstruction()+
     (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
-    renderClassification()+controls();
+    renderClassification()+controls();freezeAnswers();
   return;
  }
  const item=activity(active);
  app.innerHTML=nav()+hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
- intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();
+ intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();freezeAnswers();
 }
 function getAnswers(){
  const state=taskState(active);
@@ -797,11 +834,11 @@ function getAnswers(){
 }
 async function check(){
  if(teacher){setFeedback('Irakaslearen aurrebistan ez da erantzunik bidaltzen.','');return}
- if(releaseClosed||submitting||completions.has(active)||!isReady())return;
- submitting=true;
- setFeedback('Erantzunak egiaztatzen…');
- const saveButton=$('[data-check]');if(saveButton)saveButton.disabled=true;
+ if(!canEdit()||!isReady())return;
+ submitting=true;let stamped=false;feedback='Erantzunak egiaztatzen…';feedbackState='';render();
  try{
+   if(autosave&&!(await autosave.flushConfirmed()))throw Error('Taldearen lana ez dago baieztatuta');
+   if(releaseClosed||completions.has(active))return;
   const {data,error}=await client.rpc('submit_mission2_exercise',{p_exercise:active,p_answers:getAnswers()});
   if(error)throw error;
   if(data?.completed){
@@ -810,23 +847,23 @@ async function check(){
    window.dispatchEvent(new Event('m2:progress-changed'));
    feedback='Ariketa gaindituta! Taldearen aurrerapena gorde da.';
    feedbackState='success';
-   render();stampMuseumExercise(2,active);
+   stamped=true;
   }else{
    setFeedback('Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.','error');
   }
  }catch(error){
   console.error('M2 egiaztapena:',error);
   setFeedback('Ezin izan dira erantzunak egiaztatu. Konexioa egiaztatu eta saiatu berriro.','error');
- }finally{submitting=false;const checkButton=$('[data-check]');if(checkButton)checkButton.disabled=!isReady()||completions.has(active)}
+ }finally{submitting=false;render();if(stamped&&!releaseClosed)stampMuseumExercise(2,active)}
 }
 function openExercise(n){
  if(releaseClosed||submitting||!steps.includes(n)||!canOpen(n))return;
  if(!teacher)void autosave?.flush();
- active=n;lastCabinetMove=null;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
+ active=n;lastCabinetMove=null;lastPlacement=null;previewSealed=false;selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;dragging=false;feedback='';feedbackState='';teacherEnding=false;render();
  window.scrollTo({top:0,behavior:'instant'});
 }
 function assignToCategory(catId){
- if(active!==1||!causes.some(c=>c.id===selected)||!categories.some(c=>c.id===catId))return;
+ if(!canEdit()||active!==1||!causes.some(c=>c.id===selected)||!categories.some(c=>c.id===catId))return;
  const state=taskState(1);state.assignments=state.assignments||{};
  const former=selected;const before=state.assignments[former]||null;
  if(before!==catId)lastCabinetMove={card:former,before,after:catId};
@@ -836,15 +873,16 @@ function assignToCategory(catId){
  $('[data-card="'+former+'"]')?.focus({preventScroll:true});animatePlacement('[data-card="'+former+'"]');
 }
 function assignYear(year){
- if(active!==2||!infrastructure.some(i=>i.id===selected)||!['1869','1908','1914'].includes(year))return;
- const state=taskState(2);
+ if(!canEdit()||active!==2||!infrastructure.some(i=>i.id===selected)||!['1869','1908','1914'].includes(year))return;
+ const state=taskState(2),before={...taskState(2)};
  const patch={};
  for(const y of ['1869','1908','1914'])if(state[y]===selected){delete state[y];patch[y]=null}
- state[year]=selected;patch[year]=selected;queueMission2(patch,2);selected=null;render();
+ state[year]=selected;patch[year]=selected;recordUndo(before,patch);queueMission2(patch,2);selected=null;render();
  $('[data-year="'+year+'"]')?.focus({preventScroll:true});animatePlacement('[data-year="'+year+'"]');
  const dial=$('.m2-e2-globe');if(!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)dial?.animate?.([{transform:'rotate(-3deg)'},{transform:'rotate(2deg)'},{transform:'rotate(0deg)'}],{duration:460,easing:'ease-out'});
 }
 function toggleMulti(group,value){
+ if(!canEdit()||active!==5)return;
  const state=taskState(5);state.multi=state.multi||{};
  if(!['africa','asia'].includes(group)||!(group==='africa'?riverOptions:asiaOptions).some(([id])=>id===value))return;
  const list=new Set(state.multi[group]||[]),limit=group==='africa'?4:3;
@@ -856,28 +894,28 @@ function toggleMulti(group,value){
 /* Los cuatro paneles conservan los campos en draft[3], no corrigen en el cliente.
    Las respuestas de la misión se validan únicamente mediante la RPC privada. */
 function atlasMoveRoute(location){
- if(active!==3||!atlasRoutes.some(r=>r.id===atlasSelectedRoute)||!atlasRoutes.some(r=>r.id===location))return;
- const state=taskState(3);
+ if(!canEdit()||active!==3||!atlasRoutes.some(r=>r.id===atlasSelectedRoute)||!atlasRoutes.some(r=>r.id===location))return;
+ const state=taskState(3),before={...taskState(3)};
  const patch={};
  for(const route of atlasRoutes){
   if(route.id!==atlasSelectedRoute&&state['route_'+route.id]===location){delete state['route_'+route.id];patch['route_'+route.id]=null}
  }
  const moved=atlasSelectedRoute;state['route_'+moved]=location;
- patch['route_'+moved]=location;queueMission2(patch,3);
+ patch['route_'+moved]=location;recordUndo(before,patch);queueMission2(patch,3);
  atlasSelectedRoute=null;
  feedback='';feedbackState='';render();
  if(!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)$('[data-route-trace="'+moved+'"]')?.animate?.([{strokeDasharray:'1',strokeDashoffset:1},{strokeDasharray:'1',strokeDashoffset:0}],{duration:550,easing:'ease-out'});
 }
 function atlasPack(bag){
- if(active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage)||!['cause','effect'].includes(bag))return;
- const item=atlasSelectedLuggage;taskState(3)['bag_'+item]=bag;
- queueMission2({['bag_'+item]:bag},3);
+ if(!canEdit()||active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage)||!['cause','effect'].includes(bag))return;
+ const item=atlasSelectedLuggage,key='bag_'+item,before={...taskState(3)};taskState(3)[key]=bag;
+ recordUndo(before,{[key]:bag});queueMission2({[key]:bag},3);
  atlasSelectedLuggage=null;
  feedback='';feedbackState='';render();animatePlacement('[data-atlas-bag-card="'+item+'"]');
 }
 function atlasReturnBag(){
- if(active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage))return;
- const item=atlasSelectedLuggage;delete taskState(3)['bag_'+item];queueMission2({['bag_'+item]:null},3);
+ if(!canEdit()||active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage))return;
+ const item=atlasSelectedLuggage,key='bag_'+item,before={...taskState(3)};delete taskState(3)[key];recordUndo(before,{[key]:null});queueMission2({[key]:null},3);
  atlasSelectedLuggage=null;render();$('[data-atlas-bag-card="'+item+'"]')?.focus({preventScroll:true});
 }
 function atlasPartCheck(part){
@@ -886,10 +924,11 @@ function atlasPartCheck(part){
   part===2?['route_africa','route_asia','route_oceania']:
   part===3?atlasStatements.map(item=>item[0]):atlasSuitcase.map(item=>'bag_'+item[0]);
  const ready=keys.every(key=>!!state[key]);
- setFeedback(ready?'Atala osatuta. Erantzunak amaieran egiaztatuko dira.':'Osatu atal honetako erantzun guztiak.');
+ setFeedback(ready?'Atala beteta dago; ez da oraindik zuzendu. Erantzun guztiak amaieran egiaztatuko dira.':'Bete atal honetako erantzun guztiak.');
 }
 app.addEventListener('click',event=>{
  if(submitting||releaseClosed)return;
+ if(!canEdit()&&event.target.closest(editSelector))return;
  const elem=event.target.closest('button');
  if(!elem||!app.contains(elem)){
    const zone=event.target.closest('[data-zone]');
@@ -915,7 +954,7 @@ app.addEventListener('click',event=>{
  if(active===3&&elem.hasAttribute('data-atlas-target'))return atlasMoveRoute(elem.dataset.atlasTarget);
  if(active===3&&elem.hasAttribute('data-route-return')){
   if(!atlasRoutes.some(r=>r.id===atlasSelectedRoute))return;
-  const field='route_'+atlasSelectedRoute;delete taskState(3)[field];queueMission2({[field]:null},3);atlasSelectedRoute=null;render();return;
+  const field='route_'+atlasSelectedRoute,before={...taskState(3)};delete taskState(3)[field];recordUndo(before,{[field]:null});queueMission2({[field]:null},3);atlasSelectedRoute=null;render();return;
  }
  if(active===3&&elem.hasAttribute('data-atlas-bag-card')){
   atlasSelectedLuggage=atlasSelectedLuggage===elem.dataset.atlasBagCard?null:elem.dataset.atlasBagCard;
@@ -926,15 +965,15 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-card')){selected=selected===elem.dataset.card?null:elem.dataset.card;const chosen=elem.dataset.card;render();$('[data-card="'+chosen+'"]')?.focus({preventScroll:true});return}
  const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
  if(active===3&&elem.closest('[data-atlas-bag-zone]'))return atlasPack(elem.closest('[data-atlas-bag-zone]').dataset.atlasBagZone);
- if(elem.hasAttribute('data-event')){selected=elem.dataset.event;render();$('[data-event="'+selected+'"]')?.focus({preventScroll:true});return}
+ if(elem.hasAttribute('data-event')){const chosen=elem.dataset.event;selected=selected===chosen?null:chosen;render();$('[data-event="'+chosen+'"]')?.focus({preventScroll:true});return}
  if(elem.hasAttribute('data-year')){
   if(!selected&&active===2&&taskState(2)[elem.dataset.year]){selected=taskState(2)[elem.dataset.year];render();return}
   return assignYear(elem.dataset.year)
  }
  if(elem.hasAttribute('data-year-return')){
   if(active!==2||!selected)return;
-  const state=taskState(2),patch={};for(const year of ['1869','1908','1914'])if(state[year]===selected){delete state[year];patch[year]=null}
-  selected=null;if(Object.keys(patch).length)queueMission2(patch,2);render();return;
+  const state=taskState(2),before={...state},patch={};for(const year of ['1869','1908','1914'])if(state[year]===selected){delete state[year];patch[year]=null}
+  selected=null;if(Object.keys(patch).length){recordUndo(before,patch);queueMission2(patch,2)}render();return;
  }
  if(elem.hasAttribute('data-multi'))return toggleMulti(elem.dataset.multi,elem.dataset.value);
  if(elem.hasAttribute('data-expedition-field')){
@@ -945,6 +984,7 @@ app.addEventListener('click',event=>{
   const state=taskState(5);if(state[field]===value){delete state[field];queueMission2({[field]:null},5)}else{state[field]=value;queueMission2({[field]:value},5)}
   render();$('[data-expedition-field="'+field+'"][data-expedition-value="'+value+'"]')?.focus({preventScroll:true});return;
  }
+ if(elem.hasAttribute('data-placement-undo'))return undoPlacement();
  if(elem.hasAttribute('data-cabinet-undo')){
   if(!canUndoCabinet())return;
   const {card,before}=lastCabinetMove;lastCabinetMove=null;const assignments=taskState(1).assignments||(taskState(1).assignments={});
@@ -954,16 +994,17 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-reset')){
   if(completions.has(active)&&!teacher)return;
   const exercise=active;
-  museumDialog('Ariketa berriz hasi?','<p class="m2-dialog-reading">'+(teacher?'Aurrebistako erantzunak ezabatuko dira.':'Ariketa honetako taldearen erantzunak ezabatuko dira, baita beste kideek gordetakoak ere. Lortutako zigiluak ez dira galduko.')+'</p>',{confirm:true,onConfirm:()=>{if(active!==exercise||!teacher&&completions.has(exercise))return;draft[exercise]={};if(exercise===1)lastCabinetMove=null;if(!teacher)autosave?.reset(exercise);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render()}});return
+  museumDialog('Ariketa berriz hasi?','<p class="m2-dialog-reading">'+(teacher?'Aurrebistako erantzunak ezabatuko dira.':'Ariketa honetako taldearen erantzunak ezabatuko dira, baita beste kideek gordetakoak ere. Lortutako zigiluak ez dira galduko.')+'</p>',{confirm:true,onConfirm:()=>{if(active!==exercise||!teacher&&completions.has(exercise))return;draft[exercise]={};lastPlacement=null;if(exercise===1)lastCabinetMove=null;if(!teacher)autosave?.reset(exercise);selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback='';feedbackState='';render()}});return
  }
  if(elem.hasAttribute('data-check')){void check();return}
  if(elem.hasAttribute('data-next')){openExercise(active+1);return}
- if(elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: irakaslearen erantzunak ez dira gordetzen.','');return}
+ if(teacher&&elem.hasAttribute('data-preview-check')){setFeedback('Aurrebista: ez da erantzunen zuzentasuna egiaztatzen eta ez da daturik gordetzen.','');return}
+ if(teacher&&elem.hasAttribute('data-preview-state')){const state=elem.dataset.previewState;previewSealed=state==='sealed';if(state==='initial'){draft[active]={};lastPlacement=null;lastCabinetMove=null}selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;feedback=state==='sealed'?'Simulazioa: ariketa gaindituta. Ez da daturik gorde.':state==='error'?'Simulazioa: ez da zuzena. Berrikusi erantzunak eta saiatu berriro.':'';feedbackState=state==='sealed'?'success':state==='error'?'error':'';render();return}
  if(elem.hasAttribute('data-preview-next')){if(active===5){teacherEnding=true;render()}else openExercise(active+1);return}
  if(elem.hasAttribute('data-ending')&&(teacher||completions.size===5)){teacherEnding=true;render()}
 });
 app.addEventListener('change',event=>{
- if(submitting||releaseClosed)return;
+ if(!canEdit())return;
  const target=event.target;
  if(target.matches('select[data-field],input[type="radio"][data-field]')){
   if(target.value)taskState(active)[target.dataset.field]=target.value;else delete taskState(active)[target.dataset.field];
@@ -981,9 +1022,10 @@ app.addEventListener('change',event=>{
   const badge=$('[data-archive-progress]');
   if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
  }
- const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();
+ const button=$('[data-check]');if(button&&!submitting)button.disabled=!isReady();updateAnswerCount();
 });
 app.addEventListener('keydown',event=>{
+ if(!canEdit())return;
  if(event.key==='Escape'&&(selected||atlasSelectedRoute||atlasSelectedLuggage)){event.preventDefault();selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render();return}
  if(active!==1||!['Enter',' '].includes(event.key))return;
  const zone=event.target.closest('[data-zone]');
@@ -994,7 +1036,7 @@ window.addEventListener('pointerup',()=>{pointerEditing=false});
 window.addEventListener('pointercancel',()=>{pointerEditing=false});
 window.addEventListener('blur',()=>{pointerEditing=false;dragging=false});
 app.addEventListener('dragstart',event=>{
- if(submitting||releaseClosed){event.preventDefault();return}
+ if(!canEdit()){event.preventDefault();return}
  dragging=true;pointerEditing=false;
  if(active===3){
   const route=event.target.closest('[data-atlas-route]');
@@ -1009,32 +1051,31 @@ app.addEventListener('dragstart',event=>{
  if(event.dataTransfer)event.dataTransfer.effectAllowed='move';
 });
 app.addEventListener('dragover',event=>{
+ if(!canEdit())return;
  if(active===3&&event.target.closest('[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]')){
   event.preventDefault();if(event.dataTransfer)event.dataTransfer.dropEffect='move';return;
  }
  if(event.target.closest('[data-zone]')||event.target.closest('[data-year]')||event.target.closest('[data-unassign]'))event.preventDefault();
 });
-app.addEventListener('drop',event=>{
+function dropOn(target,moved){
  dragging=false;pointerEditing=false;
- if(submitting||releaseClosed){event.preventDefault();return}
+ if(!canEdit()||!target||!app.contains(target))return;
  if(active===3){
-  const pin=event.target.closest('[data-atlas-target]');
-  const bag=event.target.closest('[data-atlas-bag-zone]');
-  const tray=event.target.closest('[data-atlas-bag-reset]');
+  const pin=target.closest('[data-atlas-target]');
+  const bag=target.closest('[data-atlas-bag-zone]');
+  const tray=target.closest('[data-atlas-bag-reset]');
   if(pin||bag||tray){
-   event.preventDefault();
-   const type=event.dataTransfer?.getData('text/plain')||'';
+   const type=moved||'';
    if(pin&&type.startsWith('route:')){atlasSelectedRoute=type.slice(6);return atlasMoveRoute(pin.dataset.atlasTarget)}
    if((bag||tray)&&type.startsWith('bag:')){atlasSelectedLuggage=type.slice(4);return bag?atlasPack(bag.dataset.atlasBagZone):atlasReturnBag()}
    return;
   }
  }
- const zone=event.target.closest('[data-zone]');
- const year=event.target.closest('[data-year]');
- const loose=event.target.closest('[data-unassign]');
+ const zone=target.closest('[data-zone]');
+ const year=target.closest('[data-year]');
+ const loose=target.closest('[data-unassign]');
  if(!zone&&!year&&!loose)return;
- event.preventDefault();
- const moved=event.dataTransfer?.getData('text/plain');
+ 
  if(active===1&&!causes.some(c=>c.id===moved)||active===2&&!infrastructure.some(i=>i.id===moved))return;
  if(moved)selected=moved;
  if(loose&&active===1&&selected){
@@ -1043,6 +1084,51 @@ app.addEventListener('drop',event=>{
  }
  if(zone)assignToCategory(zone.dataset.zone);
  if(year)assignYear(year.dataset.year);
+}
+app.addEventListener('drop',event=>{event.preventDefault();dropOn(event.target,event.dataTransfer?.getData('text/plain')||'')});
+let touchDrag=null,suppressTouchClick=false;
+const touchItems='[data-card],[data-event],[data-atlas-route],[data-atlas-bag-card]';
+const dropTargets='[data-zone],[data-year],[data-unassign],[data-atlas-target],[data-atlas-bag-zone],[data-atlas-bag-reset]';
+function clearTouch(){
+ if(!touchDrag)return;
+ const d=touchDrag;touchDrag=null;d.ghost?.remove();d.target?.classList.remove('m2-drop-highlight');d.card.classList.remove('m2-touch-moving');
+ if(d.card.hasPointerCapture?.(d.id))d.card.releasePointerCapture(d.id);
+ dragging=false;pointerEditing=false;
+}
+app.addEventListener('pointerdown',event=>{
+ suppressTouchClick=false;
+ const card=event.target.closest(touchItems);
+ if(!canEdit()||event.pointerType==='mouse'||!event.isPrimary||!card||card.disabled)return;
+ const token=card.dataset.card||card.dataset.event||(card.dataset.atlasRoute?'route:'+card.dataset.atlasRoute:'bag:'+card.dataset.atlasBagCard);
+ touchDrag={id:event.pointerId,card,token,x:event.clientX,y:event.clientY,moving:false};
+ card.setPointerCapture?.(event.pointerId);
 });
+window.addEventListener('pointermove',event=>{
+ const d=touchDrag;if(!d||d.id!==event.pointerId)return;
+ if(!canEdit()){clearTouch();return}
+ if(!d.moving&&Math.hypot(event.clientX-d.x,event.clientY-d.y)<8)return;
+ event.preventDefault();
+ if(!d.moving){
+  d.moving=true;dragging=true;d.card.classList.add('m2-touch-moving');
+  d.ghost=d.card.cloneNode(true);d.ghost.removeAttribute('id');d.ghost.setAttribute('aria-hidden','true');d.ghost.tabIndex=-1;
+  Object.assign(d.ghost.style,{position:'fixed',zIndex:'10000',pointerEvents:'none',margin:'0',width:Math.min(d.card.getBoundingClientRect().width,230)+'px',maxWidth:'none',opacity:'.94',transform:'translate(-50%,-50%)'});
+  document.body.append(d.ghost);
+ }
+ d.ghost.style.left=event.clientX+'px';d.ghost.style.top=event.clientY+'px';
+ const hit=document.elementFromPoint(event.clientX,event.clientY)?.closest(dropTargets);
+ const target=hit&&app.contains(hit)?hit:null;
+ if(target!==d.target){d.target?.classList.remove('m2-drop-highlight');target?.classList.add('m2-drop-highlight');d.target=target}
+},{passive:false});
+window.addEventListener('pointerup',event=>{
+ const d=touchDrag;if(!d||d.id!==event.pointerId)return;
+ const target=d.moving?document.elementFromPoint(event.clientX,event.clientY)?.closest(dropTargets):null;
+ clearTouch();
+ if(!d.moving)return;
+ event.preventDefault();suppressTouchClick=true;
+ if(target)dropOn(target,d.token);
+});
+window.addEventListener('pointercancel',clearTouch);
+window.addEventListener('blur',clearTouch);
+app.addEventListener('click',event=>{if(suppressTouchClick&&event.detail!==0){suppressTouchClick=false;event.preventDefault();event.stopImmediatePropagation()}},true);
 document.addEventListener('dragend',()=>{dragging=false;pointerEditing=false;if(selected||atlasSelectedRoute||atlasSelectedLuggage){selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;render()}});
 initialize();
