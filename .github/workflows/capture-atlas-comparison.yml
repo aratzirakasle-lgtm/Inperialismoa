@@ -37,11 +37,11 @@ jobs:
           python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/atlas-despues.log 2>&1 &
           node tests/capture-atlas-comparison.mjs
       - name: Publicar capturas de validación únicamente en la rama de prueba
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/capturas/atlas-antes.png docs/capturas/atlas-despues.png docs/capturas/atlas-antes-en-curso.png docs/capturas/atlas-despues-en-curso.png
+          git add docs/capturas/atlas-*.png
           if ! git diff --cached --quiet; then
             git commit -m "Capturas reales antes y después del atlas"
             git push origin HEAD:atlas-pulido-validacion
