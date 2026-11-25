@@ -1,0 +1,165 @@
+/* Propuesta de pulido del vestíbulo autenticado — 25/11/2026.
+ * Capa reversible. No modifica la pintura, las coordenadas de los hotspots,
+ * el estado de las misiones ni las pantallas de acceso, atlas o ejercicios.
+ */
+.c-museo-home {
+  --vestibulo-gold: #e8c68b;
+  --vestibulo-ink: #30210e;
+  --vestibulo-paper: #f5e3bf;
+}
+/* Una acción principal, dos secundarias. Mantener la estética de latón. */
+.c-museo-home .c-museo-toolbar {
+  min-height: 50px;
+  padding-block: 8px;
+  border-bottom-color: #a78651;
+  gap: 10px 16px;
+}
+.c-museo-home .c-museo-toolbar-team {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+  overflow: visible;
+}
+.c-museo-home .c-museo-toolbar-actions button {
+  min-height: 36px;
+  padding: 8px 12px;
+  line-height: 1.25;
+}
+.c-museo-home .c-museo-toolbar-actions button[data-mission] {
+  color: var(--vestibulo-ink);
+  background: linear-gradient(180deg,#f0d6a4,#d8b477);
+  border-color: #e9c98e;
+  box-shadow: inset 0 1px #fff2cf,0 2px 5px #061d16a6;
+}
+.c-museo-home .c-museo-toolbar-actions button[data-mission]:hover {
+  background: linear-gradient(180deg,#f8e4be,#e1be84);
+}
+.c-museo-home .c-museo-toolbar-actions button[data-c-toggle],
+.c-museo-home .c-museo-toolbar-actions .c-museo-exit {
+  background: transparent;
+  border-color: #9a825a;
+}
+.c-museo-home .c-museo-toolbar-actions button[data-c-toggle]:hover,
+.c-museo-home .c-museo-toolbar-actions .c-museo-exit:hover {
+  background: #2d4b38;
+}
+/* El contorno cálido debe parecer luz de la sala y no un botón superpuesto. */
+.c-museo-home .c-museo-hotspots .c-museo-portal.is-next:enabled::before {
+  background: radial-gradient(ellipse at 50% 65%,#f8d47828 0%,#f3cb7010 58%,transparent 85%);
+  border-color: #ffe1a28c;
+  box-shadow: inset 0 0 .8cqw #f8d99531,0 0 .65cqw #f1bd6166;
+  opacity: .9;
+}
+.c-museo-home .c-museo-hotspots .c-museo-portal.is-next:enabled:is(:hover,:focus-visible)::before {
+  opacity: 1;
+  box-shadow: inset 0 0 1.15cqw #f8d99550,0 0 .9cqw #f1bd6199;
+}
+.c-museo-home .c-museo-hotspots .c-museo-portal:is(.is-locked,.is-upcoming):disabled::before {
+  opacity: .4; /* Las ilustraciones históricas siguen siendo visibles. */
+}
+.c-museo-home .c-museo-hotspots .c-museo-globe:enabled:is(:hover,:focus-visible),
+.c-museo-home .c-museo-hotspots .c-museo-book1:enabled:is(:hover,:focus-visible),
+.c-museo-home .c-museo-hotspots .c-museo-book2:enabled:is(:hover,:focus-visible) {
+  border-color: #e8c68b85;
+  background: #f5d58c0b;
+  box-shadow: inset 0 0 .9cqw #f5d18735,0 0 .6cqw #e6bf6c65;
+}
+.c-museo-home .c-museo-hotspot:focus-visible {
+  outline: 3px solid #ffe2a6;
+  outline-offset: -3px;
+}
+/* Tinta dinámica: conservar las restauraciones del pergamino y ajustar
+ * únicamente la métrica tipográfica a sus áreas disponibles. */
+.c-museo-home .c-museo-real-data .c-museo-book-name {
+  display: block;
+  align-content: center;
+  font-size: 1.65cqw !important;
+  line-height: 1.06;
+  text-overflow: ellipsis;
+}
+.c-museo-home .c-museo-real-data .c-museo-book-name.small {
+  font-size: 1.48cqw !important;
+}
+.c-museo-home .c-museo-real-data .c-museo-book-name.smaller {
+  font-size: 1.27cqw !important;
+}
+.c-museo-home .c-museo-real-data .c-museo-book-progress,
+.c-museo-home .c-museo-real-data .c-museo-book-percent {
+  font-size: 1.82cqw;
+  font-variant-numeric: tabular-nums;
+}
+.c-museo-home .c-museo-real-data .c-museo-book-next {
+  font-size: 1.38cqw !important;
+  line-height: 1.08 !important;
+  overflow-wrap: anywhere;
+}
+.c-museo-home .c-museo-real-data .c-museo-book-bar i {
+  background: linear-gradient(180deg,#88b779,#4c854c 45%,#30623c);
+  box-shadow: inset 0 1px 1px #e6f4bc88;
+}
+.c-museo-home .c-museo-footer {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #e0cba5;
+}
+/* En pantallas estrechas, controles cómodos y el menú actual en euskera.
+ * Se conserva la escena y la secuencia del DOM; no se duplican botones.
+ */
+@media (max-width:800px) {
+  .c-museo-home .c-museo-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 10px 12px;
+    padding: 10px 12px;
+  }
+  .c-museo-home .c-museo-toolbar-brand { white-space: normal; }
+  .c-museo-home .c-museo-toolbar-team { min-width: 0; text-align: right; }
+  .c-museo-home .c-museo-toolbar-actions {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 8px;
+  }
+  .c-museo-home .c-museo-toolbar-actions button {
+    min-height: 44px;
+    white-space: normal;
+    font-size: 14px;
+  }
+  .c-museo-home .c-museo-toolbar-actions button[data-mission],
+  .c-museo-home .c-museo-preview-tag,
+  .c-museo-home .c-museo-toolbar-actions .c-museo-return {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width:740px) {
+  .c-museo-home .c-museo-mobile-guide { padding: 16px 14px; }
+  .c-museo-home .c-museo-mobile-summary { border: 1px solid #b78b4b; }
+  .c-museo-home .c-museo-mobile-atlas {
+    min-height: 44px;
+    font-size: 15px;
+    border: 1px solid #a78245;
+  }
+  .c-museo-home .c-museo-mobile-mission {
+    min-height: 72px;
+    border: 1px solid #b78b4b;
+    padding: 12px;
+  }
+  .c-museo-home .c-museo-mobile-mission.is-next:not(:disabled) {
+    border: 2px solid #e9bf71;
+    background: linear-gradient(115deg,#f9e7be,#e5be80);
+    box-shadow: 0 0 0 2px #e7bf6550,0 3px 10px #07150b80;
+  }
+  .c-museo-home .c-museo-mobile-mission:disabled {
+    color: #453728;
+    background: linear-gradient(110deg,#d1c0a2,#b9a58a);
+    opacity: 1;
+  }
+  .c-museo-home .c-museo-mobile-info small { font-size: 14px; }
+  .c-museo-home .c-museo-mobile-progress>span {
+    background: linear-gradient(#88b779,#30623c);
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .c-museo-home .c-museo-hotspot,
+  .c-museo-home .c-museo-hotspot::before { transition: none !important; }
+}
