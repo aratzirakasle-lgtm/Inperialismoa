@@ -525,8 +525,11 @@ function renderTimeline(){
  ).join('');
  const slots=years.map(year=>{
   const item=infrastructure.find(p=>p.id===state[year]);
+  // Each placed card is a true SVG circle, independent of legacy rectangle styles.
+  const artIndex=item?['suez','hijaz','panama'].indexOf(item.id):-1;
+  const roundArt=artIndex<0?'':`<svg class="m2-e2-round-picture" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" style="position:absolute!important;inset:3px!important;width:calc(100% - 6px)!important;height:calc(100% - 6px)!important;pointer-events:none!important;z-index:0"><defs><clipPath id="m2-e2-round-${year}" clipPathUnits="userSpaceOnUse"><circle cx="50" cy="50" r="48.5"/></clipPath></defs><image href="./assets/m2-e2-cartelas-hd.webp" x="${50-(artIndex+.5)*704/307*100}" y="0" width="${2112/307*100}" height="100" preserveAspectRatio="xMidYMid meet" clip-path="url(#m2-e2-round-${year})"/><circle cx="50" cy="50" r="48.5" fill="none" stroke="#e6c286" stroke-width="1.5"/></svg>`;
   return `<button type="button" class="m2-year m2-e2-slot m2-e2-slot-${year} ${item?'m2-selected-year':''}" data-year="${year}" ${item?`draggable="true" data-year-piece="${esc(item.id)}"`:""} aria-label="${year}: ${item?esc(item.label):'Kokatu pieza hemen'}">
-     <strong>${year}</strong><span class="m2-e2-slot-face">${item?`<span class="m2-e2-small-picture m2-e2-art-${esc(item.id)}" aria-hidden="true"></span><span class="m2-e2-filled-label">${esc(item.label)}</span>`:'<span class="m2-e2-empty-mark" aria-hidden="true">✣</span><span class="m2-e2-empty-label">Kokatu pieza hemen</span>'}</span>
+     ${roundArt}<strong>${year}</strong><span class="m2-e2-slot-face">${item?`<span class="m2-e2-filled-label">${esc(item.label)}</span>`:'<span class="m2-e2-empty-mark" aria-hidden="true">✣</span><span class="m2-e2-empty-label">Kokatu pieza hemen</span>'}</span>
     </button>`;
  }).join('');
  const choices=(field,items)=>items.map(([value,label,icon])=>
