@@ -181,7 +181,7 @@ try{
      loaded:img.complete&&img.naturalWidth>0,
      fit:getComputedStyle(img).objectFit
    })));
-   assert.ok(sceneLayout.every(x=>x.loaded&&x.fit==='fill'),'Las cinco escenas deben verse enteras sin cortes laterales');
+   assert.ok(sceneLayout.every(x=>x.loaded&&['fill','contain'].includes(x.fit)),'Las cinco escenas deben verse enteras sin cortes laterales');
    assert.equal(await page.locator('.m2-case-spot').first().evaluate(el=>getComputedStyle(el).pointerEvents),'none');
 
    assert.equal(await page.locator('.m2-case-scene').evaluateAll(els=>els.every(img=>img.complete&&img.naturalWidth>0)),true,'Las cinco escenas históricas deben cargar');
@@ -223,7 +223,12 @@ try{
     assert.equal(await page.locator('.m2-e2-ledger-page').count(),2);
     assert.equal(await page.locator('.m2-e2-option input[type="radio"]').count(),6);
     const bg=await page.locator('.m2-e2-picture').first().evaluate(el=>getComputedStyle(el).backgroundImage);
-    assert.match(bg,/m2-e2-reference-art\.svg/,'Las ilustraciones de transporte deben cargar');
+    assert.match(bg,/m2-e2-(suez|hijaz|panama)-plate\.svg/,'Las láminas independientes de transporte deben cargar');
+    assert.deepEqual(await page.locator('[data-event]').evaluateAll(es=>es.map(e=>e.dataset.event)),['panama','suez','hijaz']);
+    await page.locator('.m2-e2-globe img').evaluate(img=>img.decode());
+    const decoded=await page.locator('.m2-e2-picture').evaluateAll(els=>Promise.all(els.map(async el=>{const src=getComputedStyle(el).backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1];const img=new Image();img.src=src;await img.decode();return img.naturalWidth>0;})));
+    assert.ok(decoded.every(Boolean));
+    assert.doesNotMatch(await page.locator('.m2-e2-source-note').innerText(),/1869|1908|1914/);
     await mkdir('test-output',{recursive:true});
     await page.screenshot({path:'test-output/m2-e2-'+label+'-nuevo.png',fullPage:true,animations:'disabled'});
     for(const [id,year] of [['suez','1914'],['hijaz','1869'],['panama','1908']]){

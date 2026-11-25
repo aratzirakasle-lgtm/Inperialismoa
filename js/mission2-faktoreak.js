@@ -420,7 +420,7 @@ function renderTimeline(){
  const years=['1869','1908','1914'];
  const placed=years.filter(year=>Boolean(state[year])).length;
  const taken=new Set(years.map(year=>state[year]).filter(Boolean));
- const cards=infrastructure.map(item=>
+ const cards=['panama','suez','hijaz'].map(id=>infrastructure.find(item=>item.id===id)).map(item=>
   `<button type="button" class="m2-tile m2-e2-piece ${taken.has(item.id)?'m2-used':''} ${selected===item.id?'m2-e2-piece-active':''}" draggable="true" data-event="${esc(item.id)}" aria-pressed="${selected===item.id?'true':'false'}">
    <span class="m2-e2-picture m2-e2-art-${esc(item.id)}" aria-hidden="true"></span>
    <span class="m2-e2-piece-info"><strong>${esc(item.label)}</strong><small>Hartu pieza · Kokatu urtean</small></span><span class="m2-e2-grip" aria-hidden="true">⋮</span></button>`
@@ -447,16 +447,7 @@ function renderTimeline(){
    <div class="m2-e2-clock-dial">
     <div class="m2-e2-inner-ring"></div>
     <div class="m2-e2-globe" aria-hidden="true">
-      <svg viewBox="0 0 400 400" focusable="false"><g fill="none" stroke="#c8b989" stroke-width="1.1" opacity=".48">
-      <path d="M10 125H390M2 188H398M3 247H397M30 307H370M200 0V400M130 5Q165 200 130 395M270 5Q235 200 270 395M65 45Q145 200 65 350M335 45Q255 200 335 350"/>
-      </g><g fill="#d9c69c" stroke="#ae9870" stroke-width="2.3" stroke-linejoin="round">
-      <path d="M60 70L101 56 132 75 128 99 148 114 137 139 113 146 107 177 88 179 91 202 72 202 57 185 45 164 30 154 29 126 45 111Z"/>
-      <path d="M124 206L156 214 171 245 166 275 150 293 153 323 131 350 113 339 109 315 99 286 93 258 111 238Z"/>
-      <path d="M193 86L223 66 249 68 270 62 298 79 327 91 359 105 362 127 337 138 322 164 300 167 289 189 262 179 252 151 229 156 220 136 202 130Z"/>
-      <path d="M211 155L236 168 254 189 277 198 287 229 276 254 264 282 246 318 221 320 199 293 194 260 180 248 190 204Z"/>
-      <path d="M295 272L324 268 348 280 347 302 321 315 297 298Z"/>
-      <path d="M162 80L180 71 187 87 177 100 161 98Z"/>
-      </g><circle cx="201" cy="201" r="13" fill="#d6a861" stroke="#815322" stroke-width="5"/></svg>
+      <img src="./assets/atlas-mapa-cartografico.svg" width="720" height="360" alt="" draggable="false">
     </div>
     ${slots}
    </div>
@@ -468,12 +459,12 @@ function renderTimeline(){
   <h3>✦ &nbsp; KAPITALAREN INBERTSIOEN LIBURUA &nbsp; ✦</h3>
   <div class="m2-e2-ledger-pages">
    <fieldset class="m2-e2-ledger-page m2-e2-ledger-finance"><legend><b>1</b> Nola erabili zen metatutako kapitala?</legend>
-    <div class="m2-e2-book-illustration m2-e2-finance-illustration" role="img" aria-label="XIX. mendeko bankaria, diru-zakua eta kreditu-agiriak"></div>
-    <div class="m2-e2-options">${choices('funding',[['credits','Kredituak emanez','coins'],['salaries','Soldatak soilik ordainduz','bag'],['donations','Opari pribatuak eginez','gift']])}</div>
+    <div class="m2-e2-book-illustration m2-e2-finance-illustration" role="img" aria-label="XIX. mendeko inbertsioen liburuko apaindura"></div>
+    <div class="m2-e2-options">${choices('funding',[['salaries','Soldatak soilik ordainduz','bag'],['credits','Kredituak emanez','coins'],['donations','Opari pribatuak eginez','gift']])}</div>
    </fieldset>
    <fieldset class="m2-e2-ledger-page m2-e2-ledger-works"><legend><b>2</b> Zer lan mota finantzatu ziren?</legend>
-    <div class="m2-e2-book-illustration m2-e2-works-illustration" role="img" aria-label="Trenbidea, ubideak, portua eta merkataritza-ontziak"></div>
-    <div class="m2-e2-options">${choices('works',[['rail_ports_canals','Trenbideak, portuak eta kanalak','train'],['palaces_only','Jauregiak soilik','palace'],['schools_only','Eskolak soilik','school']])}</div>
+    <div class="m2-e2-book-illustration m2-e2-works-illustration" role="img" aria-label="XIX. mendeko inbertsioen liburuko apaindura"></div>
+    <div class="m2-e2-options">${choices('works',[['schools_only','Eskolak soilik','school'],['palaces_only','Jauregiak soilik','palace'],['rail_ports_canals','Trenbideak, portuak eta kanalak','train']])}</div>
    </fieldset>
   </div>
   <p class="m2-e2-source-note">Iturria: 7.–9. diapositibak. Aztertu dokumentazioa eta osatu kronologia eta inbertsioen liburua.</p>

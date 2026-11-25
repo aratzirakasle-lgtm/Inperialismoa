@@ -1,0 +1,67 @@
+/* Kapitalaren ibilbideak · latón, cartografía y papel.
+   Decoración sin respuestas ni señales de acierto. */
+#m2-app.m2-capital-active .m2-e2-scene:after{
+ background:linear-gradient(180deg,#38200e66,transparent 45%,#25120875),url('./atlas-madera-referencia-hd.webp') center/480px 100% repeat-x,#754626;
+}
+#m2-app.m2-capital-active .m2-e2-clock-dial{
+ background:radial-gradient(ellipse at 45% 29%,#8b6034 0%,#48291a 54%,#1f120d 80%);
+ border-color:#c5a064;
+ box-shadow:inset 0 0 0 2px #f9dba0,inset 0 0 0 7px #7c4b23,inset 0 0 0 10px #b68b4b,inset 0 0 32px #0a0604b8,0 8px 18px #090805c0;
+}
+#m2-app.m2-capital-active .m2-e2-clock-dial:before{
+ border:2px double #d4a95f;
+ box-shadow:inset 0 0 0 3px #5b3418,0 0 0 2px #4d2d17,0 0 0 5px #d0a15a7d;
+}
+#m2-app.m2-capital-active .m2-e2-inner-ring{
+ background:repeating-conic-gradient(from -1deg,#e5b974 0deg 1deg,transparent 1deg 6deg);
+ mask-image:radial-gradient(ellipse,transparent 68%,#000 69% 76%,transparent 77%);
+ opacity:.72;
+}
+#m2-app.m2-capital-active .m2-e2-globe{
+ background:radial-gradient(ellipse at 36% 23%,#f6e4bc,#b18c56);
+ border-color:#d6aa61;
+ box-shadow:inset 0 0 15px #35200f,0 3px 10px #000b,0 0 0 2px #a2783f,0 0 0 4px #edd29a;
+ display:flex;align-items:center;justify-content:center;
+}
+#m2-app.m2-capital-active .m2-e2-globe img{
+ display:block;width:100%;height:auto;object-fit:contain;filter:saturate(1.16) contrast(1.06);
+}
+#m2-app.m2-capital-active .m2-e2-globe:before{
+ background:radial-gradient(ellipse at 35% 22%,#fff2cb35,transparent 56%,#40250c70);
+ box-shadow:inset 0 0 14px #4b331a8c;
+}
+#m2-app.m2-capital-active .m2-e2-art-suez{background-image:url('./m2-e2-suez-plate.svg')}
+#m2-app.m2-capital-active .m2-e2-art-hijaz{background-image:url('./m2-e2-hijaz-plate.svg')}
+#m2-app.m2-capital-active .m2-e2-art-panama{background-image:url('./m2-e2-panama-plate.svg')}
+#m2-app.m2-capital-active .m2-e2-picture,#m2-app.m2-capital-active .m2-e2-small-picture{
+ background-size:contain;background-position:center!important;background-repeat:no-repeat;
+ filter:saturate(1.17) contrast(1.05);background-color:#ead8b4;
+}
+#m2-app.m2-capital-active .m2-e2-intro,#m2-app.m2-capital-active .m2-e2-piece{
+ background-image:linear-gradient(120deg,#fff5de90,#e6bf8560),url('./atlas-papel-referencia.svg');
+ background-size:100% 100%;
+}
+#m2-app.m2-capital-active .m2-e2-piece.m2-e2-piece-active{
+ outline:2px solid #ffe09a!important;outline-offset:2px;
+ box-shadow:0 0 12px #e2b76380!important;
+}
+#m2-app.m2-capital-active .m2-e2-ledger{
+ background-image:linear-gradient(90deg,#94683c50,transparent 5% 47%,#70441e35 49.5%,#ffefd080 50.5%,transparent 54% 95%,#98673d45),url('./atlas-papel-referencia.svg');
+ background-size:100% 100%;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration{
+ height:clamp(32px,4vw,52px);background-image:linear-gradient(90deg,transparent,#b8965f24,transparent),url('./atlas-papel-referencia.svg');
+ background-position:center;background-size:100% 100%;border:0;box-shadow:none;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration:after{
+ content:'❧  ──────────  ✦  ──────────  ❧';display:grid;place-items:center;height:100%;color:#9b7741;font-size:clamp(12px,1.3vw,19px);
+}
+#m2-app.m2-capital-active .m2-e2-option-copy{font-size:clamp(12px,.95vw,15px);line-height:1.3}
+#m2-app.m2-capital-active .m2-e2-option{min-height:48px}
+#m2-app.m2-capital-active .m2-e2-source-note{font-size:12px;color:#53391e}
+@media(max-width:620px){
+ #m2-app.m2-capital-active .m2-e2-options{grid-template-columns:1fr}
+ #m2-app.m2-capital-active .m2-e2-option{flex-direction:row;justify-content:flex-start;padding:8px;min-height:44px}
+ #m2-app.m2-capital-active .m2-e2-option-copy{text-align:left;font-size:13px}
+ #m2-app.m2-capital-active .m2-e2-source-note{font-size:11px}
+}
