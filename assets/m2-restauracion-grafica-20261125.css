@@ -236,16 +236,3 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app .m2-room-index-item,#m2-app .m2-controls .m2-button{transition:none!important}
 }
-
-/* Exercise 3: the old 16:9 composition absolutely positioned a tiny action
-   strip at the bottom. Keep the menu and controls in normal flow so they
-   cannot cover luggage buttons, even as the suitcases or feedback grow. */
-#m2-app.m2-atlas-active .m2-atlas-screen{aspect-ratio:auto;height:auto;min-height:0;overflow:visible;padding-bottom:8px}
-#m2-app.m2-atlas-active .m2-room-index{position:static;inset:auto}
-#m2-app.m2-atlas-active .m2-atlas-final-controls{position:relative;inset:auto;z-index:auto;clear:both;height:auto;min-height:0;margin:12px 0 0!important;padding:0!important}
-#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-controls{position:static;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;height:auto;min-height:0;margin:0;padding:12px;overflow:visible}
-#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-feedback{flex:1 1 240px;font-size:13px;line-height:1.4;white-space:normal}
-#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-button{height:auto;min-height:44px;padding:8px 14px;font-size:13px;line-height:1.25;white-space:normal;touch-action:manipulation}
-#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-preview-states{flex:1 1 100%}
-@media(max-width:640px){#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons{width:100%}#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-controls{flex-direction:column;align-items:stretch}#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-feedback{flex:auto}}

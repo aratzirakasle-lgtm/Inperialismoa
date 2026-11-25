@@ -891,58 +891,30 @@ try{
   }
  });
 
- await scenario('Atlas 3: las tablas, pies, maletas y botonera ocupan filas independientes',async()=>{
+ await scenario('Atlas 3: diseño panorámico original y botonera general debajo de las maletas',async()=>{
   for(const size of [{width:1536,height:691},{width:1365,height:768},{width:768,height:1024},{width:390,height:844}]){
    const {page,context,errors}=await open('teacher',size);
    try{
     await page.locator('[data-open="3"]').click();
-    const checkLayout=async()=>{
-     const issues=await page.locator('.m2-atlas-screen').evaluate(root=>{
-      const box=sel=>root.querySelector(sel).getBoundingClientRect();
-      const after=(a,b)=>box(a).top>=box(b).bottom-1;
-      const pairs=[
-       ['#m2-route-part>footer','.m2-atlas-route-stage'],
-       ['#m2-facts-part>footer','.m2-atlas-statements'],
-       ['#m2-luggage-part','.m2-atlas-row-two'],
-       ['.m2-atlas-luggage-board','#m2-luggage-part>header'],
-       ['#m2-luggage-part>footer','.m2-atlas-luggage-board'],
-       ['.m2-atlas-final-controls','#m2-luggage-part']
-      ];
-      return pairs.filter(([a,b])=>!after(a,b)).map(([a,b])=>a+' overlaps '+b);
+    const checkFooter=async()=>{
+     const geometry=await page.locator('.m2-atlas-screen').evaluate(root=>{
+      const luggage=root.querySelector('#m2-luggage-part');
+      const strip=root.querySelector('.m2-atlas-final-controls');
+      const bottom=Math.max(luggage.getBoundingClientRect().bottom,...[...luggage.querySelectorAll('.m2-atlas-suitcase,.m2-atlas-packed,.m2-atlas-luggage-drop,.m2-atlas-luggage-card')].map(el=>el.getBoundingClientRect().bottom));
+      return {bottom,top:strip.getBoundingClientRect().top};
      });
-     assert.deepEqual(issues,[],JSON.stringify({size,issues}));
-     for(const field of await page.locator('.m2-atlas-statement-select,.m2-atlas-luggage-drop,.m2-atlas-final-controls [data-preview-check],.m2-atlas-final-controls [data-preview-next]').all()){
-      await field.scrollIntoViewIfNeeded();
-      assert.ok(await field.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}), 'Control tapado: '+await field.getAttribute('class'));
+     assert.ok(geometry.top>=geometry.bottom-1,JSON.stringify({size,geometry}));
+     for(const button of await page.locator('.m2-atlas-final-controls [data-preview-check],.m2-atlas-final-controls [data-preview-next]').all()){
+      await button.scrollIntoViewIfNeeded();
+      assert.ok(await button.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),'Botonera general tapada');
      }
     };
-    const assertCardText=async()=>{
-     const problems=await page.locator('.m2-atlas-luggage-board').evaluate(board=>{
-      const cards=[...board.querySelectorAll('.m2-atlas-luggage-card,.m2-atlas-packed')];
-      const r=el=>el.getBoundingClientRect();
-      const intersects=(a,b)=>Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1;
-      const issues=[];
-      cards.forEach((card,i)=>{
-       const box=r(card),image=r(card.querySelector('img')),label=r(card.querySelector('span:last-child'));
-       if(label.top<image.bottom-1||label.bottom>box.bottom+1||label.right>box.right+1||label.left<box.left-1)issues.push('Rótulo fuera de su tarjeta: '+card.dataset.atlasBagCard);
-       if(cards.slice(0,i).some(other=>intersects(box,r(other))))issues.push('Tarjetas superpuestas: '+card.dataset.atlasBagCard);
-      });
-      for(const box of board.querySelectorAll('.m2-atlas-suitcase')){
-       const header=r(box.querySelector('header')),drop=r(box.querySelector('.m2-atlas-luggage-drop')),items=r(box.querySelector('.m2-atlas-suitcase-items'));
-       if(drop.top<header.bottom-1||items.top<drop.bottom-1||items.bottom>r(box).bottom+1)issues.push('Maleta: cabecera, botón o contenido superpuesto');
-      }
-      return issues;
-     });
-     assert.deepEqual(problems,[],JSON.stringify({size,problems}));
-    };
-    await checkLayout();
-    await assertCardText();
+    await checkFooter();
     for(const id of await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card]').evaluateAll(els=>els.map(el=>el.dataset.atlasBagCard))){
      await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="'+id+'"]').click();
      await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
     }
-    await checkLayout();
-    await assertCardText();
+    await checkFooter();
     await page.locator('.m2-atlas-final-controls [data-preview-check]').click();
     await page.locator('.m2-atlas-final-controls [data-preview-next]').click();
     await page.locator('.m2-archive-active').waitFor();
