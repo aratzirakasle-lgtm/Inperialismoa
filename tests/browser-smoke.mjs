@@ -535,7 +535,8 @@ try{
      await waitVisible(page,'.c-museo-stage');
      assert.equal(await page.locator('#app-shell .topbar').isVisible(),false,
        'No se repiten dos cabeceras en la pantalla inmersiva');
-     assert.equal(await page.locator('.c-museo-toolbar-team').isVisible(),true);
+     assert.equal(await page.locator('.c-museo-top-team').isVisible(),true);
+     assert.equal(await page.locator('.c-museo-toolbar-actions .m1-class-widget').count(),1);
      assert.equal(await page.locator('.c-museo-banner-dim').count(),0,
        'No deben usarse parches rectangulares sobre el estandarte');
      assert.equal(await page.locator('.c-museo-second-dim').count(),0);
@@ -556,9 +557,14 @@ try{
        const state=await page.locator('.c-museo-m'+id).evaluate(el=>({bg:getComputedStyle(el).backgroundColor,shade:Number(getComputedStyle(el,'::before').opacity)}));
        assert.equal(state.bg,'rgba(0, 0, 0, 0)');assert.ok(state.shade>0&&state.shade<1);
      }
-     await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
+     await page.mouse.move(1,1);
+     assert.equal(await page.locator('.c-museo-m1').evaluate(el=>Number(getComputedStyle(el,'::before').opacity)),0,'Sin halo en reposo');
+     assert.equal(await page.locator('.c-museo-mission-lettering').count(),4);
      await page.locator('.c-museo-m1').hover();
+     await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('.c-museo-m1'),'::before').opacity)>.72);
+     await page.mouse.move(1,1);
      await page.locator('.c-museo-m1').focus();
+     assert.equal(await page.locator('.c-museo-m1').evaluate(el=>Number(getComputedStyle(el,'::before').opacity)),0,'El foco mantiene el contorno sin halo');
      assert.equal(await page.locator('.c-museo-m1').evaluate(el=>document.activeElement===el),true);
      assert.match(await page.locator('.c-museo-m1').getAttribute('aria-label'),/Eskuragarri/);
      assert.equal(await page.locator('.c-museo-toolbar [data-c-logout]').count(),1);

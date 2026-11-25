@@ -20,7 +20,6 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  const nextLabel=nextId?nextId+'. Misioa:\n'+display[nextId].title+(nextId===2&&!mission2Open?'\n(Blokeatuta)':''):"3. Misioa:\nInperioen banaketa\n(Prestatzen)";
  const rawName=String(teamName||"Taldea").trim().slice(0,80)||"Taldea";
  const safeName=esc(rawName);
- const shortName=esc(rawName.length>9?rawName.slice(0,8)+'…':rawName);
  const nameSize=rawName.length>18?"smaller":rawName.length>12?"small":"";
  // Jatorrizko irudian "Atlas · 1 / 4 · 25 %" ageri da.
  // Egoera berdina denean, ez dugu papera alferrik estaltzen.
@@ -53,6 +52,10 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  const lock='<svg viewBox="0 0 24 26" fill="none" aria-hidden="true" focusable="false"><path d="M6 11V7a6 6 0 0 1 12 0v4" stroke="currentColor" stroke-width="2.5"/><rect x="3" y="10" width="18" height="14" rx="2.5" fill="currentColor"/><path d="M12 15v4" stroke="#d4b170" stroke-width="2" stroke-linecap="round"/></svg>';
  const inscription=(id,label,active)=>'<span class="c-museo-inscription c-museo-inscription-'+id+(active?' is-next':' is-locked')+'" aria-hidden="true">'+label+'</span>';
  const inscriptions=(complete1?'':inscription(1,'HASI',true))+(complete2?'':inscription(2,activeId===2?'HASI':lock+'<span>BLOKEATUTA</span>',activeId===2));
+ const lettering=[1,2,3,4].map(id=>{
+  const titles={1:'Aurrekarriak\neta oinarriak',2:'Inperialismoaren\nfaktoreak',3:'Inperioen\nbanaketa',4:'Inperioen\nItzalak'};
+  return '<div class="c-museo-mission-lettering c-museo-mission-lettering-'+id+'" aria-hidden="true"><span class="c-museo-mission-heading">'+id+'. MISIOA</span><span class="c-museo-mission-title">'+esc(titles[id])+'</span></div>';
+ }).join('');
  const mobileMissions=[1,2,3,4].map(id=>{
   const doneMission=done.has(id);
   const published=id===1||id===2;
@@ -60,8 +63,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
   const state=!published?'Prestatzen':doneMission?'Osatuta':id===activeId?'HASI':'Blokeatuta';
   return '<button type="button" class="c-museo-mobile-mission'+(id===activeId?' is-next':'')+'" '+(published&&unlocked?'data-mission="'+id+'"':'disabled')+'><span class="c-museo-mobile-index">'+String(id).padStart(2,'0')+'</span><span class="c-museo-mobile-info"><strong>'+esc(display[id].title)+'</strong><small>'+state+'</small></span><span class="c-museo-mobile-mark" aria-hidden="true">'+(doneMission?'✓':!published||!unlocked?'🔒':'→')+'</span></button>';
  }).join('');
- return '<div class="c-museo-home" lang="eu">'+
- '<div class="c-museo-toolbar"><span class="c-museo-toolbar-brand">✦ MUSEO DIGITALA <span>· 4 MISIO</span></span>'+
+ const toolbar='<div class="c-museo-toolbar"><span class="c-museo-toolbar-brand">✦ MUSEO DIGITALA <span>· 4 MISIO</span></span>'+
  '<span class="c-museo-toolbar-team" title="'+safeName+'">Taldea: <strong>'+safeName+'</strong></span>'+
  '<div class="c-museo-toolbar-actions">'+
  (preview?'<span class="c-museo-preview-tag">IRAKASLEAREN AURREBISTA · EZ DA GORDETZEN</span>':'')+
@@ -69,12 +71,13 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  '<button type="button" data-c-toggle="1" class="c-museo-alternative">Aurreko ikuspegia</button>'+
  (preview?'<button type="button" data-view="teacher" class="c-museo-return">← Irakaslearen panela</button>':'')+
  '<button type="button" data-c-logout="1" class="c-museo-exit">Irten ↗</button>'+
- '</div></div>'+
+ '</div></div>';
+ return '<div class="c-museo-home" lang="eu">'+
  '<div class="c-museo-stage" aria-label="Ongi etorri, ikertzaileak. Inperialismoaren garaia. Lau misioko museoa">'+
  '<img class="c-museo-picture" src="./assets/museo-c-vestibulo-original.png" width="1672" height="941" alt="" aria-hidden="true" draggable="false" loading="eager" fetchpriority="high">'+
- restoration1+restoration2+inscriptions+
+ restoration1+restoration2+inscriptions+lettering+
  '<div class="c-museo-real-data">'+
- '<span class="c-museo-top-team" title="'+safeName+'">Taldea: '+shortName+'</span>'+
+ '<span class="c-museo-top-team '+nameSize+'" title="'+safeName+'">Taldea: '+safeName+'</span>'+
  '<span class="c-museo-book-name '+nameSize+'" title="'+safeName+'">'+safeName+'</span>'+ 
  '<span class="c-museo-book-progress">'+count+' / 4</span>'+ 
  '<span class="c-museo-book-percent">'+pct+' %</span>'+ 
@@ -83,7 +86,7 @@ export function renderVestibuloC({teamName,completedIds=[],preview=false,mission
  // Zigilu organikoak berak estaltzen ditu erreferentziako markak.
 
  '</div>'+
- '<div class="c-museo-hotspots">'+zones+'</div></div>'+
+ '<div class="c-museo-hotspots">'+zones+'</div></div>'+toolbar+
  '<section class="c-museo-mobile-guide" aria-label="Misioen nabigazioa"><h1 class="c-museo-mobile-welcome">Ongi etorri, ikertzaileak</h1><div class="c-museo-mobile-summary"><button type="button" class="c-museo-mobile-atlas" data-c-globe="1" aria-haspopup="dialog">✧ Ikertzailearen atlasa · Pasaportea</button><h2>Taldearen espedientea</h2><strong>'+safeName+'</strong><p>'+count+' / 4 misio osatuta · '+pct+' %</p><div class="c-museo-mobile-progress" role="img" aria-label="'+pct+' % aurrerapena"><span style="width:'+pct+'%"></span></div><p><b>Hurrengo erronka:</b> '+esc(nextLabel).replace(/\n/g,' ')+'</p></div><h2>Misioen aretoak</h2><div class="c-museo-mobile-missions">'+mobileMissions+'</div></section>'+ 
  '<p class="c-museo-footer">Zuen taldearen benetako aurrerapena azaltzen da. 3. eta 4. misioetako aretoak prestatzen ari gara.</p>'+
  '</div>';
