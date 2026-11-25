@@ -199,7 +199,7 @@ function openSource(id){
  dialog.classList.add('m2-archive-reading-dialog');
  dialog.querySelectorAll('input[name="m2-dialog-answer"]').forEach(input=>input.addEventListener('change',()=>{
   if(!canEdit()||active!==4)return;
-  taskState(4)[id]=input.value;queueMission2({[id]:input.value},4);
+  taskState(4)[id]=input.value;queueMission2({[id]:input.value},4);setFeedback('','');
   const original=app.querySelector('input[data-archive="'+id+'"][value="'+input.value+'"]');if(original)original.checked=true;
   const dossier=app.querySelector('[data-source="'+id+'"]');if(dossier)dossier.dataset.answered='true';
   const badge=$('[data-archive-progress]');if(badge)badge.textContent=archives.filter(a=>Boolean(taskState(4)[a.id])).length+' / 5';
@@ -235,7 +235,13 @@ function openSource(id){
  redraw();
 }
 function openMap(kind){
- if(kind==='migration')museumDialog('Munduko atlasa','<img class="m2-dialog-map" src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa historikoa">');
+ if(kind==='migration'){
+  museumDialog('Munduko atlasa','<div class="m2-map-tools" aria-label="Maparen kontrolak"><button type="button" data-world-scale="out" aria-label="Txikitu">−</button><span data-world-percent role="status">100 %</span><button type="button" data-world-scale="in" aria-label="Handitu">+</button><button type="button" data-world-scale="reset">Hasierako ikuspegia</button></div><div class="m2-world-viewport" tabindex="0" aria-label="Munduko mapa; mugitzeko, erabili desplazamendu-barrak"><img class="m2-dialog-map m2-world-zoom" src="./assets/m2-migration-map-clean.svg" alt="Munduko mapa orientagarria, muga historikorik gabe" draggable="false"></div><p class="m2-map-help">Handitu eta mugitu mapa. Ez da erantzunik egiaztatzen.</p>');
+  const dialog=document.querySelector('#m2-reading-dialog'),viewport=dialog.querySelector('.m2-world-viewport'),image=dialog.querySelector('.m2-world-zoom');let scale=1;
+  const redraw=()=>{image.style.width=scale*100+'%';dialog.querySelector('[data-world-percent]').textContent=Math.round(scale*100)+' %';dialog.querySelector('[data-world-scale="out"]').disabled=scale===1;dialog.querySelector('[data-world-scale="in"]').disabled=scale===3;if(scale===1){viewport.scrollLeft=0;viewport.scrollTop=0}};
+  dialog.querySelector('.m2-map-tools').addEventListener('click',event=>{const action=event.target.closest('[data-world-scale]')?.dataset.worldScale;if(!action)return;scale=action==='reset'?1:Math.max(1,Math.min(3,scale+(action==='in'?.5:-.5)));redraw()});
+  redraw();
+ }
  else if(kind==='expedition'){
   museumDialog('Esplorazioen atlasa','<div class="m2-map-tools" aria-label="Maparen kontrolak"><button type="button" data-map-action="out" aria-label="Txikitu">−</button><span data-map-scale role="status">100 %</span><button type="button" data-map-action="in" aria-label="Handitu">+</button><button type="button" data-map-action="left" aria-label="Ezkerrera">←</button><button type="button" data-map-action="up" aria-label="Gora">↑</button><button type="button" data-map-action="down" aria-label="Behera">↓</button><button type="button" data-map-action="right" aria-label="Eskuinera">→</button><button type="button" data-map-action="reset">Hasierako ikuspegia</button></div><div class="m2-dialog-expedition">'+expeditionMap().replaceAll('id="m2-','id="m2-zoom-').replaceAll('url(#m2-','url(#m2-zoom-')+'</div><p class="m2-map-help">Handitu mapa eta mugitu norabide-botoiekin edo arrastatuz. Ez da erantzunik egiaztatzen.</p>');
   const dialog=document.querySelector('#m2-reading-dialog'),svg=dialog.querySelector('svg');
@@ -810,9 +816,50 @@ function renderEnd(){
  '<footer class="m2-ceremony-footer"><div>'+(teacher?'<p><strong>Irakaslearen aurrebista.</strong> Ez da saiakerarik edo osatzerik gorde.</p>':'<p><strong>3. misioa prestatzen ari gara.</strong> Taldearen aurrerapena zerbitzarian gordeta dago.</p>')+'</div>'+
  '<a class="m2-button m2-ceremony-return" href="./index.html'+(teacher?'?teacherpanel=1':'')+'">Museora itzuli →</a></footer></div></section>';
 }
+// Patch only the mutable areas in the current room. The museum scenery, maps,
+ // wallet and navigation retain their existing DOM nodes during local edits.
+const roomPatchSelectors={
+ 1:['.m2-case-well','.m2-museum-desktop-top','.m2-museum-cards'],
+ 2:['.m2-e2-pieces','[data-year]','.m2-e2-dial-progress','.m2-e2-return-slot','.m2-e2-ledger'],
+ 3:['.m2-atlas-total','.m2-room-index','.m2-atlas-pop-list','.m2-atlas-top-question fieldset','.m2-atlas-top-check','.m2-atlas-route-labels','.m2-atlas-route-lines','.m2-atlas-pin','.m2-atlas-route-activity > footer','.m2-atlas-statements','.m2-atlas-facts-activity > footer','.m2-atlas-luggage-available','.m2-atlas-suitcase-items','.m2-atlas-luggage-activity > footer'],
+ 4:['[data-source]','.m2-archive-progress'],
+ 5:['.m2-atlas-route-ledger','.m2-expedition-progress','.m2-room-index','.m2-expedition-panel']
+};
+const focusAttributes=['id','data-card','data-event','data-year','data-atlas-route','data-atlas-target','data-atlas-bag-card','data-field','data-archive','data-multi','data-expedition-field','data-room-jump','data-source-zoom','data-return-card','data-year-return','data-route-return','data-bag-return','data-placement-undo','data-cabinet-undo','data-check','data-reset','data-preview-state'];
+function rememberRoomFocus(){
+ const node=document.activeElement;
+ if(!node||!app.contains(node))return null;
+ const attrs=focusAttributes.concat(['data-value','data-expedition-value']).filter(name=>node.hasAttribute(name)).map(name=>[name,node.getAttribute(name)]);
+ return attrs.length?{node,attrs,tag:node.tagName,type:node.type,value:node.type==='radio'?node.value:null}:null;
+}
+function restoreRoomFocus(saved){
+ if(!saved||saved.node.isConnected)return;
+ const node=[...app.querySelectorAll('['+saved.attrs[0][0]+']')].find(el=>el.tagName===saved.tag&&saved.attrs.every(([name,value])=>el.getAttribute(name)===value)&&(saved.value===null||el.value===saved.value)&&!el.disabled&&!el.hidden);
+ node?.focus({preventScroll:true});
+}
+function paintRoom(markup){
+ const mode=[active,teacher,teacherEnding,readOnly(),submitting,[...completions].sort().join(',')].join(':');
+ const same=mode===lastPaintKey&&!teacherEnding;
+ const saved=same?rememberRoomFocus():null;
+ if(!same){app.innerHTML=markup;lastPaintKey=mode;return}
+ const template=document.createElement('template');template.innerHTML=markup;
+ const pairs=[];
+ for(const selector of [...roomPatchSelectors[active],'.m2-controls']){
+  const current=[...app.querySelectorAll(selector)],next=[...template.content.querySelectorAll(selector)];
+  if(current.length!==next.length||!current.length){app.innerHTML=markup;restoreRoomFocus(saved);return}
+  for(let i=0;i<current.length;i++)pairs.push([current[i],next[i]]);
+ }
+ for(const [current,next] of pairs)if(current.outerHTML!==next.outerHTML)current.replaceWith(next.cloneNode(true));
+ for(const selector of ['.m2-museum-interaction','.m2-e2-scene']){
+  const current=app.querySelector(selector),next=template.content.querySelector(selector);
+  if(current&&next)current.className=next.className;
+ }
+ restoreRoomFocus(saved);
+}
 function render(){
  if(releaseClosed)return;
  if(teacherEnding&&!teacher&&completions.size!==5)teacherEnding=false;
+ if(readOnly()){selected=null;atlasSelectedRoute=null;atlasSelectedLuggage=null;}
  remoteRenderPending=false;clearTimeout(remoteRenderTimer);remoteRenderTimer=null;
  animateRoomArrival(teacherEnding?'amaiera':String(active));
  const firstRoom=active===1&&!teacherEnding;
@@ -825,17 +872,17 @@ function render(){
  document.querySelector('.m2-page')?.classList.toggle('m2-first-active',firstRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-atlas-page',atlasRoom);
  document.querySelector('.m2-page')?.classList.toggle('m2-capital-page',active===2&&!teacherEnding);
- if(teacherEnding){app.innerHTML=renderEnd();return}
- if(atlasRoom){app.innerHTML=nav()+renderPopulation();freezeAnswers();return}
+ if(teacherEnding){paintRoom(renderEnd());return}
+ if(atlasRoom){paintRoom(nav()+renderPopulation());freezeAnswers();return}
  if(firstRoom){
-  app.innerHTML=nav()+museumHeader()+museumInstruction()+
+  paintRoom(nav()+museumHeader()+museumInstruction()+
     (teacher?'<p class="m2-museum-preview">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
-    renderClassification()+controls();freezeAnswers();
+    renderClassification()+controls());freezeAnswers();
   return;
  }
  const item=activity(active);
- app.innerHTML=nav()+hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
- intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls();freezeAnswers();
+ paintRoom(nav()+hero()+(teacher?'<p class="m2-chip">IRAKASLEAREN AURREBISTA · EZ DA DATURIK GORDEKO</p>':'')+
+ intro()+'<section class="m2-work" aria-label="'+esc(item.title)+'">'+renderExercise()+'</section>'+controls());freezeAnswers();
 }
 function getAnswers(){
  const state=taskState(active);
@@ -903,7 +950,7 @@ function assignYear(year){
  const state=taskState(2),before={...taskState(2)};
  const patch={};
  for(const y of ['1869','1908','1914'])if(state[y]===selected){delete state[y];patch[y]=null}
- state[year]=selected;patch[year]=selected;recordUndo(before,patch);queueMission2(patch,2);selected=null;render();
+ state[year]=selected;patch[year]=selected;recordUndo(before,patch);queueMission2(patch,2);selected=null;feedback='';feedbackState='';render();
  $('[data-year="'+year+'"]')?.focus({preventScroll:true});animatePlacement('[data-year="'+year+'"]');
  const dial=$('.m2-e2-globe');if(!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)dial?.animate?.([{transform:'rotate(-3deg)'},{transform:'rotate(2deg)'},{transform:'rotate(0deg)'}],{duration:460,easing:'ease-out'});
 }
@@ -913,7 +960,7 @@ function toggleMulti(group,value){
  if(!['africa','asia'].includes(group)||!(group==='africa'?riverOptions:asiaOptions).some(([id])=>id===value))return;
  const list=new Set(state.multi[group]||[]),limit=group==='africa'?4:3;
  if(list.has(value))list.delete(value);else if(list.size<limit)list.add(value);else{setFeedback('Kendu hautatutako aukera bat beste bat hautatu aurretik.');return}
- state.multi[group]=[...list];queueMission2({multi:{[group]:state.multi[group]}},5);render();
+ state.multi[group]=[...list];queueMission2({multi:{[group]:state.multi[group]}},5);feedback='';feedbackState='';render();
  $('[data-multi="'+group+'"][data-value="'+value+'"]')?.focus({preventScroll:true});
 }
 
@@ -943,14 +990,6 @@ function atlasReturnBag(){
  if(!canEdit()||active!==3||!atlasSuitcase.some(c=>c[0]===atlasSelectedLuggage))return;
  const item=atlasSelectedLuggage,key='bag_'+item,before={...taskState(3)};delete taskState(3)[key];recordUndo(before,{[key]:null});queueMission2({[key]:null},3);
  atlasSelectedLuggage=null;render();$('[data-atlas-bag-card="'+item+'"]')?.focus({preventScroll:true});
-}
-function atlasPartCheck(part){
- const state=taskState(3);
- const keys=part===1?['1850','1870','1900','migration','missionaries']:
-  part===2?['route_africa','route_asia','route_oceania']:
-  part===3?atlasStatements.map(item=>item[0]):atlasSuitcase.map(item=>'bag_'+item[0]);
- const ready=keys.every(key=>!!state[key]);
- setFeedback(ready?'Atala beteta dago; ez da oraindik zuzendu. Erantzun guztiak amaieran egiaztatuko dira.':'Bete atal honetako erantzun guztiak.');
 }
 app.addEventListener('click',event=>{
  if(submitting||releaseClosed)return;
@@ -989,7 +1028,7 @@ app.addEventListener('click',event=>{
   atlasSelectedRoute=null;render();return;
  }
  if(active===3&&elem.hasAttribute('data-atlas-bag-zone'))return atlasPack(elem.dataset.atlasBagZone);
- if(active===3&&elem.hasAttribute('data-atlas-stage'))return atlasPartCheck(Number(elem.dataset.atlasStage));
+ // Section status is informational only; never submit a partial correction.
  if(elem.hasAttribute('data-card')){selected=selected===elem.dataset.card?null:elem.dataset.card;const chosen=elem.dataset.card;render();$('[data-card="'+chosen+'"]')?.focus({preventScroll:true});return}
  const zone=elem.closest('[data-zone]');if(zone&&active===1)return assignToCategory(zone.dataset.zone);
  if(active===3&&elem.closest('[data-atlas-bag-zone]'))return atlasPack(elem.closest('[data-atlas-bag-zone]').dataset.atlasBagZone);
@@ -1029,7 +1068,7 @@ app.addEventListener('click',event=>{
 });
 app.addEventListener('change',event=>{
  if(!canEdit())return;
- const target=event.target;
+ const target=event.target;if(target.matches('[data-field],[data-archive]'))setFeedback('','');
  if(target.matches('select[data-field],input[type="radio"][data-field]')){
   if(target.value)taskState(active)[target.dataset.field]=target.value;else delete taskState(active)[target.dataset.field];
   queueMission2({[target.dataset.field]:target.value||null});
@@ -1082,9 +1121,18 @@ app.addEventListener('dragover',event=>{
  }
  if(event.target.closest('[data-zone],[data-year],[data-unassign],[data-year-tray]'))event.preventDefault();
 });
+// Highlight every mechanically valid destination, without checking correctness.
+function isDropTarget(target,token){
+ if(!target||!canEdit())return false;
+ if(active===1)return causes.some(c=>c.id===token)&&!!target.closest('[data-zone],[data-unassign]');
+ if(active===2)return infrastructure.some(i=>i.id===token)&&!!target.closest('[data-year],[data-year-tray]');
+ if(active===3&&token?.startsWith('route:'))return !!target.closest('[data-atlas-target]');
+ if(active===3&&token?.startsWith('bag:'))return !!target.closest('[data-atlas-bag-zone],[data-atlas-bag-reset]');
+ return false;
+}
 function dropOn(target,moved){
  dragging=false;pointerEditing=false;
- if(!canEdit()||!target||!app.contains(target))return;
+ if(!canEdit()||!target||!app.contains(target)||!isDropTarget(target,moved))return;
  if(active===3){
   const pin=target.closest('[data-atlas-target]');
   const bag=target.closest('[data-atlas-bag-zone]');
@@ -1142,7 +1190,7 @@ window.addEventListener('pointermove',event=>{
  }
  d.ghost.style.left=event.clientX+'px';d.ghost.style.top=event.clientY+'px';
  const hit=document.elementFromPoint(event.clientX,event.clientY)?.closest(dropTargets);
- const target=hit&&app.contains(hit)?hit:null;
+ const target=hit&&app.contains(hit)&&isDropTarget(hit,d.token)?hit:null;
  if(target!==d.target){d.target?.classList.remove('m2-drop-highlight');target?.classList.add('m2-drop-highlight');d.target=target}
 },{passive:false});
 window.addEventListener('pointerup',event=>{
@@ -1151,7 +1199,7 @@ window.addEventListener('pointerup',event=>{
  clearTouch();
  if(!d.moving)return;
  event.preventDefault();suppressTouchClick=true;
- if(target)dropOn(target,d.token);
+ if(target&&isDropTarget(target,d.token))dropOn(target,d.token);
 });
 window.addEventListener('pointercancel',clearTouch);
 window.addEventListener('blur',clearTouch);
