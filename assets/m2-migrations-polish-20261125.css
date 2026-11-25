@@ -41,9 +41,43 @@
 /* Sala 3: ilustración histórica HD, sin modificar la cartografía interactiva. */
 #m2-app.m2-atlas-active .m2-atlas-main-map.m2-migration-hero>img{object-fit:cover!important;object-position:center center;filter:none!important}
 
-/* Exercise 3 only: the image, pins and SVG routes share one undistorted canvas. */
-#m2-app.m2-atlas-active .m2-atlas-route-map-hd{display:grid;place-items:center;container-type:size;background:#155668}
-#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas{position:relative;box-sizing:border-box;width:min(100%,177.577cqh);aspect-ratio:1671/941;max-width:100%;min-width:0}
-#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas>img{display:block;width:100%;height:100%;object-fit:contain!important;filter:none!important;pointer-events:none}
-#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-@supports not (width:1cqh){#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas{width:100%;height:100%;aspect-ratio:auto}#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas>img{object-fit:fill!important}}
+/* Exercise 3: fit the frame to the complete HD illustration, not vice versa.
+   The image, pins and traces share exactly the same coordinate rectangle. */
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-stage{
+ display:grid;grid-template-columns:minmax(0,33fr) minmax(0,67fr);
+ height:auto;min-height:0;max-height:none;align-items:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd{
+ display:block;container-type:normal;box-sizing:border-box;
+ width:100%;height:auto;min-height:0;max-height:none;align-self:start;
+ background:#155668;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas{
+ position:relative;box-sizing:border-box;width:100%;height:auto;
+ aspect-ratio:1671/941;max-width:100%;min-width:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-canvas>img{
+ position:absolute;inset:0;display:block;width:100%;height:100%;
+ object-fit:contain!important;filter:none!important;pointer-events:none;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-map-hd .m2-atlas-route-lines{
+ position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
+}
+/* The map can grow in height without colliding with the controls or luggage. */
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-activity{
+ height:auto;max-height:none;min-height:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-activity>footer{
+ position:relative;inset:auto;min-height:0;
+ margin:6px 0 0;padding:4px 10px 7px;flex-wrap:wrap;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-activity>footer .m2-atlas-check{margin:0}
+@media(min-width:1101px){
+ #m2-app.m2-atlas-active .m2-atlas-screen{aspect-ratio:auto}
+ #m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-activity{height:auto;min-height:18.43cqw}
+ #m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-activity>footer{margin:.45cqw 0 0;padding:.15cqw .5cqw .35cqw}
+}
+@media(max-width:620px){
+ #m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-route-stage{grid-template-columns:minmax(0,1fr)}
+ #m2-app.m2-atlas-active .m2-atlas-route-labels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+}
