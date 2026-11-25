@@ -2,7 +2,7 @@ import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-gu
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 /* Bi sistema, bi Europa · fase 2. El servidor guarda las soluciones y las comprobaciones. */
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261125-inline1";
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from "./mission1-navigation.js?v=20261125-eye1";
 import { ICONS } from "./bi-sistema-iconos.js?v=1";
 import { createBiSistemaShared } from "./bi-sistema-shared.js?v=20261124-guardado1";
 

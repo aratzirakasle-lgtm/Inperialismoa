@@ -2,7 +2,7 @@ import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-gu
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261124-guardado1';
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261125-inline1';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261125-eye1';
 
 import { renderMuseumPassport } from './museum-passport.js?v=20261124-atlas1';
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';

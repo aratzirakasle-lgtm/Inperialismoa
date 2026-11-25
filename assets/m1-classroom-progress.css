@@ -47,3 +47,11 @@
 /* Misma medalla y tablero del aula, sin modificar los ejercicios. */
 .m2-class-widget .m1-class-toggle{display:flex;align-items:center;gap:6px;padding:4px 15px 4px 7px;min-height:41px}
 .m2-class-trophy{width:32px;height:32px;flex:0 0 32px;filter:drop-shadow(0 0 3px #e3b45e66)}
+
+/* Insignias vectoriales de equipo: solo en los paneles desplegables. */
+.m1-class-identity{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.m1-class-identity .m1-class-name{flex:1;min-width:0}
+.m1-team-emblem{width:40px;height:40px;flex:0 0 40px;display:block;filter:drop-shadow(0 1px 1px #573b2840)}
+.m1-class-toggle .m1-progress-eye{width:26px;height:26px;vertical-align:middle;margin-right:5px}
+.m1-class-widget-inline .m1-class-toggle .m1-progress-eye{width:32px;height:32px;margin-right:0}
+@media(max-width:560px){.m1-class-identity{gap:4px}.m1-team-emblem{width:25px;height:25px;flex-basis:25px}.m1-class-widget-inline .m1-class-toggle .m1-progress-eye{width:28px;height:28px}}

@@ -2,7 +2,7 @@ import { paintSaveIndicator, SAVE_TEXT } from './save-indicator.js?v=20261124-gu
 import { startClassAccess } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission1DraftSync } from './mission1-draft-sync.js?v=20261124-guardado1';
-import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261125-inline1';
+import { mountExerciseNav, mountStudentExerciseNav, markMission1NavCompleted, addTeacherStageControls } from './mission1-navigation.js?v=20261125-eye1';
 
 const message=document.querySelector('#message');
 const next=document.querySelector('#next-fourth');

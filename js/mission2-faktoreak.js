@@ -4,10 +4,10 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261125-cohesion1';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mission2RouteMarkup } from './mission1-navigation.js?v=20261124-atlas3';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261125-eye1';
 import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
-import { renderMission1ClassProgress } from './classroom-progress.js?v=20261124-m2board1';
+import { renderMission1ClassProgress, progressEyeMarkup } from './classroom-progress.js?v=20261125-eye1';
 import { renderMuseumPassport } from './museum-passport.js?v=20261125-ceremony29';
 const app=document.querySelector('#m2-app');
 let passportDates={},mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
@@ -335,10 +335,10 @@ function hero(){
  '<div class="m2-hero-seal" aria-hidden="true"><strong>02</strong><span>IKERKETA HISTORIKOA</span></div></header>';
 }
 function nav(){
- const trophy='<svg class="m1-progress-emblem" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false"><circle class="m1-progress-medallion" cx="20" cy="20" r="17.5" fill="#392a1a" stroke="#dcb36a" stroke-width="1.2"/><circle cx="20" cy="20" r="14.5" fill="none" stroke="#98733c" stroke-width=".7"/><path d="M14 11H26V19C26 23 23 25 20 25S14 23 14 19Z" fill="#e2b75e" stroke="#fff0bf" stroke-width=".8"/><path d="M14 13H10V16C10 20 12 21 15 21M26 13H30V16C30 20 28 21 25 21" fill="none" stroke="#e8c779" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 25V29M16 29H24L26 32H14Z" fill="#e2b75e" stroke="#edcf86" stroke-width="1.3" stroke-linejoin="round"/><path d="M20 14L21.1 17.2L24.5 17.2L21.8 19.2L22.8 22.4L20 20.5L17.2 22.4L18.2 19.2L15.5 17.2L18.9 17.2Z" fill="#795020"/><path class="m1-progress-spark" d="M31 5V11M28 8H34M8 27V31M6 29H10" stroke="#ffedb0" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
  return mission2RouteMarkup(activities,active,{teacher,completedSteps:[...completions],canOpen,ending:teacherEnding})+
  '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+missionBriefButton(2)+walletButton()+'</div>'+
- (!teacher&&teamId?'<details class="m2-class-inline" id="m2-class-inline" '+(classBoardOpen?'open':'')+'><summary data-m2-class-progress aria-controls="m2-class-modal-board">'+trophy+'<span>Taldeen aurrerapena · 2. misioa</span><small data-m2-class-count>'+classBoardCount()+'</small></summary><div class="m2-class-inline-content"><p>Gelako talde guztien 1–5 ariketak · 15 segundoan behin eguneratzen da.</p><div id="m2-class-modal-board" aria-live="polite" aria-atomic="true">'+classBoardMarkup()+'</div><button type="button" class="m2-button secondary" data-m2-class-refresh>↻ Eguneratu</button></div></details>':'');
+ (!teacher&&teamId?'<details class="m2-class-inline" id="m2-class-inline" '+(classBoardOpen?'open':'')+'><summary data-m2-class-progress title="Ikusi gelako taldeen aurrerapena" aria-controls="m2-class-modal-board">' +progressEyeMarkup+'<span>Taldeen aurrerapena · 2. misioa</span><small data-m2-class-count>'+classBoardCount()+'</small></summary><div class="m2-class-inline-content"><p>Gelako talde guztien 1–5 ariketak · 15 segundoan behin eguneratzen da.</p><div id="m2-class-modal-board" aria-live="polite" aria-atomic="true">'+classBoardMarkup()+'</div><button type="button" class="m2-button secondary" data-m2-class-refresh>↻ Eguneratu</button></div></details>':'');
 }
 function dossierMarkup(){
  const rows=activities.map(({id,title})=>'<li class="'+(completions.has(id)?'m1-sealed':'')+'"><span class="m1-medal">'+(completions.has(id)?'✓':String(id).padStart(2,'0'))+'</span><span>'+esc(title)+'</span><small>'+(completions.has(id)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
@@ -356,7 +356,7 @@ function openDossier(){
  // Its state survives room changes and server-driven rerenders.
 function classBoardCount(){return classBoardRows.length?classBoardRows.length+' talde':classBoardError?'Ezin eguneratu':'Ikusi taldeak'}
 function classBoardMarkup(){
- return renderMission1ClassProgress(classBoardRows,{ownTeamId:teamId,missionId:2,error:classBoardError});
+ return renderMission1ClassProgress(classBoardRows,{ownTeamId:teamId,missionId:2,error:classBoardError,showEmblems:true});
 }
 function paintClassBoard(){
  const board=$('#m2-class-modal-board'),count=$('[data-m2-class-count]');

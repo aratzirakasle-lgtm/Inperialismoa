@@ -2,11 +2,11 @@ import { renderTeacherLiveProgress,indexTeacherActivity } from "./teacher-live-p
 import { startClassAccess, stopClassAccess, renderClassAccessControls } from "./class-access.js?v=20261124-access2";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEMO_MODE } from "./config.js";
 import { renderVestibuloC } from "./vestibulo-c-auth.js?v=20261125-resume1";
-import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261124-m2board1";
+import { renderMission1ClassProgress } from "./classroom-progress.js?v=20261125-eye1";
 import { renderTeacherRoster } from "./teacher-roster.js?v=20261124-4b1";
-import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261124-members1";
+import { mountClassroomProgressPanel, unmountClassroomProgressPanel } from "./classroom-progress-overlay.js?v=20261125-eye1";
 import { euskaratuMisioa } from "./euskara-ikasleak.js";
-import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261124-guardado1";
+import { mountGallery, ITEMS as GALLERY_ITEMS } from "./galeria-potencias.js?v=20261125-eye1";
 import { createGallerySharedDraft } from "./galeria-borrador-compartido.js?v=20261123-talde1";
 import { renderMuseumPassport, confirmedStamp } from "./museum-passport.js?v=20261125-signatures28";
 import {readExpedition,renderExpedition,activateAtlasPhoto} from "./museum-expedition.js?v=20261125-signatures28";
@@ -267,7 +267,7 @@ function paintClassProgressModal(){
  }
  const classId=m1ProgressClassId();
  // Never show unfiltered rows while the class is unknown.
- const html=renderMission1ClassProgress(classId?classProgressRows:[],{ownTeamId:viewTeamId(),classId,error:classProgressError});
+ const html=renderMission1ClassProgress(classId?classProgressRows:[],{ownTeamId:viewTeamId(),classId,error:classProgressError,showEmblems:true});
  if(board.innerHTML!==html)board.innerHTML=html;
 }
 function m1ClassProgress(){
