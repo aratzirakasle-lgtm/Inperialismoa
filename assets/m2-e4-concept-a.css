@@ -182,3 +182,6 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app.m2-archive-active .m2-archive-dossier{transition:none!important}
 }
+
+/* E4 only: remove the redundant green mission heading; retain navigation and the archive title. */
+#m2-app.m2-archive-active > .m2-hero{display:none!important}
