@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="eu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="../">
+<title>Atlas · aurrebista bisuala (datu asmatuak)</title>
+<link rel="stylesheet" href="./css/styles.css?v=museo1">
+<link rel="stylesheet" href="./assets/museum-passport.css?v=20261124-atlas1">
+<link rel="stylesheet" href="./assets/museum-expedition.css?v=20261125-atlas30">
+<link rel="stylesheet" href="./assets/atlas-photo.css?v=20261125-atlas30">
+<style>
+html,body{margin:0;min-height:100%;background:#18241c;color:#f2ddb7}
+.preview-controls{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;padding:10px;font:14px system-ui,sans-serif}
+.preview-controls button{font:inherit;padding:6px 10px;background:#ead4a9;color:#422d19;border:1px solid #9b7845;border-radius:4px;cursor:pointer}
+#stage{width:min(100%,1672px);margin:auto}
+</style>
+</head>
+<body>
+<header class="preview-controls"><strong>AURREBISTA BISUALA · DATU ASMATUAK · EZ DA GORDETZEN</strong>
+<button type="button" id="switch">Aldatu ikuspegia / Cambiar vista</button>
+<button type="button" id="progress">Aldatu aurrerapena / Cambiar progreso</button></header>
+<main id="stage"></main>
+<script type="module">
+import {renderExpedition,activateAtlasPhoto} from './js/museum-expedition.js?v=20261125-atlas30';
+let layout=innerWidth>=1100?'photo':'classic',level=2;
+const stage=document.querySelector('#stage');
+function paint(){
+ const steps=level===0?[[1],[],null,null]:level===1?[[1,2,3,4,5],[1,2],null,null]:[[1,2,3,4,5],[1,2,3,4,5],null,null];
+ const summary={completedIds:level===0?[]:level===1?[1]:[1,2],completedAt:{},steps,known:[true,true,false,false],next:level===0?1:level===1?2:0};
+ stage.innerHTML=renderExpedition({teamName:'Probako taldea',memberNames:['Ane','Iker','June'],summary,preview:true,layout});
+ activateAtlasPhoto(stage);
+}
+document.querySelector('#switch').addEventListener('click',()=>{layout=layout==='photo'?'classic':'photo';paint()});
+document.querySelector('#progress').addEventListener('click',()=>{level=(level+1)%3;paint()});
+paint();
+</script>
+</body></html>
