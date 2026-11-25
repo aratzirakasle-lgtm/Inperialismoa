@@ -76,3 +76,12 @@ body:has(#modal:not([hidden]) .atlas-photo) .m1-class-widget{visibility:hidden;p
 .ap-art-preview img{display:block;width:100%;height:auto;max-height:10cqw;object-fit:cover;border:1px solid #a77b4b}
 .ap-art-preview figcaption{font-size:.65cqw;line-height:1.25;color:#72512e;margin-top:.2cqw}
 .atlas-photo-img,.ap-mission-artwork{image-rendering:auto}
+
+/* V27: local enamel repair and printed labels, without changing the scene. */
+.ap-action-enamel{position:absolute;left:76.79425837320574%;top:79.91498405951117%;width:14.952153110047847%;height:5.100956429330499%;background:url('./atlas-detail-button-v27.webp') center/100% 100% no-repeat;pointer-events:none}
+.atlas-photo .ap-action,.atlas-photo .ap-action span{background:transparent}
+.atlas-photo .ap-action[data-atlas-close] span{font-size:1.45cqw}
+.ap-progress-label{position:absolute;display:flex;align-items:center;padding-left:.24cqw;font:bold 1.17cqw/1 Georgia,'Times New Roman',serif;color:#30200e;white-space:nowrap;background-size:100% 100%;background-repeat:no-repeat}
+.ap-progress-label-m{left:73.74401913875597%;top:29.330499468650373%;width:8.791866028708133%;height:2.6567481402763016%;background-image:url('./atlas-detail-m-v27.webp')}
+.ap-progress-label-e{left:73.74401913875597%;top:36.23804463336875%;width:9.808612440191387%;height:2.6567481402763016%;background-image:url('./atlas-detail-e-v27.webp')}
+.ap-meter span{background:linear-gradient(180deg,#68bd68 0%,#3da950 43%,#288443 100%);box-shadow:inset 0 1px 1px #b1e3a780,inset 0 -1px 1px #236b3a55}

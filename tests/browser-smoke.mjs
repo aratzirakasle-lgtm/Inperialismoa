@@ -660,6 +660,8 @@ try{
      assert.equal(await stage.locator('.ap-caption-surface').count(),1);
 
      assert.equal(await stage.locator('.ap-meter-m').getAttribute('aria-valuenow'),done?'2':'0');
+     assert.deepEqual(await stage.locator('.ap-progress-label').allTextContents(),['Misio osatuta','Ariketa osatuta']);
+     if(done)assert.equal(await stage.locator('.ap-action').textContent(),'Museora itzuli');
      assert.equal(await stage.locator('.ap-meter-e').getAttribute('aria-valuenow'),done?'10':'0');
      const geom=await stage.evaluate(el=>{const r=el.getBoundingClientRect(),b=el.querySelector('.ap-action').getBoundingClientRect();return {ratio:r.width/r.height,top:r.top,bottom:r.bottom,button:b.bottom,viewport:innerHeight}});
      assert.ok(Math.abs(geom.ratio-1672/941)<.02);
