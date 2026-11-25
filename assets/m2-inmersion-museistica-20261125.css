@@ -1,0 +1,244 @@
+/* MISIOA 02 · Ambientación museística por salas.
+ * Los recursos originales, las medidas de las zonas de juego y la lógica
+ * permanecen intactos. Las luces no dependen de la clave de respuestas.
+ * No hay superposiciones nuevas sobre controles ni mapas interactivos. */
+#m2-app{
+ --m2-antique-gold:linear-gradient(180deg,#f8dfaa 0%,#d1a66a 19%,#9f6b35 43%,#eac586 58%,#ab783d 84%,#6e4726 100%);
+ --m2-walnut-veneer:linear-gradient(90deg,#26150e9c,#9c65321a 12%,#9c65321a 88%,#26150e9c),url('./atlas-madera-referencia-hd.webp');
+ --m2-cream-folio:linear-gradient(115deg,#fff8e690,transparent 58%,#b88c4d2b),url('./atlas-papel-referencia.svg');
+}
+/* 1 · Kabinetea: five equal glass cases, carved wood and copper hardware. */
+#m2-app.m2-first-room .m2-museum-case{
+ background-image:
+ radial-gradient(ellipse at 50% 4%,#ffe4a852,transparent 58%),
+ linear-gradient(90deg,#301a10 0%,#f3d19a 2%,#9b682f 4%,#4b2918 8%,transparent 14% 86%,#482719 92%,#a97538 96%,#f3d49a 98%,#301a10),
+ url('./atlas-madera-referencia-hd.webp');
+ background-size:100% 100%,100% 100%,auto 100%;
+ background-position:center;
+}
+#m2-app.m2-first-room .m2-case-crown{
+ filter:saturate(1.13) drop-shadow(0 2px 2px #1c0c06aa);
+}
+#m2-app.m2-first-room .m2-case-spot{
+ background:radial-gradient(ellipse at 50% 12%,#fffef1,#ffdfa4 40%,#ba7c2d 78%,#57331a);
+ box-shadow:0 0 0 1px #eac280,0 3px 8px #fff0c1a8,0 0 14px #f4c67980;
+}
+#m2-app.m2-first-room .m2-photo-vitrine::before{
+ background:
+ linear-gradient(112deg,transparent 12%,#fff9e42a 13%,#fff8df12 21%,transparent 31%,transparent 74%,#fbeac725 80%,transparent 89%),
+ radial-gradient(ellipse at 50% 0%,#fff1c857,transparent 55%);
+ pointer-events:none;
+}
+#m2-app.m2-first-room .m2-case-foundation{
+ background-image:
+ radial-gradient(circle at 12px 50%,#ffe9b6 0 1px,#c79554 2px 3px,#58371e 4px 5px,transparent 6px),
+ radial-gradient(circle at calc(100% - 12px) 50%,#ffe9b6 0 1px,#c79554 2px 3px,#58371e 4px 5px,transparent 6px),
+ linear-gradient(180deg,#eed1a1 0%,#a77439 13%,#67401f 35%,#3c2216 65%,#c99753 82%,#51301b);
+ box-shadow:inset 0 0 0 1px #e9c58f,0 4px 0 #2e180e,0 8px 8px #1009049c;
+}
+#m2-app.m2-first-room .m2-desk-front{
+ background-image:linear-gradient(180deg,#f3cb8b 0 9%,#8d562d 10% 27%,#321b12cc 28% 65%,#925328 66% 87%,#e1ac68 88% 100%),url('./atlas-madera-referencia-hd.webp');
+ background-size:100% 100%,auto 100%;
+}
+#m2-app.m2-first-room .m2-museum-interaction:has(.m2-archive-card[aria-pressed="true"]) .m2-case-spot{
+ box-shadow:0 0 0 1px #ffe4a2,0 4px 11px #fff0bfdb,0 0 18px #f4c679b5;
+}
+#m2-app.m2-first-room .m2-archive-card:not(:disabled):hover .m2-card-miniature{
+ filter:saturate(1.19) contrast(1.05) drop-shadow(0 2px 2px #56301c55);
+}
+/* 2 · Kronografoa: engraved dial, glass globe, ruled ledger and museum plates. */
+#m2-app.m2-capital-active .m2-e2-scene::before{
+ background:
+ radial-gradient(ellipse at 65% 5%,#f5cb792e,transparent 58%),
+ radial-gradient(ellipse at 18% 0%,#e5bf7626,transparent 60%),
+ linear-gradient(90deg,#120e0c99,transparent 24% 76%,#120d0c99),
+ repeating-linear-gradient(90deg,#b38a4a15 0 1px,transparent 2px 115px);
+ pointer-events:none;
+}
+#m2-app.m2-capital-active .m2-e2-clock-dial{
+ background-image:
+ radial-gradient(ellipse at 48% 46%,#17100b 0%,#342019 41%,transparent 65%),
+ radial-gradient(ellipse at 50% 0%,#e9b673 0%,#a4713c 26%,#4b2a1b 65%,#27150e 100%);
+ box-shadow:inset 0 0 0 2px #ffdfa5,inset 0 0 0 6px #73502d,inset 0 0 0 9px #c29b61,inset 0 0 24px #120b079e,0 6px 0 #342015,0 11px 17px #100a07a6;
+}
+#m2-app.m2-capital-active .m2-e2-inner-ring{
+ background:repeating-conic-gradient(from -1deg,#f5d298 0deg .7deg,transparent .7deg 6deg);
+ opacity:.85;
+}
+#m2-app.m2-capital-active .m2-e2-globe::before{
+ background:radial-gradient(ellipse at 30% 16%,#fff5cd62,transparent 43%),linear-gradient(125deg,#fff6d640,transparent 24% 75%,#43270d38);
+ box-shadow:inset 0 0 12px #50351765;
+ pointer-events:none;
+}
+#m2-app.m2-capital-active .m2-e2-slot>strong{
+ background:var(--m2-antique-gold);text-shadow:0 1px #fff0cc;
+}
+#m2-app.m2-capital-active .m2-e2-slot{
+ box-shadow:inset 0 0 0 1px #fff3d4,inset 0 -3px 6px #91613938,0 3px 0 #62401f,0 6px 8px #10080385;
+}
+#m2-app.m2-capital-active .m2-e2-picture,
+#m2-app.m2-capital-active .m2-e2-small-picture{
+ box-shadow:0 0 0 1px #79552c,inset 0 0 0 1px #ffedc8,0 2px 3px #61432144;
+}
+#m2-app.m2-capital-active .m2-e2-ledger{
+ background-image:
+ linear-gradient(90deg,#94683c44,transparent 7% 47.8%,#6f421b50 49.5%,#fff1d2b0 50.3%,transparent 54% 94%,#97673538),
+ repeating-linear-gradient(0deg,#80623f13 0 1px,transparent 1px 23px),
+ url('./atlas-papel-referencia.svg');
+ background-size:100% 100%;
+}
+#m2-app.m2-capital-active .m2-e2-ledger-page legend b{
+ color:#4e3218;background:var(--m2-antique-gold);
+ border-color:#a27842;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration{
+ background-image:linear-gradient(90deg,transparent,#c7a57629 50%,transparent),url('./atlas-papel-referencia.svg');
+}
+/* 3 · Migrazioen bulegoa: preserve the entire original panorama and layout.
+ * All styling is on existing frames, paper surfaces or non-text illustrations.
+ * Transparent luggage objects remain alpha-transparent. */
+#m2-app.m2-atlas-active .m2-atlas-heading{
+ background-image:radial-gradient(ellipse at 50% 0%,#7d9a5e48,transparent 65%),linear-gradient(180deg,#345b45,#172f25 67%,#2d4d37);
+ box-shadow:inset 0 0 0 1px #efcf97,inset 0 0 10px #0f251d65,0 3px 0 #462718,0 6px 10px #100b08a6;
+}
+#m2-app.m2-atlas-active .m2-atlas-intro,
+#m2-app.m2-atlas-active .m2-atlas-pop,
+#m2-app.m2-atlas-active .m2-atlas-top-question{
+ background-image:var(--m2-cream-folio);
+ background-size:100% 100%;
+}
+#m2-app.m2-atlas-active .m2-atlas-main-map,
+#m2-app.m2-atlas-active .m2-atlas-route-map{
+ border-color:#bb935c;
+ box-shadow:0 0 0 1px #6b4728,inset 0 0 0 1px #fff0c7,0 3px 5px #31201285;
+}
+#m2-app.m2-atlas-active .m2-atlas-main-map>img,
+#m2-app.m2-atlas-active .m2-atlas-route-map>img{
+ filter:saturate(1.10) contrast(1.05);
+}
+#m2-app.m2-atlas-active .m2-atlas-pin{
+ background:radial-gradient(circle at 34% 26%,#fff5ce,#d9af66 58%,#aa7439);
+ border-color:#d8b576;color:#56371f;
+ box-shadow:0 0 0 1px #654321,0 2px 4px #25160a9c;
+}
+#m2-app.m2-atlas-active .m2-atlas-pin:is(:hover,:focus-visible){
+ box-shadow:0 0 0 1px #674421,0 0 6px #ffdc8a,0 2px 4px #25160a9c;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-available{
+ /* Do not replace the original painted suitcase background. */
+ box-shadow:inset 0 0 0 1px #d7ad71,0 3px 0 #50321e,0 6px 8px #1c100b80;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase{
+ filter:drop-shadow(0 2px 2px #3924164a);
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-card img.m2-atlas-card-illustration,
+#m2-app.m2-atlas-active .m2-atlas-packed img.m2-atlas-card-illustration{
+ filter:saturate(1.18) contrast(1.04) drop-shadow(0 2px 1px #3a251d66);
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-card:not(:disabled):hover img.m2-atlas-card-illustration{
+ filter:saturate(1.22) contrast(1.05) drop-shadow(0 2px 2px #39261980);
+}
+#m2-app.m2-atlas-active .m2-atlas-fact-head{
+ color:inherit;
+ text-shadow:none;
+}
+/* 4 · Artxiboa: stacked paper, metal clips, archival labels and warm table light. */
+#m2-app.m2-archive-active .m2-archive-scene::before{
+ background:
+ radial-gradient(ellipse at 19% 22%,#efc47738,transparent 45%),
+ radial-gradient(ellipse at 82% 18%,#efd19a29,transparent 52%),
+ repeating-linear-gradient(90deg,transparent 0 18%,#b9925630 18.2%,#32190d9c 18.5%,transparent 18.7% 37%);
+ pointer-events:none;
+}
+#m2-app.m2-archive-active .m2-archive-desk-crest{
+ background-image:var(--m2-cream-folio);background-size:100% 100%;
+ box-shadow:inset 0 0 0 1px #fff1cd,0 3px 0 #a77940,0 5px 8px #25140880;
+}
+#m2-app.m2-archive-active .m2-archive-folder-tab{
+ background:linear-gradient(180deg,#e5c692,#bc9059);
+ border-color:#9c7240;
+ box-shadow:0 -1px 2px #3c231a66;
+}
+#m2-app.m2-archive-active .m2-archive-fileclip{
+ border-color:#bd9457;
+ box-shadow:inset 1px 0 #fff0b0,0 0 0 1px #684727,1px 2px 3px #54300e8a;
+}
+#m2-app.m2-archive-active .m2-archive-dossier{
+ box-shadow:inset 0 0 0 1px #fff2d5,inset 0 0 14px #96623225,0 2px 0 #e0c69a,0 4px 0 #9e7547,0 6px 0 #d6bc8e,0 9px 10px #21140878;
+}
+#m2-app.m2-archive-active .m2-archive-dossier .m2-source-index{
+ background-image:var(--m2-antique-gold);
+ border-color:#9f773f;
+}
+#m2-app.m2-archive-active .m2-archive-illustration .m2-source-engraving{
+ /* Preserve the AVIF/WebP sheet and its exact crop. */
+ box-shadow:inset 0 0 0 1px #ffeac0,inset 0 0 9px #2817084d,0 2px 0 #704a2a,0 4px 6px #301c0e80;
+}
+#m2-app.m2-archive-active .m2-archive-desk-front{
+ background-image:linear-gradient(#c49758 0 8%,#6d411e 10% 39%,#342017a8 40% 74%,#9c6836 77% 91%,#d2ac70 94%),url('./atlas-madera-referencia-hd.webp');
+ background-size:100% 100%,auto 100%;
+}
+#m2-reading-dialog.m2-archive-reading-dialog .m2-archive-zoom-viewport{
+ box-shadow:inset 0 0 0 1px #fae7bc,inset 0 0 13px #936d3a38,0 3px 5px #5e3b1a3b;
+}
+#m2-reading-dialog.m2-archive-reading-dialog .m2-dialog-reading{
+ color:#352519;
+}
+/* 5 · Esplorazioa: physical atlas mount, embossed notebook, polar exhibit.
+ * No addition of river names, routes or labels; original geography preserved. */
+#m2-app.m2-expedition-active .m2-historical-map{
+ background-image:var(--m2-walnut-veneer);
+ background-size:100% 100%,auto 100%;
+ background-position:center;
+}
+#m2-app.m2-expedition-active .m2-expedition-map-wrap{
+ box-shadow:0 0 0 1px #8f693a,0 0 0 3px #e3c18a,0 0 0 5px #684424,0 5px 9px #2c1a107a;
+}
+#m2-app.m2-expedition-active .m2-atlas-museum-title{
+ background-image:radial-gradient(ellipse at 50% 0%,#7d9b6855,transparent 65%),linear-gradient(180deg,#3b6248,#213d30);
+ text-shadow:0 1px 2px #10261b;
+}
+#m2-app.m2-expedition-active .m2-atlas-route-ledger{
+ background-image:linear-gradient(120deg,#fff4d5a0,transparent 70%),repeating-linear-gradient(0deg,transparent 0 19px,#8f6c3e19 19px 20px),url('./atlas-papel-referencia.svg');
+ background-size:100% 100%;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel{
+ background-image:var(--m2-cream-folio);background-size:100% 100%;
+ box-shadow:inset 0 0 0 1px #fff2ce,0 2px 0 #dfc59b,0 4px 0 #9e7947,0 6px 9px #402a195e;
+}
+#m2-app.m2-expedition-active .m2-expedition-panel header{
+ background-image:radial-gradient(ellipse at 25% 0%,#74936e44,transparent 60%),linear-gradient(160deg,#466e50,#203d31 75%);
+ box-shadow:inset 0 -1px #d2ae6c,0 2px 3px #8060392b;
+}
+#m2-app.m2-expedition-active .m2-polar-plate{
+ background-image:linear-gradient(#6f9faa,#b1cdd1 44%,#e6e9df);
+ box-shadow:inset 0 0 0 1px #f1e4bc,0 2px 4px #55452d55;
+}
+#m2-app.m2-expedition-active .m2-exploration-art img:not([src$="atlas-expediente-foto-hd.webp"]){
+ box-shadow:0 0 0 1px #785632,0 3px 5px #62432355;
+}
+#m2-app.m2-expedition-active .m2-expedition-progress-track{
+ box-shadow:inset 0 1px 3px #795a3470;
+}
+/* End-of-mission cabinet: only the already validated ceremony receives this finish. */
+#m2-app .m2-ceremony-file-seal{
+ background:radial-gradient(circle at 32% 20%,#fff2bc,#d8b369 38%,#9f7135 85%);
+ box-shadow:inset 0 0 0 1px #f7dca3,0 2px 3px #61431e66;
+}
+#m2-app .m2-ceremony-plaque{
+ background-image:var(--m2-antique-gold);
+ box-shadow:inset 0 0 0 1px #ffe9ba,0 2px 0 #7b5128,0 5px 8px #11180f8a;
+}
+/* Short glints follow deliberate hover, never correctness. Reduced motion is respected. */
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ #m2-app.m2-first-room .m2-card-miniature,
+ #m2-app.m2-atlas-active .m2-atlas-card-illustration,
+ #m2-app.m2-atlas-active .m2-atlas-pin{
+  transition:filter .14s ease,box-shadow .14s ease;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app.m2-first-room .m2-card-miniature,
+ #m2-app.m2-atlas-active .m2-atlas-card-illustration,
+ #m2-app.m2-atlas-active .m2-atlas-pin{transition:none!important}
+}
