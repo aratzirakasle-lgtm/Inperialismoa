@@ -1,0 +1,196 @@
+/* M2 / 3 · Migrazioen bulegoa: layout in document flow.
+   No fixed-height lower panels, floating footers or overlapping artwork.
+   The page may scroll vertically; all controls retain their original behavior. */
+#m2-app.m2-atlas-active .m2-atlas-screen{
+ display:flow-root;box-sizing:border-box;aspect-ratio:auto;height:auto;min-height:0;max-height:none;
+ overflow:visible;padding:0 0 14px;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-row-two{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;
+ gap:14px;margin:16px 10px 0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity{
+ display:flex;flex-direction:column;gap:10px;min-width:0;
+ position:relative;isolation:isolate;box-sizing:border-box;
+ width:auto;height:auto;min-height:0;max-height:none;overflow:visible;
+ margin:0;padding:12px;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity>header{
+ position:relative;inset:auto;display:flex;align-items:center;gap:9px;
+ width:auto;height:auto;min-height:0;margin:0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity>header h2{
+ flex:1 1 auto;width:auto;max-width:none;height:auto;
+ min-height:0;padding:8px;font-size:clamp(17px,1.65vw,24px);line-height:1.2;white-space:normal;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-number{
+ flex:0 0 38px;width:38px;height:38px;margin:0;font-size:20px;border-width:3px;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two .m2-atlas-exercise-instruction{
+ margin:0;padding:0;font-size:13px;line-height:1.45;white-space:normal;
+}
+/* The decorative photos previously occupied the same area as the table.
+   Keep the museum's parchment and brass frames, not the floating overlays. */
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity::before,
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity::after,
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity::before,
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity::after{content:none!important;display:none!important}
+#m2-app.m2-atlas-active .m2-atlas-route-stage{
+ position:relative;inset:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+ align-items:center;gap:10px;width:100%;height:auto;min-height:0;max-height:none;
+ margin:0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-labels{
+ display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-card{
+ width:100%;height:auto;min-height:44px;padding:6px;white-space:normal;
+ font-size:13px;line-height:1.3;overflow-wrap:anywhere;
+}
+#m2-app.m2-atlas-active .m2-atlas-route-map{
+ width:100%;height:auto;min-height:0;aspect-ratio:1.65;align-self:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-fact-head{
+ display:flex;position:static;justify-content:space-between;gap:8px;
+ width:auto;margin:0;padding:4px 0;font-size:10px;
+}
+#m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statements{
+ display:grid;grid-template-rows:none;grid-auto-rows:auto;
+ position:relative;inset:auto;width:100%;height:auto;min-height:0;max-height:none;
+ margin:0;padding:6px;overflow:visible;background:#f6e4c4;
+}
+#m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statement{
+ grid-template-columns:minmax(0,1fr) minmax(80px,110px);gap:10px;
+ min-height:50px;height:auto;padding:8px 4px;font-size:13px;line-height:1.4;
+ white-space:normal;overflow-wrap:anywhere;
+}
+#m2-app.m2-atlas-active .m2-atlas-facts-activity .m2-atlas-statement-select{
+ display:block;width:100%;min-height:40px;height:auto;font-size:13px;padding:6px 3px;
+}
+/* Each section status belongs to a separate row below its own content. */
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity>footer,
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity>footer{
+ display:flex;flex-direction:row;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:10px;
+ position:static;inset:auto;transform:none;z-index:auto;
+ box-sizing:border-box;width:100%;height:auto;min-height:0;max-height:none;
+ margin:0;padding:10px 0 0;border-top:1px solid #b58b51;background:transparent;
+}
+#m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity>footer{margin-top:auto}
+#m2-app.m2-atlas-active .m2-atlas-activity>footer .m2-atlas-section-status{
+ position:static;inset:auto;width:auto;height:auto;margin:0;padding:4px 6px;
+ font-size:12px;line-height:1.3;white-space:normal;color:#4c361f;background:#f5e5c5;
+}
+#m2-app.m2-atlas-active .m2-atlas-activity>footer .m2-neutral-stage{
+ position:static;inset:auto;width:auto;height:auto;min-height:36px;max-width:100%;
+ margin:0;padding:7px 12px;font-size:12px;line-height:1.2;
+}
+/* Full-width luggage workspace: heading, loose cards, both suitcases, status.
+   No absolute side panels and no rows forced into the old 16:9 height. */
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-activity{
+ display:flex;flex-direction:column;gap:12px;box-sizing:border-box;isolation:isolate;
+ position:relative;width:auto;height:auto;min-height:0;max-height:none;
+ margin:16px 10px 0;padding:14px;overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity>header{
+ display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:8px;
+ position:static;inset:auto;z-index:auto;width:auto;height:auto;margin:0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity>header .m2-atlas-number{
+ width:40px;height:40px;margin:0;font-size:21px;border-width:3px;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity>header h2{
+ width:auto;height:auto;margin:0;padding:8px;font-size:clamp(18px,1.7vw,26px);
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-activity>header p{
+ grid-column:1/-1;position:static;width:auto;height:auto;min-height:0;
+ margin:0;padding:9px 12px;font-size:14px;line-height:1.4;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-board{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px;
+ align-items:start;position:relative;inset:auto;
+ width:100%;height:auto;min-height:0;max-height:none;margin:0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-available{
+ display:flex;flex-direction:column;gap:8px;min-width:0;width:auto;
+ height:auto;min-height:0;max-height:none;padding:14px;
+ border:3px ridge #b98a52;border-radius:10px;
+ background:linear-gradient(145deg,#714528,#3b2318);overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-available::before{content:none}
+#m2-app.m2-atlas-active .m2-atlas-luggage-note{
+ margin:0;padding:3px;font-size:12px;line-height:1.3;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-cards{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto;
+ gap:8px;width:100%;height:auto;min-height:0;margin:0;padding:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-card{
+ width:100%;height:auto;min-height:112px!important;padding:6px!important;overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-card>span:last-child{
+ font-size:12px;line-height:1.25;overflow-wrap:anywhere;
+}
+#m2-app.m2-atlas-active .m2-atlas-luggage-targets{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px;
+ width:100%;height:auto;min-height:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase{
+ display:flex;flex-direction:column;gap:8px;min-width:0;height:auto;min-height:0;max-height:none;
+ margin:0;padding:12px;border:4px ridge #bb8a4d;border-radius:10px;
+ background:repeating-linear-gradient(30deg,#ffffff08 0 1px,transparent 1px 7px),linear-gradient(140deg,#823b30,#4e251d);
+ overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-suitcase>header{
+ position:static!important;clip-path:none!important;width:auto!important;height:auto!important;
+ overflow:visible!important;margin:0!important;padding:8px!important;white-space:normal;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase>header strong{font-size:14px;line-height:1.25}
+#m2-app.m2-atlas-active .m2-atlas-luggage-drop{
+ position:relative;inset:auto;width:100%;height:auto;min-height:44px;margin:0;
+ padding:8px 5px;font-size:12px;line-height:1.25;white-space:normal;
+}
+#m2-app.m2-atlas-active .m2-atlas-suitcase-items{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;
+ grid-auto-rows:auto;gap:8px;min-height:60px;height:auto;margin:0;padding:0;overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-packed{
+ height:auto;min-height:52px;max-width:100%;padding:5px;font-size:12px;line-height:1.25;
+ white-space:normal;overflow-wrap:anywhere;
+}
+/* Final action area: separate normal-flow block with its own full-height row. */
+#m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-final-controls{
+ display:block;position:static;inset:auto;z-index:auto;width:auto;height:auto;
+ min-height:0;max-height:none;margin:18px 10px 0!important;padding:0!important;
+}
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-controls{
+ display:grid;grid-template-columns:minmax(0,1fr);gap:10px;position:static;
+ width:auto;height:auto;min-height:0;max-height:none;margin:0;padding:14px;
+ overflow:visible;
+}
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-feedback,
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-answer-count,
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-autosave-status{
+ position:static;width:auto;height:auto;margin:0;font-size:13px;line-height:1.45;
+ white-space:normal;text-align:center;
+}
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons{
+ position:static;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:0;
+}
+#m2-app.m2-atlas-active .m2-atlas-final-controls .m2-button{
+ height:auto;min-height:44px;padding:10px 16px;font-size:14px;line-height:1.25;
+}
+@media(max-width:900px){
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-row-two,
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-board{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:580px){
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-row-two,
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-activity{margin:12px 3px 0}
+ #m2-app.m2-atlas-active .m2-atlas-row-two>.m2-atlas-activity,
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-luggage-activity{padding:8px}
+ #m2-app.m2-atlas-active .m2-atlas-route-stage{grid-template-columns:minmax(0,1fr)}
+ #m2-app.m2-atlas-active .m2-atlas-luggage-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #m2-app.m2-atlas-active .m2-atlas-luggage-targets{grid-template-columns:minmax(0,1fr)}
+ #m2-app.m2-atlas-active .m2-atlas-screen .m2-atlas-final-controls{margin:14px 3px 0!important}
+ #m2-app.m2-atlas-active .m2-atlas-final-controls .m2-buttons>.m2-button{flex:1 1 140px}
+}

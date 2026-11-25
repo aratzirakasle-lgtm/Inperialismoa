@@ -889,6 +889,44 @@ try{
   }
  });
 
+ await scenario('Atlas 3: las tablas, pies, maletas y botonera ocupan filas independientes',async()=>{
+  for(const size of [{width:1536,height:691},{width:1365,height:768},{width:768,height:1024},{width:390,height:844}]){
+   const {page,context,errors}=await open('teacher',size);
+   try{
+    await page.locator('[data-open="3"]').click();
+    const checkLayout=async()=>{
+     const issues=await page.locator('.m2-atlas-screen').evaluate(root=>{
+      const box=sel=>root.querySelector(sel).getBoundingClientRect();
+      const after=(a,b)=>box(a).top>=box(b).bottom-1;
+      const pairs=[
+       ['#m2-route-part>footer','.m2-atlas-route-stage'],
+       ['#m2-facts-part>footer','.m2-atlas-statements'],
+       ['#m2-luggage-part','.m2-atlas-row-two'],
+       ['.m2-atlas-luggage-board','#m2-luggage-part>header'],
+       ['#m2-luggage-part>footer','.m2-atlas-luggage-board'],
+       ['.m2-atlas-final-controls','#m2-luggage-part']
+      ];
+      return pairs.filter(([a,b])=>!after(a,b)).map(([a,b])=>a+' overlaps '+b);
+     });
+     assert.deepEqual(issues,[],JSON.stringify({size,issues}));
+     for(const field of await page.locator('.m2-atlas-statement-select,.m2-atlas-luggage-drop,.m2-atlas-final-controls [data-preview-check],.m2-atlas-final-controls [data-preview-next]').all()){
+      await field.scrollIntoViewIfNeeded();
+      assert.ok(await field.evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}), 'Control tapado: '+await field.getAttribute('class'));
+     }
+    };
+    await checkLayout();
+    for(const id of await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card]').evaluateAll(els=>els.map(el=>el.dataset.atlasBagCard))){
+     await page.locator('.m2-atlas-luggage-cards [data-atlas-bag-card="'+id+'"]').click();
+     await page.locator('.m2-atlas-luggage-drop[data-atlas-bag-zone="cause"]').click();
+    }
+    await checkLayout();
+    await page.locator('.m2-atlas-final-controls [data-preview-check]').click();
+    await page.locator('.m2-atlas-final-controls [data-preview-next]').click();
+    await page.locator('.m2-archive-active').waitFor();
+    assert.deepEqual(errors,[]);
+   }finally{await context.close()}
+  }
+ });
  await scenario('Atlas 3: sin desbordes ni controles cortados a 1672, 1365, 768, 390 y 320 px',async()=>{
   for(const size of [{width:1672,height:941},{width:1365,height:900},{width:768,height:1024},{width:390,height:844},{width:320,height:700}]){
    const {page,context,errors}=await open('teacher',size);
