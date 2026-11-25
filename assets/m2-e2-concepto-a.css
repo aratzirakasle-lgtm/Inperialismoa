@@ -413,9 +413,9 @@
  background-size:300% 100%;background-repeat:no-repeat;filter:contrast(1.05) saturate(.92);
 }
 #m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture{aspect-ratio:110/48;border-color:#96764c}
-#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-suez{background-position:0 50%}
-#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-hijaz{background-position:50% 50%}
-#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-panama{background-position:100% 50%}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-suez{background-position:0% 50%!important}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-hijaz{background-position:50% 50%!important}
+#m2-app.m2-capital-active :is(.m2-e2-picture,.m2-e2-small-picture).m2-e2-art-panama{background-position:100% 50%!important}
 #m2-app.m2-capital-active .m2-e2-piece-info strong{
  padding:3px 2px;border:1px solid #a87d45;border-radius:6px;
  background:linear-gradient(#f7e6bd,#d7b27a);font-size:clamp(11px,1.1vw,16px);
@@ -497,3 +497,8 @@
  #m2-app.m2-capital-active .m2-e2-ledger{border-width:6px;padding:17px 12px 14px}
  #m2-app.m2-capital-active .m2-e2-piece-info strong{font-size:10px}
 }
+
+/* Preserve the picture aspect ratio in the filled medallions. */
+#m2-app.m2-capital-active .m2-e2-small-picture{aspect-ratio:110/48;height:auto;flex:0 1 auto;max-height:65%;min-height:0}
+#m2-app.m2-capital-active .m2-e2-ledger>h3{position:relative}
+#m2-app.m2-capital-active .m2-e2-ledger>h3::after{content:"";position:absolute;left:calc(50% - 5px);bottom:-5px;width:9px;height:9px;background:#d6b17c;border:1px solid #987340;transform:rotate(45deg);pointer-events:none}
