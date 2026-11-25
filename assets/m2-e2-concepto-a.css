@@ -1,0 +1,307 @@
+/* M2 E2 · Concepto A: distribución del referente circular.
+ * Los cinco campos y acciones conservan sus identificadores originales.
+ * Escenario propio de la sala 2: no afecta a las otras salas.
+ * Las imágenes de las tres obras son las ilustraciones existentes.
+ */
+#m2-app.m2-capital-active{
+ --e2-gold:linear-gradient(160deg,#fff1bc 0%,#d1a063 21%,#a97539 36%,#f4d293 55%,#c09354 75%,#885226);
+ --e2-paper:radial-gradient(ellipse at 42% 0%,#fff5dc99,transparent 70%),url('./atlas-papel-referencia.svg');
+ background:linear-gradient(160deg,#182e24,#12221a);border-color:#9c7846;color:#f8e3b9;
+ padding:clamp(6px,1vw,14px);
+}
+#m2-app.m2-capital-active .m2-hero{
+ padding:8px 15px;background:linear-gradient(115deg,#203b2e,#11291e);
+ border-color:#a3804a;box-shadow:inset 0 0 0 1px #c5a26c70;
+}
+#m2-app.m2-capital-active .m2-hero h1{font-size:clamp(18px,1.7vw,25px);color:#f6dfa9}
+#m2-app.m2-capital-active .m2-hero p,#m2-app.m2-capital-active .m2-hero .m2-eyebrow{color:#e5cc9d}
+#m2-app.m2-capital-active .m2-e2-scene{
+ box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);
+ grid-template-areas:"heading heading" "instrument book" "instrument actions";
+ gap:clamp(10px,1.2vw,18px) clamp(18px,2vw,32px);align-items:start;
+ isolation:isolate;position:relative;overflow:visible;margin:10px 0 0;
+ padding:clamp(12px,1.4vw,25px) clamp(16px,4.2vw,65px) clamp(18px,2vw,32px);
+ background:linear-gradient(180deg,#0b20153d,transparent 50%,#4624111a),url('./atlas-sala-referencia-hd.webp') center/100% 100% no-repeat,#17291f;
+ border:4px ridge #bb9153;border-radius:4px;
+ box-shadow:inset 0 0 0 1px #f4d69f90,0 8px 18px #090b07ae;
+}
+#m2-app.m2-capital-active .m2-e2-scene::before{
+ inset:0;background:radial-gradient(ellipse at 35% 12%,#eac5761c,transparent 48%),linear-gradient(90deg,transparent 0 8%,#15271d18 9% 92%,transparent 93%);
+ pointer-events:none;z-index:-1;
+}
+#m2-app.m2-capital-active .m2-e2-scene::after{
+ top:72%;left:0;right:0;bottom:0;
+ background:linear-gradient(180deg,#35201335,transparent 20%,#2b170d60),url('./atlas-madera-referencia-hd.webp') center/400px 100% repeat-x;
+ box-shadow:inset 0 3px 4px #341c1155;
+ pointer-events:none;z-index:-1;
+}
+#m2-app.m2-capital-active .m2-e2-intro{
+ grid-area:heading;min-height:0;display:grid;justify-items:center;gap:4px;
+ padding:0;background:none;border:0;box-shadow:none;text-align:center;
+}
+#m2-app.m2-capital-active .m2-e2-intro>span{font:700 10px/1.2 Georgia,serif;color:#f0d7a4;letter-spacing:.13em;text-shadow:0 1px 3px #14251b}
+#m2-app.m2-capital-active .m2-e2-intro h2{
+ margin:0;padding:7px clamp(16px,4vw,58px);
+ border:4px ridge #c89752;border-radius:15px 15px 11px 11px;
+ background:var(--e2-gold);box-shadow:inset 0 0 0 1px #fff1bc,0 4px 0 #5c371b,0 6px 9px #0e100bc0;
+ color:#152b1d;font:700 clamp(22px,3vw,40px)/1.12 Georgia,serif;
+ text-shadow:0 1px #f9e3b0;
+}
+#m2-app.m2-capital-active .m2-e2-concept-subtitle{
+ display:block;margin:-3px 0 0;padding:3px 20px;
+ border:2px ridge #b98a46;border-radius:5px;background:var(--e2-gold);color:#392416;
+ font:700 clamp(15px,1.5vw,20px)/1.15 Georgia,serif;box-shadow:0 2px 3px #12190d90;
+}
+#m2-app.m2-capital-active .m2-e2-intro p{
+ max-width:860px;margin:6px 0 0;color:#ffedc8;font:clamp(13px,1.2vw,17px)/1.4 Georgia,serif;
+ text-shadow:0 2px 4px #0d160f;
+}
+#m2-app.m2-capital-active .m2-e2-upper{
+ grid-area:instrument;display:flex;flex-direction:column;align-items:stretch;
+ min-height:0;padding:0;gap:6px;min-width:0;
+}
+#m2-app.m2-capital-active .m2-e2-chronograph{
+ display:flex;flex-direction:column;align-items:center;width:100%;padding:0;
+ gap:3px;min-width:0;
+}
+/* The visible subtitle above the dial identifies the instrument.
+   The original section label remains accessible. */
+#m2-app.m2-capital-active .m2-e2-chronograph-title{
+ width:auto;max-width:100%;margin:0;padding:3px 10px;
+ background:transparent;border:0;box-shadow:none;transform:none;
+ color:#e7c98e;
+}
+#m2-app.m2-capital-active .m2-e2-chronograph-title strong{
+ font:700 clamp(10px,.9vw,13px)/1.1 Georgia,serif;letter-spacing:.09em;
+}
+#m2-app.m2-capital-active .m2-e2-chronograph-title small{display:none}
+#m2-app.m2-capital-active .m2-e2-clock-dial{
+ width:min(100%,600px);height:auto;min-height:0;aspect-ratio:6/5;
+ border:0;border-radius:0;box-shadow:none;
+ background:url('./m2-e2-cronografo-concepto-a.svg') center/100% 100% no-repeat;
+ position:relative;overflow:visible;
+}
+#m2-app.m2-capital-active .m2-e2-clock-dial::before,
+#m2-app.m2-capital-active .m2-e2-clock-dial::after{content:none}
+#m2-app.m2-capital-active .m2-e2-inner-ring{display:none}
+#m2-app.m2-capital-active .m2-e2-globe{
+ left:29%;top:32%;width:42%;height:auto;aspect-ratio:1;z-index:1;
+ border:5px ridge #ca9b51;border-radius:50%;
+ background:radial-gradient(circle at 30% 18%,#94b6ae,#315c63 70%,#1a3339);
+ box-shadow:inset 0 0 0 1px #e6bb76,inset -12px -10px 20px #11180f80,0 0 0 3px #795126,0 8px 10px #0c0d09a6;
+}
+#m2-app.m2-capital-active .m2-e2-globe img{
+ width:150%;max-width:none;height:100%;object-fit:cover;object-position:55% 50%;
+ filter:sepia(.14) saturate(.9) contrast(1.04);
+}
+#m2-app.m2-capital-active .m2-e2-globe::before{
+ background:radial-gradient(ellipse at 26% 15%,#fff5ce62,transparent 40%),radial-gradient(ellipse at 25% 35%,transparent 40%,#10150d9c 100%);
+ box-shadow:inset 0 0 12px #50351765;opacity:1;
+}
+#m2-app.m2-capital-active .m2-e2-globe::after{
+ content:"";position:absolute;left:0;right:0;top:50%;height:4px;
+ background:linear-gradient(#ffe5a7,#b07b36,#f1c47f);pointer-events:none;z-index:3;
+}
+#m2-app.m2-capital-active .m2-e2-slot{
+ box-sizing:border-box;position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ width:29%;height:auto;min-height:0;aspect-ratio:1;
+ padding:clamp(5px,.6vw,10px) 7px;
+ border:5px ridge #c99c5a;border-radius:50%;
+ background:radial-gradient(ellipse at 30% 18%,#fff5d8,#e8c99a 78%,#c49b63);
+ box-shadow:inset 0 0 0 2px #fdf0cd,inset 0 0 0 4px #b58b51,0 0 0 2px #805124,0 5px 8px #110c07b5;
+ color:#422e1a;transform:none;z-index:4;
+}
+#m2-app.m2-capital-active .m2-e2-slot-1908{left:35.5%;right:auto;top:0;bottom:auto}
+#m2-app.m2-capital-active .m2-e2-slot-1869{left:2%;right:auto;top:47%;bottom:auto}
+#m2-app.m2-capital-active .m2-e2-slot-1914{left:auto;right:2%;top:47%;bottom:auto}
+#m2-app.m2-capital-active .m2-e2-slot>strong{
+ position:static;transform:none;margin:0;padding:0 2px;
+ border:0;background:none;box-shadow:none;border-radius:0;
+ font:700 clamp(17px,2.1vw,33px)/1.05 Georgia,serif;
+ color:#352515;text-shadow:0 1px #fff4d1;
+}
+#m2-app.m2-capital-active .m2-e2-slot-face{
+ flex:1 1 0;min-height:0;max-height:68%;width:90%;gap:2px;
+}
+#m2-app.m2-capital-active .m2-e2-empty-mark{
+ display:grid;place-items:center;flex:0 0 auto;width:clamp(21px,3.8vw,52px);height:clamp(21px,3.8vw,52px);
+ border:1px dashed #9e7a48;border-radius:50%;font-size:0;color:#8f6c3e;
+}
+#m2-app.m2-capital-active .m2-e2-empty-mark::before{
+ content:"↓";font:700 clamp(18px,2.8vw,37px)/1 Georgia,serif;
+}
+#m2-app.m2-capital-active .m2-e2-empty-label{
+ max-width:100%;font:600 clamp(9px,.83vw,12px)/1.1 Georgia,serif;text-align:center;
+}
+#m2-app.m2-capital-active .m2-e2-small-picture{
+ display:block;flex:1 1 0;width:95%;max-width:110px;min-height:0;height:100%;
+ background-size:contain;background-position:center;border:1px solid #aa8047;border-radius:4px;
+}
+#m2-app.m2-capital-active .m2-e2-filled-label{
+ font:700 clamp(9px,.9vw,13px)/1.05 Georgia,serif;overflow-wrap:anywhere;max-width:100%;
+}
+#m2-app.m2-capital-active .m2-e2-slot:is(:hover,:focus-visible){
+ box-shadow:inset 0 0 0 2px #fff4d1,inset 0 0 0 4px #bc8e4a,0 0 0 2px #dfb86e,0 0 13px #efce8d88;
+}
+#m2-app.m2-capital-active .m2-e2-dial-progress{
+ margin:-5px 0 0;padding:3px 15px;font-size:12px;
+ background:linear-gradient(#204638,#122e23);border:2px ridge #b99151;color:#fbe2a9;
+}
+#m2-app.m2-capital-active .m2-e2-return-slot:not(:empty){margin:5px 0 0}
+#m2-app.m2-capital-active .m2-e2-left{display:block;width:100%;min-width:0}
+#m2-app.m2-capital-active .m2-e2-catalogue{
+ width:100%;box-sizing:border-box;min-width:0;
+ padding:8px clamp(6px,1.1vw,15px) 12px;border:6px ridge #a8753c;border-radius:7px;
+ background:linear-gradient(135deg,#40231835,#23140d85),url('./atlas-madera-referencia-hd.webp') center/360px 100% repeat-x,#5c3620;
+ box-shadow:inset 0 0 0 1px #e3b374,inset 0 8px 16px #21120a9c,0 5px 0 #392014,0 9px 12px #100905a6;
+}
+#m2-app.m2-capital-active .m2-e2-catalogue>header{
+ margin:0 0 8px;padding:3px 6px;
+ border:2px ridge #b58a4d;border-radius:5px;background:var(--e2-gold);
+ color:#382515;text-shadow:0 1px #f5dfad;
+}
+#m2-app.m2-capital-active .m2-e2-catalogue>header strong{font:700 clamp(11px,1.05vw,15px)/1.1 Georgia,serif}
+#m2-app.m2-capital-active .m2-e2-catalogue>header small{color:#402919;font:italic 11px/1.2 Georgia,serif}
+#m2-app.m2-capital-active .m2-e2-pieces{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(4px,.75vw,10px)}
+#m2-app.m2-capital-active .m2-e2-piece{
+ display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;gap:4px;
+ box-sizing:border-box;position:relative;min-height:0;padding:5px;
+ border:2px solid #ab7941;border-radius:5px;background:var(--e2-paper),#ead4ad;
+ background-size:100% 100%;box-shadow:inset 0 0 0 1px #fff3d4,0 2px 0 #93663a,0 5px 5px #1c100b99;
+ text-align:center;
+}
+#m2-app.m2-capital-active .m2-e2-piece .m2-e2-picture{
+ display:block;flex:0 0 auto;min-height:0;height:auto;aspect-ratio:1.75;
+ width:100%;border:1px solid #b78f52;border-radius:2px;background-size:contain;
+}
+#m2-app.m2-capital-active .m2-e2-piece-info{display:flex;align-items:center;gap:2px;flex:1}
+#m2-app.m2-capital-active .m2-e2-piece-info strong{
+ display:block;width:100%;padding:4px 2px;border:1px solid #b88e56;border-radius:3px;
+ background:linear-gradient(#fcecc9,#ddbc83);color:#332317;
+ font:700 clamp(10px,1vw,15px)/1.15 Georgia,serif;overflow-wrap:anywhere;
+}
+#m2-app.m2-capital-active .m2-e2-piece-info small{
+ display:block;font:italic clamp(9px,.75vw,11px)/1.1 Georgia,serif;color:#604427;
+}
+#m2-app.m2-capital-active .m2-e2-grip{
+ position:absolute;display:block;top:8px;left:8px;padding:1px 3px;line-height:1;
+ background:#f4dfb7;border:1px solid #ad8957;border-radius:3px;color:#473020;z-index:2;
+}
+#m2-app.m2-capital-active .m2-e2-piece.m2-used{opacity:.68}
+#m2-app.m2-capital-active .m2-e2-piece[aria-pressed="true"]{
+ opacity:1;outline:2px solid #ffdc92!important;outline-offset:1px;
+ box-shadow:0 0 12px #f2bf6fa8!important;
+}
+/* Open ledger — vertical stacked questions, real radio inputs remain accessible. */
+#m2-app.m2-capital-active .m2-e2-ledger{
+ grid-area:book;align-self:stretch;min-width:0;box-sizing:border-box;margin:0;
+ display:flex;flex-direction:column;justify-content:center;
+ padding:clamp(18px,2vw,30px) clamp(13px,2vw,30px) 17px;
+ border:9px solid #573524;border-radius:13px 15px 21px 20px;
+ background:
+ linear-gradient(90deg,#9d713b45 0%,transparent 7% 47%,#80592e16 49.5%,#fff8e472 50.8%,transparent 54% 94%,#a275422e),
+ var(--e2-paper),#f5e1b8;
+ background-size:100% 100%;
+ box-shadow:inset 0 0 0 2px #d2a56b,inset 0 0 0 5px #f8e5be,inset 0 0 0 7px #b89660,inset 0 0 22px #a273373e,0 0 0 2px #c29453,0 4px 0 #3c2117,0 8px 0 #ad7c46,0 12px 0 #352017,0 17px 18px #120d08aa;
+}
+#m2-app.m2-capital-active .m2-e2-ledger::before{
+ display:block;top:15px;bottom:15px;left:49.9%;border-left:1px solid #89653938;box-shadow:none;
+}
+#m2-app.m2-capital-active .m2-e2-ledger>h3{
+ margin:0 auto 15px;padding:0 2px 12px;max-width:100%;width:100%;
+ background:transparent;border:0;border-bottom:1px solid #ac8551;border-radius:0;
+ box-shadow:none;color:#332113;font:700 clamp(19px,2.1vw,30px)/1.15 Georgia,serif;
+ text-align:center;text-transform:none;text-shadow:0 1px #fff5dc;
+}
+#m2-app.m2-capital-active .m2-e2-ledger-pages{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(13px,1.8vw,26px)}
+#m2-app.m2-capital-active .m2-e2-ledger-page{padding:0;gap:5px}
+#m2-app.m2-capital-active .m2-e2-ledger-page legend{
+ float:none;margin:0 0 8px;padding:6px 7px;width:100%;
+ display:flex;align-items:center;gap:8px;box-sizing:border-box;
+ background:linear-gradient(150deg,#f9e7c4,#dbbc88);border:1px solid #b38a50;border-radius:4px;
+ box-shadow:0 2px 3px #8f693f45;color:#38271b;font:700 clamp(14px,1.4vw,19px)/1.2 Georgia,serif;
+}
+#m2-app.m2-capital-active .m2-e2-ledger-page legend b{
+ width:30px;height:30px;flex-basis:30px;border:2px ridge #ba914f;border-radius:5px;
+ background:linear-gradient(#305440,#19372a);color:#ffe7b0;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration{
+ height:14px;min-height:0;margin:0;background:none;mask-image:none;box-shadow:none;border:0;
+}
+#m2-app.m2-capital-active .m2-e2-book-illustration::after{
+ content:"❧ ───── ✦ ───── ❧";font-size:13px;line-height:1;color:#987347;
+}
+#m2-app.m2-capital-active .m2-e2-options{display:grid;grid-template-columns:minmax(0,1fr);gap:7px}
+#m2-app.m2-capital-active .m2-e2-option{
+ min-height:clamp(36px,3vw,45px);display:flex;flex-direction:row;justify-content:flex-start;align-items:center;
+ padding:8px 10px;gap:9px;border:1px solid #b79762;border-radius:4px;
+ background:linear-gradient(170deg,#fff4d9,#ead3aa);
+ box-shadow:inset 0 1px #fff7e2,0 2px 3px #6b472830;
+}
+#m2-app.m2-capital-active .m2-e2-option-copy{
+ font:600 clamp(13px,1.25vw,17px)/1.3 Georgia,serif;text-align:left;color:#352518;
+}
+#m2-app.m2-capital-active .m2-e2-option-icon{display:none}
+#m2-app.m2-capital-active .m2-e2-option input{
+ width:19px;height:19px;flex:0 0 19px;accent-color:#88612e;
+}
+#m2-app.m2-capital-active .m2-e2-source-note{
+ margin:12px 0 0;padding:8px 0 0;border-top:1px solid #a5814b66;
+ color:#684a2c;font:italic 11px/1.3 Georgia,serif;
+}
+#m2-app.m2-capital-active .m2-e2-scene>.m2-controls{
+ grid-area:actions;position:relative;align-self:start;z-index:7;margin:4px 0 0;
+ padding:8px 10px!important;border:1px solid #b78d52!important;border-radius:5px;
+ background:linear-gradient(155deg,#2c432f,#142b21)!important;
+ box-shadow:inset 0 0 0 1px #dfb77755,0 4px 8px #1b100b99!important;
+ gap:7px;color:#fce7bc;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-answer-count{
+ align-self:center;margin:0;padding:5px 13px;background:linear-gradient(#2c513d,#16372b);
+ border:2px ridge #b48a50;border-radius:4px;color:#fff0c8;font:700 14px/1.2 Georgia,serif;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-feedback,
+#m2-app.m2-capital-active .m2-e2-scene .m2-autosave-status{
+ color:#f9e5bc;margin:0;text-shadow:0 1px 2px #132519;font:12px/1.3 Georgia,serif;text-align:center;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-buttons{
+ flex-wrap:wrap;gap:6px;justify-content:center;align-items:stretch;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-button{
+ min-width:0;min-height:40px;padding:7px 10px;border:3px ridge #bb9658;
+ font-size:clamp(11px,.95vw,14px);white-space:normal;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-buttons>.m2-button{flex:1 1 100px}
+#m2-app.m2-capital-active .m2-e2-scene .m2-buttons>.m2-button:not(.secondary){
+ background:linear-gradient(#416749,#1d402d);color:#fff0c6;
+}
+#m2-app.m2-capital-active .m2-e2-scene .m2-buttons>.m2-button.secondary{background:var(--e2-gold);color:#352313}
+#m2-app.m2-capital-active .m2-e2-scene .m2-preview-states{justify-content:center}
+@media(min-width:1000px){
+ #m2-app.m2-capital-active .m2-e2-upper{align-self:start}
+ #m2-app.m2-capital-active .m2-e2-clock-dial{width:min(100%,560px)}
+}
+@media(max-width:900px){
+ #m2-app.m2-capital-active .m2-e2-scene{
+ grid-template-columns:minmax(0,1fr);grid-template-areas:"heading" "instrument" "book" "actions";
+ padding:12px clamp(8px,2.4vw,20px) 16px;gap:16px;background-size:auto 100%;
+ }
+ #m2-app.m2-capital-active .m2-e2-clock-dial{width:min(100%,540px)}
+ #m2-app.m2-capital-active .m2-e2-upper{max-width:650px;width:100%;margin:auto}
+ #m2-app.m2-capital-active .m2-e2-ledger{width:min(100%,660px);margin:auto}
+ #m2-app.m2-capital-active .m2-e2-scene>.m2-controls{width:min(100%,660px);box-sizing:border-box;margin:auto}
+ #m2-app.m2-capital-active .m2-e2-slot>strong{font-size:clamp(17px,3.6vw,30px)}
+ #m2-app.m2-capital-active .m2-e2-empty-label,#m2-app.m2-capital-active .m2-e2-filled-label{font-size:clamp(9px,1.8vw,13px)}
+ #m2-app.m2-capital-active .m2-e2-piece-info strong{font-size:clamp(10px,2vw,15px)}
+}
+@media(max-width:420px){
+ #m2-app.m2-capital-active .m2-e2-scene{padding:10px 6px 12px;border-width:2px}
+ #m2-app.m2-capital-active .m2-e2-slot{border-width:3px;padding:4px 3px}
+ #m2-app.m2-capital-active .m2-e2-empty-label{font-size:8px}
+ #m2-app.m2-capital-active .m2-e2-filled-label{font-size:8px}
+ #m2-app.m2-capital-active .m2-e2-piece-info small{font-size:8px}
+ #m2-app.m2-capital-active .m2-e2-ledger{border-width:6px;padding:16px 10px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+ #m2-app.m2-capital-active .m2-e2-piece,#m2-app.m2-capital-active .m2-e2-slot{transition:none!important}
+}
