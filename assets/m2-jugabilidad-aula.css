@@ -57,3 +57,25 @@
 #m2-app[data-m2-readonly] [data-card]:disabled,#m2-app[data-m2-readonly] [data-event]:disabled,#m2-app[data-m2-readonly] [data-atlas-route]:disabled,#m2-app[data-m2-readonly] [data-atlas-bag-card]:disabled,#m2-app[data-m2-readonly] [data-multi]:disabled,#m2-app[data-m2-readonly] [data-expedition-field]:disabled{opacity:1;cursor:default;filter:none}
 .m2-answer-count{font-weight:700;text-align:center;font-variant-numeric:tabular-nums;margin:0 0 6px}
 .m2-preview-states{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;font-size:.85rem}
+
+/* M2 · sala por sala: estados de trabajo neutros, sin revelar aciertos parciales. */
+#m2-app .m2-room-index{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:8px 12px;margin:8px 0;background:linear-gradient(180deg,#3b291b,#2b231b);border:1px solid #a7834f;border-radius:4px}
+#m2-app .m2-room-index-item{flex:1 1 110px;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 8px;border:1px solid #c4a367;border-radius:3px;background:linear-gradient(#e8d4a8,#c9a775);color:#49351e;font:700 12px/1.2 Georgia,serif;text-align:center;cursor:pointer}
+#m2-app .m2-room-index-item small{font:600 10px/1.25 Georgia,serif;color:#5e482d}
+#m2-app .m2-room-index-item:is(:hover,:focus-visible){outline:2px solid #f6d28a;outline-offset:2px}
+#m2-app [id^="m2-exp-file-"],#m2-app [id$="-part"]{scroll-margin-top:16px}
+#m2-app .m2-return-card[hidden],#m2-app .m2-e2-return-slot:empty{display:none!important}
+#m2-app .m2-museum-desktop-top{flex-wrap:wrap}
+#m2-app .m2-return-card{font-size:12px;padding:5px 9px;min-height:28px}
+#m2-app [data-year-piece]{touch-action:none;cursor:grab}
+#m2-app[data-m2-readonly] [data-year-piece]{cursor:default}
+#m2-app .m2-neutral-stage{display:inline-flex;justify-content:center;align-items:center;cursor:default;pointer-events:none}
+#m2-app.m2-archive-active .m2-source-seal[data-source-status]{border-color:#977744;background:#f1dfb9;color:#6a502c;opacity:.86;font-size:9px;transform:rotate(-6deg)}
+#m2-app.m2-archive-active[data-m2-readonly] .m2-source-seal[data-source-status]{border-color:#b99a58;background:#284637;color:#f4e1b4;opacity:1}
+#m2-app .m2-archive-file-actions,#m2-app .m2-atlas-links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:9px 0}
+#m2-app .m2-atlas-tag{font:700 12px/1.2 Georgia,serif;border:1px solid #a7834e;border-radius:3px;background:#e8d1a1;color:#50381e;padding:5px 8px;cursor:pointer}
+#m2-app .m2-atlas-tag:disabled{opacity:1;cursor:default}
+#m2-app .m2-atlas-tag:focus-visible{outline:2px solid #977744;outline-offset:2px}
+.m2-reading-dialog .m2-world-viewport{overflow:auto;max-height:62vh;border:1px solid #b69254;overscroll-behavior:contain}
+.m2-reading-dialog .m2-world-viewport .m2-world-zoom{display:block;width:100%;height:auto;max-width:none!important;margin:0}
+@media(max-width:640px){#m2-app .m2-room-index{gap:4px;padding:6px}#m2-app .m2-room-index-item{flex-basis:95px;font-size:11px}}
