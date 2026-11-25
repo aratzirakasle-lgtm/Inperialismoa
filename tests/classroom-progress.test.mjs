@@ -50,3 +50,15 @@ test('La misión 2 reutiliza las cinco marcas y etiqueta correctamente su sello'
  assert.match(html,/2\. misioa: taldeen/);assert.match(html,/2\. misioa osatu gabe/);assert.match(html,/2\. misioa gaindituta/);
  assert.doesNotMatch(html,/1\. misioa/);assert.match(html,/Ane/);assert.match(html,/ZUEN TALDEA/);
 });
+
+test('Medallones ilustrados: ocho motivos y variantes sin duplicados en un aula de diez equipos',()=>{
+ const ten=Array.from({length:10},(_,i)=>({team_id:'team-'+i,team_name:'Taldea '+i,class_id:'class1'}));
+ const images=html=>[...html.matchAll(/data-emblem="([^"]+)"[^>]*><span class="m1-class-name" title="([^"]+)"/g)].map(m=>[m[2],m[1]]);
+ const before=renderMission1ClassProgress(ten,{showEmblems:true});
+ const after=renderMission1ClassProgress(ten.map(r=>({...r,exercise_1:true})).reverse(),{showEmblems:true,missionId:2});
+ assert.equal(images(before).length,10);
+ assert.equal(new Set(images(before).map(x=>x[1])).size,10);
+ assert.deepEqual(Object.fromEntries(images(before)),Object.fromEntries(images(after)));
+ assert.equal((before.match(/<img class="m1-team-emblem /g)||[]).length,10);
+ assert.doesNotMatch(renderMission1ClassProgress(ten),/team-emblem-/);
+});

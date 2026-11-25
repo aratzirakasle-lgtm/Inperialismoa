@@ -55,3 +55,10 @@
 .m1-class-toggle .m1-progress-eye{width:26px;height:26px;vertical-align:middle;margin-right:5px}
 .m1-class-widget-inline .m1-class-toggle .m1-progress-eye{width:32px;height:32px;margin-right:0}
 @media(max-width:560px){.m1-class-identity{gap:4px}.m1-team-emblem{width:25px;height:25px;flex-basis:25px}.m1-class-widget-inline .m1-class-toggle .m1-progress-eye{width:28px;height:28px}}
+
+/* Identidad de cada equipo: medallones ilustrados sin fondo, no insignias de logro. */
+.m1-class-identity{align-items:center}
+img.m1-team-emblem{width:44px;height:44px;flex:0 0 44px;display:block;object-fit:contain;filter:drop-shadow(0 1px 1px #573b2850)}
+img.m1-team-emblem--blue{filter:url("./team-emblem-colors.svg#blue") drop-shadow(0 1px 1px #573b2850)}
+img.m1-team-emblem--red{filter:url("./team-emblem-colors.svg#red") drop-shadow(0 1px 1px #573b2850)}
+@media(max-width:560px){img.m1-team-emblem{width:30px;height:30px;flex-basis:30px}}

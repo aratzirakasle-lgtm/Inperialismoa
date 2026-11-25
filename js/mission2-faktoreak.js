@@ -4,10 +4,10 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { createMission2Autosave } from './mission2-autosave.js?v=20261125-cohesion1';
 
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
-import { mission2RouteMarkup } from './mission1-navigation.js?v=20261125-eye1';
+import { mission2RouteMarkup } from './mission1-navigation.js?v=20261125-emblems2';
 import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
 import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
-import { renderMission1ClassProgress, progressEyeMarkup } from './classroom-progress.js?v=20261125-eye1';
+import { renderMission1ClassProgress, progressEyeMarkup } from './classroom-progress.js?v=20261125-emblems2';
 import { renderMuseumPassport } from './museum-passport.js?v=20261125-ceremony29';
 const app=document.querySelector('#m2-app');
 let passportDates={},mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;

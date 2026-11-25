@@ -1,6 +1,6 @@
-import { progressEyeMarkup } from './classroom-progress.js?v=20261125-eye1';
+import { progressEyeMarkup } from './classroom-progress.js?v=20261125-emblems2';
 import { gallerySaveState, gallerySaveText } from './save-indicator.js?v=20261124-guardado1';
-import { exerciseNavMarkup } from './mission1-navigation.js?v=20261125-eye1';
+import { exerciseNavMarkup } from './mission1-navigation.js?v=20261125-emblems2';
 import {walletButton} from './museum-wallet.js?v=1';
 import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=2';
 import { galleryIllustration } from './galeria-iconos-color.js?v=20261123-visibles2';
