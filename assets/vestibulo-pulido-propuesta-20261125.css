@@ -244,3 +244,20 @@
  #app-shell.museo-c-enabled .c-museo-toolbar-actions .m1-class-toggle{min-height:44px}
  #app-shell.museo-c-enabled .c-museo-toolbar-actions .m1-class-panel{left:0;right:0;margin:auto}
 }
+
+/* Cartelas gemelas: mismo acabado, geometría, alineación y tinta.
+   Se reutiliza el área de las cartelas existentes; no se crean controles nuevos. */
+.c-museo-home .c-museo-inscription,
+.c-museo-home .c-museo-inscription.is-locked{
+ top:52.2%;width:10.45%;height:5.7%;
+ transform:translateX(-50%);box-sizing:border-box;
+ padding:0 .25cqw;
+ font:700 .99cqw/1 Georgia,'Times New Roman',serif;
+ color:#38230c;text-shadow:0 .04cqw #ffe6ae;
+ background:linear-gradient(90deg,#b78136 0%,#edc27d 6%,#f8dc9d 25%,#f4d494 75%,#d9aa61 94%,#ad7733 100%)!important;
+ border:.11cqw solid #96632c!important;
+ border-radius:.34cqw;
+ box-shadow:inset 0 0 0 .09cqw #ffe6ae,inset 0 -.16cqw .22cqw #a16d394f,0 .12cqw .25cqw #22140870!important;
+}
+.c-museo-home .c-museo-inscription-1{left:21.86%}
+.c-museo-home .c-museo-inscription-2{left:34.55%}

@@ -552,6 +552,13 @@ try{
        imgs=>Promise.all(imgs.map(img=>img.decode())));
      assert.equal(await page.locator('.c-museo-inscription-1.is-next').innerText(),'HASI');
      assert.equal(await page.locator('.c-museo-inscription-2.is-locked svg').count(),1);
+     const plaqueStyles=await page.locator('.c-museo-inscription').evaluateAll(nodes=>nodes.map(el=>{
+       const s=getComputedStyle(el),r=el.getBoundingClientRect();
+       return {font:s.font,color:s.color,background:s.backgroundImage,border:s.border,
+         radius:s.borderRadius,width:r.width,height:r.height,top:r.top};
+     }));
+     assert.equal(plaqueStyles.length,2);
+     assert.deepEqual(plaqueStyles[0],plaqueStyles[1],'HASI y BLOKEATUTA usan cartelas gemelas');
      assert.equal(await page.locator('.c-museo-m2').isDisabled(),true);
      for(const id of [2,3,4]){
        const state=await page.locator('.c-museo-m'+id).evaluate(el=>({bg:getComputedStyle(el).backgroundColor,shade:Number(getComputedStyle(el,'::before').opacity)}));
