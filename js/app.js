@@ -564,11 +564,14 @@ async function setSession({freshLogin=false}={}){const {data:{user:authUser}}=aw
  if(p.role==="student"&&!(await startClassAccess(db)))return;
  await refreshData();
  const hash=location.hash;
- // Cada inicio de sesión del alumnado comienza en el vestíbulo original.
- // Las rutas internas se mantienen para sesiones ya autenticadas.
- if(freshLogin&&!accountIsTeacher()){
-  conceptCHome=true;teacherPreview=false;teacherPreviewTeamId=null;
-  currentMission=0;galleryQuestionsOpen=false;responses={};checkFeedback=null;
+ // El vestíbulo con el globo es siempre la entrada del alumnado.
+ // Solo una sesión ya autenticada puede seguir un enlace interno válido.
+ const studentLanding=p.role==="student"&&(freshLogin||!(hash==="#mission1gallery"||(hash==="#mission2"&&available(2))));
+ if(p.role==="student")conceptCHome=true;
+ if(studentLanding){
+  teacherPreview=false;teacherPreviewTeamId=null;
+  currentMission=0;galleryQuestionsOpen=false;responses={};checkFeedback=null;selectedCountry=null;
+  if(!$("#modal").hidden)closeModal();
   const url=new URL(location.href);url.searchParams.delete("museo");url.hash="";
   history.replaceState(null,"",url.pathname+url.search);
  }
@@ -576,8 +579,8 @@ async function setSession({freshLogin=false}={}){const {data:{user:authUser}}=aw
  else if(!accountIsTeacher()&&hash==="#mission2"&&available(2)){currentMission=2;galleryQuestionsOpen=false}
  else if(!accountIsTeacher()&&hash==="#mission1gallery"){currentMission=1;galleryQuestionsOpen=false}
  else{currentMission=0;galleryQuestionsOpen=false}
- if(!(freshLogin&&!accountIsTeacher())&&(hash.startsWith("#mission")||hash.startsWith("#teacherpreview")))history.replaceState(null,"",location.pathname+location.search);
- switchScreen(true);startClassProgressPolling();if(isTeacher()&&teacherTab==='overview')void syncTeacherActivity();if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
+ if(!studentLanding&&(hash.startsWith("#mission")||hash.startsWith("#teacherpreview")))history.replaceState(null,"",location.pathname+location.search);
+ switchScreen(true);if(studentLanding)window.scrollTo({top:0,left:0,behavior:"instant"});startClassProgressPolling();if(isTeacher()&&teacherTab==='overview')void syncTeacherActivity();if(realtimeChannel)await db.removeChannel(realtimeChannel);realtimeChannel=db.channel("class-progress").on("postgres_changes",{event:"*",schema:"public",table:"mission_badges"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_claims"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"territory_markers"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"submissions"},()=>void refreshFromRealtime()).on("postgres_changes",{event:"*",schema:"public",table:"gallery_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"bi_sistema_team_drafts"},()=>{if(accountIsTeacher())void refreshFromRealtime()}).on("postgres_changes",{event:"*",schema:"public",table:"mission1_exercise_completions"},()=>void refreshFromRealtime()).subscribe()}
 async function start(){demo=DEMO_MODE||!SUPABASE_URL||!SUPABASE_ANON_KEY;if(!demo){try{if(!window.supabase)throw Error("No se cargó la biblioteca Supabase");db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);db.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){user=null;stopClassProgressPolling();classProgressRows=[];classProgressError=false;m2Rows=[];m2Error=false;teacherActivity=new Map();teacherActivityError=true;teacherLastSync=null;teacherActivityRequest=null;teacherMissionDates=new Map();teacherDatesError=true;if(realtimeChannel){void db.removeChannel(realtimeChannel);realtimeChannel=null}switchScreen(false)}});const {data:{session}}=await db.auth.getSession();if(session)await setSession();else switchScreen(false)}catch(e){console.error(e);$("#loading").textContent="Error de conexión a Supabase. Revisa la configuración del proyecto."}}else{initDemo();switchScreen(false)}}
 document.addEventListener("click",async e=>{const svgCountry=e.target.closest("svg [data-country]");if(svgCountry){chooseCountry(svgCountry.dataset.country);return}const b=e.target.closest("button");if(!b)return;
 if(b.hasAttribute("data-m2-class")){
