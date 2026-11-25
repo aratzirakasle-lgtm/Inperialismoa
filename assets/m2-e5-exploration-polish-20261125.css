@@ -51,3 +51,13 @@
  max-width:100%;max-height:none;aspect-ratio:1491/1055;object-fit:contain!important;
  background:transparent;filter:none;
 }
+
+/* E5 / document 03: fit both polar maps in a single 2:1 frame, without cropping. */
+#m2-app.m2-expedition-active #m2-exp-file-3 .m2-polar-hd{
+ box-sizing:border-box;width:min(100%,460px);height:auto;max-height:none;
+ margin:0 auto 10px;padding:0;overflow:hidden;background:none;
+}
+#m2-app.m2-expedition-active #m2-exp-file-3 .m2-polar-hd>img{
+ display:block;width:100%;height:auto;max-height:none;aspect-ratio:2/1;
+ object-fit:contain;filter:none;border:0;
+}
