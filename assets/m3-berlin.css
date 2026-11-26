@@ -493,3 +493,11 @@ html,body{background:#17382f}
 .karik-inscription-mask.inscription-reveal{animation:karikColorReveal .85s ease-in-out forwards}
 @keyframes karikColorReveal{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:rotate(-8deg) translateY(-180%);visibility:hidden}}
 @media(prefers-reduced-motion:reduce){.karik-inscription-mask.inscription-reveal{visibility:hidden}}
+
+/* Akta: explicit local verification, matching the museum's green and antique-gold palette. */
+.act-check-panel{position:absolute;left:29%;top:85%;width:44%;min-height:10%;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.38cqw;padding:.4cqw .65cqw;background:linear-gradient(90deg,#17382fe8,#244b38f5,#17382fe8);border:1px solid #b68d50;border-radius:4px;box-shadow:0 3px 9px #21150e90,inset 0 0 0 1px #d0ac6b44;color:#f7e2b7;text-align:center}
+.act-check-feedback{margin:0;font:600 1.02cqw/1.2 Georgia,serif;min-height:1.2em}
+.act-confirm{min-width:48%;padding:.45cqw 1.2cqw;border:3px double #e5c584;border-radius:4px;background:linear-gradient(#41684b,#214331);color:#ffedc1;font:bold 1.32cqw/1.12 Georgia,serif;box-shadow:0 2px 5px #101c14a0;cursor:pointer}
+.act-confirm:disabled{opacity:.55;cursor:default}.act-confirm:not(:disabled):hover{filter:brightness(1.15)}.act-confirm:focus-visible{outline:2px solid #ffdc80;outline-offset:3px}
+.act-check-panel[data-result="correct"]{border-color:#e9cc85;background:linear-gradient(90deg,#1b422f,#386143,#1b422f)}.act-check-panel[data-result="wrong"] .act-check-feedback{color:#ffdfaa}
+@media(max-width:900px),(max-height:550px){.act-check-panel{position:static;order:3;width:100%;padding:12px;gap:8px;min-height:0}.act-check-feedback{font-size:15px}.act-confirm{font-size:20px;min-height:44px;padding:10px 18px}}
