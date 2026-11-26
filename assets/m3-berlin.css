@@ -288,3 +288,10 @@ html,body{background:#17382f}
 .karik-board .karik-slot{min-height:2.15cqw;padding:.24cqw .35cqw;font-size:.98cqw}
 .karik-board .karik-feedback{margin-top:0}
 @media(max-width:1050px),(max-height:590px){.karik-page-nav{gap:8px}.karik-page-nav button{font-size:14px;padding:8px}.karik-board{height:auto;min-height:0;max-height:none;overflow:visible;gap:8px}.karik-board h2{font-size:23px}.karik-board .karik-card{font-size:15px;min-height:54px;padding:8px}.karik-board .karik-question,.karik-board .karik-slot{font-size:15px}.karik-board .karik-slot{min-height:38px;padding:7px}}
+
+/* Karikatura: make both rounds immediately visible. */
+.karik-page-nav{gap:.45cqw;margin:.15cqw 0 .3cqw}
+.karik-page-nav button{min-height:2.4cqw;font-size:1.05cqw;padding:.38cqw .2cqw;line-height:1.15;border:1px solid #8f6635;box-shadow:0 1px 3px #70431f44}
+.karik-page-nav button[aria-pressed="true"]{background:#234b3b;color:#fff1cd;box-shadow:0 0 0 1px #b88a4b}
+.karik-board .karik-question{font-weight:700}
+@media(max-width:1050px),(max-height:590px){.karik-page-nav button{font-size:15px;min-height:42px;padding:8px}}
