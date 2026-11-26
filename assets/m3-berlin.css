@@ -101,3 +101,14 @@ html,body{background:#17382f}
 .act-clause:nth-child(even){background-position:55% 40%}.act-clause.is-selected{outline:1px solid #dabb7e;box-shadow:inset 0 0 0 1px #99703c,0 1px 2px #220e0d66}.act-clause span{display:block;transform:rotate(-.35deg)}.act-clause:nth-child(even) span{transform:rotate(.2deg)}
 .act-clause input{background:transparent;border-color:#69452b;border-radius:0}.act-clause input:checked::before{font-family:"Akta Manuscript",cursive;transform:rotate(-8deg);color:#5d371f}
 @media(max-width:900px),(max-height:550px){.act-paper{transform:none;background:url("./m3-berlin-akta-paper.webp") center/cover no-repeat;padding:12px;border:1px solid #b48a54}.act-slot,.act-clause{font-size:20px;line-height:1.13;padding:8px;min-height:48px}.act-slot.empty{font-size:18px}.act-chain h2{font-size:21px}.act-chain-row select{font-size:17px;padding:7px 4px}.act-selection-count{font-size:17px}.act-paper-heading{font-size:15px}}
+
+/* More legible manuscript: dark, strengthened strokes without losing the handwritten character. */
+.act-slot,.act-clause,.act-clause.is-selected,.act-chain-row select,.act-chain h2,.act-selection-count{color:#352012;font-weight:400;-webkit-text-stroke:.024em currentColor;text-shadow:none;font-kerning:normal;text-rendering:optimizeLegibility}
+.act-slot{font-size:1.55cqw;line-height:1.12;letter-spacing:.005em}
+.act-slot.empty{font-size:1.31cqw;color:#56381f;-webkit-text-stroke:.016em currentColor}
+.act-slot.filled>span:nth-child(2),.act-clause span{filter:none;opacity:1}
+.act-clause,.act-clause.is-selected{font-size:1.38cqw;line-height:1.12;letter-spacing:.005em;padding:.2cqw .4cqw;gap:.4cqw}
+.act-clause input{border-color:#4e2e18;border-width:1.5px}.act-clause input:checked::before{color:#352012;-webkit-text-stroke:.035em currentColor}
+.act-chain h2{font-size:1.48cqw;line-height:1.05}.act-chain-row select{font-size:1.19cqw;line-height:1.17;letter-spacing:0}.act-chain-row label{font-size:.94cqw;font-weight:600;color:#482c1b}.act-chain-row select option{font-family:Georgia,serif;font-size:1.04cqw;-webkit-text-stroke:0}
+.act-bank-heading p{font-size:.99cqw;line-height:1.2;color:#fff0cd}.act-selection-count{font-size:1.25cqw}
+@media(max-width:900px),(max-height:550px){.act-slot,.act-clause,.act-clause.is-selected{font-size:22px;line-height:1.2;padding:8px;gap:8px}.act-slot.empty{font-size:19px}.act-chain h2{font-size:23px}.act-chain-row label{font-size:13px}.act-chain-row select{font-size:19px;line-height:1.2;padding:7px 4px}.act-chain-row select option{font-size:16px}.act-bank-heading p{font-size:14px}.act-selection-count{font-size:19px}}
