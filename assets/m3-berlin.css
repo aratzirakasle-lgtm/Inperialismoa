@@ -112,3 +112,14 @@ html,body{background:#17382f}
 .act-chain h2{font-size:1.48cqw;line-height:1.05}.act-chain-row select{font-size:1.19cqw;line-height:1.17;letter-spacing:0}.act-chain-row label{font-size:.94cqw;font-weight:600;color:#482c1b}.act-chain-row select option{font-family:Georgia,serif;font-size:1.04cqw;-webkit-text-stroke:0}
 .act-bank-heading p{font-size:.99cqw;line-height:1.2;color:#fff0cd}.act-selection-count{font-size:1.25cqw}
 @media(max-width:900px),(max-height:550px){.act-slot,.act-clause,.act-clause.is-selected{font-size:22px;line-height:1.2;padding:8px;gap:8px}.act-slot.empty{font-size:19px}.act-chain h2{font-size:23px}.act-chain-row label{font-size:13px}.act-chain-row select{font-size:19px;line-height:1.2;padding:7px 4px}.act-chain-row select option{font-size:16px}.act-bank-heading p{font-size:14px}.act-selection-count{font-size:19px}}
+
+/* Akta: intrinsic parchment-card sizing; never clip or truncate the original clauses. */
+.act-bank{left:74.5%;top:16.7%;width:24%;height:auto;min-height:61%;max-height:none;padding:.65cqw .65cqw .6cqw;gap:.38cqw}
+.act-bank-heading{flex:none}
+.act-options{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-rows:minmax(min-content,1fr);align-content:stretch;gap:.38cqw}
+.act-clause,.act-clause.is-selected{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;min-height:3.4cqw;height:auto;padding:.34cqw .5cqw;gap:.45cqw;line-height:1.16;overflow:visible}
+.act-clause span{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-overflow:clip;transform:none!important;text-wrap:pretty}
+.act-clause input{align-self:center;margin:0}
+.act-message{flex:none;min-height:0}.act-message:empty{display:none}
+@media(max-width:900px),(max-height:550px){.act-bank{position:static;width:100%;min-height:0;height:auto;max-height:none;padding:12px;gap:8px}.act-options{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;gap:7px}.act-clause,.act-clause.is-selected{min-height:48px;padding:9px 10px;gap:8px;font-size:22px;line-height:1.2}}
+@media(max-width:520px){.act-options{grid-template-columns:minmax(0,1fr)}}
