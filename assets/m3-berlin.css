@@ -25,3 +25,10 @@ html,body{background:#17382f}
 #berlin .notice{color:#e2d5b8}
 #berlin .status.success{color:#d3f2b1}#berlin .status.error{color:#ffe3ae}
 @media(max-width:650px){.museum-side{display:none}.room-fit{background:#17382f}}
+
+/* Antique brass frames integrate the photographed cabinets into the imperial-green wall. */
+.museum-side{container-type:inline-size;align-items:stretch}
+.museum-cabinet-frame{display:flex;flex:0 1 auto;min-width:0;width:calc(100% - 16px);max-width:33cqh;align-self:stretch;margin:8px 8px;position:relative;padding:clamp(3px,2.8cqw,7px);border:1px solid #78552e;border-radius:3px;background:linear-gradient(120deg,#795326 0%,#b48a4b 10%,#e0c17f 24%,#96703c 43%,#c9a565 68%,#ead198 83%,#8e6635 100%);box-shadow:0 0 0 1px #ba995c,0 3px 10px #091d16a6,inset 0 0 0 1px #e0c78a;overflow:hidden}
+.museum-cabinet-frame::after{content:"";position:absolute;inset:3px;border:1px solid #f0d49a;box-shadow:0 0 0 1px #78552e;pointer-events:none;border-radius:1px}
+.museum-cabinet-frame .museum-cabinet{flex:1;min-width:0;width:100%;height:100%;max-width:none;border:1px solid #644725;border-radius:1px}
+@container(max-width:35px){.museum-cabinet-frame{display:none}}
