@@ -6,12 +6,12 @@ import { createMission2Autosave } from './mission2-autosave.js?v=20261125-cohesi
 import { MISSION2_OPEN, MISSION2_LOCKED_TEXT } from './mission-release.js?v=20261124-lock1';
 import { mission2RouteMarkup } from './mission1-navigation.js?v=20261125-emblems2';
 import {walletButton,walletContext,prepareWallet} from './museum-wallet.js?v=20261124-atlas2';
-import { arriveMuseumRoom, stampMuseumExercise, missionBriefButton } from './museum-experience.js?v=2';
+import { arriveMuseumRoom, stampMuseumExercise } from './museum-experience.js?v=2';
 import { renderMission1ClassProgress, progressEyeMarkup } from './classroom-progress.js?v=20261125-emblems2';
 import { renderMuseumPassport } from './museum-passport.js?v=20261125-ceremony29';
 const app=document.querySelector('#m2-app');
 let passportDates={},mission2TeamName='Taldea',releaseTimer=null,releaseChecking=false,releaseClosed=false;
-let classBoardOpen=false,classBoardRows=[],classBoardError=false,classBoardBusy=false,classBoardTimer=null;
+let classBoardLoaded=false,classBoardRows=[],classBoardError=false,classBoardBusy=false,classBoardTimer=null;
 async function checkMission2Release(){
  if(teacher||releaseChecking)return;
  releaseChecking=true;
@@ -338,10 +338,9 @@ function hero(){
  '<div class="m2-hero-seal" aria-hidden="true"><strong>02</strong><span>IKERKETA HISTORIKOA</span></div></header>';
 }
 function nav(){
-
  return mission2RouteMarkup(activities,active,{teacher,completedSteps:[...completions],canOpen,ending:teacherEnding})+
- '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+missionBriefButton(2)+walletButton()+'</div>'+
- (!teacher&&teamId?'<details class="m2-class-inline" id="m2-class-inline" '+(classBoardOpen?'open':'')+'><summary data-m2-class-progress title="Ikusi gelako taldeen aurrerapena" aria-controls="m2-class-modal-board">' +progressEyeMarkup+'<span>Taldeen aurrerapena · 2. misioa</span><small data-m2-class-count>'+classBoardCount()+'</small></summary><div class="m2-class-inline-content"><p>Gelako talde guztien 1–5 ariketak · 15 segundoan behin eguneratzen da.</p><div id="m2-class-modal-board" aria-live="polite" aria-atomic="true">'+classBoardMarkup()+'</div><button type="button" class="m2-button secondary" data-m2-class-refresh>↻ Eguneratu</button></div></details>':'');
+ '<div class="m2-archive-access m1-archive-open"><button type="button" data-m2-dossier aria-haspopup="dialog">✧ Ikerketa-espedientea <span>'+completions.size+' / 5</span></button>'+
+ ((teacher||teamId)?'<button type="button" class="m1-class-toggle" data-m2-class-progress aria-haspopup="dialog" title="Ikusi gelako taldeen aurrerapena">'+progressEyeMarkup+'Taldeen aurrerapena</button>':'')+walletButton()+'</div>';
 }
 function dossierMarkup(){
  const rows=activities.map(({id,title})=>'<li class="'+(completions.has(id)?'m1-sealed':'')+'"><span class="m1-medal">'+(completions.has(id)?'✓':String(id).padStart(2,'0'))+'</span><span>'+esc(title)+'</span><small>'+(completions.has(id)?'ZIGILATUA':'ZAIN')+'</small></li>').join('');
@@ -355,19 +354,24 @@ function openDossier(){
   if(releaseClosed||completions.size!==5)return;dialog.close();teacherEnding=true;render();window.scrollTo({top:0,behavior:'instant'});
  });
 }
-// The native disclosure is independent of the exercise click/drag handlers.
- // Its state survives room changes and server-driven rerenders.
-function classBoardCount(){return classBoardRows.length?classBoardRows.length+' talde':classBoardError?'Ezin eguneratu':'Ikusi taldeak'}
+// Classroom progress: same eye button and shared read-only board as mission 1.
 function classBoardMarkup(){
- return renderMission1ClassProgress(classBoardRows,{ownTeamId:teamId,missionId:2,error:classBoardError,showEmblems:true});
+ if(teacher)return '<p class="m1-class-empty">Irakaslearen aurrebista · ikaslearen saioan gelako taldeen benetako aurrerapena agertuko da.</p>';
+ return renderMission1ClassProgress(classBoardRows,{ownTeamId:teamId,missionId:2,error:classBoardError,loading:!classBoardLoaded&&!classBoardError,showEmblems:true});
 }
 function paintClassBoard(){
- const board=$('#m2-class-modal-board'),count=$('[data-m2-class-count]');
+ const board=$('#m2-class-modal-board');
  if(board){const markup=classBoardMarkup();if(board.innerHTML!==markup)board.innerHTML=markup}
- if(count)count.textContent=classBoardCount();
+}
+function openClassBoard(){
+ if(releaseClosed||(!teacher&&!teamId))return;
+ museumDialog('Taldeen aurrerapena','<div class="m2-class-progress-popup"><p class="m2-class-dialog-heading">2. MISIOA · TALDEAK</p><div id="m2-class-modal-board" aria-live="polite" aria-atomic="true">'+classBoardMarkup()+'</div>'+(!teacher?'<p class="m1-class-info">15 segundoan behin eguneratzen da.</p><button type="button" class="m2-button secondary" data-m2-class-refresh>↻ Eguneratu</button>':'')+'</div>');
+ const dialog=$('#m2-reading-dialog');dialog.dataset.museumPanel='class-progress';
+ dialog.querySelector('[data-m2-class-refresh]')?.addEventListener('click',()=>void refreshClassBoard());
+ if(!teacher)void refreshClassBoard();
 }
 async function refreshClassBoard(){
- if(teacher||!teamId||releaseClosed||classBoardBusy||document.hidden)return;
+ if(teacher||!teamId||releaseClosed||classBoardBusy||document.hidden||!document.querySelector('#m2-reading-dialog[open][data-museum-panel="class-progress"]'))return;
  classBoardBusy=true;
  try{
   const {data,error}=await client.rpc('mission2_class_progress_members',{});
@@ -377,23 +381,17 @@ async function refreshClassBoard(){
   const own=rows.find(row=>String(row.team_id)===String(teamId));
   if(!own?.class_id)throw Error('Taldearen gela ezin izan da egiaztatu');
   classBoardRows=rows.filter(row=>String(row.class_id)===String(own.class_id));
-  classBoardError=false;
- }catch(e){classBoardError=true;console.warn('Taldeen aurrerapenaren kontsulta',e)}
+  classBoardError=false;classBoardLoaded=true;
+ }catch(e){classBoardError=true;classBoardLoaded=true;console.warn('Taldeen aurrerapenaren kontsulta',e)}
  finally{classBoardBusy=false;if(!releaseClosed)paintClassBoard()}
 }
 function startClassBoard(){
  if(classBoardTimer!==null)return;
  const sync=()=>{if(!document.hidden)void refreshClassBoard()};
- app.addEventListener('toggle',event=>{
-  if(event.target.id!=='m2-class-inline'||!app.contains(event.target))return;
-  classBoardOpen=event.target.open;
-  if(classBoardOpen)sync();
- },true);
  window.addEventListener('focus',sync);window.addEventListener('online',sync);
  window.addEventListener('m2:progress-changed',sync);document.addEventListener('visibilitychange',sync);
  classBoardTimer=setInterval(sync,15000);
  window.addEventListener('pagehide',()=>{clearInterval(classBoardTimer);classBoardTimer=null;window.removeEventListener('focus',sync);window.removeEventListener('online',sync);window.removeEventListener('m2:progress-changed',sync);document.removeEventListener('visibilitychange',sync)},{once:true});
- sync();
 }
 function intro(){
  const item=activity(active);
@@ -1044,7 +1042,6 @@ function atlasReturnBag(){
  atlasSelectedLuggage=null;render();$('[data-atlas-bag-card="'+item+'"]')?.focus({preventScroll:true});
 }
 app.addEventListener('click',event=>{
- if(event.target.closest('[data-m2-class-refresh]')){void refreshClassBoard();return}
  if(submitting||releaseClosed)return;
  if(!canEdit()&&event.target.closest(editSelector))return;
  const elem=event.target.closest('button');
@@ -1065,6 +1062,7 @@ app.addEventListener('click',event=>{
  if(elem.hasAttribute('data-map-zoom'))return openMap(elem.dataset.mapZoom);
  if(elem.hasAttribute('data-bag-return'))return atlasReturnBag();
  if(elem.hasAttribute('data-m2-dossier'))return openDossier();
+ if(elem.hasAttribute('data-m2-class-progress'))return openClassBoard();
  if(elem.hasAttribute('data-open'))return openExercise(Number(elem.dataset.open));
  if(active===3&&elem.hasAttribute('data-atlas-route')){
   atlasSelectedRoute=atlasSelectedRoute===elem.dataset.atlasRoute?null:elem.dataset.atlasRoute;

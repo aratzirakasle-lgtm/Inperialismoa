@@ -49,17 +49,16 @@
  #m2-class-modal-board .m1-class-members{font-size:10px}
 }
 
-/* A native in-flow classroom board, always reachable above the current room. */
-#m2-app .m2-class-inline{display:block;position:relative;isolation:isolate;z-index:10;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:8px 0 16px;border:2px ridge #bd9759;border-radius:8px;background:#f4e6c7;color:#3f2d1c;font:14px/1.4 Georgia,serif;overflow:visible}
-#m2-app .m2-class-inline>summary{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;min-height:44px;box-sizing:border-box;padding:8px 12px;cursor:pointer;pointer-events:auto;list-style:none;background:linear-gradient(#3e5844,#1b3327);color:#f8e1b1;font-weight:700;border-radius:5px;touch-action:manipulation}
-#m2-app .m2-class-inline>summary::-webkit-details-marker{display:none}
-#m2-app .m2-class-inline>summary::after{content:'▾';font-size:18px}
-#m2-app .m2-class-inline[open]>summary::after{content:'▴'}
-#m2-app .m2-class-inline>summary:focus-visible{outline:3px solid #f1c779;outline-offset:2px}
-#m2-app .m2-class-inline>summary svg{width:30px;height:30px;flex:0 0 30px;pointer-events:none}
-#m2-app .m2-class-inline>summary small{font-size:12px;padding:3px 7px;background:#20392c;border:1px solid #bb9b63;border-radius:4px}
-#m2-app .m2-class-inline-content{box-sizing:border-box;max-width:760px;margin:auto;padding:12px;min-width:0}
-#m2-app .m2-class-inline-content>p{margin:0 0 10px;color:#533b22;font-size:13px}
-#m2-app .m2-class-inline-content>button{display:block;min-height:40px;margin:12px auto 0}
-#m2-app #m2-class-modal-board .m1-class-name{white-space:normal;overflow-wrap:anywhere}
-#m2-app #m2-class-modal-board .m1-class-progress{width:100%;max-width:100%}
+
+/* M2: replace the old full-width disclosure with the M1 eye button.
+   The board uses the existing native museum dialog, so it cannot be clipped
+   by a room's scenery or compete with the drag targets. */
+#m2-app .m2-archive-access .m1-class-toggle{display:inline-flex;align-items:center;gap:7px;letter-spacing:normal}
+#m2-app .m2-archive-access .m1-class-toggle .m1-progress-eye{width:26px;height:26px;flex:0 0 26px;margin:0}
+#m2-reading-dialog[data-museum-panel="class-progress"]{width:min(720px,calc(100vw - 24px));max-width:calc(100vw - 24px)}
+.m2-class-progress-popup{min-width:0;padding:4px 2px}
+.m2-class-dialog-heading{color:#765326;font:bold 12px Georgia,serif;letter-spacing:.08em;margin:0 0 12px}
+.m2-class-progress-popup .m1-class-name{white-space:normal;overflow-wrap:anywhere}
+.m2-class-progress-popup #m2-class-modal-board{min-width:0;width:100%}
+.m2-class-progress-popup .m1-class-info{margin-top:9px}
+.m2-class-progress-popup [data-m2-class-refresh]{display:block;margin:10px auto 0}
