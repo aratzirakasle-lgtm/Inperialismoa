@@ -123,3 +123,34 @@ html,body{background:#17382f}
 .act-message{flex:none;min-height:0}.act-message:empty{display:none}
 @media(max-width:900px),(max-height:550px){.act-bank{position:static;width:100%;min-height:0;height:auto;max-height:none;padding:12px;gap:8px}.act-options{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto;gap:7px}.act-clause,.act-clause.is-selected{min-height:48px;padding:9px 10px;gap:8px;font-size:22px;line-height:1.2}}
 @media(max-width:520px){.act-options{grid-template-columns:minmax(0,1fr)}}
+
+/* Afrikaren mapa — full original scene, live overlays and the shared Akta navigation. */
+#station.map-station{width:min(calc(100vw - 12px),calc((100vh - 164px)*1.5));width:min(calc(100vw - 12px),calc((100dvh - 164px)*1.5));max-width:none;max-height:calc(100dvh - 12px);overflow:auto;background:#17382f;border:1px solid #af8a50;border-radius:4px;color:#f5dfb0}
+.map-station .dialog-top{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0}
+.map-station #station-body{padding:0}
+.map-station .dialog-foot{padding:5px 10px;min-height:42px;border-top:1px solid #b4935d;justify-content:center}
+.map-station .dialog-foot button{padding:6px 14px}
+.map-scene{position:relative;container-type:inline-size;background:#17382f;isolation:isolate}
+.map-artwork{position:relative;width:100%;aspect-ratio:3/2;overflow:hidden;isolation:isolate}
+.map-original{width:100%;height:100%;display:block;object-fit:contain;pointer-events:none;user-select:none}
+.map-live-overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.map-inner-highlight,.map-coast-highlight,.map-point-edge,.map-point-arrow{opacity:0;transition:opacity .2s}
+.map-scene[data-coast="true"] .map-coast-highlight{opacity:.72}.map-scene[data-coast="true"] .map-point-edge{opacity:.95}
+.map-scene[data-interior="true"] .map-inner-highlight{opacity:.82}.map-scene[data-coast="true"][data-interior="true"] .map-point-arrow{opacity:1}
+.map-pin{position:absolute;z-index:2;transform:translate(-50%,-50%);width:2.8cqw;height:2.8cqw;border:1px solid #f7d993;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff1bb,#d6a54c 43%,#906025 75%,#523512);box-shadow:0 0 0 1px #6b431a,0 2px 4px #20150b90;padding:0;cursor:pointer}
+.map-pin:hover,.map-pin:focus-visible,.map-pin[aria-pressed="true"]{box-shadow:0 0 0 2px #fff1b8,0 0 1.25cqw .35cqw #ffce69;background:radial-gradient(circle,#fffbe2,#f4d16f 55%,#a97028)}
+.map-artwork .act-nav{top:1.6%;left:75%;right:1.7%;height:10.5%;padding:0 1%;background:linear-gradient(90deg,#322318ed,#281a15f0,#34221aeb);border:1px solid #b58b4e;border-radius:5px;z-index:4}
+.map-layer-controls{position:absolute;z-index:3;left:3.55%;top:33.2%;width:17.5%;height:25.5%;display:flex;flex-direction:column;gap:0;color:#51311b;font-family:Georgia,serif}
+.map-layer-controls h2{font-size:1.35cqw;line-height:1.15;margin:0 0 1.65cqw;text-align:center;font-weight:600;letter-spacing:.04em}
+.map-layer{position:relative;display:flex;align-items:center;gap:.8cqw;height:4.1cqw;min-height:0;width:100%;border-radius:999px;cursor:pointer;color:#fff5d8;font-family:Georgia,serif;font-size:1.4cqw;font-weight:600;line-height:1.05;text-shadow:0 1px 2px #271b12;isolation:isolate}
+.map-layer-coast{background:linear-gradient(110deg,#376c85,#28536c);border:1px solid #6a553a;margin-bottom:2.55cqw}
+.map-layer-interior{background:repeating-linear-gradient(-45deg,#b58a4e 0 6px,#d3b17a 6px 12px);border:1px solid #805a35;color:#432a17;text-shadow:0 1px #f6dda4}
+.map-layer input{appearance:none;flex:none;width:3.45cqw;height:3.45cqw;margin:0 0 0 .16cqw;border:2px solid #a88045;border-radius:50%;background:radial-gradient(circle at 42% 36%,#64472e,#33251c 64%,#8a6132);box-shadow:0 0 0 1px #503218;cursor:pointer}
+.map-layer input:checked{background:radial-gradient(circle,#fff8cc 0 23%,#ffe097 38%,#c99537 66%,#755024);box-shadow:0 0 0 1px #68451c,0 0 .8cqw #ffd477}
+.map-layer:hover{outline:1px solid #eac16d}.map-layer:focus-within{outline:2px solid #ffe39a}
+.map-layer span{flex:1;text-align:center;padding-right:.5cqw;white-space:nowrap}.map-layer-hint{font-size:1.05cqw;line-height:1.15;text-align:center;margin:.75cqw 0 0;color:#56351f}
+.map-question{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:8px 12px;background:#eddbb8 url("./m3-berlin-akta-paper.webp") center/cover;color:#402a19;border-top:1px solid #a7814d;font-family:Georgia,serif}
+.map-question-copy{flex:1 1 43%;min-width:0}.map-source-tag{font-size:10px;letter-spacing:.09em;font-weight:bold;color:#6d4b29}.map-question h2{font-size:clamp(14px,1.35vw,19px);line-height:1.2;margin:2px 0 4px;color:#3f2919}.map-question p{margin:0;font-size:11px;line-height:1.15;color:#614a31}
+.map-question .choices{flex:1 1 56%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:stretch}.map-question .choices label{font-size:clamp(12px,1.15vw,16px);line-height:1.15;min-width:0;white-space:normal;overflow-wrap:anywhere;background:#f9e9c8b0;border:1px solid #ad8750;color:#432a18;padding:9px 7px;gap:5px}.map-question input{accent-color:#6c4828;flex:none;margin:0}.map-question .choices label:has(input:checked){background:#e7c98b;border-color:#73512e;box-shadow:inset 0 0 0 1px #a97e45}
+@media(max-width:900px),(max-height:600px){#station.map-station{width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}.map-layer-controls{position:static;width:auto;height:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px 12px;background:#eed8b2}.map-layer-controls h2,.map-layer-hint{grid-column:1/-1;font-size:15px;margin:0}.map-layer{height:42px;font-size:16px;margin:0}.map-layer input{width:33px;height:33px;margin-left:3px}.map-pin{width:max(20px,3cqw);height:max(20px,3cqw)}.map-artwork .act-nav{height:auto;left:auto;right:5px;top:5px;padding:4px;gap:3px}.map-artwork .act-nav button{flex:0 0 32px;height:32px;padding:5px}.map-artwork .act-nav-line{width:10px;flex:none}.map-question{flex-direction:column;align-items:stretch;gap:8px}.map-question .choices label{font-size:15px}.map-question h2{font-size:17px}}
+@media(max-width:520px){.map-question .choices{grid-template-columns:1fr}.map-layer span{font-size:14px}.map-question p{font-size:12px}}
