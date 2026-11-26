@@ -191,3 +191,34 @@ html,body{background:#17382f}
 .sketch-instructions strong{font-size:11px;letter-spacing:.04em;color:#79502c}.sketch-instructions p{margin:3px 0;font-size:13px;line-height:1.2}.sketch-progress{font-weight:bold}.sketch-connections{display:grid;gap:3px}.sketch-connection{display:flex;align-items:center;justify-content:space-between;min-height:24px;border-bottom:1px solid #a37b48;color:#53341d;font-size:14px}.sketch-connection button{border:0;background:transparent;color:#754729;font-size:20px;padding:0 6px;line-height:1}.sketch-submit{min-width:0}.sketch-submit .map-confirm{width:100%;white-space:normal}.sketch-feedback{margin:3px 0 0;font-size:12px;line-height:1.2}.sketch-feedback[data-result="correct"]{color:#24553d;font-weight:bold}.sketch-feedback[data-result="wrong"]{color:#893e2a}
 @media(max-width:900px),(max-height:600px){#station.map-station{width:calc(100vw - 12px)}.sketch-tools{position:static;width:auto;min-height:0;max-height:none;padding:10px 12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.sketch-tools h2,.sketch-tools p,.sketch-tools .arrow-tool{grid-column:1/-1}.sketch-tools h2{font-size:19px}.sketch-tools p,.sketch-tools p.sketch-step{font-size:14px}.sketch-tool{font-size:16px;min-height:40px;padding:7px}.sketch-point{width:max(23px,3.5cqw);height:max(23px,3.5cqw);font-size:max(11px,1.18cqw)}.sketch-desk{grid-template-columns:1fr 1fr}.sketch-instructions{grid-column:1/-1}}
 @media(max-width:520px){.sketch-desk{grid-template-columns:1fr}.sketch-instructions{grid-column:auto}}
+
+/* Guided cartography: one visible action at a time, always explicit. */
+#station.map-station{width:min(calc(100vw - 12px),calc((100vh - 154px)*1.5));width:min(calc(100vw - 12px),calc((100dvh - 154px)*1.5))}
+.guided-tools{top:31%;left:1.7%;width:21%;min-height:46%;max-height:none;overflow:visible;gap:.5cqw;padding:.8cqw;justify-content:flex-start}
+.guide-kicker{font:700 .83cqw/1.2 Georgia,serif;letter-spacing:.07em;text-align:center;color:#775231}
+.guided-tools h2{font-size:1.58cqw;line-height:1.12;margin:.1cqw 0 .3cqw;text-align:center}
+.guided-tools #guide-task{font-size:1.3cqw;font-weight:bold;line-height:1.2;text-align:center}
+#guide-example svg{width:100%;height:auto;max-height:4.8cqw;border:1px solid #b38a53;border-radius:3px;display:block}
+#guide-example:empty{display:none}
+#guide-choices{display:grid;gap:.45cqw}
+.guide-choice{display:block;width:100%;border:1px solid #987041;border-radius:4px;background:linear-gradient(#f5e5c3,#e4c28a);color:#4b301c;padding:.65cqw .35cqw;font:700 1.22cqw/1.18 Georgia,serif;min-height:3.5cqw;white-space:normal;cursor:pointer}
+.guide-choice[aria-pressed="true"]{background:#285b50;color:#fff3d0;border-color:#9e7b43;box-shadow:0 0 0 2px #efcc82}
+.guide-choice:not(:disabled):hover{filter:brightness(1.06)}
+.guided-tools #guide-detail{font-size:1.05cqw;text-align:center;line-height:1.25}
+.guide-route{text-align:center;font:bold 1.5cqw/1.2 Georgia,serif;padding:.6cqw;background:#f5deb2;border:1px solid #ba9258}
+.sketch-point.guide-muted{opacity:.28;box-shadow:none}
+.sketch-point.guide-target{outline:3px solid #ffe2a0;box-shadow:0 0 0 5px #ad7638,0 0 15px 4px #ffce67}
+.sketch-point.guide-target:disabled{opacity:1;cursor:default}
+.sketch-point[aria-pressed="true"]{outline:3px solid #fffce5;box-shadow:0 0 0 5px #e0a646,0 0 18px 7px #ffda83}
+.guided-desk{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr);align-items:center;gap:14px;padding:10px 15px}
+.guide-source{font-size:10px;letter-spacing:.05em;font-weight:bold;color:#79502c}
+.guide-main h2{font-size:clamp(16px,1.5vw,22px);margin:3px 0}
+.guide-main p{font-size:clamp(13px,1.1vw,16px);line-height:1.25;margin:3px 0}
+.guide-steps{display:flex;gap:4px;font:600 11px/1.2 Georgia,serif;color:#785935;flex-wrap:wrap}
+.guide-steps span{flex:1;text-align:center;border-bottom:2px solid #bda17a;padding:5px 2px}
+.guide-steps .is-current{color:#234f43;border-color:#285b50}
+.guide-navigation{display:flex;align-items:center;gap:8px;margin-top:7px}
+.guide-navigation button{flex:1;font:600 13px/1.2 Georgia,serif;padding:8px 6px;white-space:normal}
+.guide-back{background:#f1d9ad;color:#51331d;border:1px solid #987041;border-radius:3px}
+#guide-progress{font-weight:bold;white-space:nowrap}
+@media(max-width:900px),(max-height:600px){#station.map-station{width:calc(100vw - 12px)}.guided-tools{position:static;width:auto;min-height:0;padding:12px;display:flex;gap:8px}.guide-kicker{font-size:11px}.guided-tools h2{font-size:20px}.guided-tools #guide-task{font-size:18px}.guided-tools #guide-detail{font-size:14px}#guide-example svg{max-height:68px}#guide-choices{display:flex;gap:8px}.guide-choice{font-size:16px;min-height:44px;padding:9px}.guide-route{font-size:20px;padding:8px;min-width:80px}.guided-desk{grid-template-columns:1fr;gap:8px}.guide-main h2{font-size:18px}.guide-main p{font-size:14px}}
