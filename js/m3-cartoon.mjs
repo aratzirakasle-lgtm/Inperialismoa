@@ -25,12 +25,14 @@ export const CARDS=[
 {id:'literal',label:'Benetako oturuntza baten kontakizuna',icon:'✦'}
 ];
 export const SLOTS=[{id:'who',question:'Nor ageri da?',expected:'powers'},{id:'action',question:'Zer egiten ari dira?',expected:'division'},{id:'message',question:'Zer mezu iradokitzen du?',expected:'critique'},{id:'evidence',question:'Zein xehetasunek lotzen du tarta Afrikarekin?',expected:'inscription'},{id:'meaning',question:'Zer adierazten du tarta zatitzeak modu sinbolikoan?',expected:'symbol'},{id:'boundary',question:'Zer ezin da jakin karikatura honetatik bakarrik?',expected:'limits'}];
-export const CARTOON_PAGES=[{title:'1. Behaketa eta mezua',cards:['division','local','powers','critique'],slots:['who','action','message']},{title:'2. Frogak eta mugak',cards:['limits','literal','inscription','symbol'],slots:['evidence','meaning','boundary']}];
+export const CARTOON_PAGES=[{title:'Behaketa eta mezua',cards:['division','local','powers','critique'],slots:['who','action','message']},{title:'Frogak eta mugak',cards:['limits','literal','inscription','symbol'],slots:['evidence','meaning','boundary']}];
 export function createCartoon(){return {seen:new Set(),active:null,selected:null,answers:{},checked:false,quizActive:null,quizAnswers:{},quizChecked:false};}
 export function observe(s,id){if(CLUES.some(c=>c.id===id)){s.seen.add(id);s.active=id;}}
 export function selectCard(s,id){if(CARDS.some(c=>c.id===id))s.selected=s.selected===id?null:id;}
 export function place(s,slot,id=s.selected){if(!CARTOON_PAGES.some(p=>p.slots.includes(slot)&&p.cards.includes(id)))return false;for(const key of Object.keys(s.answers))if(s.answers[key]===id)delete s.answers[key];s.answers[slot]=id;s.selected=null;s.checked=false;return true;}
-export function remove(s,slot){delete s.answers[slot];s.checked=false;}
+export function remove(s,slot){if(!SLOTS.some(x=>x.id===slot)||!Object.hasOwn(s.answers,slot))return false;delete s.answers[slot];s.selected=null;s.checked=false;return true;}
+// Reset only the current interpretation round; keep the quiz, observations and other round.
+export function resetPage(s,pageIndex){const page=CARTOON_PAGES[pageIndex];if(!page)return false;const changed=page.slots.some(id=>Object.hasOwn(s.answers,id));for(const id of page.slots)delete s.answers[id];s.selected=null;if(changed)s.checked=false;return changed;}
 export function ready(s){return quizComplete(s)&&CLUES.every(c=>s.seen.has(c.id))&&SLOTS.every(x=>CARDS.some(c=>c.id===s.answers[x.id]));}
 export function score(s){return SLOTS.filter(x=>s.answers[x.id]===x.expected).length;}
 export function sealCartoon(s){s.checked=ready(s);return completeCartoon(s);}

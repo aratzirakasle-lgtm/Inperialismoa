@@ -559,3 +559,23 @@ html,body{background:#17382f}
   .karik-scene[data-karik-phase="behatu"] .karik-question{font-size:16px}
   .karik-scene[data-karik-phase="behatu"] .karik-slot{font-size:15px;min-height:44px;padding:8px 10px}
 }
+
+/* Berrezarri32: clear and revise answers independently in each interpretation round. */
+.karik-board .karik-round-heading{display:flex;align-items:center;justify-content:space-between;gap:.48cqw;min-width:0;border-top:1px solid #ad8650;padding-top:.45cqw;margin:.15cqw 0 0}
+.karik-board .karik-round-heading h3{margin:0;padding:0;border:0;line-height:1.2;min-width:0;font-size:1.08cqw}
+.karik-reset,.karik-board .karik-remove{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:.24cqw;white-space:nowrap;border:1px solid #a17a43;border-radius:3px;background:linear-gradient(#f3dfb5,#e5c48d);color:#604321;font:bold .86cqw/1.15 Georgia,serif;padding:.38cqw .48cqw;cursor:pointer;box-shadow:0 1px 2px #6f4b2928}
+.karik-reset span,.karik-board .karik-remove span{font-size:1.25em;line-height:1}
+.karik-reset:disabled{opacity:.48;cursor:default}
+.karik-reset:not(:disabled):hover,.karik-board .karik-remove:hover{background:#fff0c5;border-color:#8b632a}
+.karik-reset:focus-visible,.karik-board .karik-remove:focus-visible{outline:2px solid #31563e;outline-offset:2px}
+.karik-board .karik-remove[hidden]{display:none}
+.karik-scene[data-karik-phase="interpretatu"] .karik-board{top:16.8%;bottom:3%;height:auto;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden;gap:.42cqw}
+.karik-scene[data-karik-phase="interpretatu"] .karik-board>*{flex:0 0 auto;min-width:0}
+.karik-scene[data-karik-phase="interpretatu"] .karik-slots{grid-template-rows:repeat(3,max-content);min-height:min-content;align-content:start;gap:.55cqw}
+.karik-scene[data-karik-phase="interpretatu"] .karik-slot-row{display:flex;flex-direction:column;min-width:0;gap:.28cqw;padding-bottom:.35cqw;border-bottom:1px solid #aa81474a}
+.karik-scene[data-karik-phase="interpretatu"] .karik-question{line-height:1.25;overflow-wrap:break-word}
+.karik-scene[data-karik-phase="interpretatu"] .karik-slot{min-height:2.45cqw;height:auto;line-height:1.25;overflow-wrap:break-word;white-space:normal}
+@media(max-width:1050px),(max-height:590px){
+.karik-board .karik-round-heading{gap:8px;padding-top:8px;margin-top:6px}.karik-board .karik-round-heading h3{font-size:17px}.karik-reset,.karik-board .karik-remove{gap:4px;padding:8px;font-size:14px;min-height:40px}
+.karik-scene[data-karik-phase="interpretatu"] .karik-board{position:static;width:100%;height:auto;min-height:0;max-height:none;overflow:visible;gap:10px}.karik-scene[data-karik-phase="interpretatu"] .karik-slots{gap:12px}.karik-scene[data-karik-phase="interpretatu"] .karik-slot-row{gap:6px;padding-bottom:8px}.karik-scene[data-karik-phase="interpretatu"] .karik-slot{min-height:44px;padding:8px 10px}
+}
