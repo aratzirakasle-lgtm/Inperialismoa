@@ -795,8 +795,7 @@ function renderExpedition(){
    '<div class="m2-atlas-links"><button type="button" class="m2-button secondary" data-room-jump="m2-exp-file-1">Ibaietako agiria →</button><button type="button" class="m2-button secondary" data-map-zoom="migration">Munduko atlasa ＋</button></div><p class="m2-atlas-footnote">AA bidez sortutako mapa ilustratiboa. Ibaien trazadurak orientagarriak eta izenik gabeak dira. Handitu mapa xehetasunak aztertzeko.</p>'+
   '</aside>'+
   '<div class="m2-atlas-notes m2-expedition-files">'+
-   '<div class="m2-expedition-intro"><span class="m2-archive-eyebrow">IKERKETA GEOGRAFIKOA · 05 / 05</span><h3>Esploratzaileen espedientea</h3>'+
-    '<p>Lotu mapa, espedizioak eta Kongoko ustiapen kolonialaren testuingurua. Aztertu bost agiriak; erantzun guztiak osatu arte ezingo dituzue egiaztatu.</p><div class="m2-expedition-progress" role="status"><span>ERANTZUNDAKO AGIRIAK</span><strong>'+filled.filter(Boolean).length+' / 5</strong><span class="m2-expedition-progress-track" aria-hidden="true"><i style="width:'+filled.filter(Boolean).length*20+'%"></i></span></div></div>'+
+   '<div class="m2-expedition-progress" role="status"><span>ERANTZUNDAKO AGIRIAK</span><strong>'+filled.filter(Boolean).length+' / 5</strong><span class="m2-expedition-progress-track" aria-hidden="true"><i style="width:'+filled.filter(Boolean).length*20+'%"></i></span></div>'+
    roomIndex(['Ibaiak','Asia eta Ozeania','Poloak','Topaketa','Kongo'].map((title,i)=>({id:'m2-exp-file-'+(i+1),title,filled:filled[i]?1:0,total:1})),'Esploratzaileen bost agiriak')+
    '<section class="m2-panel m2-expedition-panel" id="m2-exp-file-1" tabindex="-1"><header><span>AGIRIA 01</span><h3>Afrikako ibai handiak</h3>'+fileStatus(1)+'</header>'+
     '<p class="m2-caption">Aukeratu diapositiban aipatzen diren LAU ibaiak.</p>'+

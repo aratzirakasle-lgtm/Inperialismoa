@@ -219,3 +219,10 @@
 @media(prefers-reduced-motion:reduce){
  #m2-app.m2-expedition-active .m2-expedition-files .m2-expedition-panel :is(.m2-multi .m2-tile,.m2-explorer-card){transition:none!important;transform:none!important}
 }
+
+/* E5: omit the redundant introduction; keep a compact neutral progress strip. */
+#m2-app.m2-expedition-active .m2-expedition-files>.m2-expedition-progress{
+ grid-column:1/-1;align-self:start;margin:0;padding:2px 6px 0;gap:3px;
+}
+#m2-app.m2-expedition-active .m2-expedition-files>.m2-expedition-progress .m2-expedition-progress-track{height:6px}
+#m2-app.m2-expedition-active .m2-expedition-files>.m2-room-index{grid-column:1/-1;margin:0 0 2px}
