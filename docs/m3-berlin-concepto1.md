@@ -1,0 +1,3 @@
+# Misión 3 · primer concepto
+
+La sala reproduce el archivo original de 1448 × 1086 sin recortes. Para completar la carga de recursos binarios, subir a assets/: m3-berlin-original.webp, m3-berlin-slide18.webp y m3-berlin-karikatura.webp. El acceso exige una sesión docente y ?preview=1. No hay escrituras en Supabase ni cambios en desbloqueos. Las actividades se validan en conjunto según la diapositiva 18; son una vista previa local, no corrección de producción. Las áreas clicables son botones HTML sobre las cartelas originales, accesibles por teclado.
