@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 660" fill="none">
+<defs>
+<linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5c3a1c"/><stop offset=".28" stop-color="#be9359"/><stop offset=".48" stop-color="#f0d19a"/><stop offset=".63" stop-color="#8e6034"/><stop offset="1" stop-color="#4f301b"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#201b14"/><stop offset=".17" stop-color="#60412a"/><stop offset=".32" stop-color="#31281a"/><stop offset=".52" stop-color="#503a23"/><stop offset=".83" stop-color="#362618"/><stop offset="1" stop-color="#1b180f"/></linearGradient>
+<linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#25473a"/><stop offset=".5" stop-color="#142f26"/><stop offset="1" stop-color="#0e241c"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#e2b76b" stop-opacity=".36"/><stop offset="1" stop-color="#e2b76b" stop-opacity="0"/></radialGradient>
+<pattern id="damask" width="30" height="42" patternUnits="userSpaceOnUse"><path d="M15 1Q22 10 15 21Q8 10 15 1ZM0 22Q7 30 0 42M30 22Q23 30 30 42M15 21Q3 24 15 41Q27 24 15 21Z" stroke="#c49c61" stroke-opacity=".11" stroke-width=".7"/></pattern>
+</defs>
+<rect x="7" y="5" width="226" height="650" rx="3" fill="url(#wood)" stroke="#977041" stroke-opacity=".7"/>
+<rect x="19" y="18" width="202" height="390" rx="2" fill="url(#green)" stroke="url(#brass)" stroke-width="2"/>
+<rect x="26" y="25" width="188" height="376" fill="url(#damask)" stroke="#977041" stroke-opacity=".65"/>
+<path d="M34 70V34H70M170 34H206V70M34 356V392H70M170 392H206V356" stroke="url(#brass)" stroke-width="1.3"/>
+<ellipse cx="120" cy="166" rx="96" ry="143" fill="url(#glow)"/>
+<g transform="translate(120 185)">
+<circle r="60" fill="#152c24" stroke="url(#brass)" stroke-width="3"/><circle r="53" stroke="#b48a52" stroke-width=".9"/><circle r="44" stroke="#a57c48" stroke-dasharray="1 4"/>
+<path d="M0-48L9-12L0 0L-9-12ZM48 0L12 9L0 0L12-9ZM0 48L-9 12L0 0L9 12ZM-48 0L-12-9L0 0L-12 9Z" fill="url(#brass)" stroke="#d1ac72" stroke-width=".5"/>
+<path d="M-30-30L0-9L30-30L9 0L30 30L0 9L-30 30L-9 0Z" fill="#906b3a" fill-opacity=".55"/><circle r="7" fill="#cfab70" stroke="#61441f" stroke-width="1.5"/>
+</g>
+<path d="M80 278H160M95 286H145" stroke="url(#brass)" stroke-width="1"/>
+<path d="M120 310c-20-23-42-4-19 13c8 5 19 5 19 20c0-15 11-15 19-20c23-17 1-36-19-13Z" stroke="url(#brass)" stroke-width="1.5"/>
+<rect x="15" y="419" width="210" height="12" fill="url(#brass)" opacity=".64"/>
+<rect x="19" y="443" width="202" height="200" fill="#2a2018" stroke="url(#brass)" stroke-width="2"/>
+<rect x="30" y="454" width="180" height="178" fill="url(#wood)" stroke="#a37b48" stroke-opacity=".65"/>
+<path d="M44 470H196V616H44Z M52 478H188V608H52Z" stroke="#927048" stroke-opacity=".58"/>
+<path d="M120 487L173 543L120 599L67 543Z" fill="#1c2e24" stroke="url(#brass)" stroke-width="1.5"/><path d="M120 503L157 543L120 583L83 543Z" stroke="#977041"/><path d="M120 527L136 543L120 559L104 543Z" fill="url(#brass)"/>
+</svg>

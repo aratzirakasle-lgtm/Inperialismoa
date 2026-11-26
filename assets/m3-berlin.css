@@ -11,3 +11,11 @@
 #asset-error{grid-row:5}
 @media(max-width:650px){#berlin:not([hidden]){padding:4px;gap:3px}#berlin .toolbar{gap:5px;padding:5px}#berlin .toolbar a,#berlin .toolbar button{padding:6px 8px}#berlin .hotspot{min-height:0}}
 @supports not (width:1cqh){.room{width:min(100%,1448px,calc((100vh - 150px)*4/3))}}
+
+/* Museum wall panelling fills only the spare side space; the original scene never enlarges. */
+#berlin:not([hidden]){background:radial-gradient(ellipse at 50% 20%,#40513b 0%,#22392c 45%,#152a22 100%)}
+.room-fit{isolation:isolate;overflow:hidden;background:linear-gradient(90deg,#253b2d,#182b22 35%,#182b22 65%,#253b2d);border-radius:3px}
+.room-fit::before,.room-fit::after{content:"";flex:1 1 0;min-width:0;align-self:stretch;pointer-events:none;background-image:url("./m3-berlin-wall.svg"),linear-gradient(90deg,#78573255,transparent 12%,#172c2255 75%,#85623a55),repeating-linear-gradient(90deg,#392a1c 0px,#473524 3px,#4d3926 6px,#3a2b1d 8px,#2e241a 10px);background-size:min(96%,245px) 98%,100% 100%,100% 100%;background-repeat:no-repeat,no-repeat,repeat;background-position:center;box-shadow:inset 0 0 28px #0c17176b}
+.room{z-index:1;box-shadow:0 0 0 1px #a47a43,0 0 18px #100f0bb0}
+#berlin .toolbar{background:linear-gradient(180deg,#254235,#152e25);border:1px solid #8b6a43;border-radius:3px}
+@media(max-width:650px){.room-fit{background:radial-gradient(ellipse,#314739,#1c3127)}.room-fit::before,.room-fit::after{background-size:94% 98%,100% 100%,100% 100%}}
