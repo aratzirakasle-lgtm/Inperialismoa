@@ -430,3 +430,16 @@ html,body{background:#17382f}
 /* Keep the decorative lighting still after the initial reveal. */
 .karik-scene::before{animation-iteration-count:1;animation-fill-mode:forwards}
 @media(prefers-reduced-motion:reduce){.karik-scene::before{animation:none}}
+
+/* Karikatura: nine transparent museum pieces, no opaque badge or backdrop. */
+.karik-scene .engraved-art{display:block;width:100%;height:100%;background-image:url("./m3-karikatura-test-art.webp?v=20261126-gardena26");background-repeat:no-repeat;background-size:300% 300%;background-position:var(--art-x) var(--art-y);filter:drop-shadow(0 1px 1px #57372055)}
+.karik-scene .answer-art{width:4.1cqw;height:4.1cqw;overflow:visible;border-radius:0;box-shadow:none;background:none}
+.karik-scene .quiz-answer{grid-template-columns:1.3cqw 4.1cqw minmax(0,1fr) 1.35cqw;gap:.3cqw;padding:.2cqw .3cqw;min-height:4.5cqw}
+.karik-scene .answer-letter{width:1.3cqw;height:1.3cqw;font-size:.84cqw}
+.karik-scene .answer-wax{width:1.35cqw;height:1.35cqw}
+.karik-scene .collected-emblem{border-radius:0;overflow:visible}
+.karik-scene .journal-entry[data-state="verified"] .journal-medal{background:none;border:0;box-shadow:none;overflow:visible;padding:0}
+.karik-scene .journal-entry[data-state="verified"] .engraved-art{filter:drop-shadow(0 0 3px #dcae61)}
+.karik-scene .reward-medals .collected-emblem{background:none;box-shadow:none;border:0}
+.karik-scene .reward-medals .engraved-art{filter:drop-shadow(0 2px 3px #0009)}
+@media(max-width:1050px),(max-height:590px){.karik-scene .quiz-answer{grid-template-columns:24px 58px minmax(0,1fr) 24px;gap:8px;padding:7px;min-height:66px}.karik-scene .answer-art{width:58px;height:58px}.karik-scene .answer-letter{width:24px;height:24px;font-size:14px}.karik-scene .answer-wax{width:24px;height:24px}}
