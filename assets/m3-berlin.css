@@ -443,3 +443,46 @@ html,body{background:#17382f}
 .karik-scene .reward-medals .collected-emblem{background:none;box-shadow:none;border:0}
 .karik-scene .reward-medals .engraved-art{filter:drop-shadow(0 2px 3px #0009)}
 @media(max-width:1050px),(max-height:590px){.karik-scene .quiz-answer{grid-template-columns:24px 58px minmax(0,1fr) 24px;gap:8px;padding:7px;min-height:66px}.karik-scene .answer-art{width:58px;height:58px}.karik-scene .answer-letter{width:24px;height:24px;font-size:14px}.karik-scene .answer-wax{width:24px;height:24px}}
+
+/* Lupa27: numbered antique brass instruments, neutral selection, no sound. */
+.karik-scene .karik-lens{--instrument-size:clamp(36px,4.45cqw,76px);width:var(--instrument-size);height:var(--instrument-size);padding:0;border:0;border-radius:50%;background:none;box-shadow:none;overflow:visible;display:grid;place-items:center;transform:translate(-50%,-50%);color:#fdf1c7;isolation:isolate;cursor:pointer;transition:filter .2s}
+.karik-scene .karik-lens:hover,.karik-scene .karik-lens[aria-pressed="true"],.karik-scene .karik-lens.is-seen{background:none;box-shadow:none;border:0}
+.lens-instrument{position:relative;display:block;width:79%;height:79%;pointer-events:none;transform:rotate(-13deg);transition:transform .22s ease;filter:drop-shadow(0 3px 3px #2c190db0)}
+.lens-metal{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;padding:13%;background:conic-gradient(from 25deg,#65421e,#e6bc70 11%,#fff0bd 20%,#a36c2b 33%,#7d4e22 44%,#e6bd70 58%,#fff1bd 66%,#b27b37 79%,#6b4621 91%,#65421e);border:1px solid #62401e;box-shadow:inset 0 0 0 1px #f4d28d,0 0 0 1px #b68a47;z-index:2}
+.lens-crystal{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle at 35% 22%,#fff9da9e,transparent 46%),linear-gradient(135deg,#3f5a3ddd,#132e24c9);border:1px solid #513c25;box-shadow:inset 0 0 4px #171d13b0,inset 0 0 0 1px #f5e2a780;overflow:hidden}
+.lens-crystal::before{content:"";position:absolute;inset:7%;border-radius:50%;border-top:2px solid #fff5d3d4;transform:rotate(-24deg)}
+.lens-number{position:relative;font:bold clamp(13px,1.56cqw,24px)/1 Georgia,serif;color:#fff1c7;text-shadow:0 1px 3px #1c190f;transform:rotate(13deg);z-index:1}
+.lens-grip{position:absolute;width:24%;height:62%;left:50%;top:89%;transform:translateX(-50%) rotate(-39deg);transform-origin:50% 0;border:1px solid #4a2b19;border-radius:2px 2px 5px 5px;background:linear-gradient(90deg,#412a19,#89582e 32%,#c28e51 48%,#6c4225 71%,#3b2518);box-shadow:1px 2px 3px #21150d80;z-index:1}
+.lens-grip::before{content:"";display:block;width:100%;height:26%;background:linear-gradient(90deg,#815223,#f5d390 44%,#b98d44 70%,#755022);border-radius:1px}
+.lens-beacon{position:absolute;inset:-15%;border:1px solid #f5d993;border-radius:50%;opacity:0;z-index:0;pointer-events:none}
+.karik-lens:not(.is-seen):not(.is-recorded):not([aria-pressed="true"]) .lens-beacon{animation:lensBeacon 3s ease-out 3}
+@keyframes lensBeacon{0%,35%{opacity:0;transform:scale(.85)}45%{opacity:.75}95%,100%{opacity:0;transform:scale(1.48)}}
+.karik-lens:hover .lens-instrument,.karik-lens:focus-visible .lens-instrument{transform:rotate(-8deg) scale(1.12);filter:drop-shadow(0 0 6px #ffdd83)}
+.karik-lens.is-recorded .lens-metal{box-shadow:inset 0 0 0 1px #fff1b3,0 0 6px #eac06e}
+.karik-lens.is-seen .lens-crystal{background:radial-gradient(circle at 35% 22%,#e4ffd47d,transparent 45%),linear-gradient(135deg,#437b58,#143e2d)}
+.karik-lens.is-seen .lens-metal{box-shadow:inset 0 0 0 1px #ffefad,0 0 7px #b2d58a}
+.karik-scene .karik-lens.is-seen::after,.karik-scene .karik-lens.is-recorded::after{content:none}
+.karik-lens.is-seen .lens-beacon{opacity:.85;border:2px solid #b1d49a;inset:-5%}
+.karik-lens.is-recorded:not(.is-seen) .lens-beacon{opacity:.9;border:2px solid #f0d38b;inset:-5%}
+/* The selected small instrument yields to the large optical lens; the number remains legible. */
+.karik-lens[aria-pressed="true"] .lens-instrument{transform:rotate(-13deg)}
+.karik-lens[aria-pressed="true"] .lens-metal{background:transparent;border-color:transparent;box-shadow:none;padding:0}
+.karik-lens[aria-pressed="true"] .lens-crystal{background:none;border-color:transparent;box-shadow:none;overflow:visible}
+.karik-lens[aria-pressed="true"] .lens-crystal::before,.karik-lens[aria-pressed="true"] .lens-grip,.karik-lens[aria-pressed="true"] .lens-beacon{display:none}
+.karik-lens[aria-pressed="true"] .lens-number{position:absolute;top:-22%;left:-12%;border:2px solid #e7bd72;border-radius:50%;display:grid;place-items:center;width:1.6em;height:1.6em;background:#264936;box-shadow:0 2px 5px #2b180c99}
+.karik-optics .optics-rim{transition:left .28s ease,top .28s ease;box-shadow:0 0 0 1px #624020,0 0 0 3px #e6c785,inset 0 0 0 1px #6b4826,inset 0 0 0 3px #f2daa1,inset 0 0 16px #e9c88060,0 6px 13px #2a150eb0}
+.optics-window{transition:clip-path .28s ease}.optics-enlarged{transition:transform-origin .28s ease}
+.karik-optics.is-focusing .optics-glass{animation:lensReflex .45s ease-out}
+@keyframes lensReflex{from{box-shadow:inset 0 0 24px #fff8d3a0;background-color:#fff3d02b}to{box-shadow:inset 0 0 13px #f9df9a26;background-color:transparent}}
+/* A full-width gold selection treatment, never an error/correctness symbol. */
+.karik-scene .quiz-answer{position:relative;grid-template-columns:1.45cqw 4.1cqw minmax(0,1fr);gap:.42cqw;text-align:left;min-height:4.5cqw;overflow:hidden;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
+.answer-copy{display:grid;gap:.14cqw;min-width:0;align-content:center}
+.answer-selection{display:flex;align-items:center;gap:.3em;color:#75501b;font:bold clamp(9px,.77cqw,13px)/1.05 Georgia,serif;letter-spacing:.075em;visibility:hidden;opacity:0;transition:opacity .15s}
+.selection-diamond{font-size:.9em;color:#9e6b22}
+.karik-scene .quiz-answer[aria-pressed="true"]{background:linear-gradient(106deg,#f7e6b8,#ffe8ae 55%,#efcc83);color:#422e19;border-color:#926429;outline:2px solid #d8ad54;outline-offset:-3px;box-shadow:inset 0 0 0 1px #fff7d4,inset .34cqw 0 0 #b48835,0 2px 6px #73502066;transform:none}
+.karik-scene .quiz-answer[aria-pressed="true"] .answer-letter{background:linear-gradient(135deg,#f5d88f,#b38232);color:#402b13;border-color:#895a24;font-weight:bold}
+.karik-scene .quiz-answer[aria-pressed="true"] .answer-selection{visibility:visible;opacity:1}
+.karik-scene .quiz-answer[aria-pressed="true"] .answer-art{filter:drop-shadow(0 1px 2px #98642080)}
+.karik-scene .quiz-answer:focus-visible{outline:2px solid #3e614a;outline-offset:-2px}
+@media(max-width:1050px),(max-height:590px){.karik-scene .karik-lens{--instrument-size:clamp(44px,7vw,60px)}.lens-number{font-size:18px}.karik-scene .quiz-answer{grid-template-columns:24px 58px minmax(0,1fr);gap:8px;min-height:66px}.answer-copy{gap:3px}.answer-selection{font-size:11px}.karik-scene .quiz-answer[aria-pressed="true"]{box-shadow:inset 4px 0 #b48835,0 2px 6px #73502066}}
+@media(prefers-reduced-motion:reduce){.karik-lens .lens-beacon,.karik-optics.is-focusing .optics-glass{animation:none!important}.optics-window,.optics-enlarged,.optics-rim,.lens-instrument,.quiz-answer,.answer-selection{transition:none!important}}
