@@ -579,3 +579,12 @@ html,body{background:#17382f}
 .karik-board .karik-round-heading{gap:8px;padding-top:8px;margin-top:6px}.karik-board .karik-round-heading h3{font-size:17px}.karik-reset,.karik-board .karik-remove{gap:4px;padding:8px;font-size:14px;min-height:40px}
 .karik-scene[data-karik-phase="interpretatu"] .karik-board{position:static;width:100%;height:auto;min-height:0;max-height:none;overflow:visible;gap:10px}.karik-scene[data-karik-phase="interpretatu"] .karik-slots{gap:12px}.karik-scene[data-karik-phase="interpretatu"] .karik-slot-row{gap:6px;padding-bottom:8px}.karik-scene[data-karik-phase="interpretatu"] .karik-slot{min-height:44px;padding:8px 10px}
 }
+
+/* Frogak33: transparent illustrative objects, no baked parchment, independent card heights. */
+.karik-scene[data-karik-phase="interpretatu"] .karik-cards{grid-auto-rows:auto;align-items:stretch;gap:.48cqw}
+.karik-board .frogak-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.18cqw;min-height:6.8cqw;height:auto;padding:.3cqw .35cqw .42cqw;text-align:center;font-size:.99cqw;line-height:1.18;overflow-wrap:normal}
+.karik-board .frogak-card-art{display:block;flex:0 0 auto;width:min(100%,6.15cqw);aspect-ratio:3/2;background:url("./m3-frogak-art.webp?v=20261126-frogak33") no-repeat;background-size:200% 200%;background-position:var(--frogak-art-position);filter:drop-shadow(0 1px 1px #64442235);pointer-events:none}
+.karik-board .frogak-card .karik-card-label{display:block;width:100%;min-width:0;flex:1;align-content:center}
+.karik-board .frogak-card[aria-pressed="true"]{outline:2px solid #b18438;outline-offset:-2px;background:linear-gradient(110deg,#fff0bf,#e9c87f);box-shadow:0 0 5px #e8b96188}
+.karik-board .frogak-card.is-placed{opacity:.66}
+@media(max-width:1050px),(max-height:590px){.karik-board .frogak-card{min-height:122px;padding:8px;font-size:15px;gap:5px}.karik-board .frogak-card-art{width:min(100%,132px)}.karik-scene[data-karik-phase="interpretatu"] .karik-cards{gap:8px}}

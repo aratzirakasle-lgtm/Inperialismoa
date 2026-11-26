@@ -24,7 +24,7 @@ export const CARDS=[
 {id:'limits',label:'Potentzia bakoitzak zein lurralde hartu zuen',icon:'⌖'},
 {id:'literal',label:'Benetako oturuntza baten kontakizuna',icon:'✦'}
 ];
-export const SLOTS=[{id:'who',question:'Nor ageri da?',expected:'powers'},{id:'action',question:'Zer egiten ari dira?',expected:'division'},{id:'message',question:'Zer mezu iradokitzen du?',expected:'critique'},{id:'evidence',question:'Zein xehetasunek lotzen du tarta Afrikarekin?',expected:'inscription'},{id:'meaning',question:'Zer adierazten du tarta zatitzeak modu sinbolikoan?',expected:'symbol'},{id:'boundary',question:'Zer ezin da jakin karikatura honetatik bakarrik?',expected:'limits'}];
+export const SLOTS=[{id:'who',question:'Nor ageri da?',expected:'powers'},{id:'action',question:'Zer egiten ari dira?',expected:'division'},{id:'message',question:'Zer mezu iradokitzen du?',expected:'critique'},{id:'evidence',question:'Nola dakigu tartak zer kontinente irudikatzen duen?',expected:'inscription'},{id:'meaning',question:'Zer adierazten du tarta zatitzeak modu sinbolikoan?',expected:'symbol'},{id:'boundary',question:'Zer ezin da jakin karikatura honetatik bakarrik?',expected:'limits'}];
 export const CARTOON_PAGES=[{title:'Behaketa eta mezua',cards:['division','local','powers','critique'],slots:['who','action','message']},{title:'Frogak eta mugak',cards:['limits','literal','inscription','symbol'],slots:['evidence','meaning','boundary']}];
 export function createCartoon(){return {seen:new Set(),active:null,selected:null,answers:{},checked:false,quizActive:null,quizAnswers:{},quizChecked:false};}
 export function observe(s,id){if(CLUES.some(c=>c.id===id)){s.seen.add(id);s.active=id;}}
