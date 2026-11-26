@@ -295,3 +295,18 @@ html,body{background:#17382f}
 .karik-page-nav button[aria-pressed="true"]{background:#234b3b;color:#fff1cd;box-shadow:0 0 0 1px #b88a4b}
 .karik-board .karik-question{font-weight:700}
 @media(max-width:1050px),(max-height:590px){.karik-page-nav button{font-size:15px;min-height:42px;padding:8px}}
+
+/* Asmatu: three contextual questions; opaque paper label hides the inscription until Behatu. */
+.karik-page-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
+.karik-page-nav button{font-size:.92cqw;min-height:2.5cqw}
+.karik-page-nav button:disabled{opacity:.58;cursor:default}
+.karik-inscription-mask{position:absolute;left:39%;top:46.6%;width:25.9%;height:10.4%;transform:rotate(4deg);background:#d9b98a url("./m3-berlin-akta-paper.webp") center/cover;border:1px solid #987443;box-shadow:0 1px 2px #5a402950;z-index:1;pointer-events:none}
+.karik-quiz .karik-lens{z-index:2}
+.quiz-board{gap:.65cqw;min-height:60%;max-height:66%}
+.quiz-board #quiz-question{font-size:1.48cqw;line-height:1.2;padding:.65cqw 0 .4cqw;margin:.35cqw 0 0;color:#4c2d19}
+#quiz-options{display:grid;gap:.65cqw}
+.quiz-answer{width:100%;text-align:left;padding:.75cqw .8cqw;min-height:3.6cqw;font:bold 1.22cqw/1.2 Georgia,serif;color:#43291a;border:1px solid #a47a45;border-radius:4px;background:linear-gradient(#f6e3bc,#e7c48b);box-shadow:0 2px 4px #80552635;white-space:normal}
+.quiz-answer[aria-pressed="true"]{background:#285642;color:#fff3ce;border-color:#d5ad67;box-shadow:0 0 0 1px #946a38}
+.quiz-answer:not(:disabled):hover{filter:brightness(1.08)}
+.quiz-board .karik-feedback{font-size:1.1cqw;margin-top:.45cqw}
+@media(max-width:1050px),(max-height:590px){.karik-page-nav button{font-size:14px;min-height:42px}.quiz-board{min-height:0;max-height:none;gap:10px}.quiz-board #quiz-question{font-size:20px;padding:8px 0}.quiz-answer{font-size:17px;min-height:48px;padding:10px}.quiz-board .karik-feedback{font-size:15px}#quiz-options{gap:8px}}
