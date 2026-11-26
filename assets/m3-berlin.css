@@ -597,3 +597,9 @@ html,body{background:#17382f}
 .karik-board .karik-slot-wrap .karik-remove:disabled{opacity:.35;cursor:default;box-shadow:none}
 .karik-scene[data-karik-phase="interpretatu"] .karik-board,.karik-scene[data-karik-phase="behatu"] .karik-board{z-index:3}
 @media(max-width:1050px),(max-height:590px){.karik-board .karik-slot-wrap{gap:6px}.karik-board .karik-slot-wrap .karik-remove{min-width:74px;min-height:44px;font-size:15px;padding:8px}}
+
+/* Exercise 1 completion */
+#berlin .toolbar .m3-next-button{background:linear-gradient(180deg,#52794d,#254d37);border:3px double #efcd83;color:#fff0bd;font-weight:bold;box-shadow:0 2px 7px #12271c90;padding:8px 15px}
+#berlin .toolbar .m3-next-button[hidden]{display:none!important}
+#berlin .toolbar .m3-next-button:not(:disabled):hover{background:linear-gradient(180deg,#648c59,#305b40)}
+.m3-next-intro{text-align:center;display:grid;justify-items:center;gap:12px;padding:24px 12px;background:#efd8ae;color:#47301c;border:3px double #b18a4b;border-radius:5px}.m3-next-intro h2,.m3-next-intro h3,.m3-next-intro p{margin:0}.m3-next-intro h2{color:#284c37}.m3-next-intro hr{width:80%;border:0;border-top:1px solid #b18a4b}.m3-next-medal{display:grid;place-items:center;width:68px;height:68px;background:#244934;border:4px double #d9b566;border-radius:50%;color:#ffe3a0;font-size:34px}
