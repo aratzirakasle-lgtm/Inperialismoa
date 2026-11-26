@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createAudit,changeScope,reverseArrow,swapLegend,score,seal,complete} from '../js/m3-map-audit.mjs';
+test('initial map is wrong and cannot pass',()=>{const s=createAudit();assert.deepEqual(score(s),{scope:0,arrows:2,legend:0});assert.equal(seal(s),false);});
+test('the slide 18 interpretation is accepted only on explicit validation',()=>{const s=createAudit();changeScope(s,'almost');reverseArrow(s,1);reverseArrow(s,3);swapLegend(s);assert.deepEqual(score(s),{scope:1,arrows:4,legend:1});assert.equal(complete(s),false);assert.equal(seal(s),true);});
+test('all is not almost all; reversal and legend edits invalidate seal',()=>{const s=createAudit();changeScope(s,'almost');reverseArrow(s,1);reverseArrow(s,3);swapLegend(s);seal(s);changeScope(s,'all');assert.equal(seal(s),false);changeScope(s,'almost');seal(s);reverseArrow(s,2);assert.equal(complete(s),false);reverseArrow(s,2);seal(s);swapLegend(s);assert.equal(seal(s),false);});
