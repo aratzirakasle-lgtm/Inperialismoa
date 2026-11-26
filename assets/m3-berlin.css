@@ -501,3 +501,13 @@ html,body{background:#17382f}
 .act-confirm:disabled{opacity:.55;cursor:default}.act-confirm:not(:disabled):hover{filter:brightness(1.15)}.act-confirm:focus-visible{outline:2px solid #ffdc80;outline-offset:3px}
 .act-check-panel[data-result="correct"]{border-color:#e9cc85;background:linear-gradient(90deg,#1b422f,#386143,#1b422f)}.act-check-panel[data-result="wrong"] .act-check-feedback{color:#ffdfaa}
 @media(max-width:900px),(max-height:550px){.act-check-panel{position:static;order:3;width:100%;padding:12px;gap:8px;min-height:0}.act-check-feedback{font-size:15px}.act-confirm{font-size:20px;min-height:44px;padding:10px 18px}}
+
+/* Behatu30: remove the baked-in light trace with a locally restored patch.
+   It follows the original 1672 x 941 scene at all widths. */
+.act-halo-repair{position:absolute;left:68.06220096%;top:0;width:8.31339713%;aspect-ratio:139/108;transform:translateY(417.5925926%);background:url("./akta-halo-patch.webp?v=20261126-behatu30") center/100% 100% no-repeat;z-index:1;pointer-events:none}
+.karik-board .behatu-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.15cqw;min-height:6.8cqw;padding:.25cqw .35cqw .36cqw;text-align:center;line-height:1.12;overflow-wrap:normal;font-size:.99cqw}
+.karik-board .behatu-card-art{display:block;flex:0 0 auto;width:min(100%,6.15cqw);aspect-ratio:3/2;background:url("./m3-behatu-art.webp?v=20261126-behatu30") no-repeat;background-size:200% 200%;background-position:var(--behatu-art-position);filter:drop-shadow(0 1px 1px #64442235);pointer-events:none}
+.karik-board .behatu-card .karik-card-label{display:block;width:100%;min-width:0;flex:1;align-content:center}
+.karik-board .behatu-card[aria-pressed="true"]{outline:2px solid #b18438;outline-offset:-2px;background:linear-gradient(110deg,#fff0bf,#e9c87f);box-shadow:0 0 5px #e8b96188}
+.karik-board .behatu-card.is-placed{opacity:.66}
+@media(max-width:1050px),(max-height:590px){.karik-board .behatu-card{min-height:122px;padding:8px;font-size:15px;gap:5px}.karik-board .behatu-card-art{width:min(100%,132px)}}
