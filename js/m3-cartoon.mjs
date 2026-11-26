@@ -33,7 +33,7 @@ export function place(s,slot,id=s.selected){if(!CARTOON_PAGES.some(p=>p.slots.in
 export function remove(s,slot){if(!SLOTS.some(x=>x.id===slot)||!Object.hasOwn(s.answers,slot))return false;delete s.answers[slot];s.selected=null;s.checked=false;return true;}
 // Reset only the current interpretation round; keep the quiz, observations and other round.
 export function resetPage(s,pageIndex){const page=CARTOON_PAGES[pageIndex];if(!page)return false;const changed=page.slots.some(id=>Object.hasOwn(s.answers,id));for(const id of page.slots)delete s.answers[id];s.selected=null;if(changed)s.checked=false;return changed;}
-export function ready(s){return quizComplete(s)&&CLUES.every(c=>s.seen.has(c.id))&&SLOTS.every(x=>CARDS.some(c=>c.id===s.answers[x.id]));}
+export function ready(s){return quizComplete(s)&&SLOTS.every(x=>CARDS.some(c=>c.id===s.answers[x.id]));}
 export function score(s){return SLOTS.filter(x=>s.answers[x.id]===x.expected).length;}
 export function sealCartoon(s){s.checked=ready(s);return completeCartoon(s);}
 export function completeCartoon(s){return s.checked&&ready(s)&&score(s)===SLOTS.length;}
