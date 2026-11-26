@@ -310,3 +310,68 @@ html,body{background:#17382f}
 .quiz-answer:not(:disabled):hover{filter:brightness(1.08)}
 .quiz-board .karik-feedback{font-size:1.1cqw;margin-top:.45cqw}
 @media(max-width:1050px),(max-height:590px){.karik-page-nav button{font-size:14px;min-height:42px}.quiz-board{min-height:0;max-height:none;gap:10px}.quiz-board #quiz-question{font-size:20px;padding:8px 0}.quiz-answer{font-size:17px;min-height:48px;padding:10px}.quiz-board .karik-feedback{font-size:15px}#quiz-options{gap:8px}}
+
+/* Museum research atelier: tactile controls, optical magnification and a live journal. */
+.karik-scene{--museum-gold:#c49b55;--museum-ink:#432d1a;--museum-green:#224a37}
+.karik-paper{background-color:#e8c797;border-color:#a4793e;box-shadow:0 3px 7px #30181088,inset 0 0 0 2px #eac98c}
+.karik-brief{gap:.55cqw}
+.karik-journal{display:grid;gap:.4cqw;border-top:1px solid #aa8148;padding-top:.4cqw}
+.karik-journal h3{font:bold italic 1.24cqw/1.2 Georgia,serif;text-align:center;color:#284731;margin:0}
+.journal-list{display:grid;gap:.3cqw}
+.journal-entry{display:grid;grid-template-columns:2.8cqw minmax(0,1fr);align-items:center;gap:.5cqw;padding:.35cqw 0;border-bottom:1px solid #b68c5277}
+.journal-entry>div{display:grid;gap:.12cqw;min-width:0}
+.journal-entry strong{font-size:1.08cqw;color:#57391e}
+.journal-value{font-size:.97cqw;line-height:1.17;overflow-wrap:break-word;color:#765334}
+.journal-medal,.phase-medal{display:grid;place-items:center;border-radius:50%;color:#f7dc9d;background:radial-gradient(circle at 38% 25%,#8c6536,#4b301b);border:2px solid #c4a064;box-shadow:inset 0 0 0 1px #5d3d22,0 2px 3px #57351c44}
+.journal-medal{width:2.8cqw;height:2.8cqw;padding:.52cqw}
+.journal-medal svg,.phase-medal svg,.quiz-empty svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.journal-entry[data-state="verified"] .journal-medal{background:radial-gradient(circle,#477257,#183c2c);border-color:#e8c47c;box-shadow:0 0 6px #b79550}
+.journal-entry[data-state="verified"] .journal-value{color:#244d36;font-weight:bold}
+.journal-entry[data-state="recorded"] .journal-medal{background:radial-gradient(circle,#ae8850,#694422)}
+.journal-meter{height:.48cqw;border-radius:10px;overflow:hidden;background:#c5a77b;box-shadow:inset 0 1px 2px #6c482c60}
+.journal-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#254a36,#527b55);transition:width .4s ease}
+.karik-journal #journal-count{font-size:.92cqw;text-align:center;color:#765334}
+.karik-page-nav{gap:.4cqw;margin:.1cqw 0 .4cqw}
+.karik-page-nav button{position:relative;display:flex;flex-direction:column;align-items:center;gap:.25cqw;min-height:4cqw;border:0;background:transparent;box-shadow:none;color:#6c492c;padding:.15cqw;font-size:.99cqw}
+.karik-page-nav button .phase-medal{width:2.65cqw;height:2.65cqw;padding:.52cqw;transition:box-shadow .2s,background .2s}
+.karik-page-nav button[aria-pressed="true"]{background:transparent;color:#214631;box-shadow:none;font-weight:bold}
+.karik-page-nav button[aria-pressed="true"] .phase-medal{background:radial-gradient(circle,#426c4d,#193d2d);border-color:#f4d893;box-shadow:0 0 0 1px #a98140,0 0 .7cqw #b98a3c}
+.karik-page-nav button:not(:last-child)::after{content:"";position:absolute;top:1.48cqw;left:calc(50% + 1.45cqw);width:calc(100% - 2.6cqw);height:1px;background:#a97e41;pointer-events:none}
+.karik-page-nav button:disabled{opacity:.6}
+.quiz-board{gap:.45cqw;min-height:63.4%;max-height:68.5%}
+.quiz-chapter{display:flex;align-items:center;justify-content:center;gap:.65cqw;color:#f5dfac;border:1px solid #a98042;background:linear-gradient(90deg,#4d281b,#6d3d23,#4d281b);padding:.4cqw;font:bold .88cqw/1 Georgia,serif;letter-spacing:.12em;border-radius:3px}
+.quiz-chapter span{color:#d1a95f}
+.quiz-board #quiz-question{font-size:1.45cqw;line-height:1.18;margin:.15cqw 0 .05cqw;padding:.35cqw 0}
+.quiz-answer{display:grid;grid-template-columns:2cqw minmax(0,1fr) 1.7cqw;gap:.48cqw;align-items:center;min-height:3.9cqw;padding:.55cqw .5cqw;font-size:1.18cqw;line-height:1.18;background:linear-gradient(110deg,#f5e0b5,#e5c18a);border:3px double #a77b42;box-shadow:0 2px 3px #7b502b50,inset 0 0 6px #a77b4220}
+.answer-letter{display:grid;place-items:center;width:1.8cqw;height:1.8cqw;border:1px solid #ab8349;border-radius:50%;background:#6b482c;color:#fbe7b8;font-weight:normal}
+.answer-label{overflow-wrap:break-word}
+.answer-wax{visibility:hidden;display:grid;place-items:center;width:1.7cqw;height:1.7cqw;border:2px solid #c87851;border-radius:44% 48% 41% 47%;background:radial-gradient(circle at 35% 25%,#ae4b34,#75271e);color:#ffdfb0;box-shadow:0 2px 2px #2e191c70;font-size:1.05cqw}
+.quiz-answer[aria-pressed="true"]{background:linear-gradient(110deg,#f7e3b4,#edce92);color:#43291a;border-color:#98713a;outline:1px solid #b48a45;box-shadow:0 0 .5cqw #e3b666}
+.quiz-answer[aria-pressed="true"] .answer-wax{visibility:visible}
+.quiz-answer[aria-pressed="true"] .answer-letter{background:#244e37}
+.quiz-empty{display:grid;place-items:center;gap:.7cqw;text-align:center;color:#7c5631;padding:1.6cqw .3cqw}
+.quiz-empty>span{width:4.3cqw;height:4.3cqw;border:2px solid #b48b4c;border-radius:50%;padding:.85cqw;background:#dfbd86}
+.quiz-empty p{font-size:1.16cqw!important}
+.karik-picture{isolation:isolate}
+.karik-optics{position:absolute;inset:0;z-index:2;pointer-events:none;--lens-x:50%;--lens-y:50%;--lens-radius:clamp(38px,6.2cqw,94px)}
+.karik-optics[hidden]{display:none}
+.optics-shade{position:absolute;inset:0;background:radial-gradient(circle at var(--lens-x) var(--lens-y),transparent 0 var(--lens-radius),#241b1452 calc(var(--lens-radius) + 2px));animation:karikFade .22s ease-out}
+.optics-window{position:absolute;inset:0;clip-path:circle(var(--lens-radius) at var(--lens-x) var(--lens-y));animation:karikFade .22s ease-out}
+.optics-enlarged{position:absolute;inset:0;transform-origin:var(--lens-x) var(--lens-y);transform:scale(1.85)}
+.optics-enlarged img{width:100%;height:100%;object-fit:fill}
+.optics-rim{position:absolute;left:var(--lens-x);top:var(--lens-y);width:calc(2 * var(--lens-radius));height:calc(2 * var(--lens-radius));transform:translate(-50%,-50%);border:clamp(3px,.42cqw,7px) solid #d9ac5b;border-radius:50%;box-shadow:0 0 0 1px #735025,inset 0 0 0 2px #6f4c28,inset 0 0 10px #f8da9b70,0 4px 10px #2d1b11a0}
+.optics-rim::after{content:"";position:absolute;inset:7%;border-radius:50%;border-top:2px solid #fff4cf9c;transform:rotate(-28deg)}
+.karik-scene .karik-lens{z-index:4;transition:box-shadow .2s,background .2s}
+.karik-lens.is-recorded::after{content:"•";position:absolute;right:-.25cqw;bottom:-.25cqw;background:#966128;border:1px solid #ffe4a0;border-radius:50%;width:1.15cqw;height:1.15cqw;font-size:.85cqw;line-height:1cqw}
+.karik-lens.is-seen{background:radial-gradient(circle,#48785a,#183c2c);border-color:#f4d98f;box-shadow:0 0 0 2px #bd9352,0 0 10px #d9d68a}
+.karik-inscription-mask.inscription-reveal{z-index:3;animation:karikReveal .85s ease-in-out forwards}
+@keyframes karikReveal{0%{opacity:1;transform:rotate(4deg) translateY(0)}100%{opacity:0;transform:rotate(-9deg) translateY(-180%);visibility:hidden}}
+@keyframes karikFade{from{opacity:0}to{opacity:1}}
+.karik-final-stamp{display:none;position:absolute;z-index:5;right:3%;bottom:4%;width:8.7cqw;aspect-ratio:1;border:4px double #e1b16a;border-radius:45% 49% 43% 47%;background:radial-gradient(circle at 37% 26%,#a94835,#741f1c);color:#f4d6a0;box-shadow:0 4px 10px #31180c90,inset 0 0 0 3px #8f3426;transform:rotate(-8deg);text-align:center;align-content:center;pointer-events:none}
+.karik-final-stamp strong{font:bold .98cqw/1.13 Georgia,serif;letter-spacing:.03em}
+.karik-final-stamp span{font-size:1.3cqw}.karik-final-stamp small{font-size:.78cqw}
+.karik-complete .karik-final-stamp{display:grid;gap:.3cqw;animation:karikStamp .35s ease-out both}
+@keyframes karikStamp{from{opacity:0;transform:rotate(-8deg) scale(1.4)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+@media(max-width:1050px),(max-height:590px){
+.karik-brief{gap:10px}.karik-journal{gap:6px;padding-top:8px}.karik-journal h3{font-size:18px}.journal-list{gap:4px}.journal-entry{grid-template-columns:42px 1fr;gap:8px;padding:5px 0}.journal-medal{width:42px;height:42px;padding:8px}.journal-entry strong{font-size:16px}.journal-value,.karik-journal #journal-count{font-size:14px}.journal-meter{height:7px}.karik-page-nav{gap:8px}.karik-page-nav button{font-size:15px;gap:5px;padding:5px}.karik-page-nav button .phase-medal{width:38px;height:38px;padding:8px}.karik-page-nav button:not(:last-child)::after{top:24px;left:calc(50% + 22px);width:calc(100% - 36px)}.quiz-board{gap:10px;min-height:0;max-height:none}.quiz-chapter{font-size:13px;padding:8px;gap:10px}.quiz-board #quiz-question{font-size:20px;padding:5px 0}.quiz-answer{grid-template-columns:30px 1fr 28px;gap:8px;min-height:54px;padding:10px;font-size:17px}.answer-letter{width:28px;height:28px}.answer-wax{width:27px;height:27px;font-size:17px}.quiz-empty{padding:18px;gap:10px}.quiz-empty>span{width:60px;height:60px;padding:13px}.quiz-empty p{font-size:16px!important}.karik-optics{--lens-radius:clamp(35px,10cqw,85px)}.karik-lens.is-recorded::after{width:15px;height:15px;line-height:13px;font-size:12px;right:-4px;bottom:-4px}.karik-final-stamp{width:100px;gap:3px}.karik-final-stamp strong{font-size:12px}.karik-final-stamp span{font-size:16px}.karik-final-stamp small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.karik-scene *, .karik-scene *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.karik-inscription-mask.inscription-reveal{visibility:hidden}}
