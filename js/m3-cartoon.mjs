@@ -31,6 +31,8 @@ export function observe(s,id){if(CLUES.some(c=>c.id===id)){s.seen.add(id);s.acti
 export function selectCard(s,id){if(CARDS.some(c=>c.id===id))s.selected=s.selected===id?null:id;}
 export function place(s,slot,id=s.selected){if(!CARTOON_PAGES.some(p=>p.slots.includes(slot)&&p.cards.includes(id)))return false;for(const key of Object.keys(s.answers))if(s.answers[key]===id)delete s.answers[key];s.answers[slot]=id;s.selected=null;s.checked=false;return true;}
 export function remove(s,slot){if(!SLOTS.some(x=>x.id===slot)||!Object.hasOwn(s.answers,slot))return false;delete s.answers[slot];s.selected=null;s.checked=false;return true;}
+// A click on a filled slot removes its answer unless another card is selected.
+export function activateSlot(s,slot){if(!SLOTS.some(x=>x.id===slot))return false;if(s.selected)return place(s,slot);return remove(s,slot);}
 // Reset only the current interpretation round; keep the quiz, observations and other round.
 export function resetPage(s,pageIndex){const page=CARTOON_PAGES[pageIndex];if(!page)return false;const changed=page.slots.some(id=>Object.hasOwn(s.answers,id));for(const id of page.slots)delete s.answers[id];s.selected=null;if(changed)s.checked=false;return changed;}
 export function ready(s){return quizComplete(s)&&SLOTS.every(x=>CARDS.some(c=>c.id===s.answers[x.id]));}

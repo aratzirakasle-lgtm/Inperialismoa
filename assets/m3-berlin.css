@@ -588,3 +588,12 @@ html,body{background:#17382f}
 .karik-board .frogak-card[aria-pressed="true"]{outline:2px solid #b18438;outline-offset:-2px;background:linear-gradient(110deg,#fff0bf,#e9c87f);box-shadow:0 0 5px #e8b96188}
 .karik-board .frogak-card.is-placed{opacity:.66}
 @media(max-width:1050px),(max-height:590px){.karik-board .frogak-card{min-height:122px;padding:8px;font-size:15px;gap:5px}.karik-board .frogak-card-art{width:min(100%,132px)}.karik-scene[data-karik-phase="interpretatu"] .karik-cards{gap:8px}}
+
+/* Kendu36: stable, individually clickable answer and removal controls. */
+.karik-board .karik-slot-wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.35cqw;align-items:stretch;min-width:0}
+.karik-board .karik-slot-wrap .karik-slot{width:100%;min-width:0;cursor:pointer}
+.karik-board .karik-slot-wrap .karik-slot.is-filled:not(.can-place):hover{background:#ffedc2;border-color:#a1783f;outline:1px solid #b78c45}
+.karik-board .karik-slot-wrap .karik-remove{position:relative;z-index:2;min-width:4.8cqw;min-height:2.7cqw;font-size:1cqw;padding:.4cqw .5cqw;touch-action:manipulation;pointer-events:auto}
+.karik-board .karik-slot-wrap .karik-remove:disabled{opacity:.35;cursor:default;box-shadow:none}
+.karik-scene[data-karik-phase="interpretatu"] .karik-board,.karik-scene[data-karik-phase="behatu"] .karik-board{z-index:3}
+@media(max-width:1050px),(max-height:590px){.karik-board .karik-slot-wrap{gap:6px}.karik-board .karik-slot-wrap .karik-remove{min-width:74px;min-height:44px;font-size:15px;padding:8px}}
