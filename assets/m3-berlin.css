@@ -375,3 +375,54 @@ html,body{background:#17382f}
 @media(max-width:1050px),(max-height:590px){
 .karik-brief{gap:10px}.karik-journal{gap:6px;padding-top:8px}.karik-journal h3{font-size:18px}.journal-list{gap:4px}.journal-entry{grid-template-columns:42px 1fr;gap:8px;padding:5px 0}.journal-medal{width:42px;height:42px;padding:8px}.journal-entry strong{font-size:16px}.journal-value,.karik-journal #journal-count{font-size:14px}.journal-meter{height:7px}.karik-page-nav{gap:8px}.karik-page-nav button{font-size:15px;gap:5px;padding:5px}.karik-page-nav button .phase-medal{width:38px;height:38px;padding:8px}.karik-page-nav button:not(:last-child)::after{top:24px;left:calc(50% + 22px);width:calc(100% - 36px)}.quiz-board{gap:10px;min-height:0;max-height:none}.quiz-chapter{font-size:13px;padding:8px;gap:10px}.quiz-board #quiz-question{font-size:20px;padding:5px 0}.quiz-answer{grid-template-columns:30px 1fr 28px;gap:8px;min-height:54px;padding:10px;font-size:17px}.answer-letter{width:28px;height:28px}.answer-wax{width:27px;height:27px;font-size:17px}.quiz-empty{padding:18px;gap:10px}.quiz-empty>span{width:60px;height:60px;padding:13px}.quiz-empty p{font-size:16px!important}.karik-optics{--lens-radius:clamp(35px,10cqw,85px)}.karik-lens.is-recorded::after{width:15px;height:15px;line-height:13px;font-size:12px;right:-4px;bottom:-4px}.karik-final-stamp{width:100px;gap:3px}.karik-final-stamp strong{font-size:12px}.karik-final-stamp span{font-size:16px}.karik-final-stamp small{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.karik-scene *, .karik-scene *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.karik-inscription-mask.inscription-reveal{visibility:hidden}}
+
+/* Collector's cabinet: restrained warm light, tactile relief, all silent. */
+.karik-scene{background-color:#2f241a}
+.karik-scene::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 49% 34%,#ffdf8b15 0,transparent 48%),radial-gradient(ellipse at 12% 10%,#ffbc6630,transparent 35%),radial-gradient(ellipse at 90% 14%,#ffc66c25,transparent 34%),linear-gradient(0deg,#1d120c22,transparent 30%);animation:karikMuseumGlow 6s ease-in-out infinite alternate}
+@keyframes karikMuseumGlow{from{opacity:.55}to{opacity:1}}
+.karik-scene .act-nav{z-index:6}
+.karik-paper,.karik-figure,.karik-footer{z-index:1}
+.karik-brief{border:4px solid #80502e;border-left:clamp(7px,.8cqw,13px) solid #684025;border-radius:3px 7px 7px 3px;background:repeating-linear-gradient(0deg,transparent 0 1.5cqw,#9f744613 1.5cqw calc(1.5cqw + 1px)),url("./m3-berlin-akta-paper.webp") center/cover;box-shadow:0 4px 9px #2a160dc0,inset 0 0 0 2px #d6b077,inset 5px 0 9px #8e663735,3px 3px 0 #c79f64,5px 5px 0 #684025;padding:.85cqw .75cqw}
+.karik-brief h2{position:relative;font-size:1.52cqw;letter-spacing:.01em}
+.karik-journal h3{font-variant:small-caps;letter-spacing:.035em}
+.journal-entry{grid-template-columns:3.45cqw minmax(0,1fr);gap:.5cqw;padding:.22cqw 0}
+.journal-medal{width:3.45cqw;height:3.45cqw;border:3px double #c8a15f;padding:.62cqw;background:radial-gradient(circle at 35% 25%,#8b6a3a,#4c3621 70%);box-shadow:0 2px 4px #51321d80,inset 0 0 0 1px #745330}
+.journal-entry[data-state="verified"] .journal-medal{padding:0;border:2px solid #eac778;box-shadow:0 0 0 1px #90602f,0 0 8px #f7ce76,0 2px 4px #51321d80;animation:medalArrive .38s ease-out}
+.collected-emblem{display:block;width:100%;height:100%;border-radius:50%;overflow:hidden}
+.engraved-art{width:100%;height:100%;display:block}
+.journal-medal .engraved-art{stroke:none;fill:initial}
+.journal-entry[data-state="verified"] .journal-medal .engraved-art{stroke:initial;fill:initial}
+@keyframes medalArrive{from{filter:brightness(1.6);transform:scale(.86)}to{filter:brightness(1);transform:scale(1)}}
+.journal-meter{background:#b29165;border:1px solid #9e7545;height:.65cqw}
+.journal-meter span{background:linear-gradient(90deg,#244735,#557d51,#dfb765)}
+.quiz-board{border:3px double #b68a4d;box-shadow:0 4px 12px #301810a0,inset 0 0 0 2px #eac98c}
+.quiz-answer{grid-template-columns:1.45cqw 3.35cqw minmax(0,1fr) 1.5cqw;gap:.32cqw;min-height:4.15cqw;padding:.3cqw .35cqw;background:radial-gradient(ellipse at 0% 15%,#fff3d066,transparent 65%),linear-gradient(105deg,#edcf9b,#f6e1b9 54%,#e5be84);border:3px double #a67b43;box-shadow:0 3px 3px #67411e50,inset 0 0 7px #a67b4326;font-size:1.1cqw}
+.answer-art{width:3.35cqw;height:3.35cqw;border-radius:50%;box-shadow:0 2px 3px #69432275;overflow:hidden}
+.answer-letter{width:1.45cqw;height:1.45cqw;font-size:.9cqw}
+.answer-wax{width:1.5cqw;height:1.5cqw}
+.quiz-answer[aria-pressed="true"]{border-color:#876335;background:linear-gradient(110deg,#f5dda8,#ecd08d);outline:1px solid #e5bb66}
+.quiz-answer:not(:disabled):hover{transform:translateY(-1px);filter:brightness(1.04)}
+.quiz-answer:focus-visible,.karik-page-nav button:focus-visible,.karik-lens:focus-visible,.karik-card:focus-visible{outline:2px solid #e9b84e;outline-offset:2px}
+.karik-figure{outline:3px double #d1a45f;box-shadow:0 0 0 3px #79552e,0 0 0 5px #bd9559,0 7px 15px #20120ca0}
+.karik-figure::after{content:"";position:absolute;inset:0;border-top:2px solid #f4d69c88;box-shadow:inset 0 0 14px #3d251c50;pointer-events:none;z-index:6}
+.optics-rim{border:clamp(5px,.65cqw,10px) solid #c89a4c;background:transparent;box-shadow:0 0 0 1px #684526,0 0 0 3px #e5c27e,inset 0 0 0 1px #684526,inset 0 0 0 3px #f0d89c,inset 0 0 15px #e9c88060,0 6px 10px #2a150eaa}
+.optics-handle{position:absolute;left:50%;top:calc(100% + 1px);width:clamp(9px,1.2cqw,20px);height:clamp(22px,4cqw,60px);transform-origin:50% 0;transform:translateX(-50%) rotate(-38deg);border:1px solid #57351e;border-radius:3px 3px 8px 8px;background:linear-gradient(90deg,#4a2c1b,#95613a 42%,#c18e50 53%,#654020 80%,#42271a);box-shadow:2px 3px 5px #23160fa0}
+.optics-handle::before{content:"";display:block;height:24%;border-radius:2px;background:linear-gradient(90deg,#89612d,#f1d18b 42%,#b18a48 70%,#67431f)}
+.optics-glass{position:absolute;inset:0;border-radius:50%;background:linear-gradient(145deg,#fff6d42b 0 14%,transparent 28% 70%,#fff5d115 86%);box-shadow:inset 0 0 13px #f9df9a26;pointer-events:none}
+.optics-rim::after{border-top:3px solid #fff4cfb0}
+.karik-scene[data-karik-phase="behatu"] .karik-board{border-color:#a28d52}
+.karik-scene[data-karik-phase="interpretatu"] .karik-board{border-color:#9b6a47}
+.karik-scene .karik-board{animation:karikFade .3s ease-out}
+.karik-final-stamp{display:none;position:absolute;inset:7% 12%;width:auto;aspect-ratio:auto;transform:none;border:4px double #c99c55;border-radius:6px;background:radial-gradient(ellipse at 50% 30%,#345b43,#19372b 70%,#11291f);box-shadow:0 5px 18px #21150dc0,inset 0 0 0 2px #a17c41,inset 0 0 24px #0b2117;color:#f1d6a0;align-content:center;justify-items:center;gap:.35cqw;padding:.7cqw;z-index:7}
+.karik-complete .karik-final-stamp{display:grid;animation:karikReward .5s ease-out both}
+.karik-final-stamp .reward-laurel-wrap{position:relative;display:grid;place-items:center;width:76%;max-height:62%;aspect-ratio:220/130}
+.karik-final-stamp .karik-laurel{position:absolute;width:100%;height:100%;inset:0}
+.reward-wax{display:grid;justify-items:center;align-content:center;gap:.12cqw;width:48%;aspect-ratio:1;border-radius:43% 48% 44% 49%;border:4px double #e1ad64;background:radial-gradient(circle at 36% 25%,#b25039,#79281f 70%,#571c16);box-shadow:inset 0 0 0 3px #8c3527,0 3px 7px #0e1e16a0;transform:rotate(-6deg)}
+.reward-wax strong{font-size:1.08cqw;line-height:1.12}.reward-wax span{font-size:1.5cqw;line-height:1}.reward-wax small{font-size:.8cqw}
+.reward-medals{display:flex;gap:.55cqw;justify-content:center}
+.reward-medals .collected-emblem{width:3.65cqw;height:3.65cqw;border:2px solid #d2a65d;box-shadow:0 2px 6px #0007}
+.karik-final-stamp p{font:bold 1.1cqw/1.2 Georgia,serif;margin:0;text-align:center}
+@keyframes karikReward{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@media(max-width:1050px),(max-height:590px){
+.karik-brief{padding:12px;border-left-width:10px;background-size:auto,cover}.karik-brief h2{font-size:23px}.journal-entry{grid-template-columns:48px 1fr;gap:8px;padding:5px 0}.journal-medal{width:48px;height:48px;padding:9px}.journal-meter{height:8px}.quiz-answer{grid-template-columns:24px 48px minmax(0,1fr) 25px;gap:8px;font-size:17px;min-height:64px;padding:8px}.answer-art{width:48px;height:48px}.answer-letter{width:24px;height:24px;font-size:14px}.answer-wax{width:24px;height:24px;font-size:16px}.karik-final-stamp{inset:5% 9%;width:auto;gap:4px;padding:8px}.karik-final-stamp .reward-laurel-wrap{width:65%;max-height:none}.reward-wax strong{font-size:clamp(9px,2.4cqw,15px)}.reward-wax span{font-size:16px}.reward-wax small{font-size:10px}.reward-medals{gap:6px}.reward-medals .collected-emblem{width:clamp(28px,8cqw,48px);height:clamp(28px,8cqw,48px)}.karik-final-stamp p{font-size:clamp(12px,3cqw,16px)}}
+@media(prefers-reduced-motion:reduce){.karik-scene::before{animation:none}.karik-scene *, .karik-scene *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
