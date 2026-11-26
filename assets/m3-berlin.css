@@ -426,3 +426,7 @@ html,body{background:#17382f}
 @media(max-width:1050px),(max-height:590px){
 .karik-brief{padding:12px;border-left-width:10px;background-size:auto,cover}.karik-brief h2{font-size:23px}.journal-entry{grid-template-columns:48px 1fr;gap:8px;padding:5px 0}.journal-medal{width:48px;height:48px;padding:9px}.journal-meter{height:8px}.quiz-answer{grid-template-columns:24px 48px minmax(0,1fr) 25px;gap:8px;font-size:17px;min-height:64px;padding:8px}.answer-art{width:48px;height:48px}.answer-letter{width:24px;height:24px;font-size:14px}.answer-wax{width:24px;height:24px;font-size:16px}.karik-final-stamp{inset:5% 9%;width:auto;gap:4px;padding:8px}.karik-final-stamp .reward-laurel-wrap{width:65%;max-height:none}.reward-wax strong{font-size:clamp(9px,2.4cqw,15px)}.reward-wax span{font-size:16px}.reward-wax small{font-size:10px}.reward-medals{gap:6px}.reward-medals .collected-emblem{width:clamp(28px,8cqw,48px);height:clamp(28px,8cqw,48px)}.karik-final-stamp p{font-size:clamp(12px,3cqw,16px)}}
 @media(prefers-reduced-motion:reduce){.karik-scene::before{animation:none}.karik-scene *, .karik-scene *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Keep the decorative lighting still after the initial reveal. */
+.karik-scene::before{animation-iteration-count:1;animation-fill-mode:forwards}
+@media(prefers-reduced-motion:reduce){.karik-scene::before{animation:none}}
