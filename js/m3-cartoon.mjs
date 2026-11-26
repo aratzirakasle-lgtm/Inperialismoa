@@ -1,8 +1,8 @@
 // Asmatu includes two teacher-supplied historical context questions, not named in slide 18.
 export const QUIZ=[
-{id:'politician',x:56,y:20,question:'Nor da politikari hau?',options:[['napoleon','Napoleon III.a'],['bismarck','Bismarck'],['cavour','Cavour']],expected:'bismarck'},
-{id:'beneficiaries',x:23,y:45,question:'Nortzuk izan ziren banaketan onuradun nagusiak?',options:[['italyspain','Italia eta Espainia'],['germanyportugal','Alemania eta Portugal'],['britainfrance','Britainia Handia eta Frantzia']],expected:'britainfrance'},
-{id:'continent',x:53,y:53,question:'Zein kontinenteri egiten dio erreferentzia tartak?',options:[['africa','Afrika'],['asia','Asia'],['america','Amerika']],expected:'africa'}
+{id:'politician',x:51,y:13,question:'Nor da politikari hau?',options:[['napoleon','Napoleon III.a'],['bismarck','Bismarck'],['cavour','Cavour']],expected:'bismarck'},
+{id:'beneficiaries',x:17,y:36,question:'Nortzuk izan ziren banaketan onuradun nagusiak?',options:[['italyspain','Italia eta Espainia'],['germanyportugal','Alemania eta Portugal'],['britainfrance','Britainia Handia eta Frantzia']],expected:'britainfrance'},
+{id:'continent',x:48,y:61,question:'Zein kontinenteri egiten dio erreferentzia tartak?',options:[['africa','Afrika'],['asia','Asia'],['america','Amerika']],expected:'africa'}
 ];
 export function quizScore(s){return QUIZ.filter(q=>s.quizAnswers[q.id]===q.expected).length;}
 export function quizReady(s){return QUIZ.every(q=>q.options.some(([id])=>id===s.quizAnswers[q.id]));}
@@ -10,9 +10,9 @@ export function quizComplete(s){return s.quizChecked&&quizReady(s)&&quizScore(s)
 export function chooseQuiz(s,qid,value){const q=QUIZ.find(q=>q.id===qid);if(!q?.options.some(([id])=>id===value)||quizComplete(s))return false;s.quizAnswers[qid]=value;s.quizChecked=false;s.checked=false;return true;}
 export function sealQuiz(s){s.quizChecked=quizReady(s);return quizComplete(s);}
 export const CLUES=[
-{id:'people',x:22,y:52,title:'Pertsonak',description:'Mahai baten inguruan hainbat gizon daude.',position:'14% 48%'},
-{id:'knife',x:39,y:24,title:'Objektua',description:'Erdiko gizonak labana bat du eskuan.',position:'39% 16%'},
-{id:'cake',x:53,y:51,title:'Irudia eta testua',description:'Mahai gaineko tartan AFRIQUE hitza irakur daiteke.',position:'53% 51%'}
+{id:'people',x:17,y:36,title:'Pertsonak',description:'Mahai baten inguruan hainbat gizon daude.',position:'10% 32%'},
+{id:'knife',x:45,y:45,title:'Objektua',description:'Erdiko gizonak labana bat du eskuan.',position:'43% 44%'},
+{id:'cake',x:48,y:61,title:'Irudia eta testua',description:'Mahai gaineko tartan AFRIQUE hitza irakur daiteke.',position:'48% 63%'}
 ];
 export const CARDS=[
 {id:'division',label:'Afrika irudikatzen duen tarta banatzea',icon:'✦'},
