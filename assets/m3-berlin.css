@@ -1074,3 +1074,6 @@ html,body{background:#17382f}
  .fach47 .fach-feedback{font-size:13px;min-height:30px}
  .fach47 .fach-letter-caption{font-size:20px}.fach47 .fach-letter-caption small{font-size:10px}
 }
+
+/* Doitasuna47b — clean artwork beneath the independent controls. */
+.fach47.fach-scene{background-image:url("./m3-fachoda-scene47.webp")}
