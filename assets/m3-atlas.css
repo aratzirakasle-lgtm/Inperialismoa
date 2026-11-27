@@ -43,3 +43,40 @@
 @media(prefers-reduced-motion:reduce){.atlas64-zone{animation:none!important;transition:none}}
 
 .atlas64-territory.is-assigned .atlas64-zone{stroke-width:2.4}.atlas64-map-label{stroke-width:.65}.atlas64-territory text{font-size:4.8px}.atlas64.is-zoom .atlas64-map{min-height:0}
+
+/* Atlas 66: photographed museum textures, engraved objects and direct map assignment. */
+.atlas66{background:linear-gradient(90deg,#23190c8c,#162e2180 20%,#162e2190 80%,#23190c8c),url('./atlas-sala-referencia-hd.webp') center/cover,#223d2e;padding:clamp(9px,1.15vw,17px);box-shadow:inset 0 0 35px #0b130caa}
+.atlas66-heading,.atlas66 .atlas64-heading{position:relative;margin:0 0 8px;border:3px double #bc9b60;border-radius:4px;background:linear-gradient(100deg,#152c22e8,#315343f0 50%,#152c22e8);box-shadow:0 4px 10px #110c07b0,inset 0 0 16px #091c14}
+.atlas66 .atlas64-heading h1{font-size:clamp(26px,3.1cqw,46px);letter-spacing:.015em;margin:4px 0 3px}.atlas66-title-rule{display:inline-flex;align-items:center;gap:10px;padding-top:6px}
+.atlas66 .atlas64-work{gap:clamp(7px,.8cqw,13px);grid-template-columns:minmax(0,18fr) minmax(0,50fr) minmax(0,32fr)}
+.atlas66 .atlas64-panel{background:linear-gradient(125deg,#ffffff0d 0 13%,transparent 13% 57%,#ffffff09 57% 60%,transparent 60%),radial-gradient(ellipse at 40% 0,#466c51,#1b392c 45%,#142c23);border:4px double #b99a60;border-radius:5px;box-shadow:inset 0 0 0 1px #e1c99333,inset 0 0 20px #07191166,0 5px 12px #130c08cc}
+.atlas66 .atlas64-panel:before,.atlas66 .atlas64-panel:after{width:7px;height:7px;top:5px;background:radial-gradient(circle at 33% 25%,#fff1bd,#c5a064 40%,#66431e 75%);box-shadow:0 1px 3px #0009}
+.atlas66 .atlas64-panel h2{padding-bottom:7px;border-bottom:1px solid #ba9b6066;text-shadow:0 1px 2px #0e1c12}
+.atlas66 .atlas64-layer{background:linear-gradient(140deg,#446b4e,#203c2e 52%,#2d4b38);box-shadow:inset 0 1px #f8e8b72b,0 2px 4px #081c14aa}
+.atlas66 .atlas64-switch{box-shadow:inset 0 1px 4px #172a18,0 1px #d9c99b44}
+.atlas66 .atlas64-mapframe{border:6px double #c7a36a;box-shadow:0 5px 14px #100c07da,inset 0 0 9px #654424}
+.atlas66 .atlas64-mapcanvas{background:radial-gradient(ellipse,#d1d5b8,#a5b6a9);position:relative}
+.atlas66 .atlas64-map{min-height:0;max-height:60dvh}
+.atlas66 .atlas64-map-label{fill:#f5e4bd;stroke:#9f7b45;filter:drop-shadow(0 1px .65px #4a321d66)}
+.atlas66 .atlas64-territory.is-assigned .atlas64-zone{filter:drop-shadow(0 0 3px var(--zone-color)) drop-shadow(0 0 1px var(--zone-color));stroke:var(--zone-color)}
+.atlas66 .atlas64-territory.is-flash .atlas64-zone{animation:atlas66-glow .7s ease-out}
+@keyframes atlas66-glow{0%{stroke-width:4.5;filter:drop-shadow(0 0 10px var(--zone-color)) drop-shadow(0 0 5px var(--zone-color))}100%{stroke-width:2.4;filter:drop-shadow(0 0 3px var(--zone-color))}}
+.atlas66 .atlas64-row{grid-template-columns:clamp(30px,3cqw,46px) minmax(0,1fr) minmax(100px,1.02fr);gap:6px;min-height:36px;padding:3px 6px;background:linear-gradient(100deg,#f3e5c4,#e1c698);border-bottom:1px solid #a98a58}
+.atlas66 .atlas64-row:nth-child(even){background:linear-gradient(100deg,#ebd8af,#d5b784)}
+.atlas64-engraving{display:block;aspect-ratio:8/5;width:100%;border:1px solid #b09260;border-radius:2px;background-image:url('./m3-atlas-engravings66.svg');background-size:500% 200%;background-position:var(--engrave-x) var(--engrave-y);box-shadow:0 1px 2px #7b552c55}
+.atlas66 .atlas64-row.is-active{background:#fff1c7;box-shadow:inset 0 0 0 2px #cb9d48}
+.atlas66 .atlas64-selectwrap select{box-shadow:inset 0 1px 2px #9e7b4733,0 1px #fff6df;min-height:28px}
+.atlas66-quick{display:grid;grid-template-columns:1fr 2fr;gap:6px;align-items:center;background:linear-gradient(#f2dfb5,#ddc193);color:#4c3220;padding:5px 7px;border-top:1px solid #a48550}
+.atlas66-quick>span{min-width:0}.atlas66-quick small{display:block;font-size:8px;letter-spacing:.09em;color:#80633b}.atlas66-quick b{display:block;font-size:clamp(10px,.9cqw,13px);overflow-wrap:anywhere}.atlas66-quick>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.atlas66-quick button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 2px;border:1px solid #ae8951;border-radius:4px;background:#f6e7c6;color:#4a3524;font:700 clamp(9px,.78cqw,12px) Georgia,serif;min-height:36px}
+.atlas66-quick button:disabled{opacity:.48}.atlas66-quick button[aria-pressed=true]{background:#fff1c4;box-shadow:inset 0 0 0 2px #a87830}
+.atlas66 .atlas64-footer{position:relative;background:linear-gradient(#4e2c1bb8,#27170fcf),url('./atlas-madera-referencia-hd.webp') center/cover;border:1px solid #997746;border-top:3px double #c4a16a;margin-top:10px;padding:9px 13px;grid-template-columns:auto 1fr auto;min-height:76px;box-shadow:0 3px 8px #140d08}
+.atlas66-desk-props{position:absolute;bottom:0;left:8px;display:flex;align-items:end;gap:4px;opacity:.7;pointer-events:none;transform:translateY(4px);z-index:-1}.atlas66-desk-props img{width:65px;max-height:55px;object-fit:contain}
+.atlas66 .atlas64-seal{background:transparent url('./m3-atlas-wax66.svg') center/100% 100% no-repeat;border:0;border-radius:0;min-height:65px;min-width:155px;padding:11px 24px;box-shadow:none;text-shadow:0 2px 2px #42150e;color:#fff0c5;filter:drop-shadow(0 4px 4px #160a06);font-size:clamp(16px,1.55cqw,24px)}
+.atlas66 .atlas64-seal:disabled{opacity:.63}.atlas66.is-complete .atlas64-seal{background:transparent url('./m3-atlas-wax66.svg') center/100% 100% no-repeat;opacity:1;animation:atlas66-seal .4s ease-out both}
+@keyframes atlas66-seal{from{transform:scale(1.14);opacity:.5}to{transform:scale(1);opacity:1}}
+.atlas66 .atlas64-rival-options button[aria-pressed=true]{background:linear-gradient(#f8e7bc,#ddc18a);border-color:#efcf81;box-shadow:0 0 9px #efd18a80,inset 0 0 0 1px #e8bc66}
+.atlas66.is-zoom .atlas64-work{grid-template-columns:1fr}.atlas66.is-zoom .atlas64-map{max-height:none}
+@media(max-width:1050px){.atlas66 .atlas64-work{grid-template-columns:1fr 1.5fr}.atlas66 .atlas64-map{max-height:none}.atlas66 .atlas64-row{min-height:44px}.atlas66 .atlas64-selectwrap select{min-height:34px}.atlas66-quick button{min-height:44px}}
+@media(max-width:600px){.atlas66 .atlas64-work,.atlas66 .atlas64-footer{grid-template-columns:1fr}.atlas66-quick{grid-template-columns:1fr}.atlas66 .atlas64-seal{width:180px;justify-self:center}.atlas66 .atlas64-row{grid-template-columns:44px minmax(0,1fr) minmax(105px,1fr)}}
+@media(prefers-reduced-motion:reduce){.atlas66 .atlas64-zone,.atlas66.is-complete .atlas64-seal{animation:none!important}}

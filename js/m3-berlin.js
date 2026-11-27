@@ -3,7 +3,7 @@ import { ARROWS, createAudit, changeScope, reverseArrow, swapLegend, score, seal
 import { CLUES, CARDS, SLOTS, CARTOON_PAGES, QUIZ, quizScore, quizReady, quizComplete, chooseQuiz, sealQuiz, createCartoon, observe, selectCard, place, activateSlot, remove as removeCartoonAnswer, resetPage, ready as cartoonReady, score as cartoonScore, sealCartoon, completeCartoon } from './m3-cartoon.mjs?v=20261126-kendu36';
 import { itineraryHeaderMarkup } from './m3-itinerary.mjs?v=20261128-atlas64';
 import { createAtlas, finished as atlasFinished } from './m3-atlas.mjs?v=20261128-atlas64';
-import { attachAtlas, detachAtlas } from './m3-atlas-ui.mjs?v=20261128-atlas65';
+import { attachAtlas, detachAtlas } from './m3-atlas-ui.mjs?v=20261128-atlas66';
 const atlas=createAtlas();
 import { finished as fachodaFinished, createFachoda } from './m3-fachoda.mjs?v=20261127-irakaslea57';
 import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-retirada59';
