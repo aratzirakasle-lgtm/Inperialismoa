@@ -23,7 +23,10 @@ export function axisIntersection(s){
  return a>=0&&a<=1&&b>=0&&b<=1?{x:p.x+a*ax,y:p.y+a*ay}:null;
 }
 function encounterMarkup(){return '<section class="fach-map fach-encounter53" aria-label="Fachodako topaketaren irudikapena"><div class="fach-map-inner"><img class="fach-encounter-art53" src="'+ENCOUNTER_ART+'" width="1448" height="1086" alt="Britainiar eta frantziar ordezkariak aurrez aurre Nilo ibaiaren ondoan, Fachodako gatazkaren irudikapen artistikoa." draggable="false"></div><p>Fachodako gatazka · 1898 · Irudikapen artistikoa</p></section>';}
+const RETREAT_ART='./assets/m3-fachoda-retirada54.webp';
+function retreatMarkup(){return '<section class="fach-map fach-encounter53 fach-retreat54" aria-label="Frantziar tropen erretiratzearen irudikapena"><div class="fach-map-inner"><img class="fach-encounter-art53 fach-retreat-art54" src="'+RETREAT_ART+'" width="1448" height="1086" alt="Frantziar soldaduak ekipamendua biltzen Nilo ibaiaren ertzean; Fachodako gatazkaren amaieraren irudikapen artistikoa." draggable="false"></div><p>Frantziar tropen erretiratzea · Irudikapen artistikoa</p></section>';}
 function mapMarkup(s,view={}){
+ if(s.phase===2&&M.finished(s))return retreatMarkup();
  if(s.phase>=1&&s.sealed[1]&&!view.revealing)return encounterMarkup();
  const reveal=view.revealing&&s.phase===1&&s.sealed[1]?axisIntersection(s):null;
  const lines=M.COLORS.map(c=>{const a=s.axes[c];if(a.points.length!==2)return '';const [p,q]=a.points.map(k=>ATLAS_POINTS[k]);return '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="#fff2c9" stroke-width="15" stroke-linecap="round"/><line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="'+colors[c].hex+'" stroke-width="11" stroke-linecap="round"/><line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="#fff4da" stroke-width="3" stroke-dasharray="12 9" stroke-linecap="round"/>';}).join('');
@@ -49,7 +52,7 @@ function openingMarkup(next){return '<div class="fach-open52" role="status" aria
 export function attachFachoda(root,s,onChange=()=>{}){
  const render=()=>{const scene=root.querySelector('.fach-scene');const panel=scene?.querySelector('.fach-right');const scroll=panel?.scrollTop||0;root.innerHTML=fachodaMarkup(s,{revealing:!!root._fachRevealing});root.querySelector('.fach-right').scrollTop=scroll;onChange();};
  // Preload during the map challenge so the portrait can appear on time.
- if(typeof Image==='function'){const preload=new Image();preload.src=ENCOUNTER_ART;}
+ if(typeof Image==='function'){for(const src of [ENCOUNTER_ART,RETREAT_ART]){const preload=new Image();preload.src=src;}}
  const revealEncounter=()=>{
   root._fachRevealing=true;root.setAttribute('aria-busy','true');render();
   root._fachRevealTimer=setTimeout(()=>{
