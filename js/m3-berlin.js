@@ -3,7 +3,7 @@ import { ARROWS, createAudit, changeScope, reverseArrow, swapLegend, score, seal
 import { CLUES, CARDS, SLOTS, CARTOON_PAGES, QUIZ, quizScore, quizReady, quizComplete, chooseQuiz, sealQuiz, createCartoon, observe, selectCard, place, activateSlot, remove as removeCartoonAnswer, resetPage, ready as cartoonReady, score as cartoonScore, sealCartoon, completeCartoon } from './m3-cartoon.mjs?v=20261126-kendu36';
 import { itineraryHeaderMarkup } from './m3-itinerary.mjs?v=20261127-lacre51';
 import { finished as fachodaFinished, createFachoda } from './m3-fachoda.mjs?v=20261127-irakaslea57';
-import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-irakaslea57';
+import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-irakaslea58';
 const fachoda=createFachoda();
 let currentExercise=1,teacherSecondPreview=false,teacherPreviewAuthenticated=false;
 function syncItinerary(){const first=firstExerciseComplete(),second=fachodaFinished(fachoda);for(const [id,step] of [['#m3-room-header',1],['#m3-dialog-header',currentExercise]]){const el=$(id),markup=itineraryHeaderMarkup(step,first,second,teacherSecondPreview);if(el&&el._markup!==markup){el.innerHTML=markup;el._markup=markup;}}}
@@ -22,7 +22,7 @@ function sealAct(){data.actChecked=actReady();return actFilled();}
 const mapFilled=()=>complete(data.audit);
 const cartoonFilled=()=>completeCartoon(data.cartoon);
 const firstExerciseComplete=()=>actFilled()&&mapFilled()&&cartoonFilled();
-function paint(){const n=[actFilled(),mapFilled(),cartoonFilled()].filter(Boolean).length;const done=firstExerciseComplete();$('#count').textContent=n+' / 3 atalak';$('#verify').disabled=!done;$('#next-exercise').hidden=!done;$('#next-exercise').disabled=!done;syncItinerary();if(!done&&$('#status').classList.contains('success')){$('#status').textContent='';$('#status').className='status';}}
+function paint(){const n=[actFilled(),mapFilled(),cartoonFilled()].filter(Boolean).length;const done=firstExerciseComplete();$('#count').textContent=n+' / 3 atalak';$('#verify').disabled=!done;$('#next-exercise').hidden=!(done||teacherPreviewAuthenticated);$('#next-exercise').disabled=!(done||teacherPreviewAuthenticated);syncItinerary();if(!done&&$('#status').classList.contains('success')){$('#status').textContent='';$('#status').className='status';}}
 // Akta is completed only after explicit confirmation of the clauses and event chain.
 const actOrder=['wrongDate','agents','wrongScope','date','wrongGoal','goal'];
 const clauseText=id=>clauses.find(c=>c[0]===id)?.[1]||'';
@@ -166,7 +166,7 @@ $('#station-body').addEventListener('dragover',e=>{const karik=e.target.closest(
 $('#station-body').addEventListener('dragleave',e=>{e.target.closest('[data-karik-slot]')?.classList.remove('is-drop-target');e.target.closest('[data-drop-slot]')?.classList.remove('is-drop-target');});
 $('#station-body').addEventListener('drop',e=>{const karik=e.target.closest('[data-karik-slot]');if(karik&&e.dataTransfer){e.preventDefault();karik.classList.remove('is-drop-target');place(data.cartoon,karik.dataset.karikSlot,e.dataTransfer.getData('application/x-karik-card'));syncCartoon();paint();return;}const slot=e.target.closest('[data-drop-slot]');if(!slot||!e.dataTransfer)return;e.preventDefault();slot.classList.remove('is-drop-target');setActClause(e.dataTransfer.getData('text/plain'),true);});
 document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.open)));$('#notes').addEventListener('click',()=>open('notes'));['#close','#return'].forEach(s=>$(s).addEventListener('click',()=>$('#station').close()));
-$('#next-exercise').addEventListener('click',()=>{if(firstExerciseComplete())open('exercise2');});
+$('#next-exercise').addEventListener('click',()=>{if(teacherPreviewAuthenticated||firstExerciseComplete())open('exercise2',teacherPreviewAuthenticated);});
 for(const id of ['#m3-room-header','#m3-dialog-header'])$(id).addEventListener('click',e=>{const b=e.target.closest('[data-m3-room]');if(!b||b.disabled)return;closeRouteMenus();const n=Number(b.dataset.m3Room);if(n===1){if(currentExercise===2)$('#station').close();currentExercise=1;syncItinerary();}else if(n===2&&(firstExerciseComplete()||teacherSecondPreview)){if(currentExercise!==2||!$('#station').open)open('exercise2');}});
 $('#station').addEventListener('close',()=>{detachFachoda($('#station-body'));currentExercise=1;syncItinerary();});
 $('#verify').addEventListener('click',()=>{if(!actFilled()||!mapFilled()||!cartoonFilled())return;const correct=actFilled()&&complete(data.audit)&&completeCartoon(data.cartoon);$('#status').textContent=correct?'Berlingo akta zigilatuta · Irakaslearen aurrebista':'Ez da zuzena. Berrikusi erantzun guztiak eta saiatu berriro.';$('#status').className='status '+(correct?'success':'error');});
