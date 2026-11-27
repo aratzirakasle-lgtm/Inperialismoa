@@ -984,3 +984,93 @@ html,body{background:#17382f}
  .fach46 .fach-axis-list{position:static}
  .fach46 .fach-feedback{font-size:14px}
 }
+
+/* Doitasuna47 — reserve non-overlapping zones, preserve source art proportions. */
+.fach47,.fach47 *{box-sizing:border-box}
+.fach47 .fach-title{pointer-events:none}
+.fach47 .fach-point{width:2.55cqw;height:2.55cqw;min-width:24px;min-height:24px;z-index:6;overflow:visible}
+.fach47 .fach-pin,.fach47 .fach-point.is-selected .fach-pin{position:absolute;width:3.6cqw;height:2.4cqw;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.fach47 .fach-point b{font-size:clamp(10px,1.03cqw,17px);padding:.15cqw .35cqw;line-height:1.1;white-space:nowrap;pointer-events:none}
+.fach47 .fach-point[data-fach-point="N"] b,.fach47 .fach-point[data-fach-point="S"] b{left:calc(100% + .12cqw);right:auto;top:50%;transform:translateY(-50%)}
+.fach47 .fach-point[data-fach-point="W"] b{left:50%;right:auto;top:calc(100% + .12cqw);transform:translateX(-50%)}
+.fach47 .fach-point[data-fach-point="E"] b{left:auto;right:calc(100% + .12cqw);top:50%;transform:translateY(-50%)}
+.fach47 .fach-axis-target{z-index:5;min-width:2.6cqw;min-height:1.9cqw;padding:.15cqw;background:linear-gradient(#f9e4b2,#d2a76b)}
+.fach47 .fach-axis-target svg{width:2.65cqw;height:1.76cqw}
+.fach47 .fach-region{z-index:7;white-space:nowrap;font-size:clamp(10px,.9cqw,16px)}
+.fach47 .fach-axis-list[hidden]{display:none!important}
+.fach47 .fach-axis-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:.35cqw;background:linear-gradient(110deg,#142e23,#234537);border:2px double #c6a261;padding:.22cqw .3cqw;color:#f4dfb4;box-shadow:0 2px 4px #1d110a88}
+.fach47 .fach-axis-row{display:grid;grid-template-columns:.4cqw minmax(0,1fr) auto auto;align-items:center;gap:.25cqw;padding:.2cqw .3cqw;min-width:0;font-size:.86cqw;line-height:1.1}
+.fach47 .fach-axis-row span{white-space:normal;overflow-wrap:normal}
+.fach47 .fach-axis-row button{font-size:.8cqw;white-space:nowrap;min-height:1.5cqw;padding:.15cqw .3cqw}
+.fach47 .fach-axis-row i{width:.4cqw;height:1.25cqw}
+.fach47 .fach-card h2,.fach47 .fach-card h3{overflow-wrap:normal}
+.fach47 .fach-goal{padding:.42cqw 29% .35cqw 16%;display:flex;flex-direction:column;justify-content:center}
+.fach47 .fach-goal h2{font-size:1.5cqw;margin:0 0 .2cqw;padding:0;line-height:1.1}
+.fach47 .fach-goal p{font-size:.94cqw;line-height:1.18;margin:0}
+.fach47 .fach-instructions h3{left:16.5%;top:0;height:20%;font-size:1.25cqw;align-items:center}
+.fach47 .fach-instructions ol{left:17%;right:3.6%;top:23%;bottom:5%;font-size:.9cqw;gap:0}
+.fach47 .fach-instructions li{line-height:1.15;min-width:0}
+.fach47 .fach-tools{display:grid;grid-template-columns:1fr 1fr}
+.fach47 .fach-tools h3{font-size:1.1cqw;left:14%;right:2%;height:24%;top:4%;white-space:nowrap}
+.fach47 .fach-colors,.fach47 .fach-flags{gap:.15cqw;top:32%;bottom:4%}
+.fach47 .fach-colors i,.fach47 .fach-flags button::before{width:4.8cqw;height:3.2cqw}
+.fach47 .fach-meter{font-size:1.06cqw;padding:.32cqw 6% .32cqw 16%}
+.fach47 .fach-meter span{gap:.35cqw}
+.fach47 .fach-meter i{width:1.35cqw;height:1.35cqw;flex:none}
+.fach47 .fach-controls button{font-size:1.26cqw;line-height:1.05;white-space:nowrap}
+.fach47 .fach-feedback{display:flex;align-items:center;justify-content:center;line-height:1.1;font-size:.86cqw;min-height:0}
+.fach47 .fach-letter{max-width:none;min-height:0}
+.fach47 .fach-letter-caption{top:7%;left:13%;right:13%;font-size:1.36cqw;line-height:1.05}
+.fach47 .fach-letter-caption small{font-size:.68cqw}
+.fach47 .fach-letter.is-opening{z-index:12}
+@media(min-width:1051px) and (min-height:591px){
+ .fach47.fach-scene{overflow:hidden}
+ .fach47 .fach-title{left:25.55%;top:.7%;width:48.9%;height:8.5%;z-index:7}
+ .fach47 .fach-map{left:12.62%;top:9.08%;width:46.97%;height:71.58%;z-index:2}
+ .fach47 .fach-map>p{bottom:-1.25cqw;font-size:.69cqw;white-space:nowrap}
+ .fach47 .fach-header nav{left:13%;width:46%;top:94.3%;height:4.7%;z-index:6}
+ .fach47 .fach-header nav button{min-height:0;font-size:.94cqw;padding:.15cqw .35cqw;flex-direction:row;gap:.3cqw;white-space:nowrap}
+ .fach47 .fach-header nav button span{font-size:1.15cqw}
+ .fach47 .fach-right{left:61.35%;top:10.5%;width:27.9%;height:85%;overflow:visible}
+ .fach47[data-phase="0"] .fach-right{display:grid;grid-template-rows:13.5% 18.8% 13.5% 6.9% 7.1% 4.2% minmax(0,1fr);gap:1.05%;align-items:stretch}
+ .fach47[data-phase="0"] .fach-right>*{position:relative;inset:auto;width:auto;height:auto;margin:0;min-width:0;min-height:0}
+ .fach47[data-phase="0"] .fach-goal{grid-row:1}
+ .fach47[data-phase="0"] .fach-instructions{grid-row:2}
+ .fach47[data-phase="0"] .fach-tools{grid-row:3}
+ .fach47[data-phase="0"] .fach-meter{grid-row:4}
+ .fach47[data-phase="0"] .fach-controls{grid-row:5}
+ .fach47[data-phase="0"] .fach-feedback{grid-row:6}
+ .fach47[data-phase="0"] .fach-letter{grid-row:7;justify-self:center;align-self:center;width:78.4%;height:auto;max-height:100%;aspect-ratio:360/210}
+ .fach47 .fach-workspace>.fach-axis-list{position:absolute;left:12.62%;top:84.25%;width:46.97%;height:8.5%;z-index:5;overflow:auto}
+ .fach47:not([data-phase="0"]) .fach-right{display:flex;flex-direction:column;gap:.7cqw;padding:0;overflow:auto}
+ .fach47:not([data-phase="0"]) .fach-letter{width:78%;height:auto;aspect-ratio:360/210;flex:none}
+ .fach47:not([data-phase="0"]) .fach-goal{min-height:5.85cqw}
+}
+@media(max-width:1050px),(max-height:590px){
+ .fach47 .fach-map{overflow:hidden}
+ .fach47 .fach-map-inner{max-width:100%;aspect-ratio:4/3}
+ .fach47 .fach-point{width:26px;height:26px}
+ .fach47 .fach-pin,.fach47 .fach-point.is-selected .fach-pin{width:36px;height:24px}
+ .fach47 .fach-point b{font-size:clamp(10px,2.2vw,14px);padding:2px 4px}
+ .fach47 .fach-axis-target{min-width:30px;min-height:25px;padding:2px}
+ .fach47 .fach-axis-target svg{width:30px;height:20px}
+ .fach47 .fach-region{font-size:clamp(10px,2.1vw,14px)}
+ .fach47 .fach-workspace{display:flex;flex-direction:column}
+ .fach47 .fach-workspace>.fach-axis-list{position:static;order:1;width:100%;grid-template-columns:1fr;gap:5px;padding:6px}
+ .fach47 .fach-axis-row{grid-template-columns:6px minmax(0,1fr) auto auto;gap:5px;padding:5px;font-size:13px}
+ .fach47 .fach-axis-row button{font-size:13px;padding:6px;min-height:34px}
+ .fach47 .fach-axis-row i{width:6px;height:20px}
+ .fach47 .fach-goal{padding:9px 29% 9px 16%;min-height:125px}
+ .fach47 .fach-goal h2{font-size:21px}
+ .fach47 .fach-goal p{font-size:clamp(12px,2vw,16px)}
+ .fach47 .fach-instructions{min-height:clamp(156px,24vw,220px)}
+ .fach47 .fach-instructions h3{font-size:18px;display:flex}
+ .fach47 .fach-instructions ol{font-size:clamp(12px,2vw,16px)}
+ .fach47 .fach-tools h3{font-size:clamp(12px,2.5vw,18px)}
+ .fach47 .fach-colors i,.fach47 .fach-flags button::before{width:clamp(42px,10vw,72px);height:clamp(28px,6.67vw,48px)}
+ .fach47 .fach-meter{font-size:15px;padding:7px 6% 7px 16%}
+ .fach47 .fach-meter i{width:16px;height:16px}
+ .fach47 .fach-controls button{font-size:clamp(14px,2.4vw,19px)}
+ .fach47 .fach-feedback{font-size:13px;min-height:30px}
+ .fach47 .fach-letter-caption{font-size:20px}.fach47 .fach-letter-caption small{font-size:10px}
+}
