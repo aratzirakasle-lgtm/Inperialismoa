@@ -41,3 +41,5 @@
 @media(max-width:1050px){.atlas64-work{grid-template-columns:1fr 1.5fr}.atlas64-mapframe{grid-column:1/-1;grid-row:1}.atlas64-layers,.atlas64-assign{grid-row:2}.atlas64-row{min-height:39px}.atlas64-row b,.atlas64 select{font-size:13px}.atlas64-map{max-height:65dvh}.atlas64.is-zoom .atlas64-map{max-height:none}}
 @media(max-width:600px){.atlas64-work,.atlas64-lower,.atlas64-footer{grid-template-columns:1fr}.atlas64-assign{grid-row:2}.atlas64-layers{grid-row:3}.atlas64-map{min-height:0}.atlas64-panel h2{font-size:17px}.atlas64-layer{min-height:44px}.atlas64-row{min-height:44px}.atlas64-actions button{min-height:44px}.atlas64-source{inset:5% 3% auto}.atlas64-seal{width:100%}}
 @media(prefers-reduced-motion:reduce){.atlas64-zone{animation:none!important;transition:none}}
+
+.atlas64-territory.is-assigned .atlas64-zone{stroke-width:2.4}.atlas64-map-label{stroke-width:.65}.atlas64-territory text{font-size:4.8px}.atlas64.is-zoom .atlas64-map{min-height:0}
