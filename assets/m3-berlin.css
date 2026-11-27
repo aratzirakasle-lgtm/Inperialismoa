@@ -1120,3 +1120,74 @@ html,body{background:#17382f}
  .fach49 .fach-point[data-fach-point="E"] b{left:auto;right:calc(100% + 2px)}
  .fach49 .fach-point b{font-size:10px;max-width:90px}
 }
+
+/* Lacre50 — original art, live numerals, no extra header row. */
+#berlin .m3-header43,#station .m3-header43{
+ background:linear-gradient(180deg,#081d13,#142e20 50%,#091d13);
+ border:3px solid #b78636;border-image:url("./m3-header-frame50.webp") 9 24 9 24 / 4px 12px / 0 stretch;
+ border-radius:0;padding:2px 11px;gap:clamp(6px,1.1vw,18px);
+}
+#berlin .m3-brand43,#station .m3-brand43{border-right:1px solid #b18a4b;padding-right:8px}
+#berlin .m3-brand43 img,#station .m3-brand43 img{height:32px;max-width:clamp(116px,16vw,228px);object-fit:contain}
+#berlin .m3-title43,#station .m3-title43{padding-inline:18px;line-height:1.02;font-size:14px}
+#berlin .m3-title43 strong,#station .m3-title43 strong{font-size:13px}
+#berlin .m3-medals43,#station .m3-medals43{gap:clamp(2px,.55vw,9px);padding:1px 2px}
+.m3-medals43::before{height:5px;background:linear-gradient(#fff5c8 0%,#c99032 27%,#754017 50%,#ffcf72 72%,#9e6929 100%);box-shadow:0 1px 3px #000}
+#berlin .m3-header43 button.m3-medal43,#station .m3-header43 button.m3-medal43{
+ width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+ aspect-ratio:1!important;flex:0 0 34px!important;border-radius:50%!important;
+ background:none!important;overflow:visible!important;padding:0!important;
+}
+#berlin .m3-medal43 .m3-medal-disc49,#station .m3-medal43 .m3-medal-disc49{
+ display:grid;place-items:center;box-sizing:border-box;width:100%;height:100%;aspect-ratio:1;border:0;border-radius:50%;
+ background:transparent url("./m3-header-medals50.webp") left center/300% 100% no-repeat;
+ color:#faeac3;font:bold 20px/1 Georgia,serif;text-shadow:0 1px 2px #160e08;box-shadow:0 1px 4px #0008;
+}
+#berlin .m3-medal43.is-complete .m3-medal-disc49,#station .m3-medal43.is-complete .m3-medal-disc49{background-position:right center;color:#fff4d7}
+#berlin .m3-medal43.is-current .m3-medal-disc49,#station .m3-medal43.is-current .m3-medal-disc49{
+ background-position:center;color:#2e1909;text-shadow:0 1px #ffe7a1;
+ box-shadow:0 0 0 1px #ffe7a4,0 0 0 3px #c4861f,0 0 8px 4px #ffb833b8;
+}
+#berlin .m3-medal43:not(:disabled):focus-visible,#station .m3-medal43:not(:disabled):focus-visible{outline:2px solid #fff5c0;outline-offset:4px}
+#berlin .m3-medal43 i,#station .m3-medal43 i{width:13px;height:13px;right:-3px;bottom:-2px;border:1px solid #ffe2a2;background:linear-gradient(#3ab34b,#186321);font-size:10px}
+#berlin .m3-progress43,#station .m3-progress43{position:relative;white-space:nowrap;border:3px double #b67b2a;border-radius:4px;background:linear-gradient(115deg,#efd09a,#fff1cc 50%,#e6ba78);color:#392613;box-shadow:inset 0 0 0 1px #fff2c6,0 1px 3px #0008;font:bold 16px/1 Georgia,serif}
+@media(max-width:1050px){#berlin .m3-brand43,#station .m3-brand43{display:none}}
+@media(max-width:680px){
+ #berlin .m3-header43,#station .m3-header43{gap:4px;padding:1px 4px;border-width:2px;border-image-width:2px 5px}
+ #berlin .m3-title43,#station .m3-title43{padding:0;font-size:10px}
+ #berlin .m3-title43 strong,#station .m3-title43 strong{font-size:10px}
+ .m3-title43::before,.m3-title43::after{display:none}
+ #berlin .m3-header43 button.m3-medal43,#station .m3-header43 button.m3-medal43{width:clamp(20px,5vw,26px)!important;height:clamp(20px,5vw,26px)!important;min-width:0!important;min-height:0!important;flex:0 0 auto!important}
+ #berlin .m3-medal43 .m3-medal-disc49,#station .m3-medal43 .m3-medal-disc49{font-size:15px}
+ #berlin .m3-progress43,#station .m3-progress43{font-size:12px;padding:3px 5px}
+}
+@media(max-width:400px){#berlin .m3-title43,#station .m3-title43{display:none}}
+/* Envelope: photographed face, proportional fitting in the existing grid cell. */
+.fach49 .fach-letter{background:none;border:0!important;border-radius:0;box-shadow:none!important;isolation:isolate;overflow:visible;aspect-ratio:345/206;perspective:650px;opacity:1!important}
+.fach49 .fach-letter-back{inset:0;background:transparent url("./m3-fachoda-sobre50.webp") center/contain no-repeat;border:0;box-shadow:none}
+.fach49 .fach-letter:not(.is-unlocked){filter:brightness(.86) saturate(.94);opacity:1!important}
+.fach49 .fach-letter.is-unlocked{filter:drop-shadow(0 0 4px #ffd05b) drop-shadow(0 0 9px #f8a42f);cursor:pointer}
+.fach49 .fach-letter.is-unlocked:hover{filter:drop-shadow(0 0 5px #fff1ac) drop-shadow(0 0 13px #ffbd3e)}
+.fach49 .fach-letter-caption{position:absolute;left:9%;right:9%;top:7%;padding:0;background:none;color:#8b2619;font-family:Georgia,"Times New Roman",serif;text-align:center;line-height:1.15;text-shadow:0 1px #ffebc2;gap:2px}
+.fach49 .fach-letter-caption small{font-size:clamp(9px,.70cqw,13px);color:#3d2916;font-weight:bold;letter-spacing:.075em;white-space:nowrap}
+.fach49 .fach-letter-caption b{font-size:clamp(12px,1.38cqw,23px);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fach49 .fach-letter-flap,.fach49 .fach-letter-wax{opacity:0;pointer-events:none}
+.fach49 .fach-letter.is-opening{z-index:20}
+.fach49 .fach-letter.is-opening .fach-letter-back{background:linear-gradient(145deg,#e9bd79,#bc8745 80%);border:1px solid #d8a651;clip-path:none;box-shadow:inset 0 0 15px #6e401e80}
+.fach49 .fach-letter.is-opening .fach-letter-flap{opacity:1;position:absolute;inset:1.5% 1.5% auto;height:54.4%;background:transparent url("./m3-fachoda-solapa50.webp") center/100% 100% no-repeat;clip-path:none;transform-origin:top center;animation:m3-open50 .34s ease-out both;z-index:5}
+.fach49 .fach-letter.is-opening .fach-letter-wax{opacity:1;position:absolute;left:50%;top:59%;width:26%;height:45%;border:0;border-radius:0;background:transparent url("./m3-fachoda-lacre50.webp") center/contain no-repeat;box-shadow:none;color:transparent;animation:m3-wax50 .2s ease-out both;z-index:6}
+.fach49 .fach-letter-paper{left:12%;right:12%;top:12%;height:72%;font-family:Georgia,serif;background:linear-gradient(#f6e3b9,#d9b581);box-shadow:0 1px 4px #442c18;z-index:1}
+.fach49 .fach-letter.is-opening .fach-letter-paper{z-index:4;transform:translateY(-60%);transition:transform .31s .29s ease-out}
+.fach49 .fach-letter.is-opening .fach-letter-caption{opacity:0}
+@keyframes m3-open50{from{transform:rotateX(0)}to{transform:rotateX(170deg)}}
+@keyframes m3-wax50{from{opacity:1;transform:translate(-50%,-50%)}to{opacity:0;transform:translate(-50%,-65%) scale(.7)}}
+@media(min-width:1051px) and (min-height:591px){
+ .fach49[data-phase="0"] .fach-right>.fach-letter{width:auto;height:100%;max-width:90%;max-height:100%;min-width:0;min-height:0;aspect-ratio:345/206;justify-self:center;align-self:center;position:relative;inset:auto;margin:0}
+ .fach49:not([data-phase="0"]) .fach-right>.fach-letter{width:78%;height:auto;max-width:90%;min-height:0;aspect-ratio:345/206;flex:none;margin:auto auto 0}
+}
+@media(max-width:1050px),(max-height:590px){
+ .fach49 .fach-letter{width:min(86%,345px);height:auto;min-height:0;max-height:none;aspect-ratio:345/206;align-self:center}
+ .fach49 .fach-letter-caption small{font-size:clamp(9px,1.8vw,12px)}
+ .fach49 .fach-letter-caption b{font-size:clamp(14px,3vw,23px)}
+}
+@media(prefers-reduced-motion:reduce){.fach49 .fach-letter.is-opening .fach-letter-flap,.fach49 .fach-letter.is-opening .fach-letter-wax{animation:none}}
