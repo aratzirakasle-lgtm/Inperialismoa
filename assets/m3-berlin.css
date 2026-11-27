@@ -678,12 +678,7 @@ html,body{background:#17382f}
 .m3-itinerary-step:not(:disabled):not(.is-current):hover .m3-itinerary-medal{box-shadow:0 0 9px #ffd786}
 .m3-itinerary-objective{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:3px;padding:3px 7px;background:#e4c995;border:1px solid #b98c50;color:#3c2a1a;font-size:clamp(10px,1vw,13px);line-height:1.2}
 .m3-itinerary-objective>span{border-left:1px solid #a98049;padding-left:10px}
-#berlin:not([hidden]){grid-template-rows:auto minmax(0,1fr) auto auto auto auto}
-#berlin #m3-room-header{grid-row:1}#berlin .room-fit{grid-row:2}#berlin .toolbar{grid-row:3}#berlin .status{grid-row:4}#berlin .notice{grid-row:5}#berlin #asset-error{grid-row:6}
-#station #m3-dialog-header{margin:0;border-radius:0;position:relative;z-index:5}
-#station.act-station,#station.karik-station,#station.fach-station{width:min(calc(100vw - 12px),calc((100dvh - 112px)*1.777))}
-#station.map-station{width:min(calc(100vw - 12px),calc((100dvh - 112px)*1.42))}
-@media(max-width:1050px),(max-height:590px){#station.act-station,#station.karik-station,#station.fach-station,#station.map-station{width:calc(100vw - 12px)}}
+/* Original scene dimensions retained; itinerary moved into existing control bars. */
 @media(max-width:650px){.m3-itinerary{padding:5px}.m3-itinerary-top{gap:4px;flex-wrap:wrap}.m3-itinerary-title{gap:4px}.m3-itinerary-progress{margin-left:auto}.m3-itinerary-path{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:7px}.m3-itinerary-path::before{display:none}.m3-itinerary-objective{display:block;text-align:center}.m3-itinerary-objective>span{display:none}.m3-itinerary-label{font-size:11px}.m3-itinerary-medal{width:42px}.m3-itinerary-num{width:16px;height:16px;font-size:10px}.m3-itinerary-check,.m3-itinerary-lock{width:17px;height:17px}.m3-itinerary-dots{display:none}}
 
 /* Trinkoa41: one compact horizontal itinerary; prioritize working area. */
@@ -725,3 +720,21 @@ html,body{background:#17382f}
  .m3-itinerary-path{gap:2px}
  .m3-itinerary-progress>b{font-size:12px}
 }
+
+/* Tamaina42 · no extra grid row or dialog height. The full route opens over the scene only on demand. */
+#berlin .toolbar,#station .dialog-foot{position:relative;isolation:isolate;z-index:10}
+#berlin .toolbar .m3-route-popover,#station .dialog-foot .m3-route-popover{position:absolute;bottom:calc(100% + 4px);left:0;right:0;width:100%;margin:0;z-index:20;box-shadow:0 4px 16px #0009}
+.m3-route-popover[hidden]{display:none!important}
+#berlin .toolbar .m3-route-toggle,#station .dialog-foot .m3-route-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:5px 8px;min-width:0;line-height:1.15;white-space:nowrap;font-size:13px}
+.m3-route-mini{display:inline-flex;gap:5px;align-items:center;color:#f4dfb6;white-space:nowrap}
+.m3-mini-title{font-weight:bold;color:#e5c487}
+.m3-mini-medals{display:inline-flex;align-items:center;gap:3px}
+.m3-mini-medals i{font:normal bold 10px/1 Georgia,serif;border:1px solid #bfa064;border-radius:50%;width:17px;height:17px;display:grid;place-items:center;background:#152c23;color:#cbb48b}
+.m3-mini-medals i.is-complete{background:#46784a;color:#f0ffdc}
+.m3-mini-medals i.is-current{background:#e8bd61;border-color:#fff1bd;color:#3b2915;box-shadow:0 0 6px #ffd573}
+.m3-mini-arrow{font-size:13px;color:#e9c57e}
+.m3-route-toggle[aria-expanded="true"] .m3-mini-arrow{transform:rotate(180deg)}
+.m3-mini-count{font-weight:bold}
+.m3-mini-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:650px){#berlin .toolbar .m3-route-toggle,#station .dialog-foot .m3-route-toggle{padding:4px 5px;gap:4px;font-size:11px}.m3-mini-title{display:none}.m3-mini-medals{gap:2px}.m3-mini-medals i{width:14px;height:14px;font-size:9px}.m3-route-mini{gap:3px}#station .dialog-foot{flex-wrap:wrap;gap:5px}}
+@media(max-width:390px){#berlin .toolbar .m3-mini-medals{display:none}}
