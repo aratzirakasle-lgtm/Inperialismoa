@@ -13,3 +13,7 @@ export function swapLegend(s){s.legend.reverse();s.checked=false;}
 export function score(s){return {scope:Number(s.scope==='almost'),arrows:s.directions.filter(Boolean).length,legend:Number(s.legend[0]==='control'&&s.legend[1]==='authority')};}
 export function seal(s){s.checked=true;return complete(s);}
 export function complete(s){const r=score(s);return s.checked&&r.scope===1&&r.arrows===4&&r.legend===1;}
+
+// Independent snapshots for the cartographer's undo history. Restoring always requires a fresh seal.
+export function snapshotAudit(s){return {scope:s.scope,directions:[...s.directions],legend:[...s.legend],checked:!!s.checked};}
+export function restoreAudit(s,previous){Object.assign(s,snapshotAudit(previous),{checked:false});return s;}

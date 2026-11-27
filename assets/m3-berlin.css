@@ -1349,3 +1349,75 @@ html,body{background:#17382f}
 @media(max-width:1050px),(max-height:590px){
  #station .fach49 .fach-tg-fragment55{grid-template-columns:44px minmax(0,1fr);gap:9px;padding:5px 8px;min-height:48px}
 }
+
+/* Cartographer desk 60 · isolated to the existing map station. */
+#station.map-station{width:min(calc(100vw - 16px),1480px);max-height:calc(100dvh - 12px)}
+.audit-desk60{--ink:#432d20;--brass:#c4a064;--forest:#203c30;--paper:#e9d5ad;gap:clamp(8px,1cqw,14px);padding:clamp(10px,1.2cqw,18px);background:radial-gradient(ellipse at 50% 45%,#88604640,transparent 70%),repeating-linear-gradient(4deg,#ffffff05 0 1px,transparent 2px 13px),linear-gradient(105deg,#312016,#63412c 48%,#382319);color:var(--ink)}
+.audit-desk60 .audit-header{flex-direction:row;justify-content:space-between;gap:12px;padding:9px 16px;border:1px solid var(--brass);background:linear-gradient(#254638,#172e25);box-shadow:0 3px 8px #190e09a0}
+.audit-heading small,.audit-eyebrow{display:block;color:#a66c36;font:700 10px/1.3 Georgia,serif;letter-spacing:.14em}
+.audit-heading small{color:#d6bc86}
+.audit-desk60 .audit-title{border:0;background:none;box-shadow:none;text-shadow:none;padding:2px 0 0;border-radius:0;font-size:clamp(23px,2.5cqw,36px);color:#f3e3bc;font-style:normal}
+.audit-desk60 .audit-header .act-nav{width:clamp(145px,19cqw,275px);padding:3px 10px;background:#132a22;flex:none}
+.audit-desk60 .audit-header .act-nav button{flex:0 0 clamp(34px,3.3cqw,45px);height:clamp(34px,3.3cqw,45px)}
+.audit-desk60 .audit-workspace{grid-template-columns:minmax(0,18fr) minmax(0,57fr) minmax(0,25fr);gap:clamp(8px,1cqw,15px);align-items:start}
+.audit-desk60 .audit-parchment{padding:clamp(10px,1.1cqw,17px);border:1px solid #a47a45;border-radius:3px;box-shadow:2px 4px 0 #9e774c,4px 6px 0 #d5b37d,6px 9px 12px #160d08a0;background:linear-gradient(#f0dfbd48,#d2ab7155),url("./m3-berlin-akta-paper.webp") center/cover,#ead5aa}
+.audit-desk60 .audit-notebook{border-left:8px solid #69472c;align-self:center;background:repeating-linear-gradient(transparent 0 27px,#76583216 27px 28px),url("./m3-berlin-akta-paper.webp") center/cover,#ead5aa}
+.audit-desk60 .audit-parchment h2{font-size:clamp(18px,1.7cqw,25px);text-align:left;line-height:1.14;margin:6px 0 10px;color:#653a25}
+.audit-desk60 .audit-parchment h3{font-size:clamp(13px,1.14cqw,17px);margin:14px 0 6px;color:#5d351f}
+.audit-desk60 .audit-parchment p,.audit-desk60 .audit-parchment li{font-size:clamp(13px,1.05cqw,16px);line-height:1.42}
+.audit-desk60 .audit-brief ol{list-style:none;counter-reset:audit-step;padding:0;margin:18px 0}
+.audit-desk60 .audit-brief li{counter-increment:audit-step;display:grid;grid-template-columns:26px 1fr;gap:2px 8px;align-items:start;margin:0 0 15px}
+.audit-desk60 .audit-brief li:before{content:counter(audit-step);grid-row:span 2;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#60462e;color:#fff1d2;border:1px solid #b99355;font-weight:bold}
+.audit-desk60 .audit-brief li span{grid-column:2}
+.audit-desk60 .audit-source{font-size:clamp(11px,.9cqw,14px);padding-top:10px}
+.audit-desk60 .audit-map{width:100%;align-self:start;aspect-ratio:auto;border:5px double #c19b60;border-radius:2px;box-shadow:0 7px 18px #190f09c0;background:#dac19a;overflow:hidden}
+.audit-map-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;color:#f3ddb0;background:#233c31;font:700 clamp(10px,.9cqw,13px)/1.3 Georgia,serif;letter-spacing:.07em}
+.audit-map-bar button{font:700 13px Georgia,serif;letter-spacing:0;color:#f4e6c2;background:#3e5a48;border:1px solid #c5a265;border-radius:3px;padding:7px 10px;min-height:34px;white-space:nowrap}
+.audit-map-sheet{position:relative;aspect-ratio:950/850;background:#dcc49e;overflow:hidden}
+.audit-desk60 .audit-cartography{width:100%;height:100%;display:block}
+.audit-desk60 .audit-map-note{position:static;background:#e6d2a7;padding:5px 8px;font-size:clamp(10px,.9cqw,13px);line-height:1.2;color:#573e28;border-top:1px solid #a77b42}
+.audit-compass{position:absolute;left:3%;top:4%;width:10%;color:#72583a;text-align:center;pointer-events:none;font:700 12px Georgia,serif;opacity:.85}
+.audit-compass svg{display:block;width:100%}
+.audit-arrow-group{cursor:pointer;outline:none}
+.audit-arrow-group path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.audit-arrow-hit{stroke:transparent;stroke-width:60;pointer-events:stroke}
+.audit-arrow-shadow{stroke:#faeac4;stroke-width:20;pointer-events:none}
+.audit-arrow-line{stroke:#8c3026;stroke-width:12;marker-end:url(#audit-arrowhead);pointer-events:none}
+.audit-arrow-medal{fill:#f5e2b9;stroke:#8c3026;stroke-width:4;pointer-events:all}
+.audit-arrow-number{font:700 30px Georgia,serif;fill:#6c2b22;pointer-events:none}
+.audit-arrow-group:hover .audit-arrow-shadow,.audit-arrow-group:focus-visible .audit-arrow-shadow{stroke:#ffda79;stroke-width:30}
+.audit-arrow-group:focus-visible .audit-arrow-medal{stroke:#1f5243;stroke-width:7}
+.audit-flip .audit-arrow-line{animation:audit-ink60 .38s ease-out}
+@keyframes audit-ink60{from{opacity:.25;stroke-dasharray:6 12}to{opacity:1;stroke-dasharray:none}}
+.audit-desk60 .audit-scopes{gap:6px}
+.audit-desk60 .audit-scopes .audit-scope-card{display:grid;grid-template-columns:clamp(40px,4.5cqw,66px) 1fr 12px;gap:8px;align-items:center;text-align:left;padding:6px 7px;min-height:52px;font-size:clamp(12px,1.05cqw,15px);border:1px solid #a9824e;background:linear-gradient(#f6e8cc,#e7cda0);color:#4c3322}
+.audit-scope-card svg{width:100%;height:clamp(38px,4cqw,56px);display:block}
+.audit-scope-card i{width:11px;height:11px;border:1px solid currentColor;border-radius:50%;opacity:.8}
+.audit-desk60 .audit-scopes .audit-scope-card[aria-pressed="true"]{background:linear-gradient(#365849,#254437);border-color:#9e7c43;color:#fff0cf;box-shadow:0 0 0 2px #c4a064}
+.audit-scope-card[aria-pressed="true"] i{background:#e5c37a;box-shadow:inset 0 0 0 2px #294a3b}
+.audit-desk60 .audit-legend{gap:7px;margin:9px 0}
+.audit-desk60 .audit-legend>div{display:grid;grid-template-columns:28px 1fr;gap:7px;font-size:clamp(12px,1cqw,15px)}
+.audit-desk60 .audit-swatch{width:28px;height:30px;border-radius:1px;box-shadow:inset 0 0 0 2px #f3dfb5}
+.audit-desk60 .inland-swatch{background:repeating-linear-gradient(35deg,#87503c 0 3px,#d9b998 3px 8px)}
+.audit-legend-card{display:flex;align-items:center;justify-content:space-between;gap:5px;text-align:left;min-width:0;width:100%;min-height:44px;padding:6px 8px;border:1px solid #a37b4a;background:linear-gradient(#faeed1,#e9cca0);color:#4c3322;font:inherit;cursor:grab;box-shadow:0 2px 3px #73512a30;border-radius:2px}
+.audit-legend-card.is-drop-target{outline:3px dashed #315b4d;outline-offset:2px}
+.audit-desk60 .audit-swap{min-height:38px;font-size:clamp(12px,1cqw,15px)}
+.audit-desk60 .audit-drag-hint{font-size:clamp(11px,.9cqw,13px);font-style:italic;color:#664c34}
+.audit-desk60 button:focus-visible{outline:3px solid #e9bc60;outline-offset:2px}
+.audit-desk60 .audit-footer{display:grid;grid-template-columns:1fr auto auto;gap:12px;background:linear-gradient(#e8d4ac,#d9b98a);padding:10px 14px;border:3px double #a67f4a}
+.audit-desk60 .audit-footer strong{font-size:clamp(15px,1.3cqw,19px)}
+.audit-desk60 .audit-feedback{font-size:clamp(13px,1.05cqw,15px)}
+.audit-actions{display:flex;flex-wrap:wrap;gap:6px}
+.audit-secondary{min-height:40px;padding:8px 11px;border:1px solid #9b7749;border-radius:3px;background:#f3e4c5;color:#503721;font:700 13px Georgia,serif}
+.audit-secondary:disabled{opacity:.5;cursor:default}
+.audit-desk60 .audit-seal{border-radius:8px;min-height:52px;padding:8px 18px;font-size:clamp(15px,1.3cqw,19px);display:flex;align-items:center;gap:9px}
+.audit-desk60 .audit-seal span{font-size:24px}
+.audit-final-stamp{display:none;position:absolute;bottom:9%;right:6%;width:20%;aspect-ratio:1;place-content:center;text-align:center;border:5px double #dfb5a0;border-radius:46% 51% 44% 49%;background:radial-gradient(#a74b3b,#76241e 75%);color:#fae3b6;box-shadow:0 5px 10px #2d150b88;font:700 clamp(10px,1.15cqw,17px)/1.1 Georgia,serif;transform:rotate(-12deg);pointer-events:none}
+.audit-complete .audit-final-stamp{display:grid;animation:audit-stamp60 .45s ease-out both}
+@keyframes audit-stamp60{from{opacity:0;transform:scale(1.45) rotate(-16deg)}to{opacity:1;transform:scale(1) rotate(-12deg)}}
+.audit-desk60.audit-zoomed .audit-workspace{grid-template-columns:1fr}
+.audit-desk60.audit-zoomed .audit-notebook,.audit-desk60.audit-zoomed .audit-tools{display:none}
+.audit-desk60.audit-zoomed .audit-map{grid-column:1;grid-row:1;width:min(100%,1050px);justify-self:center}
+@media(max-width:1000px){.audit-desk60 .audit-workspace{grid-template-columns:1fr 1fr}.audit-desk60 .audit-map{grid-column:1/-1;grid-row:1;width:min(100%,750px);justify-self:center}.audit-desk60 .audit-notebook,.audit-desk60 .audit-tools{grid-row:2;align-self:start}.audit-desk60 .audit-footer{grid-template-columns:1fr auto}.audit-desk60 .audit-status{grid-column:1/-1}}
+@media(max-width:560px){#station.map-station{width:calc(100vw - 8px)}.audit-desk60{padding:7px}.audit-desk60 .audit-header{padding:8px;flex-wrap:wrap}.audit-desk60 .audit-workspace{grid-template-columns:1fr}.audit-desk60 .audit-map{grid-row:1;grid-column:1}.audit-desk60 .audit-tools{grid-row:2}.audit-desk60 .audit-notebook{grid-row:3}.audit-desk60 .audit-footer{grid-template-columns:1fr}.audit-desk60 .audit-seal{justify-content:center}.audit-desk60 .audit-actions{justify-content:space-between}.audit-desk60 .audit-actions button{flex:1;min-height:44px}.audit-map-bar button,.audit-desk60 .audit-swap{min-height:44px}.audit-arrow-hit{stroke-width:115}.audit-arrow-medal{r:31px}.audit-desk60 .audit-final-stamp{font-size:9px;border-width:3px}}
+@media(prefers-reduced-motion:reduce){.audit-flip .audit-arrow-line,.audit-complete .audit-final-stamp{animation:none}}
