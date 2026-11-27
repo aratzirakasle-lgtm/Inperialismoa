@@ -17,3 +17,10 @@ export function complete(s){const r=score(s);return s.checked&&r.scope===1&&r.ar
 // Independent snapshots for the cartographer's undo history. Restoring always requires a fresh seal.
 export function snapshotAudit(s){return {scope:s.scope,directions:[...s.directions],legend:[...s.legend],checked:!!s.checked};}
 export function restoreAudit(s,previous){Object.assign(s,snapshotAudit(previous),{checked:false});return s;}
+
+export function createAuditGuide(){return {step:0,passed:[false,false,false],attempted:[false,false,false]};}
+export function guideCanVisit(g,step,teacher=false){return Number.isInteger(step)&&step>=0&&step<3&&(teacher||g.passed.slice(0,step).every(Boolean));}
+export function guideVisit(g,step,teacher=false){if(!guideCanVisit(g,step,teacher))return false;g.step=step;return true;}
+export function guideVerify(g,s){const r=score(s),ok=[r.scope===1,r.arrows===4,r.legend===1][g.step];g.attempted[g.step]=true;g.passed[g.step]=ok;return ok;}
+export function guideInvalidate(g,step){g.passed[step]=false;g.attempted[step]=false;}
+export function guideReady(g){return g.passed.every(Boolean);}
