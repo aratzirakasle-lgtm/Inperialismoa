@@ -22,7 +22,7 @@ export function orientation(a){const key=[...a.points].sort().join('');return ke
 export function phaseReady(s,p=s.phase){return p===0?COLORS.every(c=>s.axes[c].points.length===2&&s.axes[c].country):p===1?!!s.region&&!!s.year:p===2?FIELDS.every(f=>f.options.some(([id])=>id===s.answers[f.id])):false;}
 export function phaseScore(s,p=s.phase){if(p===0)return COLORS.filter(c=>{const a=s.axes[c];return (a.country==='uk'&&orientation(a)==='vertical')||(a.country==='fr'&&orientation(a)==='horizontal');}).length;if(p===1)return Number(s.region==='sudan')+Number(s.year==='1898');return FIELDS.filter(f=>s.answers[f.id]===f.expected).length;}
 export function phaseCorrect(s,p=s.phase){return phaseReady(s,p)&&phaseScore(s,p)===(p===2?3:2);}
-export function sealPhase(s){if(!phaseReady(s))return false;const p=s.phase;s.sealed[p]=phaseCorrect(s,p);s.feedback={correct:s.sealed[p],score:phaseScore(s,p)};if(s.sealed[p])s.unlocked=Math.max(s.unlocked,Math.min(2,p+1));return s.sealed[p];}
-export function goPhase(s,p){if(!Number.isInteger(p)||p<0||p>s.unlocked)return false;s.phase=p;s.flag=null;s.feedback=null;return true;}
+export function sealPhase(s){if(!phaseReady(s))return false;const p=s.phase;s.sealed[p]=phaseCorrect(s,p);s.feedback={correct:s.sealed[p],score:phaseScore(s,p)};if(s.sealed[p])s.unlocked=s.sealed[0]?(s.sealed[1]?2:1):0;return s.sealed[p];}
+export function goPhase(s,p,teacherPreview=false){if(!Number.isInteger(p)||p<0||p>2||(!teacherPreview&&p>s.unlocked))return false;s.phase=p;s.flag=null;s.feedback=null;return true;}
 export function finished(s){return s.sealed.every(Boolean)&&[0,1,2].every(p=>phaseCorrect(s,p));}
 export function resetPhase(s){if(s.phase===0){for(const c of COLORS)s.axes[c]={points:[],country:null};s.flag=null;}else if(s.phase===1){s.region=null;s.year=null;}else s.answers={};invalidate(s,s.phase);}
