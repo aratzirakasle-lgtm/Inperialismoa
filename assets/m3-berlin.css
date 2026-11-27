@@ -1077,3 +1077,46 @@ html,body{background:#17382f}
 
 /* Doitasuna47b — clean artwork beneath the independent controls. */
 .fach47.fach-scene{background-image:url("./m3-fachoda-scene47.webp")}
+
+/* Mapa49 — artwork-only replacement of the illustrated atlas and common header.
+   Map, panel and envelope footprint from Doitasuna47b is unchanged. */
+.fach49 .fach-map-inner{background:#dfbc80;overflow:visible;isolation:isolate}
+.fach49 .fach-map-inner::after{content:none}
+.fach49 .fach-map-inner>svg{width:100%;height:100%;display:block}
+.fach49 .fach-point b{background:linear-gradient(#fff0c8,#dfb575);border:2px solid #9c662f;box-shadow:inset 0 0 0 1px #fff1c3,0 2px 4px #4c2c16aa;border-radius:4px;color:#342310;line-height:1.12}
+.fach49 .fach-point[data-fach-point="W"] b{left:auto;right:calc(100% + .1cqw);top:50%;transform:translateY(-50%)}
+.fach49 .fach-point[data-fach-point="E"] b{left:calc(100% + .1cqw);right:auto;top:50%;transform:translateY(-50%)}
+.fach49 .fach-region{border:2px solid #be9046;background:linear-gradient(#fff1cc,#e4ba75);box-shadow:0 2px 4px #4c2c16aa}
+.fach49 .fach-region.is-selected{background:#842b1e;color:#fff0c8;box-shadow:0 0 7px #ffcd76}
+.fach49 .fach-map>p{font-family:Georgia,serif}
+/* Make the visible medals round even if a generic toolbar-button rule overrides the button box. */
+#berlin .m3-header43,#station .m3-header43{font-family:Georgia,"Times New Roman",serif;min-width:0;gap:clamp(6px,1vw,14px);background:linear-gradient(180deg,#0b2418,#132f20 50%,#071e14);border:2px solid #d4a654;box-shadow:inset 0 0 0 1px #ffe4a1,inset 0 -3px 6px #0009,0 1px 3px #16100a;padding:2px 7px;border-radius:4px}
+#berlin .m3-brand43,#station .m3-brand43{padding:0;border:0;flex:none;display:flex;align-items:center;background:none}
+.m3-brand43 img{display:block;height:32px;width:auto;max-width:100%;object-fit:contain}
+#berlin .m3-title43,#station .m3-title43{position:relative;flex:none;color:#fff0c6;padding:0 17px;text-shadow:0 1px 2px #000;line-height:1.08;font-size:13px}
+.m3-title43::before,.m3-title43::after{content:"";position:absolute;top:0;bottom:0;width:16px;background:url("./m3-header-laurel49.webp") left center/200% 100% no-repeat;pointer-events:none}
+.m3-title43::before{left:0}.m3-title43::after{right:0;background-position:right center}
+#berlin .m3-title43 strong,#station .m3-title43 strong{font-size:13px}
+#berlin .m3-medals43,#station .m3-medals43{display:flex;align-items:center;justify-content:space-evenly;gap:clamp(3px,.8vw,11px);flex:1;min-width:0;padding:2px 0}
+.m3-medals43::before{height:4px;background:linear-gradient(#fff2bd,#c68a29 45%,#6c3b16 70%,#efc775);box-shadow:0 1px 2px #000}
+#berlin .m3-header43 button.m3-medal43,#station .m3-header43 button.m3-medal43{position:relative;display:grid;place-items:center;flex:0 0 auto;width:33px!important;height:33px!important;min-width:0!important;min-height:0!important;aspect-ratio:1;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;color:#f8e8c3!important;opacity:1!important}
+.m3-medal-disc49{display:grid;place-items:center;width:100%;height:100%;aspect-ratio:1;border-radius:50%;background:#33271a url("./m3-header-medal49.webp") center/100% 100% no-repeat;font:bold 20px/1 Georgia,serif;color:#f9eac5;text-shadow:0 2px 2px #181006;box-shadow:0 2px 3px #0008}
+.m3-medal43.is-complete .m3-medal-disc49{background:radial-gradient(circle at 35% 25%,#92c577,#1c6329 60%,#123e20 82%);border:2px solid #e5bb70;box-shadow:inset 0 0 0 1px #52361b,0 1px 4px #0009}
+.m3-medal43.is-current .m3-medal-disc49{background:radial-gradient(circle at 38% 28%,#fff5bf,#ffc84b 52%,#d99820 74%,#8c5011 100%);border:2px solid #fff1b6;color:#38240d;text-shadow:0 1px #ffecac;box-shadow:0 0 0 1px #a76a22,0 0 0 3px #e9ad41,0 0 9px 4px #ffce5fb0,inset 0 0 0 1px #a46517}
+#berlin .m3-medal43 i,#station .m3-medal43 i{z-index:2;background:#388e39;border:1px solid #eac76c;box-shadow:0 1px 2px #000}
+#berlin .m3-progress43,#station .m3-progress43{border:3px double #ad7832;background:linear-gradient(#fff2c8,#dfb673);color:#382617;box-shadow:0 1px 3px #0009;border-radius:3px;font-size:15px;padding:4px 9px}
+#station .m3-top43 #return{width:33px;height:33px;min-height:0;padding:0;border:2px solid #d9ad63;border-radius:50%!important;background:radial-gradient(#57452b,#221c13);color:#f5d28b}
+@media(max-width:1050px){#berlin .m3-brand43,#station .m3-brand43{display:none}}
+@media(max-width:600px){
+ #berlin .m3-header43,#station .m3-header43{gap:5px;padding:2px 4px}
+ #berlin .m3-title43,#station .m3-title43{padding:0;font-size:10px}
+ .m3-title43::before,.m3-title43::after{display:none}
+ #berlin .m3-header43 button.m3-medal43,#station .m3-header43 button.m3-medal43{width:25px!important;height:25px!important}
+ .m3-medal-disc49{font-size:15px}
+ #berlin .m3-progress43,#station .m3-progress43{font-size:12px;padding:3px 5px}
+}
+@media(max-width:480px){
+ .fach49 .fach-point[data-fach-point="W"] b{left:50%;right:auto;top:calc(100% + 1px);transform:translateX(-50%)}
+ .fach49 .fach-point[data-fach-point="E"] b{left:auto;right:calc(100% + 2px)}
+ .fach49 .fach-point b{font-size:10px;max-width:90px}
+}
