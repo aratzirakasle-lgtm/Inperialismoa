@@ -802,3 +802,77 @@ html,body{background:#17382f}
  .fach43 .fach-choices button,.fach43 .fach-field,.fach43 .fach-field select{font-size:16px;padding:7px}.fach43 .fach-letter{width:min(75%,300px);min-height:135px;max-height:none}.fach-letter-caption{font-size:18px;padding:5px}.fach-letter-caption small{font-size:11px}.fach-letter-wax{width:34px;height:34px;font-size:18px}.fach-letter-paper{font-size:12px;padding:10px}
 }
 @media(prefers-reduced-motion:reduce){.fach-letter-flap,.fach-letter-paper,.fach-letter-caption,.fach-letter-wax{transition:none!important}}
+
+/* Pergamino44: closer match to the approved second concept. */
+.fach43 .fach-card{background:linear-gradient(105deg,#f8e6bf,#f3d8a2 62%,#dfb777);border:3px double #dca85d;border-radius:2px;box-shadow:0 0 0 1px #683e20,inset 0 0 12px #bc854e80,0 2px 3px #080c09}
+.fach43 .fach-goal{position:relative;padding-right:30%;min-height:5.6cqw}
+.fach43 .fach-goal-photo{position:absolute;right:.35cqw;top:-.5cqw;width:27%;height:auto;box-shadow:1px 3px 6px #321c13aa;transform:rotate(4deg);pointer-events:none}
+.fach43 .fach-goal h2::before{content:"◎";font-size:1.75em;float:left;line-height:.8;margin:0 .25em .1em 0;color:#8e3226}
+.fach43 .fach-goal h2{font-size:1.65cqw;margin-bottom:.15cqw}
+.fach43 .fach-card h3{font-size:1.25cqw}
+.fach43 .fach-instructions{padding-top:0}
+.fach43 .fach-instructions h3{display:table;margin:-.15cqw 0 .38cqw -.55cqw;padding:.22cqw 1cqw .22cqw .55cqw;color:#ffe7b0;background:linear-gradient(#2d4c34,#122c20);border:2px double #d7a25c;box-shadow:0 2px 3px #6b451c99;border-radius:2px}
+.fach43 .fach-instructions ol{list-style:none;counter-reset:fachinstruction;padding-left:0;margin:0;gap:.22cqw}
+.fach43 .fach-instructions li{counter-increment:fachinstruction;display:flex;align-items:flex-start;gap:.4cqw;line-height:1.18}
+.fach43 .fach-instructions li::before{content:counter(fachinstruction);flex:none;display:grid;place-items:center;width:1.15cqw;height:1.15cqw;border:1px solid #9b652e;border-radius:50%;background:radial-gradient(circle at 30% 20%,#ffe8a0,#b67a28 80%);color:#412710;font-weight:bold;box-shadow:0 1px 2px #855c37}
+.fach43 .fach-tools{gap:0;padding:0;overflow:hidden}
+.fach43 .fach-tools>div{padding:0 0 .25cqw}
+.fach43 .fach-tools>div+div{padding-left:0;border-left:1px solid #a87b43}
+.fach43 .fach-tools h3{text-align:center;color:#ffe8b3;background:linear-gradient(#284633,#132b20);border-bottom:2px solid #cba05e;padding:.25cqw .1cqw;margin:0 0 .3cqw;font-size:1.05cqw}
+.fach43 .fach-colors,.fach43 .fach-flags{padding:0 .25cqw;gap:.3cqw}
+.fach43 .fach-colors button,.fach43 .fach-flags button{border-radius:4px}
+.fach43 .fach-colors i{width:2.7cqw;height:2.7cqw;border:2px solid #f6d393;box-shadow:0 0 0 1px #9a672f,0 2px 3px #4b321a;background:radial-gradient(circle at 30% 20%,#ffffff75,transparent 38%),linear-gradient(0deg,#0004,transparent),var(--axis)}
+.fach43 .fach-flags svg{width:3.65cqw;height:2.43cqw}
+.fach43 .fach-colors button[aria-pressed="true"],.fach43 .fach-flags button[aria-pressed="true"]{outline:2px solid #fff0b0;background:#f4d49b;border-color:#e6a842;box-shadow:0 0 7px #ffca54}
+.fach43 .fach-axis-list[hidden]{display:none!important}
+.fach43 .fach-meter{border:3px double #e0b471;background:linear-gradient(#274635,#102b20);font-size:1.12cqw;padding:.25cqw .6cqw}
+.fach43 .fach-meter b::before{content:"☷";color:#ebc988;margin-right:.4em}
+.fach43 .fach-meter i{border:2px solid #dcb572;width:1.35cqw;height:1.35cqw;box-shadow:inset 0 1px 2px #0009}
+.fach43 .fach-controls button{font-size:1.18cqw;border:3px double #eac27d;border-radius:4px;box-shadow:0 2px 5px #0009,inset 0 1px 2px #fff6bc;min-height:2.5cqw;background:linear-gradient(#fff1c6,#ddaf63)}
+.fach43 .fach-controls button[data-fach-seal]{background:linear-gradient(#48844a,#145024 60%,#103b1d);color:#fff5d2}
+.fach43 .fach-controls button[data-fach-seal]:disabled{opacity:.65}
+.fach43 .fach-letter{width:78%;min-height:7.8cqw;max-height:9.4cqw;flex:none;margin:.15cqw auto 0}
+.fach43 .fach-letter-back{border:0;background-color:#deb47b;box-shadow:0 2px 4px #120c06}
+.fach43 .fach-letter:not(.is-opening) .fach-letter-flap,.fach43 .fach-letter:not(.is-opening) .fach-letter-wax{opacity:0}
+.fach43 .fach-letter-caption{left:10%;right:10%;top:5%;padding:.18cqw .2cqw;background:linear-gradient(120deg,#e9c68b,#f3dca8,#e7bb7b);font-size:1.45cqw;font-style:italic}
+.fach43 .fach-letter-caption small{font-size:.65cqw;font-style:normal}
+.fach43 .fach-letter.is-opening .fach-letter-flap{opacity:1}
+.fach43 .fach-letter.is-unlocked{filter:drop-shadow(0 0 10px #ffc354)}
+.fach43 .fach-point b{border:3px double #a66f33;background:linear-gradient(#fff0c8,#e2ba75);box-shadow:0 2px 4px #58350e99;color:#342313;padding:.18cqw .4cqw;font-size:1.12cqw}
+.fach43 .fach-pin{background:radial-gradient(circle at 32% 22%,#fffbe0,#f9d681 54%,#aa6619 90%);border:2px solid #ffedb7;box-shadow:0 0 0 2px #956024,0 3px 6px #422707}
+.fach43 .fach-point.is-selected .fach-pin{background:radial-gradient(circle at 35% 25%,#fff9d3,var(--active) 75%);box-shadow:0 0 0 2px #9b6b31,0 0 10px var(--active)}
+.fach43 .fach-point[data-fach-point="W"] b{right:100%;left:auto}
+.fach43 .fach-axis-target{background:linear-gradient(#ffe8bc,#dfb97d);border:2px solid var(--axis);box-shadow:0 0 0 1px #936336,0 2px 5px #62400c99}
+@media(min-width:1051px) and (min-height:591px){
+ .fach43.fach-scene{background-size:100% 109%}
+ .fach43 .fach-title{left:25.5%;width:49%;top:1%;height:8.5%;border:5px double #e0b05e;box-shadow:0 0 0 1px #6b3c1e,inset 0 0 0 2px #8c612e,0 4px 8px #0009;z-index:5}
+ .fach43 .fach-map{left:12%;top:8.4%;width:48.3%;height:80.8%;padding:.32cqw;background:#c59b60;border:5px double #dbaa57;justify-content:stretch}
+ .fach43 .fach-map-inner{flex:1;min-height:0;width:100%;height:100%;aspect-ratio:auto;border:1px solid #835423}
+ .fach43 .fach-map>p{background:#f3dcb0;font-size:.75cqw;margin:0;padding:.2cqw;width:100%;color:#55391e;flex:none}
+ .fach43 .fach-header nav{top:8.9%;height:4%;left:61.2%;width:28.7%;z-index:6}
+ .fach43 .fach-header nav button{font-size:.8cqw;padding:.15cqw}
+ .fach43 .fach-right{left:60.7%;top:13.8%;width:28.9%;height:82.4%;padding:.42cqw .5cqw;gap:.32cqw;background:linear-gradient(115deg,#254331,#102a1f);border:3px double #d9ac62;overflow:auto;font-size:1.05cqw;line-height:1.15}
+ .fach43 .fach-card{padding:.4cqw .55cqw}
+ .fach43 .fach-goal{padding-right:30%}
+ .fach43 .fach-tools{padding:0}
+ .fach43 .fach-instructions{padding-top:0}
+ .fach43 .fach-axis-row{font-size:.82cqw}
+}
+@media(max-width:1050px),(max-height:590px){
+ .fach43 .fach-goal{min-height:95px;padding-right:28%}
+ .fach43 .fach-goal-photo{width:22%;max-width:110px;right:8px;top:-4px}
+ .fach43 .fach-goal h2{font-size:23px}
+ .fach43 .fach-card h3,.fach43 .fach-tools h3{font-size:17px}
+ .fach43 .fach-instructions h3{padding:5px 12px;margin:0 0 8px}
+ .fach43 .fach-instructions li{gap:8px}
+ .fach43 .fach-instructions li::before{width:20px;height:20px}
+ .fach43 .fach-colors i{width:36px;height:36px}
+ .fach43 .fach-flags svg{width:48px;height:32px}
+ .fach43 .fach-meter{font-size:16px;padding:7px}
+ .fach43 .fach-meter i{width:16px;height:16px}
+ .fach43 .fach-controls button{font-size:16px;padding:8px;min-height:44px}
+ .fach43 .fach-letter{width:min(75%,310px);min-height:170px;max-height:none}
+ .fach43 .fach-letter-caption{font-size:20px;padding:4px}
+ .fach43 .fach-letter-caption small{font-size:11px}
+ .fach43 .fach-point b{font-size:12px;padding:2px 4px}
+}
