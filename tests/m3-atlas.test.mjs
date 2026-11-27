@@ -4,3 +4,5 @@ test('invalid IDs and third rival rejected, undo snapshot independent',()=>{cons
 test('one screen contains ten map zones and selectors, three strategies and layers',()=>{const h=atlasMarkup();for(const t of M.TERRITORIES){assert.ok(h.includes('data-atlas-map="'+t.id+'"'));assert.ok(h.includes('data-atlas-territory="'+t.id+'"'));}assert.equal((h.match(/data-atlas-strategy="/g)||[]).length,3);assert.equal((h.match(/data-atlas-layer="/g)||[]).length,3);assert.equal((h.match(/data-atlas-rival="/g)||[]).length,3);assert.doesNotMatch(h,/selected="selected"/);});
 
 test('direct map assignment is available for all three powers and every territory has its own engraving',()=>{const h=atlasMarkup();assert.equal((h.match(/data-atlas-quick="/g)||[]).length,3);assert.equal((h.match(/class="atlas64-engraving"/g)||[]).length,10);});
+
+test('premium art shell keeps visible version and accessible seal label',()=>{const h=atlasMarkup();assert.match(h,/class="atlas64 atlas66 atlas67"/);assert.match(h,/data-atlas-art-status/);assert.match(h,/data-atlas-seal-label>✦ Egiaztatu/);assert.match(h,/atlas67-map-finish/);});
