@@ -738,3 +738,67 @@ html,body{background:#17382f}
 .m3-mini-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media(max-width:650px){#berlin .toolbar .m3-route-toggle,#station .dialog-foot .m3-route-toggle{padding:4px 5px;gap:4px;font-size:11px}.m3-mini-title{display:none}.m3-mini-medals{gap:2px}.m3-mini-medals i{width:14px;height:14px;font-size:9px}.m3-route-mini{gap:3px}#station .dialog-foot{flex-wrap:wrap;gap:5px}}
 @media(max-width:390px){#berlin .toolbar .m3-mini-medals{display:none}}
+
+/* Atlas43: shared upper route replaces the previous control row. */
+#berlin:not([hidden]){grid-template-rows:auto minmax(0,1fr) auto auto auto}
+#berlin .toolbar{grid-row:1;display:flex;align-items:center;flex-wrap:nowrap;padding:3px 5px;gap:5px;background:#11291f;border:2px solid #bb9150}
+#berlin .room-fit{grid-row:2}#berlin .toolbar>a,#berlin .toolbar>button{flex:none;font-size:12px;padding:5px 7px}#berlin #count{font-size:12px;white-space:nowrap}#berlin .toolbar .m3-next-button{padding:5px 7px;font-size:12px}
+#station .dialog-foot.m3-top43{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:5px;padding:3px 7px;min-height:42px;background:#10291f;border:2px solid #bd9350}
+#station .m3-top43 #return{border-radius:50%;border:2px solid #c5a35d;background:#203d2b;color:#f6dba5;font-size:19px;line-height:1;width:31px;height:31px;padding:0;flex:none}
+.m3-header43{flex:1;min-width:0;display:flex;align-items:center;gap:clamp(5px,1vw,16px);color:#f9e2af;white-space:nowrap;font-family:Georgia,serif}
+.m3-brand43{display:flex;align-items:center;gap:6px;padding:2px 7px;border:1px solid #c7a05c;background:linear-gradient(120deg,#253b25,#0d241b);color:#f5d58b;font-size:11px;line-height:1.1}
+.m3-brand43 small{display:block;font-size:8px}.m3-brand-emblem{font-size:22px}.m3-title43{font-size:12px;text-align:center;line-height:1.1}.m3-title43 strong{display:block;font-size:13px}
+.m3-medals43{display:flex;align-items:center;justify-content:space-evenly;position:relative;isolation:isolate;flex:1;gap:clamp(2px,.65vw,10px);min-width:0}
+.m3-medals43::before{content:"";position:absolute;left:6%;right:6%;height:3px;background:linear-gradient(#e4c489,#ad7939,#edc46d);z-index:-1}
+.m3-medal43{position:relative;display:grid;place-items:center;flex:none;width:30px;height:30px;padding:0!important;border:2px solid #c3a066!important;border-radius:50%;background:radial-gradient(circle at 35% 25%,#5c583a,#10251b 72%);color:#f4dfa9;font:bold 17px/1 Georgia,serif!important;box-shadow:0 1px 4px #0009;opacity:1!important}
+.m3-medal43.is-complete{background:radial-gradient(circle at 35% 25%,#70a75e,#27552c 70%)}.m3-medal43.is-current{background:radial-gradient(circle at 35% 25%,#ffeb9b,#e6a72b 65%,#9b5d13);border-color:#ffecb1!important;color:#3d2912;box-shadow:0 0 0 2px #d99724,0 0 10px 3px #ffcd60aa}
+.m3-medal43 i{position:absolute;bottom:-4px;right:-4px;border:1px solid #e5c77a;background:#38753a;color:white;font:normal bold 10px/1 Georgia;display:grid;place-items:center;width:14px;height:14px;border-radius:50%}
+.m3-progress43{flex:none;padding:4px 9px;border:2px double #c4a161;background:#e9ce9a;color:#392717;font:bold 15px/1 Georgia}
+@media(max-width:1050px){.m3-brand43{display:none}#berlin .toolbar{flex-wrap:wrap}#berlin .toolbar .m3-header43{flex-basis:100%}}
+@media(max-width:580px){.m3-title43{font-size:10px}.m3-title43 strong{display:none}.m3-medal43{width:25px;height:25px;font-size:14px!important}.m3-progress43{font-size:12px;padding:3px 5px}.m3-header43{gap:5px}}
+/* Reconstruct the approved second concept with live text, neutral atlas and animated letter. */
+.fach43.fach-scene{background:#392519 url("./m3-fachoda-escena43.webp") center bottom/100% 109% no-repeat;display:block;padding:0;overflow:hidden;aspect-ratio:16/9}
+.fach43 .fach-header{position:absolute;inset:0;display:block;background:none;border:0;box-shadow:none;padding:0;pointer-events:none}
+.fach43 .fach-title{position:absolute;left:25.4%;top:1.2%;width:49%;height:8.6%;background:linear-gradient(120deg,#294534,#0c2419);border:5px double #d6ad61;box-shadow:0 4px 7px #0009;display:grid;place-items:center;padding:0;pointer-events:auto}
+.fach43 .fach-title h1{font-size:2.65cqw;text-shadow:0 2px 3px #000;margin:0}
+.fach43 .fach-header nav{position:absolute;left:60.7%;top:9.8%;width:28.7%;height:5.7%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;pointer-events:auto;z-index:4}
+.fach43 .fach-header nav button{font-size:.79cqw;line-height:1.05;min-height:0;padding:.25cqw;background:#17392a;border:1px solid #b48c4d;color:#efd8a1;display:flex;align-items:center;justify-content:center;gap:.25cqw}
+.fach43 .fach-header nav button span{font-size:1cqw}.fach43 .fach-header nav button[aria-current="step"]{color:#fff0bb;border-color:#ffda73;box-shadow:0 0 6px #ffd36588}
+.fach43 .fach-workspace{display:contents}
+.fach43 .fach-map{position:absolute;left:11.9%;top:10%;width:48.4%;height:79%;z-index:2;padding:.6cqw;background:#d2b379;border:5px double #bc8740;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 12px #724c29,0 4px 9px #23150c}
+.fach43 .fach-map-inner{height:auto;width:100%;aspect-ratio:4/3;max-height:none;flex:none;border:1px solid #967147}.fach43 .fach-map-inner>svg{width:100%;height:100%}.fach43 .fach-map>p{font-size:.75cqw;margin:.4cqw 0 0}
+.fach43 .fach-point{width:2.2cqw;height:2.2cqw;padding:0;gap:0;overflow:visible}.fach43 .fach-pin{width:2.1cqw;height:2.1cqw;border:2px solid #fce7aa;box-shadow:0 0 0 1px #80521f,0 3px 5px #35210f88;background:radial-gradient(circle at 32% 22%,#fff9d5,#f2c568 60%,#94601e)}
+.fach43 .fach-point b{position:absolute;left:100%;top:50%;transform:translateY(-50%);font-size:1cqw;padding:.3cqw .45cqw;border:2px double #9a6935;border-radius:3px;white-space:nowrap}.fach43 .fach-point[data-fach-point="W"] b{left:auto;right:100%}.fach43 .fach-point.is-selected .fach-pin{background:var(--active)}.fach43 .fach-region{font-size:.95cqw}
+.fach43 .fach-right{position:absolute;left:60.7%;top:15.8%;width:28.7%;height:78%;z-index:3;display:flex;flex-direction:column;gap:.38cqw;background:linear-gradient(120deg,#233e2b,#11281e);border:3px double #c49a53;padding:.55cqw;box-shadow:0 3px 7px #25190f88;overflow:auto;font-size:.96cqw;line-height:1.15;color:#f6dfa9}
+.fach43 .fach-right>*{flex-shrink:0}
+.fach43 .fach-card{background:linear-gradient(135deg,#f4dfaf,#e5c185);border:3px double #ac793d;border-radius:4px;color:#382414;padding:.4cqw .55cqw;box-shadow:0 2px 4px #0006}
+.fach43 .fach-card h2,.fach43 .fach-card h3{color:#673b20;margin:0 0 .24cqw;padding:0;font-size:1.13cqw;border:0;text-align:left}.fach43 .fach-card h2{font-size:1.4cqw;color:#762e23}.fach43 .fach-card p{margin:0}
+.fach43 .fach-instructions ol{padding-left:1.35cqw;margin:.15cqw 0;display:grid;gap:.13cqw}.fach43 .fach-tools{display:grid;grid-template-columns:1fr 1fr;gap:.5cqw}.fach43 .fach-tools>div+div{border-left:1px solid #a98044;padding-left:.5cqw}
+.fach43 .fach-colors,.fach43 .fach-flags{display:flex;gap:.35cqw}.fach43 .fach-colors button,.fach43 .fach-flags button{min-width:0;flex:1;padding:.2cqw;gap:.2cqw;background:none;border:1px solid transparent;color:#3c2817;font-size:.73cqw;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fach43 .fach-colors i{width:2.3cqw;height:2.3cqw;border-radius:50%;border:2px solid #e7c47b;background:radial-gradient(circle at 30% 20%,#ffffff7c,transparent 36%),var(--axis);box-shadow:0 2px 4px #5c3c2399}.fach43 .fach-flags svg{width:3.3cqw;height:2.2cqw;border:2px solid #d7aa5e;border-radius:3px;box-shadow:0 2px 3px #492d15aa}
+.fach43 .fach-colors button[aria-pressed="true"],.fach43 .fach-flags button[aria-pressed="true"]{background:#ffdfa6;border-color:#c68e2c;box-shadow:0 0 7px #f5ba35}
+.fach43 .fach-axis-list{display:grid;gap:2px}.fach43 .fach-axis-row{display:flex;align-items:center;gap:.3cqw;background:#d4ba86;border:1px solid #b99253;padding:.13cqw .25cqw;font-size:.78cqw;color:#3e2a17}.fach43 .fach-axis-row span{flex:1;min-width:0}.fach43 .fach-axis-row i{width:.45cqw;height:1.1cqw;flex:none}.fach43 .fach-axis-row button{font-size:.72cqw;padding:.14cqw .22cqw;white-space:nowrap}
+.fach43 .fach-meter{display:flex;align-items:center;justify-content:space-between;gap:.4cqw;border:2px double #c9a258;padding:.22cqw .45cqw;font-size:.96cqw}.fach43 .fach-meter span{display:flex;gap:.35cqw}.fach43 .fach-meter i{display:block;width:1.25cqw;height:1.25cqw;border:1px solid #e3b967;border-radius:50%;background:#173128}.fach43 .fach-meter i.filled{background:#d8b760}
+.fach43 .fach-controls{display:grid;grid-template-columns:1fr 1fr;gap:.5cqw}.fach43 .fach-controls button{border:3px double #d0ad68;background:linear-gradient(#eed7a5,#c49b55);color:#422b17;font-weight:bold;padding:.3cqw;font-size:1.02cqw;min-height:2.1cqw}.fach43 .fach-controls button[data-fach-seal]{background:linear-gradient(#397847,#18472b);color:#fff0bd}.fach43 .fach-feedback{margin:0;text-align:center;font-size:.85cqw;min-height:.9em}
+.fach43 .fach-letter{position:relative;isolation:isolate;perspective:600px;display:block;min-height:5.8cqw;width:80%;margin:.2cqw auto .1cqw;padding:0;border:0;background:none;color:#6a3520;flex:1;max-height:8.2cqw;overflow:visible;opacity:.62}
+.fach43 .fach-letter.is-unlocked{opacity:1;filter:drop-shadow(0 0 6px #f2ba47);cursor:pointer}
+.fach-letter-back{position:absolute;inset:0;background:#d8ad72 url("./m3-fachoda-sobre43.webp") center/100% 100%;border:1px solid #f4d28b;border-radius:3px}
+.fach-letter-flap{position:absolute;left:1%;right:1%;top:0;height:58%;background:linear-gradient(150deg,#f4ddb1,#c99a5a);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .28s;z-index:3}
+.fach-letter-wax{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);border:2px double #e29d71;border-radius:50%;width:2.1cqw;height:2.1cqw;background:radial-gradient(circle at 30% 20%,#aa3c29,#711c13);display:grid;place-items:center;color:#ffdc8d;z-index:4;font-size:1.2cqw}
+.fach-letter-caption{position:absolute;top:6%;left:4%;right:4%;display:grid;gap:1px;text-align:center;background:#efd5a0;padding:.2cqw;color:#68331f;z-index:5;font-size:1.25cqw;line-height:1.05}.fach-letter-caption small{font-size:.7cqw;letter-spacing:.06em}
+.fach-letter-paper{position:absolute;left:12%;right:12%;top:12%;height:66%;background:#f4ddb1;border:1px solid #a57943;padding:.6cqw;font-size:.8cqw;z-index:1;transition:transform .35s .23s}
+.fach-letter.is-opening .fach-letter-flap{transform:rotateX(180deg)}.fach-letter.is-opening .fach-letter-caption,.fach-letter.is-opening .fach-letter-wax{opacity:0;transition:opacity .15s}.fach-letter.is-opening .fach-letter-paper{z-index:4;transform:translateY(-65%)}
+.fach43 .fach-choices{display:grid;gap:.35cqw;margin:.5cqw 0}.fach43 .fach-choices button,.fach43 .fach-field select{font-size:1cqw;padding:.35cqw;min-height:2.1cqw}.fach43 .fach-field{font-size:1cqw;margin:.5cqw 0}.fach43 .fach-completion{padding:.6cqw;border:2px double #c6a05e;background:#28543a;text-align:center;color:#f3dfa8;font-weight:bold}
+@media(max-width:1050px),(max-height:590px){
+ .fach43.fach-scene{aspect-ratio:auto;display:flex;flex-direction:column;gap:10px;padding:10px;background-size:cover}
+ .fach43 .fach-header{position:static;display:flex;flex-direction:column;gap:6px;pointer-events:auto}
+ .fach43 .fach-title,.fach43 .fach-header nav{position:static;width:100%;height:auto;padding:5px}.fach43 .fach-title h1{font-size:clamp(20px,4vw,32px)}.fach43 .fach-header nav button{font-size:13px;padding:7px}.fach43 .fach-header nav button span{font-size:15px}
+ .fach43 .fach-workspace{display:flex;flex-direction:column;gap:10px}.fach43 .fach-map,.fach43 .fach-right{position:static;width:100%;height:auto;padding:8px}.fach43 .fach-map{max-width:760px}.fach43 .fach-map>p{font-size:12px}
+ .fach43 .fach-point,.fach43 .fach-pin{width:22px;height:22px}.fach43 .fach-point b{font-size:12px;padding:2px 4px}.fach43 .fach-region{font-size:13px}
+ .fach43 .fach-right{font-size:16px;gap:8px;overflow:visible}.fach43 .fach-card{padding:10px}.fach43 .fach-card h2{font-size:20px}.fach43 .fach-card h3{font-size:18px}.fach43 .fach-instructions ol{padding-left:22px}
+ .fach43 .fach-colors button,.fach43 .fach-flags button{font-size:12px;padding:6px}.fach43 .fach-colors i{width:38px;height:38px}.fach43 .fach-flags svg{width:48px;height:32px}
+ .fach43 .fach-axis-row,.fach43 .fach-axis-row button{font-size:13px;padding:5px}.fach43 .fach-axis-row i{width:6px;height:20px}
+ .fach43 .fach-meter,.fach43 .fach-controls button,.fach43 .fach-feedback{font-size:15px;padding:7px}.fach43 .fach-meter i{width:14px;height:14px}
+ .fach43 .fach-choices button,.fach43 .fach-field,.fach43 .fach-field select{font-size:16px;padding:7px}.fach43 .fach-letter{width:min(75%,300px);min-height:135px;max-height:none}.fach-letter-caption{font-size:18px;padding:5px}.fach-letter-caption small{font-size:11px}.fach-letter-wax{width:34px;height:34px;font-size:18px}.fach-letter-paper{font-size:12px;padding:10px}
+}
+@media(prefers-reduced-motion:reduce){.fach-letter-flap,.fach-letter-paper,.fach-letter-caption,.fach-letter-wax{transition:none!important}}

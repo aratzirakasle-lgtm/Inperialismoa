@@ -1,7 +1,7 @@
 export const COLORS=['red','blue'];
-export const POINTS={N:{x:480,y:45,label:'Iparraldea'},S:{x:480,y:553,label:'Hegoaldea'},W:{x:105,y:237,label:'Mendebaldea'},E:{x:700,y:237,label:'Ekialdea'}};
+export const POINTS={N:{x:542,y:60,label:'Iparraldea'},S:{x:542,y:523,label:'Hegoaldea'},W:{x:146,y:224,label:'Mendebaldea'},E:{x:704,y:224,label:'Ekialdea'}};
 export const COUNTRIES=['uk','fr'];
-export const REGIONS={algeria:{x:285,y:125,label:'Aljeria'},cameroon:{x:356,y:275,label:'Kamerun'},sudan:{x:480,y:237,label:'Sudan'}};
+export const REGIONS={algeria:{x:296,y:85,label:'Aljeria'},cameroon:{x:375,y:258,label:'Kamerun'},sudan:{x:542,y:224,label:'Sudan'}};
 export const FIELDS=[
  {id:'cause',question:'Zergatik sortu zen gatazka?',options:[['trade','Merkataritza-itun bat sinatu nahi zutelako'],['rail','Koloniak lotzeko trenbide-proiektuek talka egin zutelako'],['independence','Koloniek independentzia lortu zutelako']],expected:'rail'},
  {id:'withdrawal',question:'Nor erretiratu zen?',options:[['uk','Britainiar tropak'],['fr','Frantziar tropak'],['both','Bi potentzietako tropak']],expected:'fr'},
