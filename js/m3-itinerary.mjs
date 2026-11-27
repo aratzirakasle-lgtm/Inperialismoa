@@ -1,13 +1,13 @@
 export const ROOMS=[
 {title:'Berlingo areto sekretua',objective:'Berlingo Konferentziaren akta, mapa eta karikatura aztertzea.'},
 {title:'Fachodako bidegurutzea',objective:'Britainia Handiaren eta Frantziaren hedapen-proiektuak ulertzea eta Fachodako gatazka azaltzea.'},
-{title:'Inperioen atlas ezkutua',objective:''},
+{title:'Inperioen atlas ezkutua',objective:'Hiru inperioen lurraldeak eta hedapen-estrategiak alderatzea.'},
 {title:'Lau inperioen enigma',objective:''},
 {title:'Munduko telegrama galduak',objective:''},
 {title:'Historiaren epaimahaia',objective:''}];
-export function itineraryState(current,berlinDone,fachodaDone,teacherSecond=false){
-const completed=[!!berlinDone,!!fachodaDone,false,false,false,false];
-return {count:completed.filter(Boolean).length,rooms:ROOMS.map((room,i)=>({...room,id:i+1,current:current===i+1,complete:completed[i],available:i===0||(i===1&&(berlinDone||teacherSecond||current===2))}))};
+export function itineraryState(current,berlinDone,fachodaDone,teacherSecond=false,options={}){
+const completed=[!!berlinDone,!!fachodaDone,!!options.atlasDone,false,false,false];
+return {count:completed.filter(Boolean).length,rooms:ROOMS.map((room,i)=>({...room,id:i+1,current:current===i+1,complete:completed[i],available:i===0||(i===1&&(berlinDone||teacherSecond||current===2))||(i===2&&options.atlasAvailable&&(teacherSecond||(berlinDone&&fachodaDone)||current===3))}))};
 }
 export function itineraryMarkup(current,berlinDone,fachodaDone,teacherSecond=false){
 const {count,rooms}=itineraryState(current,berlinDone,fachodaDone,teacherSecond);
@@ -16,4 +16,4 @@ return '<div class="m3-itinerary-top"><div class="m3-itinerary-title"><span>❧ 
 
 export function itineraryMiniMarkup(current,berlinDone,fachodaDone,teacherSecond=false){const {count,rooms}=itineraryState(current,berlinDone,fachodaDone,teacherSecond);return '<span class="m3-mini-title">3. misioa</span><span class="m3-mini-medals" aria-hidden="true">'+rooms.map(r=>'<i class="'+(r.complete?'is-complete ':'')+(r.current?'is-current':'')+'">'+r.id+'</i>').join('')+'</span><span class="m3-mini-count">'+count+'/6</span><span class="m3-mini-arrow" aria-hidden="true">▴</span><span class="m3-mini-sr">'+rooms[current-1].title+' · Misioko ibilbidea</span>';}
 
-export function itineraryHeaderMarkup(current,berlinDone,fachodaDone,teacherSecond=false){const {count,rooms}=itineraryState(current,berlinDone,fachodaDone,teacherSecond);return '<div class="m3-brand43"><img src="./assets/m3-header-brand49.webp" alt="Inperialismoa · Museo digital de historia" draggable="false"></div><div class="m3-title43"><b>3. MISIOA</b><strong>Inperioen banaketa</strong></div><nav class="m3-medals43" aria-label="3. misioaren ariketak">'+rooms.map(r=>'<button type="button" class="m3-medal43'+(r.current?' is-current':'')+(r.complete?' is-complete':'')+'" data-m3-room="'+r.id+'" '+(!r.available?'disabled ':'')+(r.current?'aria-current="step" ':'')+' title="'+r.title+'" aria-label="'+r.id+'. '+r.title+' · '+(r.current?'Oraingo ariketa':r.complete?'Osatuta':r.available?'Eskuragarri':'Blokeatuta')+'"><span class="m3-medal-disc49">'+r.id+'</span>'+(r.complete?'<i aria-hidden="true">✓</i>':'')+'</button>').join('')+'</nav><span class="m3-progress43" aria-live="polite" aria-label="Misioko aurrerapena">'+count+' / 6</span>';}
+export function itineraryHeaderMarkup(current,berlinDone,fachodaDone,teacherSecond=false,options={}){const {count,rooms}=itineraryState(current,berlinDone,fachodaDone,teacherSecond,options);return '<div class="m3-brand43"><img src="./assets/m3-header-brand49.webp" alt="Inperialismoa · Museo digital de historia" draggable="false"></div><div class="m3-title43"><b>3. MISIOA</b><strong>Inperioen banaketa</strong></div><nav class="m3-medals43" aria-label="3. misioaren ariketak">'+rooms.map(r=>'<button type="button" class="m3-medal43'+(r.current?' is-current':'')+(r.complete?' is-complete':'')+'" data-m3-room="'+r.id+'" '+(!r.available?'disabled ':'')+(r.current?'aria-current="step" ':'')+' title="'+r.title+'" aria-label="'+r.id+'. '+r.title+' · '+(r.current?'Oraingo ariketa':r.complete?'Osatuta':r.available?'Eskuragarri':'Blokeatuta')+'"><span class="m3-medal-disc49">'+r.id+'</span>'+(r.complete?'<i aria-hidden="true">✓</i>':'')+'</button>').join('')+'</nav><span class="m3-progress43" aria-live="polite" aria-label="Misioko aurrerapena">'+count+' / 6</span>';}
