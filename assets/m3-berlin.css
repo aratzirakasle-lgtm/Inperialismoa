@@ -681,7 +681,47 @@ html,body{background:#17382f}
 #berlin:not([hidden]){grid-template-rows:auto minmax(0,1fr) auto auto auto auto}
 #berlin #m3-room-header{grid-row:1}#berlin .room-fit{grid-row:2}#berlin .toolbar{grid-row:3}#berlin .status{grid-row:4}#berlin .notice{grid-row:5}#berlin #asset-error{grid-row:6}
 #station #m3-dialog-header{margin:0;border-radius:0;position:relative;z-index:5}
-#station.act-station,#station.karik-station,#station.fach-station{width:min(calc(100vw - 12px),calc((100dvh - 198px)*1.777))}
-#station.map-station{width:min(calc(100vw - 12px),calc((100dvh - 198px)*1.42))}
+#station.act-station,#station.karik-station,#station.fach-station{width:min(calc(100vw - 12px),calc((100dvh - 112px)*1.777))}
+#station.map-station{width:min(calc(100vw - 12px),calc((100dvh - 112px)*1.42))}
 @media(max-width:1050px),(max-height:590px){#station.act-station,#station.karik-station,#station.fach-station,#station.map-station{width:calc(100vw - 12px)}}
 @media(max-width:650px){.m3-itinerary{padding:5px}.m3-itinerary-top{gap:4px;flex-wrap:wrap}.m3-itinerary-title{gap:4px}.m3-itinerary-progress{margin-left:auto}.m3-itinerary-path{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:7px}.m3-itinerary-path::before{display:none}.m3-itinerary-objective{display:block;text-align:center}.m3-itinerary-objective>span{display:none}.m3-itinerary-label{font-size:11px}.m3-itinerary-medal{width:42px}.m3-itinerary-num{width:16px;height:16px;font-size:10px}.m3-itinerary-check,.m3-itinerary-lock{width:17px;height:17px}.m3-itinerary-dots{display:none}}
+
+/* Trinkoa41: one compact horizontal itinerary; prioritize working area. */
+.m3-itinerary{display:grid;grid-template-columns:minmax(74px,auto) minmax(0,1fr) auto;align-items:center;gap:8px;padding:5px 8px;border-width:2px;min-height:48px}
+.m3-itinerary:empty{display:none}
+.m3-itinerary-top{display:contents}
+.m3-itinerary-title{grid-column:1;grid-row:1;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.m3-itinerary-title>span{font-size:10px;line-height:1.1;padding:2px 4px;white-space:nowrap}
+.m3-itinerary-title>strong{font-size:12px;line-height:1.1;max-width:100px}
+.m3-itinerary-progress{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;margin:0}
+.m3-itinerary-progress>b{font-size:15px;line-height:1.2}
+.m3-itinerary-progress>span:first-child{font-size:0}
+.m3-itinerary-progress>span:first-child::after{content:"Aurrerapena";font-size:10px}
+.m3-itinerary-dots{display:none}
+.m3-itinerary-path{grid-column:2;grid-row:1;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:0;align-items:stretch}
+.m3-itinerary-path::before{display:none}
+.m3-itinerary-step{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:4px;min-height:38px;text-align:left;padding:2px 1px;border-radius:3px}
+.m3-itinerary-medal{width:32px;border-width:2px;margin:0;justify-self:center}
+.m3-itinerary-num{top:-4px;left:0;transform:none;width:14px;height:14px;font-size:9px}
+.m3-itinerary-check,.m3-itinerary-lock{width:15px;height:15px;right:-3px;bottom:-2px;font-size:11px}
+.m3-itinerary-lock svg{width:10px;height:10px}
+.m3-itinerary-label{min-height:0;align-self:stretch;padding:2px 3px;font-size:clamp(10px,.88vw,12px);line-height:1.12;overflow-wrap:normal}
+.m3-itinerary-step.is-current .m3-itinerary-medal{box-shadow:0 0 0 1px #e8b34a,0 0 8px 2px #ffd05c88}
+.m3-itinerary-objective{display:none}
+@media(max-width:900px){
+ .m3-itinerary{grid-template-columns:auto minmax(0,1fr) auto;gap:5px;padding:4px 6px}
+ .m3-itinerary-title>strong{display:none}
+ .m3-itinerary-step{grid-template-columns:1fr;justify-items:center;gap:0}
+ .m3-itinerary-label{display:none}
+ .m3-itinerary-medal{width:32px}
+ .m3-itinerary-progress>span:first-child{display:none}
+ .m3-itinerary-objective{display:block;grid-column:1/-1;grid-row:2;margin:0;border:0;background:none;color:#f5e0ae;font-size:12px;text-align:center;padding:0;line-height:1.15}
+ .m3-itinerary-objective>span{display:none}
+}
+@media(max-width:430px){
+ .m3-itinerary-title>span{font-size:9px;padding:2px}
+ .m3-itinerary-step{min-height:33px;padding:1px}
+ .m3-itinerary-medal{width:27px}
+ .m3-itinerary-path{gap:2px}
+ .m3-itinerary-progress>b{font-size:12px}
+}
