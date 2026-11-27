@@ -1191,3 +1191,37 @@ html,body{background:#17382f}
  .fach49 .fach-letter-caption b{font-size:clamp(14px,3vw,23px)}
 }
 @media(prefers-reduced-motion:reduce){.fach49 .fach-letter.is-opening .fach-letter-flap,.fach49 .fach-letter.is-opening .fach-letter-wax{animation:none}}
+
+/* Lacre51 — the actual illustrated envelope is the only visible closed face.
+   Hide the internal paper and animation layers until the opening begins. */
+.fach49 .fach-letter{position:relative;display:block;padding:0!important;overflow:visible;isolation:isolate;background:transparent!important;aspect-ratio:345/206}
+.fach49 .fach-letter-original51{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;max-width:none;max-height:none;z-index:2;pointer-events:none}
+.fach49 .fach-letter:not(.is-opening) .fach-letter-paper,
+.fach49 .fach-letter:not(.is-opening) .fach-letter-back,
+.fach49 .fach-letter:not(.is-opening) .fach-letter-flap,
+.fach49 .fach-letter:not(.is-opening) .fach-letter-wax{display:none!important;visibility:hidden!important;opacity:0!important}
+.fach49 .fach-letter:not(.is-unlocked){filter:none!important;opacity:1!important}
+.fach49 .fach-letter-caption{z-index:6;top:7%;background:transparent!important;box-shadow:none!important;pointer-events:none}
+.fach49 .fach-letter-caption b{white-space:normal;overflow:visible;text-overflow:clip}
+.fach49 .fach-letter.is-opening .fach-letter-original51{z-index:2;clip-path:polygon(0 38%,50% 68%,100% 38%,100% 100%,0 100%)}
+.fach49 .fach-letter.is-opening .fach-letter-back{z-index:0;clip-path:none}
+.fach49 .fach-letter.is-opening .fach-letter-paper{display:block;visibility:visible;opacity:1;z-index:1;animation:fach-paper51 .36s .28s ease-out both;transition:none}
+.fach49 .fach-letter.is-opening .fach-letter-caption{visibility:hidden}
+@keyframes fach-paper51{from{transform:translateY(8%)}to{transform:translateY(-72%)}}
+@media(min-width:1051px) and (min-height:591px){
+ .fach49[data-phase="0"] .fach-right>.fach-letter{width:73%;height:auto;max-width:90%;max-height:none;min-height:0;aspect-ratio:345/206;justify-self:center;align-self:center}
+}
+@media(prefers-reduced-motion:reduce){.fach49 .fach-letter.is-opening .fach-letter-paper{animation:none}}
+/* Real completion state takes precedence over the current-room fill.
+   Keep the active gold halo even when revisiting a completed exercise. */
+#berlin .m3-header43 .m3-medal43.is-complete .m3-medal-disc49,
+#station .m3-header43 .m3-medal43.is-complete .m3-medal-disc49{
+ background:radial-gradient(circle at 35% 25%,#6fdc63 0%,#258d36 31%,#116422 62%,#073a18 85%)!important;
+ border:2px solid #f1d38d!important;color:#fff7d8!important;
+ box-shadow:inset 0 0 0 1px #154d23,inset 0 -3px 4px #082c17,0 1px 4px #0009!important;
+ text-shadow:0 1px 2px #0b3219!important;
+}
+#berlin .m3-header43 .m3-medal43.is-complete.is-current .m3-medal-disc49,
+#station .m3-header43 .m3-medal43.is-complete.is-current .m3-medal-disc49{
+ box-shadow:inset 0 0 0 1px #154d23,0 0 0 1px #fff0b6,0 0 0 3px #c58c27,0 0 8px 4px #ffc44ba0!important;
+}
