@@ -876,3 +876,111 @@ html,body{background:#17382f}
  .fach43 .fach-letter-caption small{font-size:11px}
  .fach43 .fach-point b{font-size:12px;padding:2px 4px}
 }
+
+/* Erreferentzia46 · recortes del concepto aprobado; contenido y estados independientes. */
+.fach46.fach-scene{background:#392519 url("./m3-fachoda-scene46.webp") center/100% 100% no-repeat;aspect-ratio:1648/848}
+.fach46 .fach-title{background:transparent;border:0;box-shadow:none;border-radius:0}
+.fach46 .fach-title h1{font-size:2.75cqw;line-height:1;color:#fce5af;text-shadow:0 2px 2px #201b10}
+.fach46 .fach-map{background:none;border:0;box-shadow:none;border-radius:0;padding:0}
+.fach46 .fach-map-inner{border:0;isolation:isolate}
+.fach46 .fach-map-inner::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 1.4cqw #795025aa;pointer-events:none;z-index:1}
+.fach46 .fach-pin,.fach46 .fach-point.is-selected .fach-pin{display:block;width:3.6cqw;height:2.4cqw;flex:none;border:0;border-radius:0;background:transparent url("./m3-fachoda-controls45.webp") 0% 50%/500% 100% no-repeat;box-shadow:none;outline:0}
+.fach46 .fach-point.is-selected .fach-pin{filter:drop-shadow(0 0 4px var(--active)) drop-shadow(0 0 4px var(--active))}
+.fach46 .fach-right{border:0;border-radius:0;box-shadow:none;background:none;padding:0}
+.fach46 .fach-card{border:0;border-radius:0;box-shadow:none}
+.fach46 .fach-goal{background:url("./m3-fachoda-goal46.webp") center/100% 100% no-repeat;padding:.55cqw 29% .4cqw 16%;min-height:0}
+.fach46 .fach-goal h2{font-size:1.6cqw;line-height:1.05;margin:0 0 .12cqw;color:#762c20}
+.fach46 .fach-goal h2::before{content:none}
+.fach46 .fach-goal p{font-size:.94cqw;line-height:1.15}
+.fach46 .fach-instructions{background:url("./m3-fachoda-instruction46.webp") center/100% 100% no-repeat;padding:0;position:relative}
+.fach46 .fach-instructions h3{background:none;border:0;box-shadow:none;color:#ffe9b6;margin:0;padding:0;line-height:1.05;font-size:1.38cqw;position:absolute;top:1%;left:15.5%}
+.fach46 .fach-instructions ol{margin:0;gap:0;padding:0;list-style:none;counter-reset:none;position:absolute;left:15.8%;right:2%;top:26%;bottom:5%;display:grid;grid-template-rows:repeat(4,1fr);align-items:center;font-size:.92cqw}
+.fach46 .fach-instructions li{display:block;line-height:1.15}
+.fach46 .fach-instructions li::before{content:none}
+.fach46 .fach-tools{background:url("./m3-fachoda-tools46.webp") center/100% 100% no-repeat;border:0;padding:0;gap:0;overflow:visible}
+.fach46 .fach-tools>div,.fach46 .fach-tools>div+div{position:relative;border:0;padding:0;min-width:0}
+.fach46 .fach-tools h3{background:none;border:0;box-shadow:none;color:#ffe5ad;font-size:1.18cqw;margin:0;line-height:1.05;padding:0;text-align:center;position:absolute;top:4%;left:12%;right:0;height:25%;display:flex;align-items:center;justify-content:center}
+.fach46 .fach-colors,.fach46 .fach-flags{display:flex;align-items:center;justify-content:center;padding:0;gap:0;position:absolute;left:0;right:0;top:34%;bottom:3%}
+.fach46 .fach-colors button,.fach46 .fach-flags button{border:0!important;outline:0;background:none!important;box-shadow:none!important;padding:0;min-height:0;min-width:0;position:relative}
+.fach46 .fach-colors button:focus-visible,.fach46 .fach-flags button:focus-visible{outline:2px solid #fff3b5;outline-offset:1px}
+.fach46 .fach-colors i,.fach46 .fach-flags button::before{content:"";display:block;width:5.2cqw;height:3.4667cqw;border:0;border-radius:0;box-shadow:none;background:transparent url("./m3-fachoda-controls45.webp") var(--control-pos) 50%/500% 100% no-repeat}
+.fach46 .fach-colors button[data-fach-color="red"]{--control-pos:25%}
+.fach46 .fach-colors button[data-fach-color="blue"]{--control-pos:50%}
+.fach46 .fach-flags button[data-fach-flag="fr"]{--control-pos:75%}
+.fach46 .fach-flags button[data-fach-flag="uk"]{--control-pos:100%}
+.fach46 .fach-flags button svg{display:none}
+.fach46 .fach-colors b,.fach46 .fach-flags b{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.fach46 .fach-colors button[aria-pressed="true"] i,.fach46 .fach-flags button[aria-pressed="true"]::before{filter:drop-shadow(0 0 3px #fff4b0) drop-shadow(0 0 4px #fbb431)}
+.fach46 .fach-meter{border:0;box-shadow:none;background:url("./m3-fachoda-progress45.webp") center/100% 100% no-repeat;padding:.4cqw 6% .4cqw 16%;font-size:1.15cqw;line-height:1}
+.fach46 .fach-meter b::before{content:none}
+.fach46 .fach-meter i{width:1.4cqw;height:1.4cqw;background:#183b2a;border:2px solid #e5ba6c;box-shadow:inset 0 1px 3px #0009}
+.fach46 .fach-meter i.filled{background:radial-gradient(circle at 35% 25%,#ffedb0,#b58b39)}
+.fach46 .fach-controls{gap:3.5%;grid-template-columns:44% 52.5%}
+.fach46 .fach-controls button{border:0!important;border-radius:0;box-shadow:none;background:url("./m3-fachoda-reset45.webp") center/100% 100% no-repeat;color:#352615;font-size:1.35cqw;line-height:1.05;padding:0 3% 0 26%;min-height:0;text-shadow:none}
+.fach46 .fach-controls button[data-fach-seal]{background:url("./m3-fachoda-check45.webp") center/100% 100% no-repeat;color:#fff2ce;padding-left:30%;text-shadow:0 1px 2px #172319}
+.fach46 .fach-controls button[data-fach-seal]:disabled{opacity:.66;filter:saturate(.65)}
+.fach46 .fach-controls button:not(:disabled):hover{filter:brightness(1.13)}
+.fach46 .fach-letter{border:0;padding:0;max-height:none;min-height:0;aspect-ratio:360/210}
+.fach46 .fach-letter-back{background:transparent url("./m3-fachoda-envelope45.webp") center/100% 100% no-repeat;box-shadow:none;border:0;border-radius:0}
+.fach46 .fach-letter-caption{top:6%;left:12%;right:12%;background:none;color:#582916;padding:0;line-height:1.12;font-size:1.45cqw;text-shadow:0 1px #f9dfac}
+.fach46 .fach-letter-caption small{font-size:.73cqw;font-weight:bold}
+.fach46 .fach-letter:not(.is-unlocked){opacity:.78;filter:brightness(.72) saturate(.8)}
+.fach46 .fach-letter.is-unlocked{filter:drop-shadow(0 0 8px #ffbf45)}
+.fach46 .fach-letter.is-opening .fach-letter-back{background:linear-gradient(140deg,#f4d5a0,#b58047);clip-path:polygon(0 8%,100% 0,100% 100%,0 100%)}
+.fach46 .fach-letter.is-opening .fach-letter-flap{background:url("./m3-fachoda-envelope45.webp") top center/100% auto no-repeat}
+.fach46 .fach-right .fach-card:not(.fach-goal):not(.fach-instructions):not(.fach-tools){background:linear-gradient(115deg,#f8e5bf,#e9c68b);border:3px double #ad7633;padding:.7cqw}
+.fach46 .fach-feedback{color:#ffe9b4;text-shadow:0 1px 2px #0c1e16}
+@media(min-width:1051px) and (min-height:591px){
+ #station.fach-station{width:min(calc(100vw - 12px),calc((100dvh - 56px)*1.943396))}
+ .fach46 .fach-title{left:25.55%;top:.7%;width:48.9%;height:8.5%;z-index:7}
+ .fach46 .fach-header nav{left:25%;top:93%;width:34%;height:5.4%;z-index:6}
+ .fach46 .fach-header nav button{font-size:.95cqw;background:linear-gradient(#2b4a35,#122c20);border:2px solid #b69150}
+ .fach46 .fach-map{left:12.62%;top:9.08%;width:46.97%;height:71.58%;overflow:visible}
+ .fach46 .fach-map-inner{width:100%;height:100%;flex:none;aspect-ratio:auto}
+ .fach46 .fach-map>p{position:absolute;left:0;right:0;bottom:-1.4cqw;background:#dbc39a;color:#4c3620;border:1px solid #98703f;font-size:.72cqw;padding:.13cqw .3cqw;margin:0;line-height:1.1}
+ .fach46 .fach-right{left:61.35%;top:10.5%;width:27.9%;height:82%;overflow:visible;display:block;font-size:.98cqw;line-height:1.15}
+ .fach46[data-phase="0"] .fach-right>*{position:absolute;left:0;width:100%;margin:0}
+ .fach46[data-phase="0"] .fach-goal{top:0;height:13.8%}
+ .fach46[data-phase="0"] .fach-instructions{top:16.05%;height:19%}
+ .fach46 .fach-instructions h3{height:20%;display:flex;align-items:center}
+ .fach46[data-phase="0"] .fach-tools{top:36.4%;height:13.7%}
+ .fach46[data-phase="0"] .fach-meter{top:51.35%;height:7.05%}
+ .fach46[data-phase="0"] .fach-controls{top:59.8%;height:7.05%}
+ .fach46[data-phase="0"] .fach-feedback{top:67.4%;height:2.8%;font-size:.8cqw;line-height:1.05}
+ .fach46[data-phase="0"] .fach-letter{top:70.25%;left:15.2%;width:78.4%;height:30.1%}
+ .fach46[data-phase="0"] .fach-axis-list{left:-155%;top:89%;width:152%;max-height:10.5%;overflow:auto;border:2px double #c9a05f;background:#163529;padding:.18cqw .3cqw;gap:.14cqw;z-index:6}
+ .fach46 .fach-axis-row{font-size:.89cqw;padding:.12cqw .3cqw}
+ .fach46 .fach-axis-row button{font-size:.8cqw;min-height:1.15cqw;padding:.08cqw .25cqw}
+ .fach46:not([data-phase="0"]) .fach-right{display:flex;flex-direction:column;gap:.7cqw;padding:0;overflow:auto}
+ .fach46:not([data-phase="0"]) .fach-goal{min-height:5.85cqw}
+ .fach46:not([data-phase="0"]) .fach-controls{height:3cqw;flex:none}
+ .fach46:not([data-phase="0"]) .fach-letter{width:78%;height:auto;min-height:10cqw;margin:auto auto 0}
+}
+@media(max-width:1050px),(max-height:590px){
+ .fach46.fach-scene{aspect-ratio:auto;background-size:cover;overflow:visible}
+ .fach46 .fach-header{position:static;display:flex;gap:8px}
+ .fach46 .fach-title{position:static;background:linear-gradient(#294834,#142d21);border:3px double #c79d55;padding:8px;width:100%}
+ .fach46 .fach-title h1{font-size:clamp(21px,4vw,32px)}
+ .fach46 .fach-header nav{position:static;width:100%;height:auto}
+ .fach46 .fach-map{background:#d6b47d;border:4px double #d9ab62;padding:3px;overflow:visible}
+ .fach46 .fach-map-inner{aspect-ratio:4/3}
+ .fach46 .fach-map>p{padding:4px;background:#dbc39a;margin:0}
+ .fach46 .fach-pin,.fach46 .fach-point.is-selected .fach-pin{width:36px;height:24px}
+ .fach46 .fach-right{display:flex;gap:10px;background:#142e22;border:3px double #c79d55;padding:8px}
+ .fach46 .fach-goal{min-height:clamp(105px,17vw,155px);padding:10px 29% 9px 16%}
+ .fach46 .fach-goal h2{font-size:21px}.fach46 .fach-goal p{font-size:clamp(13px,2.2vw,16px)}
+ .fach46 .fach-instructions{min-height:clamp(145px,23vw,200px)}
+ .fach46 .fach-instructions h3{font-size:19px}
+ .fach46 .fach-instructions ol{font-size:clamp(12px,2vw,16px)}
+ .fach46 .fach-tools{height:clamp(100px,16vw,140px)}
+ .fach46 .fach-tools h3{font-size:clamp(14px,2.6vw,19px)}
+ .fach46 .fach-colors i,.fach46 .fach-flags button::before{width:72px;height:48px}
+ .fach46 .fach-meter{height:46px;font-size:15px}
+ .fach46 .fach-meter i{width:17px;height:17px}
+ .fach46 .fach-controls{height:49px}
+ .fach46 .fach-controls button{font-size:clamp(14px,2.5vw,19px)}
+ .fach46 .fach-letter{width:min(82%,340px);min-height:0;max-height:none;height:auto}
+ .fach46 .fach-letter-caption{font-size:20px}.fach46 .fach-letter-caption small{font-size:11px}
+ .fach46 .fach-axis-list{position:static}
+ .fach46 .fach-feedback{font-size:14px}
+}
