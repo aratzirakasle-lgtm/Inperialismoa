@@ -1225,3 +1225,39 @@ html,body{background:#17382f}
 #station .m3-header43 .m3-medal43.is-complete.is-current .m3-medal-disc49{
  box-shadow:inset 0 0 0 1px #154d23,0 0 0 1px #fff0b6,0 0 0 3px #c58c27,0 0 8px 4px #ffc44ba0!important;
 }
+
+/* Egiaztatu52: crisp resolution-independent emerald enamel, gilded rim and vector tick. */
+#station .fach49 .fach-controls button[data-fach-seal]{
+ display:flex;align-items:center;justify-content:center;gap:.48em;box-sizing:border-box;min-width:0;
+ padding:0 .45em!important;border:2px solid #efc96e!important;border-radius:5px;
+ background:linear-gradient(180deg,#68c75b 0%,#319c39 17%,#146922 44%,#094716 49%,#0e641e 80%,#073c14 100%)!important;
+ box-shadow:inset 0 0 0 1px #79521e,inset 0 2px 2px #fff0ae99,inset 0 -3px 4px #032b0f,0 2px 4px #0009!important;
+ color:#fff8dd!important;text-shadow:0 1px 2px #0b3017;font-weight:bold;line-height:1.1;white-space:nowrap;
+ transition:filter .15s,box-shadow .15s;
+}
+#station .fach49 .fach-check52{width:1.3em;height:1.3em;flex:none;filter:drop-shadow(0 1px 1px #11391c);display:block}
+#station .fach49 .fach-controls button[data-fach-seal]:disabled{opacity:1!important;filter:saturate(.68) brightness(.87)}
+#station .fach49 .fach-controls button[data-fach-seal]:not(:disabled):hover{filter:brightness(1.16);box-shadow:inset 0 0 0 1px #79521e,inset 0 2px 2px #fff0ae99,0 0 9px #69be4a99!important}
+#station .fach49 .fach-controls button[data-fach-seal]:focus-visible{outline:2px solid #fff0b2;outline-offset:3px}
+/* Opening is a focused, viewport-sized animation, not a paper overlapping the menu.
+   No layout changes to map, menu, header or the closed envelope. */
+.fach-open52{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;justify-items:center;gap:clamp(10px,2vh,22px);background:radial-gradient(ellipse at 50% 45%,#342b1aeb,#071b15f5 75%);color:#ffe9b4;isolation:isolate;animation:fach-open-overlay52 .22s ease-out both;overflow:hidden}
+.fach-open52-heading{font:bold clamp(15px,2vw,25px)/1.2 Georgia,serif;letter-spacing:.16em;text-shadow:0 2px 3px #000;z-index:8;text-align:center}
+.fach-open52-art{position:relative;width:min(68vw,500px,70vh);aspect-ratio:345/206;perspective:1000px;isolation:isolate;margin-top:min(20vh,150px);filter:drop-shadow(0 0 18px #e9ad3866)}
+.fach-open52-art>*{box-sizing:border-box;position:absolute}
+.fach-open52-back{inset:1%;background:linear-gradient(135deg,#9a5f2c,#e6bd78 40%,#8e5426);border:2px solid #edc480;border-radius:5px;box-shadow:inset 0 0 16px #6b3b1f;z-index:1}
+.fach-open52-flap{left:1.5%;top:1%;width:97%;height:54.4%;object-fit:fill;transform-origin:top center;clip-path:polygon(0 0,100% 0,92% 48%,50% 98%,8% 48%);z-index:2;animation:fach-flap52 .64s .37s cubic-bezier(.3,.7,.3,1) both}
+.fach-open52-paper{left:9%;right:9%;top:6%;height:86%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55em;padding:9% 5%;background:radial-gradient(ellipse at center,#fff2cc,#e6c18b 78%,#c89b60);border:3px double #a57336;border-radius:2px;color:#632c1d;box-shadow:0 3px 9px #301a0eaa;z-index:3;animation:fach-paper52 .78s .94s cubic-bezier(.18,.76,.27,1) both;text-align:center;font-family:Georgia,serif}
+.fach-open52-paper small{font-size:clamp(9px,1.25vw,15px);font-weight:bold;letter-spacing:.1em;color:#785225}
+.fach-open52-paper b{font-size:clamp(17px,2.6vw,32px);font-style:italic}
+.fach-open52-paper span{font-size:clamp(12px,1.6vw,22px);color:#9a672d}
+.fach-open52-pocket{inset:0;z-index:4;clip-path:polygon(0 29%,50% 68%,100% 29%,100% 100%,0 100%);background:linear-gradient(32deg,transparent 49.3%,#94602c 49.8%,#f5d697 50.3%,transparent 51%) left bottom/51% 71% no-repeat,linear-gradient(-32deg,transparent 49.3%,#94602c 49.8%,#f5d697 50.3%,transparent 51%) right bottom/51% 71% no-repeat,linear-gradient(135deg,#e0ac64,#f5d69b 52%,#c4904b);border:2px solid #eac071;border-radius:4px;box-shadow:inset 0 -4px 8px #89532188}
+.fach-open52-closed{inset:0;width:100%;height:100%;object-fit:contain;z-index:5;animation:fach-closed52 .12s .37s linear both}
+.fach-open52-wax{left:50%;top:59%;width:25.5%;height:44.7%;object-fit:contain;z-index:6;animation:fach-wax52 .45s .28s ease-in both;transform:translate(-50%,-50%)}
+.fach-open52-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@keyframes fach-open-overlay52{from{opacity:0}to{opacity:1}}
+@keyframes fach-closed52{from{opacity:1}to{opacity:0}}
+@keyframes fach-wax52{0%{opacity:1;transform:translate(-50%,-50%)}45%{opacity:1;transform:translate(-50%,-69%) rotate(-9deg)}100%{opacity:0;transform:translate(-50%,25%) rotate(20deg) scale(.75)}}
+@keyframes fach-flap52{from{transform:rotateX(0deg)}to{transform:rotateX(168deg)}}
+@keyframes fach-paper52{from{transform:translateY(13%)}to{transform:translateY(-88%)}}
+@media(prefers-reduced-motion:reduce){.fach-open52,.fach-open52-art>*{animation:none!important}}
