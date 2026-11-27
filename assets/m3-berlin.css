@@ -1422,48 +1422,36 @@ html,body{background:#17382f}
 @media(max-width:560px){#station.map-station{width:calc(100vw - 8px)}.audit-desk60{padding:7px}.audit-desk60 .audit-header{padding:8px;flex-wrap:wrap}.audit-desk60 .audit-workspace{grid-template-columns:1fr}.audit-desk60 .audit-map{grid-row:1;grid-column:1}.audit-desk60 .audit-tools{grid-row:2}.audit-desk60 .audit-notebook{grid-row:3}.audit-desk60 .audit-footer{grid-template-columns:1fr}.audit-desk60 .audit-seal{justify-content:center}.audit-desk60 .audit-actions{justify-content:space-between}.audit-desk60 .audit-actions button{flex:1;min-height:44px}.audit-map-bar button,.audit-desk60 .audit-swap{min-height:44px}.audit-arrow-hit{stroke-width:115}.audit-arrow-medal{r:31px}.audit-desk60 .audit-final-stamp{font-size:9px;border-width:3px}}
 @media(prefers-reduced-motion:reduce){.audit-flip .audit-arrow-line,.audit-complete .audit-final-stamp{animation:none}}
 
-/* Three visually distinct guided cartography challenges. */
-.audit-guide61 [hidden]{display:none!important}
-.audit-guide61 .audit-guide-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.audit-guide-nav button{display:flex;align-items:center;gap:12px;text-align:left;padding:9px 13px;background:linear-gradient(135deg,#284639,#172d24);border:1px solid #a68953;color:#e9d8b4;border-radius:6px;min-height:55px;font:inherit}
-.audit-guide-nav button:disabled{opacity:.55}
-.audit-step-number{display:grid;place-items:center;border:1px solid #bfa16b;border-radius:50%;width:34px;height:34px;flex:none;color:#f4e4bd;font-size:18px}
-.audit-guide-nav small{display:block;font:700 10px/1.2 Georgia,serif;letter-spacing:.11em;color:#d6bd88}
-.audit-guide-nav b{display:block;font-size:clamp(14px,1.4cqw,20px)}
-.audit-guide-nav .is-current{background:linear-gradient(135deg,#ead4a7,#c8a269);color:#432b1c;border:2px solid #f8e0a1;padding:8px 12px}
-.audit-guide-nav .is-current small{color:#765024}
-.audit-guide-nav .is-current .audit-step-number{background:#304d3e;color:#fff0cb}
-.audit-step-check{margin-left:auto;font-style:normal;font-size:21px}
-.audit-guide-nav .is-passed .audit-step-check{color:#8fbd92}
-.audit-guide-nav .is-passed.is-current .audit-step-check{color:#315b4d}
-.audit-question{display:flex;align-items:center;gap:14px;padding:12px 18px;background:linear-gradient(110deg,#f4e5c7,#e1c69a);border:1px solid #ad8b55;box-shadow:0 3px 8px #21130e70;border-radius:5px}
-.audit-question-number{font:700 clamp(26px,3.1cqw,44px)/1 Georgia,serif;color:#987240;border-right:1px solid #bda475;padding-right:15px}
-.audit-question small{display:block;letter-spacing:.15em;font:700 10px Georgia,serif;color:#805133}
-.audit-question h2{margin:4px 0;font-size:clamp(17px,1.7cqw,25px);line-height:1.25;color:#38291d}
-.audit-question p{margin:0;font:clamp(13px,1.05cqw,16px)/1.4 system-ui,sans-serif;color:#5a4030}
-.audit-guide61 .audit-workspace{grid-template-columns:minmax(0,19fr) minmax(0,53fr) minmax(0,28fr)}
-.audit-guide61 .audit-map-sheet{aspect-ratio:950/850;max-height:55dvh}
-.audit-guide61 .audit-cartography{object-fit:contain}
-.audit-guide61 .audit-scopes .audit-scope-card{grid-template-columns:clamp(52px,6.5cqw,94px) 1fr 12px;min-height:70px;font-family:system-ui,sans-serif;font-weight:600}
-.audit-guide61 .audit-scope-card svg{height:clamp(54px,6.3cqw,85px)}
-.audit-guide61 .audit-notebook{align-self:start}
-.audit-guide61 .audit-parchment p,.audit-guide61 .audit-legend-card{font-family:system-ui,sans-serif}
-.audit-guide61[data-step="0"] .audit-arrows,.audit-guide61[data-step="2"] .audit-arrows,.audit-guide61:not([data-step="2"]) .audit-interior-zone,.audit-guide61:not([data-step="2"]) .audit-coastal-zone,.audit-guide61:not([data-step="0"]) .audit-full-fill,.audit-guide61:not([data-step="0"]) .audit-small-fill{display:none!important}
-.audit-guide61 .audit-legend-row{grid-template-columns:42px 1fr}
-.audit-guide61 .audit-legend-row .audit-swatch{width:42px;height:42px}
-.audit-guide61 .audit-legend-card{min-height:55px}
-.audit-direction-demo{display:flex;align-items:center;justify-content:space-between;padding:14px 8px;background:linear-gradient(90deg,#c6dce0 0 49%,#e0c899 51%);border:1px solid #a88655;border-radius:4px;color:#513b26;font:600 13px system-ui,sans-serif}
-.audit-direction-demo i{height:42px;width:4px;background:#6b9cac;border-radius:2px;transform:rotate(9deg)}
-.audit-arrow-controls{display:grid;gap:6px;margin-top:10px}
-.audit-arrow-controls button{display:flex;align-items:center;gap:7px;min-height:44px;text-align:left;background:#f4e4c5;color:#543322;border:1px solid #b38d54;border-radius:4px;padding:7px;font:600 clamp(12px,1cqw,15px) system-ui,sans-serif}
-.audit-arrow-controls b{display:grid;place-items:center;background:#843a2d;color:#fff0cc;border-radius:50%;width:26px;height:26px;flex:none}
-.audit-arrow-controls i{margin-left:auto;font-style:normal;font-size:18px}
-.audit-source-toggle{margin-top:12px;width:100%;min-height:44px;border:1px solid #997343;background:#f4e5c6;color:#493322;border-radius:3px;font:bold 13px Georgia,serif}
+
+/* Unified cartographic audit: all six decisions share one map. */
+.audit-unified63 [hidden]{display:none!important}
+.audit-unified-brief{display:flex;align-items:center;gap:12px;padding:8px 15px;background:linear-gradient(110deg,#f4e5c7,#e1c69a);border:1px solid #ad8b55;border-radius:4px}
+.audit-unified-brief>span{font-size:28px;color:#8f6535}
+.audit-unified-brief h2{margin:0 0 3px;font-size:clamp(17px,1.6cqw,23px);color:#51331f}
+.audit-unified-brief p{margin:0;font:clamp(12px,1.04cqw,15px)/1.35 system-ui,sans-serif;color:#513b2b}
+.audit-unified63 .audit-workspace{grid-template-columns:minmax(0,21fr) minmax(0,53fr) minmax(0,26fr);align-items:start}
+.audit-unified63 .audit-notebook{align-self:start}
+.audit-unified63 .audit-notebook p,.audit-unified63 .audit-brief li span,.audit-unified63 .audit-legend-card{font-family:system-ui,sans-serif}
+.audit-unified63 .audit-brief ol{margin:12px 0}
+.audit-unified63 .audit-brief li{margin-bottom:10px}
+.audit-unified63 .audit-map-sheet{max-height:58dvh}
+.audit-unified63 .audit-tools{padding:clamp(8px,.8cqw,12px)}
+.audit-unified63 .audit-tool-section+section{border-top:1px solid #b28e5b;margin-top:9px;padding-top:7px}
+.audit-unified63 .audit-tool-section h3{margin:4px 0 7px;font-size:clamp(14px,1.12cqw,17px)}
+.audit-unified63 .audit-scopes .audit-scope-card{min-height:44px;grid-template-columns:clamp(38px,3.5cqw,52px) 1fr 10px;padding:4px 6px;gap:6px;font-family:system-ui,sans-serif}
+.audit-unified63 .audit-scope-card svg{height:clamp(32px,3.5cqw,48px)}
+.audit-unified63 .audit-legend{margin:6px 0;gap:5px}
+.audit-unified63 .audit-legend-card{min-height:40px;font-size:clamp(12px,.95cqw,14px)}
+.audit-unified63 .audit-drag-hint{margin:4px 0 0}
+.audit-arrow-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:6px}
+.audit-arrow-controls button{display:flex;justify-content:center;align-items:center;gap:4px;min-height:36px;padding:4px;background:#f4e4c5;color:#543322;border:1px solid #b38d54;border-radius:4px;font:600 13px system-ui,sans-serif}
+.audit-arrow-controls b{display:grid;place-items:center;background:#843a2d;color:#fff0cc;border-radius:50%;width:21px;height:21px;flex:none}
+.audit-arrow-controls i{font-style:normal;font-size:16px}
+.audit-source-toggle{margin-top:10px;width:100%;min-height:36px;border:1px solid #997343;background:#f4e5c6;color:#493322;border-radius:3px;font:bold 13px Georgia,serif}
 .audit-source-sheet{position:relative;background:#1b3329;border:1px solid #bca16a;padding:12px;text-align:center}
 .audit-source-sheet img{display:block;max-width:100%;max-height:70dvh;margin:auto}
 .audit-source-sheet button{margin:10px auto 0;padding:10px 20px;background:#e8d2a4;color:#44301e;border:1px solid #ac864e;border-radius:4px}
-.audit-guide61 .audit-final-stamp{z-index:1}
-.audit-guide61.audit-zoomed .audit-map-sheet{max-height:none}
-@media(max-width:1000px){.audit-guide61 .audit-workspace{grid-template-columns:1fr 1fr}.audit-guide61 .audit-map{grid-column:1/-1;grid-row:1}.audit-guide61 .audit-map-sheet{max-height:none}.audit-guide61 .audit-tools{grid-row:2}.audit-guide61 .audit-notebook{grid-row:2}.audit-guide61 .audit-guide-nav button{gap:6px;padding:7px}.audit-step-number{width:28px;height:28px}}
-@media(max-width:560px){.audit-guide61 .audit-workspace{grid-template-columns:1fr}.audit-guide61 .audit-notebook{grid-row:3}.audit-guide61 .audit-tools{grid-row:2}.audit-guide61 .audit-guide-nav{gap:4px}.audit-guide-nav button{flex-direction:column;gap:4px;text-align:center;min-height:72px;justify-content:center}.audit-guide-nav small{display:none}.audit-step-check{position:absolute;right:5px;top:3px;font-size:13px}.audit-guide-nav button{position:relative}.audit-question{padding:10px;gap:8px}.audit-question-number{padding-right:8px}.audit-guide61 .audit-scopes .audit-scope-card{min-height:64px}}
-.audit-guide61.audit-zoomed .audit-workspace{grid-template-columns:1fr}
+.audit-unified63.audit-zoomed .audit-workspace{grid-template-columns:1fr}
+.audit-unified63.audit-zoomed .audit-map-sheet{max-height:none}
+@media(max-width:1000px){.audit-unified63 .audit-workspace{grid-template-columns:1fr 1fr}.audit-unified63 .audit-map{grid-column:1/-1;grid-row:1}.audit-unified63 .audit-map-sheet{max-height:none}.audit-unified63 .audit-tools,.audit-unified63 .audit-notebook{grid-row:2}.audit-arrow-controls button{min-height:44px}}
+@media(max-width:560px){.audit-unified63 .audit-workspace{grid-template-columns:1fr}.audit-unified63 .audit-map{grid-column:1}.audit-unified63 .audit-tools{grid-row:2}.audit-unified63 .audit-notebook{grid-row:3}.audit-unified63 .audit-scopes .audit-scope-card{min-height:48px}.audit-unified63 .audit-legend-card{min-height:44px}}
