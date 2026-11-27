@@ -17,6 +17,7 @@ export function removeFlag(s,color){if(s.phase!==0||!COLORS.includes(color)||!s.
 export function chooseRegion(s,region){if(s.phase!==1||!Object.hasOwn(REGIONS,region))return false;s.region=region;invalidate(s,1);return true;}
 export function chooseYear(s,year){if(s.phase!==1||!['1885','1898','1914'].includes(year))return false;s.year=year;invalidate(s,1);return true;}
 export function chooseAnswer(s,id,value){const f=FIELDS.find(q=>q.id===id);if(s.phase!==2||!f?.options.some(([key])=>key===value))return false;s.answers[id]=value;invalidate(s,2);return true;}
+export function removeAnswer(s,id){if(s.phase!==2||!FIELDS.some(f=>f.id===id)||!Object.hasOwn(s.answers,id))return false;delete s.answers[id];invalidate(s,2);return true;}
 export function orientation(a){const key=[...a.points].sort().join('');return key==='NS'?'vertical':key==='EW'?'horizontal':null;}
 export function phaseReady(s,p=s.phase){return p===0?COLORS.every(c=>s.axes[c].points.length===2&&s.axes[c].country):p===1?!!s.region&&!!s.year:p===2?FIELDS.every(f=>f.options.some(([id])=>id===s.answers[f.id])):false;}
 export function phaseScore(s,p=s.phase){if(p===0)return COLORS.filter(c=>{const a=s.axes[c];return (a.country==='uk'&&orientation(a)==='vertical')||(a.country==='fr'&&orientation(a)==='horizontal');}).length;if(p===1)return Number(s.region==='sudan')+Number(s.year==='1898');return FIELDS.filter(f=>s.answers[f.id]===f.expected).length;}
