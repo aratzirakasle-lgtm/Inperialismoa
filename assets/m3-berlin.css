@@ -1261,3 +1261,15 @@ html,body{background:#17382f}
 @keyframes fach-flap52{from{transform:rotateX(0deg)}to{transform:rotateX(168deg)}}
 @keyframes fach-paper52{from{transform:translateY(13%)}to{transform:translateY(-88%)}}
 @media(prefers-reduced-motion:reduce){.fach-open52,.fach-open52-art>*{animation:none!important}}
+
+/* Talka53 — confirmation at the actual intersection, then the historical illustration. */
+.fach49 .fach-intersection53{position:absolute;transform:translate(-50%,-50%);width:4.4cqw;height:4.4cqw;min-width:36px;min-height:36px;z-index:12;pointer-events:none;display:grid;place-items:center}
+.fach49 .fach-intersection53 i{position:absolute;inset:0;border:3px solid #ffdc75;border-radius:50%;box-shadow:0 0 10px #ffb531,inset 0 0 8px #ffcc52;animation:fach-ring53 1s ease-out infinite}
+.fach49 .fach-intersection53 i:nth-child(2){animation-delay:.5s}
+.fach49 .fach-intersection-core53{position:absolute;inset:20%;border:3px solid #fff1ac;border-radius:50%;background:radial-gradient(circle,#fff4ac55,#d98a2455);box-shadow:0 0 12px #ffb32d,0 0 0 2px #95501d}
+.fach49 .fach-intersection53 b{position:absolute;top:100%;left:50%;transform:translateX(-50%);white-space:nowrap;padding:.25em .5em;background:linear-gradient(#923727,#5d1e17);border:2px solid #f0c46b;border-radius:4px;color:#fff0c6;text-shadow:0 1px 2px #2a160d;font-size:clamp(12px,1.15cqw,20px);box-shadow:0 2px 5px #38200a99}
+@keyframes fach-ring53{0%{transform:scale(.55);opacity:1}100%{transform:scale(1.5);opacity:0}}
+.fach49 .fach-encounter53 .fach-map-inner{background:#102b20;overflow:hidden;display:grid;place-items:center}
+.fach49 .fach-encounter-art53{display:block;width:100%;height:100%;object-fit:contain;max-width:100%;max-height:100%;animation:fach-reveal53 .65s ease-out both}
+@keyframes fach-reveal53{from{opacity:0;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.fach49 .fach-intersection53 i,.fach49 .fach-encounter-art53{animation:none!important}}

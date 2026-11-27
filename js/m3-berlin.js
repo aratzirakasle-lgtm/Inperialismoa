@@ -3,7 +3,7 @@ import { ARROWS, createAudit, changeScope, reverseArrow, swapLegend, score, seal
 import { CLUES, CARDS, SLOTS, CARTOON_PAGES, QUIZ, quizScore, quizReady, quizComplete, chooseQuiz, sealQuiz, createCartoon, observe, selectCard, place, activateSlot, remove as removeCartoonAnswer, resetPage, ready as cartoonReady, score as cartoonScore, sealCartoon, completeCartoon } from './m3-cartoon.mjs?v=20261126-kendu36';
 import { itineraryHeaderMarkup } from './m3-itinerary.mjs?v=20261127-lacre51';
 import { finished as fachodaFinished, createFachoda } from './m3-fachoda.mjs?v=20261127-atlas43';
-import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-gutuna52';
+import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-talka53';
 const fachoda=createFachoda();
 let currentExercise=1,teacherSecondPreview=false;
 function syncItinerary(){const first=firstExerciseComplete(),second=fachodaFinished(fachoda);for(const [id,step] of [['#m3-room-header',1],['#m3-dialog-header',currentExercise]]){const el=$(id),markup=itineraryHeaderMarkup(step,first,second,teacherSecondPreview);if(el&&el._markup!==markup){el.innerHTML=markup;el._markup=markup;}}}
