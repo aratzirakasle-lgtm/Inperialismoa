@@ -1326,3 +1326,26 @@ html,body{background:#17382f}
  .fach49 .fach-tg-hint55,.fach49 .fach-tg-progress55{font-size:14px}
  #station .fach49 .fach-tg-remove55{min-width:36px;min-height:36px}
 }
+
+/* Cartelas56 — nine illustrated answer fragments; original telegram layout and mechanics preserved. */
+#station .fach49 .fach-tg-fragment55{
+ display:grid;grid-template-columns:clamp(30px,3.1cqw,48px) minmax(0,1fr);align-items:center;gap:7px;
+ padding:4px 7px;min-height:0;border:2px solid #b58a45;border-radius:4px;
+ background:radial-gradient(ellipse at 25% 20%,#fff1ca,#ebcf99 75%,#d5a66a);
+ box-shadow:inset 0 0 0 1px #fff0be,inset 0 -2px 3px #a8783c44,0 2px 4px #0006;
+}
+#station .fach49 .fach-tg-art56{
+ display:block;aspect-ratio:1;width:100%;background-image:url("./m3-fachoda-cartelas56.webp");
+ background-repeat:no-repeat;background-size:300% 300%;background-position:var(--art-x) var(--art-y);
+ pointer-events:none;filter:drop-shadow(0 1px 1px #5c331d30);
+}
+#station .fach49 .fach-tg-fragmenttext56{display:block;min-width:0;overflow-wrap:break-word;pointer-events:none}
+#station .fach49 .fach-tg-fragment55:hover{border-color:#e9bd62;filter:brightness(1.035)}
+#station .fach49 .fach-tg-fragment55[aria-pressed="true"]{
+ background:radial-gradient(ellipse at 30% 25%,#fff4c9,#edca7f);
+ border-color:#ffe5a1;outline:1px solid #ffcb64;
+ box-shadow:inset 0 0 0 1px #b58138,0 0 8px #ffc44c99;
+}
+@media(max-width:1050px),(max-height:590px){
+ #station .fach49 .fach-tg-fragment55{grid-template-columns:44px minmax(0,1fr);gap:9px;padding:5px 8px;min-height:48px}
+}
