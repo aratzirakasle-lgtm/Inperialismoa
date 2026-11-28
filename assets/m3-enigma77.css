@@ -1,0 +1,75 @@
+/* V77: reference-coordinate interactive panels on the native-resolution scenery. */
+#station.enigma-station{width:min(calc(100vw - 12px),calc((100dvh - 55px)*1671/941));max-width:none;max-height:calc(100dvh - 8px);padding:0;overflow:auto;background:#142b25;border:2px solid #b48b45;color:#f7e1b0}
+.enigma-station .dialog-top{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0}
+.enigma-station #station-body{padding:0}
+.enigma77{position:relative;container-type:inline-size;isolation:isolate;aspect-ratio:1671/941;font:clamp(9px,1.02cqw,18px)/1.15 Georgia,serif;color:#f8dfac;background:#122b22}
+.enigma77 *{box-sizing:border-box}.enigma77 [hidden]{display:none!important}
+.enigma77-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:-1;pointer-events:none}
+.enigma77-title{position:absolute;left:31.7%;top:1.6%;width:36.6%;text-align:center;background:radial-gradient(ellipse,#234b42,#071f20);border:4px double #c49b4d;border-radius:18% 18% 8% 8%/30%;box-shadow:0 2px 7px #120b05,inset 0 0 0 1px #f5d18a;padding:.55cqw .5cqw .25cqw}
+.enigma77-title h1{font:bold 3.05cqw/1 Georgia,serif;margin:0;color:#f7d99a;text-shadow:0 2px 2px #38220e}
+.enigma77-title span{display:block;background:linear-gradient(#f6ddb0,#c39b60);color:#46321a;border:2px solid #ad7b38;border-radius:4px;font:bold 1.04cqw Georgia,serif;margin:.5cqw 6% 0;padding:.18cqw}
+.enigma77-instructions{position:absolute;left:33.2%;top:14.7%;width:33.6%;margin:0;padding:.45cqw .75cqw;text-align:center;font-size:.92cqw;line-height:1.23;background:#ead0a0 url('./atlas-papel-fibras.svg') center/100% 100%;color:#362616;border:3px double #a9854c;box-shadow:0 3px 7px #140b07}
+.enigma77-panel{position:absolute;border:6px double #caa45d;border-image:url('./atlas-marco-laton.svg') 30 stretch;box-shadow:0 5px 9px #100a06c9,inset 0 0 1.3cqw #0b2119}
+.enigma77-panel h2,.enigma77-parchment h2{margin:0;text-align:center;font:bold 1.23cqw/1.05 Georgia,serif;color:#f9dfaa;text-shadow:0 1px #37220e}
+.enigma77-identify{left:33.5%;top:24.3%;width:33%;height:28.9%;padding:.65cqw 2.7cqw;background:radial-gradient(ellipse at 50% 0,#174842,#061e20 83%);display:grid;grid-template-rows:auto repeat(4,minmax(0,1fr));gap:.38cqw}
+.enigma77-idrow{display:grid;grid-template-columns:17% 1fr;gap:.8cqw;align-items:stretch;min-height:0}
+.enigma77-idrow>b,.enigma77-box-target>b{display:grid;place-items:center;font:bold 2cqw Georgia,serif;color:#392716;background:linear-gradient(#f6e3b8,#c39a58);border:3px double #9c6f35;border-radius:4px;box-shadow:0 2px 2px #0007}
+.enigma77-select{position:relative;display:flex;min-width:0;align-items:center;background:#eddaaf;border:3px double #b88b42;border-radius:4px}
+.enigma77-select select{width:100%;height:100%;min-width:0;background:transparent;color:#422e18;border:0;padding:0 1.6cqw 0 .55cqw;font:italic 1.16cqw Georgia,serif;cursor:pointer}
+.enigma77-select select:has(option:checked:not([value=""])){font-weight:bold;font-style:normal}
+.enigma77-select [data-enigma-flag]{position:absolute;right:1.4cqw;display:flex;pointer-events:none}
+.enigma77-flag{width:1.25cqw;height:1.25cqw;border-radius:50%;box-shadow:0 0 0 1px #795b38}
+.enigma77-clues{position:absolute;left:1.65%;top:50.3%;width:20.8%;height:36.7%;padding:.8cqw .7cqw;display:flex;flex-direction:column;gap:.45cqw;background:#ead3a5 url('./atlas-papel-fibras.svg') center/100% 100%;border:5px double #a77a39;color:#4a311c;box-shadow:2px 5px 9px #140a06}
+.enigma77-clues h2{padding:.45cqw;background:linear-gradient(#744328,#422818);border:3px double #c49a52;border-radius:4px}
+.enigma77-clues button{display:flex;align-items:center;text-align:left;flex:1;min-height:0;gap:.6cqw;padding:.3cqw .5cqw;background:linear-gradient(#f9e9c5,#dfbd84);border:1px solid #b18a52;border-radius:3px;box-shadow:0 2px 3px #7a512444;color:#412b19;font:bold 1.1cqw Georgia,serif}
+.enigma77-letter,.enigma77-wax{display:grid;place-items:center;flex:none;width:2.25cqw;height:2.25cqw;border-radius:50%;background:radial-gradient(circle at 32% 27%,#c54c33,#7b2016 60%,#4f170e);border:2px double #d78e5a;color:#fce2a7;font:bold 1.5cqw Georgia,serif;box-shadow:0 2px 3px #5c341e}
+.enigma77-clues small{font:normal .85cqw Georgia,serif}.enigma77-envelope{margin-left:auto;font-size:1.65cqw;color:#856136}.enigma77-clues .is-read{border-color:#4d7849;background:linear-gradient(#e8edc4,#c9d5a0)}
+.enigma77-clues>p{margin:.1cqw 0 0;text-align:center;font-size:.85cqw}
+.enigma77-bank{left:27.5%;top:55%;width:50.3%;height:25.4%;padding:.45cqw .85cqw;background:linear-gradient(#65402bd9,#352017f5),url('./atlas-madera-referencia-hd.webp') center/cover}
+.enigma77-bank>p{font-size:.85cqw;text-align:center;margin:.28cqw 0 .3cqw}
+.enigma77-cards{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:.45cqw;height:75%}
+.enigma77-card{position:relative;display:flex;flex-direction:column;align-items:stretch;width:15.4%;height:47%;min-width:0;min-height:0;padding:.23cqw;border:2px solid #a87f48;border-radius:3px;background:#f1ddaf;color:#392818;box-shadow:0 1px 4px #130905;cursor:grab}
+.enigma77-card-art{display:block;flex:1;min-height:0;overflow:hidden;border:1px solid #bca06a;border-radius:2px}
+.enigma77-card-art img,.enigma77-card-art svg{display:block;width:100%;height:100%;object-fit:cover}
+.enigma77-card-name{display:grid;place-items:center;min-height:1.1cqw;padding:.12cqw .06cqw;font:bold .76cqw/1.04 Georgia,serif;text-align:center;overflow-wrap:anywhere}
+.enigma77-card[aria-pressed="true"]{outline:2px solid #f4de8c;box-shadow:0 0 8px #fee9a5}
+.enigma77-card.is-assigned{filter:saturate(.65)}.enigma77-assignment{position:absolute;top:.18cqw;right:.18cqw;background:#204a3a;color:#f7dfa8;border:1px solid #ebc36c;border-radius:50%;display:grid;place-items:center;width:1.4cqw;height:1.4cqw;font:bold .95cqw Georgia,serif}
+.enigma77-bank [data-enigma-selection]{margin:.18cqw 0 0;color:#ffe5ab;min-height:.8cqw;font-size:.76cqw}
+.enigma77-boxes{position:absolute;left:20.6%;top:81.2%;width:61.5%;height:15.7%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.05cqw}
+.enigma77-box{position:relative;min-width:0;display:flex;flex-direction:column;padding:.4cqw .65cqw .2cqw}
+.enigma77-box-target{display:grid;grid-template-columns:1fr auto;gap:.15cqw;align-items:center;background:linear-gradient(#f6deae,#c79a5e);border:3px double #8b5b2d;border-radius:3px;color:#432c19;padding:.2cqw .4cqw;box-shadow:0 2px 3px #140905;cursor:pointer}
+.enigma77-box-target>b{font-size:1.45cqw;background:none;border:0;box-shadow:none;justify-self:center}
+.enigma77-box-target>small{grid-column:1/-1;text-align:center;font:bold .75cqw Georgia,serif}
+.enigma77-box-target>span{font:bold .9cqw Georgia,serif}
+.enigma77-box.is-target .enigma77-box-target,.enigma77-box.is-over{outline:2px solid #f7d37c;box-shadow:0 0 12px #f9c44b}
+.enigma77-inventory{display:flex;flex-wrap:wrap;align-content:start;gap:.18cqw;overflow:auto;min-height:0;flex:1;padding:.3cqw 0}
+.enigma77-inventory button{font:bold .65cqw/1.1 Georgia,serif;padding:.12cqw .25cqw;background:#edce93;border:1px solid #ac8546;color:#462e18;border-radius:2px;max-width:100%;overflow-wrap:anywhere}
+.enigma77-actions{position:absolute;left:84.9%;top:66.3%;width:12.9%;height:31%;display:flex;flex-direction:column;align-items:center;gap:.4cqw;text-align:center}
+.enigma77-actions [data-enigma-progress]{color:#f3d9a8;background:#4b261a;border:1px solid #c99a51;border-radius:4px;padding:.25cqw .6cqw;font:bold 1.1cqw Georgia,serif}
+.enigma77-actions [data-enigma-seal]{width:95%;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 40% 30%,#b44331,#7c2119 65%,#4a160f);border:4px double #d9965f;border-radius:50%;box-shadow:0 3px 8px #48190d,inset 0 0 0 3px #9e3c2c;color:#f9dca3;padding:.6cqw;font:bold 1.05cqw/1.1 Georgia,serif}
+.enigma77-actions [data-enigma-seal]>span{font-size:2cqw}.enigma77-actions [data-enigma-seal]:disabled{opacity:.78}
+.enigma77.is-complete [data-enigma-seal]{opacity:1;background:radial-gradient(#b64b36,#821e16);box-shadow:0 0 13px #f5c15b}
+.enigma77-actions [data-enigma-reset]{font:.8cqw Georgia,serif;color:#f3d6a3;background:#402a1c;border:1px solid #ac824a;border-radius:3px;padding:.2cqw .4cqw}
+.enigma77-actions [data-enigma-feedback]{font:bold .8cqw Georgia,serif;color:#fff1cf;text-shadow:0 1px 2px #1c0d06;margin:0;max-width:100%;overflow-wrap:anywhere;background:#3e261bdd}
+.enigma77-clue-dialog{width:min(760px,94vw);max-width:none;max-height:90dvh;padding:0;color:#46301c;background:#ead1a0 url('./atlas-papel-fibras.svg') center/100% 100%;border:8px double #a87c39;box-shadow:0 12px 45px #000c}
+.enigma77-clue-dialog::backdrop{background:#070f0bd0;backdrop-filter:blur(3px)}
+.enigma77-clue-sheet{padding:clamp(12px,2vw,28px);display:grid;gap:14px;font:16px/1.35 Georgia,serif}
+.enigma77-clue-sheet header{display:flex;align-items:center;gap:12px;background:#163a31;color:#f8db9d;padding:8px 12px;border:3px double #c59c52}
+.enigma77-clue-sheet h2{font-size:22px;margin:0;flex:1}.enigma77-clue-sheet .enigma77-wax{width:42px;height:42px;font-size:26px}
+.enigma77-clue-sheet header button,.enigma77-clue-sheet [data-enigma-continue]{padding:8px 14px;border:2px solid #ad8747;border-radius:4px;background:#234b38;color:#ffe5af;font-weight:bold}
+.enigma77-clue-content{display:grid;grid-template-columns:1fr .9fr;gap:16px;align-items:center}.enigma77-clue-quote{font:bold clamp(19px,2.5vw,29px)/1.3 Georgia,serif;margin:0}.enigma77-clue-art{border:4px double #ac8550;box-shadow:1px 3px 6px #62412477}.enigma77-clue-art img,.enigma77-clue-art svg{display:block;width:100%;height:auto;max-height:220px;object-fit:cover}
+.enigma77-clue-sheet label{display:grid;gap:5px;font-weight:bold}.enigma77-clue-sheet select{padding:10px;border:2px solid #b78e52;background:#fff0cf;color:#43301c;font:16px Georgia,serif}.enigma77-clue-sheet [data-enigma-clue-feedback]{margin:0;min-height:1.3em}.enigma77-clue-sheet [data-enigma-continue]{justify-self:end;min-width:140px}
+@media(max-width:1000px),(max-height:580px){
+#station.enigma-station{width:calc(100vw - 8px)}
+.enigma77{aspect-ratio:auto;display:grid;gap:10px;padding:10px;font-size:14px}
+.enigma77-bg{height:auto;aspect-ratio:1671/941;object-fit:cover}
+.enigma77-title,.enigma77-instructions,.enigma77-identify,.enigma77-clues,.enigma77-bank,.enigma77-boxes,.enigma77-actions{position:relative;inset:auto;width:auto;height:auto}
+.enigma77-title{padding:8px;margin-bottom:12vw}.enigma77-title h1{font-size:clamp(23px,4vw,36px)}.enigma77-title span{font-size:12px;padding:4px}
+.enigma77-instructions{font-size:14px;padding:10px}.enigma77-panel h2,.enigma77-parchment h2{font-size:18px}
+.enigma77-identify{gap:6px;padding:12px}.enigma77-idrow{min-height:42px}.enigma77-idrow>b{font-size:23px}.enigma77-select select{font-size:16px;padding:5px 34px 5px 8px}.enigma77-select [data-enigma-flag]{right:20px}.enigma77-flag{width:18px;height:18px}
+.enigma77-clues{padding:10px;gap:6px}.enigma77-clues button{min-height:44px;font-size:16px;padding:6px}.enigma77-clues h2{padding:7px}.enigma77-letter{width:30px;height:30px;font-size:20px}.enigma77-clues small,.enigma77-clues>p{font-size:13px}.enigma77-envelope{font-size:22px}
+.enigma77-bank{padding:10px}.enigma77-bank>p,.enigma77-bank [data-enigma-selection]{font-size:13px;margin:6px 0}.enigma77-cards{height:auto;gap:6px}.enigma77-card{width:calc(25% - 6px);height:auto;min-height:95px;padding:3px}.enigma77-card-art{aspect-ratio:1.5;flex:none}.enigma77-card-name{font-size:12px;padding:4px;min-height:28px}.enigma77-assignment{width:20px;height:20px;font-size:14px}
+.enigma77-boxes{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.enigma77-box{background:linear-gradient(#5c3824,#362016);border:4px double #bb985b;padding:8px;min-height:110px}.enigma77-box-target{padding:6px;min-height:44px}.enigma77-box-target>b{font-size:21px}.enigma77-box-target>small,.enigma77-box-target>span{font-size:12px}.enigma77-inventory{gap:4px;padding:5px 0}.enigma77-inventory button{font-size:12px;padding:4px}
+.enigma77-actions{background:#38261c;padding:10px;border:3px double #bb985b;gap:6px}.enigma77-actions [data-enigma-seal]{width:140px;font-size:14px}.enigma77-actions [data-enigma-seal]>span{font-size:24px}.enigma77-actions [data-enigma-progress],.enigma77-actions [data-enigma-reset],.enigma77-actions [data-enigma-feedback]{font-size:13px;padding:6px}
+}
+@media(max-width:480px){.enigma77-card{width:calc(33.333% - 6px)}.enigma77-clue-content{grid-template-columns:1fr}.enigma77-clue-art{max-width:220px;justify-self:center}}

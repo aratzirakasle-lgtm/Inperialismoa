@@ -6,7 +6,7 @@ export const ROOMS=[
 {title:'Munduko telegrama galduak',objective:''},
 {title:'Historiaren epaimahaia',objective:''}];
 export function itineraryState(current,berlinDone,fachodaDone,teacherSecond=false,options={}){
-const completed=[!!berlinDone,!!fachodaDone,!!options.atlasDone,false,false,false];
+const completed=[!!berlinDone,!!fachodaDone,!!options.atlasDone,!!options.enigmaDone,false,false];
 return {count:completed.filter(Boolean).length,rooms:ROOMS.map((room,i)=>({...room,id:i+1,current:current===i+1,complete:completed[i],available:i===0||(i===1&&(berlinDone||teacherSecond||current===2))||(i===2&&options.atlasAvailable&&(teacherSecond||(berlinDone&&fachodaDone)||current===3))||(i===3&&!!options.enigmaPreview&&teacherSecond)}))};
 }
 export function itineraryMarkup(current,berlinDone,fachodaDone,teacherSecond=false){
