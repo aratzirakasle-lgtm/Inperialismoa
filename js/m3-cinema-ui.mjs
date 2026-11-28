@@ -32,28 +32,31 @@ function filmCard(film) {
 function controlsMarkup(film) {
   return film.fields.map((field, index) => {
     const mechanical = field.device === 'lever' || field.device === 'switch';
-    const title = `<h3>${field.title}</h3>`;
-    const options = field.options.map(([id, label], i) => `<button type="button" data-cinema-option="${id}"
-      title="${label}" aria-label="${label}" aria-pressed="false">${field.device === 'buttons' ? label : i + 1}</button>`).join('');
+    const direct = field.device === 'buttons';
+    const options = field.options.map(([id, label]) => `<button type="button" data-cinema-option="${id}"
+      title="${label}" aria-label="${label}" aria-pressed="false"><i class="cinema-choice-lamp" aria-hidden="true"></i><span>${label}</span></button>`).join('');
     const deviceIcon = field.device === 'shield' ? icon('shield') : field.device === 'beams' ? icon('beam') : '';
-    const mechanism = field.device === 'buttons' ? `<div class="cinema-direct">${options}</div>` :
-      `<div class="cinema-device">
-        <button class="cinema-dial" data-cinema-dial type="button" aria-label="${field.title} · Hurrengo aukera"><span>${deviceIcon}</span></button>
-        <div class="cinema-device-right"><output class="cinema-choice">Hautatu…</output>
+    const mechanism = direct ? `<div class="cinema-direct" role="group" aria-label="${field.title} · Aukerak">${options}</div>` :
+      `<div class="cinema-mechanics">
+        <div class="cinema-hardware">
+          <button class="cinema-dial" data-cinema-dial type="button" aria-label="${field.title} · Hurrengo aukera"><span>${deviceIcon}</span></button>
+          <button type="button" class="cinema-actuator ${mechanical ? 'cinema-lever' : ''}" data-cinema-act title="${field.action}">
+            <i aria-hidden="true"></i><b>${field.action}</b>
+          </button>
+        </div>
+        <div class="cinema-device-right"><output class="cinema-choice cinema-accessible-choice" aria-live="polite">Hautatu…</output>
           <div class="cinema-options" role="group" aria-label="${field.title} · Aukerak">${options}</div>
         </div>
-      </div><button type="button" class="cinema-actuator ${mechanical ? 'cinema-lever' : ''}" data-cinema-act>
-        <i aria-hidden="true"></i><b>${field.action}</b>
-      </button>`;
+      </div>`;
     return `<section class="cinema-control" data-cinema-field="${field.id}" data-device="${field.device}">
-      <div class="cinema-control-title"><span aria-hidden="true">${String(index + 1).padStart(2,'0')}</span>${title}</div>
+      <div class="cinema-control-title"><span aria-hidden="true">${String(index + 1).padStart(2,'0')}</span><h3>${field.title}</h3></div>
       ${mechanism}
     </section>`;
   }).join('');
 }
 
 function markup() {
-  return `<section class="m3-cinema" aria-labelledby="cinema-title">
+  return `<section class="m3-cinema cinema-premium3" data-cinema-build="premium3" aria-labelledby="cinema-title">
     <header class="cinema-heading">
       <div><h2 id="cinema-title">5. Inperialismoa mugimenduan</h2><p>Berreraiki historiaren hiru filmak</p></div>
       <button type="button" class="cinema-brass" data-cinema-notes>${icon('notes')} 22. diapositiba ikusi</button>

@@ -65,3 +65,7 @@ En la base `e5aefdd` y en esta rama se reproducen los mismos tres fallos de prue
 Descartar la PR conserva la versión actual. Si el cambio se incorpora en el futuro, se puede revertir su commit. La rama no requiere migraciones.
 
 Para un futuro lanzamiento, el solucionario de ensayo debe retirarse del cliente. El servidor autorizado deberá validar los doce IDs, aplicar los permisos de cada equipo y devolver únicamente los resultados. El guardado del borrador se podrá conectar entonces al mecanismo de equipos que se autorice para la misión 3.
+
+## Tercera pasada — consola de dirección
+
+Las doce alternativas de cada película se muestran en placas de texto completas, no detrás de números. Las ruedas siguen siendo controles de teclado y ratón; las palancas y pulsadores conservan la reproducción original. La selección se reconoce por la placa de latón y su luz, sin mostrar aciertos antes de comprobar. Se reorganiza el espacio interior de la consola y se utiliza una columna de mandos en móviles estrechos. El solucionario, las animaciones, los permisos y los cuatro ejercicios anteriores no se modifican. Las nuevas comprobaciones verifican los textos visibles de todas las alternativas en las tres películas, las dimensiones de las placas y las pruebas de interacción previas.

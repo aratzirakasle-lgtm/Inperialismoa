@@ -40,6 +40,9 @@ try {
   const root = page.locator('.m3-cinema');
   const screen = root.locator('[data-cinema-screen]');
   await root.waitFor();
+  assert.equal(await root.getAttribute('data-cinema-build'),'premium3');
+  const verifyLabels=async()=>{const options=await root.locator('[data-cinema-option]').evaluateAll(els=>els.map(el=>({label:el.getAttribute('aria-label'),text:el.textContent.trim()})));assert.equal(options.length,12);assert.ok(options.every(o=>o.text===o.label&&o.text.length>1),JSON.stringify(options));};
+  await verifyLabels();
   const assets = {
     room:[1672,941], train:[1432,876], 'train-wheel':[136,136], ship:[1414,1036],
     'reel-front':[230,230], 'reel-back':[217,217], projector:[825,1083],
@@ -63,7 +66,7 @@ try {
       if (outer.bottom > control.closest('.cinema-desk').querySelector('.cinema-actions').getBoundingClientRect().top + 1) {
         return ['Overlapping controls: ' + control.dataset.cinemaField];
       }
-      return [...control.querySelectorAll('h3,output,button')].filter(el => {
+      return [...control.querySelectorAll('h3,output:not(.cinema-accessible-choice),button')].filter(el => {
         const bounds = el.getBoundingClientRect();
         return bounds.top < outer.top - 1 || bounds.bottom > outer.bottom + 1 ||
           bounds.left < outer.left - 1 || bounds.right > outer.right + 1 ||
@@ -177,6 +180,7 @@ try {
   await shot('11-primer-sello');
   await next.click();
 
+  await verifyLabels();
   await shot('04-estados-unidos');
   await choose('t_b_sender','us');
   await act('t_b_sender');
@@ -211,6 +215,7 @@ try {
   await shot('06b-puerto-rico-verificado');
   await next.click();
 
+  await verifyLabels();
   await shot('07-japon');
   await choose('t_c_sender','jp');
   await choose('t_c_annex','formosa-korea');
@@ -275,6 +280,7 @@ try {
       ]);
       assert.ok(projection.width >= 590 && projection.height >= 295,'Projection aperture lost usable space');
       assert.ok(knob.width >= 42 && knob.height >= 42,'Dial target is too small');
+      const plate=await control('t_a_sender').locator('[data-cinema-option]').first().boundingBox();assert.ok(plate.width>65&&plate.height>=20,'Choice plate too small');
     }
     if (width !== 390) await shot(`14-${width}x${height}`);
     if (width === 390) {
