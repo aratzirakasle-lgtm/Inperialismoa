@@ -1,18 +1,3 @@
-# Atlas HD (V67)
-
-The exercise's code and SVG geometry work without the optional art pack. When all six WebP assets exist, the room automatically enables the photographic art layer and shows V67 · HD. Otherwise it shows V67 · OINARRIZKOA and retains the working V66/vector artwork.
-
-Install these six files in assets/ (all exact names):
-- m3-atlas-library67.webp
-- m3-atlas-engravings67.webp
-- m3-atlas-frame67.webp
-- m3-atlas-grain67.webp
-- m3-atlas-seal67.webp
-- m3-atlas-wood67.webp
-
-The generated concept map is deliberately not used as an answer map: it contains printed answers and unreliable boundaries. Only its texture and outer decorative frame are used; actual clickable geometry remains the separately labeled Natural Earth-based schematic.
-
-The source slides 19 and 20 still need to be provided. No live pupil state, permissions or database writes were added.
-
-## Local HD preview (V68)
-If server art is absent, the teacher can select the original ZIP directly in the atlas. It validates all six WebP entries and their CRCs, imports them with browser-native ZIP decompression, and saves the images in IndexedDB on this browser only. No file is sent to GitHub or Supabase. The public site automatically prefers published assets if they become available. The local preview does not change answers, progress, or permissions.
+# Atlas art V69
+The pupil exercise contains no ZIP installer, file selector, local storage or visual version badge. The public base uses existing repository art. The HD pack, if it is committed to assets/ later, is silently detected by the UI without any additional action from teachers or pupils. The six V67 filenames remain unchanged.
+The original generated map is not used as the answer map because it prints answers and has inaccurate historical boundaries; the functional schematic remains separate.
