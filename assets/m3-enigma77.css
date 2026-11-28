@@ -327,3 +327,73 @@
 .enigma84-status-symbol{width:26px;height:24px;font-size:21px}.enigma84-register .enigma83-status-row[data-state="read"] .enigma84-status-symbol{width:23px;height:23px;font-size:16px}
 .enigma84-register-footer{gap:8px;padding-top:6px}.enigma84-status-meter{gap:5px}.enigma84-status-meter i{width:7px;height:7px}.enigma84-register-footer p{font-size:13px}.enigma84-register-footer small{font-size:10px}
 }
+
+/* V85: actual cleaned reference-image crop. Dynamic content is layered on its paper;
+   the source's five printed clues were removed, and no solutions are embedded. */
+.enigma85-register.enigma84-register.enigma77-clues{
+ left:.6%;top:49.3%;width:23.3%;height:39.75%;
+ padding:0;gap:0;display:block;isolation:isolate;background:none;border:0;box-shadow:none;
+}
+.enigma85-register.enigma84-register:before{
+ inset:0;background:url('./m3-enigma-pisten-erregistroa85.avif') center/100% 100% no-repeat;
+ clip-path:none;box-shadow:none;filter:none;z-index:-1
+}
+.enigma85-register.enigma84-register:after{display:none}
+.enigma85-register.enigma84-register h2{
+ position:absolute;left:27%;right:25%;top:4.8%;height:7%;margin:0;padding:0;
+ border:0;background:none;clip-path:none;box-shadow:none;color:#f8e0ac;
+ font:bold 1.29cqw/1 Georgia,serif;text-shadow:0 1px 2px #211106;white-space:nowrap;
+}
+.enigma85-register.enigma84-register .enigma83-help{
+ position:absolute;left:9%;right:13%;top:19%;margin:0;
+ font:italic .81cqw/1.2 Georgia,serif;color:#503719;
+ transform:rotate(-2.5deg);text-align:left;
+}
+.enigma85-register .enigma84-register-list{
+ position:absolute;left:9%;right:11%;top:29%;bottom:16%;transform:rotate(-3deg);transform-origin:center;
+}
+.enigma85-register.enigma84-register .enigma83-status-row{
+ padding:.2cqw .15cqw;gap:.66cqw;border-bottom:1px solid #92704470;
+ background:transparent;box-shadow:none;min-height:0;align-items:center;
+}
+.enigma85-register .enigma85-plaque{
+ flex:none;display:flex;align-items:center;gap:.25cqw;padding:.22cqw .38cqw .22cqw .22cqw;
+ color:#3b2918;background:linear-gradient(145deg,#f3dcad,#c49a5f);
+ border:1px solid #9d7340;border-radius:3px;box-shadow:0 2px 2px #76512966,inset 0 0 0 1px #f6e3bc;
+ font:bold .9cqw/1 Georgia,serif;white-space:nowrap
+}
+.enigma85-plaque>b{
+ display:grid;place-items:center;width:1.25cqw;height:1.25cqw;flex:none;
+ border-radius:50%;border:2px double #d5b47c;background:radial-gradient(circle at 30% 25%,#6e4b2a,#3b2717);
+ box-shadow:0 1px 2px #4a3019;color:#fff0c5;font:bold .82cqw/1 Georgia,serif
+}
+.enigma85-register .enigma84-status-text{gap:.1cqw}
+.enigma85-register .enigma84-status-text strong{font:bold .96cqw/1.12 Georgia,serif;color:#382719}
+.enigma85-register.enigma84-register .enigma84-status-text small{font:normal .83cqw/1.1 Georgia,serif;color:#634d30}
+.enigma85-register .enigma84-status-symbol{font-size:1.15cqw;width:1.5cqw}
+.enigma85-register.enigma84-register .enigma83-status-row[data-state="read"]{background:transparent}
+.enigma85-register.enigma84-register .enigma83-status-row[data-state="read"] .enigma85-plaque>b{background:radial-gradient(circle at 30% 25%,#66885a,#2f5336);border-color:#c7c58b}
+.enigma85-register.enigma84-register .enigma83-status-row[data-state="read"] small{color:#315e3c;font-weight:bold}
+.enigma85-register .enigma84-register-footer{
+ position:absolute;left:10%;right:10%;bottom:9.8%;transform:rotate(-3deg);border-top:1px solid #9f7a4380;
+ padding-top:.25cqw;gap:.35cqw
+}
+@media(max-width:1000px),(max-height:580px){
+.enigma85-register.enigma84-register.enigma77-clues{
+ position:relative;inset:auto;width:min(100%,390px);height:auto;aspect-ratio:390/374;
+ min-height:0;margin:0 auto;padding:0;container-type:inline-size;
+}
+.enigma85-register.enigma84-register h2{font-size:5.2cqw;gap:0}
+.enigma85-register.enigma84-register .enigma83-help{font-size:3.35cqw;margin:0}
+.enigma85-register .enigma84-register-list{gap:0}
+.enigma85-register.enigma84-register .enigma83-status-row{min-height:0;padding:1cqw .6cqw;gap:2.3cqw}
+.enigma85-register .enigma85-plaque{font-size:3.8cqw;gap:1cqw;padding:.8cqw 1.1cqw}
+.enigma85-plaque>b{width:5.5cqw;height:5.5cqw;font-size:3.4cqw}
+.enigma85-register .enigma84-status-text strong{font-size:3.9cqw}
+.enigma85-register.enigma84-register .enigma84-status-text small{font-size:3.4cqw}
+.enigma85-register .enigma84-status-symbol{font-size:4.7cqw;width:6cqw;height:6cqw}
+.enigma85-register.enigma84-register .enigma83-status-row[data-state="read"] .enigma84-status-symbol{width:6cqw;height:6cqw;font-size:4.3cqw}
+.enigma85-register .enigma84-register-footer{gap:1.3cqw;padding-top:1cqw}
+.enigma85-register .enigma84-status-meter{gap:1cqw}.enigma85-register .enigma84-status-meter i{width:1.6cqw;height:1.6cqw}
+.enigma85-register .enigma84-register-footer p{font-size:3cqw}.enigma85-register .enigma84-register-footer small{font-size:2.3cqw}
+}
