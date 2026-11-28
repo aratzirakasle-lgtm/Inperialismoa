@@ -156,3 +156,9 @@
 .atlas69.atlas67-ready .atlas64-footer{background:linear-gradient(#3c210d55,#27150c70),url('./m3-atlas-wood67.webp') center/cover}
 @media(max-width:1050px){.atlas69 .atlas64-heading{width:90%}.atlas69 .atlas64-row{min-height:44px}}
 @media(max-width:600px){.atlas69 .atlas64-heading{width:100%;padding:10px}.atlas69 .atlas64-lower,.atlas69-fachoda{grid-template-columns:1fr}.atlas69-fachoda>img{max-width:220px}.atlas69 .atlas64-row{grid-template-columns:20px 38px minmax(0,1fr) minmax(100px,1fr)}}
+
+/* Color cutout vignettes: proportionate to text, with no tile or border. */
+.atlas69[data-atlas-build="70"] .atlas64-row{--territory-art-size:clamp(28px,2.9cqw,40px);grid-template-columns:20px var(--territory-art-size) minmax(0,1fr) minmax(96px,1fr);min-height:36px;gap:5px;align-items:center}
+.atlas69 .atlas70-territory-art{display:block;width:100%;height:var(--territory-art-size);max-width:40px;max-height:40px;object-fit:contain;object-position:center;justify-self:center;align-self:center;background:none;border:0;border-radius:0;box-shadow:none;filter:none;padding:0;margin:0;pointer-events:none}
+@media(max-width:1050px){.atlas69[data-atlas-build="70"] .atlas64-row{--territory-art-size:34px;min-height:44px}}
+@media(max-width:600px){.atlas69[data-atlas-build="70"] .atlas64-row{--territory-art-size:32px;grid-template-columns:19px var(--territory-art-size) minmax(0,1fr) minmax(95px,1fr);gap:4px}}
