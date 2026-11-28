@@ -1,0 +1,57 @@
+{
+  "mozambique": {
+    "width": 911,
+    "height": 506,
+    "bytes": 140962
+  },
+  "libya": {
+    "width": 912,
+    "height": 506,
+    "bytes": 125080
+  },
+  "eritrea": {
+    "width": 911,
+    "height": 506,
+    "bytes": 143292
+  },
+  "somalia": {
+    "width": 911,
+    "height": 506,
+    "bytes": 102790
+  },
+  "capeverde": {
+    "width": 912,
+    "height": 506,
+    "bytes": 103042
+  },
+  "bissau": {
+    "width": 911,
+    "height": 506,
+    "bytes": 150376
+  },
+  "morocco": {
+    "width": 911,
+    "height": 506,
+    "bytes": 123310
+  },
+  "equatorial": {
+    "width": 912,
+    "height": 506,
+    "bytes": 150512
+  },
+  "sahara": {
+    "width": 911,
+    "height": 506,
+    "bytes": 45482
+  },
+  "congo": {
+    "width": 1370,
+    "height": 1530,
+    "bytes": 533310
+  },
+  "angola": {
+    "width": 1370,
+    "height": 1530,
+    "bytes": 421648
+  }
+}
