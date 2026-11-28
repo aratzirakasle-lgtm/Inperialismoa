@@ -1,0 +1,85 @@
+/* V88: live composition based on the approved 1648 x 928 reference.
+   The HD room remains the background. The furniture and all controls are live. */
+.enigma88 .enigma88-drawer{isolation:isolate;position:relative;min-width:0;padding:0}
+.enigma88-drawer-cavity{position:absolute;inset:0 0 35%;clip-path:polygon(9% 0,91% 0,100% 100%,0 100%);background:linear-gradient(130deg,#f4ca7e,#8e572b 18%,#f2c17b 22%,#603819 29%,#241309 60%,#a56a35 82%,#f3bf76 86%,#62381d);filter:drop-shadow(0 3px 5px #160900);z-index:0}
+.enigma88-drawer-cavity:before{content:"";position:absolute;inset:4% 4% 1%;clip-path:polygon(6% 0,94% 0,100% 100%,0 100%);background:linear-gradient(180deg,#3d1f11e8,#694122a6 40%,#25170d),url('./atlas-madera-referencia-hd.webp') center/cover;border-top:2px solid #ffca82;box-shadow:inset 0 0 13px #140903}
+.enigma88-drawer-cavity:after{content:"";position:absolute;inset:9% 9% 0;clip-path:polygon(7% 0,93% 0,100% 100%,0 100%);background:linear-gradient(180deg,#201006,#643b1d 53%,#b77a3b 54%,#49301e 100%);border-top:1px solid #c58c4f;opacity:.78}
+.enigma88 .enigma77-box .enigma77-box-target{position:absolute;left:0;right:0;top:54%;bottom:0;height:auto;display:block;width:100%;padding:0;border:3px double #c49150;border-radius:5px;background:linear-gradient(180deg,#9c5b2b45,#44200c88),url('./atlas-madera-referencia-hd.webp') center/cover;box-shadow:inset 0 0 0 2px #633615,inset 0 0 13px #180900,0 5px 8px #190c07;z-index:4;color:#38220f;cursor:pointer}
+.enigma88 .enigma77-box-target:before{content:"";position:absolute;inset:1px;border:1px solid #dbaa62;border-radius:3px;pointer-events:none;background:radial-gradient(circle at 2% 5%,#e7c288 0 2px,#66431e 3px,transparent 4px),radial-gradient(circle at 98% 5%,#e7c288 0 2px,#66431e 3px,transparent 4px),radial-gradient(circle at 2% 95%,#e7c288 0 2px,#66431e 3px,transparent 4px),radial-gradient(circle at 98% 95%,#e7c288 0 2px,#66431e 3px,transparent 4px)}
+.enigma88-drawer-plaque{position:absolute;left:19%;right:19%;top:5%;height:58%;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#fff0c1,#dcb475 54%,#f6d99d);clip-path:polygon(6% 0,94% 0,94% 12%,100% 20%,100% 80%,94% 88%,94% 100%,6% 100%,6% 88%,0 80%,0 20%,6% 12%);border:3px double #a16b33;box-shadow:inset 0 0 6px #8e592f}
+.enigma88-drawer-plaque b{font:bold 2.3cqw/.9 Georgia,serif;display:block}
+.enigma88-drawer-plaque small{font:bold .91cqw/1 Georgia,serif;white-space:nowrap}
+.enigma88-drawer-counter{position:absolute;right:5%;top:11%;font:bold .77cqw/1 Georgia,serif;color:#ffe6b1;background:#442611b8;border:1px solid #bd9252;padding:.15cqw .28cqw;border-radius:999px}
+.enigma88-drawer-handle{position:absolute;left:31%;right:31%;top:70%;height:18%;border:3px solid #d6a45c;border-top:4px solid #f5c971;border-radius:2px 2px 7px 7px;box-shadow:0 2px 3px #2e1507,inset 0 1px 2px #ffdb8c;background:#46270e66}
+.enigma88-drawer-handle:before,.enigma88-drawer-handle:after{content:"";position:absolute;top:-4px;width:14%;height:130%;background:linear-gradient(#edc67e,#9c6129,#e4b96c);border:1px solid #815123;border-radius:2px}
+.enigma88-drawer-handle:before{left:-8%}.enigma88-drawer-handle:after{right:-8%}
+.enigma88 .enigma77-box.is-target .enigma77-box-target,.enigma88 .enigma77-box.is-over .enigma77-box-target{outline:2px solid #f5d58d;outline-offset:2px;box-shadow:0 0 14px #eac274, inset 0 0 13px #231105}
+.enigma88 .enigma77-box .enigma77-inventory{position:absolute;inset:5% 6% 43%;overflow:visible;isolation:isolate;z-index:3;margin:0;min-height:0}
+.enigma88 .enigma77-inventory .enigma87-photo{aspect-ratio:1.65;box-shadow:2px 3px 5px #180900cf;border:1px solid #bfa16f;background:#fff0cb;padding:3px;transform-origin:center 85%}
+.enigma88 .enigma77-inventory .enigma87-photo-art{border:1px solid #9f885b}
+.enigma88 .enigma87-photo-label{font-size:clamp(6px,.56cqw,10px)}
+.enigma88 .enigma77-inventory[data-count="1"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="2"] .enigma87-photo{aspect-ratio:1.65}
+.enigma88 .enigma77-inventory[data-count="3"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="4"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="5"] .enigma87-photo{aspect-ratio:1.6}
+.enigma88 .enigma77-inventory[data-count="6"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="7"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="8"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="9"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="10"] .enigma87-photo,.enigma88 .enigma77-inventory[data-count="11"] .enigma87-photo{aspect-ratio:1.95}
+.enigma88 .enigma77-card-art{border:1px solid #ad8954;border-radius:2px;min-height:0}
+.enigma88 .enigma77-card{background:#f4deb0 url('./atlas-papel-fibras.svg') center/cover;border:3px double #d1ae6d;box-shadow:0 3px 5px #190c06,inset 0 0 0 1px #f9e8bd}
+.enigma88 .enigma77-card-art .enigma87-territory-art,.enigma88 .enigma87-photo-art .enigma87-territory-art{filter:saturate(1.4) contrast(1.09) brightness(1.035)}
+.enigma88 .enigma88-step-icon{width:2.9cqw;height:2.9cqw;filter:drop-shadow(0 2px 1px #92613966)}
+.enigma88 .enigma86-guide .enigma85-plaque{padding:0;border:0;background:none;box-shadow:none}
+.enigma88 .enigma86-guide .enigma85-plaque>b{width:1.7cqw;height:1.7cqw;font:bold 1.15cqw Georgia,serif;box-shadow:0 2px 3px #694322;flex:none}
+.enigma88 .enigma86-step{grid-template-columns:auto auto minmax(0,1fr) auto}
+.enigma88 .enigma86-step-progress{border:1px solid #b9975d70;background:#d3ac6b55;border-radius:5px;padding:.2cqw .27cqw;font:bold .87cqw/1 Georgia,serif;color:#432d18;text-align:center;white-space:nowrap}
+.enigma88 .enigma86-step[data-state="done"] .enigma86-step-progress{background:#b9cb9455;color:#326039;border-color:#749056}
+.enigma88 .enigma86-step[data-state="current"] .enigma85-plaque{box-shadow:none}
+.enigma88 .enigma86-step[data-state="current"] .enigma85-plaque>b{box-shadow:0 0 5px #e2b45d}
+.enigma88-guide-intro{position:absolute;top:12%;left:10%;right:10%;margin:0;text-align:center;color:#392718;font:bold .91cqw/1.1 Georgia,serif}
+@media(min-width:1001px) and (min-height:581px){
+.enigma88 .enigma77-title{left:32.4%;top:1.1%;width:35.2%;padding:.35cqw .5cqw .17cqw}
+.enigma88 .enigma77-title h1{font-size:2.85cqw}.enigma88 .enigma77-title span{margin:.25cqw 7% 0}
+.enigma88 .enigma77-instructions{left:33.1%;top:12%;width:34%;font-size:.87cqw;padding:.35cqw .7cqw}
+.enigma88 .enigma77-identify{left:34.1%;top:20.6%;width:31.8%;height:25.6%;padding:.6cqw 2.7cqw;gap:.3cqw;border-width:7px}
+.enigma88 .enigma77-identify h2{font-size:1.08cqw;line-height:1.08}
+.enigma88 .enigma77-idrow>b{font-size:1.65cqw}
+.enigma88 .enigma77-select{border-color:#d0a45c}
+.enigma88 .enigma77-select select{font-size:1.08cqw}
+.enigma88 .enigma85-register.enigma84-register.enigma77-clues{left:.2%;top:29.4%;width:23.4%;height:60.1%}
+.enigma88 .enigma85-register.enigma84-register:before{background:none;border:solid transparent;border-width:4.1cqw 0 4.1cqw;border-image:url('./m3-enigma-pisten-erregistroa85.avif') 67 0 67 0 fill stretch}
+.enigma88 .enigma85-register.enigma84-register h2{left:26%;right:23%;top:3.2%;height:6.3%;font-size:1.28cqw}
+.enigma88 .enigma86-guide.enigma85-register.enigma84-register .enigma86-steps{left:8%;right:9%;top:17%;bottom:13%;transform:rotate(-1.5deg)}
+.enigma88 .enigma86-step{gap:.32cqw;padding:.18cqw .03cqw}
+.enigma88 .enigma86-instruction strong{font:bold .99cqw/1.06 Georgia,serif}
+.enigma88 .enigma86-instruction>span{font:normal .83cqw/1.13 Georgia,serif}
+.enigma88 .enigma86-guide .enigma84-register-footer{left:10%;right:8%;bottom:7.8%;transform:rotate(-1.5deg)}
+.enigma88 .enigma84-register-footer p{font-size:.83cqw}
+.enigma88 .enigma77-bank{left:23.7%;top:47.5%;width:57.1%;height:28.6%;padding:.6cqw 1.1cqw .45cqw;background:linear-gradient(110deg,#482719a6,#321b10cf),url('./atlas-madera-referencia-hd.webp') center/cover;border-width:8px;box-shadow:0 5px 10px #170b07,inset 0 0 0 2px #bb8d4d}
+.enigma88 .enigma77-bank h2{position:absolute;left:28%;right:28%;top:-.7cqw;padding:.35cqw .25cqw;background:linear-gradient(#7b4423,#3e2315);border:3px double #c59a52;border-radius:5px;font:bold 1.16cqw/1 Georgia,serif;box-shadow:0 3px 3px #1a0c06;white-space:nowrap}
+.enigma88 .enigma77-bank h2 span{color:#e1bd78}
+.enigma88 .enigma77-bank>p{margin:.82cqw 0 .3cqw;font-size:.86cqw}
+.enigma88 .enigma77-cards{display:grid;grid-template-columns:repeat(30,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:.48cqw .1cqw;height:79%;align-content:stretch}
+.enigma88 .enigma77-cards .enigma77-card{width:100%;height:100%;padding:.2cqw;min-height:0;margin:0}
+.enigma88 .enigma77-card:nth-child(1){grid-area:1/1/2/6}.enigma88 .enigma77-card:nth-child(2){grid-area:1/6/2/11}.enigma88 .enigma77-card:nth-child(3){grid-area:1/11/2/16}.enigma88 .enigma77-card:nth-child(4){grid-area:1/16/2/21}.enigma88 .enigma77-card:nth-child(5){grid-area:1/21/2/26}.enigma88 .enigma77-card:nth-child(6){grid-area:1/26/2/31}
+.enigma88 .enigma77-card:nth-child(7){grid-area:2/1/3/7}.enigma88 .enigma77-card:nth-child(8){grid-area:2/7/3/13}.enigma88 .enigma77-card:nth-child(9){grid-area:2/13/3/19}.enigma88 .enigma77-card:nth-child(10){grid-area:2/19/3/25}.enigma88 .enigma77-card:nth-child(11){grid-area:2/25/3/31}
+.enigma88 .enigma77-card-name{font:bold .89cqw/1.04 Georgia,serif;min-height:1.35cqw;padding:.11cqw .08cqw}
+.enigma88 .enigma77-bank [data-enigma-selection]{position:absolute;bottom:.12cqw;left:1%;right:1%;font-size:.72cqw;margin:0}
+.enigma88 .enigma77-boxes{left:19.3%;top:76.5%;width:64.7%;height:21.5%;gap:.6cqw}
+.enigma88 .enigma77-actions{left:84.3%;width:14.1%;top:64.7%;height:32.2%}
+.enigma88 .enigma77-actions [data-enigma-seal]{font-size:1.08cqw;width:74%;left:13%}
+.enigma88 .enigma83-gates:has(.is-opening,.is-open){z-index:5}
+}
+@media(max-width:1000px),(max-height:580px){
+.enigma88 .enigma85-register.enigma84-register.enigma77-clues{width:min(100%,410px);aspect-ratio:390/490}
+.enigma88 .enigma85-register.enigma84-register:before{background:none;border:solid transparent;border-width:15cqw 0;border-image:url('./m3-enigma-pisten-erregistroa85.avif') 67 0 67 0 fill stretch}
+.enigma88 .enigma85-register.enigma84-register h2{top:3.1%;font-size:5.2cqw}
+.enigma88-guide-intro{font-size:3.8cqw;top:12%}
+.enigma88 .enigma86-guide.enigma85-register.enigma84-register .enigma86-steps{top:17%;bottom:13%;transform:rotate(-1.5deg)}
+.enigma88 .enigma88-step-icon{width:11cqw;height:11cqw}
+.enigma88 .enigma86-guide .enigma85-plaque>b{width:6.7cqw;height:6.7cqw;font-size:4.7cqw}
+.enigma88 .enigma86-step{gap:1.1cqw}.enigma88 .enigma86-instruction strong{font-size:3.9cqw}.enigma88 .enigma86-instruction>span{font-size:3.3cqw}
+.enigma88 .enigma86-step-progress{font-size:3.1cqw;padding:.7cqw}
+.enigma88 .enigma86-guide .enigma84-register-footer{bottom:7.8%;transform:rotate(-1.5deg)}
+.enigma88 .enigma77-box.enigma88-drawer{min-height:175px;background:none;border:0}
+.enigma88-drawer-plaque b{font-size:30px}.enigma88-drawer-plaque small{font-size:12px}.enigma88-drawer-counter{font-size:11px;padding:3px 5px}
+.enigma88 .enigma77-box .enigma77-inventory{inset:5% 6% 43%;min-height:0;margin:0}
+.enigma88 .enigma77-inventory .enigma87-photo{max-height:none;min-height:0}.enigma88 .enigma87-photo-label{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){.enigma88 .enigma87-photo.is-new{animation:none}}
