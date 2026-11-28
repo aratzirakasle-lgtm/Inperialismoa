@@ -190,3 +190,33 @@
  .enigma92-country-flag .enigma77-flag{width:19px;height:19px}
  .enigma92 .enigma91-slots .enigma91-slot{width:23px;height:23px}
 }
+
+/* V93: separate, mandatory identification checkpoint before the territory inventory. */
+.enigma93 .enigma77-identify{grid-template-rows:auto repeat(4,minmax(0,1fr)) auto;gap:.25cqw}
+.enigma93 .enigma77-idrow{grid-template-columns:15% minmax(0,1fr) 7%;gap:.35cqw}
+.enigma93 .enigma93-idmark{display:grid;place-items:center;color:#f8e6b5;font:bold clamp(13px,1.45cqw,23px)/1 Georgia,serif}
+.enigma93 .enigma77-idrow[data-state="right"] .enigma77-select{border-color:#9ed29a;background:#dbe8bb}
+.enigma93 .enigma77-idrow[data-state="wrong"] .enigma77-select{border-color:#d97762;background:#f1c5ac}
+.enigma93 .enigma77-idrow[data-state="right"] .enigma93-idmark{color:#b5edb0}
+.enigma93 .enigma77-idrow[data-state="wrong"] .enigma93-idmark{color:#ff9b87}
+.enigma93 .enigma77-select select:disabled{opacity:1;color:#25482a;cursor:default}
+.enigma93-idcheck{display:flex;align-items:center;gap:.35cqw;min-width:0}
+.enigma93-idcheck button{flex:none;max-width:63%;padding:.25cqw .45cqw;background:linear-gradient(#32645a,#173d37);color:#f7dfac;border:2px double #d6ad68;border-radius:999px;font:bold clamp(8px,.7cqw,13px)/1.05 Georgia,serif;cursor:pointer}
+.enigma93-idcheck button:disabled{opacity:.65;cursor:default}
+.enigma93-idcheck [data-enigma-idfeedback]{flex:1;color:#f2ddb4;font:normal clamp(8px,.7cqw,12px)/1.1 Georgia,serif}
+.enigma93-locked .enigma77-card{filter:saturate(.65) brightness(.8);cursor:not-allowed}
+.enigma93-locked .enigma77-box-target{cursor:not-allowed}
+.enigma93-locked [data-enigma-bank-hint]{color:#f7d48e;font-weight:bold}
+@media(min-width:1001px) and (min-height:581px){
+ .enigma93 .enigma77-identify{padding:.45cqw 1.85cqw .35cqw}
+ .enigma93 .enigma77-idrow>b{font-size:1.35cqw}
+ .enigma93 .enigma77-select select{font-size:1cqw}
+ .enigma93 .enigma77-identify h2{font-size:.94cqw}
+}
+@media(max-width:1000px),(max-height:580px){
+ .enigma93 .enigma77-identify{gap:6px}
+ .enigma93 .enigma77-idrow{gap:5px}
+ .enigma93-idcheck{gap:7px}
+ .enigma93-idcheck button{font-size:11px;padding:8px}
+ .enigma93-idcheck [data-enigma-idfeedback]{font-size:12px}
+}

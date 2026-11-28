@@ -10,17 +10,21 @@ D:{text:'Sahara eta Ekuatore Ginea nire lurraldeetako bi ziren.',question:'Zein 
 export const TERRITORIES=[
 ['congo','Kongo','A','river'],['angola','Angola','C','savanna'],['mozambique','Mozambike','C','harbor'],['libya','Libia','B','ruins'],['eritrea','Eritrea','B','mountain'],['somalia','Somalia','B','camel'],['capeverde','Cabo Verde','C','island'],['bissau','Guinea Bissau','C','mangrove'],['morocco','Marokoko protektoratua','D','fort'],['equatorial','Ekuatore Ginea','D','forest'],['sahara','Sahara Espainiarra','D','dunes']
 ].map(([id,name,box,art])=>({id,name,box,art}));
-export const createEnigma=()=>({identities:{},territories:{},opened:{},read:{},answers:{},verified:{},checked:false});
-export function identify(s,b,p){if(!BOXES.includes(b)||p!==''&&!Object.hasOwn(COUNTRIES,p))return false;if(p&&BOXES.some(x=>x!==b&&s.identities[x]===p))return false;if(p)s.identities[b]=p;else delete s.identities[b];s.checked=false;return true;}
-export function assign(s,id,b){if(!TERRITORIES.some(t=>t.id===id)||b!==''&&!BOXES.includes(b))return false;if(b)s.territories[id]=b;else delete s.territories[id];s.checked=false;return true;}
+export const createEnigma=()=>({identities:{},territories:{},opened:{},read:{},answers:{},verified:{},identitiesChecked:false,checked:false});
+export function identify(s,b,p){if(identitiesConfirmed(s))return false;if(!BOXES.includes(b)||p!==''&&!Object.hasOwn(COUNTRIES,p))return false;if(p&&BOXES.some(x=>x!==b&&s.identities[x]===p))return false;if(p)s.identities[b]=p;else delete s.identities[b];s.identitiesChecked=false;s.checked=false;return true;}
+export function assign(s,id,b){if(!canAssign(s))return false;if(!TERRITORIES.some(t=>t.id===id)||b!==''&&!BOXES.includes(b))return false;if(b)s.territories[id]=b;else delete s.territories[id];s.checked=false;return true;}
 export function acknowledge(s,b,field,value){if(!BOXES.includes(b)||!['read','answers'].includes(field))return false;if(field==='read'&&!['','yes','no'].includes(value))return false;if(field==='answers'&&value!==''&&!CLUES[b].options.some(([id])=>id===value))return false;s[field][b]=value;delete s.verified[b];s.checked=false;return true;}
 export const clueReady=(s,b)=>s.read[b]==='yes'&&s.answers[b]===CLUES[b]?.answer;
 export function confirmClue(s,b){if(!BOXES.includes(b)||!clueReady(s,b))return false;s.verified[b]=true;return true;}
 export const cluesDone=s=>BOXES.every(b=>s.verified[b]&&clueReady(s,b));
 export const progress=s=>BOXES.filter(b=>Object.hasOwn(COUNTRIES,s.identities[b])).length+TERRITORIES.filter(t=>BOXES.includes(s.territories[t.id])).length;
 export const correct=s=>BOXES.every(b=>s.identities[b]===IDENTITIES[b])&&TERRITORIES.every(t=>s.territories[t.id]===t.box);
-export const finished=s=>s.checked&&cluesDone(s)&&correct(s);
-export const canCheck=s=>cluesDone(s)&&BOXES.every(b=>Object.hasOwn(COUNTRIES,s.identities[b]));
+export const finished=s=>s.checked&&canAssign(s)&&correct(s);
+export const canCheckIdentities=s=>cluesDone(s)&&BOXES.every(b=>Object.hasOwn(COUNTRIES,s.identities[b]));
+export const identitiesConfirmed=s=>s.identitiesChecked===true&&BOXES.every(b=>s.identities[b]===IDENTITIES[b]);
+export function checkIdentities(s){if(!canCheckIdentities(s))return false;s.identitiesChecked=true;return identitiesConfirmed(s);}
+export const canAssign=s=>cluesDone(s)&&identitiesConfirmed(s);
+export const canCheck=canAssign;
 export function seal(s){s.checked=canCheck(s);return finished(s);}
 // Capacities follow the selected country, not the secret identity of a drawer.
 export const COUNTRY_TERRITORY_COUNT=Object.freeze(Object.fromEntries(Object.keys(COUNTRIES).map(p=>[p,TERRITORIES.filter(t=>IDENTITIES[t.box]===p).length])));
