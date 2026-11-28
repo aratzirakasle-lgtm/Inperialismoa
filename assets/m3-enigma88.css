@@ -115,3 +115,17 @@
  .enigma89-empty-bank strong{font-size:18px}
  .enigma89-empty-bank span{font-size:13px}
 }
+
+/* V90: resolve spacing found by inspecting the actual 1280x720 capture. */
+@media(min-width:1001px) and (min-height:581px){
+ .enigma90 .enigma77-bank{display:flex;flex-direction:column;align-items:stretch;padding:1.35cqw 1.1cqw .8cqw}
+ .enigma90 .enigma77-bank>p:not([data-enigma-selection]){flex:none;position:relative;margin:.15cqw 0 .38cqw;font-size:.84cqw;line-height:1.15;z-index:0}
+ .enigma90 .enigma77-cards{flex:1 1 auto;height:auto;min-height:0;grid-template-rows:repeat(2,minmax(0,1fr))}
+ .enigma90 .enigma77-bank [data-enigma-selection]{bottom:.14cqw}
+ .enigma90 .enigma77-identify h2{font-size:.99cqw;line-height:1.08}
+ .enigma90 .enigma77-identify{padding-left:2.35cqw;padding-right:2.35cqw}
+ .enigma90 .enigma88-drawer-plaque{top:4%;height:63%}
+ .enigma90 .enigma88-drawer-plaque b{font-size:2.14cqw}
+ .enigma90 .enigma88-drawer-plaque small{font-size:.83cqw}
+ .enigma90 .enigma88-drawer-handle{top:77%;height:14%}
+}
