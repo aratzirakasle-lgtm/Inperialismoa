@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 570" preserveAspectRatio="none">
+<defs>
+<linearGradient id="brass" x2="1" y2=".7"><stop stop-color="#342113"/><stop offset=".12" stop-color="#9d7136"/><stop offset=".22" stop-color="#edcd83"/><stop offset=".33" stop-color="#694621"/><stop offset=".58" stop-color="#b58b50"/><stop offset=".75" stop-color="#50331c"/><stop offset=".9" stop-color="#d8b16b"/><stop offset="1" stop-color="#382415"/></linearGradient>
+<linearGradient id="left" x2="1" y2=".3"><stop stop-color="#70523a"/><stop offset=".3" stop-color="#2c413e"/><stop offset="1" stop-color="#101d1e"/></linearGradient>
+<linearGradient id="right" x2="1" y2=".2"><stop stop-color="#102324"/><stop offset=".7" stop-color="#384b43"/><stop offset="1" stop-color="#826342"/></linearGradient>
+<linearGradient id="top" x2=".3" y2="1"><stop stop-color="#65482a"/><stop offset=".45" stop-color="#172b2d"/><stop offset="1" stop-color="#0c191a"/></linearGradient>
+<linearGradient id="floor" x2="0" y2="1"><stop stop-color="#121b1a"/><stop offset=".5" stop-color="#3e3c2a"/><stop offset="1" stop-color="#171412"/></linearGradient>
+<linearGradient id="shelf" x2="0" y2="1"><stop stop-color="#e9c17d"/><stop offset=".17" stop-color="#a77c43"/><stop offset=".52" stop-color="#594026"/><stop offset=".62" stop-color="#c19b58"/><stop offset="1" stop-color="#302215"/></linearGradient>
+<radialGradient id="back" cx=".5" cy=".24" r=".87"><stop stop-color="#495e4d"/><stop offset=".28" stop-color="#2a4441"/><stop offset=".65" stop-color="#172e30"/><stop offset="1" stop-color="#0b1a1b"/></radialGradient>
+<radialGradient id="lamp"><stop stop-color="#fff5ca" stop-opacity=".97"/><stop offset=".12" stop-color="#f4d184" stop-opacity=".54"/><stop offset=".55" stop-color="#dca454" stop-opacity=".12"/><stop offset="1" stop-color="#e2af68" stop-opacity="0"/></radialGradient>
+<radialGradient id="vignette"><stop offset=".38" stop-color="#060707" stop-opacity="0"/><stop offset="1" stop-color="#060707" stop-opacity=".64"/></radialGradient>
+<pattern id="brush" width="3" height="9" patternUnits="userSpaceOnUse"><path d="M.5 0v9m1.3-7v5" stroke="#b7c0a1" stroke-opacity=".09" stroke-width=".4"/></pattern>
+<pattern id="cloth" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 1h5M1 0v5" stroke="#c3b899" stroke-opacity=".09" stroke-width=".5"/></pattern>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" seed="13" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<clipPath id="arch"><path d="M2 570V150C2 66 67 2 160 2S318 66 318 150V570Z"/></clipPath>
+<g id="bolt"><circle r="5" fill="#221d16" stroke="#d2ac67" stroke-width="1.5"/><circle r="3" fill="#8a6d42"/><path d="M-2 1L2 -1" stroke="#33291c"/></g>
+</defs>
+<g clip-path="url(#arch)">
+<rect width="320" height="570" fill="#17130f"/>
+<path d="M6 567V151C6 66 74 6 160 6S314 66 314 151V567Z" fill="url(#brass)" stroke="#382719" stroke-width="6"/>
+<path d="M20 555V153C20 76 77 20 160 20S300 76 300 153V555Z" fill="#151b1a" stroke="#d2af6c" stroke-width="2.5"/>
+<path d="M29 548V153C29 82 84 30 160 30S291 82 291 153V548Z" fill="url(#back)"/>
+<!-- Perspective walls, rear plane, deep bevels and brushed steel. -->
+<path d="M29 153Q29 65 160 30Q291 65 291 153L244 187Q240 116 160 101Q80 116 76 187Z" fill="url(#top)" stroke="#7f6d4a" stroke-width="1.2"/>
+<path d="M29 153L76 187V472L29 548Z" fill="url(#left)" stroke="#a18251" stroke-width="1.4"/>
+<path d="M291 153L244 187V472L291 548Z" fill="url(#right)" stroke="#8c7145" stroke-width="1.4"/>
+<path d="M76 187Q79 112 160 101Q241 112 244 187V472H76Z" fill="url(#back)" stroke="#81917d" stroke-opacity=".55"/>
+<path d="M84 190Q88 125 160 113Q232 125 236 190V466H84Z" fill="url(#cloth)" stroke="#94875e" stroke-opacity=".55"/>
+<path d="M29 548L76 472H244L291 548Z" fill="url(#floor)" stroke="#8b7145"/>
+<path d="M36 157L71 184V470L36 527M284 157L249 184V470L284 527" fill="none" stroke="#c1a473" stroke-opacity=".47" stroke-width="2"/>
+<path d="M40 166L66 189V464L40 509M280 166L254 189V464L280 509" fill="none" stroke="#0d1b1b" stroke-width="2"/>
+<path d="M29 153L76 187V472L29 548ZM291 153L244 187V472L291 548Z" fill="url(#brush)"/>
+<path d="M88 228H232M88 397H232" stroke="#b5a16b" stroke-opacity=".32" stroke-width=".8"/>
+<path d="M91 233V392M229 233V392" stroke="#172221" stroke-opacity=".65" stroke-width="1.2"/>
+<!-- Small antique recessed lamp, warm spill and upper ornamental label. -->
+<path d="M118 145Q160 130 202 145L194 155H126Z" fill="url(#brass)" stroke="#382919" stroke-width="1.5"/>
+<ellipse cx="160" cy="155" rx="31" ry="7" fill="#e8c77e"/>
+<ellipse cx="160" cy="155" rx="22" ry="3.5" fill="#fff1b5"/>
+<ellipse cx="160" cy="211" rx="125" ry="143" fill="url(#lamp)"/>
+<path d="M137 164L99 310H221L183 164Z" fill="#e4bd79" opacity=".035"/>
+<rect x="115" y="189" width="90" height="25" rx="4" fill="#253331" stroke="#b99b65"/>
+<rect x="120" y="194" width="80" height="15" rx="2" fill="none" stroke="#a68b58" stroke-opacity=".6"/>
+<path d="M153 201l7-5 7 5-7 5Z" fill="#b7a071"/>
+<!-- Lower shelf and a discreet bundle of old folios beneath it. -->
+<path d="M30 390L76 366H244L290 390Z" fill="#69604a" stroke="#bba06d" stroke-width="1.5"/>
+<path d="M30 390H290V410H30Z" fill="url(#shelf)" stroke="#634526"/>
+<path d="M36 392H284" stroke="#f4cf8e" stroke-width="1.5" opacity=".65"/>
+<path d="M40 409L76 421H244L280 409" fill="#0b1515" opacity=".77"/>
+<g transform="translate(83 432) rotate(-4 76 20)">
+<path d="M0 8L126 0 153 10 28 19Z" fill="#a58b5f" stroke="#4d3d27"/>
+<path d="M28 19L153 10V26L28 35 0 24V8Z" fill="#c6b38a" stroke="#6c5537"/>
+<path d="M28 23L150 14M28 27L150 18M28 31L150 22" stroke="#77674c" stroke-opacity=".65"/>
+<path d="M65 4L86 3 111 14 111 29 90 31 90 16Z" fill="#665044"/>
+<path d="M68 5L90 16M90 16V30" stroke="#9d7d55"/>
+</g>
+<path d="M37 526L81 489H239L283 526" fill="none" stroke="#a88b56" stroke-opacity=".44"/>
+<rect x="30" y="31" width="260" height="517" filter="url(#grain)" opacity=".12" style="mix-blend-mode:soft-light"/>
+<rect width="320" height="570" fill="url(#vignette)"/>
+<path d="M10 560V151C10 75 75 10 160 10S310 75 310 151V560Z" fill="none" stroke="#e7c784" stroke-opacity=".7" stroke-width="1.6"/>
+<path d="M22 552V154C22 79 81 22 160 22S298 79 298 154V552Z" fill="none" stroke="#8e683b" stroke-width="3"/>
+<use href="#bolt" x="16" y="180"/><use href="#bolt" x="16" y="285"/><use href="#bolt" x="16" y="390"/><use href="#bolt" x="16" y="501"/><use href="#bolt" x="304" y="180"/><use href="#bolt" x="304" y="285"/><use href="#bolt" x="304" y="390"/><use href="#bolt" x="304" y="501"/><use href="#bolt" x="160" y="13"/><use href="#bolt" x="65" y="50"/><use href="#bolt" x="255" y="50"/>
+</g></svg>

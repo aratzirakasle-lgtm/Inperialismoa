@@ -10,7 +10,7 @@ D:{text:'Sahara eta Ekuatore Ginea nire lurraldeetako bi ziren.',question:'Zein 
 export const TERRITORIES=[
 ['congo','Kongo','A','river'],['angola','Angola','C','savanna'],['mozambique','Mozambike','C','harbor'],['libya','Libia','B','ruins'],['eritrea','Eritrea','B','mountain'],['somalia','Somalia','B','camel'],['capeverde','Cabo Verde','C','island'],['bissau','Guinea Bissau','C','mangrove'],['morocco','Marokoko protektoratua (21. diap.)','D','fort'],['equatorial','Ekuatore Ginea','D','forest'],['sahara','Sahara Espainiarra','D','dunes']
 ].map(([id,name,box,art])=>({id,name,box,art}));
-export const createEnigma=()=>({identities:{},territories:{},read:{},answers:{},verified:{},checked:false});
+export const createEnigma=()=>({identities:{},territories:{},opened:{},read:{},answers:{},verified:{},checked:false});
 export function identify(s,b,p){if(!BOXES.includes(b)||p!==''&&!Object.hasOwn(COUNTRIES,p))return false;if(p&&BOXES.some(x=>x!==b&&s.identities[x]===p))return false;if(p)s.identities[b]=p;else delete s.identities[b];s.checked=false;return true;}
 export function assign(s,id,b){if(!TERRITORIES.some(t=>t.id===id)||b!==''&&!BOXES.includes(b))return false;if(b)s.territories[id]=b;else delete s.territories[id];s.checked=false;return true;}
 export function acknowledge(s,b,field,value){if(!BOXES.includes(b)||!['read','answers'].includes(field))return false;if(field==='read'&&!['','yes','no'].includes(value))return false;if(field==='answers'&&value!==''&&!CLUES[b].options.some(([id])=>id===value))return false;s[field][b]=value;delete s.verified[b];s.checked=false;return true;}
