@@ -194,6 +194,7 @@ try {
   assert.equal(await root.locator('.cinema-seal:visible').count(),3);
   await root.locator('[data-cinema-reset]').click();
   await root.locator('.cinema-reset-dialog [value="confirm"]').click();
+  await root.getByText('0 / 12 erabaki osatuta',{exact:true}).waitFor();
   assert.equal(await count.textContent(),'0 / 12 erabaki osatuta');
   for (const [width,height] of [[1920,1080],[1440,960],[1366,768],[1280,720],[1024,768],[820,600],[390,844]]) {
     await page.setViewportSize({width,height});

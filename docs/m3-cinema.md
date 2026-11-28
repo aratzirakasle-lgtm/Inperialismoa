@@ -42,6 +42,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 En otra terminal, `CINEMA_VIDEO=1 node tests/m3-cinema-browser.mjs` produce las capturas y la grabación en `test-output/`. Con un Chromium instalado se puede indicar `CINEMA_CHROMIUM=/ruta/al/binario`.
 
+En la base `e5aefdd` y en esta rama se reproducen los mismos tres fallos de pruebas unitarias del vestíbulo C y del atlas fotográfico. La suite general de Chromium también reproduce los fallos de base en el marcador de aula, el vestíbulo C y el atlas fotográfico. La prueba del cronógrafo de la misión 2 reproduce en ambas versiones la discrepancia entre la lámina WebP cargada y el SVG que espera la prueba. Las pruebas de aula de la misión 1, del atlas de la misión 3 y de `Lau inperioen enigma` pasaron con Chromium.
+
 Descartar la PR conserva la versión actual. Si el cambio se incorpora en el futuro, se puede revertir su commit. La rama no requiere migraciones.
 
 Para un futuro lanzamiento, el solucionario de ensayo debe retirarse del cliente. El servidor autorizado deberá validar los doce IDs, aplicar los permisos de cada equipo y devolver únicamente los resultados. El guardado del borrador se podrá conectar entonces al mecanismo de equipos que se autorice para la misión 3.

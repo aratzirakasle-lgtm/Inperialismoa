@@ -384,8 +384,11 @@ export function attachCinema(container, state, onChange) {
   }, {signal:abort.signal});
   if (sourceFiles.has(state)) setSource(sourceFiles.get(state));
 
-  reset.addEventListener('close', () => {
-    if (reset.returnValue !== 'confirm') return;
+  reset.querySelector('form').addEventListener('submit', event => {
+    event.preventDefault();
+    const choice = event.submitter?.value;
+    reset.close(choice);
+    if (choice !== 'confirm') return;
     Object.assign(state,M.createCinema());
     openFilm(true);
     onChange();

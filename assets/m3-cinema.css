@@ -313,7 +313,7 @@
 @media(max-height:780px) and (min-width:851px) {
   .m3-cinema { padding:9px 13px; }
   .cinema-heading { padding-block:7px; }.cinema-heading h2 { font-size:clamp(23px,2.5vw,34px); }
-  .cinema-instruction { margin:7px 2px; }.cinema-screen { height:clamp(240px,calc(100dvh - 465px),480px); }
+  .cinema-instruction { margin:7px 2px; }.cinema-screen { height:clamp(240px,calc(100dvh - 480px),480px); }
   .cinema-frame { padding:8px; }.cinema-desk { padding:7px; }
 }
 @media(max-width:850px) {
@@ -322,6 +322,17 @@
   .cinema-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .cinema-choice { min-height:30px; }.cinema-options button { min-height:28px; }
   .cinema-direct button,.cinema-actuator { min-height:29px; }
+}
+@media (min-width:761px) and (max-width:850px) {
+  .cinema-controls { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .cinema-choice { min-height:26px; }
+  .cinema-options button,.cinema-direct button,.cinema-actuator { min-height:23px; }
+}
+@media (min-width:761px) and (max-width:850px) and (max-height:700px) {
+  .cinema-screen { height:clamp(190px,calc(100dvh - 365px),310px); }
+  .cinema-heading { padding-block:7px; }
+  .cinema-progress { padding-block:5px; }
+  .cinema-projector { width:min(100%,155px); margin-top:7px; }
 }
 @media(max-width:570px) {
   #station.cinema-station { width:100%; max-height:100dvh; border-radius:0; }
