@@ -1,0 +1,11 @@
+/* Teacher-only scenery preview. The background is not an answer-bearing screenshot. */
+#station.enigma-station{width:min(calc(100vw - 12px),calc((100dvh - 112px)*16/9));max-width:none;max-height:calc(100dvh - 8px);overflow:auto;padding:0;background:#142b25;border:2px solid #b48b45;color:#f7e1b0}
+.enigma-station .dialog-top{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0}
+.enigma-station #station-body{padding:0}
+.enigma75-preview{position:relative;background:#122b22}
+.enigma75-caption{position:absolute;z-index:1;left:32%;top:1.5%;width:36%;padding:.35em .6em;text-align:center;border:3px double #d3ab63;border-radius:5px;background:linear-gradient(#193b33,#0a211b);color:#f7d89b;box-shadow:0 3px 9px #0009}
+.enigma75-caption h1{margin:0;font:bold clamp(12px,2.2vw,38px)/1.05 Georgia,serif}
+.enigma75-caption span{display:block;margin-top:3px;font:clamp(8px,.9vw,14px) Georgia,serif}
+.enigma75-background{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}
+.enigma75-note{margin:0;padding:7px 12px;text-align:center;font:12px system-ui,sans-serif;color:#edd3a6;background:#132a21;border-top:1px solid #b08c4b}
+@media(max-width:750px){#station.enigma-station{width:calc(100vw - 8px)}.enigma75-caption{left:24%;width:52%}}
