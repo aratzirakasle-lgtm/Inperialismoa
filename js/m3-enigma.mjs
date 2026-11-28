@@ -20,5 +20,8 @@ export const cluesDone=s=>BOXES.every(b=>s.verified[b]&&clueReady(s,b));
 export const progress=s=>BOXES.filter(b=>Object.hasOwn(COUNTRIES,s.identities[b])).length+TERRITORIES.filter(t=>BOXES.includes(s.territories[t.id])).length;
 export const correct=s=>BOXES.every(b=>s.identities[b]===IDENTITIES[b])&&TERRITORIES.every(t=>s.territories[t.id]===t.box);
 export const finished=s=>s.checked&&cluesDone(s)&&correct(s);
-export function seal(s){s.checked=cluesDone(s)&&progress(s)===15;return finished(s);}
+export const canCheck=s=>cluesDone(s)&&BOXES.every(b=>Object.hasOwn(COUNTRIES,s.identities[b]));
+export function seal(s){s.checked=canCheck(s);return finished(s);}
+// Anonymous per-drawer totals; never disclose the identity of a misplaced territory.
+export function boxResults(s,b){if(!s.checked||!BOXES.includes(b))return null;const expected=TERRITORIES.filter(t=>t.box===b),right=expected.filter(t=>s.territories[t.id]===b).length,wrong=TERRITORIES.filter(t=>t.box!==b&&s.territories[t.id]===b).length;return {right,wrong,missing:expected.length-right};}
 export function reset(s){Object.assign(s,createEnigma());}

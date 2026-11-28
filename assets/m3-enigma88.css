@@ -129,3 +129,47 @@
  .enigma90 .enigma88-drawer-plaque small{font-size:.83cqw}
  .enigma90 .enigma88-drawer-handle{top:77%;height:14%}
 }
+
+/* V91 — lower, compact parchment and post-check brass-framed answer slots. */
+.enigma91 .enigma77-box .enigma77-box-target{top:49%}
+.enigma91 .enigma88-drawer-plaque{top:4%;height:43%;left:20%;right:20%}
+.enigma91 .enigma88-drawer-plaque b{font-size:clamp(15px,1.72cqw,29px)}
+.enigma91 .enigma88-drawer-plaque small{font-size:clamp(7px,.73cqw,12px)}
+.enigma91 .enigma91-slots{position:absolute;left:8%;right:8%;top:54%;bottom:10%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:3px;align-items:stretch;pointer-events:none}
+.enigma91 .enigma91-slots[data-many="true"]{grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+.enigma91-slot,.enigma91-legend i{display:grid;place-items:center;min-width:0;min-height:0;border:1.5px solid #ddb66d;border-radius:4px;background:linear-gradient(#715035,#8a643d);box-shadow:inset 0 1px 3px #39210e99;color:#fff3d4;font:bold clamp(10px,1.12cqw,20px)/1 Georgia,serif}
+.enigma91-slot[data-result="right"],.enigma91-legend i[data-result="right"]{background:linear-gradient(#54884c,#28552d);border-color:#b8cd82;box-shadow:inset 0 0 4px #1c462a}
+.enigma91-slot[data-result="wrong"],.enigma91-legend i[data-result="wrong"]{background:linear-gradient(#bd4c3f,#84251e);border-color:#e9a173;box-shadow:inset 0 0 4px #641a18}
+.enigma91-slot[data-result="missing"],.enigma91-legend i[data-result="missing"]{background:linear-gradient(#d99535,#a95d19);border-color:#f5ce87;box-shadow:inset 0 0 4px #8d4713}
+.enigma91 .enigma91-legend[hidden]{display:none!important}
+.enigma91-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 6px;background:#332619e8;border:1px solid #b78b4c;border-radius:4px;padding:4px;color:#f7ddb1;font:600 clamp(9px,.67cqw,12px)/1 Georgia,serif}
+.enigma91-legend span{display:flex;align-items:center;gap:3px}
+.enigma91-legend i{width:14px;height:14px;font-size:11px;font-style:normal;border-radius:3px}
+@media(min-width:1001px) and (min-height:581px){
+ .enigma91 .enigma85-register.enigma84-register.enigma77-clues{left:.2%;top:50.8%;width:23.2%;height:45.5%}
+ .enigma91 .enigma85-register.enigma84-register:before{border-width:3.0cqw 0 3.0cqw}
+ .enigma91 .enigma85-register.enigma84-register h2{top:4.4%;height:8%;font-size:1.19cqw}
+ .enigma91 .enigma88-guide-intro{top:15%;font-size:.83cqw}
+ .enigma91 .enigma86-guide.enigma85-register.enigma84-register .enigma86-steps{top:21%;bottom:13%;left:8%;right:9%;transform:rotate(-1deg)}
+ .enigma91 .enigma86-step{gap:.27cqw;padding:.07cqw 0}
+ .enigma91 .enigma88-step-icon{width:2.15cqw;height:2.15cqw}
+ .enigma91 .enigma86-guide .enigma85-plaque>b{width:1.43cqw;height:1.43cqw;font-size:.98cqw}
+ .enigma91 .enigma86-instruction strong{font-size:.88cqw;line-height:1.04}
+ .enigma91 .enigma86-instruction>span{font-size:.77cqw;line-height:1.06}
+ .enigma91 .enigma86-step-progress{font-size:.75cqw;padding:.13cqw .18cqw}
+ .enigma91 .enigma86-guide .enigma84-register-footer{bottom:7%;transform:rotate(-1deg)}
+ .enigma91 .enigma84-register-footer p{font-size:.72cqw}
+ .enigma91 .enigma77-bank{padding:.4cqw 1.1cqw .72cqw}
+ .enigma91 .enigma77-bank h2{position:relative;inset:auto;align-self:center;width:auto;max-width:100%;flex:none;margin:-.12cqw 0 .14cqw;padding:.22cqw .65cqw;line-height:1}
+ .enigma91 .enigma77-bank>p:not([data-enigma-selection]){margin:.08cqw 0 .25cqw;font-size:.81cqw}
+ .enigma91 .enigma77-cards{min-height:0}
+ .enigma91 .enigma77-box .enigma77-inventory{inset:4% 6% 47%}
+ .enigma91 .enigma91-slots{gap:.22cqw}
+}
+@media(max-width:1000px),(max-height:580px){
+ .enigma91 .enigma77-box.enigma88-drawer{min-height:195px}
+ .enigma91 .enigma88-drawer-plaque b{font-size:23px}
+ .enigma91 .enigma88-drawer-plaque small{font-size:10px}
+ .enigma91 .enigma77-box .enigma77-inventory{inset:4% 6% 47%}
+ .enigma91 .enigma91-slot{font-size:14px}
+}

@@ -3,7 +3,7 @@ import { ARROWS, createAudit, changeScope, reverseArrow, swapLegend, score, seal
 import { CLUES, CARDS, SLOTS, CARTOON_PAGES, QUIZ, quizScore, quizReady, quizComplete, chooseQuiz, sealQuiz, createCartoon, observe, selectCard, place, activateSlot, remove as removeCartoonAnswer, resetPage, ready as cartoonReady, score as cartoonScore, sealCartoon, completeCartoon } from './m3-cartoon.mjs?v=20261126-kendu36';
 import { itineraryHeaderMarkup } from './m3-itinerary.mjs?v=20261128-enigma77';
 import {createEnigma,finished as enigmaFinished} from './m3-enigma.mjs?v=87';
-import {attachEnigma,detachEnigma} from './m3-enigma-ui.mjs?v=90';
+import {attachEnigma,detachEnigma} from './m3-enigma-ui.mjs?v=91';
 const enigma=createEnigma();
 import { createAtlas, finished as atlasFinished } from './m3-atlas.mjs?v=20261128-atlas64';
 import { attachAtlas, detachAtlas } from './m3-atlas-ui.mjs?v=20261128-atlas74';
