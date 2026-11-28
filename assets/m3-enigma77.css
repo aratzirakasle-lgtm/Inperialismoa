@@ -397,3 +397,37 @@
 .enigma85-register .enigma84-status-meter{gap:1cqw}.enigma85-register .enigma84-status-meter i{width:1.6cqw;height:1.6cqw}
 .enigma85-register .enigma84-register-footer p{font-size:3cqw}.enigma85-register .enigma84-register-footer small{font-size:2.3cqw}
 }
+
+/* V86: the original parchment becomes a five-step student guide. */
+.enigma86-guide.enigma85-register.enigma84-register .enigma86-steps{
+ position:absolute;left:9%;right:10%;top:19%;bottom:15%;
+ display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:0;
+ list-style:none;padding:0;margin:0;transform:rotate(-3deg);transform-origin:center;
+}
+.enigma86-guide .enigma86-step{
+ min-height:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+ align-items:center;gap:.40cqw;padding:.13cqw .08cqw;border-bottom:1px solid #92704466;color:#392819;
+}
+.enigma86-guide .enigma86-step:last-child{border:0}
+.enigma86-guide .enigma85-plaque{align-self:center;font-size:.73cqw;gap:.15cqw;padding:.2cqw .25cqw .2cqw .15cqw}
+.enigma86-guide .enigma85-plaque>b{width:1.02cqw;height:1.02cqw;font-size:.69cqw}
+.enigma86-instruction{min-width:0;display:grid;gap:.08cqw}
+.enigma86-instruction strong{font:bold .89cqw/1.06 Georgia,serif}
+.enigma86-instruction>span{font:normal .75cqw/1.08 Georgia,serif;overflow-wrap:normal}
+.enigma86-step-progress{min-width:1.4cqw;text-align:right;color:#77572e;font:bold .72cqw/1 Georgia,serif;font-variant-numeric:tabular-nums}
+.enigma86-guide .enigma86-step[data-state="current"] .enigma85-plaque{box-shadow:0 0 5px #d39b40,inset 0 0 0 1px #fff0c4;border-color:#946525}
+.enigma86-guide .enigma86-step[data-state="done"] .enigma85-plaque>b{background:radial-gradient(circle at 30% 25%,#66885a,#2f5336);border-color:#c7c58b}
+.enigma86-guide .enigma86-step[data-state="done"] .enigma86-step-progress{color:#315e3c;font-size:1.05cqw}
+.enigma86-guide .enigma84-register-footer{bottom:9.6%;gap:.28cqw}
+@media(max-width:1000px),(max-height:580px){
+.enigma86-guide.enigma85-register.enigma84-register .enigma86-steps{left:9%;right:10%;top:19%;bottom:15%}
+.enigma86-guide .enigma86-step{gap:1.5cqw;padding:.45cqw .3cqw}
+.enigma86-guide .enigma85-plaque{font-size:3.0cqw;gap:.6cqw;padding:.7cqw .9cqw .7cqw .55cqw}
+.enigma86-guide .enigma85-plaque>b{width:4.2cqw;height:4.2cqw;font-size:2.8cqw}
+.enigma86-instruction{gap:.3cqw}
+.enigma86-instruction strong{font-size:3.6cqw}
+.enigma86-instruction>span{font-size:3.05cqw}
+.enigma86-step-progress{min-width:5.5cqw;font-size:2.9cqw}
+.enigma86-guide .enigma86-step[data-state="done"] .enigma86-step-progress{font-size:4.2cqw}
+.enigma86-guide .enigma84-register-footer{gap:1cqw}
+}
