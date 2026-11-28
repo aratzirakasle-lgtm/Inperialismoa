@@ -225,3 +225,7 @@
 .enigma94 .enigma83-door-hint{top:13%;bottom:auto;height:max-content}
 .enigma94 .enigma83-gate:not(.is-open):not(.is-opening) .enigma83-door-hint{opacity:1}
 .enigma94 .enigma83-gate.is-opening .enigma83-door-hint,.enigma94 .enigma83-gate.is-open .enigma83-door-hint{opacity:0}
+
+/* V95: raise only the A access label; keep the other three unchanged. */
+.enigma95 .enigma83-gate.gate-A .enigma83-door-hint{top:5%;bottom:auto}
+.enigma95 .enigma83-gate.gate-A:not(.is-open):not(.is-opening) .enigma83-door-hint{top:5%}
