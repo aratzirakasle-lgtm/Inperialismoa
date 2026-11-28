@@ -1,0 +1,73 @@
+name: Importación puntual de cartelas HD
+on:
+  push:
+    branches: ['asset-import/enigma89']
+    paths: ['.github/workflows/import-enigma89.yml']
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperar y recortar ilustraciones originales
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANIFEST_BLOB: 7744f22811921224d911046e289f5a04218a5237
+        run: |
+          python -m pip -q install pillow
+          gh api "repos/$GITHUB_REPOSITORY/git/blobs/$MANIFEST_BLOB" --jq .content | base64 -d > /tmp/enigma89-sources.json
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps, ImageDraw
+          import json, subprocess
+          urls=json.loads(Path('/tmp/enigma89-sources.json').read_text())
+          Path('/tmp/enigma89-sources.json').unlink()
+          out=Path('assets/m3-enigma-hd89');out.mkdir(parents=True,exist_ok=True)
+          preview=Path('/tmp/enigma89-preview');preview.mkdir(exist_ok=True)
+          ids=[['mozambique','libya','eritrea','somalia','capeverde','bissau','morocco','equatorial','sahara'],['congo','angola']]
+          sizes={}
+          for k,url in enumerate(urls):
+              print('::add-mask::'+url,flush=True)
+              dest=preview/f'source-{k}.png'
+              result=subprocess.run(['curl','--fail','--silent','--location','--retry','2','--max-time','90','-o',str(dest),url])
+              assert result.returncode==0, 'Download failed'
+              im=Image.open(dest).convert('RGB')
+              print('Original',k,im.size)
+              cols,rows=(3,3) if k==0 else (2,1)
+              for i,key in enumerate(ids[k]):
+                  c,r=i%cols,i//cols
+                  x0=round(c*im.width/cols)+3;y0=round(r*im.height/rows)+3
+                  x1=round((c+1)*im.width/cols)-3;y1=round((r+1)*im.height/rows)-3
+                  tile=im.crop((x0,y0,x1,y1))
+                  assert tile.width>=500 and tile.height>=300,(key,tile.size)
+                  tile.save(out/f'{key}.webp',quality=90,method=6)
+                  sizes[key]={'width':tile.width,'height':tile.height,'bytes':(out/f'{key}.webp').stat().st_size}
+          order=['congo','angola','mozambique','libya','eritrea','somalia','capeverde','bissau','morocco','equatorial','sahara']
+          assert set(sizes)==set(order)
+          (out/'manifest.json').write_text(json.dumps(sizes,indent=2)+'\n')
+          board=Image.new('RGB',(1000,720),'#e4d1a9');draw=ImageDraw.Draw(board)
+          for i,key in enumerate(order):
+              tile=Image.open(out/f'{key}.webp')
+              tile=ImageOps.fit(tile,(238,200))
+              x=5+(i%4)*250;y=5+(i//4)*240
+              board.paste(tile,(x,y));draw.text((x+5,y+205),key,fill='#382615')
+          board.save(preview/'contact.jpg',quality=94)
+          print(json.dumps(sizes,indent=2))
+          PY
+      - name: Guardar recursos para inspección visual
+        uses: actions/upload-artifact@v4
+        with:
+          name: enigma89-originales-y-cartelas
+          path: |
+            assets/m3-enigma-hd89
+            /tmp/enigma89-preview
+      - name: Guardar imágenes en rama de preparación
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/m3-enigma-hd89
+          git rm .github/workflows/import-enigma89.yml
+          git commit -m "Store eleven native-resolution territory illustrations"
+          git push origin HEAD:refs/heads/asset-import/enigma89
