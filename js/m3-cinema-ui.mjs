@@ -1,5 +1,5 @@
 import * as M from './m3-cinema.mjs';
-import { finalStory, preview, screenMarkup, stage, stories } from './m3-cinema-animation.mjs?v=premium1';
+import { finalStory, preview, screenMarkup, stage, stories } from './m3-cinema-animation.mjs?v=premium2';
 
 const sourceFiles = new WeakMap();
 const mounted = new WeakMap();

@@ -25,6 +25,16 @@ La sala usa el proyector pintado en el decorado y dos bobinas independientes. En
 
 Los paisajes completos se conservaron. Son recreaciones escénicas y se identifican en pantalla como **Paisaia birsortua**. Las vistas previas usan la escena del lugar elegido cuando existe, como Formosa, Cuba o Puerto Rico. Las otras alternativas usan un mapa esquemático con puntos geográficos. La cartografía procede del contorno Natural Earth ya distribuido con el museo. El mapa indica lugares y relaciones, sin definir fronteras históricas. Elegir anexionar Cuba genera una hipótesis sin mostrar la anexión como hecho.
 
+### Segunda pasada visual
+
+La abertura de la proyección ocupa más superficie del decorado. El tratamiento de color y la luz de proyección separan mejor el paisaje, las capas en movimiento y los rótulos. Las miniaturas completan más superficie de cada tira y el borde iluminado señala la película activa.
+
+La mesa utiliza nogal oscuro, placas de latón, ruedas más grandes y pulsadores con relieve. Sigue respondiendo a los mismos controles de ratón, teclado y tacto. La locomotora tiene una sombra de contacto que la acompaña sobre la vía. El barco conserva el recorrido y se integra en el agua mediante un balanceo más corto, reflejo y espuma a la altura del casco.
+
+La ocupación se muestra con una ruta marítima y un ancla. El control usa un visor de vigilancia. La anexión usa un sello cobrizo con un estandarte esquemático y el protectorado un escudo verde de doble borde. Las rivalidades se representan con trazos y focos en el mapa. Se conservan los destinos, los textos y las doce decisiones del ejercicio.
+
+Las escenas siguen siendo recreaciones. La comprobación curricular con la diapositiva 22 y una sesión docente real quedan pendientes. La prueba simulada de la vista previa cubre el recorrido completo y vuelve a comprobar los mandos, el encaje de la proyección y el tamaño de la rueda a 1280 × 720. El trabajo sigue en revisión en la PR #7.
+
 ## Archivos
 
 | Archivos | Función |

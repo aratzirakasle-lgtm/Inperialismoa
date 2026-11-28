@@ -226,12 +226,17 @@ try {
   await choose('t_c_rivals','china-russia');
   await act('t_c_rivals');
   assert.equal(await screen.locator('.cinema-map [data-place]').count(),2);
+  assert.equal(await screen.locator('.cinema-map--rivals .cinema-rival-thread').count(),1);
   await page.setViewportSize({width:1280,height:720});
   await visibleChoices();
   await page.waitForTimeout(550);
   await shot('09b-mandos-1280');
   await page.setViewportSize({width:1440,height:960});
   await check.click();
+  await screen.locator('.cinema-caption strong').filter({hasText:/^Japonia$/}).waitFor();
+  await page.waitForTimeout(550);
+  await pause.click();
+  await shot('07b-japon-proyeccion');
   await skip.click();
   assert.equal(await root.locator('[data-cinema-count]').textContent(),'3 / 3 film berreskuratuta');
   assert.equal(await count.textContent(),'12 / 12 erabaki osatuta');
@@ -264,6 +269,13 @@ try {
     }
     await visibleChoices();
     if (width === 1024) assert.equal(await projector.locator('.cinema-projector-body').isVisible(),true);
+    if (width === 1280) {
+      const [projection, knob] = await Promise.all([
+        screen.boundingBox(),control('t_a_sender').locator('[data-cinema-dial]').boundingBox(),
+      ]);
+      assert.ok(projection.width >= 590 && projection.height >= 295,'Projection aperture lost usable space');
+      assert.ok(knob.width >= 42 && knob.height >= 42,'Dial target is too small');
+    }
     if (width !== 390) await shot(`14-${width}x${height}`);
     if (width === 390) {
       await shot('15-movil');

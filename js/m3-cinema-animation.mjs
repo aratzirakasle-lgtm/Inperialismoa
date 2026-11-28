@@ -1,23 +1,59 @@
 const asset = path => new URL('../assets/' + path, import.meta.url).href;
 const landscape = name => asset('m3-cinema/' + name + '.webp');
 
-const direction = 'M37 142 Q127 77 252 48 M225 37l28 10-18 22';
-const region = 'M71 85 102 57 147 63 187 49 232 80 218 128 168 153 123 139 84 150 52 121Z';
+const effectLight = `<defs>
+  <radialGradient id="cinema-effect-glow">
+    <stop stop-color="currentColor" stop-opacity=".48"/>
+    <stop offset=".56" stop-color="currentColor" stop-opacity=".13"/>
+    <stop offset="1" stop-color="currentColor" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="cinema-effect-inlay" x2="0" y2="1">
+    <stop stop-color="currentColor" stop-opacity=".52"/>
+    <stop offset="1" stop-color="currentColor" stop-opacity=".12"/>
+  </linearGradient>
+</defs>
+<ellipse class="glow" cx="151" cy="100" rx="147" ry="90"/>`;
+
 const effects = {
-  take: '<path class="outline fill" d="'+region+'"/><path d="M123 107l15 15 34-36"/>',
-  direction: '<path class="outline" d="'+direction+'"/><path class="outline" d="M57 158q62-16 113-35m-22-9 23 8-13 18"/>',
-  arrive: '<circle class="outline" cx="198" cy="83" r="27"/><circle cx="198" cy="83" r="9"/><path class="outline" d="M53 144Q104 140 172 97"/>',
-  occupy: '<path class="outline" d="M33 143Q112 153 169 92h75m-17-15 17 15-17 15"/><path d="M244 61v72m-14 0h29"/>',
-  control: '<path class="outline dashed" d="'+region+'"/><path d="M127 106q23-28 49 0-26 28-49 0Z"/><circle cx="152" cy="106" r="6"/>',
-  annex: '<path class="outline annex-fill" d="'+region+'"/><path d="M145 123V75m2 2h41l-9 12 9 12h-41"/>',
-  protect: '<path class="outline dashed" d="'+region+'"/><path class="shield" d="M151 74q12 10 27 11v22q-4 17-27 29-23-12-27-29V85q15-1 27-11Z"/><path d="m140 102 8 8 14-15"/>',
-  rivals: '<path class="tension" d="m25 36 107 59-25 9zM277 36 170 95l25 9z"/><circle class="outline" cx="151" cy="111" r="19"/>',
-  transfer: '<path class="outline" d="M59 74h61v52H59z M184 74h61v52h-61zM129 100h43m-11-11 11 11-11 11"/>',
-  context: '<path class="outline" d="M99 58h108v93H99z M119 80h68m-68 23h68m-68 23h41"/>',
+  take: `<path class="inlay" d="M56 92 89 66 125 71 165 49 211 60 242 85 226 127 180 147 133 138 95 151 63 128Z"/>
+    <path class="detail" d="m73 94 21-17 33 5 40-22 40 11 23 17-14 32-38 17-44-10-39 13-21-18Z"/>
+    <path class="emblem" d="m121 99 19 19 38-42"/>`,
+  direction: `<path class="track" d="M35 149C96 91 180 55 252 46m-24-12 24 12-16 23"/>
+    <path class="detail" d="M49 156c36-17 70-28 104-37m-15-8 15 8-10 14"/>
+    <circle class="emblem" cx="35" cy="149" r="5"/>
+    <path class="detail" d="M86 68h30m-15-15v30m91 50h18m-9-9v18"/>`,
+  arrive: `<path class="track" d="M37 144Q114 137 171 98"/>
+    <circle class="detail" cx="199" cy="82" r="38"/><circle class="fine-ring" cx="199" cy="82" r="31"/>
+    <path class="emblem" d="M199 64c9 0 16 7 16 16 0 12-16 27-16 27s-16-15-16-27c0-9 7-16 16-16Z"/>
+    <circle class="detail" cx="199" cy="80" r="6"/>`,
+  occupy: `<path class="track" d="M33 144c45 8 81-5 113-29 20-15 36-27 67-30m-12-10 14 10-13 11"/>
+    <circle class="detail" cx="231" cy="83" r="37"/><circle class="fine-ring" cx="231" cy="83" r="31"/>
+    <circle class="inlay" cx="231" cy="83" r="26"/>
+    <path class="emblem" d="M231 65v35m-10-23h20m-28 9c2 10 9 14 18 14s16-4 18-14m-36 0-3 4m39-4 3 4"/>
+    <circle class="emblem" cx="231" cy="65" r="4"/>
+    <path class="detail" d="M45 155c21 2 40 0 56-5m-65-18 17 1 11-3"/>`,
+  control: `<ellipse class="detail" cx="151" cy="95" rx="91" ry="48"/>
+    <ellipse class="fine-ring" cx="151" cy="95" rx="104" ry="61"/>
+    <path class="track" d="M42 71V52h21m176 0h21v19m0 48v19h-21m-176 0H42v-19"/>
+    <path class="detail" d="M59 95h53m77 0h54M151 47v18m0 59v19"/>
+    <path class="inlay" d="M112 95q39-43 78 0-39 43-78 0Z"/>
+    <circle class="emblem" cx="151" cy="95" r="12"/><circle class="detail" cx="151" cy="95" r="5"/>`,
+  annex: `<path class="detail" d="M116 129 97 160l23-4 9 17 16-28m40-16 19 31-23-4-9 17-16-28"/>
+    <path class="inlay" d="m151 25 15 9 17-2 10 13 16 4 5 16 13 11-2 16 8 15-10 13-3 17-16 6-11 13-16-2-16 8-14-8-17 2-10-13-16-5-4-17-11-12 7-16-2-17 13-10 5-16 17-5 10-13 17 2Z"/>
+    <circle class="detail" cx="151" cy="92" r="49"/><circle class="fine-ring" cx="151" cy="92" r="43"/>
+    <path class="emblem" d="M136 116V68m2 3c13-8 26 8 40 0v26c-14 8-27-8-40 0m-11 19h30"/>`,
+  protect: `<path class="detail" d="M126 137c-27-5-42-21-49-48m0 0-8-12m16 25-13-3m20 14-14 1m24 10-13 6m86 7c27-5 42-21 49-48m0 0 8-12m-16 25 13-3m-20 14 14 1m-24 10 13 6"/>
+    <path class="inlay" d="M151 38q27 14 55 16v40c0 24-15 44-55 64-40-20-55-40-55-64V54q28-2 55-16Z"/>
+    <path class="detail" d="M151 49q23 12 45 14v31c0 21-15 37-45 53-30-16-45-32-45-53V63q22-2 45-14Z"/>
+    <path class="emblem" d="m133 94 13 13 24-27"/>
+    <path class="fine-ring" d="M49 70Q151 4 253 70m0 53q-102 67-204 0"/>`,
+  context: `<path class="inlay" d="M105 47h89l16 18v94H90V63Z"/>
+    <path class="detail" d="M194 47v20h16M103 72v74h94m-73-58h55m-55 15h55m-55 15h33"/>
+    <path class="emblem" d="M122 70h51"/>`,
 };
 const puff = '<i></i><i></i><i></i><i></i>';
 const premiumAsset = name => landscape('premium/' + name);
-const train = `<div class="cinema-vehicle cinema-train"><div class="cinema-steam">${puff}</div><img class="cinema-premium-vehicle-image" src="${premiumAsset('train')}" width="1432" height="876" alt="" draggable="false"><span class="cinema-wheel-pocket"><i class="cinema-train-wheel"></i></span></div>`;
+const train = `<div class="cinema-vehicle cinema-train"><span class="cinema-train-contact"></span><div class="cinema-steam">${puff}</div><img class="cinema-premium-vehicle-image" src="${premiumAsset('train')}" width="1432" height="876" alt="" draggable="false"><span class="cinema-wheel-pocket"><i class="cinema-train-wheel"></i></span></div>`;
 const ship = `<div class="cinema-vehicle cinema-ship"><div class="cinema-wake"></div><div class="cinema-steam">${puff}</div><div class="cinema-hull"><img class="cinema-premium-vehicle-image" src="${premiumAsset('ship')}" width="1414" height="1036" alt="" draggable="false"><img class="cinema-reflection" src="${premiumAsset('ship')}" alt="" draggable="false"></div></div>`;
 
 export function screenMarkup() {
@@ -151,8 +187,13 @@ export function stage(root, onPlayback) {
     map.hidden = frame.mode !== 'map';
     const points = frame.points || [];
     const origin = points.at(-1);
-    const lines = frame.connect ? `<svg viewBox="0 0 720 360" aria-hidden="true">${points.slice(0,-1).map(({x,y}) =>
-      `<line x1="${x}" y1="${y}" x2="${origin.x}" y2="${origin.y}"/>`).join('')}</svg>` : '';
+    map.classList.toggle('cinema-map--rivals',Boolean(frame.connect));
+    const lines = frame.connect ? `<svg viewBox="0 0 720 360" aria-hidden="true">${points.slice(0,-1).map(({x,y}) => {
+      const length = Math.hypot(origin.x - x,origin.y - y);
+      const lift = Math.min(38,length * .23);
+      const curve = `M${x} ${y}Q${(x + origin.x) / 2} ${(y + origin.y) / 2 - lift} ${origin.x} ${origin.y}`;
+      return `<path class="cinema-rival-halo" d="${curve}"/><path class="cinema-rival-thread" d="${curve}"/>`;
+    }).join('')}</svg>` : '';
     pins.innerHTML = lines + points.map(({key,x,y}) =>
       `<i data-place="${key}" style="left:${x / 7.2}%;top:${y / 3.6}%"></i>`).join('');
     imageLabel.hidden = false;
@@ -161,7 +202,7 @@ export function stage(root, onPlayback) {
     screen.dataset.draft = String(draft);
     screen.dataset.motion = 'false';
     screen.querySelector('.cinema-symbol').innerHTML = frame.effect ?
-      `<svg viewBox="0 0 300 190" class="cinema-effect cinema-effect--${frame.effect}">${effects[frame.effect]}</svg>` : '';
+      `<svg viewBox="0 0 300 190" class="cinema-effect cinema-effect--${frame.effect}">${effectLight}${effects[frame.effect]}</svg>` : '';
     setText('small', frame.action || '');
     setText('strong', frame.title || '');
     setText('span', frame.note || '');
