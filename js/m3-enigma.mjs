@@ -22,6 +22,9 @@ export const correct=s=>BOXES.every(b=>s.identities[b]===IDENTITIES[b])&&TERRITO
 export const finished=s=>s.checked&&cluesDone(s)&&correct(s);
 export const canCheck=s=>cluesDone(s)&&BOXES.every(b=>Object.hasOwn(COUNTRIES,s.identities[b]));
 export function seal(s){s.checked=canCheck(s);return finished(s);}
-// Anonymous per-drawer totals; never disclose the identity of a misplaced territory.
-export function boxResults(s,b){if(!s.checked||!BOXES.includes(b))return null;const expected=TERRITORIES.filter(t=>t.box===b),right=expected.filter(t=>s.territories[t.id]===b).length,wrong=TERRITORIES.filter(t=>t.box!==b&&s.territories[t.id]===b).length;return {right,wrong,missing:expected.length-right};}
+// Capacities follow the selected country, not the secret identity of a drawer.
+export const COUNTRY_TERRITORY_COUNT=Object.freeze(Object.fromEntries(Object.keys(COUNTRIES).map(p=>[p,TERRITORIES.filter(t=>IDENTITIES[t.box]===p).length])));
+export const expectedSlotsForBox=(s,b)=>COUNTRY_TERRITORY_COUNT[s.identities[b]]||0;
+// Score photographs against the displayed country. Identity is checked independently.
+export function boxResults(s,b){if(!s.checked||!BOXES.includes(b)||!expectedSlotsForBox(s,b))return null;const country=s.identities[b],total=expectedSlotsForBox(s,b),assigned=TERRITORIES.filter(t=>s.territories[t.id]===b),right=assigned.filter(t=>IDENTITIES[t.box]===country).length,wrong=assigned.length-right;return {right,wrong,missing:Math.max(0,total-assigned.length),total,overflow:Math.max(0,assigned.length-total),identityCorrect:IDENTITIES[b]===country};}
 export function reset(s){Object.assign(s,createEnigma());}
