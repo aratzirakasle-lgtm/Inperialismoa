@@ -105,7 +105,7 @@
  .enigma89 .enigma77-cards{column-gap:.18cqw;row-gap:.42cqw;height:80%}
  .enigma89 .enigma77-card-name{font-size:.89cqw}
  .enigma89 .enigma89-empty-bank{position:absolute;inset:22% 6% 7%;border:1px solid #b58d5255;background:radial-gradient(ellipse,#c1a36b16,transparent 69%);border-radius:5px}
- .enigma89 .enigma83-gate.gate-A:not(.is-open):not(.is-opening) .enigma83-door-hint{top:13%;bottom:auto;opacity:1;font-size:.81cqw}
+ .enigma89 .enigma83-gate:not(.is-open):not(.is-opening) .enigma83-door-hint{top:13%;bottom:auto;opacity:1;font-size:.81cqw}
  .enigma89 .enigma77-inventory .enigma87-photo-label{font-size:clamp(7px,.59cqw,11px)}
 }
 @media(max-width:1000px),(max-height:580px){
@@ -220,3 +220,8 @@
  .enigma93-idcheck button{font-size:11px;padding:8px}
  .enigma93-idcheck [data-enigma-idfeedback]{font-size:12px}
 }
+
+/* V94 — all four doors share the same upper access label, including mobile. */
+.enigma94 .enigma83-door-hint{top:13%;bottom:auto;height:max-content}
+.enigma94 .enigma83-gate:not(.is-open):not(.is-opening) .enigma83-door-hint{opacity:1}
+.enigma94 .enigma83-gate.is-opening .enigma83-door-hint,.enigma94 .enigma83-gate.is-open .enigma83-door-hint{opacity:0}
