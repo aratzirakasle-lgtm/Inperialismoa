@@ -8,7 +8,7 @@ C:{text:'Nire inperioak Angola eta Mozambike zituen.',question:'Zein bi lurralde
 D:{text:'Sahara eta Ekuatore Ginea nire lurraldeetako bi ziren.',question:'Zein bi lurralde aipatzen dira esaldian?',options:[['sc','Sahara eta Kongo'],['sg','Sahara eta Ekuatore Ginea'],['ge','Ekuatore Ginea eta Eritrea']],answer:'sg',art:'sahara'}
 };
 export const TERRITORIES=[
-['congo','Kongo','A','river'],['angola','Angola','C','savanna'],['mozambique','Mozambike','C','harbor'],['libya','Libia','B','ruins'],['eritrea','Eritrea','B','mountain'],['somalia','Somalia','B','camel'],['capeverde','Cabo Verde','C','island'],['bissau','Guinea Bissau','C','mangrove'],['morocco','Marokoko protektoratua (21. diap.)','D','fort'],['equatorial','Ekuatore Ginea','D','forest'],['sahara','Sahara Espainiarra','D','dunes']
+['congo','Kongo','A','river'],['angola','Angola','C','savanna'],['mozambique','Mozambike','C','harbor'],['libya','Libia','B','ruins'],['eritrea','Eritrea','B','mountain'],['somalia','Somalia','B','camel'],['capeverde','Cabo Verde','C','island'],['bissau','Guinea Bissau','C','mangrove'],['morocco','Marokoko protektoratua','D','fort'],['equatorial','Ekuatore Ginea','D','forest'],['sahara','Sahara Espainiarra','D','dunes']
 ].map(([id,name,box,art])=>({id,name,box,art}));
 export const createEnigma=()=>({identities:{},territories:{},opened:{},read:{},answers:{},verified:{},checked:false});
 export function identify(s,b,p){if(!BOXES.includes(b)||p!==''&&!Object.hasOwn(COUNTRIES,p))return false;if(p&&BOXES.some(x=>x!==b&&s.identities[x]===p))return false;if(p)s.identities[b]=p;else delete s.identities[b];s.checked=false;return true;}

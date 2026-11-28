@@ -431,3 +431,44 @@
 .enigma86-guide .enigma86-step[data-state="done"] .enigma86-step-progress{font-size:4.2cqw}
 .enigma86-guide .enigma84-register-footer{gap:1cqw}
 }
+
+/* V87 — vivid illustrations, physical photographs stored inside the archive drawers. */
+.enigma77-card-art .enigma87-territory-art,.enigma87-photo-art .enigma87-territory-art{
+ display:block;width:100%;height:100%;object-fit:cover;
+ filter:saturate(1.32) contrast(1.075) brightness(1.035);
+ image-rendering:auto
+}
+.enigma77-card[hidden]{display:none!important}
+.enigma77-cards{align-content:center}
+.enigma77-box .enigma77-inventory{
+ isolation:isolate;overflow:visible;pointer-events:none;display:block;padding:0
+}
+.enigma77-inventory .enigma87-photo{
+ position:absolute;left:var(--px);top:var(--py);width:var(--pw);
+ aspect-ratio:1.35;display:flex;flex-direction:column;gap:0;
+ padding:2px;border:1px solid #a17c49;border-radius:2px;background:#f1dfb7;
+ transform:rotate(var(--pr));transform-origin:center 70%;z-index:var(--pz);
+ box-shadow:1px 3px 5px #1a0c06ba;pointer-events:auto;cursor:pointer;
+ transition:transform .16s,filter .16s;overflow:hidden;color:#472d18;max-width:none;
+}
+.enigma87-photo-art{display:block;width:100%;flex:1;min-height:0;overflow:hidden;border:1px solid #bba074}
+.enigma87-photo-label{display:block;text-align:center;font:bold clamp(6px,.49cqw,9px)/1 Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:2px 0}
+.enigma87-photo-remove{position:absolute;right:1px;top:1px;display:none;background:#663326;color:#fff1ce;border-radius:50%;width:16px;height:16px;line-height:15px;font: bold 14px/15px Georgia,serif;text-align:center}
+.enigma77-inventory .enigma87-photo:hover,.enigma77-inventory .enigma87-photo:focus-visible{transform:translateY(-8%) rotate(0) scale(1.14);z-index:30;filter:brightness(1.07);outline:2px solid #f0d39b;outline-offset:1px}
+.enigma87-photo:hover .enigma87-photo-remove,.enigma87-photo:focus-visible .enigma87-photo-remove{display:block}
+.enigma87-photo.is-new{animation:enigma87-file-in .35s cubic-bezier(.2,.8,.35,1) both}
+@keyframes enigma87-file-in{from{opacity:0;transform:translateY(-35%) scale(1.12) rotate(calc(var(--pr) - 8deg))}to{opacity:1;transform:rotate(var(--pr))}}
+@media(min-width:1001px) and (min-height:581px){
+ .enigma77-box .enigma77-inventory{top:-5%;left:10%;right:10%;bottom:53%;z-index:3}
+ .enigma77-box .enigma77-box-target{z-index:4}
+ .enigma77-inventory[data-count="0"]{display:none}
+ .enigma77-inventory[data-count="1"] .enigma87-photo,.enigma77-inventory[data-count="2"] .enigma87-photo{aspect-ratio:1.55}
+ .enigma77-inventory[data-count="3"] .enigma87-photo,.enigma77-inventory[data-count="4"] .enigma87-photo,.enigma77-inventory[data-count="5"] .enigma87-photo{aspect-ratio:1.4}
+ .enigma77-inventory[data-count="6"] .enigma87-photo,.enigma77-inventory[data-count="7"] .enigma87-photo,.enigma77-inventory[data-count="8"] .enigma87-photo,.enigma77-inventory[data-count="9"] .enigma87-photo,.enigma77-inventory[data-count="10"] .enigma87-photo,.enigma77-inventory[data-count="11"] .enigma87-photo{aspect-ratio:2.1}
+}
+@media(max-width:1000px),(max-height:580px){
+ .enigma77-box .enigma77-inventory{position:relative;min-height:110px;margin-top:4px;flex:1}
+ .enigma77-inventory .enigma87-photo{max-height:70px;min-height:34px}
+ .enigma87-photo-label{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.enigma87-photo.is-new{animation:none}.enigma77-inventory .enigma87-photo{transition:none}}
