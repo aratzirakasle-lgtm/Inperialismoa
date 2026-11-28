@@ -1,5 +1,5 @@
 /* Third room: single-screen library atlas, independent of earlier rooms. */
-#station.atlas-station{width:min(1510px,calc(100vw - 12px));max-width:none;max-height:calc(100dvh - 8px);overflow:auto;background:#17362a;border:1px solid #bfa064;color:#f3dfb8}
+#station.atlas-station{width:calc(100vw - 12px);max-width:none;max-height:calc(100dvh - 8px);overflow:auto;background:#17362a;border:1px solid #bfa064;color:#f3dfb8}
 .atlas-station .dialog-top{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0}
 .atlas-station #station-body{padding:0}
 .atlas64{--gold:#b99557;--cream:#f1dfb9;--green:#18372b;position:relative;container-type:inline-size;padding:clamp(8px,1.1vw,16px);font-family:Georgia,serif;color:var(--cream);background:linear-gradient(90deg,#29190f66,#17382ddd 19%,#17382deb 81%,#28180f66),url('./atlas-sala-referencia-hd.webp') center/cover,#223d2e;isolation:isolate}
@@ -158,10 +158,10 @@
 @media(max-width:600px){.atlas69 .atlas64-heading{width:100%;padding:10px}.atlas69 .atlas64-lower,.atlas69-fachoda{grid-template-columns:1fr}.atlas69-fachoda>img{max-width:220px}.atlas69 .atlas64-row{grid-template-columns:20px 38px minmax(0,1fr) minmax(100px,1fr)}}
 
 /* Color cutout vignettes: proportionate to text, with no tile or border. */
-.atlas69[data-atlas-build="72"] .atlas64-row{--territory-art-size:clamp(28px,2.9cqw,40px);grid-template-columns:20px var(--territory-art-size) minmax(0,1fr) minmax(96px,1fr);min-height:36px;gap:5px;align-items:center}
+.atlas69[data-atlas-build="73"] .atlas64-row{--territory-art-size:clamp(28px,2.9cqw,40px);grid-template-columns:20px var(--territory-art-size) minmax(0,1fr) minmax(96px,1fr);min-height:36px;gap:5px;align-items:center}
 .atlas69 .atlas70-territory-art{display:block;width:100%;height:var(--territory-art-size);max-width:40px;max-height:40px;object-fit:contain;object-position:center;justify-self:center;align-self:center;background:none;border:0;border-radius:0;box-shadow:none;filter:none;padding:0;margin:0;pointer-events:none}
-@media(max-width:1050px){.atlas69[data-atlas-build="72"] .atlas64-row{--territory-art-size:34px;min-height:44px}}
-@media(max-width:600px){.atlas69[data-atlas-build="72"] .atlas64-row{--territory-art-size:32px;grid-template-columns:19px var(--territory-art-size) minmax(0,1fr) minmax(95px,1fr);gap:4px}}
+@media(max-width:1050px){.atlas69[data-atlas-build="73"] .atlas64-row{--territory-art-size:34px;min-height:44px}}
+@media(max-width:600px){.atlas69[data-atlas-build="73"] .atlas64-row{--territory-art-size:32px;grid-template-columns:19px var(--territory-art-size) minmax(0,1fr) minmax(95px,1fr);gap:4px}}
 
 /* V71: one assignment control per territory; selected power shown with a round flag. */
 .atlas71-selected{display:flex;align-items:center;flex-wrap:wrap;gap:5px 12px;padding:7px 10px;color:#51351f;background:linear-gradient(#f6e6c1,#d8b77d);border-top:1px solid #a48550;min-height:30px}
@@ -181,5 +181,23 @@
 
 /* V72: map-color dot before the power name, round flag after it. */
 .atlas71-selectface .atlas72-power-dot{display:block;width:.7em;height:.7em;flex:0 0 .7em;border-radius:50%;background-color:#b2a080;box-shadow:0 0 0 .5px #785b3c66}
-.atlas69[data-atlas-build="72"] .atlas71-selectface{gap:3px;padding-left:5px}
-.atlas69[data-atlas-build="72"] .atlas71-selectface>[data-atlas-power-name]{overflow-wrap:normal;white-space:normal}
+.atlas69[data-atlas-build="73"] .atlas71-selectface{gap:3px;padding-left:5px}
+.atlas69[data-atlas-build="73"] .atlas71-selectface>[data-atlas-power-name]{overflow-wrap:normal;white-space:normal}
+
+/* V73: use the whole available desktop width and give the atlas map priority. */
+#station.atlas-station{width:calc(100vw - 12px);max-width:none;box-sizing:border-box;overflow-x:hidden}
+.atlas69[data-atlas-build="73"]{padding-inline:clamp(8px,.9vw,17px)}
+.atlas69[data-atlas-build="73"] .atlas64-map{width:100%;height:auto;max-width:none}
+@media(min-width:1051px){
+ .atlas69[data-atlas-build="73"] .atlas64-work{grid-template-columns:clamp(160px,14%,245px) minmax(0,1fr) clamp(315px,29%,465px);gap:clamp(7px,.7vw,13px)}
+ .atlas69[data-atlas-build="73"] .atlas64-map{max-height:none;aspect-ratio:330/186}
+ .atlas69[data-atlas-build="73"] .atlas64-mapcanvas{min-width:0}
+ .atlas69[data-atlas-build="73"] .atlas64-mapframe{min-width:0;border-width:7px}
+ .atlas69[data-atlas-build="73"] .atlas64-layers{padding-inline:clamp(8px,.65vw,12px)}
+ .atlas69[data-atlas-build="73"] .atlas64-layer{grid-template-columns:clamp(25px,2.1vw,34px) minmax(0,1fr) auto;gap:5px;padding-inline:6px}
+ .atlas69[data-atlas-build="73"] .atlas64-layer b{overflow-wrap:normal}
+ .atlas69[data-atlas-build="73"] .atlas64-row{grid-template-columns:20px var(--territory-art-size) minmax(0,1fr) minmax(110px,1.05fr)}
+}
+.atlas69[data-atlas-build="73"].is-zoom .atlas64-work{grid-template-columns:minmax(0,1fr)}
+.atlas69[data-atlas-build="73"].is-zoom .atlas64-mapframe{width:100%;max-width:none}
+.atlas69[data-atlas-build="73"].is-zoom .atlas64-map{max-height:none}
