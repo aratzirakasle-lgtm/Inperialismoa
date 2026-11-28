@@ -40,16 +40,49 @@ try {
   const root = page.locator('.m3-cinema');
   const screen = root.locator('[data-cinema-screen]');
   await root.waitFor();
+  const assets = {
+    room:[1672,941], train:[1432,876], 'train-wheel':[136,136], ship:[1414,1036],
+    'reel-front':[230,230], 'reel-back':[217,217], projector:[825,1083],
+    walnut:[740,106], dial:[117,117], button:[58,58],
+  };
+  await root.evaluate(async (_, assets) => {
+    await Promise.all(Object.entries(assets).map(async ([key,[width,height]]) => {
+      const img = new Image();
+      img.src = './assets/m3-cinema/premium/' + key + '.webp';
+      await img.decode();
+      if (img.naturalWidth !== width || img.naturalHeight !== height) throw Error('Invalid artwork: ' + key);
+    }));
+  },assets);
+  const projector = root.locator('.cinema-projector');
+  assert.equal(await projector.count(),1);
+  assert.equal(await projector.locator('.cinema-projector-body').isVisible(),false);
+  assert.equal(await projector.locator('.cinema-reel:visible').count(),2);
+  const visibleChoices = async () => {
+    const faults = await root.locator('.cinema-control').evaluateAll(controls => controls.flatMap(control => {
+      const outer = control.getBoundingClientRect();
+      if (outer.bottom > control.closest('.cinema-desk').querySelector('.cinema-actions').getBoundingClientRect().top + 1) {
+        return ['Overlapping controls: ' + control.dataset.cinemaField];
+      }
+      return [...control.querySelectorAll('h3,output,button')].filter(el => {
+        const bounds = el.getBoundingClientRect();
+        return bounds.top < outer.top - 1 || bounds.bottom > outer.bottom + 1 ||
+          bounds.left < outer.left - 1 || bounds.right > outer.right + 1 ||
+          (el.textContent.trim() && el.scrollWidth > el.clientWidth + 1);
+      }).map(el => el.textContent?.trim() || el.getAttribute('aria-label'));
+    }));
+    assert.deepEqual(faults,[]);
+  };
+
   const image = () => screen.evaluate(async el => {
     const src = getComputedStyle(el).getPropertyValue('--shot').trim().slice(5,-2);
     if (!src) throw Error('Missing scene source');
     const img = new Image();
     img.src = src;
     try { await img.decode(); } catch { throw Error('Undecodable backdrop: ' + src); }
-    return img.width;
+    return src.endsWith('.svg') ? img.naturalWidth > 0 : img.naturalWidth >= 800;
   });
   const shot = async name => {
-    assert.ok(await image() >= 800);
+    assert.equal(await image(),true);
     await page.screenshot({path:`${output}/m3-cinema-${name}.png`});
   };
   const choose = (field, option) => root.locator(`[data-cinema-field="${field}"] [data-cinema-option="${option}"]`).click();
@@ -74,6 +107,9 @@ try {
 
   const dial = control('t_a_sender').locator('[data-cinema-dial]');
   await dial.focus();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
+  assert.notEqual(await dial.evaluate(el => getComputedStyle(el).outlineStyle),'none');
   await dial.press('ArrowRight');
   assert.equal(await control('t_a_sender').locator('output').textContent(),'Errusia');
   assert.equal(await control('t_a_sender').getAttribute('data-result'),'selected');
@@ -89,11 +125,17 @@ try {
   await page.mouse.up();
   await page.waitForFunction(() => document.querySelector('.m3-cinema').dataset.running === 'true');
   const train = screen.locator('.cinema-train');
+  assert.match(await train.locator('img').getAttribute('src'),/premium\/train\.webp$/);
+  const wheel = screen.locator('.cinema-train-wheel');
+  const reels = root.locator('.cinema-reel i');
+  const transform = el => el.evaluate(node => getComputedStyle(node).transform);
+  const wheelStart = await transform(wheel);
+  const reelStarts = await Promise.all([0,1].map(i => transform(reels.nth(i))));
   const trainStart = (await train.boundingBox()).x;
   await page.waitForTimeout(520);
   assert.ok((await train.boundingBox()).x > trainStart + 10);
-  assert.notEqual(await screen.locator('.cinema-train-wheel').first().evaluate(el => getComputedStyle(el).transform),'none');
-  assert.notEqual(await root.locator('.cinema-reel i').first().evaluate(el => getComputedStyle(el).transform),'none');
+  assert.notEqual(await transform(wheel),wheelStart);
+  for (const [i,start] of reelStarts.entries()) assert.notEqual(await transform(reels.nth(i)),start);
   assert.ok(await screen.locator('.cinema-steam i').first().evaluate(el => Number(getComputedStyle(el).opacity)) > 0);
   await pause.click();
   await shot('03-locomotora');
@@ -121,6 +163,11 @@ try {
   await choose('t_a_direction','himalaya-india');
   await act('t_a_direction');
   await page.waitForSelector('.cinema-effect--direction');
+  await choose('t_a_china','cape-verde');
+  await act('t_a_china');
+  await screen.locator('.cinema-map [data-place="cape-verde"]').waitFor();
+  await page.waitForTimeout(540);
+  await shot('03b-cabo-verde-mapa');
   await choose('t_a_china','china');
   await act('t_a_china');
   await page.waitForSelector('.cinema-effect--arrive');
@@ -136,6 +183,8 @@ try {
   await choose('t_b_occupation','philippines-puerto-rico');
   await act('t_b_occupation');
   const ship = screen.locator('.cinema-ship');
+  assert.match(await ship.locator('.cinema-premium-vehicle-image').getAttribute('src'),/premium\/ship\.webp$/);
+  assert.match(await ship.locator('.cinema-reflection').getAttribute('src'),/premium\/ship\.webp$/);
   const boatStart = (await ship.boundingBox()).x;
   await page.waitForTimeout(630);
   assert.ok((await ship.boundingBox()).x > boatStart + 10);
@@ -143,6 +192,7 @@ try {
   await pause.click();
   await shot('05-barco');
   await choose('t_b_cuba','annex');
+  assert.equal(await screen.locator('.cinema-effect--annex').count(),0);
   assert.equal(await screen.locator('.cinema-draft').isVisible(),true);
   await check.click();
   assert.equal(await control('t_b_cuba').getAttribute('data-result'),'wrong');
@@ -157,6 +207,8 @@ try {
   await check.click();
   await screen.getByText('Filipinak',{exact:true}).waitFor();
   await screen.getByText('Puerto Rico',{exact:true}).waitFor();
+  await pause.click();
+  await shot('06b-puerto-rico-verificado');
   await next.click();
 
   await shot('07-japon');
@@ -173,6 +225,12 @@ try {
   await shot('09-protectorado');
   await choose('t_c_rivals','china-russia');
   await act('t_c_rivals');
+  assert.equal(await screen.locator('.cinema-map [data-place]').count(),2);
+  await page.setViewportSize({width:1280,height:720});
+  await visibleChoices();
+  await page.waitForTimeout(550);
+  await shot('09b-mandos-1280');
+  await page.setViewportSize({width:1440,height:960});
   await check.click();
   await skip.click();
   assert.equal(await root.locator('[data-cinema-count]').textContent(),'3 / 3 film berreskuratuta');
@@ -204,11 +262,14 @@ try {
       const [frame, actions] = await Promise.all([page.locator('#station').boundingBox(),root.locator('.cinema-actions').boundingBox()]);
       assert.ok(actions.y + actions.height <= frame.y + frame.height,`Controls require scrolling at ${width} × ${height}`);
     }
-    if (width === 1280) await shot('14-1280x720');
+    await visibleChoices();
+    if (width === 1024) assert.equal(await projector.locator('.cinema-projector-body').isVisible(),true);
+    if (width !== 390) await shot(`14-${width}x${height}`);
     if (width === 390) {
       await shot('15-movil');
       await control('t_a_sender').locator('[data-cinema-dial]').click();
       assert.equal(await count.textContent(),'1 / 12 erabaki osatuta');
+      await root.locator('.cinema-actions').scrollIntoViewIfNeeded();
       await shot('15b-movil-consola');
     }
   }

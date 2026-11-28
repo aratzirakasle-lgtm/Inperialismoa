@@ -12,7 +12,7 @@ import { finished as fachodaFinished, createFachoda } from './m3-fachoda.mjs?v=2
 import { attachFachoda, detachFachoda } from './m3-fachoda-ui.mjs?v=20261127-retirada59';
 const fachoda=createFachoda();
 import { createCinema, finished as cinemaFinished } from './m3-cinema.mjs';
-import { attachCinema, detachCinema } from './m3-cinema-ui.mjs';
+import { attachCinema, detachCinema } from './m3-cinema-ui.mjs?v=premium1';
 const cinema=createCinema();
 let currentExercise=1,teacherSecondPreview=false,teacherPreviewAuthenticated=false;
 function syncItinerary(){const first=firstExerciseComplete(),second=fachodaFinished(fachoda);for(const [id,step] of [['#m3-room-header',1],['#m3-dialog-header',currentExercise]]){const el=$(id),markup=itineraryHeaderMarkup(step,first,second,teacherSecondPreview,{atlasAvailable:true,atlasDone:atlasFinished(atlas),enigmaPreview:teacherPreviewAuthenticated,enigmaDone:enigmaFinished(enigma),cinemaPreview:teacherPreviewAuthenticated,cinemaDone:cinemaFinished(cinema)});if(el&&el._markup!==markup){el.innerHTML=markup;el._markup=markup;}}}

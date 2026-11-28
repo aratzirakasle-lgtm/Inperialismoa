@@ -13,11 +13,17 @@ La comprobación docente reutiliza el flujo de Supabase del museo, que exige una
 
 ## Fuente y arte
 
-El PDF de aula y la maqueta de referencia mencionada en el encargo no estaban en los materiales disponibles. La comparación curricular formal con el original queda pendiente. Las doce respuestas y los resúmenes siguen el encargo recibido. En particular, el montaje ruso usa flechas para la expansión hacia el Himalaya y la India, y el estadounidense presenta el control de Cuba con un perímetro de influencia. Filipinas y Puerto Rico aparecen por separado, igual que Formosa y Corea.
+La comprobación curricular con el PDF original queda pendiente porque el paquete no incluye la diapositiva 22. Las doce respuestas y los resúmenes siguen el encargo recibido. En particular, el montaje ruso usa flechas para la expansión hacia el Himalaya y la India, y el estadounidense presenta el control de Cuba con un perímetro de influencia. Filipinas y Puerto Rico aparecen por separado, igual que Formosa y Corea.
 
 El PDF elegido se abre como archivo local en la página 22. Cuando esté disponible una copia autorizada de la diapositiva, se puede guardar en `assets/m3-cinema/diapositiba-22.webp` y configurar `data-cinema-source="./assets/m3-cinema/diapositiba-22.webp"` en `#station-body` del HTML para activar el visor ampliable integrado. El visor usa la imagen original completa.
 
-Los doce fondos WebP se generaron para esta sala. Son recreaciones escénicas, sin valor de fuente documental. Los tres fondos principales son imágenes nativas de 1672 × 941. Los planos secundarios provienen de paneles nativos de 826–877 píxeles de ancho, sin ampliación en los archivos. Locomotora, barco, símbolos y proyector se dibujan con SVG o CSS en capas independientes.
+### Integración Cinema Premium
+
+El instalador del paquete comprobó los anclajes de `d1c52ef` y los hashes de los diez WebP de ejecución. Se aplicó el parche de partida y se ajustaron las coordenadas del decorado, los ejes del proyector, el apoyo de la locomotora, la línea de flotación y la mesa de control. La composición de escritorio mantiene la proporción nativa de la sala de 1672 × 941. En las pantallas pequeñas, el filmario, la proyección y la consola se reorganizan en el flujo de la página.
+
+La sala usa el proyector pintado en el decorado y dos bobinas independientes. En la composición intermedia se usa el proyector aislado. La locomotora gira una rueda delantera independiente. El resto de ruedas y bielas forman parte del cuerpo original. El barco usa la capa genérica sin bandera, con estela y reflejo. El GIF con bandera, las dos capas de referencia y las capturas adjuntas se reservaron para comparar el resultado. El HTML autónomo se menciona como entrega separada en la documentación del ZIP.
+
+Los paisajes completos se conservaron. Son recreaciones escénicas y se identifican en pantalla como **Paisaia birsortua**. Las vistas previas usan la escena del lugar elegido cuando existe, como Formosa, Cuba o Puerto Rico. Las otras alternativas usan un mapa esquemático con puntos geográficos. La cartografía procede del contorno Natural Earth ya distribuido con el museo. El mapa indica lugares y relaciones, sin definir fronteras históricas. Elegir anexionar Cuba genera una hipótesis sin mostrar la anexión como hecho.
 
 ## Archivos
 
@@ -27,7 +33,7 @@ Los doce fondos WebP se generaron para esta sala. Son recreaciones escénicas, s
 | `js/m3-cinema.mjs` | Doce decisiones, comprobación de vista previa y progresión. |
 | `js/m3-cinema-ui.mjs` | Consola, película activa, estados, transporte y apuntes. |
 | `js/m3-cinema-animation.mjs` | Objetos en capas, animación, planos verificados y montaje final. |
-| `assets/m3-cinema.css`, `assets/m3-cinema/` | Estilos de la sala y fondos originales. |
+| `assets/m3-cinema.css`, `assets/m3-cinema/premium/` | Decorado, vehículos, bobinas, rueda y mandos. Los paisajes completos siguen en `assets/m3-cinema/`. |
 | `tests/m3-cinema.test.mjs`, `tests/m3-cinema-browser.mjs` | Pruebas de lógica, permisos simulados, interacción, animación y vistas adaptables. |
 | `.github/workflows/check.yml` | Prueba de Chromium y publicación de capturas y vídeo como artefacto de Actions. |
 
@@ -41,6 +47,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
 En otra terminal, `CINEMA_VIDEO=1 node tests/m3-cinema-browser.mjs` produce las capturas y la grabación en `test-output/`. Con un Chromium instalado se puede indicar `CINEMA_CHROMIUM=/ruta/al/binario`.
+
+La prueba específica comprueba también la decodificación de los diez WebP, el desplazamiento de ambos vehículos, el giro de la rueda y las bobinas, la visibilidad del foco, el modo de movimiento reducido y la distribución de los mandos en escritorio, tableta y móvil.
 
 En la base `e5aefdd` y en esta rama se reproducen los mismos tres fallos de pruebas unitarias del vestíbulo C y del atlas fotográfico. La suite general de Chromium también reproduce los fallos de base en el marcador de aula, el vestíbulo C y el atlas fotográfico. La prueba del cronógrafo de la misión 2 reproduce en ambas versiones la discrepancia entre la lámina WebP cargada y el SVG que espera la prueba. Las pruebas de aula de la misión 1, del atlas de la misión 3 y de `Lau inperioen enigma` pasaron con Chromium.
 

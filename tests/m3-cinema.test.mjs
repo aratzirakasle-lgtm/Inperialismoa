@@ -46,8 +46,8 @@ test('verified historical scenes distinguish direction, occupation, control, ann
   assert.deepEqual(stories.c.filter(({effect}) => effect === 'annex').map(({art}) => art),['formosa','korea']);
   assert.equal(stories.c.find(({art}) => art === 'manchuria').effect,'protect');
   const cuba = M.FILMS[1].fields[2];
-  assert.equal(preview(M.FILMS[1],cuba,'annex','ANEXIONATU')[0].effect,'annex');
-  assert.equal(preview(M.FILMS[1],cuba,'control','KONTROLATU')[0].effect,'control');
+  assert.equal(preview(cuba,'annex','ANEXIONATU')[0].effect,'context');
+  assert.equal(preview(cuba,'control','KONTROLATU')[0].effect,'control');
   const length = finalStory.reduce((sum,{duration}) => sum + duration,0);
   assert.ok(length >= 20000 && length <= 30000);
 });
@@ -62,4 +62,17 @@ test('only the teacher preview can use exercise five and exercise six remains pe
   assert.equal(finished.count,1);
   assert.equal(finished.rooms[5].available,false);
   assert.equal(finished.rooms[5].complete,false);
+});
+
+test('preview scenery follows selected destinations and uses mapped alternatives', () => {
+  const fields = new Map(M.FILMS.flatMap(film => film.fields.map(field => [field.id,field])));
+  const take = (id,option) => preview(fields.get(id),option,'Aukera');
+  assert.deepEqual(take('t_a_siberia','formosa').map(frame => frame.art),['formosa']);
+  assert.deepEqual(take('t_a_china','cape-verde')[0].points.map(point => point.key),['cape-verde']);
+  assert.deepEqual(take('t_b_occupation','philippines-puerto-rico').map(frame => frame.art),['philippines','puerto-rico']);
+  assert.deepEqual(take('t_b_occupation','siberia-india')[0].points.map(point => point.key),['siberia','india']);
+  assert.deepEqual(take('t_c_annex','formosa-korea').map(frame => frame.art),['formosa','korea']);
+  assert.equal(take('t_c_manchuria','cuba')[0].art,'cuba');
+  assert.equal(take('t_c_manchuria','siberia')[0].effect,'take');
+  assert.deepEqual(take('t_c_rivals','spain-portugal')[0].points.map(point => point.key),['spain','portugal']);
 });

@@ -1,4 +1,5 @@
-const asset = name => new URL('../assets/m3-cinema/' + name + '.webp', import.meta.url).href;
+const asset = path => new URL('../assets/' + path, import.meta.url).href;
+const landscape = name => asset('m3-cinema/' + name + '.webp');
 
 const direction = 'M37 142 Q127 77 252 48 M225 37l28 10-18 22';
 const region = 'M71 85 102 57 147 63 187 49 232 80 218 128 168 153 123 139 84 150 52 121Z';
@@ -15,37 +16,41 @@ const effects = {
   context: '<path class="outline" d="M99 58h108v93H99z M119 80h68m-68 23h68m-68 23h41"/>',
 };
 const puff = '<i></i><i></i><i></i><i></i>';
-const train = `<div class="cinema-vehicle cinema-train"><div class="cinema-steam">${puff}</div>
-  <svg viewBox="0 0 420 134" focusable="false"><defs>
-    <linearGradient id="cinema-iron" x2="0%" y2="100%" gradientUnits="objectBoundingBox"><stop stop-color="#6f766f"/><stop offset=".32" stop-color="#343c3c"/><stop offset=".67" stop-color="#171d1e"/><stop offset="1" stop-color="#080a0a"/></linearGradient>
-  </defs><path d="M3 58h92v52H3z" fill="#222927" stroke="#514c3c" stroke-width="2"/><path d="m6 59 9-12 58 1 20 11m-79 23h72" fill="#25221e" stroke="#61513b" stroke-width="3"/>
-  <path d="M98 25h73v84H98z" fill="#3c3228" stroke="#b29052" stroke-width="2"/><path d="m91 27 11-9h67l13 9" fill="#1a211f" stroke="#746049" stroke-width="4"/><path d="M110 35h24v25h-24zm34 0h16v25h-16z" fill="#b4ab78" stroke="#211e16" stroke-width="4"/>
-  <path d="M166 51h162q15 0 15 19t-15 21H166z" fill="url(#cinema-iron)" stroke="#242323" stroke-width="3"/><path d="M191 51v-6q0-14 18-14t18 14v7m34 0v-7q0-12 12-12t12 12v8m25-2V25h-5v-7h31v7h-5v25" fill="#2a2e2a" stroke="#887046" stroke-width="2"/>
-  <path d="M194 55v33m37-33v32m61-32v32m29-32v33" stroke="#a78b57" opacity=".7"/><path d="M86 91h261v17H86z" fill="#3c3026" stroke="#82503d" stroke-width="2"/><path d="M346 93l26 24h-39z" fill="#623f30" stroke="#ad7852" stroke-width="2"/><circle cx="344" cy="59" r="6" fill="#fff2ab"/>
-  ${[[27,111,12],[71,111,12],[139,105,23],[201,105,23],[263,105,23],[318,112,12]].map(([x,y,r]) => `<g transform="translate(${x} ${y})"><g class="cinema-train-wheel"><circle r="${r}" fill="#262626" stroke="#352719" stroke-width="3"/><circle r="${r-3}" fill="none" stroke="#ad6d4c" stroke-width="2"/><path d="M-${r-4} 0h${2*r-8}M0 -${r-4}v${2*r-8}" stroke="#ad6d4c" stroke-width="2"/><circle r="3" fill="#c8b27c"/></g></g>`).join('')}
-  <path d="M139 108h126" stroke="#c89361" stroke-width="3" opacity=".8"/></svg></div>`;
-
-const vesselSvg = `<svg viewBox="0 0 420 150" focusable="false"><defs>
-  <linearGradient id="cinema-hull" x2="0%" y2="100%" gradientUnits="objectBoundingBox"><stop stop-color="#4d534c"/><stop offset=".4" stop-color="#28292a"/><stop offset=".73" stop-color="#0e1416"/><stop offset="1" stop-color="#652e21"/></linearGradient>
-  </defs><g id="cinema-vessel"><path d="M29 112h254l82-7 38-10-16 22-38 17H67q-23-4-38-22Z" fill="url(#cinema-hull)" stroke="#29231b" stroke-width="2"/>
-  <path d="M47 119h299l37-11M66 132h278" stroke="#b66d45" stroke-width="2"/><path d="M62 107V91h215l27 15zm42-18V73h158l12 17z" fill="#c7b594" stroke="#655342" stroke-width="2"/>
-  <path d="M125 72v-11h95v11M129 96h136m-159-16h155" stroke="#413830" stroke-width="3" stroke-dasharray="4 5"/>
-  <path d="M159 74l-3-41h18l3 41m22 0-2-37h16l3 37" fill="#68503d" stroke="#211d1c" stroke-width="3"/><path d="M155 38h20m20 4h20" stroke="#d7a14f" stroke-width="3"/>
-  <path d="M98 92V19m202 85V14M85 35h25m176-3h28m-217-9-34 68m35-68 46 57m154-59-45 63m45-63 43 77" stroke="#332a21" stroke-width="2"/><path d="M32 113h368" stroke="#d2b285" stroke-width="2"/></g></svg>`;
-const ship = `<div class="cinema-vehicle cinema-ship"><div class="cinema-wake"></div><div class="cinema-steam">${puff}</div><div class="cinema-hull">${vesselSvg}<svg class="cinema-reflection" viewBox="0 0 420 150"><use href="#cinema-vessel"/></svg></div></div>`;
+const premiumAsset = name => landscape('premium/' + name);
+const train = `<div class="cinema-vehicle cinema-train"><div class="cinema-steam">${puff}</div><img class="cinema-premium-vehicle-image" src="${premiumAsset('train')}" width="1432" height="876" alt="" draggable="false"><span class="cinema-wheel-pocket"><i class="cinema-train-wheel"></i></span></div>`;
+const ship = `<div class="cinema-vehicle cinema-ship"><div class="cinema-wake"></div><div class="cinema-steam">${puff}</div><div class="cinema-hull"><img class="cinema-premium-vehicle-image" src="${premiumAsset('ship')}" width="1414" height="1036" alt="" draggable="false"><img class="cinema-reflection" src="${premiumAsset('ship')}" alt="" draggable="false"></div></div>`;
 
 export function screenMarkup() {
   return `<div class="cinema-frame"><div class="cinema-screen" data-cinema-screen>
     <div class="cinema-landscape"></div><div class="cinema-sky"></div><div class="cinema-water"></div>
+    <div class="cinema-map" hidden><div class="cinema-map-paper">
+      <img src="${asset('atlas-museum-world.svg')}" alt=""><div class="cinema-map-points"></div>
+    </div></div>
     <div class="cinema-rails"></div><div class="cinema-objects" aria-hidden="true">${train}${ship}</div>
     <div class="cinema-symbol" aria-hidden="true"></div><div class="cinema-vignette"></div><div class="cinema-transition"></div>
-    <b class="cinema-draft">ZIRRIBORROA · Egiaztatu gabe</b>
+    <small class="cinema-image-label"></small><b class="cinema-draft">ZIRRIBORROA · Egiaztatu gabe</b>
     <div class="cinema-caption"><small></small><strong></strong><span></span></div>
     <div class="cinema-end" role="status" hidden><i aria-hidden="true">✓</i><strong>HIRU FILMAK BERRESKURATUTA</strong><span>Inperialismoaren hedapena berreraiki duzue.</span></div>
   </div></div>`;
 }
 
 const shot = (art, mode, title, effect = '', note = '', duration = 2500) => ({art, mode, title, effect, note, duration});
+const locations = {
+  'cape-verde': [15.1,-23.6], sahara: [24.5,12], cuba: [23.1,-82.4], 'puerto-rico': [18.5,-66.1],
+  libya: [27,18], eritrea: [15.3,39], siberia: [56,105], india: [23,78],
+  angola: [-12,18], mozambique: [-18,35], china: [39.9,116.4], ru: [55.8,37.6],
+  jp: [35.7,139.7], us: [38.9,-77], spain: [40.4,-3.7], portugal: [38.7,-9.1],
+  belgium: [50.8,4.4], italy: [41.9,12.5], berlin: [52.5,13.4], fachoda: [9.9,32.1],
+  philippines: [14.6,121],
+};
+const mapShot = (keys, title, note = '', duration = 2400, connect = false) => ({
+  ...shot(null,'map',title,'',note,duration),
+  points: keys.map(key => {
+    const [lat,lon] = locations[key];
+    return { key, x: (lon + 180) * 2, y: (90 - lat) * 2 };
+  }),
+  connect,
+});
 export const stories = {
   a: [
     shot('siberia','train','Siberia','take','HARTU · Lurraldea bereganatu',3000),
@@ -61,7 +66,7 @@ export const stories = {
   ],
   c: [
     shot('japan','ship','Japonia','','',1700),
-    shot('japan','land','Txina eta Errusia','rivals','AURKARIAK · Nazioarteko lehia',2000),
+    mapShot(['china','ru','jp'],'Txina eta Errusia','AURKARIAK · Nazioarteko lehia',2000,true),
     shot('formosa','ship','Formosa','annex','ANEXIONATU · Lurraldearen estatusa aldatu',2100),
     shot('korea','ship','Korea','annex','ANEXIONATU · Beste lurralde bat',2100),
     shot('manchuria','land','Mantxuria','protect','PROTEKTORATUA · Babes-eremuaren irudikapena',2400),
@@ -74,24 +79,55 @@ export const finalStory = Object.values(stories).flat().map(frame => ({
   ...frame, duration: Math.round(frame.duration * 0.84),
 }));
 
-const takes = {
-  t_a_siberia: ['siberia','train','take'], t_a_direction: ['himalaya','land','direction'],
-  t_a_china: ['china','land','arrive'], t_b_occupation: ['ocean','ship','occupy'],
-  t_b_war: ['ocean','land','context'], t_c_annex: ['japan','ship','annex'],
-  t_c_manchuria: ['manchuria','land','protect'], t_c_rivals: ['japan','land','rivals'],
+const coastalShots = {
+  'philippines-puerto-rico': [['philippines','Filipinak'],['puerto-rico','Puerto Rico']],
+  'formosa-korea': [['formosa','Formosa'],['korea','Korea']],
 };
 
-export function preview(film, field, value, label) {
-  const cuba = {control:'control', annex:'annex', transfer:'transfer'};
-  const [art, mode, effect] = field.id === 't_b_cuba' ? ['cuba','ship',cuba[value]] :
-    takes[field.id] || [film.poster, film.mode, 'context'];
-  return [shot(art,mode,label,effect,field.action || 'KUBAKO MEKANISMOA',2400)];
+export function preview(field, value, label) {
+  const action = field.action || 'KUBAKO MEKANISMOA';
+  const scene = (art, mode, effect) => [shot(art,mode,label,effect,action,2400)];
+  const map = (...keys) => [mapShot(keys,label,action)];
+  switch (field.id) {
+    case 't_a_siberia':
+      if (value === 'siberia') return scene('siberia','train','take');
+      return scene(value,'land','context');
+    case 't_a_direction':
+      if (value === 'himalaya-india') return scene('himalaya','land','direction');
+      return value === 'cuba-puerto-rico' ? map('cuba','puerto-rico') : map('libya','eritrea');
+    case 't_a_china':
+      return value === 'china' ? scene('china','land','arrive') : map(value);
+    case 't_b_occupation':
+    case 't_c_annex': {
+      const pair = coastalShots[value];
+      if (!pair) return value === 'siberia-india' ? map('siberia','india') : map('angola','mozambique');
+      const effect = field.id === 't_b_occupation' ? 'occupy' : 'annex';
+      return pair.map(([art, place]) => shot(art,'ship',place,effect,action,2400));
+    }
+    case 't_b_cuba':
+      return scene('cuba','ship',value === 'control' ? 'control' : 'context');
+    case 't_b_war':
+      if (value === 'war-1898') return map('cuba','puerto-rico','philippines');
+      return map(value === 'berlin-1884' ? 'berlin' : 'fachoda');
+    case 't_c_manchuria':
+      if (value === 'manchuria') return scene('manchuria','land','protect');
+      return value === 'cuba' ? scene('cuba','land','protect') : scene('siberia','train','take');
+    case 't_c_rivals': {
+      const pairs = {'china-russia':['china','ru'], 'spain-portugal':['spain','portugal'], 'belgium-italy':['belgium','italy']};
+      return [mapShot(pairs[value],label,action,2400,true)];
+    }
+    default:
+      return map(value);
+  }
 }
 
 export function stage(root, onPlayback) {
   const screen = root.querySelector('[data-cinema-screen]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const caption = screen.querySelector('.cinema-caption');
+  const map = screen.querySelector('.cinema-map');
+  const pins = map.querySelector('.cinema-map-points');
+  const imageLabel = screen.querySelector('.cinema-image-label');
   const setText = (part, value) => { caption.querySelector(part).textContent = value; };
   let timer, started, remaining, index, playback, paused = false;
 
@@ -110,7 +146,17 @@ export function stage(root, onPlayback) {
   function render(frame, draft, running = false) {
     screen.querySelector('.cinema-end').hidden = true;
     caption.hidden = false;
-    screen.style.setProperty('--shot', `url("${asset(frame.art)}")`);
+    const source = frame.art ? landscape(frame.art) : asset('atlas-museum-world.svg');
+    screen.style.setProperty('--shot', `url("${source}")`);
+    map.hidden = frame.mode !== 'map';
+    const points = frame.points || [];
+    const origin = points.at(-1);
+    const lines = frame.connect ? `<svg viewBox="0 0 720 360" aria-hidden="true">${points.slice(0,-1).map(({x,y}) =>
+      `<line x1="${x}" y1="${y}" x2="${origin.x}" y2="${origin.y}"/>`).join('')}</svg>` : '';
+    pins.innerHTML = lines + points.map(({key,x,y}) =>
+      `<i data-place="${key}" style="left:${x / 7.2}%;top:${y / 3.6}%"></i>`).join('');
+    imageLabel.hidden = false;
+    imageLabel.textContent = frame.mode === 'map' ? 'Mapa eskematikoa' : 'Paisaia birsortua';
     screen.dataset.mode = frame.mode;
     screen.dataset.draft = String(draft);
     screen.dataset.motion = 'false';
@@ -172,6 +218,7 @@ export function stage(root, onPlayback) {
       stop();
       screen.querySelector('.cinema-end').hidden = false;
       caption.hidden = true;
+      imageLabel.hidden = true;
       screen.dataset.draft = 'false';
     },
     stop,

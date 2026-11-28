@@ -1,5 +1,5 @@
 import * as M from './m3-cinema.mjs';
-import { finalStory, preview, screenMarkup, stage, stories } from './m3-cinema-animation.mjs';
+import { finalStory, preview, screenMarkup, stage, stories } from './m3-cinema-animation.mjs?v=premium1';
 
 const sourceFiles = new WeakMap();
 const mounted = new WeakMap();
@@ -17,8 +17,7 @@ const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 const projectorMarkup = `<div class="cinema-projector" aria-hidden="true">
   <div class="cinema-beam"></div><div class="cinema-dust"><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="cinema-reel reel-top"><i></i></div><div class="cinema-reel reel-back"><i></i></div><div class="cinema-strip"></div>
-  <div class="cinema-machine"><i></i><div class="cinema-vents"></div></div>
-  <div class="cinema-lens"></div><div class="cinema-projector-foot"></div>
+  <div class="cinema-projector-body"></div>
 </div>`;
 
 const filmLabel = film => film.id.toUpperCase() + ' FILMA';
@@ -239,7 +238,7 @@ export function attachCinema(container, state, onChange) {
     const id = state.answers[field.id];
     const selected = field.options.find(([option]) => option === id);
     if (!selected || state.completed.includes(state.active)) return;
-    lastPreview = preview(film,field,...selected);
+    lastPreview = preview(field,...selected);
     const mechanism = $(`[data-cinema-field="${field.id}"]`);
     const knob = mechanism.querySelector('[data-cinema-act] i');
     if (knob && !reducedMotion.matches) {
