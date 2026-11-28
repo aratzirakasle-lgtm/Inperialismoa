@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {deflateRawSync} from 'node:zlib';import {extractArtZip,ART_PATHS} from '../js/m3-atlas-art.mjs';
+const data=Buffer.from('RIFF0000WEBPVP8 ','ascii');
+function crc32(bytes){let crc=-1;for(const x of bytes){crc^=x;for(let i=0;i<8;i++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}return (crc^-1)>>>0;}
+function zip(paths,method=8){const parts=[];for(const path of paths){const n=Buffer.from(path),z=method===8?deflateRawSync(data):data,h=Buffer.alloc(30);h.writeUInt32LE(0x04034b50,0);h.writeUInt16LE(method,8);h.writeUInt32LE(crc32(data),14);h.writeUInt32LE(z.length,18);h.writeUInt32LE(data.length,22);h.writeUInt16LE(n.length,26);parts.push(h,n,z);}const end=Buffer.alloc(22);end.writeUInt32LE(0x06054b50,0);const b=Buffer.concat([...parts,end]);return b.buffer.slice(b.byteOffset,b.byteOffset+b.byteLength);}
+test('HD ZIP accepts six exact paths with stored or deflated entries',async()=>{for(const method of [0,8]){const a=await extractArtZip(zip(ART_PATHS,method));assert.deepEqual(Object.keys(a),ART_PATHS);assert.equal(a[ART_PATHS[0]].size,data.length);}});
+test('HD ZIP rejects missing and duplicate files',async()=>{await assert.rejects(extractArtZip(zip(ART_PATHS.slice(1),0)));await assert.rejects(extractArtZip(zip([...ART_PATHS,ART_PATHS[0]],0)));});

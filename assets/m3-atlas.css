@@ -103,17 +103,19 @@
 .atlas67 .atlas64-lower{grid-template-columns:1.12fr 1fr}
 .atlas67 .atlas64-footer{border-top:3px solid #d3ab6d}
 .atlas67 .atlas64-seal{min-height:70px}
-.atlas67-ready{background:linear-gradient(90deg,#140c062b,#152a1c2e 18%,#13251b33 82%,#140c062b),url('./m3-atlas-library67.webp') center center/cover no-repeat}
+.atlas67-ready{background:linear-gradient(90deg,#140c062b,#152a1c2e 18%,#13251b33 82%,#140c062b),var(--atlas-hd-library,url('./m3-atlas-library67.webp')) center center/cover no-repeat}
 .atlas67-ready .atlas64-heading{background:linear-gradient(90deg,#10281fd9,#234a34eb 50%,#10281fd9)}
 .atlas67-ready .atlas64-panel{background:linear-gradient(125deg,#ffffff0b,transparent 60%),radial-gradient(ellipse at 36% 0,#3e654be8,#1a3729ed 48%,#13281fef);backdrop-filter:blur(5px)}
-.atlas67-ready .atlas64-engraving{background-image:url('./m3-atlas-engravings67.webp');background-size:500% 200%;border-color:#b89863;box-shadow:0 1px 2px #6b492c88}
-.atlas67-ready .atlas64-mapframe{border:10px solid transparent;border-image:url('./m3-atlas-frame67.webp') 33 stretch;box-shadow:0 5px 16px #120b07d9}
-.atlas67-ready .atlas67-map-finish{background:url('./m3-atlas-grain67.webp') repeat;mix-blend-mode:multiply;opacity:.26;box-shadow:inset 0 0 22px #6b4c2a66}
-.atlas67-ready .atlas64-footer{background:linear-gradient(#3c210d55,#27150c70),url('./m3-atlas-wood67.webp') center/cover}
-.atlas67-ready .atlas64-seal{min-width:130px;width:clamp(98px,10.2cqw,150px);aspect-ratio:1.08;min-height:0;background:transparent url('./m3-atlas-seal67.webp') center/contain no-repeat;padding:0;position:relative;border:0;filter:drop-shadow(0 4px 4px #210e08bd)}
+.atlas67-ready .atlas64-engraving{background-image:var(--atlas-hd-engravings,url('./m3-atlas-engravings67.webp'));background-size:500% 200%;border-color:#b89863;box-shadow:0 1px 2px #6b492c88}
+.atlas67-ready .atlas64-mapframe{border:10px solid transparent;border-image:var(--atlas-hd-frame,url('./m3-atlas-frame67.webp')) 33 stretch;box-shadow:0 5px 16px #120b07d9}
+.atlas67-ready .atlas67-map-finish{background:var(--atlas-hd-grain,url('./m3-atlas-grain67.webp')) repeat;mix-blend-mode:multiply;opacity:.26;box-shadow:inset 0 0 22px #6b4c2a66}
+.atlas67-ready .atlas64-footer{background:linear-gradient(#3c210d55,#27150c70),var(--atlas-hd-wood,url('./m3-atlas-wood67.webp')) center/cover}
+.atlas67-ready .atlas64-seal{min-width:130px;width:clamp(98px,10.2cqw,150px);aspect-ratio:1.08;min-height:0;background:transparent var(--atlas-hd-seal,url('./m3-atlas-seal67.webp')) center/contain no-repeat;padding:0;position:relative;border:0;filter:drop-shadow(0 4px 4px #210e08bd)}
 .atlas67-ready:not(.is-complete) [data-atlas-seal-label]{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .atlas67-ready.is-complete .atlas64-seal{background:transparent url('./m3-atlas-wax66.svg') center/contain no-repeat;padding:12px;font-size:17px}
 .atlas67-ready .atlas66-desk-props{display:none}
 .atlas67.is-zoom .atlas64-work{grid-template-columns:1fr}
 @media(max-width:1050px){.atlas67 .atlas64-work{grid-template-columns:1fr 1.5fr}.atlas67 .atlas64-mapframe{grid-column:1/-1}.atlas67 .atlas64-layer{grid-template-columns:34px 1fr auto}.atlas67.is-zoom .atlas64-work{grid-template-columns:1fr}}
 @media(max-width:600px){.atlas67 .atlas64-work,.atlas67 .atlas64-lower{grid-template-columns:1fr}.atlas67 .atlas64-row{grid-template-columns:46px minmax(0,1fr) minmax(105px,1fr);min-height:44px}.atlas67-version{font-size:8px;top:3px;right:3px}.atlas67 .atlas64-heading{padding-top:17px}.atlas67-ready .atlas64-seal{width:140px;justify-self:center}}
+
+.atlas68-art-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px;padding:8px 12px;background:#142d25e8;border:1px solid #bda06a;border-radius:4px;color:#f3dfb9;font:12px system-ui,sans-serif}.atlas68-art-tools[hidden]{display:none}.atlas68-art-tools span{flex:1}.atlas68-file-button,.atlas68-art-tools button{position:relative;padding:8px 12px;border:1px solid #c9ab6b;border-radius:4px;background:#29483a;color:#f6dfad;cursor:pointer;font-weight:600}.atlas68-file-button input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}.atlas68-file-button:focus-within{outline:2px solid #f5d58b;outline-offset:2px}

@@ -13,3 +13,6 @@ Install these six files in assets/ (all exact names):
 The generated concept map is deliberately not used as an answer map: it contains printed answers and unreliable boundaries. Only its texture and outer decorative frame are used; actual clickable geometry remains the separately labeled Natural Earth-based schematic.
 
 The source slides 19 and 20 still need to be provided. No live pupil state, permissions or database writes were added.
+
+## Local HD preview (V68)
+If server art is absent, the teacher can select the original ZIP directly in the atlas. It validates all six WebP entries and their CRCs, imports them with browser-native ZIP decompression, and saves the images in IndexedDB on this browser only. No file is sent to GitHub or Supabase. The public site automatically prefers published assets if they become available. The local preview does not change answers, progress, or permissions.

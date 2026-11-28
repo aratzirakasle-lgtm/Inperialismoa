@@ -6,3 +6,5 @@ test('one screen contains ten map zones and selectors, three strategies and laye
 test('direct map assignment is available for all three powers and every territory has its own engraving',()=>{const h=atlasMarkup();assert.equal((h.match(/data-atlas-quick="/g)||[]).length,3);assert.equal((h.match(/class="atlas64-engraving"/g)||[]).length,10);});
 
 test('premium art shell keeps visible version and accessible seal label',()=>{const h=atlasMarkup();assert.match(h,/class="atlas64 atlas66 atlas67"/);assert.match(h,/data-atlas-art-status/);assert.match(h,/data-atlas-seal-label>✦ Egiaztatu/);assert.match(h,/atlas67-map-finish/);});
+
+test('teacher can import the optional HD zip without changing assessment',()=>{const h=atlasMarkup();assert.match(h,/data-atlas-art-tools hidden/);assert.match(h,/type="file" data-atlas-art-file/);assert.match(h,/data-atlas-art-remove/);});
