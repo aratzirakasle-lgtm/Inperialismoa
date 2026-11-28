@@ -111,3 +111,23 @@
 .enigma77-actions [data-enigma-feedback]{position:absolute;bottom:14%;left:0;width:100%;padding:.15cqw}
 }
 @media(max-width:1000px),(max-height:580px){.enigma77-title:before,.enigma77-title:after{display:none}.enigma77-identify h2{font-size:17px}.enigma77-card-name{font-size:12px}}
+
+/* V79: exact reference artwork for the first clue, with real reading controls. */
+.enigma77-clue-dialog.enigma79-dialog{width:min(1120px,94vw,calc((100dvh - 220px)*520/227));min-width:min(94vw,560px);max-height:94dvh;border:0;padding:0;background:transparent;box-shadow:0 12px 42px #000d;color:#412b16;overflow:auto}
+.enigma77-clue-dialog.enigma79-dialog::backdrop{background:#080f0cdc;backdrop-filter:blur(3px)}
+.enigma79-master.enigma77-clue-sheet{display:grid;gap:0;padding:0;background:none;font:16px/1.3 Georgia,serif}
+.enigma79-artboard{position:relative;container-type:inline-size;isolation:isolate}
+.enigma79-reference{display:block;width:100%;height:auto;aspect-ratio:520/227}
+.enigma79-sr,.enigma79-live-quote{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.enigma79-artboard [data-enigma-close]{position:absolute;top:7.5%;right:4.4%;width:9.9%;height:10%;min-height:25px;display:grid;place-items:center;border:2px solid #b88a43;border-radius:14% / 25%;background:linear-gradient(#ffe9b9,#eac78d);color:#472d15;font:bold 2.6cqw/1 Georgia,serif;box-shadow:0 1px 3px #4b2d13;cursor:pointer;padding:0}
+.enigma79-artboard [data-enigma-close]:focus-visible{outline:3px solid #0b6963;outline-offset:2px}
+.enigma79-reading{display:grid;gap:10px;padding:14px 20px 13px;background:#ead3a1 url('./atlas-papel-fibras.svg') center/100% 100%;border:5px double #b48b42;box-shadow:inset 0 0 12px #9e713444;margin:0}
+.enigma79-reading h3{font:bold clamp(14px,1.3vw,19px)/1.1 Georgia,serif;text-align:center;letter-spacing:.03em;color:#f7dca4;background:linear-gradient(#754527,#382418);border:3px double #c49a52;border-radius:4px;padding:6px 10px;margin:0}
+.enigma79-reading-questions{display:grid;grid-template-columns:1fr 1.25fr;gap:16px}
+.enigma79-reading label{font:bold clamp(14px,1.15vw,18px)/1.2 Georgia,serif;color:#412b16;display:flex;flex-direction:column;justify-content:space-between;gap:5px}
+.enigma79-reading select{width:100%;min-width:0;border:3px double #b58a44;border-radius:4px;background:#fff0cf;color:#432d16;font:16px Georgia,serif;padding:8px;min-height:38px}
+.enigma79-reading-bottom{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.enigma79-reading-bottom [data-enigma-clue-feedback]{flex:1;margin:0;font:italic 15px Georgia,serif}
+.enigma79-reading-bottom [data-enigma-continue]{background:linear-gradient(#355d43,#183c2e);border:3px double #c8a15c;color:#ffe5ac;font:bold 17px Georgia,serif;padding:9px 16px;border-radius:4px;min-width:140px;box-shadow:0 2px 3px #6c462b66}
+.enigma79-reading-bottom [data-enigma-continue]:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:700px){.enigma77-clue-dialog.enigma79-dialog{width:94vw;min-width:0}.enigma79-reading{padding:10px}.enigma79-reading-questions{grid-template-columns:1fr;gap:9px}.enigma79-artboard [data-enigma-close]{font-size:12px;min-height:24px;width:13%;right:3%;top:5%}.enigma79-live-quote{position:relative;width:auto;height:auto;margin:0;padding:8px 12px;overflow:visible;clip-path:none;white-space:normal;background:#f2ddb0;color:#392713;font:bold 18px/1.25 Georgia,serif}}
