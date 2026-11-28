@@ -73,3 +73,41 @@
 .enigma77-actions{background:#38261c;padding:10px;border:3px double #bb985b;gap:6px}.enigma77-actions [data-enigma-seal]{width:140px;font-size:14px}.enigma77-actions [data-enigma-seal]>span{font-size:24px}.enigma77-actions [data-enigma-progress],.enigma77-actions [data-enigma-reset],.enigma77-actions [data-enigma-feedback]{font-size:13px;padding:6px}
 }
 @media(max-width:480px){.enigma77-card{width:calc(33.333% - 6px)}.enigma77-clue-content{grid-template-columns:1fr}.enigma77-clue-art{max-width:220px;justify-self:center}}
+
+/* V78: exact pictorial crops from the approved concepts. All captions remain live text. */
+.enigma78-illustration{overflow:hidden;display:block;width:100%;height:100%}
+.enigma77-card-art{border:1px solid #d1ad6a;background:#d9b780}
+.enigma77-card{background:#f0d6a3 url('./atlas-papel-fibras.svg') center/100% 100%;border:3px double #c5a365;box-shadow:0 2px 5px #130905,inset 0 0 0 1px #f8e6b9}
+.enigma77-card:hover{border-color:#fff0bd;filter:brightness(1.08)}
+.enigma77-title{border-color:#d7ae62;box-shadow:0 2px 8px #160c06,inset 0 0 0 2px #664421,inset 0 0 18px #091b19}
+.enigma77-title h1{text-shadow:0 2px 1px #3e270e,0 0 10px #e7bb5433}
+.enigma77-title:before,.enigma77-title:after{content:'❦';position:absolute;top:13%;font-size:3.2cqw;line-height:1;color:#dbb66d;text-shadow:0 2px #60401d}
+.enigma77-title:before{left:-2.1cqw;transform:rotate(-90deg)}.enigma77-title:after{right:-2.1cqw;transform:rotate(90deg)}
+.enigma77-identify{border-width:8px;box-shadow:0 5px 9px #100a06c9,inset 0 0 0 1px #5ea5a377,inset 0 0 1.5cqw #061313}
+.enigma77-identify h2{font-size:1.12cqw;line-height:1.1}
+.enigma77-idrow>b{border:3px double #a47a3f;background:#f1d4a1 url('./atlas-papel-fibras.svg') center/100% 100%}
+.enigma77-select{background:#eacb96 url('./atlas-papel-fibras.svg') center/100% 100%;box-shadow:inset 0 0 4px #977442}
+.enigma77-select:focus-within{outline:2px solid #8de5d8}
+.enigma77-clues button{background:#f4dfb4 url('./atlas-papel-fibras.svg') center/100% 100%;border:2px solid #b08b55}
+.enigma77-clues .is-read{background:#d8e3b8;border-color:#739059}
+.enigma77-bank{border-width:8px;padding-top:.4cqw}
+.enigma77-card-name{font-size:.79cqw;line-height:1.05}
+.enigma77-clue-art{display:grid;gap:9px;border:0;box-shadow:none;background:transparent}
+.enigma78-clue-frame{aspect-ratio:2/1;border:4px double #b18a4f;box-shadow:2px 4px 8px #57392177;background:#c7a46e;overflow:hidden}
+.enigma77-clue-sheet{background:radial-gradient(ellipse at 50% 30%,#fff2cd55,#92643620)}
+.enigma77-clue-sheet header{border:4px double #cfa65d;box-shadow:0 3px 6px #6b472c55}
+@media(min-width:1001px) and (min-height:581px){
+.enigma77-box{padding:0 .7cqw}
+.enigma77-box-target{position:absolute;top:33%;left:23%;right:23%;height:29%;padding:0 .25cqw;background:transparent;border:0;box-shadow:none;grid-template-columns:1fr auto;gap:0}
+.enigma77-box-target>b{font-size:1.3cqw;line-height:1}.enigma77-box-target>small{font-size:.57cqw;line-height:1}.enigma77-box-target>span{font-size:.65cqw}
+.enigma77-inventory{position:absolute;top:63%;left:7%;right:7%;bottom:10%;padding:0;align-content:start;justify-content:center}
+.enigma77-actions{left:83.9%;top:65.4%;width:14.3%;height:31.5%}
+.enigma77-actions [data-enigma-progress]{position:absolute;top:-2%;left:50%;transform:translateX(-50%)}
+.enigma77-actions [data-enigma-seal]{position:absolute;top:12%;left:15%;width:70%;aspect-ratio:1;background:transparent;border:0;box-shadow:none;padding:.4cqw;color:#f9e0aa;text-shadow:0 2px 2px #5b170c;font-size:1.03cqw}
+.enigma77-actions [data-enigma-seal]:disabled{opacity:.9}
+.enigma77-actions [data-enigma-seal]>span{font-size:2cqw}
+.enigma77.is-complete [data-enigma-seal]{background:transparent;box-shadow:none;filter:drop-shadow(0 0 5px #ffd887)}
+.enigma77-actions [data-enigma-reset]{position:absolute;bottom:1%;left:50%;transform:translateX(-50%);white-space:nowrap}
+.enigma77-actions [data-enigma-feedback]{position:absolute;bottom:14%;left:0;width:100%;padding:.15cqw}
+}
+@media(max-width:1000px),(max-height:580px){.enigma77-title:before,.enigma77-title:after{display:none}.enigma77-identify h2{font-size:17px}.enigma77-card-name{font-size:12px}}
