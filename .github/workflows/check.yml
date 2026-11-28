@@ -89,3 +89,31 @@ jobs:
           name: enigma95-capturas-navegador
           path: test-output/m3-enigma-*.png
           if-no-files-found: error
+  cinema-visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar Playwright
+        run: |
+          npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+          npx playwright install chromium
+      - name: Verificar la vista previa docente y grabar los tres montajes
+        env:
+          CINEMA_VIDEO: '1'
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/m3-cinema-server.log 2>&1 &
+          curl --retry 5 --retry-connrefused -fsS http://127.0.0.1:8765/berlingo-areto-sekretua.html >/dev/null
+          node tests/m3-cinema-browser.mjs
+      - name: Guardar capturas y vídeo obtenidos en Chromium
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m3-cinema-demostracion
+          path: |
+            test-output/m3-cinema-*.png
+            test-output/m3-cinema-demo.webm
+          if-no-files-found: error

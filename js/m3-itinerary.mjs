@@ -3,11 +3,11 @@ export const ROOMS=[
 {title:'Fachodako bidegurutzea',objective:'Britainia Handiaren eta Frantziaren hedapen-proiektuak ulertzea eta Fachodako gatazka azaltzea.'},
 {title:'Inperioen atlas ezkutua',objective:'Hiru inperioen lurraldeak eta hedapen-estrategiak alderatzea.'},
 {title:'Lau inperioen enigma',objective:'Lau espedienteak identifikatzea eta lurralde-inbentarioa osatzea.'},
-{title:'Munduko telegrama galduak',objective:''},
+{title:'Inperialismoa mugimenduan',objective:'Hedapen inperialistaren hiru filmak berreraikitzea.'},
 {title:'Historiaren epaimahaia',objective:''}];
 export function itineraryState(current,berlinDone,fachodaDone,teacherSecond=false,options={}){
-const completed=[!!berlinDone,!!fachodaDone,!!options.atlasDone,!!options.enigmaDone,false,false];
-return {count:completed.filter(Boolean).length,rooms:ROOMS.map((room,i)=>({...room,id:i+1,current:current===i+1,complete:completed[i],available:i===0||(i===1&&(berlinDone||teacherSecond||current===2))||(i===2&&options.atlasAvailable&&(teacherSecond||(berlinDone&&fachodaDone)||current===3))||(i===3&&!!options.enigmaPreview&&teacherSecond)}))};
+const completed=[!!berlinDone,!!fachodaDone,!!options.atlasDone,!!options.enigmaDone,!!options.cinemaPreview&&!!options.cinemaDone,false];
+return {count:completed.filter(Boolean).length,rooms:ROOMS.map((room,i)=>({...room,id:i+1,current:current===i+1,complete:completed[i],available:i===0||(i===1&&(berlinDone||teacherSecond||current===2))||(i===2&&options.atlasAvailable&&(teacherSecond||(berlinDone&&fachodaDone)||current===3))||(i===3&&!!options.enigmaPreview&&teacherSecond)||(i===4&&!!options.cinemaPreview&&teacherSecond)}))};
 }
 export function itineraryMarkup(current,berlinDone,fachodaDone,teacherSecond=false){
 const {count,rooms}=itineraryState(current,berlinDone,fachodaDone,teacherSecond);
