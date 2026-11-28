@@ -131,3 +131,34 @@
 .enigma79-reading-bottom [data-enigma-continue]{background:linear-gradient(#355d43,#183c2e);border:3px double #c8a15c;color:#ffe5ac;font:bold 17px Georgia,serif;padding:9px 16px;border-radius:4px;min-width:140px;box-shadow:0 2px 3px #6c462b66}
 .enigma79-reading-bottom [data-enigma-continue]:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:700px){.enigma77-clue-dialog.enigma79-dialog{width:94vw;min-width:0}.enigma79-reading{padding:10px}.enigma79-reading-questions{grid-template-columns:1fr;gap:9px}.enigma79-artboard [data-enigma-close]{font-size:12px;min-height:24px;width:13%;right:3%;top:5%}.enigma79-live-quote{position:relative;width:auto;height:auto;margin:0;padding:8px 12px;overflow:visible;clip-path:none;white-space:normal;background:#f2ddb0;color:#392713;font:bold 18px/1.25 Georgia,serif}}
+
+/* V81 — four native-size clue plates and a museum-style reading console. */
+.enigma77-clue-dialog.enigma81-dialog{width:min(1050px,94vw,calc((100dvh - 245px)*2.18));min-width:min(94vw,540px);max-height:95dvh;overflow:auto;border-radius:5px}
+.enigma81-master.enigma77-clue-sheet{display:grid;gap:5px;background:#25180f;padding:0}
+.enigma81-reference.enigma79-reference{aspect-ratio:auto;image-rendering:auto;max-width:100%}
+.enigma81-master .enigma79-artboard [data-enigma-close]{top:8%;right:3.8%;width:9.7%;height:9.5%;min-height:24px;font-size:2.5cqw;border-color:#96662d}
+.enigma81-reading.enigma79-reading{position:relative;display:grid;gap:12px;padding:13px 20px 15px;background:radial-gradient(ellipse at 50% 0,#3d5c4a,#193b33 58%,#102822);border:7px double #c49b51;border-image:url('./atlas-marco-laton.svg') 30 stretch;box-shadow:inset 0 0 0 1px #e2c381,inset 0 0 24px #081a13;color:#f4dfb0}
+.enigma81-reading-title{display:flex!important;align-items:center;justify-content:center;gap:12px;padding:0!important;margin:0;background:none!important;border:0!important;box-shadow:none!important}
+.enigma81-reading-title h3{border:0!important;background:none!important;box-shadow:none;padding:0!important;margin:0;color:#f8dfaa;font:bold clamp(15px,1.6vw,22px)/1.2 Georgia,serif;letter-spacing:.07em;text-shadow:0 2px #14251c}
+.enigma81-reading-title>span{color:#e8be69;font-size:22px;line-height:1}
+.enigma81-reading .enigma79-reading-questions{display:grid;grid-template-columns:1fr 1.15fr;gap:12px}
+.enigma81-reading .enigma81-question{position:relative;display:grid;grid-template-rows:auto 1fr;gap:9px;padding:10px 12px 11px;background:#ead0a0 url('./atlas-papel-fibras.svg') center/100% 100%;border:3px double #b68b46;border-radius:5px;box-shadow:0 3px 6px #07180e,inset 0 0 8px #98734055;color:#402b18}
+.enigma81-question-heading{display:flex;gap:8px;align-items:center;font:bold clamp(13px,1.45vw,17px)/1.2 Georgia,serif}
+.enigma81-question-heading>b{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 25%,#af4d38,#772117 65%,#4f140d);color:#fce0a1;border:2px double #d99a58;font:bold 15px Georgia,serif;box-shadow:0 2px 3px #5f361d}
+.enigma81-question-heading>span:nth-child(2){flex:1}
+.enigma81-check{display:grid;place-items:center;width:21px;height:21px;flex:none;opacity:0;color:#1f6646;font:bold 19px Georgia,serif}
+.enigma81-question.is-correct .enigma81-check{opacity:1}
+.enigma81-question.is-correct{border-color:#66834b;background-color:#e0dfb0}
+.enigma81-reading .enigma81-question select{min-height:42px;padding:9px 34px 9px 11px;background:linear-gradient(#fff3d7,#f4dfb5);border:2px solid #b48b49;box-shadow:inset 0 1px 4px #a5814444;border-radius:4px;font:600 16px Georgia,serif;color:#3e2b1a;cursor:pointer}
+.enigma81-reading .enigma81-question select:focus-visible{outline:2px solid #1f7864;outline-offset:2px}
+.enigma81-reading .enigma79-reading-bottom{gap:12px}
+.enigma81-reading-status{display:flex;flex:1;align-items:center;flex-wrap:wrap;gap:7px 10px;min-width:0}
+.enigma81-meter{display:flex;gap:4px}
+.enigma81-meter i{width:18px;height:8px;border:1px solid #b89b5a;border-radius:5px;background:#14241c}
+.enigma81-meter[data-count="1"] i:first-child,.enigma81-meter[data-count="2"] i{background:#dbb963;box-shadow:0 0 5px #f5d579}
+.enigma81-reading-status [data-enigma-reading-count]{font:bold 13px Georgia,serif;color:#e8ce93}
+.enigma81-reading-status [data-enigma-clue-feedback]{flex:1;min-width:100px;margin:0;color:#efdfb7;font:italic 14px Georgia,serif}
+.enigma81-reading-bottom [data-enigma-continue],.enigma81-reading .enigma79-reading-bottom [data-enigma-continue]{min-width:155px;padding:10px 17px;background:linear-gradient(#477757,#244831 52%,#183124);border:3px double #d7b367;border-radius:6px;color:#fff0c5;box-shadow:0 3px 5px #061910,inset 0 0 0 1px #5c7143;font:bold 17px Georgia,serif;white-space:nowrap}
+.enigma81-reading [data-enigma-continue]:disabled{background:linear-gradient(#555848,#313b30);opacity:.65;cursor:not-allowed}
+.enigma81-reading[data-ready="true"] [data-enigma-continue]{box-shadow:0 0 10px #e9be6c88,0 3px 5px #061910}
+@media(max-width:700px){.enigma77-clue-dialog.enigma81-dialog{width:94vw;min-width:0}.enigma81-reading.enigma79-reading{padding:10px;gap:9px}.enigma81-reading .enigma79-reading-questions{grid-template-columns:1fr;gap:8px}.enigma81-reading .enigma79-reading-bottom{flex-wrap:wrap}.enigma81-reading .enigma79-reading-bottom [data-enigma-continue]{margin-left:auto}.enigma81-question-heading>b{width:27px;height:27px}.enigma81-master .enigma79-artboard [data-enigma-close]{font-size:12px;width:13%;top:6%;right:3%}}
