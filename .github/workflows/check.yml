@@ -13,7 +13,7 @@ jobs:
           node-version: '22'
       - name: Verificar sintaxis JS y scripts de las pantallas
         run: |
-          for file in js/*.js; do node --check "$file"; done
+          for file in js/*.js js/*.mjs; do node --check "$file" || exit 1; done
           node tests/check-html-scripts.mjs
       - name: Probar permisos e ilustraciones de los ejercicios
         run: node --test tests/*.test.mjs
