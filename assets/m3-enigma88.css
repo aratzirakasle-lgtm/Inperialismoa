@@ -83,3 +83,35 @@
 .enigma88 .enigma77-inventory .enigma87-photo{max-height:none;min-height:0}.enigma88 .enigma87-photo-label{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.enigma88 .enigma87-photo.is-new{animation:none}}
+
+/* V89: native HD artwork and browser-audited placement. */
+.enigma89 .enigma77-card-art .enigma89-hd-art,.enigma89 .enigma87-photo-art .enigma89-hd-art{
+ filter:saturate(1.16) contrast(1.04) brightness(1.025);object-fit:cover;object-position:center;image-rendering:auto
+}
+.enigma89 .enigma77-card[data-enigma-card="congo"] .enigma89-hd-art,.enigma89 .enigma87-photo[data-enigma-remove="congo"] .enigma89-hd-art{object-position:center 58%}
+.enigma89 .enigma77-card[data-enigma-card="angola"] .enigma89-hd-art,.enigma89 .enigma87-photo[data-enigma-remove="angola"] .enigma89-hd-art{object-position:center 47%}
+.enigma89 .enigma77-cards .enigma77-card-art{flex:1 1 auto;background:#b89760;min-height:0}
+.enigma89 .enigma77-card-name{letter-spacing:.005em}
+.enigma89 .enigma89-empty-bank[hidden]{display:none!important}
+.enigma89-empty-bank{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.32cqw;text-align:center;color:#f1d6a0;text-shadow:0 2px 2px #211207}
+.enigma89-empty-bank svg{width:7.4cqw;max-height:74px;filter:drop-shadow(0 3px 3px #190c06)}
+.enigma89-empty-bank strong{font:bold 1.42cqw/1.15 Georgia,serif}
+.enigma89-empty-bank span{font:normal .9cqw/1.2 Georgia,serif;color:#e0c49a}
+.enigma89 .enigma77-bank{isolation:isolate}
+.enigma89.all-territories-filed .enigma77-cards{visibility:hidden}
+@media(min-width:1001px) and (min-height:581px){
+ .enigma89 .enigma77-boxes{left:23.9%;width:59.7%;top:76.5%;height:21.5%;gap:.6cqw}
+ .enigma89 .enigma85-register.enigma84-register.enigma77-clues{width:23.2%}
+ .enigma89 .enigma77-cards{column-gap:.18cqw;row-gap:.42cqw;height:80%}
+ .enigma89 .enigma77-card-name{font-size:.89cqw}
+ .enigma89 .enigma89-empty-bank{position:absolute;inset:22% 6% 7%;border:1px solid #b58d5255;background:radial-gradient(ellipse,#c1a36b16,transparent 69%);border-radius:5px}
+ .enigma89 .enigma83-gate.gate-A:not(.is-open):not(.is-opening) .enigma83-door-hint{top:13%;bottom:auto;opacity:1;font-size:.81cqw}
+ .enigma89 .enigma77-inventory .enigma87-photo-label{font-size:clamp(7px,.59cqw,11px)}
+}
+@media(max-width:1000px),(max-height:580px){
+ .enigma89.all-territories-filed .enigma77-cards{display:none}
+ .enigma89 .enigma89-empty-bank{padding:15px;gap:7px}
+ .enigma89-empty-bank svg{width:90px;max-height:75px}
+ .enigma89-empty-bank strong{font-size:18px}
+ .enigma89-empty-bank span{font-size:13px}
+}

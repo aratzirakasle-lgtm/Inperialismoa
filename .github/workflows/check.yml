@@ -50,13 +50,6 @@ jobs:
         run: |
           curl -fsS http://127.0.0.1:8765/ >/dev/null || (python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-atlas-server.log 2>&1 & sleep 1)
           node tests/m3-atlas-browser.mjs
-      - name: Comprobar cuarto ejercicio de la misión 3 por separado
-        if: always()
-        env:
-          SMOKE_USE_CHROME: '1'
-        run: |
-          curl -fsS http://127.0.0.1:8765/ >/dev/null || (python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/inperialismoa-enigma-server.log 2>&1 & sleep 1)
-          node tests/m3-enigma-browser.mjs
       - name: Guardar capturas históricas de los cinco ejercicios
         if: always()
         uses: actions/upload-artifact@v4
@@ -67,6 +60,32 @@ jobs:
             test-output/m1-auditoria-*.json
             test-output/m2-*.png
             test-output/m3-atlas-*.png
-            test-output/m3-enigma-*.png
             test-output/c-museo-*.png
           if-no-files-found: ignore
+  enigma-visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar lógica y once recursos HD
+        run: node --test tests/m3-enigma.test.mjs
+      - name: Instalar navegador para las pruebas
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1
+      - name: Comprobar el ejercicio completo con navegador
+        if: always()
+        env:
+          SMOKE_USE_CHROME: '1'
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/enigma89-server.log 2>&1 &
+          sleep 1
+          node tests/m3-enigma-browser.mjs
+      - name: Guardar capturas reales del ejercicio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enigma89-capturas-navegador
+          path: test-output/m3-enigma-*.png
+          if-no-files-found: error
